@@ -71,6 +71,10 @@ class HiveMain:
                 mem = getattr(self.agents["memory_agent"], "memory", [])
                 state["memory_vectors"] = [v for v, _ in mem]
 
+            # propagate candidate_probs from input_data if present
+            if isinstance(responses.get("candidate_probs"), torch.Tensor):
+                state["candidate_probs"] = responses["candidate_probs"]
+
             opinions = []
             for head in self.reasoning_heads:
                 try:

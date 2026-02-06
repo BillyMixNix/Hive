@@ -78,6 +78,8 @@ def main():
     parser.add_argument("--device", default="cpu", help="cpu or cuda")
     parser.add_argument("--limit", type=int, help="Limit number of memes processed")
     parser.add_argument("--gui", action="store_true", help="Launch a simple GUI to choose paths")
+    parser.add_argument("--enable-temporal", action="store_true", help="Include TemporalFitHead (needs real timestamps)")
+    parser.add_argument("--enable-ambiguity", action="store_true", help="Include AmbiguityHead (needs candidate probs/logits)")
     args = parser.parse_args()
 
     if args.gui or not args.memes_dir:
@@ -112,10 +114,13 @@ def main():
         NoveltyHead(current_key="current_vector", memory_key="memory_vectors"),
         CoherenceHead(agent_key="agent_vectors"),
         ConsistencyHead(agent_key="agent_vectors"),
-        AmbiguityHead(probs_key="candidate_probs"),
-        TemporalFitHead(timestamp_key="timestamp", reference_key="reference_time", tolerance_seconds=3600),
     ]
-    router = HiveRouter(min_confidence=0.2, disagreement_brake=0.35)
+    if args.enable_ambiguity:
+        heads.append(AmbiguityHead(probs_key="candidate_probs"))
+    if args.enable_temporal:
+        heads.append(TemporalFitHead(timestamp_key="timestamp", reference_key="reference_time", tolerance_seconds=3600))
+
+    router = HiveRouter(min_confidence=0.2, disagreement_brake=0.8)
 
     hive = HiveMain(
         agents=[language_agent, vision_agent, memory_agent],
@@ -132,6 +137,7 @@ def main():
             meta = metadata.get(str(path), {})
             caption = meta.get("caption") or path.stem
             ts = meta.get("timestamp") or time.time()
+            candidate_probs = meta.get("probs")  # optional list of logits/probs
 
             try:
                 image = Image.open(path).convert("RGB")
@@ -144,6 +150,8 @@ def main():
                 vision_agent.name: image,
                 "timestamp": ts,
             }
+            if candidate_probs is not None:
+                input_data["candidate_probs"] = candidate_probs
 
             hive.step(input_data)
 
