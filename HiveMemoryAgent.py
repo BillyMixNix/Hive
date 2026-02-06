@@ -47,9 +47,12 @@ class MemoryAgent:
             print(f"[MemoryAgent] Stored {count} new feedback vectors.")
 
     def process(self, _=None):
-        if not self.memory_bank:
-            return torch.zeros(1, 768, device=self.device)
-        vectors = torch.stack([v for v, _ in self.memory_bank])
+        """
+        Return the mean of stored memory vectors (or zeros if empty).
+        """
+        if not self.memory:
+            return torch.zeros(1, self.vector_dim, device=self.device)
+        vectors = torch.stack([v for v, _ in self.memory]).to(self.device)
         return torch.mean(vectors, dim=0, keepdim=True)  # [1, D]
 
     def summarize_feedback(self):

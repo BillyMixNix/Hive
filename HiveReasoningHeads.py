@@ -36,7 +36,13 @@ def _pairwise_cosine(vectors: List[torch.Tensor]) -> List[float]:
     sims = []
     for i in range(len(vectors)):
         for j in range(i + 1, len(vectors)):
-            sims.append(F.cosine_similarity(vectors[i], vectors[j], dim=-1).mean().item())
+            a, b = vectors[i], vectors[j]
+            # Align dimensions by truncating to the minimum width to avoid shape errors.
+            if a.shape[-1] != b.shape[-1]:
+                min_dim = min(a.shape[-1], b.shape[-1])
+                a = a[..., :min_dim]
+                b = b[..., :min_dim]
+            sims.append(F.cosine_similarity(a, b, dim=-1).mean().item())
     return sims
 
 

@@ -11,9 +11,11 @@ class VisionAgent(nn.Module):
         super().__init__()
         self.name = name  # <-- this fixes the 'name' issue
         self.device = device
-        self.model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT).to(device)
-        self.model.eval()
-        self.feature_dim = self.model.fc.in_features
+        base = models.resnet18(weights=models.ResNet18_Weights.DEFAULT).to(device)
+        base.eval()
+        # Strip the classification head; keep convolutional trunk + avgpool
+        self.feature_extractor = nn.Sequential(*(list(base.children())[:-1]))  # outputs [B, 512, 1, 1]
+        self.feature_dim = base.fc.in_features
 
         self.preprocess = transforms.Compose([
             transforms.Resize(256),
@@ -35,8 +37,9 @@ class VisionAgent(nn.Module):
             x = self.preprocess(input_data).unsqueeze(0).to(self.device)
 
         with torch.no_grad():
-            features = self.model.forward_features(x)
-        return features
+            feats = self.feature_extractor(x)  # [B, 512, 1, 1]
+            feats = feats.flatten(1)          # [B, 512]
+        return feats
 
     def forward(self, image: Image.Image):
         """
@@ -45,8 +48,9 @@ class VisionAgent(nn.Module):
         """
         x = self.preprocess(image).unsqueeze(0).to(self.device)
         with torch.no_grad():
-            features = self.model.forward_features(x)
-        return features  # shape: [1, feature_dim]
+            feats = self.feature_extractor(x)  # [1, 512, 1, 1]
+            feats = feats.flatten(1)           # [1, 512]
+        return feats  # shape: [1, feature_dim]
 
     def receive_signal(self, messages):
         for vec, tag in messages:

@@ -32,6 +32,13 @@ class HiveBridge:
         self.agent_outputs = {}
         self.sent_cache.clear()
 
+    def receive(self, agent_name):
+        """
+        Retrieve the last stored output for an agent.
+        Returns dict with keys: vector, tag, timestamp (if present), or None.
+        """
+        return self.agent_outputs.get(agent_name)
+
     def route_to(self, target_agent_name, attention=False):
         """
         Returns a list of (vector, tag, score) tuples.
