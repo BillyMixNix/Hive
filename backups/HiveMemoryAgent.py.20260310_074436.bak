@@ -33,21 +33,12 @@ class HiveMemoryAgent:
         self.vectors[index] = symbolic_vector.detach()
         self.tags[index] = tag
         self.notes[index] = note
-        self.tags[index] = tag  # Ensure the tag is set correctly
         self.statuses[index] = status
         self.metadata[index] = metadata
         self.timestamps[index] = datetime.utcnow()
 
         self.ptr += 1
         self.save_memory()
-    def search_notes_by_keyword(self, keyword):
-        matching_notes = []
-        for note in self.notes[:self.ptr]:
-            if keyword.lower() in note.lower():
-                matching_notes.append(note)
-        return matching_notes
-
-        # Store the note
     def retrieve_recent(self, n=10):
         return self.get_recent(n)
 
@@ -187,16 +178,6 @@ class HiveMemoryAgent:
         self.statuses[index] = new_status
         self.save_memory()
         return True
-
-    def update_task_metadata(self, task_id, new_metadata):
-        index = task_id - 1
-
-        if index < 0 or index >= self.ptr:
-            return False
-
-        self.metadata[index] = new_metadata
-        self.save_memory()
-        return True
     def get_current_task(self):
         for i in range(min(self.ptr, self.memory_size)):
             if self.statuses[i] == "active":
@@ -208,35 +189,3 @@ class HiveMemoryAgent:
                     "timestamp": str(self.timestamps[i])
                 }
         return None
-    def reject_patch(self, patch_id, reflector_verdict=None):
-        """
-        Mark a patch as rejected and store the rejection reason in the task metadata for future reference.
-        
-        Args:
-            patch_id (int): ID of the patch task.
-            reflector_verdict (dict, optional): JSON returned by Reflector with the verdict and reason.
-        """
-        success = self.update_task_status(patch_id, "rejected")
-        if not success:
-            return False
-        patch_entry = self.get_task_by_id(patch_id)
-        if patch_entry:
-            reason = reflector_verdict.get("reflection") if reflector_verdict else patch_entry.get("metadata", {}).get("reason", "Unknown")
-            patch_entry["metadata"]["rejection_reason"] = reason
-            self.save_memory()
-        return True
-    def get_rejected_patches_for_task(self, task_id, target_file=None):
-        """
-        Retrieve all rejected patches for a given task, optionally filtering by target file.
-        
-        Returns:
-            List[str]: List of rejection reasons.
-        """
-        rejected = []
-        for entry in self.get_recent_notes(200):
-            if entry["tag"] == "patch" and entry["status"] == "rejected":
-                meta = entry.get("metadata", {})
-                if meta.get("task_id") == task_id or (target_file and meta.get("target_file") == target_file):
-                    rejected.append(meta.get("rejection_reason", "Unknown reason"))
-        return rejected
-            

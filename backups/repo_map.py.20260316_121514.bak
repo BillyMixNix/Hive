@@ -1,0 +1,98 @@
+from pathlib import Path
+import ast
+
+
+DEFAULT_SKIP_FILES = {
+    "__init__.py",
+}
+
+
+class RepoMap:
+    """
+    Lightweight repository awareness for Hive.
+
+    Tracks:
+    - known python files
+    - symbol -> file
+    - file -> symbols
+    """
+
+    def __init__(self, root="."):
+        self.root = Path(root)
+        self.file_symbols = {}
+        self.symbol_to_file = {}
+        self.known_files = set()
+
+    def build(self):
+        self.file_symbols = {}
+        self.symbol_to_file = {}
+        self.known_files = set()
+
+        for path in sorted(self.root.glob("*.py")):
+            if path.name in DEFAULT_SKIP_FILES:
+                continue
+
+            try:
+                text = path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+
+            symbols = self._extract_symbols(text)
+            self.known_files.add(path.name)
+            self.file_symbols[path.name] = symbols
+
+            for symbol in symbols:
+                self.symbol_to_file.setdefault(symbol, path.name)
+
+        return self.to_dict()
+
+    def _extract_symbols(self, file_text):
+        try:
+            tree = ast.parse(file_text)
+        except SyntaxError:
+            return []
+
+        symbols = []
+
+        for node in tree.body:
+            if isinstance(node, ast.FunctionDef):
+                symbols.append(node.name)
+
+            elif isinstance(node, ast.ClassDef):
+                symbols.append(node.name)
+                for child in node.body:
+                    if isinstance(child, ast.FunctionDef):
+                        symbols.append(child.name)
+
+        return symbols
+
+    def resolve_file(self, symbol_or_file):
+        if not symbol_or_file:
+            return None
+
+        if symbol_or_file in self.known_files:
+            return symbol_or_file
+
+        return self.symbol_to_file.get(symbol_or_file)
+
+    def get_symbols_for_file(self, file_name):
+        return list(self.file_symbols.get(file_name, []))
+
+    def to_dict(self):
+        return {
+            "known_files": sorted(self.known_files),
+            "file_symbols": {k: list(v) for k, v in self.file_symbols.items()},
+            "symbol_to_file": dict(self.symbol_to_file),
+        }
+
+    @classmethod
+    def from_dict(cls, data, root="."):
+        inst = cls(root=root)
+        data = data or {}
+
+        inst.known_files = set(data.get("known_files", []))
+        inst.file_symbols = {
+            k: list(v) for k, v in (data.get("file_symbols") or {}).items()
+        }
+        inst.symbol_to_file = dict(data.get("symbol_to_file") or {})
+        return inst

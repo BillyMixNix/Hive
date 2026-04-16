@@ -1,0 +1,941 @@
+from pathlib import Path
+from hive_llm import ask_model
+from coder_prompt import CODER_PROMPT_TEMPLATE, CODER_REVISION_PROMPT_TEMPLATE
+import textwrap
+from HiveLessonMemory import LessonMemory
+
+
+
+class CoderAgent:
+    def __init__(self, memory=None, state_manager=None, executor=None):
+        self.lesson_memory = LessonMemory()
+        self.memory = memory
+        self.state_manager = state_manager
+        self.executor = executor
+    
+    def _sandbox_test_patch(self, patch_data):
+        """
+        Run sandbox validation for a proposed patch.
+
+        Returns:
+            dict: sandbox report
+        """
+        if self.executor is None:
+            return {
+                "applied": False,
+                "syntax_valid": False,
+                "semantic_valid": False,
+                "errors": ["Executor not attached to CoderAgent."],
+                "notes": "Sandbox unavailable."
+            }
+
+        return self.executor.test_patch_in_sandbox(
+            patch_text=patch_data["patch"],
+            target_file=patch_data["target_file"],
+            patch_reason=patch_data.get("reason", "")
+        )
+    
+    def _select_target_file(self, plan, target_file=None):
+        """
+        Determine the target file for patching.
+        Priority:
+        1. Explicit target_file passed to the method
+        2. First dependency in plan
+        3. Default to 'main.py'
+        """
+        if target_file is not None:
+            return target_file
+
+        dependencies = plan.get("dependencies", [])
+        if dependencies:
+            return dependencies[0]
+
+        return "main.py"
+    
+    def _get_current_file_text(self, target_file):
+        """
+        Get the latest effective file text from shared state first,
+        then fall back to disk.
+        """
+        if self.state_manager is not None:
+            return self.state_manager.get_effective_file_text(target_file)
+
+        return Path(target_file).read_text(encoding="utf-8")
+    
+    def _classify_failure(self, error_text):
+        text = str(error_text).lower()
+
+        if "no patch:" in text:
+            return "missing_patch_section"
+        if "patch section is empty" in text:
+            return "empty_patch"
+        if "sandbox apply failed" in text:
+            return "sandbox_apply_failed"
+        if "sandbox syntax failed" in text:
+            return "sandbox_syntax_failed"
+        if "sandbox semantic failed" in text:
+            return "sandbox_semantic_failed"
+        if "sandbox unavailable" in text:
+            return "sandbox_unavailable"
+        if "non-diff commentary" in text:
+            return "non_diff_commentary"
+        if "duplicate method definition" in text or "duplicate method definitions" in text:
+            return "duplicate_method_definition"
+        if "more than one new method" in text:
+            return "patch_too_broad"
+        if "removes existing methods" in text:
+            return "removes_existing_methods"
+        if "immediately after a return line" in text:
+            return "bad_method_insertion_point"
+        if "no anchor context" in text:
+            return "missing_anchor_context"
+        if "reflector rejected patch" in text:
+            return "reflector_reject"
+        if "reflector requested revision" in text:
+            return "reflector_revision"
+        if "unfinished block" in text:
+            return "unfinished_block_insertion"
+        if "invalid indentation level" in text:
+            return "bad_method_indent"
+        if "multiple patch: sections" in text:
+            return "multiple_patch_sections"
+        if "must target exactly one file" in text:
+            return "multiple_target_files"
+        if "too large for first-pass review" in text:
+            return "patch_too_large"
+        if "empty model response" in text:
+            return "empty_model_response"
+
+        return "unknown_failure"
+
+    def _build_retry_instruction(self, error_text):
+        text = str(error_text).lower()
+
+        if "no patch:" in text:
+            return "Return ONLY the required fields followed by exactly one PATCH: section and a unified diff."
+        if "patch section is empty" in text:
+            return "Do not leave PATCH empty; provide a minimal anchored diff or return a blocked patch header with a clear reason."
+        if "non-diff commentary" in text:
+            return "Output diff lines only after PATCH:. Do not include doctrine text, summaries, or commentary."
+        if "duplicate method definition" in text or "duplicate method definitions" in text:
+            return "Do not define a method that already exists in the patch. Add or modify only one method definition."
+        if "more than one new method" in text:
+            return "Add exactly one new method and change nothing else unless the task explicitly requires it."
+        if "removes existing methods" in text:
+            return "Preserve all existing methods. Do not remove or replace unrelated method definitions."
+        if "immediately after a return line" in text:
+            return "Do not insert a new method immediately after a return line. Insert only after the previous method has fully ended."
+        if "no anchor context" in text:
+            return "Use real anchor context lines from the file. Include unchanged context lines before and after the edit."
+        if "reflector rejected patch" in text:
+            return "Keep the same goal and target file, but reduce scope and fix only the issue identified by reflection."
+        if "reflector requested revision" in text:
+            return "Revise the previous patch narrowly instead of expanding it."
+        if "unfinished block" in text:
+            return "Do not insert a new method until the previous structure has fully closed. Place new methods only at clean class-level boundaries."
+        if "invalid indentation level" in text:
+            return "Add new methods only at class-method indentation level with exactly 4 leading spaces."
+        if "sandbox apply failed" in text:
+            return "Revise the patch so it can be applied cleanly in sandbox without anchor or placement errors."
+        if "sandbox syntax failed" in text:
+            return "Revise the patch so the resulting sandboxed file is valid Python syntax."
+        if "sandbox semantic failed" in text:
+            return "Revise the patch so it passes semantic safety checks in sandbox."
+        if "sandbox unavailable" in text:
+            return "Sandbox testing is unavailable. Keep the patch minimal and structurally conservative."
+        if "multiple patch: sections" in text:
+            return "Return exactly one PATCH: section."
+        if "must target exactly one file" in text:
+            return "Modify exactly one file in this patch."
+        if "too large for first-pass review" in text:
+            return "Reduce scope. Keep the patch smaller and more localized."
+        if "empty model response" in text:
+            return "Return the required fields and a minimal unified diff patch."
+        
+        return "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure."
+
+    def _fallback_patch(self, task, plan, target_file=None):
+        dependencies = set(plan.get("dependencies", []))
+        goal = plan.get("goal", "").lower()
+        next_action = plan.get("next_action", "").lower()
+
+        intended_file = target_file or self._select_target_file(plan)
+
+        if (
+            intended_file == "router.py"
+            and ("router.py" in dependencies or "route" in goal or "route" in next_action)
+        ):
+            patch = textwrap.dedent("""\
+            --- router.py
+            +++ router.py
+             def route(self, user_input, message):
+            -        intent = message["intent"]
+            +        intent = message.get("intent")
+                     text = user_input.lower().strip()
+            """)
+
+            return {
+                "task_id": task["id"],
+                "target_file": "router.py",
+                "change_type": "diff_patch",
+                "patch": patch,
+                "reason": "Make route() use safer intent lookup inside the function scope",
+                "risk_level": "low",
+                "status": "proposed",
+                "source": "fallback"
+            }
+
+        return {
+            "task_id": task["id"],
+            "target_file": intended_file,
+            "change_type": "diff_patch",
+            "patch": f"--- {intended_file}\n+++ {intended_file}\n",
+            "reason": f"No safe fallback patch available for task {task['id']}; LLM output was invalid or insufficiently anchored.",
+            "risk_level": "high",
+            "status": "blocked",
+            "source": "fallback"
+        }
+
+    def _build_prompt(self, task, plan, target_file, file_text, lesson_text=""):
+        constraints = self._derive_patch_constraints(task, plan, target_file)
+        constraint_text = self._format_patch_constraints(constraints)
+
+        return CODER_PROMPT_TEMPLATE.format(
+            task_id=task["id"],
+            task_note=task["note"],
+            plan_goal=plan.get("goal", ""),
+            plan_steps=plan.get("plan_steps", []),
+            plan_dependencies=plan.get("dependencies", []),
+            plan_risks=plan.get("risks", []),
+            plan_next_action=plan.get("next_action", ""),
+            plan_status=plan.get("status", ""),
+            target_file=target_file,
+            file_text=file_text,
+            lesson_text=lesson_text,
+            patch_constraints=constraint_text,
+        )
+
+    def _build_revision_prompt(self, task, plan, target_file, file_text, previous_patch, reflection, lesson_text=""):
+        trimmed_previous_patch = previous_patch[:1500] if previous_patch else ""
+        lesson_text = lesson_text or "No relevant recent failure lessons."
+        constraints = self._derive_patch_constraints(task, plan, target_file)
+        constraint_text = self._format_patch_constraints(constraints)
+
+
+        return CODER_REVISION_PROMPT_TEMPLATE.format(
+            task_id=task["id"],
+            task_note=task["note"],
+            plan_goal=plan.get("goal", ""),
+            plan_steps=plan.get("plan_steps", []),
+            plan_dependencies=plan.get("dependencies", []),
+            plan_risks=plan.get("risks", []),
+            plan_next_action=plan.get("next_action", ""),
+            plan_status=plan.get("status", ""),
+            target_file=target_file,
+            file_text=file_text,
+            previous_patch_excerpt=trimmed_previous_patch,
+            reflection=reflection,
+            lesson_text=lesson_text,
+            patch_constraints=constraint_text
+        )
+
+    def _has_unfinished_block_before_added_def(self, diff_lines):
+        bracket_balance = 0
+
+        for i, line in enumerate(diff_lines):
+            if not line:
+                continue
+
+            content = line[1:] if line[0] in "+- " else line
+            stripped = content.rstrip()
+
+            if line.startswith("+") and stripped.lstrip().startswith("def "):
+                if bracket_balance > 0:
+                    return True
+
+                j = i - 1
+                while j >= 0:
+                    prev_line = diff_lines[j]
+
+                    if not prev_line:
+                        j -= 1
+                        continue
+
+                    prev_content = prev_line[1:] if prev_line[0] in "+- " else prev_line
+                    prev_stripped = prev_content.rstrip()
+
+                    if not prev_stripped.strip():
+                        j -= 1
+                        continue
+
+                    bad_endings = ("(", "[", "{", ",", "\\")
+                    if prev_stripped.strip().endswith(bad_endings):
+                        return True
+
+                    if (
+                        prev_stripped.strip().startswith("if ")
+                        and not prev_stripped.strip().endswith(":")
+                    ):
+                        return True
+
+                    if (
+                        prev_stripped.strip().startswith("for ")
+                        and not prev_stripped.strip().endswith(":")
+                    ):
+                        return True
+
+                    if (
+                        prev_stripped.strip().startswith("while ")
+                        and not prev_stripped.strip().endswith(":")
+                    ):
+                        return True
+
+                    break
+
+            bracket_balance += stripped.count("(") - stripped.count(")")
+            bracket_balance += stripped.count("[") - stripped.count("]")
+            bracket_balance += stripped.count("{") - stripped.count("}")
+
+        return False
+
+    def _has_bad_method_indent(self, diff_lines):
+        for line in diff_lines:
+            if not line.startswith("+"):
+                continue
+
+            content = line[1:]
+            stripped = content.lstrip()
+
+            if not stripped.startswith("def "):
+                continue
+
+            indent = len(content) - len(stripped)
+
+            if indent != 4:
+                return True
+
+        return False
+   
+    def _preflight_patch_contract(self, raw_response):
+        """
+        Fast contract check for raw model output before full patch parsing/sandboxing.
+
+        Goals:
+        - reject rambling/non-patch output early
+        - enforce one PATCH: section
+        - require minimal diff shape
+        - keep first-step patches small and reviewable
+        """
+
+        text = (raw_response or "").strip()
+        if not text:
+            raise ValueError("Empty model response.")
+
+        patch_marker_count = text.count("PATCH:")
+        if patch_marker_count == 0:
+            raise ValueError("No PATCH: section found in model response.")
+        if patch_marker_count > 1:
+            raise ValueError("Model response contains multiple PATCH: sections.")
+
+        patch_body = text.partition("PATCH:")[2].strip()
+        if not patch_body:
+            raise ValueError("PATCH section is empty.")
+
+        if "--- " not in patch_body or "+++ " not in patch_body:
+            raise ValueError("Patch is missing diff file headers.")
+
+        patch_lines = patch_body.splitlines()
+        valid_prefixes = ("---", "+++", "@@", "+", "-", " ", "\\")
+
+        for line in patch_lines:
+            if not line:
+                continue
+            if not line.startswith(valid_prefixes):
+                raise ValueError(f"Patch contains non-diff commentary: {line[:80]}")
+
+        nonempty_diff_lines = [line for line in patch_lines if line.strip()]
+        if len(nonempty_diff_lines) > 80:
+            raise ValueError("Patch is too large for first-pass review.")
+
+        target_headers = [line for line in patch_lines if line.startswith("+++ ")]
+        if len(target_headers) != 1:
+            raise ValueError("Patch must target exactly one file.")
+
+        added_method_names = []
+        for line in patch_lines:
+            if line.startswith("+") and line.lstrip("+").strip().startswith("def "):
+                name = line.split("def ", 1)[1].split("(", 1)[0].strip()
+                added_method_names.append(name)
+
+        if len(set(added_method_names)) != len(added_method_names):
+            raise ValueError("Patch adds duplicate method definitions.")
+
+        if len(added_method_names) > 1:
+            raise ValueError("Patch is too broad: more than one new method added.")
+
+        return True
+  
+    def _validate_patch_data(self, patch_data):
+        known_files = {
+            "main.py",
+            "router.py",
+            "interface.py",
+            "planner.py",
+            "coder.py",
+            "builder.py",
+            "executor.py",
+            "reflector.py",
+            "HiveMemoryAgent.py",
+            "hive_llm.py",
+        }
+
+        if patch_data["target_file"] not in known_files:
+            raise ValueError(f"Unknown target file: {patch_data['target_file']}")
+
+        if patch_data["change_type"] != "diff_patch":
+            raise ValueError("Only diff_patch is currently supported.")
+
+        patch_text = patch_data["patch"]
+        if "--- " not in patch_text or "+++ " not in patch_text:
+            raise ValueError("Patch is missing diff file headers.")
+
+        diff_lines = patch_text.splitlines()
+        valid_prefixes = ("---", "+++", "@@", "+", "-", " ", "\\")
+
+        for line in diff_lines:
+            if not line:
+                continue
+            if not line.startswith(valid_prefixes):
+                raise ValueError(f"Patch contains non-diff commentary: {line[:80]}")
+
+        added_method_names = []
+        for line in diff_lines:
+            if line.startswith("+") and line.lstrip("+").strip().startswith("def "):
+                name = line.split("def ", 1)[1].split("(", 1)[0].strip()
+                added_method_names.append(name)
+
+        for name in set(added_method_names):
+            if patch_text.count(f"def {name}(") > 1:
+                raise ValueError(f"Patch contains duplicate method definition for: {name}")
+
+        if len(added_method_names) != len(set(added_method_names)):
+            raise ValueError("Patch adds duplicate method definitions.")
+
+        if len(added_method_names) > 1:
+            raise ValueError("First patch is too broad: more than one new method added.")
+
+        removed_method_names = []
+        for line in diff_lines:
+            if line.startswith("-") and line.lstrip("-").strip().startswith("def "):
+                name = line.split("def ", 1)[1].split("(", 1)[0].strip()
+                removed_method_names.append(name)
+
+        if removed_method_names:
+            raise ValueError(f"Patch removes existing methods: {removed_method_names}")
+
+        for i, line in enumerate(diff_lines[1:], start=1):
+            if line.startswith("+") and line.lstrip("+").strip().startswith("def "):
+                prev = diff_lines[i - 1].strip()
+                if prev.startswith("return "):
+                    raise ValueError("Patch appears to insert a method immediately after a return line.")
+
+        has_anchor = any(line.startswith(" ") or line.startswith("-") for line in diff_lines)
+
+        if not has_anchor:
+            if not (
+                patch_data["risk_level"] == "high"
+                and patch_data["status"] == "blocked"
+            ):
+                raise ValueError("Patch has no anchor context or removal lines.")
+
+        if self._has_bad_method_indent(diff_lines):
+            raise ValueError("Patch adds a method with invalid indentation level.")
+
+        if self._has_unfinished_block_before_added_def(diff_lines):
+            raise ValueError("Patch inserts a method into an unfinished block.")
+
+    def _parse_patch_response(self, raw_response, task):
+        lines = raw_response.splitlines()
+
+        fields = {
+            "target_file": None,
+            "change_type": None,
+            "risk_level": None,
+            "status": None,
+            "reason": None,
+            "patch": None,
+        }
+
+        patch_start = None
+
+        for i, line in enumerate(lines):
+            if line.startswith("TARGET_FILE:"):
+                fields["target_file"] = line.split(":", 1)[1].strip()
+            elif line.startswith("CHANGE_TYPE:"):
+                fields["change_type"] = line.split(":", 1)[1].strip()
+            elif line.startswith("RISK_LEVEL:"):
+                fields["risk_level"] = line.split(":", 1)[1].strip()
+            elif line.startswith("STATUS:"):
+                fields["status"] = line.split(":", 1)[1].strip()
+            elif line.startswith("REASON:"):
+                fields["reason"] = line.split(":", 1)[1].strip()
+            elif line.strip() == "PATCH:":
+                patch_start = i + 1
+                break
+
+        if patch_start is None:
+            raise ValueError("No PATCH: section found in model response.")
+
+        patch_text = "\n".join(lines[patch_start:]).strip()
+
+        if not patch_text:
+            raise ValueError("PATCH section is empty.")
+
+        fields["patch"] = patch_text
+        fields["task_id"] = task["id"]
+        fields["source"] = "llm"
+
+        required_fields = [
+            "target_file",
+            "change_type",
+            "risk_level",
+            "status",
+            "reason",
+            "patch",
+        ]
+
+        for field in required_fields:
+            if not fields.get(field):
+                raise ValueError(f"Missing field in model response: {field}")
+
+        return fields
+    
+    def _derive_patch_constraints(self, task, plan, target_file):
+        """
+        Derive narrow mechanical constraints for patch generation.
+
+        This does NOT re-plan the task.
+        It only constrains how the coder is allowed to express the task as a patch.
+        """
+
+        note = (task.get("note") or "").lower()
+        goal = (plan.get("goal") or "").lower()
+        next_action = (plan.get("next_action") or "").lower()
+
+        combined = f"{note} {goal} {next_action}"
+
+        constraints = {
+            "target_file": target_file,
+            "max_files": 1,
+            "max_new_methods": 1,
+            "max_changed_regions": 1,
+            "preferred_edit_style": "modify_existing_line",
+            "allow_new_method": False,
+            "allow_method_removal": False,
+            "allow_class_scope_statements": False,
+            "require_anchor_context": True,
+            "notes": [],
+        }
+
+        if any(token in combined for token in ["add helper", "new helper", "extract helper"]):
+            constraints["preferred_edit_style"] = "add_helper"
+            constraints["allow_new_method"] = True
+            constraints["notes"].append("Allow one new helper method if modification of existing code is not sufficient.")
+
+        if any(token in combined for token in ["guard", "check", "lookup", "safe access", "null check"]):
+            constraints["preferred_edit_style"] = "modify_existing_line"
+            constraints["allow_new_method"] = False
+            constraints["notes"].append("Prefer a local line edit over adding a new method.")
+
+        if any(token in combined for token in ["refactor", "restructure", "rewrite"]):
+            constraints["max_changed_regions"] = 2
+            constraints["notes"].append("Task may require a slightly broader edit, but keep scope minimal.")
+
+        if target_file in {"executor.py", "coder.py", "router.py", "reflector.py"}:
+            constraints["notes"].append("Preserve architecture and avoid introducing new subsystems.")
+
+        return constraints
+    
+    def _format_patch_constraints(self, constraints):
+        notes = constraints.get("notes", [])
+
+        lines = [
+            "PATCH CONSTRAINTS:",
+            f"- target_file: {constraints['target_file']}",
+            f"- max_files: {constraints['max_files']}",
+            f"- max_new_methods: {constraints['max_new_methods']}",
+            f"- max_changed_regions: {constraints['max_changed_regions']}",
+            f"- preferred_edit_style: {constraints['preferred_edit_style']}",
+            f"- allow_new_method: {constraints['allow_new_method']}",
+            f"- allow_method_removal: {constraints['allow_method_removal']}",
+            f"- allow_class_scope_statements: {constraints['allow_class_scope_statements']}",
+            f"- require_anchor_context: {constraints['require_anchor_context']}",
+        ]
+
+        if notes:
+            lines.append("- notes:")
+            for note in notes:
+                lines.append(f"  - {note}")
+
+        return "\n".join(lines)   
+    
+    def generate_patch(self, task, plan):
+        target_file = self._select_target_file(plan, target_file=task.get("target_file"))
+        print(f"[Coder] Selected target file: {target_file}")
+
+        try:
+            file_text = self._get_current_file_text(target_file)
+            print(f"[Coder] Read {target_file} ({len(file_text)} chars)")
+
+            MAX_FILE_CHARS = 3000
+            if len(file_text) > MAX_FILE_CHARS:
+                file_text = file_text[:MAX_FILE_CHARS]
+                print(f"[Coder] Trimmed file_text to {len(file_text)} chars")
+            
+
+        except Exception as e:
+            fallback = self._fallback_patch(task, plan, target_file)
+            fallback["llm_error"] = f"Could not read target file {target_file}: {e}"
+            return fallback
+
+        prompt = self._build_prompt(task, plan, target_file, file_text)
+        print(f"[Coder] Prompt built ({len(prompt)} chars)")
+        print("[Coder] Sending prompt to model...")
+
+        try:
+            timeout = 120
+            raw_response = ask_model(prompt, timeout=timeout).strip()
+            print("[Coder] Model returned response")
+            print(f"[Coder] Response length: {len(raw_response)} chars")
+
+            self._preflight_patch_contract(raw_response)
+            print("[Coder] Patch contract preflight passed")
+
+            patch_data = self._parse_patch_response(raw_response, task)
+            print("[Coder] Parsed patch response")
+
+            self._validate_patch_data(patch_data)
+            print("[Coder] Patch validation passed")
+
+            sandbox_report = self._sandbox_test_patch(patch_data)
+            print(f"[Coder] Sandbox report: {sandbox_report}")
+
+            sandbox_ok = (
+                sandbox_report.get("applied") is True
+                and sandbox_report.get("syntax_valid") is True
+                and sandbox_report.get("semantic_valid") is True
+            )
+
+            patch_data["sandbox_report"] = sandbox_report
+
+            if not sandbox_ok:
+                sandbox_errors = sandbox_report.get("errors", [])
+
+                if sandbox_report.get("applied") is not True:
+                    raise ValueError(
+                        f"Sandbox apply failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes','')}"
+                    )
+
+                elif sandbox_report.get("syntax_valid") is not True:
+                    raise ValueError(
+                        f"Sandbox syntax failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes','')}"
+                    )
+
+                else:
+                    raise ValueError(
+                        f"Sandbox semantic failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes','')}"
+                    )
+
+            return patch_data
+
+        except Exception as e:
+            print(f"[Coder] Exception: {e}")
+            fallback = self._fallback_patch(task, plan, target_file)
+            fallback["llm_error"] = str(e)
+            return fallback
+
+    def generate_patch_with_revisions(self, task, plan, reflector, max_revisions=2):
+        target_file = self._select_target_file(plan, target_file=task.get("target_file"))
+        print(f"[Coder] Selected target file: {target_file}")
+
+        previous_patch_text = ""
+        last_error = None
+        reflection = {
+            "reflection": "No reflection yet.",
+            "confidence": 0.0,
+            "next_step": "Generate first patch attempt.",
+            "verdict": "revise",
+        }
+        best_patch_data = None
+        best_reflection = None
+        best_confidence = -1.0
+
+        try:
+            full_file_text = self._get_current_file_text(target_file)
+            print(f"[Coder] Read {target_file} ({len(full_file_text)} chars)")
+
+            MAX_FILE_CHARS = 5000
+            file_text = full_file_text[:MAX_FILE_CHARS]
+            if len(full_file_text) > MAX_FILE_CHARS:
+                print(f"[Coder] Trimmed file_text to {len(file_text)} chars")
+
+            REVISION_FILE_CHARS = 2500
+            revision_file_text = full_file_text[:REVISION_FILE_CHARS]
+
+        except Exception as e:
+            fallback = self._fallback_patch(task, plan, target_file)
+            fallback["llm_error"] = f"Could not read target file {target_file}: {e}"
+            return fallback
+
+        recent_lessons = self.lesson_memory.get_recent_lessons(
+            file=target_file,
+            change_type="diff_patch",
+            limit=15,
+        )
+        lesson_text = self.lesson_memory.format_lessons_for_prompt(recent_lessons)
+
+        rejected_patches = self.memory.get_rejected_patches_for_task(task["id"], target_file=target_file)
+        rejection_context = ""
+
+        if rejected_patches:
+            normalized = []
+
+            for r in rejected_patches:
+                if isinstance(r, str):
+                    normalized.append(r)
+                elif isinstance(r, dict):
+                    metadata = r.get("metadata", {})
+                    if isinstance(metadata, dict) and "reason" in metadata:
+                        normalized.append(metadata["reason"])
+                    else:
+                        normalized.append(r.get("note", str(r)))
+                else:
+                    normalized.append(str(r))
+
+            rejection_context = "Previous patch rejections:\n" + "\n".join(
+                f"- {entry}" for entry in normalized
+            )
+
+        current_prompt = self._build_prompt(
+            task,
+            plan,
+            target_file,
+            file_text,
+            lesson_text=lesson_text,
+        )
+        if rejection_context:
+            current_prompt = f"{rejection_context}\n\n{current_prompt}"
+
+        for attempt in range(max_revisions + 1):
+            print(f"[Coder] Patch attempt {attempt + 1}")
+
+            try:
+                timeout = 120 if attempt == 0 else 45
+                raw_response = ask_model(current_prompt, timeout=timeout).strip()
+                print("[Coder] Model returned response")
+                print(f"[Coder] Response length: {len(raw_response)} chars")
+                
+                self._preflight_patch_contract(raw_response)
+                print("[Coder] Patch contract preflight passed")
+                
+                patch_data = self._parse_patch_response(raw_response, task)
+                print("[Coder] Parsed patch response")
+
+                self._validate_patch_data(patch_data)
+                print("[Coder] Patch validation passed")
+                
+                sandbox_report = self._sandbox_test_patch(patch_data)
+                print(f"[Coder] Sandbox report: {sandbox_report}")
+
+                sandbox_ok = (
+                    sandbox_report.get("applied") is True
+                    and sandbox_report.get("syntax_valid") is True
+                    and sandbox_report.get("semantic_valid") is True
+                )
+
+                patch_data["sandbox_report"] = sandbox_report
+
+                if not sandbox_ok:
+                    sandbox_errors = sandbox_report.get("errors", [])
+                    if sandbox_report.get("applied") is not True:
+                        last_error = f"Sandbox apply failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
+                    elif sandbox_report.get("syntax_valid") is not True:
+                        last_error = f"Sandbox syntax failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
+                    else:
+                        last_error = f"Sandbox semantic failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
+
+                    failure_reason = self._classify_failure(last_error)
+                    retry_instruction = self._build_retry_instruction(last_error)
+
+                    self.lesson_memory.add_lesson(
+                        file=target_file,
+                        change_type="diff_patch",
+                        failure_reason=failure_reason,
+                        retry_instruction=retry_instruction,
+                        task_id=task["id"],
+                        failure_pattern=last_error,
+                        source="sandbox",
+                    )
+                    print(f"[Coder] Lesson recorded: {failure_reason}")
+
+                    if attempt >= max_revisions:
+                        break
+
+                    recent_lessons = self.lesson_memory.get_recent_lessons(
+                        file=target_file,
+                        change_type="diff_patch",
+                        limit=3,
+                    )
+                    lesson_text = self.lesson_memory.format_lessons_for_prompt(recent_lessons)
+
+                    current_prompt = self._build_revision_prompt(
+                        task,
+                        plan,
+                        target_file,
+                        revision_file_text,
+                        patch_data.get("patch", ""),
+                        {
+                            "reflection": last_error,
+                            "confidence": 0.2,
+                            "next_step": "Revise the patch so it passes sandbox application, syntax, and semantic validation.",
+                            "verdict": "revise",
+                        },
+                        lesson_text=lesson_text,
+                    )
+                    continue
+                reflection = reflector.evaluate(patch_data)
+                print(f"[Coder] Reflector verdict: {reflection.get('verdict')}")
+
+                verdict = reflection.get("verdict", "revise")
+                confidence = float(reflection.get("confidence", 0.0))
+
+                patch_is_meaningful = bool(patch_data.get("patch", "").strip())
+                patch_is_blocked = patch_data.get("status") == "blocked"
+
+                if (
+                    patch_is_meaningful
+                    and not patch_is_blocked
+                    and confidence >= 0.5
+                    and confidence > best_confidence
+                ):
+                    best_patch_data = dict(patch_data)
+                    best_reflection = dict(reflection)
+                    best_confidence = confidence
+                    print(f"[Coder] Best patch candidate updated (confidence={confidence})")
+
+                if verdict == "accept" and confidence >= 0.7:
+                    patch_data["reflection"] = reflection
+                    return patch_data
+
+                if verdict == "reject":
+                    last_error = f"Reflector rejected patch: {reflection.get('reflection')}"
+                    self.lesson_memory.add_lesson(
+                        file=target_file,
+                        change_type="diff_patch",
+                        failure_reason=reflection.get("reflection"),
+                        retry_instruction="Avoid previous mistakes",
+                        task_id=task["id"],
+                        failure_pattern=reflection.get("reflection"),
+                        source="reflector",
+                    )
+                    print(f"[Coder] Lesson recorded: {last_error}")
+                else:
+                    last_error = f"Reflector requested revision: {reflection.get('reflection')}"
+
+                previous_patch_text = patch_data["patch"]
+
+                if attempt >= max_revisions:
+                    break
+
+                recent_lessons = self.lesson_memory.get_recent_lessons(
+                    file=target_file,
+                    change_type="diff_patch",
+                    limit=3,
+                )
+                lesson_text = self.lesson_memory.format_lessons_for_prompt(recent_lessons)
+
+                rejected_patches = self.memory.get_rejected_patches_for_task(task["id"], target_file=target_file)
+                rejection_context = ""
+
+                if rejected_patches:
+                    normalized = []
+
+                    for r in rejected_patches:
+                        if isinstance(r, str):
+                            normalized.append(r)
+                        elif isinstance(r, dict):
+                            metadata = r.get("metadata", {})
+                            if isinstance(metadata, dict) and "reason" in metadata:
+                                normalized.append(metadata["reason"])
+                            else:
+                                normalized.append(r.get("note", str(r)))
+                        else:
+                            normalized.append(str(r))
+
+                    rejection_context = "Previous patch rejections:\n" + "\n".join(
+                        f"- {entry}" for entry in normalized
+                    )
+
+                current_prompt = self._build_revision_prompt(
+                    task,
+                    plan,
+                    target_file,
+                    revision_file_text,
+                    previous_patch_text or "",
+                    reflection,
+                    lesson_text=lesson_text,
+                )
+                if rejection_context:
+                    current_prompt = f"{rejection_context}\n\n{current_prompt}"
+
+            except Exception as e:
+                print(f"[Coder] Exception: {e}")
+                last_error = str(e)
+
+                failure_reason = self._classify_failure(last_error)
+                retry_instruction = self._build_retry_instruction(last_error)
+
+                self.lesson_memory.add_lesson(
+                    file=target_file,
+                    change_type="diff_patch",
+                    failure_reason=failure_reason,
+                    retry_instruction=retry_instruction,
+                    task_id=task["id"],
+                    failure_pattern=last_error,
+                    source="coder",
+                )
+                print(f"[Coder] Lesson recorded: {failure_reason}")
+
+                if attempt >= max_revisions:
+                    break
+
+                current_prompt = self._build_revision_prompt(
+                    task,
+                    plan,
+                    target_file,
+                    revision_file_text,
+                    previous_patch_text or "",
+                    reflection,
+                    lesson_text=lesson_text,
+                )
+
+        if best_patch_data is not None and best_confidence >= 0.6:
+            best_patch_data["reflection"] = best_reflection or {
+                "reflection": "Returning best validated patch after later revision attempts failed.",
+                "confidence": best_confidence,
+                "next_step": "Pilot review recommended before apply.",
+                "verdict": "revise",
+            }
+            best_patch_data["status"] = "proposed"
+            best_patch_data["reason"] = (
+                (best_patch_data.get("reason") or "").strip()
+                + " | Returning best validated patch after revision failure."
+            ).strip(" |")
+            best_patch_data["source"] = "best_candidate"
+            best_patch_data["needs_review"] = True
+            print("[Coder] Returning best validated patch candidate instead of empty fallback")
+            return best_patch_data
+
+        fallback = self._fallback_patch(task, plan, target_file)
+        fallback["llm_error"] = last_error or "Patch generation failed after revision attempts."
+        return fallback

@@ -1,0 +1,520 @@
+from pathlib import Path
+
+import torch
+
+from router import Router
+from interface import Interface
+from reflector import Reflector
+
+from HiveMemoryAgent import HiveMemoryAgent
+from HiveLessonMemory import LessonMemory
+from HiveStateManager import HiveStateManager
+
+
+def make_dummy_vector():
+    return torch.randn(256).to("cpu")
+
+
+def find_plan_for_task(memory, task_id, limit=100):
+    recent_notes = memory.get_recent_notes(limit)
+
+    for entry in reversed(recent_notes):
+        if entry.get("tag") != "plan":
+            continue
+
+        meta = entry.get("metadata") or {}
+        if meta.get("task_id") == task_id:
+            return meta.get("plan")
+
+    return None
+
+
+def find_patch_entry(memory, patch_id):
+    patch_entry = memory.get_task_by_id(patch_id)
+
+    if not patch_entry:
+        return None, f"Patch {patch_id} not found."
+
+    if patch_entry.get("tag") != "patch":
+        return None, f"Task {patch_id} is not a patch entry."
+
+    return patch_entry, None
+
+
+def require_patch_metadata(patch_entry, patch_id):
+    metadata = patch_entry.get("metadata")
+    if not metadata:
+        return None, f"Patch {patch_id} has no metadata."
+    return metadata, None
+
+
+def find_backup_for_patch(memory, patch_id, limit=50):
+    recent_notes = memory.get_recent_notes(limit)
+
+    for entry in reversed(recent_notes):
+        if entry.get("tag") != "patch_apply":
+            continue
+
+        metadata = entry.get("metadata") or {}
+        if metadata.get("patch_id") == patch_id:
+            return metadata.get("backup_path")
+
+    return None
+
+def _is_child_task_complete(plan, child_task_id):
+    for child in plan.get("tasks", []):
+        if child.get("task_id") == child_task_id:
+            return child.get("status") in ("complete", "completed")
+    return False
+
+
+def _get_first_ready_child_task(plan):
+    tasks = plan.get("tasks", [])
+    if not isinstance(tasks, list):
+        return None
+
+    for child in tasks:
+        status = child.get("status")
+        if status not in ("planned", "pending", None):
+            continue
+
+        deps = child.get("depends_on", [])
+        if all(_is_child_task_complete(plan, dep) for dep in deps):
+            return child
+
+    return None
+
+def main():
+    memory = HiveMemoryAgent(device="cpu")
+    state = HiveStateManager()
+    state.load_snapshot()
+
+    router = Router()
+    interface = Interface()
+    reflector = Reflector()
+    lesson_memory = LessonMemory()
+
+    router.coder = router.coder.__class__(
+        memory=memory,
+        state_manager=state,
+        executor=router.executor,
+    )
+
+    print("Hive Zero v0.1.2.0 Online")
+
+    while True:
+        user_input = input("\nPilot > ")
+        message = interface.process_input(user_input)
+        route, payload = router.route(user_input, message)
+
+        if user_input.lower().startswith("store "):
+            text = user_input[6:]
+
+            import re
+            match = re.search(r"to (\S+\.py)", text)
+            target_file = match.group(1) if match else None
+
+            memory.store(
+                make_dummy_vector(),
+                tag=text,
+                note=text,
+                status="stored",
+                metadata={"target_file": target_file},
+            )
+
+            result = f"Stored memory with tag: {text} | target_file: {target_file or 'none'}"
+
+        elif route == "memory":
+            recent_notes = memory.get_recent_notes()
+
+            if not recent_notes:
+                result = "Hive Memory is empty."
+            else:
+                lines = []
+                for entry in recent_notes:
+                    lines.append(
+                        f"Task {entry['id']} [{entry['tag']}] "
+                        f"({entry['status']}) {entry['note']} ({entry['timestamp']})"
+                    )
+                result = "\n".join(lines)
+
+        elif route == "plan_task":
+            task_id = payload["task_id"]
+            task = memory.get_task_by_id(task_id)
+
+            if not task:
+                result = f"Task {task_id} not found."
+            else:
+                result = router.planner.plan_task(task)
+
+                task_metadata = task.get("metadata") or {}
+                stored_target_file = task_metadata.get("target_file")
+
+                if stored_target_file:
+                    dependencies = result.get("dependencies") or []
+
+                    if not isinstance(dependencies, list):
+                        dependencies = [dependencies]
+
+                    if stored_target_file not in dependencies:
+                        dependencies.insert(0, stored_target_file)
+
+                    result["dependencies"] = dependencies
+                    result["target_file"] = stored_target_file
+
+                memory.update_task_status(task_id, "planned")
+
+                memory.store(
+                    make_dummy_vector(),
+                    tag="plan",
+                    note=f'Task {task_id} planned | {result["goal"]} | next: {result["next_action"]}',
+                    status="planned",
+                    metadata={
+                        "task_id": task_id,
+                        "plan_id": f"plan-{task_id}",
+                        "plan": result,
+                    },
+                )
+
+        elif route == "active_task":
+            task_id = payload["task_id"]
+            success = memory.update_task_status(task_id, "active")
+            result = f"Task {task_id} marked as active." if success else f"Task {task_id} not found."
+
+        elif route == "help":
+            result = """
+Available commands:
+- memory
+- lessons
+- show task <id>
+- show patch <id>
+- plan task <id>
+- code task <id>
+- continue task <id>
+- complete task <id>
+- active task <id>
+- block task <id>
+- delete task <id>
+- current task
+- apply patch <id>
+- approve patch <id>
+- reject patch <id>
+- verify patch <id>
+- rollback patch <id>
+- help
+- store <text>
+""".strip()
+
+        elif route == "delete_task":
+            task_id = payload["task_id"]
+            success = memory.update_task_status(task_id, "deleted")
+            result = f"Task {task_id} marked as deleted." if success else f"Task {task_id} not found."
+
+        elif route == "block_task":
+            task_id = payload["task_id"]
+            success = memory.update_task_status(task_id, "blocked")
+            result = f"Task {task_id} marked as blocked." if success else f"Task {task_id} not found."
+
+        elif route == "current_task":
+            task = memory.get_current_task()
+            result = task if task else "No active task found."
+
+        elif route == "show_task":
+            task_id = payload["task_id"]
+            task = memory.get_task_by_id(task_id)
+            result = task if task else f"Task {task_id} not found."
+
+        elif route == "continue_task":
+            task_id = payload["task_id"]
+            task = memory.get_task_by_id(task_id)
+
+            if not task:
+                result = f"Task {task_id} not found."
+            else:
+                result = router.builder.continue_task(task)
+                memory.store(
+                    make_dummy_vector(),
+                    tag="continued_task",
+                    note=f'Task {task_id} resumed | {task["note"]}',
+                    status="continued",
+                    metadata={
+                        "task_id": task_id,
+                        "continued_task": result,
+                    },
+                )
+
+        elif route == "code_task":
+            task_id = payload["task_id"]
+            task = memory.get_task_by_id(task_id)
+
+            if not task:
+                result = f"Task {task_id} not found."
+            else:
+                plan = find_plan_for_task(memory, task_id)
+
+                if not plan:
+                    result = f"Task {task_id} has no plan. Run plan task {task_id} first."
+                else:
+                    ready_child = _get_first_ready_child_task(plan)
+
+                    coder_task = task
+                    if ready_child:
+                        parent_meta = task.get("metadata") or {}
+                        coder_task = {
+                            "id": task["id"],
+                            "tag": task.get("tag", "task"),
+                            "status": task.get("status", "active"),
+                            "note": ready_child.get("description", task.get("note", "")),
+                            "metadata": {
+                                **parent_meta,
+                                "target_file": ready_child.get("target_file") or parent_meta.get("target_file"),
+                                "child_task_id": ready_child.get("task_id"),
+                                "parent_task_id": task["id"],
+                            },
+                            "target_file": ready_child.get("target_file") or parent_meta.get("target_file"),
+                            "child_task_id": ready_child.get("task_id"),
+                            "parent_task_id": task["id"],
+                        }
+
+                    result = router.coder.generate_patch_with_revisions(coder_task, plan, reflector)
+
+                    patch_status = result.get("status", "proposed")
+                    patch_label = "blocked" if patch_status == "blocked" else "proposed"
+
+                    patch_metadata = {
+                        **result,
+                        "task_id": task_id,
+                        "plan_id": f"plan-{task_id}",
+                        "patch_id": result.get("patch_id") or f"patch-{task_id}",
+                    }
+
+                    if ready_child:
+                        patch_metadata["child_task_id"] = ready_child.get("task_id")
+                        patch_metadata["child_task_description"] = ready_child.get("description")
+                        patch_metadata["child_target_file"] = ready_child.get("target_file")
+
+                    memory.store(
+                        make_dummy_vector(),
+                        tag="patch",
+                        note=f'Task {task_id} patch {patch_label} | {result.get("target_file", "unknown")}',
+                        status=patch_status,
+                        metadata=patch_metadata,
+                    )
+
+        elif route == "show_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            else:
+                meta, error = require_patch_metadata(patch_entry, patch_id)
+                if error:
+                    result = error
+                else:
+                    result = (
+                        f"Patch {patch_id}\n"
+                        f"Source Task: {meta['task_id']}\n"
+                        f"File: {meta['target_file']}\n"
+                        f"Type: {meta['change_type']}\n"
+                        f"Risk: {meta['risk_level']}\n"
+                        f"Reason: {meta['reason']}\n\n"
+                        f"{meta['patch']}"
+                    )
+
+        elif route == "approve_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            else:
+                success = memory.update_task_status(patch_id, "approved")
+                result = f"Patch {patch_id} approved." if success else f"Patch {patch_id} could not be approved."
+
+        elif route == "reject_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            else:
+                success = memory.update_task_status(patch_id, "rejected")
+                result = f"Patch {patch_id} rejected." if success else f"Patch {patch_id} could not be rejected."
+
+        elif route == "apply_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            elif patch_entry["status"] != "approved":
+                result = f"Patch {patch_id} must be approved first."
+            else:
+                meta, error = require_patch_metadata(patch_entry, patch_id)
+
+                if error:
+                    result = error
+                else:
+                    target_file = meta["target_file"]
+                    patch_text = meta["patch"]
+                    patch_reason = meta.get("reason", "")
+                    file_text = state.get_effective_file_text(target_file)
+
+                    try:
+                        verification = router.executor.verify_patch_context(
+                            patch_text,
+                            target_file,
+                            file_text=file_text,
+                        )
+
+                        if not verification["verified"]:
+                            result = f"Patch {patch_id} failed verification: {verification['checks']}"
+                        else:
+                            backup = router.executor.backup_file(target_file)
+                            router.executor.apply_patch(
+                                patch_text,
+                                target_file,
+                                patch_reason=patch_reason,
+                                file_text=file_text,
+                            )
+
+                            memory.update_task_status(patch_id, "applied")
+                            updated_text = Path(target_file).read_text(encoding="utf-8")
+                            state.record_patch_apply(target_file, patch_id, updated_text)
+                            state.save_snapshot()
+
+                            memory.store(
+                                make_dummy_vector(),
+                                tag="patch_apply",
+                                note=f"Patch {patch_id} applied to {target_file} | backup: {backup}",
+                                status="applied",
+                                metadata={
+                                    "apply_id": f"apply-{patch_id}",
+                                    "patch_id": patch_id,
+                                    "task_id": meta.get("task_id"),
+                                    "plan_id": meta.get("plan_id"),
+                                    "target_file": target_file,
+                                    "backup_path": backup,
+                                },
+                            )
+
+                            result = f"Patch {patch_id} applied successfully.\nBackup created: {backup}"
+
+                    except Exception as e:
+                        result = f"Patch {patch_id} failed to apply: {e}"
+
+        elif route == "verify_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            else:
+                meta, error = require_patch_metadata(patch_entry, patch_id)
+
+                if error:
+                    result = error
+                else:
+                    target_file = meta.get("target_file")
+                    patch_text = meta.get("patch", "")
+                    file_text = state.get_effective_file_text(target_file)
+
+                    verification = router.executor.verify_patch_context(
+                        patch_text,
+                        target_file,
+                        file_text=file_text,
+                    )
+                    semantic = router.executor.validate_patch_semantics(
+                        patch_text,
+                        target_file,
+                        verification=verification,
+                        patch_reason=meta.get("reason", ""),
+                        file_text=file_text,
+                    )
+
+                    result = {
+                        "patch_id": patch_id,
+                        "verified": verification["verified"],
+                        "checks": verification["checks"],
+                        "anchor_index": verification["anchor_index"],
+                        "semantic_valid": semantic["valid"],
+                        "semantic_checks": semantic["checks"],
+                        "semantic_details": semantic["details"],
+                    }
+
+        elif route == "rollback_patch":
+            patch_id = payload["patch_id"]
+            patch_entry, error = find_patch_entry(memory, patch_id)
+
+            if error:
+                result = error
+            else:
+                meta, error = require_patch_metadata(patch_entry, patch_id)
+
+                if error:
+                    result = error
+                else:
+                    target_file = meta["target_file"]
+                    backup_path = find_backup_for_patch(memory, patch_id)
+
+                    if not backup_path:
+                        result = f"No backup found for patch {patch_id}."
+                    else:
+                        try:
+                            router.executor.restore_backup(backup_path, target_file)
+                            memory.update_task_status(patch_id, "rolled_back")
+                            restored_text = Path(target_file).read_text(encoding="utf-8")
+                            state.record_patch_rollback(target_file, patch_id, restored_text)
+                            state.save_snapshot()
+                            result = f"Patch {patch_id} rolled back successfully."
+                        except Exception as e:
+                            result = f"Rollback failed: {e}"
+
+        elif route == "complete_task":
+            task_id = payload["task_id"]
+            success = memory.update_task_status(task_id, "completed")
+            result = f"Task {task_id} marked as completed." if success else f"Task {task_id} not found."
+
+        elif route == "lessons":
+            lessons = lesson_memory.get_recent_lessons(limit=10)
+
+            if not lessons:
+                result = "No lessons recorded."
+            else:
+                lines = []
+                for i, lesson in enumerate(lessons, start=1):
+                    lines.append(
+                        f"{i}. [{lesson.get('source', 'unknown')}] "
+                        f"{lesson.get('failure_reason', 'unknown')} | "
+                        f"file={lesson.get('file')} | "
+                        f"severity={lesson.get('severity', 'unknown')} | "
+                        f"promote_candidate={lesson.get('promote_candidate', False)}"
+                    )
+                result = "\n".join(lines)
+
+        elif route == "builder":
+            result = payload
+
+            memory.store(
+                make_dummy_vector(),
+                tag="builder",
+                note=f'{payload["goal"]} | next: {payload["next_action"]}',
+                status=payload.get("status", "drafted"),
+                metadata={"builder_result": payload},
+            )
+
+        else:
+            result = f"No handler for route: {route}"
+
+        reflection = reflector.evaluate(result)
+
+        print("\nHive Response:")
+        print(result)
+
+        print("\nReflection:")
+        print(reflection)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,67 +1,79 @@
-# === HiveBridge.py (Message-Passing Architecture) ===
-import time 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+import logging
+import json
+from pathlib import Path
 
-class HiveBridge:
-    def __init__(self):
-        self.agent_outputs = {}  # format: {agent_name: {'vector': tensor, 'tag': str}}
-        self.sent_cache = set()  # used for duplicate suppression
+class HiveBridge(nn.Module):
+    def __init__(self, agent_dims, shared_dim=128):
+        super().__init__()
+        self.shared_dim = shared_dim
+        self.debug_log_path = Path("logs/bridge_debug.jsonl")
+        self.debug_log_path.parent.mkdir(parents=True, exist_ok=True)
+        self.debug_log_path.write_text("")  # Clear previous run
 
-    
-    def send(self, agent_name, vector, tag=None):
-        key = (agent_name, tag, vector.sum().item())
-        if key in self.sent_cache:
-            return  # duplicate, skip storing
-        self.sent_cache.add(key)
+        # Each agent gets its own projection MLP
+        self.projections = nn.ModuleDict({
+            name: nn.Sequential(
+                nn.Linear(dim, shared_dim),
+                nn.LayerNorm(shared_dim),
+                nn.ReLU(),
+                nn.Dropout(0.1)
+            )
+            for name, dim in agent_dims.items()
+        })
 
-        self.agent_outputs[agent_name] = {
-            'vector': vector,
-            'tag': tag or "untagged",
-            'timestamp': time.time()
-        }
+        # Final fusion MLP
+        self.fuse_layer = nn.Sequential(
+            nn.Linear(shared_dim, 256),
+            nn.ReLU(),
+            nn.Linear(256, shared_dim)
+        )
+        self.latest_attn_weights = {}
         
 
-    def register_output(self, agent_name, vector, tag=None):
-        self.agent_outputs[agent_name] = {
-            'vector': vector,
-            'tag': tag or "untagged"
+    def forward(self, features_dict):
+        # Project all features to shared latent space
+        shared = {
+            name: self.projections[name](vec)
+            for name, vec in features_dict.items()
+        }
+        return shared
+
+    def fuse(self, shared_dict):
+        keys = list(shared_dict.keys())
+        values = torch.stack([shared_dict[k] for k in keys], dim=1)  # [batch, agents, shared_dim]
+
+        # Attention weights based on mean activation (simple heuristic)
+        attn_scores = torch.mean(values, dim=2, keepdim=True)  # [batch, agents, 1]
+        attn_weights = torch.softmax(attn_scores, dim=1)       # [batch, agents, 1]
+
+        # Log attention values per agent (batch-wise average)
+        self.latest_attn_weights = {
+            name: attn_weights[:, i, 0].detach().cpu().numpy().tolist()
+            for i, name in enumerate(keys)
         }
 
-    def clear(self):
-        self.agent_outputs = {}
-        self.sent_cache.clear()
+        # Weighted sum for fusion
+        fused = torch.sum(values * attn_weights, dim=1)  # [batch, shared_dim]
+        fused_output = self.fuse_layer(fused)
 
-    def receive(self, agent_name):
-        """
-        Retrieve the last stored output for an agent.
-        Returns dict with keys: vector, tag, timestamp (if present), or None.
-        """
-        return self.agent_outputs.get(agent_name)
+        # === LOGGING ===
+        try:
+            log_data = {
+                "attention": {k: round(sum(v) / len(v), 4) for k, v in self.latest_attn_weights.items()},
+                "fused_mean": round(fused_output.mean().item(), 4),
+                "shared_vectors": {
+                    k: [round(float(x), 4) for x in v[0][:10]]  # Sample 10 dims of 1st vector
+                    for k, v in shared_dict.items()
+                }
+            }
+            with self.debug_log_path.open("a") as f:
+                f.write(json.dumps(log_data) + "\n")
 
-    def route_to(self, target_agent_name, attention=False):
-        """
-        Returns a list of (vector, tag, score) tuples.
-        If attention=True, uses time-based attention weighting.
-        """
-        routed = []
-        now = time.time()
-        for name, data in self.agent_outputs.items():
-            if name == target_agent_name:
-                continue
-            vector = data['vector']
-            tag = data['tag']
-            timestamp = data['timestamp']
-            age = now - timestamp
-            score = 1.0 / (1.0 + age) if attention else 1.0
-            routed.append((vector * score, tag, score))
-        return routed
+            logging.info(f"[Bridge] {log_data}")
+        except Exception as e:
+            logging.warning(f"Failed to log bridge debug info: {e}")
 
-
-# === Example Agent Behavior ===
-# Agent receives messages:
-#   messages = hive_bridge.route_to("time_agent")
-#   for vector, tag in messages:
-#       do_something_with(vector, tag)
-
-# Optional extension: scoring, attention, tagging, time-weighted memory, etc.
+        return fused_output

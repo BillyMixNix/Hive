@@ -40,14 +40,6 @@ class HiveMemoryAgent:
 
         self.ptr += 1
         self.save_memory()
-    def search_notes_by_keyword(self, keyword):
-        matching_notes = []
-        for note in self.notes[:self.ptr]:
-            if keyword.lower() in note.lower():
-                matching_notes.append(note)
-        return matching_notes
-
-        # Store the note
     def retrieve_recent(self, n=10):
         return self.get_recent(n)
 
@@ -185,16 +177,6 @@ class HiveMemoryAgent:
             return False
 
         self.statuses[index] = new_status
-        self.save_memory()
-        return True
-
-    def update_task_metadata(self, task_id, new_metadata):
-        index = task_id - 1
-
-        if index < 0 or index >= self.ptr:
-            return False
-
-        self.metadata[index] = new_metadata
         self.save_memory()
         return True
     def get_current_task(self):
