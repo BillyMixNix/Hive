@@ -1,0 +1,161 @@
+from hive_llm import ask_model
+from planner_prompt import PLANNER_PROMPT_TEMPLATE
+import json
+
+
+class PlannerAgent:
+
+    def _fallback_plan(self, task):
+        note = task["note"].lower()
+
+        if "router" in note:
+            return {
+                "task_id": task["id"],
+                "goal": "improve router logic",
+                "plan_steps": [
+                    "Inspect current route() logic in router.py",
+                    "Identify overlapping intent conditions",
+                    "Define clearer intent priority rules",
+                    "Refactor routing branches",
+                    "Test routing against known commands"
+                ],
+                "dependencies": [
+                    "router.py",
+                    "interface.py"
+                ],
+                "risks": [
+                    "Command collisions",
+                    "Breaking existing routes"
+                ],
+                "next_action": "Inspect route() logic in router.py",
+                "status": "planned",
+                "source": "fallback"
+            }
+
+        if "memory" in note:
+            return {
+                "task_id": task["id"],
+                "goal": "improve memory system",
+                "plan_steps": [
+                    "Inspect HiveMemoryAgent.py and locate the correct insertion point inside the class",
+                    "Capture nearby existing lines for anchored diff generation",
+                    "Add a search_notes method to HiveMemoryAgent.py using class-context anchoring",
+                    "Expose search through interface and router",
+                    "Test persistence and recall after restart"
+                ],
+                "dependencies": [
+                    "HiveMemoryAgent.py",
+                    "router.py",
+                    "interface.py",
+                    "main.py"
+                ],
+                "risks": [
+                    "Breaking persistence format",
+                    "Returning false matches",
+                    "Generating a patch without enough context to verify"
+                ],
+                "next_action": "Inspect HiveMemoryAgent.py and capture exact class context for an anchored diff",
+                "status": "planned",
+                "source": "fallback"
+            }
+
+        return {
+            "task_id": task["id"],
+            "goal": task["note"],
+            "plan_steps": [
+                "Inspect the current implementation area",
+                "Clarify the intended behavior",
+                "Draft the smallest safe change",
+                "Apply the change in one file at a time",
+                "Test the result"
+            ],
+            "dependencies": [
+                "main.py"
+            ],
+            "risks": [
+                "Unclear target",
+                "Implementation drift"
+            ],
+            "next_action": "Clarify the specific implementation target",
+            "status": "planned",
+            "source": "fallback"
+        }
+
+    def _build_prompt(self, task, hint=""):
+        # Fill in the dynamic placeholders at runtime
+        return PLANNER_PROMPT_TEMPLATE.format(
+            task_id=task["id"],
+            task_note=task["note"],
+            hint=hint
+        )
+    def plan_task(self, task):
+        prompt = self._build_prompt(task)
+
+        try:
+            raw_response = ask_model(prompt).strip()
+
+            # Try to isolate JSON in case the model adds extra text
+            start = raw_response.find("{")
+            end = raw_response.rfind("}")
+
+            if start == -1 or end == -1:
+                raise ValueError("No JSON object found in model response.")
+
+            json_text = raw_response[start:end + 1]
+            plan = json.loads(json_text)
+
+            # Validate required fields
+            required_fields = [
+                "goal",
+                "plan_steps",
+                "dependencies",
+                "risks",
+                "next_action",
+                "status"
+            ]
+
+            for field in required_fields:
+                if field not in plan:
+                    raise ValueError(f"Missing field in model response: {field}")
+
+            # Attach task_id and source for traceability
+            plan["task_id"] = task["id"]
+            plan["source"] = "llm"
+
+            known_files = {
+                "main.py",
+                "router.py",
+                "interface.py",
+                "planner.py",
+                "coder.py",
+                "builder.py",
+                "executor.py",
+                "reflector.py",
+                "HiveMemoryAgent.py",
+                "hive_llm.py",
+            }
+
+            plan["dependencies"] = [
+                dep for dep in plan["dependencies"]
+                if dep in known_files
+            ]
+
+            if not plan["dependencies"]:
+                plan["dependencies"] = ["main.py"]
+
+            # Basic shape checks
+            if not isinstance(plan["plan_steps"], list) or len(plan["plan_steps"]) == 0:
+                raise ValueError("plan_steps must be a non-empty list.")
+
+            if not isinstance(plan["dependencies"], list):
+                raise ValueError("dependencies must be a list.")
+
+            if not isinstance(plan["risks"], list):
+                raise ValueError("risks must be a list.")
+
+            return plan
+
+        except Exception as e:
+            fallback = self._fallback_plan(task)
+            fallback["llm_error"] = str(e)
+            return fallback

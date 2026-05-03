@@ -1,0 +1,70 @@
+from executor import ExecutorAgent
+from builder import BuilderAgent
+from planner import PlannerAgent 
+from coder import CoderAgent
+class Router:
+    def __init__(self):
+        self.builder = BuilderAgent()
+        self.planner = PlannerAgent()
+        self.executor = ExecutorAgent()
+        self.coder = CoderAgent()
+
+    def normalize_command(self, command):
+        """Standardize user command strings."""
+        return command.lower().strip()
+
+
+    def validate_command_context(self, message):
+        """Check if message context exists."""
+        return "context" in message
+
+    def route(self, user_input, message):
+        intent = message.get("intent")
+        text = user_input.lower().strip()
+        user_input = self.normalize_command(user_input)
+
+        if intent == "plan_task":
+            return "plan_task", message.get("context")
+        if intent == "code_task":
+            return "code_task", message.get("context")
+        if intent == "memory_recall":
+            return "memory", None
+        if intent == "rollback_patch":
+            return "rollback_patch", message.get("context")
+        if intent == "verify_patch":
+            return "verify_patch", message.get("context")
+        if intent == "show_task":
+            return "show_task", message.get("context")
+        if intent == "show_patch":
+            return "show_patch", message.get("context")
+        if intent == "approve_patch":
+            return "approve_patch", message.get("context")
+        if intent == "reject_patch":
+            return "reject_patch", message.get("context")
+        if intent == "apply_patch":
+            return "apply_patch", message.get("context")
+        if intent == "continue_task":
+            return "continue_task", message.get("context")
+        if intent == "complete_task":
+            return "complete_task", message.get("context")
+        if intent == "active_task":
+            return "active_task", message.get("context")
+        if intent == "block_task":
+            return "block_task", message.get("context")
+        if intent == "help":
+            return "help", None
+        if intent == "delete_task":
+            return "delete_task", message.get("context")
+        if intent == "current_task":
+            return "current_task", None
+
+        if "design" in text or "build" in text:
+            return "builder", self.builder.build({"intent": user_input})
+
+        return "builder", self.builder.build({"intent": user_input})
+
+    def safe_get_key(self, message, key):
+        return message.get(key, None)
+
+    def safe_get(self, dictionary, key, default=None):
+        return dictionary.get(key, default)

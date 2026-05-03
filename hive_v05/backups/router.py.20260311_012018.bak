@@ -1,0 +1,78 @@
+from executor import ExecutorAgent
+from builder import BuilderAgent
+from planner import PlannerAgent 
+from coder import CoderAgent
+class Router:
+
+    def __init__(self):
+        self.builder = BuilderAgent()
+        self.planner = PlannerAgent()
+        self.executor = ExecutorAgent()
+        self.coder = CoderAgent()
+
+    def route(self, user_input, message):
+        intent = message.get("intent")
+        intent = message.get("intent")
+        text = user_input.lower().strip()
+
+        if intent == "plan_task":
+            return "plan_task", message["context"]
+        
+        if intent == "code_task":
+            return "code_task", message["context"]
+
+        if intent == "memory_recall":
+            return "memory", None
+        
+        if intent == "rollback_patch":
+            return "rollback_patch", message["context"]
+        
+        if intent == "verify_patch":
+            return "verify_patch", message["context"]
+        
+        if intent == "show_task":
+            return "show_task", message["context"]
+        
+        if intent == "show_patch":
+            return "show_patch", message["context"]
+
+        if intent == "approve_patch":
+            return "approve_patch", message["context"]
+        
+        if intent == "reject_patch":
+            return "reject_patch", message["context"]
+        
+        if intent == "apply_patch":
+            return "apply_patch", message["context"]
+
+        if intent == "continue_task":
+            return "continue_task", message["context"]
+        
+        if intent == "complete_task":
+            return "complete_task", message["context"]
+        
+        if intent == "active_task":    
+            return "active_task", message["context"]
+        
+        if intent == "block_task":
+            
+            return "block_task", message["context"]
+        
+        if intent == "help":
+            return "help", None
+        
+        if intent == "delete_task":
+            return "delete_task", message["context"]
+        
+        if intent == "current_task":
+            return "current_task", None
+        
+        if "design" in text or "build" in text:
+            return "builder", self.builder.build({
+                "intent": user_input
+            })
+
+        return "builder", self.builder.build({
+    "intent": user_input
+})
+
