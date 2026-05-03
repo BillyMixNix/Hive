@@ -44,6 +44,26 @@ class Router:
             "pilot_accept_patch": "pilot_accept_patch",
             "pilot_revise_patch": "pilot_revise_patch",
             "pilot_reject_patch": "pilot_reject_patch",
+            # Math research routes
+            "math_explore": "math_explore",
+            "math_conjecture": "math_conjecture",
+            "math_falsify": "math_falsify",
+            "math_symbolic": "math_symbolic",
+            "math_formal": "math_formal",
+            "math_strategic": "math_strategic",
+            "show_conjectures": "show_conjectures",
+            "show_math_lessons": "show_math_lessons",
+            "math_status": "math_status",
+            # Code research routes
+            "code_hypothesize": "code_hypothesize",
+            "code_benchmark":   "code_benchmark",
+            "code_probe":       "code_probe",
+            "code_scan":        "code_scan",
+            "code_arch_trace":  "code_arch_trace",
+            "code_adversarial": "code_adversarial",
+            "show_hypotheses":  "show_hypotheses",
+            "show_code_lessons": "show_code_lessons",
+            "code_status":      "code_status",
         }
 
     def normalize_command(self, command):

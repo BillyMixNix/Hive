@@ -588,31 +588,131 @@ def is_narrow_anchor_task(task, plan, target_file):
     return any(cue in combined for cue in NARROW_ANCHOR_CUES)
 
 
+_PREFERRED_BY_FILE = {
+    "planner.py": ["plan_task", "_fallback_plan", "_build_prompt"],
+    "coder.py": ["generate_patch_with_revisions", "generate_patch", "_fallback_patch"],
+    "router.py": ["map:intent_routes", "route"],
+    "reflector.py": ["evaluate", "_build_prompt"],
+    "main.py": [
+        "route:show_plan", "route:show_task", "route:show_patch",
+        "route:code_task", "route:apply_patch", "route:approve_patch",
+        "route:complete_task", "route:help",
+        "find_plan_for_task", "_get_first_ready_child_task",
+        "_is_child_task_complete", "main",
+    ],
+    "executor.py": ["apply_patch", "verify_patch_context", "validate_patch_semantics"],
+    "interface.py": ["map:exact_commands", "map:prefix_commands", "process_input"],
+    "builder.py": ["build", "continue_task"],
+    "HiveMemoryAgent.py": ["store", "get_task_by_id", "get_recent_notes", "update_task_status"],
+}
+
+_ROUTE_TERMS = [
+    ("show plan", "route:show_plan"), ("show_plan", "route:show_plan"),
+    ("show task", "route:show_task"), ("show_task", "route:show_task"),
+    ("show patch", "route:show_patch"), ("show_patch", "route:show_patch"),
+    ("code task", "route:code_task"), ("code_task", "route:code_task"),
+    ("apply patch", "route:apply_patch"), ("apply_patch", "route:apply_patch"),
+    ("approve patch", "route:approve_patch"), ("approve_patch", "route:approve_patch"),
+    ("complete task", "route:complete_task"), ("complete_task", "route:complete_task"),
+    ("help", "route:help"),
+]
+
+_MAPPING_TERMS = [
+    ("prefix_commands", "map:prefix_commands"), ("prefix commands", "map:prefix_commands"),
+    ("exact_commands", "map:exact_commands"), ("exact commands", "map:exact_commands"),
+    ("intent_routes", "map:intent_routes"), ("intent routes", "map:intent_routes"),
+]
+
+_ARCH_CHILD_TERMS = ["child task", "child-task", "depends_on", "dependency"]
+_ARCH_STATE_TERMS = ["stored plan", "plan state", "state", "active", "proposed", "completed"]
+_ARCH_PREFERRED = [
+    "find_plan_for_task", "_get_first_ready_child_task", "_is_child_task_complete", "main"
+]
+
+
+def _select_by_name_mention(blocks, combined):
+    """Strategy: return first block whose name is mentioned in combined task text."""
+    for block in blocks:
+        if _mentions_block_name(combined, block["name"]):
+            return block
+    helper_blocks = [b for b in blocks if b["name"].startswith("_")]
+    for block in helper_blocks:
+        if block["name"].lower() in combined:
+            return block
+    return None
+
+
+def _select_by_route_terms(blocks, combined):
+    """Strategy: match main.py route handler terms in combined text."""
+    for term, route_name in _ROUTE_TERMS:
+        if term in combined:
+            for block in blocks:
+                if block["name"] == route_name:
+                    return block
+    return None
+
+
+def _select_by_mapping_terms(blocks, combined):
+    """Strategy: match mapping-table terms (intent_routes, prefix_commands, etc.)."""
+    for term, map_name in _MAPPING_TERMS:
+        if term in combined:
+            for block in blocks:
+                if block["name"] == map_name:
+                    return block
+    return None
+
+
+def _select_by_arch_terms(blocks, combined, task, plan, target_file):
+    """Strategy: architectural task selection for main.py child-task and state terms."""
+    if target_file != "main.py" or not is_architectural_task(task, plan, target_file):
+        return None
+    search_lists = []
+    if any(t in combined for t in _ARCH_CHILD_TERMS):
+        search_lists.append(_ARCH_PREFERRED)
+    if any(t in combined for t in _ARCH_STATE_TERMS):
+        search_lists.append(_ARCH_PREFERRED)
+    if not search_lists:
+        search_lists.append(_ARCH_PREFERRED)
+    for preferred_list in search_lists:
+        for preferred_name in preferred_list:
+            for block in blocks:
+                if block["name"] == preferred_name:
+                    return block
+    return None
+
+
+def _select_by_file_preference(blocks, target_file):
+    """Strategy: return first block matching the file's preferred symbol list."""
+    preferred_names = _PREFERRED_BY_FILE.get(target_file, [])
+    for name in preferred_names:
+        for block in blocks:
+            if block["name"] == name:
+                return block
+    return None
+
+
 def select_target_block(task, plan, target_file, file_text, anchored_symbol=None):
     """
-    Select one likely edit block.
+    Select one likely edit block using a ranked strategy pipeline.
 
     Priority:
-    1. explicit anchored symbol
+    1. explicit anchored symbol (exact match)
     2. explicit method/function/route name mentions (token-aware)
     3. route branch preference for main.py command tasks
-    4. architectural file preferred blocks
-    5. file-specific default block
-    6. first block fallback
+    4. mapping-table terms (intent_routes, prefix_commands, etc.)
+    5. architectural child-task / state terms for main.py
+    6. file-specific preferred block list
+    7. None (no match)
     """
     blocks = extract_code_blocks(file_text, target_file=target_file)
 
     if target_file == "main.py":
-        route_blocks = extract_route_blocks(file_text, target_file=target_file)
-        blocks = route_blocks + blocks
+        blocks = extract_route_blocks(file_text, target_file=target_file) + blocks
 
-    mapping_blocks = extract_mapping_blocks(file_text)
-    blocks = mapping_blocks + blocks
+    blocks = extract_mapping_blocks(file_text) + blocks
 
     if not blocks:
         return None
-
-    combined = _normalized_combined_text(task, plan)
 
     if anchored_symbol:
         for block in blocks:
@@ -620,124 +720,15 @@ def select_target_block(task, plan, target_file, file_text, anchored_symbol=None
                 return block
         return None
 
-    preferred_by_file = {
-        "planner.py": ["plan_task", "_fallback_plan", "_build_prompt"],
-        "coder.py": ["generate_patch_with_revisions", "generate_patch", "_fallback_patch"],
-        "router.py": ["map:intent_routes", "route"],
-        "reflector.py": ["evaluate", "_build_prompt"],
-        "main.py": [
-            "route:show_plan",
-            "route:show_task",
-            "route:show_patch",
-            "route:code_task",
-            "route:apply_patch",
-            "route:approve_patch",
-            "route:complete_task",
-            "route:help",
-            "find_plan_for_task",
-            "_get_first_ready_child_task",
-            "_is_child_task_complete",
-            "main",
-        ],
-        "executor.py": ["apply_patch", "verify_patch_context", "validate_patch_semantics"],
-        "interface.py": ["map:exact_commands", "map:prefix_commands", "process_input"],
-        "builder.py": ["build", "continue_task"],
-        "HiveMemoryAgent.py": ["store", "get_task_by_id", "get_recent_notes", "update_task_status"],
-    }
+    combined = _normalized_combined_text(task, plan)
 
-    for block in blocks:
-        if _mentions_block_name(combined, block["name"]):
-            return block
-
-    helper_blocks = [
-        block for block in blocks
-        if block["name"].startswith("_")
-    ]
-
-    for block in helper_blocks:
-        if block["name"].lower() in combined:
-            return block
-
-    if target_file == "main.py":
-        route_terms = [
-            ("show plan", "route:show_plan"),
-            ("show_plan", "route:show_plan"),
-            ("show task", "route:show_task"),
-            ("show_task", "route:show_task"),
-            ("show patch", "route:show_patch"),
-            ("show_patch", "route:show_patch"),
-            ("code task", "route:code_task"),
-            ("code_task", "route:code_task"),
-            ("apply patch", "route:apply_patch"),
-            ("apply_patch", "route:apply_patch"),
-            ("approve patch", "route:approve_patch"),
-            ("approve_patch", "route:approve_patch"),
-            ("complete task", "route:complete_task"),
-            ("complete_task", "route:complete_task"),
-            ("help", "route:help"),
-        ]
-
-        for term, route_name in route_terms:
-            if term in combined:
-                for block in blocks:
-                    if block["name"] == route_name:
-                        return block
-
-    mapping_terms = [
-        ("prefix_commands", "map:prefix_commands"),
-        ("prefix commands", "map:prefix_commands"),
-        ("exact_commands", "map:exact_commands"),
-        ("exact commands", "map:exact_commands"),
-        ("intent_routes", "map:intent_routes"),
-        ("intent routes", "map:intent_routes"),
-    ]
-
-    for term, map_name in mapping_terms:
-        if term in combined:
-            for block in blocks:
-                if block["name"] == map_name:
-                    return block
-
-    if target_file == "main.py" and is_architectural_task(task, plan, target_file):
-        if any(term in combined for term in ["child task", "child-task", "depends_on", "dependency"]):
-            for preferred_name in [
-                "_get_first_ready_child_task",
-                "_is_child_task_complete",
-                "find_plan_for_task",
-                "main",
-            ]:
-                for block in blocks:
-                    if block["name"] == preferred_name:
-                        return block
-
-        if any(term in combined for term in ["stored plan", "plan state", "state", "active", "proposed", "completed"]):
-            for preferred_name in [
-                "find_plan_for_task",
-                "_get_first_ready_child_task",
-                "_is_child_task_complete",
-                "main",
-            ]:
-                for block in blocks:
-                    if block["name"] == preferred_name:
-                        return block
-
-        for preferred_name in [
-            "find_plan_for_task",
-            "_get_first_ready_child_task",
-            "_is_child_task_complete",
-            "main",
-        ]:
-            for block in blocks:
-                if block["name"] == preferred_name:
-                    return block
-
-    preferred_names = preferred_by_file.get(target_file, [])
-    for name in preferred_names:
-        for block in blocks:
-            if block["name"] == name:
-                return block
-
-    return None
+    return (
+        _select_by_name_mention(blocks, combined)
+        or _select_by_route_terms(blocks, combined)
+        or _select_by_mapping_terms(blocks, combined)
+        or _select_by_arch_terms(blocks, combined, task, plan, target_file)
+        or _select_by_file_preference(blocks, target_file)
+    )
 
 
 def get_neighbor_blocks(blocks, selected_block, radius=0):

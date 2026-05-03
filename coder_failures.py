@@ -492,13 +492,29 @@ RETRY_TEMPLATE_MAP = {
 FAILURE_RULES = RETRY_TEMPLATE_MAP
 
 
-def classify_failure(error_text):
-    text = str(error_text).lower()
-
+def _classify_format_failure(text):
+    """Classify formatting / parser-contract failures."""
     if "no patch:" in text:
         return "missing_patch_section"
     if "patch section is empty" in text:
         return "empty_patch"
+    if "non-diff commentary" in text:
+        return "non_diff_commentary"
+    if "multiple patch: sections" in text:
+        return "multiple_patch_sections"
+    if "patch is missing diff file headers" in text or "missing diff file headers" in text:
+        return "missing_diff_headers"
+    if "empty model response" in text:
+        return "empty_model_response"
+    if "patch change too small or non-functional" in text:
+        return "comment_task_rejected_as_nonfunctional"
+    if "non_meaningful_patch" in text:
+        return "non_meaningful_patch"
+    return None
+
+
+def _classify_sandbox_failure(text):
+    """Classify sandbox environment failures."""
     if "sandbox apply failed" in text:
         return "sandbox_apply_failed"
     if "sandbox syntax failed" in text:
@@ -507,19 +523,27 @@ def classify_failure(error_text):
         return "sandbox_semantic_failed"
     if "sandbox unavailable" in text:
         return "sandbox_unavailable"
+    if "access is denied" in text or "permission denied" in text or "winerror 5" in text:
+        return "workspace_sandbox_permission_issue"
+    return None
+
+
+def _classify_planner_failure(text):
+    """Classify planner contract failures."""
     if "planner output was malformed" in text or "no json object found" in text:
         return "planner_invalid_json"
     if "planner output failed validation" in text:
         return "planner_validation_failure"
     if "planner fallback was used" in text:
         return "planner_fallback_used"
-    if "non-diff commentary" in text:
-        return "non_diff_commentary"
+    return None
+
+
+def _classify_scope_failure(text):
+    """Classify scope boundary and method structure failures."""
     if "new methods are not allowed" in text:
         return "new_method_not_allowed"
-    if "violates constraints" in text and "new method" in text:
-        return "new_method_not_allowed"
-    if "violates constraints" in text and "new methods" in text:
+    if "violates constraints" in text and ("new method" in text or "new methods" in text):
         return "new_method_not_allowed"
     if "duplicate method definition" in text or "duplicate method definitions" in text:
         return "duplicate_method_definition"
@@ -529,10 +553,28 @@ def classify_failure(error_text):
         return "removes_existing_methods"
     if "immediately after a return line" in text:
         return "bad_method_insertion_point"
-    if "no anchor context" in text:
-        return "missing_anchor_context"
+    if "invalid indentation level" in text:
+        return "bad_method_indent"
+    if "unfinished block" in text:
+        return "unfinished_block_insertion"
+    if (
+        "mixed_scope_detected': true" in text
+        or '"mixed_scope_detected": true' in text
+        or "mixed scope detected" in text
+        or "mixed_scope_patch" in text
+    ):
+        return "mixed_scope_patch"
+    if "local_assignment_at_module_scope" in text:
+        return "local_assignment_at_module_scope"
+    return None
+
+
+def _classify_anchor_failure(text):
+    """Classify anchor and context block failures."""
     if "no anchor context or removal lines" in text:
         return "missing_context_block"
+    if "no anchor context" in text:
+        return "missing_anchor_context"
     if (
         "anchor_found': false" in text
         or '"anchor_found": false' in text
@@ -540,60 +582,78 @@ def classify_failure(error_text):
         or '"context_block_found": false' in text
     ):
         return "missing_context_block"
-    if (
-        "mixed_scope_detected': true" in text
-        or '"mixed_scope_detected": true' in text
-        or "mixed scope detected" in text
-    ):
-        return "mixed_scope_patch"
-    if "mixed_scope_patch" in text:
-        return "mixed_scope_patch"
-    if "reflector rejected patch" in text:
-        return "reflector_reject"
-    if "reflector requested revision" in text:
-        return "reflector_revision"
-    if "unfinished block" in text:
-        return "unfinished_block_insertion"
-    if "invalid indentation level" in text:
-        return "bad_method_indent"
-    if "multiple patch: sections" in text:
-        return "multiple_patch_sections"
-    if "patch is missing diff file headers" in text or "missing diff file headers" in text:
-        return "missing_diff_headers"
-    if "does not satisfy planner completion_cues" in text or "missing expected diff cues" in text:
-        return "completion_cue_mismatch"
-    if "must target exactly one file" in text:
-        return "multiple_target_files"
-    if "too large for first-pass review" in text:
-        return "patch_too_large"
-    if "empty model response" in text:
-        return "empty_model_response"
-    if "access is denied" in text or "permission denied" in text or "winerror 5" in text:
-        return "workspace_sandbox_permission_issue"
     if "under-anchored after trim" in text:
         return "under_anchored_after_trim"
     if "context exceeded budget" in text or "context was trimmed" in text:
         return "oversized_context_trimmed"
+    if "does not satisfy planner completion_cues" in text or "missing expected diff cues" in text:
+        return "completion_cue_mismatch"
+    return None
+
+
+def _classify_target_failure(text):
+    """Classify explicit target and scope alignment failures."""
+    if "must target exactly one file" in text:
+        return "multiple_target_files"
     if "does not match explicit task file" in text:
         return "explicit_file_mismatch"
     if "does not match explicit task method" in text:
         return "explicit_method_mismatch"
     if "symbol_anchor_drift" in text:
         return "symbol_anchor_drift"
-    if "patch appears misaligned with task scope" in text or "patch appears broader than the explicit task intent" in text:
+    if (
+        "patch appears misaligned with task scope" in text
+        or "patch appears broader than the explicit task intent" in text
+    ):
         return "scope_alignment_mismatch"
+    if "too large for first-pass review" in text:
+        return "patch_too_large"
+    return None
+
+
+def _classify_reflection_failure(text):
+    """Classify reflector verdict failures."""
+    if "reflector rejected patch" in text:
+        return "reflector_reject"
+    if "reflector requested revision" in text:
+        return "reflector_revision"
+    return None
+
+
+def _classify_block_rewrite_failure(text):
+    """Classify block rewrite contract failures."""
     if "block rewrite returned incorrect method" in text:
         return "block_rewrite_wrong_method"
-    if "block_rewrite_contract_failure" in text or "block rewrite returned an empty block" in text:
+    if (
+        "block_rewrite_contract_failure" in text
+        or "block rewrite returned an empty block" in text
+        or "block rewrite changed the target method signature" in text
+        or "block rewrite produced no meaningful change" in text
+    ):
         return "block_rewrite_contract_failure"
-    if "block rewrite changed the target method signature" in text:
-        return "block_rewrite_contract_failure"
-    if "block rewrite produced no meaningful change" in text:
-        return "block_rewrite_contract_failure"
-    if "patch change too small or non-functional" in text:
-        return "comment_task_rejected_as_nonfunctional"
+    return None
 
-    return UNKNOWN_FAILURE_CODE
+
+def classify_failure(error_text):
+    """
+    Classify a failure string into a structured failure code.
+
+    Delegates to grouped helper classifiers in priority order.
+    Returns UNKNOWN_FAILURE_CODE if no group matches.
+    """
+    text = str(error_text).lower()
+
+    return (
+        _classify_format_failure(text)
+        or _classify_sandbox_failure(text)
+        or _classify_planner_failure(text)
+        or _classify_scope_failure(text)
+        or _classify_anchor_failure(text)
+        or _classify_target_failure(text)
+        or _classify_reflection_failure(text)
+        or _classify_block_rewrite_failure(text)
+        or UNKNOWN_FAILURE_CODE
+    )
 
 
 def build_retry_instruction(error_text):

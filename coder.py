@@ -1631,56 +1631,239 @@ class CoderAgent:
             max_revisions=0,
         )
 
+    def _advance_retry_state(
+        self, task, plan, target_file, context, session,
+        failure_code, interpretation, last_error,
+        rejected_patches, reflection, repeated_failure_count,
+        lesson_prefix="",
+    ):
+        """
+        Consolidate the repeated pattern: lookup retry materials →
+        format rejection context → build retry prompt.
+        Returns (recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches).
+        Called at the end of every failed attempt branch.
+        """
+        recent_lessons, retry_lesson_package = self._lookup_retry_materials(
+            task=task,
+            target_file=target_file,
+            context=context,
+            failure_code=failure_code,
+            interpretation=interpretation,
+            last_error=last_error,
+            rejected_patches=rejected_patches,
+            limit=3,
+        )
+        rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
+        lesson_text = lesson_prefix + retry_lesson_package["text"]
+
+        current_prompt = self._build_retry_prompt_with_rejections(
+            task=task,
+            plan=plan,
+            target_file=target_file,
+            revision_file_text=session["revision_file_text"],
+            previous_patch_text=session.get("previous_patch_text", ""),
+            reflection=reflection,
+            lesson_text=lesson_text,
+            context=context,
+            rejection_context=rejection_context,
+            interpretation=interpretation,
+            repeated_failure_count=repeated_failure_count,
+        )
+        active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
+        return recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches
+
+    def _handle_repeated_patch(
+        self, attempt, max_revisions, task, plan, target_file,
+        context, session, candidate_patch_data, recent_lessons,
+        rejected_patches, active_retry_lesson_ids,
+        previous_failure_code, repeated_failure_count,
+    ):
+        """Handle the case where the retry returned the same patch. Returns updated state dict."""
+        last_error = "Retry returned the same patch as the previous failed attempt."
+        interpretation = self._interpret_failure(
+            stage="exception", error_text=last_error, task=task,
+            patch_data=candidate_patch_data, recent_lessons=recent_lessons,
+            rejected_patches=rejected_patches, attempt_index=attempt + 1,
+            context=context, source="coder_retry_guard",
+            metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
+        )
+        should_break = attempt >= max_revisions
+        if should_break:
+            return {"should_break": True, "last_error": last_error,
+                    "previous_failure_code": interpretation.classification.failure_code,
+                    "repeated_failure_count": repeated_failure_count}
+
+        recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches = (
+            self._advance_retry_state(
+                task, plan, target_file, context, session,
+                interpretation.classification.failure_code, interpretation, last_error,
+                rejected_patches,
+                {"reflection": last_error, "confidence": 0.15,
+                 "next_step": "Revise the patch by applying one tight corrective rule and changing only the failing lines.",
+                 "verdict": "revise"},
+                repeated_failure_count,
+            )
+        )
+        return {
+            "should_continue": True, "last_error": last_error,
+            "recent_lessons": recent_lessons, "current_prompt": current_prompt,
+            "active_retry_lesson_ids": active_retry_lesson_ids,
+            "rejected_patches": rejected_patches,
+            "previous_failure_code": interpretation.classification.failure_code,
+            "repeated_failure_count": repeated_failure_count,
+        }
+
+    def _handle_sandbox_failure(
+        self, attempt, max_revisions, task, plan, target_file,
+        context, session, candidate_patch_data, sandbox_report,
+        recent_lessons, rejected_patches, active_retry_lesson_ids,
+        previous_failure_code, repeated_failure_count,
+    ):
+        """Handle sandbox failure. Returns updated state dict."""
+        self._record_retry_lesson_outcome(active_retry_lesson_ids, success=False,
+                                          outcome_note="failed_again", reuse_helped="hurt")
+        sandbox_errors = sandbox_report.get("errors", [])
+        notes = sandbox_report.get("notes", "")
+        err_str = " | ".join(sandbox_errors) if sandbox_errors else notes
+        if sandbox_report.get("applied") is not True:
+            last_error = f"Sandbox apply failed: {err_str}"
+        elif sandbox_report.get("syntax_valid") is not True:
+            last_error = f"Sandbox syntax failed: {err_str}"
+        else:
+            last_error = f"Sandbox semantic failed: {err_str}"
+
+        interpretation = self._interpret_failure(
+            stage="sandbox", error_text=last_error, task=task,
+            patch_data=candidate_patch_data, sandbox_report=sandbox_report,
+            recent_lessons=recent_lessons, rejected_patches=rejected_patches,
+            attempt_index=attempt + 1, context=context, source="sandbox",
+            metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
+        )
+        print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
+
+        new_repeated = (repeated_failure_count + 1
+                        if interpretation.classification.failure_code == previous_failure_code
+                        else 0)
+
+        should_break = self._should_stop_retry(interpretation) or attempt >= max_revisions
+        if should_break:
+            return {"should_break": True, "last_error": last_error,
+                    "previous_failure_code": interpretation.classification.failure_code,
+                    "repeated_failure_count": new_repeated,
+                    "active_retry_lesson_ids": []}
+
+        lesson_prefix = (
+            "The last retry failed for the same reason again. Apply one specific corrective rule "
+            "instead of restating the same patch. Preserve the same target symbol and modify only the failing lines.\n\n"
+            if new_repeated > 0 else ""
+        ) + f"{interpretation.revision.retry_instruction}\n\n"
+
+        recent_lessons, current_prompt, active_retry_lesson_ids, _, rejected_patches = (
+            self._advance_retry_state(
+                task, plan, target_file, context, session,
+                interpretation.classification.failure_code, interpretation, last_error,
+                rejected_patches,
+                {"reflection": last_error, "confidence": interpretation.classification.confidence,
+                 "next_step": "Revise the patch so it passes sandbox application, syntax, and semantic validation.",
+                 "verdict": "revise"},
+                new_repeated, lesson_prefix=lesson_prefix,
+            )
+        )
+        return {
+            "should_continue": True, "last_error": last_error,
+            "recent_lessons": recent_lessons, "current_prompt": current_prompt,
+            "active_retry_lesson_ids": active_retry_lesson_ids,
+            "rejected_patches": rejected_patches,
+            "previous_failure_code": interpretation.classification.failure_code,
+            "repeated_failure_count": new_repeated,
+        }
+
+    def _handle_reflector_verdict(
+        self, attempt, max_revisions, task, plan, target_file,
+        context, session, candidate_patch_data, reflection,
+        recent_lessons, rejected_patches, active_retry_lesson_ids,
+        previous_failure_code, repeated_failure_count,
+    ):
+        """Handle reflector reject/revise verdict. Returns updated state dict or accept signal."""
+        verdict = reflection.get("verdict", "revise")
+        confidence = float(reflection.get("confidence", 0.0))
+
+        if verdict == "accept" and confidence >= 0.7:
+            self._record_retry_lesson_outcome(active_retry_lesson_ids, success=True,
+                                              outcome_note="retry_success", reuse_helped="helped")
+            candidate_patch_data["reflection"] = reflection
+            return {"should_accept": True, "patch_data": candidate_patch_data}
+
+        self._record_retry_lesson_outcome(active_retry_lesson_ids, success=False,
+                                          outcome_note="failed_again", reuse_helped="hurt")
+        if verdict == "reject":
+            last_error = f"Reflector rejected patch: {reflection.get('reflection')}"
+            stage = "reflector"
+        else:
+            last_error = f"Reflector requested revision: {reflection.get('reflection')}"
+            stage = "reflector"
+
+        interpretation = self._interpret_failure(
+            stage=stage, error_text=last_error, task=task,
+            patch_data=candidate_patch_data, reflection=reflection,
+            recent_lessons=recent_lessons, rejected_patches=rejected_patches,
+            attempt_index=attempt + 1, context=context, source="reflector",
+            metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
+        )
+        print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
+
+        new_repeated = (repeated_failure_count + 1
+                        if interpretation.classification.failure_code == previous_failure_code
+                        else 0)
+
+        should_break = self._should_stop_retry(interpretation) or attempt >= max_revisions
+        if should_break:
+            return {"should_break": True, "last_error": last_error,
+                    "previous_failure_code": interpretation.classification.failure_code,
+                    "repeated_failure_count": new_repeated,
+                    "active_retry_lesson_ids": []}
+
+        lesson_prefix = (
+            "The last retry failed for the same reason again. Apply one specific corrective rule "
+            "instead of repeating the prior patch shape. Preserve the same target symbol and modify only the failing lines.\n\n"
+            if new_repeated > 0 else ""
+        ) + (f"{interpretation.revision.retry_instruction}\n\n" if interpretation else "")
+
+        recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches = (
+            self._advance_retry_state(
+                task, plan, target_file, context, session,
+                interpretation.classification.failure_code, interpretation, last_error,
+                rejected_patches, reflection, new_repeated, lesson_prefix=lesson_prefix,
+            )
+        )
+        return {
+            "should_continue": True, "last_error": last_error,
+            "recent_lessons": recent_lessons, "current_prompt": current_prompt,
+            "active_retry_lesson_ids": active_retry_lesson_ids,
+            "rejected_patches": rejected_patches,
+            "previous_failure_code": interpretation.classification.failure_code,
+            "repeated_failure_count": new_repeated,
+        }
+
     def generate_patch_with_revisions(self, task, plan, reflector, max_revisions=2):
         print("[Coder DEBUG] task note:", task.get("note"))
         print("[Coder DEBUG] task target_file:", task.get("target_file"))
         print("[Coder DEBUG] plan dependencies:", plan.get("dependencies"))
 
-        target_file = self._select_target_file(
-            plan,
-            target_file=task.get("target_file"),
-            task=task,
-        )
-
+        target_file = self._select_target_file(plan, target_file=task.get("target_file"), task=task)
         print(f"[Coder] Selected target file: {target_file}")
-
         task = self._attach_pilot_guardrails(task, plan=plan, target_file=target_file)
 
-        previous_patch_text = ""
-        last_error = None
-
-        target_symbol = (
-            task.get("target_symbol")
-            or (task.get("metadata") or {}).get("target_symbol")
-        )
-
+        target_symbol = task.get("target_symbol") or (task.get("metadata") or {}).get("target_symbol")
         if not target_symbol:
-            raise ValueError(
-                f"Task is missing target_symbol. Refusing to generate patch.\nTask: {task}"
-            )
-        reflection = {
-            "reflection": "No reflection yet.",
-            "confidence": 0.0,
-            "next_step": "Generate first patch attempt.",
-            "verdict": "revise",
-        }
-        best_patch_data: PatchData | None = None
-        best_reflection: dict[str, object] | None = None
-        best_confidence = -1.0
-        candidate_patch_data: PatchData | None = None
+            raise ValueError(f"Task is missing target_symbol. Refusing to generate patch.\nTask: {task}")
 
         try:
             session = self._prepare_revision_session(task, plan, target_file)
-            context = session["context"]
-            revision_file_text = session["revision_file_text"]
-            use_block_rewrite = session["use_block_rewrite"]
-            selected_block = session["selected_block"]
         except Exception as e:
             if self._is_symbol_locked_task(task, plan):
                 return self._blocked_anchor_patch(
-                    task,
-                    plan,
-                    target_file,
+                    task, plan, target_file,
                     f"Hard anchor enforcement blocked patch for {self._get_task_anchor(task, plan).get('target_symbol')}",
                     f"Could not read target file {target_file}: {e}",
                 )
@@ -1688,112 +1871,67 @@ class CoderAgent:
             fallback["llm_error"] = f"Could not read target file {target_file}: {e}"
             return fallback
 
-        recent_lessons = self._get_retry_lessons(
-            task=task,
-            target_file=target_file,
-            context=context,
-            limit=15,
-        )
-        initial_lesson_package = self._compose_retry_lesson_text(
-            "",
-            recent_lessons,
-        )
+        context = session["context"]
+        revision_file_text = session["revision_file_text"]
+        use_block_rewrite = session["use_block_rewrite"]
+        selected_block = session["selected_block"]
+
+        recent_lessons = self._get_retry_lessons(task=task, target_file=target_file, context=context, limit=15)
+        initial_lesson_package = self._compose_retry_lesson_text("", recent_lessons)
         lesson_text = initial_lesson_package["text"]
 
-        rejection_context, rejected_patches = self._format_rejection_context(
-            task["id"],
-            target_file,
-        )
-
-        current_prompt = self._build_generation_prompt(
-            task,
-            plan,
-            target_file,
-            session,
-            lesson_text,
-        )
+        rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
+        current_prompt = self._build_generation_prompt(task, plan, target_file, session, lesson_text)
         current_prompt = self._prepend_rejection_context(current_prompt, rejection_context)
         current_prompt = self._prepend_pilot_retry_context(current_prompt, task)
-
         active_retry_lesson_ids = self._record_retry_lesson_use(
-            recent_lessons,
-            guidance_changed=initial_lesson_package["guidance_changed"],
+            recent_lessons, guidance_changed=initial_lesson_package["guidance_changed"]
         )
+
+        reflection = {"reflection": "No reflection yet.", "confidence": 0.0,
+                      "next_step": "Generate first patch attempt.", "verdict": "revise"}
+        best_patch_data = None
+        best_reflection = None
+        best_confidence = -1.0
+        candidate_patch_data = None
         previous_failure_code = None
         repeated_failure_count = 0
-        repeated_patch_count = 0
+        previous_patch_text = ""
+        last_error = None
 
         for attempt in range(max_revisions + 1):
             print(f"[Coder] Patch attempt {attempt + 1}")
             candidate_patch_data = None
-            
+            session["previous_patch_text"] = previous_patch_text
+
             try:
                 candidate_patch_data = self._generate_candidate_patch_data(
-                    task,
-                    plan,
-                    target_file,
-                    session,
-                    current_prompt,
-                    attempt,
+                    task, plan, target_file, session, current_prompt, attempt
                 )
-
                 candidate_patch_text = candidate_patch_data.get("patch", "")
-                if attempt > 0 and previous_patch_text and candidate_patch_text == previous_patch_text:
-                    repeated_patch_count += 1
-                    last_error = "Retry returned the same patch as the previous failed attempt."
-                    interpretation = self._interpret_failure(
-                        stage="exception",
-                        error_text=last_error,
-                        task=task,
-                        patch_data=candidate_patch_data,
-                        recent_lessons=recent_lessons,
-                        rejected_patches=rejected_patches,
-                        attempt_index=attempt + 1,
-                        context=context,
-                        source="coder_retry_guard",
-                        metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
-                    )
-                    previous_failure_code = interpretation.classification.failure_code
-                    if attempt >= max_revisions:
-                        break
 
-                    recent_lessons, retry_lesson_package = self._lookup_retry_materials(
-                        task=task,
-                        target_file=target_file,
-                        context=context,
-                        failure_code=interpretation.classification.failure_code,
-                        interpretation=interpretation,
-                        last_error=last_error,
-                        rejected_patches=rejected_patches,
-                        limit=3,
+                # Branch 1: same patch repeated
+                if attempt > 0 and previous_patch_text and candidate_patch_text == previous_patch_text:
+                    state = self._handle_repeated_patch(
+                        attempt, max_revisions, task, plan, target_file, context, session,
+                        candidate_patch_data, recent_lessons, rejected_patches,
+                        active_retry_lesson_ids, previous_failure_code, repeated_failure_count,
                     )
-                    rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
-                    current_prompt = self._build_retry_prompt_with_rejections(
-                        task=task,
-                        plan=plan,
-                        target_file=target_file,
-                        revision_file_text=revision_file_text,
-                        previous_patch_text=previous_patch_text,
-                        reflection={
-                            "reflection": last_error,
-                            "confidence": 0.15,
-                            "next_step": "Revise the patch by applying one tight corrective rule and changing only the failing lines.",
-                            "verdict": "revise",
-                        },
-                        lesson_text=retry_lesson_package["text"],
-                        context=context,
-                        rejection_context=rejection_context,
-                        interpretation=interpretation,
-                        repeated_failure_count=repeated_failure_count,
-                    )
-                    active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
+                    last_error = state["last_error"]
+                    previous_failure_code = state["previous_failure_code"]
+                    repeated_failure_count = state["repeated_failure_count"]
+                    if state.get("should_break"):
+                        break
+                    recent_lessons = state["recent_lessons"]
+                    current_prompt = state["current_prompt"]
+                    active_retry_lesson_ids = state["active_retry_lesson_ids"]
+                    rejected_patches = state["rejected_patches"]
                     continue
 
                 print("[Coder] Patch validation passed")
-
-                assert candidate_patch_data is not None
                 sandbox_report = self._sandbox_test_patch(candidate_patch_data)
                 print(f"[Coder] Sandbox report: {sandbox_report}")
+                candidate_patch_data["sandbox_report"] = sandbox_report
 
                 sandbox_ok = (
                     sandbox_report.get("applied") is True
@@ -1801,332 +1939,123 @@ class CoderAgent:
                     and sandbox_report.get("semantic_valid") is True
                 )
 
-                candidate_patch_data["sandbox_report"] = sandbox_report
-
+                # Branch 2: sandbox failure
                 if not sandbox_ok:
-                    self._record_retry_lesson_outcome(
-                        active_retry_lesson_ids,
-                        success=False,
-                        outcome_note="failed_again",
-                        reuse_helped="hurt",
+                    state = self._handle_sandbox_failure(
+                        attempt, max_revisions, task, plan, target_file, context, session,
+                        candidate_patch_data, sandbox_report, recent_lessons, rejected_patches,
+                        active_retry_lesson_ids, previous_failure_code, repeated_failure_count,
                     )
-                    active_retry_lesson_ids = []
-                    sandbox_errors = sandbox_report.get("errors", [])
-                    if sandbox_report.get("applied") is not True:
-                        last_error = f"Sandbox apply failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
-                    elif sandbox_report.get("syntax_valid") is not True:
-                        last_error = f"Sandbox syntax failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
-                    else:
-                        last_error = f"Sandbox semantic failed: {' | '.join(sandbox_errors) if sandbox_errors else sandbox_report.get('notes', '')}"
-
-                    interpretation = self._interpret_failure(
-                        stage="sandbox",
-                        error_text=last_error,
-                        task=task,
-                        patch_data=candidate_patch_data,
-                        sandbox_report=sandbox_report,
-                        recent_lessons=recent_lessons,
-                        rejected_patches=rejected_patches,
-                        attempt_index=attempt + 1,
-                        context=context,
-                        source="sandbox",
-                        metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
-                    )
-                    print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
-                    if interpretation.classification.failure_code == previous_failure_code:
-                        repeated_failure_count += 1
-                    else:
-                        repeated_failure_count = 0
-                    previous_failure_code = interpretation.classification.failure_code
-                    if self._should_stop_retry(interpretation):
+                    last_error = state["last_error"]
+                    previous_failure_code = state["previous_failure_code"]
+                    repeated_failure_count = state["repeated_failure_count"]
+                    active_retry_lesson_ids = state.get("active_retry_lesson_ids", [])
+                    if state.get("should_break"):
                         break
-
-                    if attempt >= max_revisions:
-                        break
-
-                    recent_lessons, retry_lesson_package = self._lookup_retry_materials(
-                        task=task,
-                        target_file=target_file,
-                        context=context,
-                        failure_code=interpretation.classification.failure_code,
-                        interpretation=interpretation,
-                        last_error=last_error,
-                        rejected_patches=rejected_patches,
-                        limit=3,
-                    )
-                    lesson_text = retry_lesson_package["text"]
-                    active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
-
-                    current_prompt = self._build_retry_prompt_with_rejections(
-                        task=task,
-                        plan=plan,
-                        target_file=target_file,
-                        revision_file_text=revision_file_text,
-                        previous_patch_text=candidate_patch_data.get("patch", ""),
-                        reflection={
-                            "reflection": last_error,
-                            "confidence": interpretation.classification.confidence,
-                            "next_step": "Revise the patch so it passes sandbox application, syntax, and semantic validation.",
-                            "verdict": "revise",
-                        },
-                        lesson_text=(
-                            (
-                                "The last retry failed for the same reason again. Apply one specific corrective rule from the failure "
-                                "instead of restating the same patch. Preserve the same target symbol and modify only the failing lines.\n\n"
-                            )
-                            if repeated_failure_count > 0
-                            else ""
-                        )
-                        + f"{interpretation.revision.retry_instruction}\n\n{lesson_text}",
-                        context=context,
-                        rejection_context="",
-                        interpretation=interpretation,
-                        repeated_failure_count=repeated_failure_count,
-                    )
+                    recent_lessons = state["recent_lessons"]
+                    current_prompt = state["current_prompt"]
+                    rejected_patches = state["rejected_patches"]
                     continue
 
-                assert candidate_patch_data is not None
-                reflection = reflector.evaluate(
-                    candidate_patch_data,
-                    task=task,
-                    plan=plan,
-                    pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
-                )
-                print(f"[Coder] Reflector verdict: {reflection.get('verdict')}")
-
-                verdict = reflection.get("verdict", "revise")
-                confidence = float(reflection.get("confidence", 0.0))
-
-                patch_text = candidate_patch_data.get("patch", "")
                 patch_is_meaningful = self._patch_has_meaningful_changes(candidate_patch_data, task)
                 patch_is_blocked = candidate_patch_data.get("status") == "blocked"
 
+                # Branch 3a: not meaningful
                 if not patch_is_meaningful:
-                    self._record_retry_lesson_outcome(
-                        active_retry_lesson_ids,
-                        success=False,
-                        outcome_note="failed_again",
-                        reuse_helped="hurt",
-                    )
+                    self._record_retry_lesson_outcome(active_retry_lesson_ids, success=False,
+                                                      outcome_note="failed_again", reuse_helped="hurt")
                     active_retry_lesson_ids = []
                     last_error = "Patch failed usefulness check: no meaningful code changes detected."
                     print(f"[Coder] {last_error}")
-
                     interpretation = self._interpret_failure(
-                        stage="exception",
-                        error_text=last_error,
-                        task=task,
-                        patch_data=candidate_patch_data,
-                        recent_lessons=recent_lessons,
-                        rejected_patches=rejected_patches,
-                        attempt_index=attempt + 1,
-                        context=context,
-                        source="coder_usefulness",
+                        stage="exception", error_text=last_error, task=task,
+                        patch_data=candidate_patch_data, recent_lessons=recent_lessons,
+                        rejected_patches=rejected_patches, attempt_index=attempt + 1,
+                        context=context, source="coder_usefulness",
                         metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
                     )
                     print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
                     previous_failure_code = interpretation.classification.failure_code
-
-                    previous_patch_text = patch_text
-
+                    previous_patch_text = candidate_patch_text
                     if attempt >= max_revisions:
                         break
-
-                    recent_lessons, retry_lesson_package = self._lookup_retry_materials(
-                        task=task,
-                        target_file=target_file,
-                        context=context,
-                        failure_code=interpretation.classification.failure_code,
-                        interpretation=interpretation,
-                        last_error=last_error,
-                        rejected_patches=rejected_patches,
-                        limit=3,
+                    recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches = (
+                        self._advance_retry_state(
+                            task, plan, target_file, context, session,
+                            interpretation.classification.failure_code, interpretation, last_error,
+                            rejected_patches,
+                            {"reflection": last_error, "confidence": 0.2,
+                             "next_step": "Revise the patch so it makes a meaningful logic change.",
+                             "verdict": "revise"},
+                            repeated_failure_count,
+                        )
                     )
-                    rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
-
-                    current_prompt = self._build_retry_prompt_with_rejections(
-                        task=task,
-                        plan=plan,
-                        target_file=target_file,
-                        revision_file_text=revision_file_text,
-                        previous_patch_text=previous_patch_text or "",
-                        reflection={
-                            "reflection": last_error,
-                            "confidence": 0.2,
-                            "next_step": "Revise the patch so it makes a meaningful logic change instead of a punctuation-only or whitespace-only edit.",
-                            "verdict": "revise",
-                        },
-                        lesson_text=retry_lesson_package["text"],
-                        context=context,
-                        rejection_context=rejection_context,
-                        interpretation=interpretation,
-                        repeated_failure_count=repeated_failure_count,
-                    )
-                    active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
                     continue
 
-                if (
-                    patch_is_meaningful
-                    and not patch_is_blocked
-                    and confidence >= 0.5
-                    and confidence > best_confidence
-                ):
-                    best_patch_data = dict(candidate_patch_data)
-                    best_reflection = dict(reflection)
-                    best_confidence = confidence
-                    print(f"[Coder] Best patch candidate updated (confidence={confidence})")
-
-                if verdict == "accept" and confidence >= 0.7:
-                    self._record_retry_lesson_outcome(
-                        active_retry_lesson_ids,
-                        success=True,
-                        outcome_note="retry_success",
-                        reuse_helped="helped",
+                # Track best candidate
+                if patch_is_meaningful and not patch_is_blocked and confidence >= 0.5:
+                    reflection_tmp = reflector.evaluate(
+                        candidate_patch_data, task=task, plan=plan,
+                        pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
                     )
-                    active_retry_lesson_ids = []
-                    assert candidate_patch_data is not None
-                    candidate_patch_data["reflection"] = reflection
-                    return candidate_patch_data
-
-                if verdict == "reject":
-                    self._record_retry_lesson_outcome(
-                        active_retry_lesson_ids,
-                        success=False,
-                        outcome_note="failed_again",
-                        reuse_helped="hurt",
-                    )
-                    active_retry_lesson_ids = []
-                    last_error = f"Reflector rejected patch: {reflection.get('reflection')}"
-                    interpretation = self._interpret_failure(
-                        stage="reflector",
-                        error_text=last_error,
-                        task=task,
-                        patch_data=candidate_patch_data,
-                        reflection=reflection,
-                        recent_lessons=recent_lessons,
-                        rejected_patches=rejected_patches,
-                        attempt_index=attempt + 1,
-                        context=context,
-                        source="reflector",
-                        metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
-                    )
-                    print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
+                    confidence_tmp = float(reflection_tmp.get("confidence", 0.0))
+                    if confidence_tmp > best_confidence:
+                        best_patch_data = dict(candidate_patch_data)
+                        best_reflection = dict(reflection_tmp)
+                        best_confidence = confidence_tmp
+                        print(f"[Coder] Best patch candidate updated (confidence={confidence_tmp})")
+                    reflection = reflection_tmp
                 else:
-                    self._record_retry_lesson_outcome(
-                        active_retry_lesson_ids,
-                        success=False,
-                        outcome_note="failed_again",
-                        reuse_helped="hurt",
+                    reflection = reflector.evaluate(
+                        candidate_patch_data, task=task, plan=plan,
+                        pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
                     )
-                    active_retry_lesson_ids = []
-                    last_error = f"Reflector requested revision: {reflection.get('reflection')}"
-                    interpretation = self._interpret_failure(
-                        stage="reflector",
-                        error_text=last_error,
-                        task=task,
-                        patch_data=candidate_patch_data,
-                        reflection=reflection,
-                        recent_lessons=recent_lessons,
-                        rejected_patches=rejected_patches,
-                        attempt_index=attempt + 1,
-                        context=context,
-                        source="reflector",
-                        metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
-                    )
+                print(f"[Coder] Reflector verdict: {reflection.get('verdict')}")
 
-                if interpretation.classification.failure_code == previous_failure_code:
-                    repeated_failure_count += 1
-                else:
-                    repeated_failure_count = 0
-                previous_failure_code = interpretation.classification.failure_code
-
-                if self._should_stop_retry(interpretation):
-                    break
-
-                assert candidate_patch_data is not None
-                previous_patch_text = candidate_patch_data["patch"]
-
-                if attempt >= max_revisions:
-                    break
-
-                recent_lessons, retry_lesson_package = self._lookup_retry_materials(
-                    task=task,
-                    target_file=target_file,
-                    context=context,
-                    failure_code=interpretation.classification.failure_code,
-                    interpretation=interpretation,
-                    last_error=last_error,
-                    rejected_patches=rejected_patches,
-                    limit=3,
+                # Branch 3b: reflector verdict
+                state = self._handle_reflector_verdict(
+                    attempt, max_revisions, task, plan, target_file, context, session,
+                    candidate_patch_data, reflection, recent_lessons, rejected_patches,
+                    active_retry_lesson_ids, previous_failure_code, repeated_failure_count,
                 )
-                rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
+                if state.get("should_accept"):
+                    return state["patch_data"]
 
-                current_prompt = self._build_retry_prompt_with_rejections(
-                    task=task,
-                    plan=plan,
-                    target_file=target_file,
-                    revision_file_text=revision_file_text,
-                    previous_patch_text=previous_patch_text or "",
-                    reflection=reflection,
-                    lesson_text=(
-                        (
-                            "The last retry failed for the same reason again. Apply one specific corrective rule from the failure "
-                            "instead of repeating the prior patch shape. Preserve the same target symbol and modify only the failing lines.\n\n"
-                        )
-                        if repeated_failure_count > 0
-                        else ""
-                    )
-                    + (
-                        f"{interpretation.revision.retry_instruction}\n\n"
-                        if interpretation is not None
-                        else ""
-                    )
-                    + retry_lesson_package["text"],
-                    context=context,
-                    rejection_context=rejection_context,
-                    interpretation=interpretation,
-                    repeated_failure_count=repeated_failure_count,
-                )
-                active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
-                    
+                last_error = state["last_error"]
+                previous_failure_code = state["previous_failure_code"]
+                repeated_failure_count = state["repeated_failure_count"]
+                active_retry_lesson_ids = state.get("active_retry_lesson_ids", [])
+                if state.get("should_break"):
+                    break
+                recent_lessons = state["recent_lessons"]
+                current_prompt = state["current_prompt"]
+                rejected_patches = state["rejected_patches"]
+                previous_patch_text = candidate_patch_data.get("patch", "")
+
             except Exception as e:
                 print(f"[Coder] Exception: {e}")
-                self._record_retry_lesson_outcome(
-                    active_retry_lesson_ids,
-                    success=False,
-                    outcome_note="failed_again",
-                    reuse_helped="hurt",
-                )
+                self._record_retry_lesson_outcome(active_retry_lesson_ids, success=False,
+                                                  outcome_note="failed_again", reuse_helped="hurt")
                 active_retry_lesson_ids = []
                 last_error = str(e)
-
                 interpretation = self._interpret_failure(
-                    stage="exception",
-                    error_text=last_error,
-                    task=task,
-                    patch_data=candidate_patch_data,
-                    recent_lessons=recent_lessons,
-                    rejected_patches=rejected_patches,
-                    attempt_index=attempt + 1,
-                    context=context,
-                    source="coder_exception",
+                    stage="exception", error_text=last_error, task=task,
+                    patch_data=candidate_patch_data, recent_lessons=recent_lessons,
+                    rejected_patches=rejected_patches, attempt_index=attempt + 1,
+                    context=context, source="coder_exception",
                     metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
                 )
                 print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
-                if interpretation.classification.failure_code == previous_failure_code:
-                    repeated_failure_count += 1
-                else:
-                    repeated_failure_count = 0
+                repeated_failure_count = (
+                    repeated_failure_count + 1
+                    if interpretation.classification.failure_code == previous_failure_code
+                    else 0
+                )
                 previous_failure_code = interpretation.classification.failure_code
                 if self._should_stop_retry(interpretation):
                     break
-
-                if (
-                    use_block_rewrite
-                    and selected_block is not None
-                    and attempt < 2
-                    and "no meaningful change" in last_error.lower()
-                ):
+                if (use_block_rewrite and selected_block is not None
+                        and attempt < 2 and "no meaningful change" in last_error.lower()):
                     current_prompt = (
                         "Your previous rewrite returned the original method or no meaningful behavioral change.\n"
                         "Rewrite the SAME method again.\n"
@@ -2134,76 +2063,33 @@ class CoderAgent:
                         "Do not return the original method unchanged.\n"
                         "Do not return markdown.\n"
                         "Do not add any new method.\n\n"
-                        + build_block_rewrite_prompt(
-                            task,
-                            plan,
-                            target_file,
-                            selected_block,
-                            lesson_text=lesson_text,
-                        )
+                        + build_block_rewrite_prompt(task, plan, target_file, selected_block, lesson_text=lesson_text)
                     )
                     active_retry_lesson_ids = self._record_retry_lesson_use(
-                        recent_lessons,
-                        guidance_changed=bool(recent_lessons),
+                        recent_lessons, guidance_changed=bool(recent_lessons)
                     )
                     continue
-
                 if attempt >= max_revisions:
                     break
-
-                recent_lessons, retry_lesson_package = self._lookup_retry_materials(
-                    task=task,
-                    target_file=target_file,
-                    context=context,
-                    failure_code=interpretation.classification.failure_code,
-                    interpretation=interpretation,
-                    last_error=last_error,
-                    rejected_patches=rejected_patches,
-                    limit=3,
-                )
-                rejection_context, rejected_patches = self._format_rejection_context(task["id"], target_file)
-
-                current_prompt = self._build_retry_prompt_with_rejections(
-                    task=task,
-                    plan=plan,
-                    target_file=target_file,
-                    revision_file_text=revision_file_text,
-                    previous_patch_text=previous_patch_text or "",
-                    reflection=reflection,
-                    lesson_text=(
-                        (
-                            "The last retry failed for the same reason again. Apply one specific corrective rule from the failure "
-                            "instead of reusing the same malformed response. Preserve the same target symbol and modify only the failing lines.\n\n"
-                        )
-                        if repeated_failure_count > 0
-                        else ""
+                recent_lessons, current_prompt, active_retry_lesson_ids, rejection_context, rejected_patches = (
+                    self._advance_retry_state(
+                        task, plan, target_file, context, session,
+                        interpretation.classification.failure_code, interpretation, last_error,
+                        rejected_patches, reflection, repeated_failure_count,
+                        lesson_prefix=(
+                            "The last retry failed for the same reason again. Apply one specific corrective rule "
+                            "instead of reusing the same malformed response.\n\n"
+                            if repeated_failure_count > 0 else ""
+                        ) + f"{interpretation.revision.retry_instruction}\n\n",
                     )
-                    + f"{interpretation.revision.retry_instruction}\n\n"
-                    + retry_lesson_package["text"],
-                    context=context,
-                    rejection_context=rejection_context,
-                    interpretation=interpretation,
-                    repeated_failure_count=repeated_failure_count,
                 )
-                active_retry_lesson_ids = self._activate_retry_lessons(recent_lessons, retry_lesson_package)
 
-        self._record_retry_lesson_outcome(
-            active_retry_lesson_ids,
-            success=False,
-            outcome_note="failed_again",
-            reuse_helped="hurt",
-        )
+        self._record_retry_lesson_outcome(active_retry_lesson_ids, success=False,
+                                          outcome_note="failed_again", reuse_helped="hurt")
         return self._finalize_generation_result(
-            task=task,
-            plan=plan,
-            target_file=target_file,
-            last_error=last_error,
-            best_patch_data=best_patch_data,
-            best_reflection=best_reflection,
-            best_confidence=best_confidence,
-            candidate_patch_data=candidate_patch_data,
-            recent_lessons=recent_lessons,
-            rejected_patches=rejected_patches,
-            context=context if 'context' in locals() else None,
-            max_revisions=max_revisions,
+            task=task, plan=plan, target_file=target_file, last_error=last_error,
+            best_patch_data=best_patch_data, best_reflection=best_reflection,
+            best_confidence=best_confidence, candidate_patch_data=candidate_patch_data,
+            recent_lessons=recent_lessons, rejected_patches=rejected_patches,
+            context=context if "context" in locals() else None, max_revisions=max_revisions,
         )

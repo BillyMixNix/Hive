@@ -1,5 +1,8 @@
 import json
+import hashlib
+import platform
 import shutil
+import sys
 import uuid
 from collections import Counter
 from pathlib import Path
@@ -26,6 +29,67 @@ from reflector import Reflector
 class ReliabilityBenchmarkHarness:
     def __init__(self, repo_root=None):
         self.repo_root = Path(repo_root or Path(__file__).resolve().parent)
+
+    def _stable_json(self, data):
+        return json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+
+    def _stable_hash(self, data):
+        payload = data if isinstance(data, str) else self._stable_json(data)
+        return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+    def _case_fingerprints(self, cases):
+        return [
+            {
+                "name": case.get("name"),
+                "band": case.get("band"),
+                "fingerprint": self._stable_hash(case),
+            }
+            for case in cases
+        ]
+
+    def _source_tree_fingerprint(self):
+        source_files = []
+        for path in sorted(self.repo_root.rglob("*.py")):
+            relative = path.relative_to(self.repo_root)
+            parts = set(relative.parts)
+            if "__pycache__" in parts or ".venv" in parts or "backups" in parts:
+                continue
+            if any(part.startswith("_tmp_reliability_") for part in relative.parts):
+                continue
+
+            source_files.append({
+                "path": relative.as_posix(),
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            })
+
+        return {
+            "file_count": len(source_files),
+            "fingerprint": self._stable_hash(source_files),
+            "files": source_files,
+        }
+
+    def _build_reproducibility_manifest(self, cases):
+        case_fingerprints = self._case_fingerprints(cases)
+        source_tree = self._source_tree_fingerprint()
+        return {
+            "goal": "v0.6-reproducibility",
+            "python_version": sys.version.split()[0],
+            "platform": platform.platform(),
+            "repo_root": str(self.repo_root),
+            "case_count": len(cases),
+            "case_order": [case.get("name") for case in cases],
+            "case_order_hash": self._stable_hash([case.get("name") for case in cases]),
+            "case_pack_hash": self._stable_hash(case_fingerprints),
+            "case_fingerprints": case_fingerprints,
+            "source_file_count": source_tree["file_count"],
+            "source_tree_fingerprint": source_tree["fingerprint"],
+        }
+
+    def _report_signature(self, report):
+        return self._stable_hash({
+            "summary": report.get("summary"),
+            "records": report.get("records"),
+        })
 
     def _create_session(self):
         temp_root = self.repo_root / "tests" / f"_tmp_reliability_{uuid.uuid4().hex}"
@@ -686,8 +750,8 @@ class ReliabilityBenchmarkHarness:
         finally:
             self._cleanup_session(session)
 
-    def run_pack(self, cases=None, output_path=None):
-        cases = list(cases or build_reliability_benchmark_pack())
+    def run_pack(self, cases=None, output_path=None, include_reproducibility=True):
+        cases = list(build_reliability_benchmark_pack() if cases is None else cases)
         records = [self.run_case(case) for case in cases]
 
         band_counts = Counter(record["band"] for record in records)
@@ -739,6 +803,58 @@ class ReliabilityBenchmarkHarness:
         report = {
             "summary": summary,
             "records": records,
+        }
+        if include_reproducibility:
+            report["reproducibility"] = {
+                "manifest": self._build_reproducibility_manifest(cases),
+                "report_signature": self._report_signature(report),
+            }
+
+        if output_path:
+            Path(output_path).write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+        return report
+
+    def run_reproducibility_check(self, cases=None, repeats=2, output_path=None):
+        if repeats < 2:
+            raise ValueError("Reproducibility checks require at least two repeats.")
+
+        cases = list(build_reliability_benchmark_pack() if cases is None else cases)
+        runs = [self.run_pack(cases=cases) for _ in range(repeats)]
+        signatures = [
+            run.get("reproducibility", {}).get("report_signature") or self._report_signature(run)
+            for run in runs
+        ]
+        baseline_signature = signatures[0] if signatures else None
+        mismatches = [
+            {
+                "run_index": index,
+                "signature": signature,
+                "baseline_signature": baseline_signature,
+            }
+            for index, signature in enumerate(signatures[1:], start=1)
+            if signature != baseline_signature
+        ]
+        summary = {
+            "repeats": repeats,
+            "case_count": len(cases),
+            "baseline_signature": baseline_signature,
+            "matching_runs": repeats - len(mismatches),
+            "mismatched_runs": len(mismatches),
+            "all_checks_passed": len(mismatches) == 0,
+        }
+        report = {
+            "summary": summary,
+            "manifest": self._build_reproducibility_manifest(cases),
+            "runs": [
+                {
+                    "run_index": index,
+                    "report_signature": signature,
+                    "summary": run["summary"],
+                }
+                for index, (run, signature) in enumerate(zip(runs, signatures))
+            ],
+            "mismatches": mismatches,
         }
 
         if output_path:

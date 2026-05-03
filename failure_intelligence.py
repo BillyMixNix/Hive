@@ -456,12 +456,8 @@ def _task_allows_documentation_only_patch(evidence: FailureEvidence) -> bool:
     return any(token in note for token in comment_tokens)
 
 
-def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
-    text = str(evidence.raw_error_text or "").lower()
-    details = _coerce_dict(evidence.sandbox_report.get("details"))
-    reflection_verdict = str(evidence.reflection_verdict or "").lower()
-    reflection_reason = str(evidence.reflection_reason or "")
-    patch_text = str(evidence.patch_text or "")
+def _classify_planner_evidence(text, details, evidence):
+    """Classify planner-layer failures. Returns FailureClassification or None."""
     planner_failure_code = str((evidence.metadata or {}).get("planner_failure_code") or "").lower()
     budget_decision = str((evidence.context_budget or {}).get("budget_decision") or "").lower()
 
@@ -479,7 +475,11 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         return _match("under_anchored_after_trim", 0.95, "Context trimming removed too much anchor confidence to continue safely.", "prompt_budget_under_anchored")
     if budget_decision == "summary_used" and evidence.stage in {"context_budget", "prompt_budget"}:
         return _match("oversized_context_trimmed", 0.88, "Large prompt context was trimmed to stay within budget.", "prompt_budget_summary")
+    return None
 
+
+def _classify_parser_evidence(text, details, evidence):
+    """Classify patch parser and format failures. Returns FailureClassification or None."""
     if "multiple patch: sections" in text or "multiple patch sections" in text:
         return _match("multiple_patch_sections", 0.99, "Model returned more than one PATCH section.", "parser_multiple_patch_sections")
     if "missing diff file headers" in text or "missing diff headers" in text:
@@ -497,15 +497,13 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         or "no meaningful code changes detected" in text
     ) and _task_allows_documentation_only_patch(evidence):
         return _match(
-            "comment_task_rejected_as_nonfunctional",
-            0.94,
+            "comment_task_rejected_as_nonfunctional", 0.94,
             "A documentation-style task was incorrectly rejected by the generic meaningful-change guard.",
             "policy_comment_only_task",
         )
     if "retry returned the same patch as the previous failed attempt" in text:
         return _match(
-            "stagnant_retry_patch",
-            0.97,
+            "stagnant_retry_patch", 0.97,
             "Retry reused the same failed patch instead of applying a narrower corrective rule.",
             "retry_same_patch_repeated",
         )
@@ -516,12 +514,15 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         or "whitespace-only" in text
     ):
         return _match(
-            "non_meaningful_patch",
-            0.92,
+            "non_meaningful_patch", 0.92,
             "Patch did not make a meaningful requested change.",
             "policy_non_meaningful_patch",
         )
+    return None
 
+
+def _classify_targeting_evidence(text, details, evidence):
+    """Classify file/symbol targeting drift failures. Returns FailureClassification or None."""
     if "does not match explicit task file" in text:
         return _match("explicit_file_mismatch", 0.98, "Patch drifted away from the explicitly targeted file.", "targeting_explicit_file_mismatch")
     if "does not match explicit task method" in text:
@@ -538,6 +539,13 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         return _match("block_rewrite_contract_failure", 0.97, "Block rewrite changed the selected method signature instead of editing the body.", "block_rewrite_signature_changed")
     if "block rewrite produced no meaningful change" in text:
         return _match("block_rewrite_contract_failure", 0.94, "Block rewrite echoed the original block without a meaningful in-method change.", "block_rewrite_no_meaningful_change")
+    return None
+
+
+def _classify_placement_evidence(text, details, evidence):
+    """Classify patch placement and context failures. Returns FailureClassification or None."""
+    budget_decision = str((evidence.context_budget or {}).get("budget_decision") or "").lower()
+
     if "patch has no anchor context or removal lines" in text:
         return _match("missing_context_block", 0.97, "Patch omitted real context lines for placement.", "placement_missing_context_block")
     if (
@@ -551,10 +559,9 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         "mixed_scope_detected': true" in text
         or '"mixed_scope_detected": true' in text
         or "mixed scope detected" in text
+        or "mixed_scope_patch" in text
     ):
         return _match("mixed_scope_patch", 0.93, "Patch mixed incompatible indentation or scope levels in one change.", "placement_mixed_scope")
-    if "mixed_scope_patch" in text:
-        return _match("mixed_scope_patch", 0.94, "Patch mixed incompatible indentation or scope levels in one change.", "placement_mixed_scope")
     if "access is denied" in text or "permission denied" in text or "winerror 5" in text:
         return _match("workspace_sandbox_permission_issue", 0.94, "Sandbox failed because the workspace path was not writable.", "sandbox_permission_issue")
     if "under-anchored after trim" in text:
@@ -564,7 +571,11 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
         and evidence.stage in {"context_budget", "prompt_budget"}
     ):
         return _match("oversized_context_trimmed", 0.86, "Prompt context was trimmed to fit the configured budget.", "prompt_budget_trimmed")
+    return None
 
+
+def _classify_semantic_evidence(text, details, evidence):
+    """Classify AST/scope semantic failures. Returns FailureClassification or None."""
     if "variable_scope_sanity" in text or "local variable referenced before assignment" in text:
         return _match("local_assignment_at_module_scope", 0.82, "Patch likely inserted a local assignment outside the intended function scope.", "semantic_scope_local_assignment")
 
@@ -591,6 +602,25 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
 
     if "patch appears to insert executable code after a terminal statement" in text:
         return _match("inserted_after_terminal_statement", 0.9, "Patch inserted code after a terminal statement.", "placement_after_terminal_statement")
+    return None
+
+
+def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
+    text = str(evidence.raw_error_text or "").lower()
+    details = _coerce_dict(evidence.sandbox_report.get("details"))
+    reflection_verdict = str(evidence.reflection_verdict or "").lower()
+    reflection_reason = str(evidence.reflection_reason or "")
+
+    for classifier in (
+        _classify_planner_evidence,
+        _classify_parser_evidence,
+        _classify_targeting_evidence,
+        _classify_placement_evidence,
+        _classify_semantic_evidence,
+    ):
+        result = classifier(text, details, evidence)
+        if result is not None:
+            return result
 
     if "reflector rejected patch" in text or reflection_verdict == "reject":
         return _match("reflector_reject", 0.9, reflection_reason or "Reflector rejected the patch.", "reflection_reject")

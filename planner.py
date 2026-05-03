@@ -16,6 +16,20 @@ ALLOWED_TASK_TYPES = {
     "validation",
     "refactor",
     "docs",
+    # Math research
+    "math_exploration",
+    "math_conjecture",
+    "math_symbolic",
+    "math_adversarial",
+    "math_formal",
+    "math_strategic",
+    # Code research
+    "code_hypothesis",
+    "code_adversarial",
+    "code_benchmark",
+    "code_formal",
+    "code_invariant",
+    "code_regression",
 }
 
 ALLOWED_CHANGE_INTENTS = {
@@ -624,138 +638,14 @@ class PlannerAgent:
         return best["symbol"]
 
     def _infer_symbol_from_text_for_file(self, text, target_file):
+        """Infer the most relevant symbol in target_file from text. Delegates to shared algorithm."""
         if not self.state_manager or not target_file:
             return None
-
         symbols = self.state_manager.get_symbols_for_file(target_file) or []
         if not symbols:
             return None
-
-        raw_text = text or ""
-        scoring_text = re.sub(re.escape(target_file), " ", raw_text, flags=re.IGNORECASE)
-        scoring_lowered = scoring_text.lower()
-        prefers_method = any(token in scoring_lowered for token in ("method", "function", "helper"))
-        error_language = any(token in scoring_lowered for token in ("invalid", "error", "fail"))
-
-        quoted_matches = []
-        for symbol in symbols:
-            patterns = [
-                rf"`{re.escape(symbol)}`",
-                rf'"{re.escape(symbol)}"',
-                rf"'{re.escape(symbol)}'",
-            ]
-            if any(re.search(pattern, scoring_text, flags=re.IGNORECASE) for pattern in patterns):
-                quoted_matches.append(symbol)
-
-        if quoted_matches:
-            return sorted(quoted_matches, key=len, reverse=True)[0]
-
-        exact_matches = []
-        for symbol in symbols:
-            pattern = rf"(?<![A-Za-z0-9_]){re.escape(symbol.lower())}(?![A-Za-z0-9_])"
-            for match in re.finditer(pattern, scoring_lowered):
-                trailing = scoring_lowered[match.end():match.end() + 3]
-                if trailing == ".py":
-                    continue
-                exact_matches.append(symbol)
-                break
-
-        if exact_matches:
-            return sorted(exact_matches, key=len, reverse=True)[0]
-
-        def normalize_token(token):
-            token = (token or "").strip().lower()
-            if len(token) > 5 and token.endswith("ing"):
-                return token[:-3]
-            if len(token) > 4 and token.endswith("ed"):
-                return token[:-2]
-            if len(token) > 4 and token.endswith("es"):
-                return token[:-2]
-            if len(token) > 3 and token.endswith("s"):
-                return token[:-1]
-            return token
-
-        def tokenize(value):
-            raw_tokens = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", (value or "").lower())
-            parts = []
-            for raw in raw_tokens:
-                for piece in raw.split("_"):
-                    norm = normalize_token(piece)
-                    if len(norm) >= 3:
-                        parts.append(norm)
-            return parts
-
-        text_tokens = tokenize(scoring_text)
-        if not text_tokens:
-            return None
-
-        text_token_set = set(text_tokens)
-        scored = []
-
-        for symbol in symbols:
-            symbol_tokens = tokenize(symbol)
-            if not symbol_tokens:
-                continue
-
-            symbol_token_set = set(symbol_tokens)
-            overlap = text_token_set & symbol_token_set
-            if not overlap:
-                continue
-
-            overlap_score = len(overlap)
-            token_hits = sum(text_tokens.count(token) for token in overlap)
-            coverage = overlap_score / max(len(symbol_token_set), 1)
-            score = (overlap_score * 10) + token_hits + coverage
-
-            if prefers_method:
-                if symbol.startswith("_") or symbol[:1].islower():
-                    score += 2
-                if symbol[:1].isupper():
-                    score -= 3
-
-            if not error_language and {"invalid", "error", "fail"} & symbol_token_set:
-                score -= 3
-
-            scored.append({
-                "symbol": symbol,
-                "score": score,
-                "overlap": overlap_score,
-                "coverage": coverage,
-            })
-
-        if not scored:
-            return None
-
-        scored.sort(
-            key=lambda entry: (
-                entry["score"],
-                entry["overlap"],
-                entry["coverage"],
-                len(entry["symbol"]),
-            ),
-            reverse=True,
-        )
-
-        best = scored[0]
-        runner_up = scored[1] if len(scored) > 1 else None
-
-        if best["overlap"] < 2 and best["coverage"] < 0.6:
-            strong_unique_hint = (
-                best["overlap"] >= 1
-                and (
-                    runner_up is None
-                    or runner_up["overlap"] == 0
-                    or (best["score"] - runner_up["score"] >= 2.5)
-                )
-            )
-            if not strong_unique_hint:
-                return None
-
-        if runner_up is not None:
-            if best["score"] - runner_up["score"] < 2 and best["overlap"] == runner_up["overlap"]:
-                return None
-
-        return best["symbol"]
+        from main import _score_symbols_for_text
+        return _score_symbols_for_text(text, symbols, target_file)
 
     def _build_anchor_from_task(self, task):
         metadata = task.get("metadata") or {}
@@ -1077,126 +967,38 @@ class PlannerAgent:
         )
         return plan
 
-    def _validate_plan(self, plan, parent_task_id, default_target_file=None, task=None):
-        """
-        Validates the given plan by checking for required fields and their data types.
-
-        Args:
-            plan (dict): The plan to validate.
-            parent_task_id (str): ID of the parent task.
-            default_target_file (str, optional): Default target file if not specified. Defaults to None.
-            task (dict, optional): Task dictionary. Defaults to None.
-
-        Raises:
-            ValueError: If any required field is missing or has incorrect data type.
-
-        Returns:
-            dict: The validated plan.
-        """
-        required_fields = [
-            "goal",
-            "tasks",
-            "dependencies",
-            "risks",
-            "next_action",
-            "status",
-        ]
-
+    def _validate_plan_required_fields(self, plan):
+        """Check required top-level fields exist and have correct types."""
+        required_fields = ["goal", "tasks", "dependencies", "risks", "next_action", "status"]
         for field in required_fields:
             if field not in plan:
                 raise ValueError(f"Missing field in model response: {field}")
-
         if not isinstance(plan["goal"], str) or not plan["goal"].strip():
             raise ValueError("goal must be a non-empty string.")
-
-        self._validate_task_list(plan["tasks"])
-
-        plan["tasks"] = self._normalize_task_list(
-            plan["tasks"],
-            parent_task_id=parent_task_id,
-        )
-
-        anchor = self._build_anchor_from_plan(task or {}, plan)
-        self._apply_anchor_to_child_tasks(
-            plan["tasks"],
-            anchor,
-            fallback_target_file=default_target_file,
-        )
-
-        plan_metadata = dict(plan.get("metadata") or {})
-        plan_metadata["anchor"] = anchor
-        plan["metadata"] = plan_metadata
-
-        for child in plan["tasks"]:
-            description = child.get("description", "")
-            if self._is_analysis_only_description(description):
-                raise ValueError(f"Child task is not coder-executable: {description}")
-
         if not isinstance(plan["risks"], list):
             raise ValueError("risks must be a list.")
-
         if not isinstance(plan["next_action"], str) or not plan["next_action"].strip():
             raise ValueError("next_action must be a non-empty string.")
-
         if not isinstance(plan["status"], str) or not plan["status"].strip():
             raise ValueError("status must be a non-empty string.")
 
-        plan["dependencies"] = self._normalize_dependencies(plan["dependencies"])
-
-        anchored_file = anchor.get("target_file")
-
-        if anchored_file and anchor.get("scope") == "single_file":
-            deps = [dep for dep in plan["dependencies"] if dep == anchored_file]
-            plan["dependencies"] = deps or [anchored_file]
-
-        effective_target_file = (
-            anchored_file
-            or default_target_file
-            or (plan["dependencies"][0] if plan["dependencies"] else None)
-            or "main.py"
-        )
-
-        text_fields = [plan["goal"], plan["next_action"]]
-        for child in plan["tasks"]:
-            text_fields.append(str(child.get("title", "")))
-            text_fields.append(str(child.get("description", "")))
-
+    def _validate_plan_task_type(self, plan):
+        """Validate and normalise task_type field."""
         task_type = plan.get("task_type", "bugfix")
         if not isinstance(task_type, str) or not task_type.strip():
             raise ValueError("task_type must be a non-empty string.")
         task_type = task_type.strip()
-
         if task_type not in ALLOWED_TASK_TYPES:
             raise ValueError(f"Unsupported task_type: {task_type}")
-
         plan["task_type"] = task_type
+        return task_type
 
-        mentioned_files = set()
-        for text in text_fields:
-            cleaned = (
-                text.replace(",", " ")
-                .replace(".", " . ")
-                .replace("(", " ")
-                .replace(")", " ")
-                .replace(":", " ")
-                .replace('"', " ")
-                .replace("'", " ")
-            )
-            for token in cleaned.split():
-                if token.endswith(".py"):
-                    mentioned_files.add(token.strip())
-
-        self._apply_anchor_to_child_tasks(
-            plan["tasks"],
-            anchor,
-            fallback_target_file=effective_target_file,
-        )
-
+    def _validate_plan_child_tasks(self, plan):
+        """Validate each child task's required fields, intents, operations, and cues."""
         for child in plan["tasks"]:
             target_file = child.get("target_file")
             if not isinstance(target_file, str) or not target_file.strip():
                 raise ValueError(f"Child task missing target_file: {child}")
-
             if target_file not in self._get_known_files():
                 raise ValueError(f"Child task references unknown target_file: {target_file}")
 
@@ -1207,7 +1009,6 @@ class PlannerAgent:
             change_intent = child.get("change_intent")
             if not isinstance(change_intent, str) or not change_intent.strip():
                 raise ValueError(f"Child task missing change_intent: {child}")
-
             if change_intent not in ALLOWED_CHANGE_INTENTS:
                 raise ValueError(f"Unsupported change_intent: {change_intent}")
 
@@ -1216,7 +1017,6 @@ class PlannerAgent:
             if expected_operation is not None:
                 if not isinstance(expected_operation, str) or not expected_operation.strip():
                     raise ValueError(f"Child task has invalid expected_operation: {child}")
-
                 if expected_operation not in ALLOWED_EXPECTED_OPERATIONS:
                     raise ValueError(f"Unsupported expected_operation: {expected_operation}")
 
@@ -1225,7 +1025,6 @@ class PlannerAgent:
             if completion_cues is not None:
                 if not isinstance(completion_cues, list):
                     raise ValueError(f"Child task completion_cues must be a list: {child}")
-
                 normalized_cues = []
                 for cue in completion_cues:
                     if not isinstance(cue, str) or not cue.strip():
@@ -1238,12 +1037,68 @@ class PlannerAgent:
             if not child.get("task_type"):
                 child["task_type"] = plan["task_type"]
 
+    def _validate_plan_file_references(self, plan, text_fields):
+        """Check that all .py filenames mentioned in plan text are known files."""
+        mentioned_files = set()
+        for text in text_fields:
+            cleaned = (
+                text.replace(",", " ").replace(".", " . ").replace("(", " ")
+                    .replace(")", " ").replace(":", " ").replace('"', " ").replace("'", " ")
+            )
+            for token in cleaned.split():
+                if token.endswith(".py"):
+                    mentioned_files.add(token.strip())
         known_files = self._get_known_files()
         unknown_files = [name for name in mentioned_files if name not in known_files]
         if unknown_files:
             raise ValueError(f"Plan references unknown files: {unknown_files}")
 
+    def _validate_plan(self, plan, parent_task_id, default_target_file=None, task=None):
+        """
+        Validate the given plan. Delegates to focused sub-validators.
+        Returns the validated and normalised plan.
+        """
+        self._validate_plan_required_fields(plan)
 
+        self._validate_task_list(plan["tasks"])
+        plan["tasks"] = self._normalize_task_list(plan["tasks"], parent_task_id=parent_task_id)
+
+        anchor = self._build_anchor_from_plan(task or {}, plan)
+        self._apply_anchor_to_child_tasks(plan["tasks"], anchor, fallback_target_file=default_target_file)
+
+        plan_metadata = dict(plan.get("metadata") or {})
+        plan_metadata["anchor"] = anchor
+        plan["metadata"] = plan_metadata
+
+        for child in plan["tasks"]:
+            if self._is_analysis_only_description(child.get("description", "")):
+                raise ValueError(f"Child task is not coder-executable: {child.get('description')}")
+
+        plan["dependencies"] = self._normalize_dependencies(plan["dependencies"])
+
+        anchored_file = anchor.get("target_file")
+        if anchored_file and anchor.get("scope") == "single_file":
+            deps = [dep for dep in plan["dependencies"] if dep == anchored_file]
+            plan["dependencies"] = deps or [anchored_file]
+
+        effective_target_file = (
+            anchored_file
+            or default_target_file
+            or (plan["dependencies"][0] if plan["dependencies"] else None)
+            or "main.py"
+        )
+
+        self._apply_anchor_to_child_tasks(plan["tasks"], anchor, fallback_target_file=effective_target_file)
+
+        task_type = self._validate_plan_task_type(plan)
+
+        text_fields = [plan["goal"], plan["next_action"]]
+        for child in plan["tasks"]:
+            text_fields.append(str(child.get("title", "")))
+            text_fields.append(str(child.get("description", "")))
+
+        self._validate_plan_child_tasks(plan)
+        self._validate_plan_file_references(plan, text_fields)
 
         plan_metadata = plan.get("metadata") or {}
         plan_metadata["anchor"] = dict(anchor)
@@ -1254,7 +1109,7 @@ class PlannerAgent:
                 raise ValueError(
                     "Architectural tasks must decompose into at least 2 child tasks when no single-file anchor is available."
                 )
-            
+
         return plan
     
     def plan_task(self, task, hint=""):

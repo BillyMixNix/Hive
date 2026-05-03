@@ -99,6 +99,37 @@ class PilotIntentLoopTests(unittest.TestCase):
         self.assertIn("preserve existing command handling", prompt)
         self.assertIn(format_pilot_brief(task), prompt)
 
+    def test_coder_prompt_includes_hive_builder_packet(self):
+        task = {
+            "id": 10,
+            "note": "Update route to handle stale pilot plans safely.",
+            "target_file": "router.py",
+            "target_symbol": "route",
+            "metadata": {
+                "anchor": {
+                    "target_file": "router.py",
+                    "target_symbol": "route",
+                    "lineno": 1,
+                    "end_lineno": 20,
+                },
+            },
+        }
+        plan = {
+            "goal": "Keep pilot intent aligned with execution.",
+            "tasks": [{"title": "Update route", "description": "Tighten route behavior."}],
+            "dependencies": ["router.py"],
+            "risks": ["Routing regressions."],
+            "next_action": "Update route in router.py.",
+            "status": "planned",
+        }
+
+        prompt = build_prompt(task, plan, "router.py", "def route(self, user_input, message):\n    pass\n")
+
+        self.assertIn("# Hive Builder Packet", prompt)
+        self.assertIn("## Output Requirement", prompt)
+        self.assertIn("Return a unified diff only.", prompt)
+        self.assertIn("File: router.py", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()

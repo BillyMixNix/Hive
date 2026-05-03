@@ -13,7 +13,34 @@ class Interface:
         "show failures": "show_failures",
         "show lessons": "show_lessons",
         "show cockpit": "show_cockpit",
+        "show conjectures": "show_conjectures",
+        "show math lessons": "show_math_lessons",
+        "math status": "math_status",
+        "show hypotheses": "show_hypotheses",
+        "show code lessons": "show_code_lessons",
+        "code status": "code_status",
+        "scan": "code_scan",
         "help": "help",
+    }
+
+    # Math commands: "explore collatz 1 1000", "conjecture <text>", "falsify <text>"
+    MATH_PREFIX_COMMANDS = {
+        "explore collatz ": "math_explore",
+        "falsify ": "math_falsify",
+        "conjecture ": "math_conjecture",
+        "symbolic ": "math_symbolic",
+        "formal ": "math_formal",
+        "strategic ": "math_strategic",
+    }
+
+    # Code research commands
+    CODE_PREFIX_COMMANDS = {
+        "hypothesize ":       "code_hypothesize",
+        "benchmark ":         "code_benchmark",
+        "probe ":             "code_probe",
+        "scan ":              "code_scan",
+        "trace arch ":        "code_arch_trace",
+        "adversarial test ":  "code_adversarial",
     }
 
     PREFIX_COMMANDS = {
@@ -119,5 +146,15 @@ class Interface:
                     return self._build_response(intent, text, {"patch_id": value})
                 except ValueError:
                     return self._invalid_response(text)
+
+        for prefix, intent in self.MATH_PREFIX_COMMANDS.items():
+            if clean.startswith(prefix):
+                payload_text = text[len(prefix):].strip()
+                return self._build_response(intent, text, {"input": payload_text})
+
+        for prefix, intent in self.CODE_PREFIX_COMMANDS.items():
+            if clean.startswith(prefix):
+                payload_text = text[len(prefix):].strip()
+                return self._build_response(intent, text, {"input": payload_text})
 
         return self._build_response("build_or_design", text)
