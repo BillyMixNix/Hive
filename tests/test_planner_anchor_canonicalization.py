@@ -3,7 +3,7 @@ from pathlib import Path
 
 from planner import PlannerAgent
 from repo_map import RepoMap
-from main import enrich_task_anchor_for_planning
+from main import build_anchor_from_text, enrich_task_anchor_for_planning
 
 
 class FakeStateManager:
@@ -138,6 +138,21 @@ class PlannerAnchorCanonicalizationTests(unittest.TestCase):
         self.assertEqual(anchor["target_file"], "hive_gui.py")
         self.assertNotEqual(anchor.get("target_file"), "bazaar.py")
         self.assertNotEqual(anchor.get("target_symbol"), "switch")
+
+    def test_task_backlog_create_request_targets_task_management_file_level(self):
+        task = {
+            "id": "597",
+            "note": "create a way of clearing older tasks that no longer need to be completed",
+            "metadata": {},
+        }
+
+        anchor = self.agent._build_anchor_from_task(task)
+        text_anchor = build_anchor_from_text(task["note"], state_manager=self.state_manager, task=task)
+
+        self.assertEqual(anchor["target_file"], "main.py")
+        self.assertIsNone(anchor.get("target_symbol"))
+        self.assertEqual(text_anchor["target_file"], "main.py")
+        self.assertIsNone(text_anchor.get("target_symbol"))
 
     def test_stale_vendor_anchor_is_rederived_from_gui_language(self):
         task = {

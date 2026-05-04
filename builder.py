@@ -1,4 +1,5 @@
 import re
+from work_ontology import build_work_profile
 
 
 def _normalize_text(value):
@@ -117,6 +118,16 @@ def format_pilot_brief(task_or_context):
 
 
 class BuilderAgent:
+    def _work_fields(self, raw_input):
+        profile = build_work_profile(task={"note": raw_input})
+        return {
+            "work_mode": profile.get("work_mode"),
+            "domain": profile.get("domain"),
+            "artifact": profile.get("artifact"),
+            "operation": profile.get("operation"),
+            "validation": profile.get("validation"),
+        }
+
     def build(self, message):
         raw_input = message.get("intent", "").strip()
         pilot_context = build_pilot_context(raw_input)
@@ -131,6 +142,7 @@ class BuilderAgent:
                 "source": "builder",
                 "pilot_context": pilot_context,
                 "pilot_intent": pilot_context.get("current_intent"),
+                **self._work_fields(raw_input),
             }
 
         return {
@@ -142,6 +154,7 @@ class BuilderAgent:
             "source": "builder",
             "pilot_context": pilot_context,
             "pilot_intent": pilot_context.get("current_intent"),
+            **self._work_fields(raw_input),
         }
 
     def continue_task(self, task):
@@ -157,4 +170,5 @@ class BuilderAgent:
             "source": "builder",
             "pilot_context": pilot_context,
             "pilot_intent": pilot_context.get("current_intent"),
+            **self._work_fields(note),
         }

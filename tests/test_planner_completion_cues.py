@@ -189,6 +189,55 @@ class PlannerCompletionCueTests(unittest.TestCase):
         self.assertEqual(plan["tasks"][0]["target_file"], "hive_gui.py")
         self.assertIsNone(plan["tasks"][0].get("target_symbol"))
 
+    def test_plan_task_uses_file_fallback_for_task_backlog_feature(self):
+        agent = PlannerAgent(state_manager=FileFallbackState())
+        task = {
+            "id": 597,
+            "note": "create a way of clearing older tasks that no longer need to be completed",
+            "target_file": "main.py",
+            "metadata": {
+                "target_file": "main.py",
+                "work_mode": "create",
+                "domain": "code",
+                "artifact": "task backlog",
+                "anchor": {
+                    "target_file": "main.py",
+                    "target_symbol": None,
+                    "scope": "single_file",
+                    "anchor_level": "file",
+                    "anchor_source": "file_level_inference",
+                },
+            },
+        }
+        bad_plan = {
+            "goal": "Create a stale-task clearing command.",
+            "task_type": "feature",
+            "tasks": [
+                {
+                    "title": "Add stale task clearing",
+                    "description": "Create a command that clears older tasks that no longer need completion.",
+                    "target_file": "main.py",
+                    "change_intent": "modify_existing_logic",
+                    "expected_operation": "modify_logic",
+                    "completion_cues": ["old tasks are clearable"],
+                }
+            ],
+            "dependencies": ["main.py"],
+            "risks": ["Task history could be removed too broadly."],
+            "next_action": "Patch main.py.",
+            "status": "planned",
+        }
+
+        with patch("planner.ask_model", return_value=str(bad_plan).replace("'", '"')):
+            plan = agent.plan_task(task)
+
+        self.assertEqual(plan["status"], "planned")
+        self.assertEqual(plan["source"], "fallback_file_task")
+        self.assertEqual(plan["target_file"], "main.py")
+        self.assertEqual(plan["work_mode"], "create")
+        self.assertEqual(plan["tasks"][0]["target_file"], "main.py")
+        self.assertIsNone(plan["tasks"][0].get("target_symbol"))
+
     def test_insert_method_change_intent_normalizes_for_gui_file_plan(self):
         agent = PlannerAgent(state_manager=FileFallbackState())
         task = {

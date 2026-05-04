@@ -14,6 +14,7 @@ from HiveLessonMemory import LessonMemory
 from HiveStateManager import HiveStateManager
 from failure_intelligence import interpret_failure
 from repo_map import RepoMap
+from work_ontology import FILE_LEVEL_WORK_MODES, build_work_profile, normalize_work_mode
 
 
 def make_dummy_vector():
@@ -46,6 +47,26 @@ def extract_file_anchor(text, state_manager=None):
     if any(term in lowered for term in gui_terms):
         known_file_set = set(known_files)
         for candidate in ("hive_gui.py", "interface.py"):
+            if candidate in known_file_set:
+                return candidate
+
+    task_management_terms = (
+        "older tasks",
+        "old tasks",
+        "completed tasks",
+        "stale tasks",
+        "clear tasks",
+        "clearing older tasks",
+        "task backlog",
+        "no longer need to be completed",
+        "delete task",
+        "complete task",
+        "active task",
+        "block task",
+    )
+    if any(term in lowered for term in task_management_terms):
+        known_file_set = set(known_files)
+        for candidate in ("main.py", "HiveMemoryAgent.py"):
             if candidate in known_file_set:
                 return candidate
 
@@ -260,17 +281,59 @@ def merge_completion_cues(existing_cues, new_cues):
     return merged[:3]
 
 
-def build_anchor_from_text(text, state_manager=None):
+def _is_file_level_work_request(text, target_file=None, task=None):
+    metadata = (task or {}).get("metadata") or {}
+    try:
+        work_mode = normalize_work_mode(
+            (task or {}).get("work_mode")
+            or (task or {}).get("task_kind")
+            or metadata.get("work_mode")
+            or metadata.get("task_kind"),
+            task_type=(task or {}).get("task_type") or metadata.get("task_type"),
+            text=text,
+        )
+    except Exception:
+        work_mode = None
+    if work_mode in FILE_LEVEL_WORK_MODES:
+        return True
+    return _is_gui_file_level_request(text, target_file) or _is_task_management_file_level_request(text, target_file)
+
+
+def _is_task_management_file_level_request(text, target_file=None):
+    if target_file not in {"main.py", "HiveMemoryAgent.py"}:
+        return False
+    lowered = (text or "").lower()
+    return any(term in lowered for term in (
+        "older tasks",
+        "old tasks",
+        "completed tasks",
+        "stale tasks",
+        "clear tasks",
+        "clearing older tasks",
+        "task backlog",
+        "no longer need to be completed",
+    ))
+
+
+def build_anchor_from_text(text, state_manager=None, task=None):
     target_file = extract_file_anchor(text, state_manager=state_manager)
-    target_symbol = extract_symbol_anchor(
-        text,
-        state_manager=state_manager,
-        target_file=target_file,
-    )
+    if _is_file_level_work_request(text, target_file, task=task):
+        target_symbol = None
+    else:
+        target_symbol = extract_symbol_anchor(
+            text,
+            state_manager=state_manager,
+            target_file=target_file,
+        )
 
     if not target_file and target_symbol and state_manager is not None:
         target_file = state_manager.resolve_symbol_to_file(target_symbol)
-    elif target_file and not target_symbol and state_manager is not None:
+    elif (
+        target_file
+        and not target_symbol
+        and state_manager is not None
+        and not _is_file_level_work_request(text, target_file, task=task)
+    ):
         target_symbol = infer_symbol_from_task_note(
             text,
             target_file,
@@ -489,7 +552,7 @@ def enrich_task_anchor_for_planning(task, memory=None, state_manager=None):
     anchor_source = str(anchor.get("anchor_source") or "").lower()
     if (
         target_symbol
-        and _is_gui_file_level_request(note_text, target_file)
+        and _is_file_level_work_request(note_text, target_file, task=task)
         and anchor_source in {"pilot_guidance", "file_level_inference", "repo_symbol_inference", "planner_normalized", "user_input"}
         and not _text_explicitly_mentions_symbol(note_text, target_symbol)
     ):
@@ -511,7 +574,7 @@ def enrich_task_anchor_for_planning(task, memory=None, state_manager=None):
         preserve_file_level_anchor = (
             not target_symbol
             and anchor_source in {"pilot_guidance", "file_level_inference", "user_input"}
-            and _is_gui_file_level_request(note_text, target_file)
+            and _is_file_level_work_request(note_text, target_file, task=task)
         )
         if preserve_file_level_anchor:
             should_reinfer_symbol = False
@@ -2899,7 +2962,7 @@ def main():
         elif route == "builder":
             result = payload
 
-            anchor = build_anchor_from_text(payload.get("note") or payload.get("goal"), state_manager=state)
+            anchor = build_anchor_from_text(payload.get("note") or payload.get("goal"), state_manager=state, task=payload)
             completion_cues = extract_required_completion_cues(payload.get("note") or payload.get("goal"))
             pilot_context = dict(payload.get("pilot_context") or {})
 
@@ -2910,6 +2973,11 @@ def main():
                 status=payload.get("status", "drafted"),
                 metadata={
                     "builder_result": payload,
+                    "work_mode": payload.get("work_mode"),
+                    "domain": payload.get("domain"),
+                    "artifact": payload.get("artifact"),
+                    "operation": payload.get("operation"),
+                    "validation": payload.get("validation"),
                     "target_file": anchor.get("target_file"),
                     "target_symbol": anchor.get("target_symbol"),
                     "completion_cues": completion_cues,

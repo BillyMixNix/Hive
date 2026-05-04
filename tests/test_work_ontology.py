@@ -33,6 +33,17 @@ class WorkOntologyTests(unittest.TestCase):
         self.assertEqual(profile["operation"], "add control plus state wiring")
         self.assertEqual(profile["validation"], "AST parse plus launch smoke test")
 
+    def test_build_profile_maps_task_backlog_create_task(self):
+        profile = build_work_profile(
+            task={"note": "create a way of clearing older tasks that no longer need to be completed"},
+        )
+
+        self.assertEqual(profile["work_mode"], "create")
+        self.assertEqual(profile["domain"], "code")
+        self.assertEqual(profile["artifact"], "task backlog")
+        self.assertEqual(profile["operation"], "clear stale task records")
+        self.assertEqual(profile["validation"], "route smoke test plus memory status check")
+
     def test_task_type_default_still_supports_legacy_plans(self):
         self.assertEqual(normalize_work_mode(task_type="bugfix"), "repair")
         self.assertEqual(normalize_work_mode(task_type="feature"), "create")

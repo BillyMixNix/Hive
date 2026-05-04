@@ -106,7 +106,13 @@ def infer_work_mode(text):
 def infer_domain(text, target_file=None, task_type=None):
     lowered = (text or "").lower()
     type_text = str(task_type or "")
-    if target_file or type_text.startswith("code_") or ".py" in lowered or "code" in lowered:
+    if (
+        target_file
+        or type_text.startswith("code_")
+        or ".py" in lowered
+        or "code" in lowered
+        or any(token in lowered for token in ("hive", "task backlog", "older tasks", "completed tasks"))
+    ):
         return "code"
     if type_text.startswith("math_") or any(token in lowered for token in ("math", "proof", "prove", "conjecture", "theorem", "lemma")):
         return "math"
@@ -119,6 +125,44 @@ def infer_domain(text, target_file=None, task_type=None):
     if any(token in lowered for token in ("habit", "schedule", "personal", "plan my")):
         return "personal"
     return "general"
+
+
+def infer_artifact(text, domain=None):
+    lowered = (text or "").lower()
+    if any(token in lowered for token in ("task", "backlog", "completed", "older work", "old work")):
+        return "task backlog"
+    if any(token in lowered for token in ("gui", "ui", "window", "button", "switch", "toggle", "theme")):
+        return "GUI capability"
+    if domain == "math":
+        return "mathematical claim"
+    if domain == "business":
+        return "business artifact"
+    if domain == "writing":
+        return "written artifact"
+    return ""
+
+
+def infer_operation(text, mode=None, artifact=None):
+    lowered = (text or "").lower()
+    if artifact == "task backlog" and any(token in lowered for token in ("clear", "archive", "remove", "prune")):
+        return "clear stale task records"
+    if mode == "create":
+        return "add capability"
+    if mode == "repair":
+        return "fix broken behavior"
+    if mode == "validate":
+        return "check claim"
+    return ""
+
+
+def infer_validation(text, domain=None, artifact=None):
+    if domain == "code":
+        if artifact == "task backlog":
+            return "route smoke test plus memory status check"
+        return "AST parse plus focused smoke test"
+    if domain == "math":
+        return "proof, counterexample search, or formal check"
+    return ""
 
 
 def build_work_profile(task=None, plan=None, child=None):
@@ -144,10 +188,12 @@ def build_work_profile(task=None, plan=None, child=None):
         text=text,
     )
     domain = child.get("domain") or plan.get("domain") or infer_domain(text, target_file=target_file, task_type=task_type)
+    artifact = child.get("artifact") or plan.get("artifact") or infer_artifact(text, domain=domain)
+    operation = child.get("operation") or plan.get("operation") or infer_operation(text, mode=mode, artifact=artifact)
     return {
         "work_mode": mode,
         "domain": domain if domain in DOMAINS else "general",
-        "artifact": child.get("artifact") or plan.get("artifact") or "",
-        "operation": child.get("operation") or plan.get("operation") or "",
-        "validation": child.get("validation") or plan.get("validation") or "",
+        "artifact": artifact,
+        "operation": operation,
+        "validation": child.get("validation") or plan.get("validation") or infer_validation(text, domain=domain, artifact=artifact),
     }

@@ -632,6 +632,26 @@ class PlannerAgent:
                 if candidate in known_files:
                     return candidate
 
+        task_management_terms = (
+            "older tasks",
+            "old tasks",
+            "completed tasks",
+            "stale tasks",
+            "clear tasks",
+            "clearing older tasks",
+            "task backlog",
+            "no longer need to be completed",
+            "delete task",
+            "complete task",
+            "active task",
+            "block task",
+        )
+        if any(term in lowered for term in task_management_terms):
+            known_files = set(self._get_known_files())
+            for candidate in ("main.py", "HiveMemoryAgent.py"):
+                if candidate in known_files:
+                    return candidate
+
         return None
 
 
@@ -766,23 +786,34 @@ class PlannerAgent:
 
     def _should_preserve_file_level_anchor(self, text, target_file, existing):
         source = str((existing or {}).get("anchor_source") or "").lower()
-        if target_file not in {"hive_gui.py", "interface.py"}:
-            return False
         if source not in {"pilot_guidance", "file_level_inference", "user_input"}:
             return False
         lowered = (text or "").lower()
-        return any(term in lowered for term in (
-            "gui",
-            "ui",
-            "window",
-            "desktop",
-            "button",
-            "toggle",
-            "dark mode",
-            "theme",
-            "aesthetic",
-            "asthetic",
-        ))
+        if target_file in {"hive_gui.py", "interface.py"}:
+            return any(term in lowered for term in (
+                "gui",
+                "ui",
+                "window",
+                "desktop",
+                "button",
+                "toggle",
+                "dark mode",
+                "theme",
+                "aesthetic",
+                "asthetic",
+            ))
+        if target_file in {"main.py", "HiveMemoryAgent.py"}:
+            return any(term in lowered for term in (
+                "older tasks",
+                "old tasks",
+                "completed tasks",
+                "stale tasks",
+                "clear tasks",
+                "clearing older tasks",
+                "task backlog",
+                "no longer need to be completed",
+            ))
+        return False
 
     def _text_explicitly_mentions_symbol(self, text, symbol):
         if not symbol:
