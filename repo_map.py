@@ -6,6 +6,17 @@ DEFAULT_SKIP_FILES = {
     "__init__.py",
 }
 
+DEFAULT_SKIP_DIRS = {
+    ".git",
+    ".venv",
+    "venv",
+    "env",
+    "__pycache__",
+    "backups",
+    "hive_v05",
+    "results",
+}
+
 
 class RepoMap:
     """
@@ -46,7 +57,7 @@ class RepoMap:
         file_symbol_records = {}
 
         # First pass: discover files + symbol owners
-        for path in sorted(self.root.rglob("*.py")):
+        for path in self._iter_project_python_files():
             if path.name in DEFAULT_SKIP_FILES:
                 continue
 
@@ -76,7 +87,7 @@ class RepoMap:
             module_to_file[Path(filename).stem] = filename
 
         # Second pass: build import graph and symbol reference graph
-        for path in sorted(self.root.rglob("*.py")):
+        for path in self._iter_project_python_files():
             if path.name in DEFAULT_SKIP_FILES:
                 continue
 
@@ -122,6 +133,18 @@ class RepoMap:
             )
 
         return self.to_dict()
+
+    def _iter_project_python_files(self):
+        for path in sorted(self.root.rglob("*.py")):
+            try:
+                relative_parts = path.relative_to(self.root).parts
+            except ValueError:
+                relative_parts = path.parts
+
+            if any(part in DEFAULT_SKIP_DIRS for part in relative_parts[:-1]):
+                continue
+
+            yield path
 
     def _select_high_value_symbols(self, symbol_records, max_symbols=8):
         scored = []

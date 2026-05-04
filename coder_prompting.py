@@ -6,6 +6,7 @@ from coder_prompt import (
 )
 from builder import format_pilot_brief
 from coder_constraints import derive_patch_constraints, format_patch_constraints
+from work_ontology import FILE_LEVEL_WORK_MODES, normalize_work_mode
 
 DEFAULT_CONTEXT_BUDGET_CHARS = 6000
 REVISION_CONTEXT_BUDGET_CHARS = 6800
@@ -70,6 +71,14 @@ def build_preflight_intent(task, target_file):
     target_symbol_id = task.get("target_symbol_id") or metadata.get("target_symbol_id") or anchor.get("target_symbol_id")
     expected_operation = task.get("expected_operation") or metadata.get("expected_operation") or "modify_logic"
     completion_cues = _format_completion_cues(task)
+    work_mode = normalize_work_mode(
+        task.get("work_mode") or task.get("task_kind") or metadata.get("work_mode") or metadata.get("task_kind"),
+        task_type=task.get("task_type") or metadata.get("task_type"),
+        text=task.get("note") or task.get("description") or "",
+    )
+    creates_symbols = task.get("creates_symbols") or metadata.get("creates_symbols") or []
+    wires_into_symbols = task.get("wires_into_symbols") or metadata.get("wires_into_symbols") or []
+    insertion_region = task.get("insertion_region") or metadata.get("insertion_region") or ""
 
     span_start = anchor.get("lineno")
     span_end = anchor.get("end_lineno")
@@ -79,18 +88,33 @@ def build_preflight_intent(task, target_file):
         span_text = "UNSPECIFIED"
 
     lines = ["STRICT REQUIREMENTS:"]
-    lines.append(f"- You MUST only modify: {target_symbol or 'the explicitly selected symbol'}")
+    lines.append(f"- Work mode: {work_mode}")
     lines.append(f"- You MUST stay within file: {target_file}")
-    lines.append(f"- You MUST stay within lines: {span_text}")
-    if target_symbol_id:
-        lines.append(f"- You MUST match symbol_id: {target_symbol_id}")
+    if target_symbol:
+        lines.append(f"- You MUST only modify: {target_symbol}")
+        lines.append(f"- You MUST stay within lines: {span_text}")
+        if target_symbol_id:
+            lines.append(f"- You MUST match symbol_id: {target_symbol_id}")
+        lines.append("- You MUST NOT modify any other functions, methods, classes, or file regions")
+    elif work_mode in FILE_LEVEL_WORK_MODES:
+        lines.append("- You are allowed to use a file-level anchor because this work mode may create or verify artifacts.")
+        if creates_symbols:
+            lines.append("- New symbols allowed by plan:")
+            lines.extend(f"  - {symbol}" for symbol in creates_symbols)
+        if wires_into_symbols:
+            lines.append("- Existing symbols that may be wired into:")
+            lines.extend(f"  - {symbol}" for symbol in wires_into_symbols)
+        if insertion_region:
+            lines.append(f"- Preferred insertion region: {insertion_region}")
+        lines.append("- Keep the patch localized and do not create unrelated capabilities.")
+    else:
+        lines.append("- You MUST stay inside the explicitly selected file-level region.")
     lines.append(f"- You MUST satisfy expected_operation: {expected_operation}")
     if completion_cues:
         lines.append("- You MUST include completion cues:")
         lines.extend(f"  - {cue}" for cue in completion_cues)
     else:
         lines.append("- You MUST include completion cues: none explicitly provided")
-    lines.append("- You MUST NOT modify any other functions, methods, classes, or file regions")
     lines.append("- If you cannot satisfy every strict requirement exactly, return STATUS: blocked")
     return "\n".join(lines)
 
@@ -203,6 +227,17 @@ def _task_has_explicit_symbol(task):
     return bool(task.get("target_symbol") or metadata.get("target_symbol"))
 
 
+def _task_allows_file_level_context(task):
+    task = task or {}
+    metadata = task.get("metadata") or {}
+    mode = normalize_work_mode(
+        task.get("work_mode") or task.get("task_kind") or metadata.get("work_mode") or metadata.get("task_kind"),
+        task_type=task.get("task_type") or metadata.get("task_type"),
+        text=task.get("note") or task.get("description") or "",
+    )
+    return mode in FILE_LEVEL_WORK_MODES
+
+
 def _build_neighbor_text(context):
     selected_block = context.get("selected_block") or {}
     neighbor_blocks = list(context.get("neighbor_blocks") or [])
@@ -281,7 +316,11 @@ def prepare_context_for_prompt(
             metadata["under_anchored_after_trim"] = True
             metadata["budget_decision"] = "under_anchored_after_trim"
 
-    if context.get("mode") == "file_head_fallback" and not _task_is_file_head_compatible(task):
+    if (
+        context.get("mode") == "file_head_fallback"
+        and not _task_is_file_head_compatible(task)
+        and not _task_allows_file_level_context(task)
+    ):
         metadata["under_anchored_after_trim"] = True
         metadata["budget_decision"] = "under_anchored_after_trim"
 

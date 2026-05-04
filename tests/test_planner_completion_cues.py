@@ -4,6 +4,23 @@ from unittest.mock import patch
 from planner import PlannerAgent
 
 
+class FileFallbackState:
+    def get_known_files(self):
+        return ["hive_gui.py", "main.py", "planner.py"]
+
+    def get_repo_map(self):
+        return {"symbol_to_file": {}, "file_symbols": {"hive_gui.py": []}}
+
+    def resolve_symbol_to_file(self, symbol):
+        return None
+
+    def get_symbol_span(self, target_file, target_symbol):
+        return None
+
+    def get_symbols_for_file(self, file_name):
+        return []
+
+
 class PlannerCompletionCueTests(unittest.TestCase):
     def setUp(self):
         self.agent = PlannerAgent()
@@ -126,6 +143,154 @@ class PlannerCompletionCueTests(unittest.TestCase):
         self.assertEqual(plan["status"], "blocked")
         self.assertEqual(plan["source"], "planner_error")
         self.assertEqual(plan["metadata"]["planner_failure_code"], "invalid_llm_plan_shape")
+
+    def test_plan_task_uses_file_fallback_for_single_file_gui_feature(self):
+        agent = PlannerAgent(state_manager=FileFallbackState())
+        task = {
+            "id": 589,
+            "note": "add a switch in the gui for a dark mode asthetic",
+            "target_file": "hive_gui.py",
+            "metadata": {
+                "target_file": "hive_gui.py",
+                "anchor": {
+                    "target_file": "hive_gui.py",
+                    "target_symbol": None,
+                    "scope": "single_file",
+                    "anchor_level": "file",
+                    "anchor_source": "pilot_guidance",
+                },
+            },
+        }
+        bad_plan = {
+            "goal": "Add dark mode toggle to the GUI.",
+            "task_type": "feature",
+            "tasks": [
+                {
+                    "title": "Add dark mode switch",
+                    "description": "Add a switch to toggle the GUI dark mode aesthetic.",
+                    "target_file": "hive_gui.py",
+                    "change_intent": "modify_existing_logic",
+                    "expected_operation": "modify_logic",
+                    "completion_cues": ["dark mode switch works"],
+                }
+            ],
+            "dependencies": ["hive_gui.py"],
+            "risks": ["Theme regressions."],
+            "next_action": "Patch hive_gui.py.",
+            "status": "planned",
+        }
+
+        with patch("planner.ask_model", return_value=str(bad_plan).replace("'", '"')):
+            plan = agent.plan_task(task)
+
+        self.assertEqual(plan["status"], "planned")
+        self.assertEqual(plan["source"], "fallback_file_task")
+        self.assertEqual(plan["target_file"], "hive_gui.py")
+        self.assertEqual(plan["tasks"][0]["target_file"], "hive_gui.py")
+        self.assertIsNone(plan["tasks"][0].get("target_symbol"))
+
+    def test_insert_method_change_intent_normalizes_for_gui_file_plan(self):
+        agent = PlannerAgent(state_manager=FileFallbackState())
+        task = {
+            "id": 589,
+            "note": "add a switch in the gui for a dark mode asthetic",
+            "target_file": "hive_gui.py",
+            "metadata": {
+                "target_file": "hive_gui.py",
+                "anchor": {
+                    "target_file": "hive_gui.py",
+                    "target_symbol": None,
+                    "scope": "single_file",
+                    "anchor_level": "file",
+                    "anchor_source": "pilot_guidance",
+                },
+            },
+        }
+        plan_payload = {
+            "goal": "Add dark mode toggle to the GUI.",
+            "task_type": "feature",
+            "tasks": [
+                {
+                    "title": "Add dark mode switch",
+                    "description": "Add a switch to toggle the GUI dark mode aesthetic.",
+                    "target_file": "hive_gui.py",
+                    "target_symbol": None,
+                    "change_intent": "insert_method",
+                    "expected_operation": "modify_logic",
+                    "completion_cues": [],
+                }
+            ],
+            "dependencies": ["hive_gui.py"],
+            "risks": ["Theme regressions."],
+            "next_action": "Patch hive_gui.py.",
+            "status": "planned",
+        }
+
+        with patch("planner.ask_model", return_value=str(plan_payload).replace("'", '"').replace("None", "null")):
+            plan = agent.plan_task(task)
+
+        self.assertEqual(plan["status"], "planned")
+        self.assertEqual(plan["dependencies"], ["hive_gui.py"])
+        self.assertEqual(plan["tasks"][0]["change_intent"], "add_method_or_function")
+        self.assertIsNone(plan["tasks"][0].get("target_symbol"))
+
+    def test_create_mode_moves_new_symbol_out_of_target_symbol(self):
+        agent = PlannerAgent(state_manager=FileFallbackState())
+        task = {
+            "id": 589,
+            "note": "add a switch in the gui for a dark mode asthetic",
+            "target_file": "hive_gui.py",
+            "metadata": {
+                "target_file": "hive_gui.py",
+                "anchor": {
+                    "target_file": "hive_gui.py",
+                    "target_symbol": None,
+                    "scope": "single_file",
+                    "anchor_level": "file",
+                    "anchor_source": "pilot_guidance",
+                },
+            },
+        }
+        plan_payload = {
+            "goal": "Add dark mode toggle to the GUI.",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "GUI capability",
+            "operation": "add control and wire state",
+            "validation": "AST parse and GUI launch smoke test",
+            "task_type": "feature",
+            "tasks": [
+                {
+                    "title": "Add dark mode switch",
+                    "description": "Add a switch to toggle the GUI dark mode aesthetic.",
+                    "work_mode": "create",
+                    "domain": "code",
+                    "artifact": "GUI capability",
+                    "operation": "add control and wire state",
+                    "validation": "AST parse and GUI launch smoke test",
+                    "target_file": "hive_gui.py",
+                    "target_symbol": "GUIApp",
+                    "change_intent": "add_new_capability",
+                    "expected_operation": "add_capability",
+                    "completion_cues": [],
+                }
+            ],
+            "dependencies": ["hive_gui.py"],
+            "risks": ["Theme regressions."],
+            "next_action": "Add the dark mode control in hive_gui.py.",
+            "status": "planned",
+        }
+
+        with patch("planner.ask_model", return_value=str(plan_payload).replace("'", '"')):
+            plan = agent.plan_task(task)
+
+        child = plan["tasks"][0]
+        self.assertEqual(plan["work_mode"], "create")
+        self.assertEqual(plan["domain"], "code")
+        self.assertEqual(child["work_mode"], "create")
+        self.assertIsNone(child.get("target_symbol"))
+        self.assertIn("GUIApp", child["creates_symbols"])
+        self.assertEqual(child["expected_operation"], "add_capability")
 
     def test_fallback_plan_preserves_anchored_file_and_symbol(self):
         task = {
