@@ -75,6 +75,79 @@ def _metadata_anchor(entry):
     }
 
 
+def _metadata_work(entry):
+    metadata = entry.get("metadata") or {}
+    plan = metadata.get("plan") if isinstance(metadata, dict) else None
+    if not isinstance(plan, dict):
+        plan = {}
+    builder_result = metadata.get("builder_result") if isinstance(metadata, dict) else None
+    if not isinstance(builder_result, dict):
+        builder_result = {}
+
+    def pick(*values):
+        for value in values:
+            if value not in (None, "", [], {}):
+                return value
+        return None
+
+    work_mode = pick(
+        metadata.get("work_mode"),
+        metadata.get("task_kind"),
+        plan.get("work_mode"),
+        plan.get("task_kind"),
+        builder_result.get("work_mode"),
+        builder_result.get("task_kind"),
+    )
+    domain = pick(metadata.get("domain"), plan.get("domain"), builder_result.get("domain"))
+    artifact = pick(metadata.get("artifact"), plan.get("artifact"), builder_result.get("artifact"))
+    operation = pick(metadata.get("operation"), plan.get("operation"), builder_result.get("operation"))
+    validation = pick(metadata.get("validation"), plan.get("validation"), builder_result.get("validation"))
+    task_type = pick(metadata.get("task_type"), plan.get("task_type"), builder_result.get("task_type"))
+
+    try:
+        from work_ontology import build_work_profile
+        profile = build_work_profile(
+            task={"note": entry.get("note"), "metadata": metadata},
+            plan=plan,
+        )
+    except Exception:
+        profile = {}
+
+    return {
+        "work_mode": work_mode or profile.get("work_mode"),
+        "domain": domain or profile.get("domain"),
+        "artifact": artifact or profile.get("artifact"),
+        "operation": operation or profile.get("operation"),
+        "validation": validation or profile.get("validation"),
+        "task_type": task_type,
+    }
+
+
+def _child_work(parent_entry, plan, child):
+    metadata = parent_entry.get("metadata") or {}
+    try:
+        from work_ontology import build_work_profile
+        profile = build_work_profile(
+            task={"note": parent_entry.get("note"), "metadata": metadata},
+            plan=plan,
+            child=child,
+        )
+    except Exception:
+        profile = {}
+
+    return {
+        "work_mode": child.get("work_mode") or child.get("task_kind") or profile.get("work_mode"),
+        "domain": child.get("domain") or plan.get("domain") or profile.get("domain"),
+        "artifact": child.get("artifact") or plan.get("artifact") or profile.get("artifact"),
+        "operation": child.get("operation") or plan.get("operation") or profile.get("operation"),
+        "validation": child.get("validation") or plan.get("validation") or profile.get("validation"),
+        "task_type": child.get("task_type") or plan.get("task_type"),
+        "creates_symbols": child.get("creates_symbols") or [],
+        "wires_into_symbols": child.get("wires_into_symbols") or [],
+        "insertion_region": child.get("insertion_region") or "",
+    }
+
+
 class HiveProcess:
     def __init__(self):
         self.proc = None
@@ -176,6 +249,7 @@ def build_state_payload():
         kind = _entry_kind(entry)
         anchor = _metadata_anchor(entry)
         anchor["valid_file"] = not anchor.get("target_file") or anchor.get("target_file") in known_files
+        work = _metadata_work(entry)
 
         nodes.append({
             "id": entry_id,
@@ -186,6 +260,7 @@ def build_state_payload():
             "label": f"{entry_id}: {_shorten(entry.get('note') or entry.get('tag'), 54)}",
             "timestamp": entry.get("timestamp"),
             "anchor": anchor,
+            "work": work,
             "metadata": metadata,
         })
 
@@ -197,6 +272,7 @@ def build_state_payload():
         if isinstance(plan, dict):
             for index, child in enumerate(plan.get("tasks") or [], start=1):
                 child_id = f"{entry_id}-child-{index}"
+                work = _child_work(entry, plan, child)
                 child_anchor = {
                     "target_file": child.get("target_file"),
                     "target_symbol": child.get("target_symbol"),
@@ -213,6 +289,7 @@ def build_state_payload():
                     "label": f"{child.get('task_id') or child_id}: {_shorten(child.get('title') or child.get('description'), 48)}",
                     "timestamp": entry.get("timestamp"),
                     "anchor": child_anchor,
+                    "work": work,
                     "metadata": child,
                 })
                 edges.append({"from": entry_id, "to": child_id, "label": "child"})
@@ -416,6 +493,27 @@ HTML = r"""<!doctype html>
     }
     .chip.bad { border-color: #884247; color: #ff9da5; }
     .chip.good { border-color: #2b7b5a; color: #7ee0b3; }
+    .chip.mode { border-color: #5b4f89; color: #c7b8ff; }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .work-row {
+      border: 1px solid #223140;
+      border-radius: 7px;
+      background: #0b121a;
+      padding: 7px 8px;
+    }
+    .work-row b {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
     #detail pre, #transcript {
       white-space: pre-wrap;
       word-break: break-word;
@@ -604,7 +702,12 @@ HTML = r"""<!doctype html>
       }
       if (!q) return nodes.slice(0, activeFilter === 'all' ? 240 : 120);
       return nodes.filter(n => {
-        const haystack = [n.id, n.kind, n.status, n.note, n.anchor?.target_file, n.anchor?.target_symbol].join(' ').toLowerCase();
+        const w = n.work || {};
+        const haystack = [
+          n.id, n.kind, n.status, n.note,
+          n.anchor?.target_file, n.anchor?.target_symbol,
+          w.work_mode, w.domain, w.artifact, w.operation, w.validation, w.task_type
+        ].join(' ').toLowerCase();
         return haystack.includes(q);
       }).slice(0, activeFilter === 'all' ? 240 : 120);
     }
@@ -633,11 +736,14 @@ HTML = r"""<!doctype html>
         return;
       }
       const a = node.anchor || {};
+      const w = node.work || {};
       const invalid = a.valid_file === false ? ' bad' : '';
       currentCard.innerHTML = `
         <div class="title">${escapeHtml(node.label)}</div>
         <div class="meta">${escapeHtml(node.status || 'unknown')} / ${escapeHtml(node.kind)}</div>
         <div style="margin-top:6px">
+          <span class="chip mode">${escapeHtml(w.work_mode || 'no mode')}</span>
+          <span class="chip">${escapeHtml(w.domain || 'no domain')}</span>
           <span class="chip${invalid}">${escapeHtml(a.target_file || 'no file')}</span>
           <span class="chip">${escapeHtml(a.target_symbol || 'no symbol')}</span>
         </div>
@@ -650,7 +756,7 @@ HTML = r"""<!doctype html>
       list.innerHTML = items.map(n => `
         <div class="list-item" data-id="${escapeHtml(n.id)}">
           <div class="title">${escapeHtml(n.label)}</div>
-          <div class="meta">${escapeHtml(n.kind)} / ${escapeHtml(n.status || 'unknown')} ${anchorChipText(n)}</div>
+          <div class="meta">${escapeHtml(n.kind)} / ${escapeHtml(n.status || 'unknown')} ${workChipText(n)} ${anchorChipText(n)}</div>
         </div>
       `).join('');
       list.querySelectorAll('.list-item').forEach(el => {
@@ -662,6 +768,14 @@ HTML = r"""<!doctype html>
       const anchor = node.anchor || {};
       if (!anchor.target_file && !anchor.target_symbol) return '';
       return ` / ${anchor.target_file || 'none'}::${anchor.target_symbol || 'none'}`;
+    }
+
+    function workChipText(node) {
+      const work = node.work || {};
+      const mode = work.work_mode || '';
+      const domain = work.domain || '';
+      if (!mode && !domain) return '';
+      return ` / ${mode || 'mode?'}:${domain || 'domain?'}`;
     }
 
     function laneFor(kind) {
@@ -704,7 +818,7 @@ HTML = r"""<!doctype html>
         return `<g class="node ${escapeHtml(n.kind)}${invalid}${selectedClass}" data-id="${escapeHtml(n.id)}" transform="translate(${p.x},${p.y})">
           <rect width="210" height="72"></rect>
           <text x="10" y="20">${escapeHtml(shorten(n.label, 30))}</text>
-          <text x="10" y="40" class="meta">${escapeHtml(n.status || 'unknown')}</text>
+          <text x="10" y="40" class="meta">${escapeHtml(shorten(`${n.status || 'unknown'} / ${workChipText(n).replace(/^ \/ /, '')}`, 32))}</text>
           <text x="10" y="58" class="meta">${escapeHtml(shorten(anchorChipText(n).replace(/^ \/ /, ''), 30))}</text>
         </g>`;
       }).join('');
@@ -758,11 +872,27 @@ HTML = r"""<!doctype html>
         return;
       }
       const a = selected.anchor || {};
+      const w = selected.work || {};
       const anchorClass = a.valid_file === false ? 'bad' : (a.target_file ? 'good' : '');
+      const createSymbols = Array.isArray(w.creates_symbols) ? w.creates_symbols : [];
+      const wireSymbols = Array.isArray(w.wires_into_symbols) ? w.wires_into_symbols : [];
       detail.innerHTML = `
         <div class="chip">${escapeHtml(selected.kind)}</div>
         <div class="chip">${escapeHtml(selected.status || 'unknown')}</div>
+        <div class="chip mode">${escapeHtml(w.work_mode || 'mode unknown')}</div>
+        <div class="chip">${escapeHtml(w.domain || 'domain unknown')}</div>
         <h3>${escapeHtml(selected.label)}</h3>
+        <div class="field-label">Work Ontology</div>
+        <div class="work-grid">
+          <div class="work-row"><b>Mode</b>${escapeHtml(w.work_mode || 'none')}</div>
+          <div class="work-row"><b>Domain</b>${escapeHtml(w.domain || 'none')}</div>
+          <div class="work-row"><b>Artifact</b>${escapeHtml(w.artifact || 'none')}</div>
+          <div class="work-row"><b>Operation</b>${escapeHtml(w.operation || 'none')}</div>
+          <div class="work-row"><b>Validation</b>${escapeHtml(w.validation || 'none')}</div>
+          ${createSymbols.length ? `<div class="work-row"><b>Creates</b>${escapeHtml(createSymbols.join(', '))}</div>` : ''}
+          ${wireSymbols.length ? `<div class="work-row"><b>Wires Into</b>${escapeHtml(wireSymbols.join(', '))}</div>` : ''}
+          ${w.insertion_region ? `<div class="work-row"><b>Insertion Region</b>${escapeHtml(w.insertion_region)}</div>` : ''}
+        </div>
         <div class="field-label">Anchor</div>
         <div>
           <span class="chip ${anchorClass}">file: ${escapeHtml(a.target_file || 'none')}</span>

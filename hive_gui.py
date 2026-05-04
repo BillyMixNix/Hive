@@ -110,11 +110,15 @@ class HiveGui(tk.Tk):
         task_list.grid(row=6, column=0, sticky="nsew", pady=(8, 0))
         task_list.columnconfigure(0, weight=1)
         task_list.rowconfigure(0, weight=1)
-        self.tasks = ttk.Treeview(task_list, columns=("status", "note"), show="headings", height=7)
+        self.tasks = ttk.Treeview(task_list, columns=("status", "mode", "domain", "note"), show="headings", height=7)
         self.tasks.heading("status", text="Status")
+        self.tasks.heading("mode", text="Mode")
+        self.tasks.heading("domain", text="Domain")
         self.tasks.heading("note", text="Task")
         self.tasks.column("status", width=90, stretch=False)
-        self.tasks.column("note", width=260, stretch=True)
+        self.tasks.column("mode", width=80, stretch=False)
+        self.tasks.column("domain", width=80, stretch=False)
+        self.tasks.column("note", width=220, stretch=True)
         self.tasks.grid(row=0, column=0, sticky="nsew")
         task_scroll = ttk.Scrollbar(task_list, orient=tk.VERTICAL, command=self.tasks.yview)
         task_scroll.grid(row=0, column=1, sticky="ns")
@@ -326,8 +330,14 @@ class HiveGui(tk.Tk):
         for entry in self._load_recent_tasks():
             note = self._shorten(entry.get("note") or entry.get("tag") or "", 86)
             status = entry.get("status") or ""
+            work = self._task_work(entry)
             entry_id = str(entry.get("id"))
-            self.tasks.insert("", tk.END, iid=entry_id, values=(status, note))
+            self.tasks.insert(
+                "",
+                tk.END,
+                iid=entry_id,
+                values=(status, work.get("work_mode") or "", work.get("domain") or "", note),
+            )
 
     def _select_task(self, _event=None):
         selected = self.tasks.selection()
@@ -356,6 +366,42 @@ class HiveGui(tk.Tk):
         if isinstance(metadata, dict) and ("builder_result" in metadata or "plan" in metadata):
             return True
         return False
+
+    def _task_work(self, entry):
+        metadata = entry.get("metadata") or {}
+        plan = metadata.get("plan") if isinstance(metadata, dict) else None
+        if not isinstance(plan, dict):
+            plan = {}
+        builder_result = metadata.get("builder_result") if isinstance(metadata, dict) else None
+        if not isinstance(builder_result, dict):
+            builder_result = {}
+
+        try:
+            from work_ontology import build_work_profile
+            profile = build_work_profile(
+                task={"note": entry.get("note"), "metadata": metadata},
+                plan=plan,
+            )
+        except Exception:
+            profile = {}
+
+        return {
+            "work_mode": (
+                metadata.get("work_mode")
+                or metadata.get("task_kind")
+                or plan.get("work_mode")
+                or plan.get("task_kind")
+                or builder_result.get("work_mode")
+                or builder_result.get("task_kind")
+                or profile.get("work_mode")
+            ),
+            "domain": (
+                metadata.get("domain")
+                or plan.get("domain")
+                or builder_result.get("domain")
+                or profile.get("domain")
+            ),
+        }
 
     def _latest_task_id(self):
         tasks = self._load_recent_tasks()
