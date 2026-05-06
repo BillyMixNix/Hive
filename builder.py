@@ -114,7 +114,7 @@ def format_pilot_brief(task_or_context):
         lines.append("- Recent pilot guidance:")
         lines.extend(f"  - {item}" for item in history[-3:])
 
-    return "\n".join(lines)
+    return "# Hive Builder Packet\n" + "\n".join(lines)
 
 
 class BuilderAgent:

@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 from coder import CoderAgent
 from coder_prompting import build_preflight_intent, build_symbol_locked_prompt
@@ -166,6 +167,89 @@ class CoderRetryTests(unittest.TestCase):
         self.assertIn("You MUST satisfy expected_operation: modify_logic", preflight)
         self.assertIn('"context": dict(context or {}),', preflight)
         self.assertIn("You MUST NOT modify any other functions", preflight)
+
+    def test_behavioral_intent_gate_accepts_matching_return_change(self):
+        target = Path("tmp_stress/test_behavioral_gate_target.py")
+        target.parent.mkdir(exist_ok=True)
+        target.write_text("def compute(x):\n    return x * 2\n", encoding="utf-8")
+
+        patch_data = {
+            "target_file": str(target),
+            "target_symbol": "compute",
+            "context_target": "compute",
+            "patch": "@@\n-    return x * 2\n+    return x + 1",
+        }
+        task = {
+            "id": "t4",
+            "note": "Change compute to return x + 1",
+            "target_file": str(target),
+            "target_symbol": "compute",
+        }
+        report = {"applied": True, "syntax_valid": True, "semantic_valid": True, "errors": [], "notes": "ok"}
+
+        try:
+            gated = self.agent._attach_behavioral_intent_gate(patch_data, task, report)
+
+            self.assertTrue(gated["semantic_valid"])
+            self.assertFalse(patch_data["intent_check"]["drift_detected"])
+            self.assertEqual(patch_data["intent_check"]["patched_outputs"], [3, 4, 6])
+        finally:
+            target.unlink(missing_ok=True)
+
+    def test_behavioral_intent_gate_rejects_drifted_return_change(self):
+        target = Path("tmp_stress/test_behavioral_gate_target.py")
+        target.parent.mkdir(exist_ok=True)
+        target.write_text("def compute(x):\n    return x * 2\n", encoding="utf-8")
+
+        patch_data = {
+            "target_file": str(target),
+            "target_symbol": "compute",
+            "context_target": "compute",
+            "patch": "@@\n-    return x * 2\n+    return x + 2",
+        }
+        task = {
+            "id": "t5",
+            "note": "Change compute to return x + 1",
+            "target_file": str(target),
+            "target_symbol": "compute",
+        }
+        report = {"applied": True, "syntax_valid": True, "semantic_valid": True, "errors": [], "notes": "ok"}
+
+        try:
+            gated = self.agent._attach_behavioral_intent_gate(patch_data, task, report)
+
+            self.assertFalse(gated["semantic_valid"])
+            self.assertTrue(patch_data["intent_check"]["drift_detected"])
+            self.assertIn("Behavioral intent drift detected.", gated["errors"])
+        finally:
+            target.unlink(missing_ok=True)
+
+    def test_behavioral_intent_gate_skips_non_top_level_targets(self):
+        target = Path("tmp_stress/test_behavioral_gate_target.py")
+        target.parent.mkdir(exist_ok=True)
+        target.write_text("class Target:\n    def compute(self, x):\n        return x * 2\n", encoding="utf-8")
+
+        patch_data = {
+            "target_file": str(target),
+            "target_symbol": "compute",
+            "context_target": "compute",
+            "patch": "@@\n-        return x * 2\n+        return x + 1",
+        }
+        task = {
+            "id": "t6",
+            "note": "Change compute to return x + 1",
+            "target_file": str(target),
+            "target_symbol": "compute",
+        }
+        report = {"applied": True, "syntax_valid": True, "semantic_valid": True, "errors": [], "notes": "ok"}
+
+        try:
+            gated = self.agent._attach_behavioral_intent_gate(patch_data, task, report)
+
+            self.assertTrue(gated["semantic_valid"])
+            self.assertTrue(patch_data["intent_check"]["skipped"])
+        finally:
+            target.unlink(missing_ok=True)
 
     def test_symbol_locked_prompt_injects_preflight_intent(self):
         task = {

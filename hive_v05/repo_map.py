@@ -156,7 +156,13 @@ class RepoMap:
         except SyntaxError:
             return routes
 
-        for node in ast.walk(tree):
+        route_root = tree
+        for node in tree.body:
+            if isinstance(node, ast.FunctionDef) and node.name == "main":
+                route_root = node
+                break
+
+        for node in ast.walk(route_root):
             if not isinstance(node, ast.Compare):
                 continue
             if not isinstance(node.left, ast.Name) or node.left.id != "route":

@@ -1,10 +1,14 @@
 
-from importlib import metadata
-
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
+try:
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    import torch.nn.functional as F
+except ImportError:
+    torch = None
+    nn = None
+    optim = None
+    F = None
 import json
 import os
 from datetime import datetime
@@ -15,7 +19,11 @@ class HiveMemoryAgent:
         self.shared_dim = shared_dim
         self.memory_size = memory_size
         self.statuses = ["drafted"] * memory_size
-        self.vectors = torch.zeros(memory_size, shared_dim).to(self.device)
+        self.vectors = (
+            torch.zeros(memory_size, shared_dim).to(self.device)
+            if torch is not None
+            else [None] * memory_size
+        )
         self.tags = [""] * memory_size
         self.notes = [""] * memory_size
         self.metadata = [None] * memory_size
@@ -30,7 +38,7 @@ class HiveMemoryAgent:
     def create_searchable_symbolic_memory_entry(self, symbolic_vector, tag="general", note="", status="drafted", metadata=None):
         index = self.ptr % self.memory_size
 
-        self.vectors[index] = symbolic_vector.detach()
+        self.vectors[index] = symbolic_vector.detach() if hasattr(symbolic_vector, "detach") else symbolic_vector
         self.tags[index] = tag
         self.notes[index] = note
         self.tags[index] = tag  # Ensure the tag is set correctly
@@ -54,7 +62,7 @@ class HiveMemoryAgent:
     def store(self, fused_vector, tag="general", note="", status="drafted", metadata=None):
         index = self.ptr % self.memory_size
 
-        self.vectors[index] = fused_vector.detach()
+        self.vectors[index] = fused_vector.detach() if hasattr(fused_vector, "detach") else fused_vector
         self.tags[index] = tag
         self.notes[index] = note
         self.statuses[index] = status
@@ -66,6 +74,9 @@ class HiveMemoryAgent:
         self.save_memory()
 
     def retrieve(self, query_vector, top_k=5, tag_filter=None):
+        if torch is None or F is None:
+            return []
+
         valid_indices = [
             i for i in range(min(self.ptr, self.memory_size))
             if (tag_filter is None or self.tags[i] == tag_filter)
@@ -100,6 +111,8 @@ class HiveMemoryAgent:
         end = self.ptr
         start = max(0, end - window)
         valid = self.vectors[start:end]
+        if torch is None:
+            return []
         return valid.mean(dim=0)
 
     def get_recent(self, n=10):
@@ -117,6 +130,9 @@ class HiveMemoryAgent:
         Returns:
             Tensor: Fused memory representations [batch_size, shared_dim]
         """
+        if torch is None:
+            return retrieved_list
+
         fused_vectors = []
         for retrieved in retrieved_list:
             if isinstance(retrieved, torch.Tensor):

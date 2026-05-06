@@ -106,6 +106,10 @@ Plan:
 Primary target file:
 {target_file}
 
+## Output Requirement
+Return a unified diff only.
+File: {target_file}
+
 REAL file contents:
 {file_text}
 """

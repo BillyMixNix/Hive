@@ -1,7 +1,10 @@
 from pathlib import Path
 import re
 
-import torch
+try:
+    import torch
+except ImportError:
+    torch = None
 
 from anchor_utils import copy_anchor_fields, merge_anchor_with_span
 from builder import merge_pilot_context
@@ -18,6 +21,8 @@ from work_ontology import FILE_LEVEL_WORK_MODES, build_work_profile, normalize_w
 
 
 def make_dummy_vector():
+    if torch is None:
+        return [0.0] * 256
     return torch.randn(256).to("cpu")
 
 
@@ -1605,6 +1610,114 @@ def _handle_math_route(route, payload, memory, state):
             f"Next: symbolic agent, stopping time bound, or formal fragment."
         )
 
+    if route == "math_symbolic":
+        from math_domain import SymbolicAgent
+        raw_input = (payload.get("input") or "").strip()
+        try:
+            agent = SymbolicAgent()
+        except RuntimeError as e:
+            return f"[SYMBOLIC UNAVAILABLE] {e}"
+
+        lowered = raw_input.lower()
+        if not raw_input or lowered in {"model", "stopping time", "stopping_time"}:
+            result = agent.stopping_time_model()
+        elif lowered in {"gap", "gap formula", "gap_formula"}:
+            result = agent.gap_formula()
+        elif lowered.startswith("error "):
+            body = raw_input[6:].strip()
+            if "|" not in body:
+                return "Usage: symbolic error <exact expression> | <approx expression>"
+            exact, approx = [part.strip() for part in body.split("|", 1)]
+            result = agent.check_approximation_error(exact, approx, subs={"n": 1000})
+        elif lowered.startswith("identity "):
+            body = raw_input[9:].strip()
+            if "=" not in body:
+                return "Usage: symbolic identity <lhs> = <rhs>"
+            lhs, rhs = [part.strip() for part in body.split("=", 1)]
+            result = agent.verify_identity(lhs, rhs)
+        else:
+            result = agent.series_expand(raw_input)
+
+        memory.store(
+            make_dummy_vector(),
+            tag="math_symbolic",
+            note=f"Symbolic math query: {raw_input or 'stopping_time_model'}",
+            status="complete",
+            metadata=result,
+        )
+        return "[SYMBOLIC]\n" + json.dumps(result, indent=2)
+
+    if route == "math_formal":
+        from math_domain import FormalVerifier
+        raw_input = (payload.get("input") or "").strip()
+        try:
+            verifier = FormalVerifier()
+        except RuntimeError as e:
+            return f"[FORMAL UNAVAILABLE] {e}"
+
+        lowered = raw_input.lower()
+        if not lowered or lowered in {"all", "run all", "suite"}:
+            result = verifier.run_all()
+        elif lowered in {"odd even", "odd", "t1"}:
+            result = verifier.verify_collatz_always_even_after_odd()
+        elif lowered in {"v2", "t2"}:
+            result = verifier.verify_v2_geq_1()
+        elif lowered.startswith("v2 "):
+            try:
+                k = int(lowered.split(None, 1)[1])
+            except ValueError:
+                return "Usage: formal v2 <k>"
+            result = verifier.verify_v2_geq_k(k)
+        else:
+            return "Usage: formal [all|odd even|v2|v2 <k>]"
+
+        memory.store(
+            make_dummy_vector(),
+            tag="math_formal",
+            note=f"Formal math verification: {raw_input or 'all'}",
+            status=str(result.get("status") or (result.get("summary") or {}).get("verdict") or "complete").lower(),
+            metadata=result,
+        )
+        return "[FORMAL]\n" + json.dumps(result, indent=2)
+
+    if route == "math_strategic":
+        from math_domain import Conjecture, MathProgressTracker
+        tracker = MathProgressTracker()
+        raw_input = (payload.get("input") or "").strip()
+        entries = memory.search_by_tag("math_conjecture")
+        conjectures = []
+
+        for entry in entries[-20:]:
+            meta = entry.get("metadata") or {}
+            statement = meta.get("statement") or entry.get("note") or ""
+            if not statement:
+                continue
+            conjecture = Conjecture(
+                statement=statement,
+                domain=meta.get("domain", "collatz"),
+                status=meta.get("status", "unverified"),
+                confidence=float(meta.get("confidence", 0.0) or 0.0),
+                evidence=list(meta.get("evidence") or []),
+                proof_sketch=meta.get("proof_sketch"),
+                formal_fragment=meta.get("formal_fragment"),
+            )
+            conjectures.append(conjecture)
+
+        if raw_input:
+            conjectures.append(Conjecture(statement=raw_input, domain="collatz"))
+        if not conjectures:
+            return "No conjectures available. Use: strategic <statement> or conjecture <statement>"
+
+        results = tracker.score_all(conjectures)
+        lines = ["[STRATEGIC MATH]"]
+        for item in results[:8]:
+            lines.append(
+                f"- score {item['score']}/{item['max_score']} ({item['level_name']}): "
+                f"{item['conjecture']}"
+            )
+            lines.append(f"  next: {item['next_action']}")
+        return "\n".join(lines)
+
     if route == "show_conjectures":
         entries = memory.search_by_tag("math_conjecture")
         if not entries:
@@ -1653,7 +1766,9 @@ def _handle_math_route(route, payload, memory, state):
         lines += [
             "",
             "Commands: explore collatz <start> <end> | conjecture <statement>",
-            "          falsify <statement> | show conjectures | show math lessons",
+            "          falsify <statement> | symbolic [model|gap|identity <lhs>=<rhs>]",
+            "          formal [all|odd even|v2 <k>] | strategic [statement]",
+            "          show conjectures | show math lessons",
         ]
         return "\n".join(lines)
 
@@ -2725,6 +2840,7 @@ def main():
                 "- verify patch <id> | rollback patch <id>\n"
                 "- hypothesize <claim> | scan | probe <file.py> | trace arch <caller> <callee>\n"
                 "- explore collatz <start> <end> | conjecture <statement> | falsify <statement>\n"
+                "- symbolic [model|gap|identity <lhs>=<rhs>] | formal [all|odd even|v2 <k>] | strategic [statement]\n"
                 "- show hypotheses | show code lessons | show conjectures | show math lessons\n"
                 "- code status | math status | store <text>"
             )
@@ -2990,6 +3106,7 @@ def main():
 
         elif route in (
             "math_explore", "math_conjecture", "math_falsify",
+            "math_symbolic", "math_formal", "math_strategic",
             "show_conjectures", "show_math_lessons", "math_status",
         ):
             result = _handle_math_route(route, payload, memory, state)

@@ -2,10 +2,29 @@ import runpy
 import tempfile
 import shutil
 import json
+import ast
+import operator
+import re
 from pathlib import Path
 from typing import Any, List
 
 from executor import ExecutorAgent
+
+
+_SAFE_BIN_OPS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.FloorDiv: operator.floordiv,
+    ast.Mod: operator.mod,
+    ast.Pow: operator.pow,
+}
+
+_SAFE_UNARY_OPS = {
+    ast.UAdd: operator.pos,
+    ast.USub: operator.neg,
+}
 
 
 def run_function_from_file(file_path: str, func_name: str, inputs: List[Any]):
@@ -25,6 +44,65 @@ def run_function_from_file(file_path: str, func_name: str, inputs: List[Any]):
         else:
             out = func(inp)
         outputs.append(out)
+    return outputs
+
+
+def _eval_simple_expr(node, variables):
+    if isinstance(node, ast.Expression):
+        return _eval_simple_expr(node.body, variables)
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float, bool, str)):
+        return node.value
+    if isinstance(node, ast.Name) and node.id in variables:
+        return variables[node.id]
+    if isinstance(node, ast.BinOp) and type(node.op) in _SAFE_BIN_OPS:
+        left = _eval_simple_expr(node.left, variables)
+        right = _eval_simple_expr(node.right, variables)
+        return _SAFE_BIN_OPS[type(node.op)](left, right)
+    if isinstance(node, ast.UnaryOp) and type(node.op) in _SAFE_UNARY_OPS:
+        operand = _eval_simple_expr(node.operand, variables)
+        return _SAFE_UNARY_OPS[type(node.op)](operand)
+    raise ValueError(f"Unsupported intent expression: {ast.dump(node, include_attributes=False)}")
+
+
+def derive_expected_outputs_from_task(task_desc: str, func_name: str, test_inputs: List[Any]):
+    """Infer expected outputs from simple task text like "return x + 1".
+
+    This intentionally handles only narrow, explicit return-expression requests.
+    It returns None when the task is too complex for deterministic local checks.
+    """
+    text = task_desc or ""
+    match = re.search(
+        rf"\b(?:change|make|update)?\s*{re.escape(func_name)}\s+to\s+returns?\s+(.+)$",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if match is None:
+        match = re.search(r"\breturns?\s+(.+)$", text, flags=re.IGNORECASE)
+    if match is None:
+        return None
+
+    expr_text = match.group(1).strip()
+    expr_text = re.split(r"[.;\n]", expr_text, maxsplit=1)[0].strip()
+    if not expr_text:
+        return None
+
+    try:
+        expr_ast = ast.parse(expr_text, mode="eval")
+    except SyntaxError:
+        return None
+
+    outputs = []
+    for inp in test_inputs:
+        if isinstance(inp, (list, tuple)):
+            if len(inp) != 1:
+                return None
+            x_value = inp[0]
+        else:
+            x_value = inp
+        try:
+            outputs.append(_eval_simple_expr(expr_ast, {"x": x_value}))
+        except Exception:
+            return None
     return outputs
 
 

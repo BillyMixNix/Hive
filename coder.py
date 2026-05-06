@@ -1,4 +1,5 @@
 from pathlib import Path
+import ast
 import re
 import textwrap
 from dataclasses import asdict
@@ -47,6 +48,10 @@ from failure_intelligence import (
     infer_trigger_pattern,
     interpret_failure,
 )
+from scripts.intent_detector import (
+    check_intent_with_patch,
+    derive_expected_outputs_from_task,
+)
 from work_ontology import FILE_LEVEL_WORK_MODES, normalize_work_mode
 
 
@@ -78,6 +83,63 @@ class CoderAgent:
             target_file=patch_data["target_file"],
             patch_reason=patch_data.get("reason", ""),
         )
+
+    def _target_is_top_level_function(self, target_file, func_name):
+        if not target_file or not func_name:
+            return False
+
+        try:
+            tree = ast.parse(Path(target_file).read_text(encoding="utf-8"))
+        except Exception:
+            return False
+
+        return any(
+            isinstance(node, ast.FunctionDef) and node.name == func_name
+            for node in tree.body
+        )
+
+    def _run_behavioral_intent_check(self, patch_data, task):
+        target_file = patch_data.get("target_file")
+        func_name = (
+            task.get("target_symbol")
+            or (task.get("metadata") or {}).get("target_symbol")
+            or patch_data.get("context_target")
+        )
+        task_note = task.get("note") or (task.get("metadata") or {}).get("note") or ""
+        test_inputs = [2, 3, 5]
+        expected = derive_expected_outputs_from_task(task_note, func_name or "", test_inputs)
+
+        if expected is None:
+            return {"skipped": True, "reason": "no explicit simple return-expression intent detected"}
+        if not self._target_is_top_level_function(target_file, func_name):
+            return {"skipped": True, "reason": "target symbol is not a top-level function executable by the intent gate"}
+
+        return check_intent_with_patch(
+            target_file,
+            patch_data.get("patch", ""),
+            func_name,
+            test_inputs,
+            expected,
+        )
+
+    def _attach_behavioral_intent_gate(self, candidate_patch_data, task, sandbox_report):
+        intent_check = self._run_behavioral_intent_check(candidate_patch_data, task)
+        candidate_patch_data["intent_check"] = intent_check
+
+        if intent_check.get("skipped"):
+            return sandbox_report
+        if intent_check.get("drift_detected"):
+            gated_report = dict(sandbox_report)
+            gated_report["semantic_valid"] = False
+            gated_report["errors"] = list(gated_report.get("errors") or [])
+            gated_report["errors"].append("Behavioral intent drift detected.")
+            gated_report["notes"] = (gated_report.get("notes") or "") + " Behavioral intent check failed."
+            gated_report["intent_check"] = intent_check
+            return gated_report
+
+        gated_report = dict(sandbox_report)
+        gated_report["intent_check"] = intent_check
+        return gated_report
 
     def _get_change_intent(self, task, plan):
         return (
@@ -1064,7 +1126,15 @@ class CoderAgent:
         selected_block = session["selected_block"]
         full_file_text = session["full_file_text"]
 
-        if session["use_block_rewrite"] and selected_block is not None and "PATCH:" not in raw_response:
+        raw_rewrite = raw_response.lstrip()
+        looks_like_selected_block = (
+            selected_block is not None
+            and raw_rewrite.startswith(f"def {selected_block['name']}(")
+            and "PATCH:" not in raw_response
+        )
+        if (
+            session["use_block_rewrite"] and selected_block is not None and "PATCH:" not in raw_response
+        ) or looks_like_selected_block:
             rewritten_block = self._prepare_rewritten_block(
                 raw_response,
                 selected_block["text"],
@@ -1311,7 +1381,7 @@ class CoderAgent:
     def _build_initial_pass_reflector(self):
         class _InitialPassReflector:
             @staticmethod
-            def evaluate(candidate_patch_data):
+            def evaluate(candidate_patch_data, **kwargs):
                 return {
                     "reflection": "Initial pass accepted after validation.",
                     "confidence": 1.0,
@@ -1946,6 +2016,16 @@ class CoderAgent:
 
                 print("[Coder] Patch validation passed")
                 sandbox_report = self._sandbox_test_patch(candidate_patch_data)
+                if (
+                    sandbox_report.get("applied") is True
+                    and sandbox_report.get("syntax_valid") is True
+                    and sandbox_report.get("semantic_valid") is True
+                ):
+                    sandbox_report = self._attach_behavioral_intent_gate(
+                        candidate_patch_data,
+                        task,
+                        sandbox_report,
+                    )
                 print(f"[Coder] Sandbox report: {sandbox_report}")
                 candidate_patch_data["sandbox_report"] = sandbox_report
 
@@ -2008,24 +2088,19 @@ class CoderAgent:
                     )
                     continue
 
+                reflection = reflector.evaluate(
+                    candidate_patch_data, task=task, plan=plan,
+                    pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
+                )
+                confidence = float(reflection.get("confidence", 0.0))
+
                 # Track best candidate
                 if patch_is_meaningful and not patch_is_blocked and confidence >= 0.5:
-                    reflection_tmp = reflector.evaluate(
-                        candidate_patch_data, task=task, plan=plan,
-                        pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
-                    )
-                    confidence_tmp = float(reflection_tmp.get("confidence", 0.0))
-                    if confidence_tmp > best_confidence:
+                    if confidence > best_confidence:
                         best_patch_data = dict(candidate_patch_data)
-                        best_reflection = dict(reflection_tmp)
-                        best_confidence = confidence_tmp
-                        print(f"[Coder] Best patch candidate updated (confidence={confidence_tmp})")
-                    reflection = reflection_tmp
-                else:
-                    reflection = reflector.evaluate(
-                        candidate_patch_data, task=task, plan=plan,
-                        pilot_guardrails=(task.get("metadata") or {}).get("pilot_guardrails"),
-                    )
+                        best_reflection = dict(reflection)
+                        best_confidence = confidence
+                        print(f"[Coder] Best patch candidate updated (confidence={confidence})")
                 print(f"[Coder] Reflector verdict: {reflection.get('verdict')}")
 
                 # Branch 3b: reflector verdict
