@@ -1,7 +1,15 @@
 import copy
-import torch
-import torch.nn as nn
 import random
+
+try:
+    import torch
+    import torch.nn as nn
+except ImportError:
+    torch = None
+    class nn:
+        class Module:
+            def __init__(self): pass
+            def __init_subclass__(cls, **kwargs): super().__init_subclass__(**kwargs)
 
 
 class HiveAgent(nn.Module):
