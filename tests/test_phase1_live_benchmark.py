@@ -201,7 +201,7 @@ class Phase1LiveBenchmarkTests(unittest.TestCase):
             "verdict": "accept",
         })
 
-        with patch("planner.ask_model", return_value=planner_response) as planner_mock:
+        with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
             plan = self.planner.plan_task(parent_task)
 
         self.assertEqual(plan.get("status"), case.get("expected_plan_status", "planned"), msg=f"planner failed for {case['name']}: {plan}")
@@ -212,9 +212,9 @@ class Phase1LiveBenchmarkTests(unittest.TestCase):
 
         coder_side_effect = case.get("coder_side_effect")
         if coder_side_effect is None:
-            coder_patch = patch("coder.ask_model", return_value=case["coder_response"])
+            coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
         else:
-            coder_patch = patch("coder.ask_model", side_effect=coder_side_effect)
+            coder_patch = patch("coder.ask_hive", side_effect=coder_side_effect)
 
         with coder_patch as coder_mock:
             with patch("reflector.ask_hive", return_value=reflection_response) as reflector_mock:

@@ -300,7 +300,7 @@ class HardAnchorEnforcementTests(unittest.TestCase):
 
         with patch.object(agent, "_select_context_for_intent", return_value=downgraded_context):
             with patch.object(agent, "_apply_prompt_budget", return_value=downgraded_context):
-                with patch("coder.ask_model") as ask_model_mock:
+                with patch("coder.ask_hive") as ask_model_mock:
                     result = agent.generate_patch(task, plan)
 
         self.assertEqual(result["status"], "blocked")
@@ -342,7 +342,7 @@ class HardAnchorEnforcementTests(unittest.TestCase):
             "+            return str(command or \"\").lower().strip()\n"
         )
 
-        with patch("coder.ask_model", return_value=patch_response):
+        with patch("coder.ask_hive", return_value=patch_response):
             with patch.object(agent, "_sandbox_test_patch", return_value={
                 "applied": True,
                 "syntax_valid": True,

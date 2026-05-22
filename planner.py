@@ -1,4 +1,4 @@
-from hive_llm import ask_model
+from hive_llm import ask_model, ask_hive
 from builder import format_pilot_brief
 from HiveLessonMemory import LessonMemory
 from planner_prompt import PLANNER_PROMPT_TEMPLATE
@@ -1456,7 +1456,7 @@ class PlannerAgent:
         anchor = self._build_anchor_from_task(task)
 
         try:
-            raw_response = ask_model(prompt).strip()
+            raw_response = ask_hive(prompt, role="planner").strip()
             json_text = self._extract_json_object(raw_response)
             plan = json.loads(json_text)
 

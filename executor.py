@@ -598,7 +598,12 @@ class ExecutorAgent:
                     ast.ClassDef,
                     ast.Assign,
                     ast.AnnAssign,
+                    ast.AugAssign,
                     ast.Pass,
+                    ast.If,        # if TYPE_CHECKING: blocks
+                    ast.Try,       # try/except at class scope
+                    ast.Import,
+                    ast.ImportFrom,
                 )):
                     continue
 
