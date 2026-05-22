@@ -192,11 +192,57 @@ def check_intent_with_patch(target_file: str, patch_text: str, func_name: str, t
 
 
 if __name__ == '__main__':
-    # quick CLI demo
     import sys
-    if len(sys.argv) < 2:
-        print('Usage: intent_detector.py <target_file>')
+
+    USAGE = (
+        "Usage: intent_detector.py <target_file> <func_name> <task_desc> [test_inputs_json]\n"
+        "\n"
+        "  target_file      Python file containing the function to inspect\n"
+        "  func_name        Name of the function to test\n"
+        "  task_desc        Natural-language description, e.g. 'make f return x + 1'\n"
+        "  test_inputs_json Optional JSON array of inputs, e.g. '[1, 2, 3]'\n"
+        "\n"
+        "Examples:\n"
+        "  intent_detector.py mymodule.py add 'make add return x + 1' '[0, 1, 5]'\n"
+        "  intent_detector.py mymodule.py add 'returns x + 1'\n"
+    )
+
+    if len(sys.argv) < 4:
+        print(USAGE)
         sys.exit(1)
 
-    target = sys.argv[1]
-    print('Run demo not implemented in CLI')
+    target_file = sys.argv[1]
+    func_name = sys.argv[2]
+    task_desc = sys.argv[3]
+    test_inputs = json.loads(sys.argv[4]) if len(sys.argv) > 4 else [0, 1, 2, 10, -1]
+
+    print(f"Target : {target_file}")
+    print(f"Function: {func_name}")
+    print(f"Task    : {task_desc}")
+    print(f"Inputs  : {test_inputs}")
+    print()
+
+    expected = derive_expected_outputs_from_task(task_desc, func_name, test_inputs)
+    if expected is None:
+        print("Task description too complex for deterministic local inference — no expected outputs derived.")
+        sys.exit(0)
+
+    print(f"Derived expected outputs: {expected}")
+    print()
+
+    if not Path(target_file).exists():
+        print(f"File not found: {target_file} — skipping patch check.")
+        sys.exit(0)
+
+    baseline = run_function_from_file(target_file, func_name, test_inputs)
+    drift = baseline != expected
+    print(f"Baseline outputs : {baseline}")
+    print(f"Drift detected   : {drift}")
+    if drift:
+        mismatches = [
+            f"  input={inp!r}: got {got!r}, expected {exp!r}"
+            for inp, got, exp in zip(test_inputs, baseline, expected)
+            if got != exp
+        ]
+        print("Mismatches:")
+        print("\n".join(mismatches))
