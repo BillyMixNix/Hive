@@ -701,3 +701,82 @@ class AdversarialTestAgent:
                 "counterexample": str(e)[:300],
                 "verdict":    "FALSIFIED — counterexample found",
             }
+
+    def run(
+        self,
+        hypothesis: "CodeConjecture",
+        *,
+        fn: Callable = None,
+        source_dir: str = ".",
+        size_fn: Callable = None,
+        sizes: list = None,
+        forbidden_edge: tuple = None,
+        strategy_desc: str = None,
+        test_fn: Callable = None,
+    ) -> dict:
+        """
+        Dispatch to the appropriate test method based on hypothesis.hypothesis_type.
+        Updates the hypothesis with the falsification attempt result and returns a
+        unified result dict with keys: hypothesis_type, status, falsified, verdict,
+        counterexample, detail.
+        """
+        h_type = hypothesis.hypothesis_type
+
+        if h_type == "architecture":
+            if forbidden_edge is None:
+                return self._skipped("forbidden_edge required for architecture hypotheses")
+            result = self.architecture_trace(source_dir, forbidden_edge)
+
+        elif h_type == "performance":
+            if fn is None or size_fn is None:
+                return self._skipped("fn and size_fn required for performance hypotheses")
+            result = self.scaling_probe(fn, size_fn, sizes or [10, 100, 1000])
+            result.setdefault("falsified", False)
+
+        elif h_type == "security":
+            if fn is None:
+                return self._skipped("fn required for security hypotheses")
+            result = self.boundary_probe(fn, type_hint="str")
+
+        else:
+            # correctness, invariant, regression
+            if test_fn is not None and strategy_desc is not None:
+                result = self.run_hypothesis_test(fn or (lambda x: x), strategy_desc, test_fn)
+            elif fn is not None:
+                stmt = hypothesis.statement.lower()
+                if "string" in stmt or "str" in stmt:
+                    type_hint = "str"
+                elif "list" in stmt or "array" in stmt:
+                    type_hint = "list"
+                else:
+                    type_hint = "int"
+                result = self.boundary_probe(fn, type_hint=type_hint)
+            else:
+                return self._skipped(f"fn required for {h_type} hypotheses")
+
+        falsified = result.get("falsified", False)
+        verdict = result.get("verdict", "FALSIFIED" if falsified else "survived all probes")
+        counterexample = result.get("counterexample")
+
+        hypothesis.record_falsification_attempt(
+            f"{h_type} adversarial test", falsified, counterexample
+        )
+
+        return {
+            "hypothesis_type": h_type,
+            "status":          "falsified" if falsified else "survived",
+            "falsified":       falsified,
+            "verdict":         verdict,
+            "counterexample":  counterexample,
+            "detail":          result,
+        }
+
+    def _skipped(self, reason: str) -> dict:
+        return {
+            "hypothesis_type": None,
+            "status":          "skipped",
+            "falsified":       False,
+            "verdict":         "inconclusive",
+            "counterexample":  None,
+            "detail":          {"reason": reason},
+        }
