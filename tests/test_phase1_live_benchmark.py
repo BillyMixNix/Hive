@@ -217,7 +217,7 @@ class Phase1LiveBenchmarkTests(unittest.TestCase):
             coder_patch = patch("coder.ask_model", side_effect=coder_side_effect)
 
         with coder_patch as coder_mock:
-            with patch("reflector.ask_model", return_value=reflection_response) as reflector_mock:
+            with patch("reflector.ask_hive", return_value=reflection_response) as reflector_mock:
                 with patch.object(self.coder.executor, "test_patch_in_sandbox", side_effect=self._workspace_sandbox_test):
                     result = self.coder.generate_patch_with_revisions(coder_task, effective_plan, self.reflector)
 

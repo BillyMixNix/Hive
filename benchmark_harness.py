@@ -384,7 +384,7 @@ class ReliabilityBenchmarkHarness:
         preview = self._preview_generation(coder, coder_task, effective_plan)
 
         with patch("coder.ask_model", side_effect=list(case["coder_side_effect"])) as coder_mock:
-            with patch("reflector.ask_model", return_value=reflection_response):
+            with patch("reflector.ask_hive", return_value=reflection_response):
                 with patch.object(
                     coder.executor,
                     "test_patch_in_sandbox",
@@ -679,7 +679,7 @@ class ReliabilityBenchmarkHarness:
                 coder_patch = patch("coder.ask_model", side_effect=list(coder_side_effect))
 
             with coder_patch as coder_mock:
-                with patch("reflector.ask_model", return_value=reflection_response):
+                with patch("reflector.ask_hive", return_value=reflection_response):
                     with patch.object(
                         coder.executor,
                         "test_patch_in_sandbox",
