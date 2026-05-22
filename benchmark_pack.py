@@ -239,7 +239,7 @@ def _main_mixed_scope_patch():
 def _architecture_failure_case(index):
     variants = [
         ("missing_diff_headers", "missing_diff_headers", "coder.py", "_build_retry_prompt"),
-        ("missing_patch_section", "block_rewrite_wrong_method", "planner.py", "_normalize_completion_cues"),
+        ("missing_patch_section", "missing_patch_section", "planner.py", "_normalize_completion_cues"),
         ("non_diff_commentary", "non_diff_commentary", "executor.py", "validate_patch_semantics"),
         ("missing_context_block", "scope_alignment_mismatch", "planner.py", "_normalize_completion_cues"),
         ("mixed_scope_patch", "mixed_scope_patch", "planner.py", "_normalize_completion_cues"),
@@ -286,7 +286,7 @@ def _architecture_failure_case(index):
 def _route_failure_case(index):
     variants = [
         ("missing_diff_headers", "missing_diff_headers", "update_current_snapshot"),
-        ("missing_patch_section", "block_rewrite_wrong_method", "_get_first_ready_child_task"),
+        ("missing_patch_section", "missing_patch_section", "_get_first_ready_child_task"),
         ("non_diff_commentary", "non_diff_commentary", "update_last_patch_snapshot"),
         ("missing_context_block", "scope_alignment_mismatch", "record_failure_observability"),
         ("mixed_scope_patch", "mixed_scope_patch", "update_current_snapshot"),

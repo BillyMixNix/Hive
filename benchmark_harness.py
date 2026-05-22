@@ -91,7 +91,7 @@ class ReliabilityBenchmarkHarness:
             "records": report.get("records"),
         })
 
-    def _create_session(self):
+    def _create_session(self, lessons_enabled=True):
         temp_root = self.repo_root / "tests" / f"_tmp_reliability_{uuid.uuid4().hex}"
         temp_root.mkdir(parents=True, exist_ok=False)
         state = HiveStateManager(
@@ -106,7 +106,9 @@ class ReliabilityBenchmarkHarness:
             state_manager=state,
             executor=ExecutorAgent(backup_dir=temp_root / "backups"),
         )
-        coder.lesson_memory = LessonMemory(path=str(temp_root / "lessons.jsonl"), max_entries=200)
+        lesson_path = str(temp_root / "lessons.jsonl") if lessons_enabled else None
+        coder.lesson_memory = LessonMemory(path=lesson_path or str(temp_root / "lessons_disabled.jsonl"), max_entries=200)
+        coder._lessons_enabled = lessons_enabled
         return {
             "temp_root": temp_root,
             "state": state,
@@ -645,8 +647,8 @@ class ReliabilityBenchmarkHarness:
         finally:
             self._cleanup_session(session)
 
-    def run_case(self, case):
-        session = self._create_session()
+    def run_case(self, case, lessons_enabled=True):
+        session = self._create_session(lessons_enabled=lessons_enabled)
         try:
             state = session["state"]
             planner = session["planner"]
@@ -750,9 +752,36 @@ class ReliabilityBenchmarkHarness:
         finally:
             self._cleanup_session(session)
 
-    def run_pack(self, cases=None, output_path=None, include_reproducibility=True):
+    def run_pack_ab(self, cases=None, output_path=None):
+        """Run the benchmark twice — with and without lesson memory — and report the delta."""
         cases = list(build_reliability_benchmark_pack() if cases is None else cases)
-        records = [self.run_case(case) for case in cases]
+        report_with = self.run_pack(cases=cases, include_reproducibility=False, _lessons_enabled=True)
+        report_without = self.run_pack(cases=cases, include_reproducibility=False, _lessons_enabled=False)
+
+        s_with    = report_with["summary"]
+        s_without = report_without["summary"]
+        ab_report = {
+            "with_lessons":    s_with,
+            "without_lessons": s_without,
+            "delta": {
+                "passed_cases":                    s_with["passed_cases"]                    - s_without["passed_cases"],
+                "successful_patch_cases_passed":   s_with["successful_patch_cases_passed"]   - s_without["successful_patch_cases_passed"],
+                "expected_failure_cases_passed":   s_with["expected_failure_cases_passed"]   - s_without["expected_failure_cases_passed"],
+                "true_regressions":                s_with["true_regressions"]                - s_without["true_regressions"],
+            },
+            "verdict": (
+                "lessons HELP" if s_with["passed_cases"] > s_without["passed_cases"]
+                else "lessons HURT" if s_with["passed_cases"] < s_without["passed_cases"]
+                else "no difference"
+            ),
+        }
+        if output_path:
+            Path(output_path).write_text(json.dumps(ab_report, indent=2))
+        return ab_report
+
+    def run_pack(self, cases=None, output_path=None, include_reproducibility=True, _lessons_enabled=True):
+        cases = list(build_reliability_benchmark_pack() if cases is None else cases)
+        records = [self.run_case(case, lessons_enabled=_lessons_enabled) for case in cases]
 
         band_counts = Counter(record["band"] for record in records)
         failure_counts = Counter(

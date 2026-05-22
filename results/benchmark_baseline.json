@@ -1,0 +1,2692 @@
+{
+  "summary": {
+    "total_cases": 40,
+    "passed_cases": 40,
+    "failed_cases": 0,
+    "successful_patch_cases_total": 20,
+    "successful_patch_cases_passed": 20,
+    "successful_patch_cases_failed": 0,
+    "expected_failure_cases_total": 20,
+    "expected_failure_cases_passed": 20,
+    "expected_failure_cases_failed": 0,
+    "true_regressions": 0,
+    "bands": {
+      "comment_docstring": 10,
+      "narrow_logic_edits": 10,
+      "architectural_in_place_rewrites": 10,
+      "route_flow_state": 10
+    },
+    "top_failure_classes": [
+      {
+        "failure_code": "missing_diff_headers",
+        "count": 4
+      },
+      {
+        "failure_code": "missing_patch_section",
+        "count": 4
+      },
+      {
+        "failure_code": "non_diff_commentary",
+        "count": 4
+      },
+      {
+        "failure_code": "scope_alignment_mismatch",
+        "count": 4
+      },
+      {
+        "failure_code": "mixed_scope_patch",
+        "count": 4
+      }
+    ]
+  },
+  "records": [
+    {
+      "name": "docs_comment_01",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_02",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_03",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_04",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_05",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_06",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_07",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_08",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_09",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "docs_comment_10",
+      "band": "comment_docstring",
+      "task_note": "Insert a comment above the anchor_span lookup in select_edit_context to explain the strict span lock.",
+      "target_file": "coder_context.py",
+      "target_symbol": "select_edit_context",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "insert_comment",
+      "completion_cues": [
+        "# Enforce span-locked selection before building exact-symbol context."
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "non_meaningful_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2906,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5735,
+        "trimmed_context_length": 1114,
+        "trimmed": true,
+        "summary_used": true,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "summary_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_01",
+      "band": "narrow_logic_edits",
+      "task_note": "Update normalize_command to handle missing command values safely before lowercasing.",
+      "target_file": "router.py",
+      "target_symbol": "normalize_command",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return str(command or \"\").lower().strip()"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2306,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 635,
+        "trimmed_context_length": 635,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_02",
+      "band": "narrow_logic_edits",
+      "task_note": "Update _build_response to copy the provided context mapping before returning it.",
+      "target_file": "interface.py",
+      "target_symbol": "_build_response",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "\"context\": dict(context or {}),"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2275,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 615,
+        "trimmed_context_length": 615,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_03",
+      "band": "narrow_logic_edits",
+      "task_note": "Update normalize_command to handle missing command values safely before lowercasing.",
+      "target_file": "router.py",
+      "target_symbol": "normalize_command",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return str(command or \"\").lower().strip()"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2306,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 635,
+        "trimmed_context_length": 635,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_04",
+      "band": "narrow_logic_edits",
+      "task_note": "Update _build_response to copy the provided context mapping before returning it.",
+      "target_file": "interface.py",
+      "target_symbol": "_build_response",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "\"context\": dict(context or {}),"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2275,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 615,
+        "trimmed_context_length": 615,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_05",
+      "band": "narrow_logic_edits",
+      "task_note": "Update normalize_command to handle missing command values safely before lowercasing.",
+      "target_file": "router.py",
+      "target_symbol": "normalize_command",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return str(command or \"\").lower().strip()"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2306,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 635,
+        "trimmed_context_length": 635,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_06",
+      "band": "narrow_logic_edits",
+      "task_note": "Update _build_response to copy the provided context mapping before returning it.",
+      "target_file": "interface.py",
+      "target_symbol": "_build_response",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "\"context\": dict(context or {}),"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2275,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 615,
+        "trimmed_context_length": 615,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_07",
+      "band": "narrow_logic_edits",
+      "task_note": "Update normalize_command to handle missing command values safely before lowercasing.",
+      "target_file": "router.py",
+      "target_symbol": "normalize_command",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return str(command or \"\").lower().strip()"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2306,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 635,
+        "trimmed_context_length": 635,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_08",
+      "band": "narrow_logic_edits",
+      "task_note": "Update _build_response to copy the provided context mapping before returning it.",
+      "target_file": "interface.py",
+      "target_symbol": "_build_response",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "\"context\": dict(context or {}),"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2275,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 615,
+        "trimmed_context_length": 615,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_09",
+      "band": "narrow_logic_edits",
+      "task_note": "Update normalize_command to handle missing command values safely before lowercasing.",
+      "target_file": "router.py",
+      "target_symbol": "normalize_command",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return str(command or \"\").lower().strip()"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2306,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 635,
+        "trimmed_context_length": 635,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "logic_narrow_10",
+      "band": "narrow_logic_edits",
+      "task_note": "Update _build_response to copy the provided context mapping before returning it.",
+      "target_file": "interface.py",
+      "target_symbol": "_build_response",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "\"context\": dict(context or {}),"
+      ],
+      "expected_failure_sensitivities": [
+        "symbol_anchor_drift",
+        "missing_context_block",
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2275,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 615,
+        "trimmed_context_length": 615,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": false,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": true,
+      "patch_rejected": false,
+      "sandbox_result": {
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true
+      },
+      "apply_result": "not_run",
+      "retry_count": 0,
+      "retry_succeeded": false,
+      "failure_code": null,
+      "final_status": "proposed",
+      "expected_to_succeed": true,
+      "pass_fail_record": {
+        "expected_final_status": "proposed",
+        "expected_failure_code": null,
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_diff_headers_01",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _build_retry_prompt with a narrow in-place architecture edit.",
+      "target_file": "coder.py",
+      "target_symbol": "_build_retry_prompt",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_diff_headers"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4228,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2618,
+        "trimmed_context_length": 2618,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_diff_headers",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_diff_headers",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_patch_section_02",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_patch_section"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_patch_section",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_patch_section",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_non_diff_commentary_03",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden validate_patch_semantics with a narrow in-place architecture edit.",
+      "target_file": "executor.py",
+      "target_symbol": "validate_patch_semantics",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "non_diff_commentary"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 6689,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5026,
+        "trimmed_context_length": 5026,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "non_diff_commentary",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "non_diff_commentary",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_context_block_04",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_context_block"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "scope_alignment_mismatch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "scope_alignment_mismatch",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_mixed_scope_patch_05",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "mixed_scope_patch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "mixed_scope_patch",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_diff_headers_06",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _build_retry_prompt with a narrow in-place architecture edit.",
+      "target_file": "coder.py",
+      "target_symbol": "_build_retry_prompt",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_diff_headers"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4228,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2618,
+        "trimmed_context_length": 2618,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_diff_headers",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_diff_headers",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_patch_section_07",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_patch_section"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_patch_section",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_patch_section",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_non_diff_commentary_08",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden validate_patch_semantics with a narrow in-place architecture edit.",
+      "target_file": "executor.py",
+      "target_symbol": "validate_patch_semantics",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "non_diff_commentary"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 6689,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 5026,
+        "trimmed_context_length": 5026,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "non_diff_commentary",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "non_diff_commentary",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_missing_context_block_09",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_context_block"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "scope_alignment_mismatch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "scope_alignment_mismatch",
+        "passed": true
+      }
+    },
+    {
+      "name": "architecture_mixed_scope_patch_10",
+      "band": "architectural_in_place_rewrites",
+      "task_note": "Harden _normalize_completion_cues with a narrow in-place architecture edit.",
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3015,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1344,
+        "trimmed_context_length": 1344,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "mixed_scope_patch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "mixed_scope_patch",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_diff_headers_01",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_current_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_current_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_diff_headers"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4038,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2434,
+        "trimmed_context_length": 2434,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_diff_headers",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_diff_headers",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_patch_section_02",
+      "band": "route_flow_state",
+      "task_note": "Tighten _get_first_ready_child_task for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "_get_first_ready_child_task",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_patch_section"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4118,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2486,
+        "trimmed_context_length": 2486,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_patch_section",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_patch_section",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_non_diff_commentary_03",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_last_patch_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_last_patch_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "non_diff_commentary"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3932,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2307,
+        "trimmed_context_length": 2307,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "non_diff_commentary",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "non_diff_commentary",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_context_block_04",
+      "band": "route_flow_state",
+      "task_note": "Tighten record_failure_observability for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "record_failure_observability",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_context_block"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2969,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1330,
+        "trimmed_context_length": 1330,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "scope_alignment_mismatch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "scope_alignment_mismatch",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_mixed_scope_patch_05",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_current_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_current_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4038,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2434,
+        "trimmed_context_length": 2434,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "mixed_scope_patch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "mixed_scope_patch",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_diff_headers_06",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_current_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_current_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_diff_headers"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4038,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2434,
+        "trimmed_context_length": 2434,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_diff_headers",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_diff_headers",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_patch_section_07",
+      "band": "route_flow_state",
+      "task_note": "Tighten _get_first_ready_child_task for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "_get_first_ready_child_task",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_patch_section"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4118,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2486,
+        "trimmed_context_length": 2486,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "missing_patch_section",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "missing_patch_section",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_non_diff_commentary_08",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_last_patch_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_last_patch_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "non_diff_commentary"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 3932,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2307,
+        "trimmed_context_length": 2307,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "non_diff_commentary",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "non_diff_commentary",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_missing_context_block_09",
+      "band": "route_flow_state",
+      "task_note": "Tighten record_failure_observability for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "record_failure_observability",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "missing_context_block"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 2969,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1330,
+        "trimmed_context_length": 1330,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "scope_alignment_mismatch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "scope_alignment_mismatch",
+        "passed": true
+      }
+    },
+    {
+      "name": "route_flow_mixed_scope_patch_10",
+      "band": "route_flow_state",
+      "task_note": "Tighten update_current_snapshot for route/state flow consistency.",
+      "target_file": "main.py",
+      "target_symbol": "update_current_snapshot",
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": [
+        "return revised_value"
+      ],
+      "expected_failure_sensitivities": [
+        "mixed_scope_patch"
+      ],
+      "selected_context_mode": "exact_symbol_block",
+      "prompt_length": 4038,
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2434,
+        "trimmed_context_length": 2434,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 5200,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "planner_source": "llm",
+      "planner_success": true,
+      "patch_accepted": false,
+      "patch_rejected": true,
+      "sandbox_result": {
+        "applied": null,
+        "syntax_valid": null,
+        "semantic_valid": null
+      },
+      "apply_result": "not_run",
+      "retry_count": 2,
+      "retry_succeeded": false,
+      "failure_code": "mixed_scope_patch",
+      "final_status": "blocked",
+      "expected_to_succeed": false,
+      "pass_fail_record": {
+        "expected_final_status": "blocked",
+        "expected_failure_code": "mixed_scope_patch",
+        "passed": true
+      }
+    }
+  ],
+  "reproducibility": {
+    "manifest": {
+      "goal": "v0.6-reproducibility",
+      "python_version": "3.11.15",
+      "platform": "Linux-6.18.5-x86_64-with-glibc2.39",
+      "repo_root": "/home/user/Hive",
+      "case_count": 40,
+      "case_order": [
+        "docs_comment_01",
+        "docs_comment_02",
+        "docs_comment_03",
+        "docs_comment_04",
+        "docs_comment_05",
+        "docs_comment_06",
+        "docs_comment_07",
+        "docs_comment_08",
+        "docs_comment_09",
+        "docs_comment_10",
+        "logic_narrow_01",
+        "logic_narrow_02",
+        "logic_narrow_03",
+        "logic_narrow_04",
+        "logic_narrow_05",
+        "logic_narrow_06",
+        "logic_narrow_07",
+        "logic_narrow_08",
+        "logic_narrow_09",
+        "logic_narrow_10",
+        "architecture_missing_diff_headers_01",
+        "architecture_missing_patch_section_02",
+        "architecture_non_diff_commentary_03",
+        "architecture_missing_context_block_04",
+        "architecture_mixed_scope_patch_05",
+        "architecture_missing_diff_headers_06",
+        "architecture_missing_patch_section_07",
+        "architecture_non_diff_commentary_08",
+        "architecture_missing_context_block_09",
+        "architecture_mixed_scope_patch_10",
+        "route_flow_missing_diff_headers_01",
+        "route_flow_missing_patch_section_02",
+        "route_flow_non_diff_commentary_03",
+        "route_flow_missing_context_block_04",
+        "route_flow_mixed_scope_patch_05",
+        "route_flow_missing_diff_headers_06",
+        "route_flow_missing_patch_section_07",
+        "route_flow_non_diff_commentary_08",
+        "route_flow_missing_context_block_09",
+        "route_flow_mixed_scope_patch_10"
+      ],
+      "case_order_hash": "ab146532b147fc48590d398098b7f5fa5ff599389ece9648d9a85ad2e6b0d8cc",
+      "case_pack_hash": "bf1df9b2803b9844dae6f2764fa1d791a0ea2e58f8fee81ebd4c3cd8d8588ad0",
+      "case_fingerprints": [
+        {
+          "name": "docs_comment_01",
+          "band": "comment_docstring",
+          "fingerprint": "405fe65cc04540b01ae258bdda0c8e761648cf04147b96bf8f24fd840a8f3a3a"
+        },
+        {
+          "name": "docs_comment_02",
+          "band": "comment_docstring",
+          "fingerprint": "b560f0562366a5fdb071f427ad874c6acffc0c3d1ee712504a1c57d87eb3dd02"
+        },
+        {
+          "name": "docs_comment_03",
+          "band": "comment_docstring",
+          "fingerprint": "534fa6c1ca44621558161d6b7b2d7896b02fe6d1e901001505e726ec0170bfb4"
+        },
+        {
+          "name": "docs_comment_04",
+          "band": "comment_docstring",
+          "fingerprint": "d4c49e198e8c8efcc2bac92bf40668d420e539ecdbe3db3f72a311625b4bb235"
+        },
+        {
+          "name": "docs_comment_05",
+          "band": "comment_docstring",
+          "fingerprint": "f2817cdb75b0ae24d71fc1c10dada87e1b724b97f5092ad02ff6c8d410106064"
+        },
+        {
+          "name": "docs_comment_06",
+          "band": "comment_docstring",
+          "fingerprint": "c48684eecf87f34c473f90faf5d0173602c190a0bcbb4011f3007bfe5e452ac4"
+        },
+        {
+          "name": "docs_comment_07",
+          "band": "comment_docstring",
+          "fingerprint": "35087f70dfeeb34fb974b820ab5cf07ebf3897fa77e50d36ec3bea19806f1e6b"
+        },
+        {
+          "name": "docs_comment_08",
+          "band": "comment_docstring",
+          "fingerprint": "5f51a0f02d41ca16be0de71323b7c29a99c64a23ad245eac39d7d58a9694b618"
+        },
+        {
+          "name": "docs_comment_09",
+          "band": "comment_docstring",
+          "fingerprint": "47a9b78536db582a826e364a331f3a5bb1c326a12dde851595bd2018524999d3"
+        },
+        {
+          "name": "docs_comment_10",
+          "band": "comment_docstring",
+          "fingerprint": "99414a084a1390c8f7ab7d2599a2baeee6ed0c3c2e7cd31d4191a1449e418892"
+        },
+        {
+          "name": "logic_narrow_01",
+          "band": "narrow_logic_edits",
+          "fingerprint": "4c897a6761538a4695cd6f6083d9117a43c3438d64117c210eacf939f5675496"
+        },
+        {
+          "name": "logic_narrow_02",
+          "band": "narrow_logic_edits",
+          "fingerprint": "f24e15357f82adad4fce2d451e093f61fcc8bcca82a792b0b429c1a5a37cee54"
+        },
+        {
+          "name": "logic_narrow_03",
+          "band": "narrow_logic_edits",
+          "fingerprint": "ffce41cb0c134ee5c0a626c9066f404665c1a8e3ea3c00fd6dff388c5babc906"
+        },
+        {
+          "name": "logic_narrow_04",
+          "band": "narrow_logic_edits",
+          "fingerprint": "aa4f86e7b400fab355a6e8b963146c1454be6088545e6712eab1baa4b8f8757d"
+        },
+        {
+          "name": "logic_narrow_05",
+          "band": "narrow_logic_edits",
+          "fingerprint": "8757036c6d161813f6772804391c28938fbc84bbef672e3787df842bed95b2a2"
+        },
+        {
+          "name": "logic_narrow_06",
+          "band": "narrow_logic_edits",
+          "fingerprint": "98747b35e5bb4297b51c0b8bb7391661d21214c4c92c3703f77b8c40598a3d67"
+        },
+        {
+          "name": "logic_narrow_07",
+          "band": "narrow_logic_edits",
+          "fingerprint": "f6b4bf0d173e9a64c74505f9b8eed324899963455b8474e358e76e926ea38b0e"
+        },
+        {
+          "name": "logic_narrow_08",
+          "band": "narrow_logic_edits",
+          "fingerprint": "45c3e16f2137f5e55549a1ec6f188800e421b06c0fa718e632a5ece70864e509"
+        },
+        {
+          "name": "logic_narrow_09",
+          "band": "narrow_logic_edits",
+          "fingerprint": "1226766f49f369f9640f6f2516c35220c683d2b87d98443deb5eb071b5cc7a98"
+        },
+        {
+          "name": "logic_narrow_10",
+          "band": "narrow_logic_edits",
+          "fingerprint": "c659b2590f310ebfe67af1ff2901d6daf109fc64924c98919ba2ef33829a09a1"
+        },
+        {
+          "name": "architecture_missing_diff_headers_01",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "6c8ca6ba11b87101ddcc307c6c071fac1fec4af121eec5cc5fb94cebdfc0f9cf"
+        },
+        {
+          "name": "architecture_missing_patch_section_02",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "4050d75f6a23fd7651ce68ce8e4414a3610e72a69da2e9ae83e65251c0a7da5f"
+        },
+        {
+          "name": "architecture_non_diff_commentary_03",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "60c3d02cf46a7a6dd7ccd9c06551dd2a16efeafbf07063c3a69c8910a340f2a7"
+        },
+        {
+          "name": "architecture_missing_context_block_04",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "d1acfc97fb9b78e2e3cc2e07f8acca467708f4764bf5696699523648cbd7d21c"
+        },
+        {
+          "name": "architecture_mixed_scope_patch_05",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "dba957f74a1f939ddc484eaf4296393ea2c998d412afcccbfcef3a4810d27970"
+        },
+        {
+          "name": "architecture_missing_diff_headers_06",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "c6fc86a5c0d60450f988a6b1b05774c4fe1554bf0224f08cda26c61bf2048931"
+        },
+        {
+          "name": "architecture_missing_patch_section_07",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "99c411220101cea0f00c060edafa690917c4571fc332d28a8eef6a8c5ecb6da2"
+        },
+        {
+          "name": "architecture_non_diff_commentary_08",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "23e048bbf98ed472884342de083d2bac3f94098d4d928fa557433548b6064b5e"
+        },
+        {
+          "name": "architecture_missing_context_block_09",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "9a16c12040d14a8ba57bc7f3a171bf595022722e91bdde5680031a589b498fa5"
+        },
+        {
+          "name": "architecture_mixed_scope_patch_10",
+          "band": "architectural_in_place_rewrites",
+          "fingerprint": "df8a125c85a713450a9d068d0f879c94d71b05c4741a104ee77dce95f1c2f639"
+        },
+        {
+          "name": "route_flow_missing_diff_headers_01",
+          "band": "route_flow_state",
+          "fingerprint": "3ca95a953b295a3da6dcab1d596dca7116a7169a1c9bf2add6694dd4fe8265d1"
+        },
+        {
+          "name": "route_flow_missing_patch_section_02",
+          "band": "route_flow_state",
+          "fingerprint": "6f7a9a7754162cdb3956f9a67a08742e0d187a9841d26410d1ec6801b4c5d503"
+        },
+        {
+          "name": "route_flow_non_diff_commentary_03",
+          "band": "route_flow_state",
+          "fingerprint": "ad50747fdb3d25aa962ff6abe681ea84350cb7e453813a068e3687cb2dcfed74"
+        },
+        {
+          "name": "route_flow_missing_context_block_04",
+          "band": "route_flow_state",
+          "fingerprint": "68d5567fac45f3d3a63cc97cf095e4369f4ba9a61d53a8f517a3f7141bdda3e7"
+        },
+        {
+          "name": "route_flow_mixed_scope_patch_05",
+          "band": "route_flow_state",
+          "fingerprint": "3b8eec994e4ba0935ef8579694865aec9e9779eec9fcf8ad0e8a0a898f50667e"
+        },
+        {
+          "name": "route_flow_missing_diff_headers_06",
+          "band": "route_flow_state",
+          "fingerprint": "1ce1c3139f656f2e3628f15c9a4673ee6712c74edd4bf2ec00ebf2bcbc9fb4ed"
+        },
+        {
+          "name": "route_flow_missing_patch_section_07",
+          "band": "route_flow_state",
+          "fingerprint": "25cd3a0e5c12304fb8b8e6419de80b356011a7085b316b8ec4156663fe2ed235"
+        },
+        {
+          "name": "route_flow_non_diff_commentary_08",
+          "band": "route_flow_state",
+          "fingerprint": "e481e6d985d1bc69bb255884289226c2b0562e7fa3e2a30b16540c7e16c9f947"
+        },
+        {
+          "name": "route_flow_missing_context_block_09",
+          "band": "route_flow_state",
+          "fingerprint": "1630a4b2b6117e554ae758588e2e0e4737aa42baed42a3c06954a53d6ee2a41d"
+        },
+        {
+          "name": "route_flow_mixed_scope_patch_10",
+          "band": "route_flow_state",
+          "fingerprint": "29fe70d1a2e48f10b966f2aa1428e4e85b7c273da4a217b83f5b3bf9e457f362"
+        }
+      ],
+      "source_file_count": 122,
+      "source_tree_fingerprint": "da807880aca7c36bca0c8f01919637e881e1c7ff9ddb55da9ba724b5f845c410"
+    },
+    "report_signature": "414ce4b5bac0577812957cf49823df15b8d11ce4ae606cc310f8900ecbdfa2e4"
+  }
+}
