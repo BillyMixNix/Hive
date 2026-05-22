@@ -367,7 +367,7 @@ class ExecutorAgent:
         detected, info = self._detect_structural_scope_inconsistency(
             patch_text,
             target_file,
-            file_text=file_text
+            file_text=file_text,
         )
         if detected:
             checks["structural_scope_valid"] = False
@@ -622,6 +622,7 @@ class ExecutorAgent:
                 if isinstance(child, (
                     ast.FunctionDef,
                     ast.AsyncFunctionDef,
+                    ast.ClassDef,
                     ast.Assign,
                     ast.AnnAssign,
                     ast.Pass,
