@@ -52,6 +52,7 @@ from scripts.intent_detector import (
     check_intent_with_patch,
     derive_expected_outputs_from_task,
 )
+from work_ontology import FILE_LEVEL_WORK_MODES, normalize_work_mode
 
 
 class CoderAgent:
@@ -919,6 +920,21 @@ class CoderAgent:
 
     def _is_symbol_locked_task(self, task, plan=None):
         return bool(self._get_task_anchor(task, plan).get("target_symbol"))
+
+    def _get_work_mode(self, task, plan=None):
+        task = task or {}
+        metadata = task.get("metadata") or {}
+        plan = plan or {}
+        return normalize_work_mode(
+            task.get("work_mode") or task.get("task_kind") or metadata.get("work_mode") or metadata.get("task_kind") or plan.get("work_mode") or plan.get("task_kind"),
+            task_type=task.get("task_type") or metadata.get("task_type") or plan.get("task_type"),
+            text=" ".join(str(value or "") for value in (task.get("note"), task.get("description"), plan.get("goal"), plan.get("next_action"))),
+        )
+
+    def _allows_file_level_work(self, task, plan=None):
+        if self._is_symbol_locked_task(task, plan):
+            return False
+        return self._get_work_mode(task, plan) in FILE_LEVEL_WORK_MODES
 
     def _blocked_anchor_patch(self, task, plan, target_file, reason, error_text):
         fallback = self._fallback_patch(task, plan, target_file)
@@ -1925,7 +1941,7 @@ class CoderAgent:
         task = self._attach_pilot_guardrails(task, plan=plan, target_file=target_file)
 
         target_symbol = task.get("target_symbol") or (task.get("metadata") or {}).get("target_symbol")
-        if not target_symbol:
+        if not target_symbol and not self._allows_file_level_work(task, plan):
             raise ValueError(f"Task is missing target_symbol. Refusing to generate patch.\nTask: {task}")
 
         try:

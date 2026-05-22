@@ -3,6 +3,13 @@ from builder import format_pilot_brief
 from HiveLessonMemory import LessonMemory
 from planner_prompt import PLANNER_PROMPT_TEMPLATE
 from anchor_utils import canonicalize_task_anchor, merge_anchor_with_span
+from work_ontology import (
+    FILE_LEVEL_WORK_MODES,
+    TASK_TYPE_MODE_DEFAULTS,
+    WORK_MODES,
+    build_work_profile,
+    normalize_work_mode,
+)
 import json
 import re 
 
@@ -32,9 +39,16 @@ ALLOWED_TASK_TYPES = {
     "code_regression",
 }
 
+ALLOWED_TASK_KINDS = WORK_MODES
+TASK_TYPE_KIND_DEFAULTS = TASK_TYPE_MODE_DEFAULTS
+FILE_LEVEL_TASK_KINDS = FILE_LEVEL_WORK_MODES
+
 ALLOWED_CHANGE_INTENTS = {
     "modify_existing_logic",
     "insert_line_after_anchor",
+    "add_new_capability",
+    "add_method_or_function",
+    "wire_existing_components",
     "update_prompt_contract",
     "tighten_validation",
     "adjust_routing_order",
@@ -45,6 +59,16 @@ ALLOWED_CHANGE_INTENTS = {
 INTENT_NORMALIZATION = {
     "insert_docstring": "modify_existing_logic",
     "add_docstring": "modify_existing_logic",
+    "insert_method": "add_method_or_function",
+    "add_method": "add_method_or_function",
+    "insert_function": "add_method_or_function",
+    "add_function": "add_method_or_function",
+    "add_capability": "add_new_capability",
+    "add_ui_capability": "add_new_capability",
+    "add_ui_control": "add_new_capability",
+    "create_capability": "add_new_capability",
+    "wire_components": "wire_existing_components",
+    "integrate_components": "wire_existing_components",
     "insert_comment": "modify_existing_logic",
     "add_comment": "modify_existing_logic",
     "clarify_comment": "modify_existing_logic",
@@ -62,6 +86,9 @@ ALLOWED_EXPECTED_OPERATIONS = {
     "reorder_logic",
     "update_state_flow",
     "refactor_block",
+    "add_capability",
+    "add_symbol",
+    "wire_component",
     "modify_logic",
 }
 
@@ -69,8 +96,11 @@ KNOWN_FILES = {
     "main.py",
     "router.py",
     "interface.py",
+    "hive_gui.py",
+    "hive_cockpit.py",
     "planner.py",
     "planner_prompt.py",
+    "work_ontology.py",
     "coder.py",
     "coder_context.py",
     "coder_validation.py",
@@ -126,6 +156,11 @@ class PlannerAgent:
         expected_operation = (child.get("expected_operation") or "").strip()
 
         combined = " ".join(part for part in [title, description, target_symbol] if part)
+
+        if expected_operation == "modify_logic" and change_intent in {"add_new_capability", "add_method_or_function"}:
+            return "add_capability"
+        if expected_operation == "modify_logic" and change_intent == "wire_existing_components":
+            return "wire_component"
 
         has_anchor_language = any(phrase in combined for phrase in [
             "after `", 'after "', "after '",
@@ -202,6 +237,10 @@ class PlannerAgent:
             return "modify_logic"
 
         if not expected_operation:
+            if change_intent in {"add_new_capability", "add_method_or_function"}:
+                return "add_capability"
+            if change_intent == "wire_existing_components":
+                return "wire_component"
             if has_anchor_language:
                 return "insert_after_anchor"
             if has_docstring_language:
@@ -293,9 +332,46 @@ class PlannerAgent:
         normalized = INTENT_NORMALIZATION.get(change_intent.strip(), change_intent.strip())
         return normalized
 
+    def _normalize_task_kind(self, task_kind, task_type=None, description=""):
+        return normalize_work_mode(task_kind, task_type=task_type, text=description)
+
+    def _normalize_string_list(self, value):
+        if value is None:
+            return []
+        if isinstance(value, str):
+            value = [value]
+        if not isinstance(value, list):
+            return []
+        normalized = []
+        seen = set()
+        for item in value:
+            text = str(item or "").strip()
+            if not text or text in seen:
+                continue
+            seen.add(text)
+            normalized.append(text)
+        return normalized[:5]
+
+    def _symbol_exists_in_file(self, target_file, symbol):
+        if not target_file or not symbol:
+            return False
+        if self.state_manager is None:
+            return True
+        if self.state_manager is not None:
+            symbols = self.state_manager.get_symbols_for_file(target_file) or []
+            if symbol in symbols:
+                return True
+            span = self.state_manager.get_symbol_span(target_file, symbol)
+            if isinstance(span, dict):
+                return True
+        resolved = self._resolve_symbol_to_file(symbol)
+        return resolved == target_file
+
     def _infer_change_intent(self, description, target_file=None):
         text = (description or "").lower()
 
+        if any(token in text for token in ("add ", "create ", "introduce ", "new capability", "new feature", "switch", "toggle", "button")):
+            return "add_new_capability"
         if "insert" in text and "immediately after" in text:
             return "insert_line_after_anchor"
         if "prompt" in text or "response contract" in text or "json response" in text:
@@ -434,8 +510,8 @@ class PlannerAgent:
 
             completion_cues = item.get("completion_cues")
             if completion_cues is not None:
-                if not isinstance(completion_cues, list) or not completion_cues:
-                    raise ValueError("completion_cues must be a non-empty list when present.")
+                if not isinstance(completion_cues, list):
+                    raise ValueError("completion_cues must be a list when present.")
 
                 for cue in completion_cues:
                     if not isinstance(cue, str) or not cue.strip():
@@ -455,6 +531,20 @@ class PlannerAgent:
 
             raw_change_intent = item.get("change_intent")
             normalized_change_intent = self._normalize_change_intent(raw_change_intent)
+            work_profile = build_work_profile(child=item)
+            task_kind = work_profile["work_mode"]
+            creates_symbols = self._normalize_string_list(item.get("creates_symbols"))
+            wires_into_symbols = self._normalize_string_list(item.get("wires_into_symbols"))
+            target_file = item.get("target_file")
+            target_symbol = item.get("target_symbol")
+
+            if (
+                task_kind == "create"
+                and target_symbol
+                and not self._symbol_exists_in_file(target_file, target_symbol)
+            ):
+                creates_symbols = self._normalize_string_list(creates_symbols + [target_symbol])
+                target_symbol = None
 
             task = {
                 "task_id": f"task-{parent_task_id}-{i}",
@@ -462,12 +552,21 @@ class PlannerAgent:
                 "description": item.get("description"),
                 "status": "planned",
                 "depends_on": [],
-                "target_file": item.get("target_file"),
-                "target_symbol": item.get("target_symbol"),
+                "target_file": target_file,
+                "target_symbol": target_symbol,
                 "change_intent": normalized_change_intent,
                 "expected_operation": item.get("expected_operation"),
                 "completion_cues": item.get("completion_cues") or [],
                 "task_type": item.get("task_type"),
+                "task_kind": task_kind,
+                "work_mode": task_kind,
+                "domain": work_profile["domain"],
+                "artifact": item.get("artifact") or work_profile["artifact"],
+                "operation": item.get("operation") or work_profile["operation"],
+                "validation": item.get("validation") or work_profile["validation"],
+                "creates_symbols": creates_symbols,
+                "wires_into_symbols": wires_into_symbols,
+                "insertion_region": str(item.get("insertion_region") or "").strip(),
             }
 
             if raw_change_intent != normalized_change_intent:
@@ -514,6 +613,44 @@ class PlannerAgent:
 
         if exact_matches:
             return sorted(exact_matches, key=len, reverse=True)[0]
+
+        gui_terms = (
+            "gui",
+            "ui",
+            "window",
+            "desktop",
+            "button",
+            "toggle",
+            "dark mode",
+            "theme",
+            "aesthetic",
+            "asthetic",
+        )
+        if any(term in lowered for term in gui_terms):
+            known_files = set(self._get_known_files())
+            for candidate in ("hive_gui.py", "interface.py"):
+                if candidate in known_files:
+                    return candidate
+
+        task_management_terms = (
+            "older tasks",
+            "old tasks",
+            "completed tasks",
+            "stale tasks",
+            "clear tasks",
+            "clearing older tasks",
+            "task backlog",
+            "no longer need to be completed",
+            "delete task",
+            "complete task",
+            "active task",
+            "block task",
+        )
+        if any(term in lowered for term in task_management_terms):
+            known_files = set(self._get_known_files())
+            for candidate in ("main.py", "HiveMemoryAgent.py"):
+                if candidate in known_files:
+                    return candidate
 
         return None
 
@@ -647,12 +784,54 @@ class PlannerAgent:
         from main import _score_symbols_for_text
         return _score_symbols_for_text(text, symbols, target_file)
 
+    def _should_preserve_file_level_anchor(self, text, target_file, existing):
+        source = str((existing or {}).get("anchor_source") or "").lower()
+        if source not in {"pilot_guidance", "file_level_inference", "user_input"}:
+            return False
+        lowered = (text or "").lower()
+        if target_file in {"hive_gui.py", "interface.py"}:
+            return any(term in lowered for term in (
+                "gui",
+                "ui",
+                "window",
+                "desktop",
+                "button",
+                "toggle",
+                "dark mode",
+                "theme",
+                "aesthetic",
+                "asthetic",
+            ))
+        if target_file in {"main.py", "HiveMemoryAgent.py"}:
+            return any(term in lowered for term in (
+                "older tasks",
+                "old tasks",
+                "completed tasks",
+                "stale tasks",
+                "clear tasks",
+                "clearing older tasks",
+                "task backlog",
+                "no longer need to be completed",
+            ))
+        return False
+
+    def _text_explicitly_mentions_symbol(self, text, symbol):
+        if not symbol:
+            return False
+        raw_text = text or ""
+        patterns = [
+            rf"`{re.escape(symbol)}`",
+            rf'"{re.escape(symbol)}"',
+            rf"'{re.escape(symbol)}'",
+        ]
+        return any(re.search(pattern, raw_text, flags=re.IGNORECASE) for pattern in patterns)
+
     def _build_anchor_from_task(self, task):
         metadata = task.get("metadata") or {}
         existing = metadata.get("anchor") or {}
 
-        explicit_symbol = self._extract_explicit_symbol_from_text(task.get("note"))
         explicit_file = self._extract_explicit_file_from_text(task.get("note"))
+        explicit_symbol = None if explicit_file else self._extract_explicit_symbol_from_text(task.get("note"))
 
         target_symbol = (
             task.get("target_symbol")
@@ -668,7 +847,29 @@ class PlannerAgent:
             or explicit_file
         )
 
-        if target_file and not target_symbol:
+        known_files = set(self._get_known_files())
+        if target_file and known_files and target_file not in known_files:
+            target_file = explicit_file
+            target_symbol = explicit_symbol
+            existing = {}
+
+        if (
+            target_symbol
+            and self._should_preserve_file_level_anchor(task.get("note"), target_file, existing)
+            and not self._text_explicitly_mentions_symbol(task.get("note"), target_symbol)
+        ):
+            target_symbol = None
+
+        if (
+            target_file
+            and not target_symbol
+            and self._normalize_task_kind(
+                task.get("work_mode") or task.get("task_kind") or metadata.get("work_mode") or metadata.get("task_kind"),
+                task_type=task.get("task_type") or metadata.get("task_type"),
+                description=task.get("note"),
+            ) not in FILE_LEVEL_TASK_KINDS
+            and not self._should_preserve_file_level_anchor(task.get("note"), target_file, existing)
+        ):
             inferred_symbol = self._infer_symbol_from_text_for_file(
                 task.get("note"),
                 target_file,
@@ -691,10 +892,17 @@ class PlannerAgent:
 
     def _build_anchor_from_plan(self, task, plan):
         parent_anchor = self._build_anchor_from_task(task)
-        plan_symbol = (
-            self._extract_explicit_symbol_from_text(plan.get("goal"))
-            or self._extract_explicit_symbol_from_text(plan.get("next_action"))
+        work_mode = self._normalize_task_kind(
+            plan.get("work_mode") or plan.get("task_kind"),
+            task_type=plan.get("task_type"),
+            description=" ".join(str(plan.get(key) or "") for key in ("goal", "next_action")),
         )
+        plan_symbol = None
+        if work_mode not in FILE_LEVEL_TASK_KINDS:
+            plan_symbol = (
+                self._extract_explicit_symbol_from_text(plan.get("goal"))
+                or self._extract_explicit_symbol_from_text(plan.get("next_action"))
+            )
 
         effective_symbol = parent_anchor.get("target_symbol") or plan_symbol
 
@@ -914,6 +1122,11 @@ class PlannerAgent:
         target_symbol = anchor.get("target_symbol")
         description = str(task.get("note") or "").strip()
         task_type = str((task.get("task_type") or (task.get("metadata") or {}).get("task_type") or "bugfix")).strip() or "bugfix"
+        task_kind = self._normalize_task_kind(
+            task.get("task_kind") or task.get("work_mode") or (task.get("metadata") or {}).get("task_kind"),
+            task_type=task_type,
+            description=description,
+        )
         change_intent = self._normalize_change_intent(
             task.get("change_intent")
             or (task.get("metadata") or {}).get("change_intent")
@@ -933,6 +1146,8 @@ class PlannerAgent:
             }),
             "completion_cues": [],
             "task_type": task_type,
+            "task_kind": task_kind,
+            "work_mode": task_kind,
         }
         child["completion_cues"] = self._build_fallback_completion_cues(
             task,
@@ -943,6 +1158,8 @@ class PlannerAgent:
             "task_id": task["id"],
             "goal": description,
             "task_type": task_type if task_type in ALLOWED_TASK_TYPES else "bugfix",
+            "task_kind": task_kind,
+            "work_mode": task_kind,
             "tasks": self._normalize_task_list([child], parent_task_id=task["id"]),
             "dependencies": [target_file] if target_file else ["main.py"],
             "risks": [
@@ -966,6 +1183,96 @@ class PlannerAgent:
             fallback_target_file=target_file,
         )
         return plan
+
+    def _should_use_file_fallback(self, task, anchor, failure_code):
+        anchored_file = anchor.get("target_file")
+        anchored_symbol = anchor.get("target_symbol")
+
+        if not anchored_file or anchored_symbol:
+            return False
+        if self._is_architectural_task(task) or self._task_mentions_multiple_files(task):
+            return False
+
+        recoverable_codes = {
+            "planner_missing_target_symbol",
+            "planner_validation_failure",
+            "invalid_llm_plan_shape",
+        }
+        return failure_code in recoverable_codes
+
+    def _build_file_fallback_plan(self, task, anchor, failure_code, error_text):
+        target_file = anchor.get("target_file")
+        description = str(task.get("note") or "").strip()
+        task_type = str((task.get("task_type") or (task.get("metadata") or {}).get("task_type") or "feature")).strip()
+        if task_type not in ALLOWED_TASK_TYPES:
+            task_type = "feature"
+        task_kind = self._normalize_task_kind(
+            task.get("task_kind") or task.get("work_mode") or (task.get("metadata") or {}).get("task_kind"),
+            task_type=task_type,
+            description=description,
+        )
+        change_intent = self._normalize_change_intent(
+            task.get("change_intent")
+            or (task.get("metadata") or {}).get("change_intent")
+            or self._infer_change_intent(description, target_file=target_file)
+        )
+        child = {
+            "task_id": f"task-{task['id']}-1",
+            "title": f"Update {target_file}",
+            "description": description,
+            "status": "current",
+            "depends_on": [],
+            "target_file": target_file,
+            "target_symbol": None,
+            "change_intent": change_intent,
+            "expected_operation": "add_capability" if task_kind == "create" else "modify_logic",
+            "completion_cues": [],
+            "task_type": task_type,
+            "task_kind": task_kind,
+            "work_mode": task_kind,
+            "artifact": (task.get("metadata") or {}).get("artifact") or "",
+            "operation": (task.get("metadata") or {}).get("operation") or "",
+            "validation": (task.get("metadata") or {}).get("validation") or "",
+            "creates_symbols": self._normalize_string_list((task.get("metadata") or {}).get("creates_symbols")),
+            "wires_into_symbols": self._normalize_string_list((task.get("metadata") or {}).get("wires_into_symbols")),
+            "insertion_region": str((task.get("metadata") or {}).get("insertion_region") or "").strip(),
+        }
+        canonicalize_task_anchor(
+            child,
+            target_file=target_file,
+            target_symbol=None,
+            state_manager=self.state_manager,
+            default_scope=anchor.get("scope") or "single_file",
+            default_anchor_level="file",
+            default_anchor_source=anchor.get("anchor_source") or "file_fallback",
+        )
+        return {
+            "task_id": task["id"],
+            "goal": description,
+            "task_type": task_type,
+            "task_kind": task_kind,
+            "work_mode": task_kind,
+            "tasks": [child],
+            "dependencies": [target_file],
+            "risks": [
+                "Planner fallback was used after planner validation failed.",
+                "File-level anchor: coder must keep the patch narrowly scoped inside the target file.",
+            ],
+            "next_action": f"Implement the requested change in {target_file}.",
+            "status": "planned",
+            "source": "fallback_file_task",
+            "llm_error": error_text,
+            "metadata": {
+                "anchor": dict(anchor),
+                "planner_source": "fallback_file_task",
+                "planner_failure_code": failure_code,
+                "planner_failure_detail": error_text,
+            },
+            "active_child_task_id": child["task_id"],
+            "active_child_task_title": child["title"],
+            "active_child_target_file": target_file,
+            "target_file": target_file,
+        }
 
     def _validate_plan_required_fields(self, plan):
         """Check required top-level fields exist and have correct types."""
@@ -991,11 +1298,29 @@ class PlannerAgent:
         if task_type not in ALLOWED_TASK_TYPES:
             raise ValueError(f"Unsupported task_type: {task_type}")
         plan["task_type"] = task_type
+        plan["task_kind"] = self._normalize_task_kind(
+            plan.get("task_kind") or plan.get("work_mode"),
+            task_type=task_type,
+            description=" ".join(str(plan.get(key) or "") for key in ("goal", "next_action")),
+        )
+        plan["work_mode"] = plan["task_kind"]
+        work_profile = build_work_profile(plan=plan)
+        plan["domain"] = plan.get("domain") or work_profile["domain"]
+        plan["artifact"] = plan.get("artifact") or work_profile["artifact"]
+        plan["operation"] = plan.get("operation") or work_profile["operation"]
+        plan["validation"] = plan.get("validation") or work_profile["validation"]
         return task_type
 
     def _validate_plan_child_tasks(self, plan):
         """Validate each child task's required fields, intents, operations, and cues."""
         for child in plan["tasks"]:
+            child["task_kind"] = self._normalize_task_kind(
+                child.get("task_kind") or child.get("work_mode"),
+                task_type=child.get("task_type") or plan.get("task_type"),
+                description=" ".join(str(child.get(key) or "") for key in ("title", "description")),
+            )
+            child["work_mode"] = child["task_kind"]
+
             target_file = child.get("target_file")
             if not isinstance(target_file, str) or not target_file.strip():
                 raise ValueError(f"Child task missing target_file: {child}")
@@ -1003,7 +1328,21 @@ class PlannerAgent:
                 raise ValueError(f"Child task references unknown target_file: {target_file}")
 
             target_symbol = child.get("target_symbol")
-            if not isinstance(target_symbol, str) or not target_symbol.strip():
+            creates_symbols = self._normalize_string_list(child.get("creates_symbols"))
+            wires_into_symbols = self._normalize_string_list(child.get("wires_into_symbols"))
+            child["creates_symbols"] = creates_symbols
+            child["wires_into_symbols"] = wires_into_symbols
+
+            if target_symbol and not self._symbol_exists_in_file(target_file, target_symbol):
+                if child["task_kind"] == "create":
+                    child["creates_symbols"] = self._normalize_string_list(creates_symbols + [target_symbol])
+                    child["target_symbol"] = None
+                    target_symbol = None
+                else:
+                    raise ValueError(f"Child task target_symbol is not an existing symbol in {target_file}: {target_symbol}")
+
+            allows_file_anchor = child["task_kind"] in FILE_LEVEL_TASK_KINDS or bool(creates_symbols or wires_into_symbols)
+            if not allows_file_anchor and (not isinstance(target_symbol, str) or not target_symbol.strip()):
                 raise ValueError("Planner produced task without target_symbol")
 
             change_intent = child.get("change_intent")
@@ -1146,6 +1485,13 @@ class PlannerAgent:
             failure_code = self._classify_plan_failure(e)
             if self._should_use_narrow_fallback(task, anchor):
                 return self._build_narrow_fallback_plan(
+                    task,
+                    anchor,
+                    failure_code=failure_code,
+                    error_text=str(e),
+                )
+            if self._should_use_file_fallback(task, anchor, failure_code):
+                return self._build_file_fallback_plan(
                     task,
                     anchor,
                     failure_code=failure_code,

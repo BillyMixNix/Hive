@@ -1,7 +1,16 @@
+from work_ontology import FILE_LEVEL_WORK_MODES, normalize_work_mode
+
+
 def derive_patch_constraints(task, plan, target_file):
     note = (task.get("note") or "").lower()
     goal = str(plan.get("goal", "")).lower()
     next_action = (plan.get("next_action") or "").lower()
+    metadata = task.get("metadata") or {}
+    work_mode = normalize_work_mode(
+        task.get("work_mode") or task.get("task_kind") or metadata.get("work_mode") or metadata.get("task_kind") or plan.get("work_mode") or plan.get("task_kind"),
+        task_type=task.get("task_type") or metadata.get("task_type") or plan.get("task_type"),
+        text=f"{note} {goal} {next_action}",
+    )
 
     combined = f"{note} {goal} {next_action}"
 
@@ -17,6 +26,22 @@ def derive_patch_constraints(task, plan, target_file):
         "require_anchor_context": True,
         "notes": [],
     }
+
+    if work_mode in FILE_LEVEL_WORK_MODES:
+        constraints["preferred_edit_style"] = "file_level_localized"
+        constraints["require_anchor_context"] = True
+        constraints["notes"].append(
+            f"Work mode {work_mode}: a file-level anchor is valid when the task creates, verifies, documents, observes, or configures an artifact."
+        )
+
+    if work_mode == "create":
+        constraints["preferred_edit_style"] = "add_capability"
+        constraints["allow_new_method"] = True
+        constraints["max_new_methods"] = 1
+        constraints["max_changed_regions"] = 2
+        constraints["notes"].append(
+            "Create-mode task: new symbols are allowed only when declared by creates_symbols or clearly required by the capability."
+        )
 
     architectural_tokens = [
         "planner",
