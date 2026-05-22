@@ -13,16 +13,27 @@ class HiveAgent(nn.Module):
         self.output_fn = output_fn
         self.optimizer = optimizer
         self.loss_fn = loss_fn
+        self.history = []
+        self._last_input = None
 
     def process(self, images):
         self.model.train()
+        self._last_input = images
         features = self.feature_fn(images)
         outputs = self.output_fn(features)
         return features, outputs
 
     def receive_feedback(self, refined_features):
-        # TODO: integrate feedback into future weights or memory
         self.history.append(refined_features.detach().cpu())
+
+        if self.optimizer is not None and self._last_input is not None:
+            import torch.nn.functional as F
+            self.model.train()
+            current_features = self.feature_fn(self._last_input)
+            loss = F.mse_loss(current_features, refined_features.to(current_features.device))
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
     
     def extract_features(self, x):
         if self.name == "vision":
