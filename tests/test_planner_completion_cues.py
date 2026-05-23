@@ -116,7 +116,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             },
         }
 
-        with patch("planner.ask_model", return_value="not json at all"):
+        with patch("planner.ask_hive", return_value="not json at all"):
             plan = self.agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
@@ -137,7 +137,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             },
         }
 
-        with patch("planner.ask_model", return_value="not json at all"):
+        with patch("planner.ask_hive", return_value="not json at all"):
             plan = self.agent.plan_task(task)
 
         self.assertEqual(plan["status"], "blocked")
@@ -180,7 +180,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             "status": "planned",
         }
 
-        with patch("planner.ask_model", return_value=str(bad_plan).replace("'", '"')):
+        with patch("planner.ask_hive", return_value=str(bad_plan).replace("'", '"')):
             plan = agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
@@ -228,7 +228,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             "status": "planned",
         }
 
-        with patch("planner.ask_model", return_value=str(bad_plan).replace("'", '"')):
+        with patch("planner.ask_hive", return_value=str(bad_plan).replace("'", '"')):
             plan = agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
@@ -275,7 +275,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             "status": "planned",
         }
 
-        with patch("planner.ask_model", return_value=str(plan_payload).replace("'", '"').replace("None", "null")):
+        with patch("planner.ask_hive", return_value=str(plan_payload).replace("'", '"').replace("None", "null")):
             plan = agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
@@ -330,7 +330,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             "status": "planned",
         }
 
-        with patch("planner.ask_model", return_value=str(plan_payload).replace("'", '"')):
+        with patch("planner.ask_hive", return_value=str(plan_payload).replace("'", '"')):
             plan = agent.plan_task(task)
 
         child = plan["tasks"][0]
@@ -353,7 +353,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
             },
         }
 
-        with patch("planner.ask_model", return_value="{\"goal\": \"bad\", \"tasks\": []}"):
+        with patch("planner.ask_hive", return_value="{\"goal\": \"bad\", \"tasks\": []}"):
             plan = self.agent.plan_task(task)
 
         self.assertEqual(plan["source"], "fallback_narrow_task")

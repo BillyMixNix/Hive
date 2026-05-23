@@ -2,7 +2,7 @@ import json
 import sys
 from pathlib import Path
 
-from scripts.stress_runner import run_stress, run_tier2
+from scripts.stress_runner import run_stress, run_tier2  # noqa: E402  (run via python -m scripts.ci_gate)
 
 
 def main():

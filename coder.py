@@ -6,7 +6,7 @@ from dataclasses import asdict
 from typing import Any
 
 PatchData = dict[str, Any]
-from hive_llm import ask_model
+from hive_llm import ask_model, ask_hive
 from HiveLessonMemory import LessonMemory
 
 from coder_prompting import (
@@ -1109,7 +1109,7 @@ class CoderAgent:
     def _generate_candidate_patch_data(self, task, plan, target_file, session, current_prompt, attempt):
         timeout = 120 if attempt == 0 else 45
         raw_response = self._strip_markdown_fences_harder(
-            ask_model(current_prompt, timeout=timeout),
+            ask_hive(current_prompt, role="coder", timeout=timeout),
             expect_patch_contract=not (
                 session["use_block_rewrite"] and session["selected_block"] is not None
             ),
