@@ -11,11 +11,34 @@ Queue format (one JSON object per line):
 Status values written back: "pending" → "running" → "done" | "failed"
 """
 import json
+import os
 import sys
 import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+
+def _bootstrap_api_key():
+    """Load ANTHROPIC_API_KEY from Claude settings if not already in environment."""
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        return
+    for settings_path in (
+        Path.home() / ".claude" / "settings.json",
+        Path.home() / ".claude" / "settings.local.json",
+    ):
+        try:
+            data = json.loads(settings_path.read_text(encoding="utf-8"))
+            key = (data.get("env") or {}).get("ANTHROPIC_API_KEY")
+            if key:
+                os.environ["ANTHROPIC_API_KEY"] = key
+                print(f"  [runner] Loaded ANTHROPIC_API_KEY from {settings_path}")
+                return
+        except Exception:
+            pass
+
+
+_bootstrap_api_key()
 
 from router import Router
 from reflector import Reflector
@@ -94,7 +117,7 @@ def store_task(entry, memory, state):
     if not note:
         raise ValueError("Queue entry missing 'note' field.")
     anchor = build_anchor_from_text(note, state_manager=state)
-    task_id = memory.store(
+    memory.store(
         make_dummy_vector(),
         tag=entry.get("tag", "task"),
         note=note,
@@ -105,6 +128,7 @@ def store_task(entry, memory, state):
             "anchor": anchor,
         },
     )
+    task_id = memory.ptr  # ptr was incremented by store(); stored item is at ptr-1, id = ptr
     print(f"  Stored task {task_id}: {note[:80]}")
     return task_id
 

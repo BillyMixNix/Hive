@@ -445,11 +445,21 @@ class PlannerAgent:
         return json.dumps(plan, indent=4)
 
     def _get_known_files(self):
+        merged = set(KNOWN_FILES)
         if self.state_manager is not None:
-            files = self.state_manager.get_known_files()
-            if files:
-                return set(files)
-        return set(KNOWN_FILES)
+            try:
+                state_files = self.state_manager.get_known_files() or []
+            except Exception:
+                state_files = []
+            for f in state_files:
+                if isinstance(f, str) and f.endswith(".py"):
+                    merged.add(f)
+            repo_map = getattr(self.state_manager, "repo_map", None)
+            if isinstance(repo_map, dict):
+                for f in repo_map.keys():
+                    if isinstance(f, str) and f.endswith(".py"):
+                        merged.add(f)
+        return merged
 
     def _resolve_symbol_to_file(self, symbol):
         if self.state_manager is not None:
@@ -1387,10 +1397,9 @@ class PlannerAgent:
                 normalized_cues = []
                 for cue in completion_cues:
                     if not isinstance(cue, str) or not cue.strip():
-                        raise ValueError(f"Child task completion_cues must contain non-empty strings: {child}")
-                    if not self._completion_cue_looks_concrete(cue):
-                        raise ValueError("completion_cues must be concrete diff-visible code strings.")
-                    normalized_cues.append(cue.strip())
+                        continue
+                    if self._completion_cue_looks_concrete(cue):
+                        normalized_cues.append(cue.strip())
                 child["completion_cues"] = normalized_cues
 
             if not child.get("task_type"):

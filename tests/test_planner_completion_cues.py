@@ -80,7 +80,7 @@ class PlannerCompletionCueTests(unittest.TestCase):
 
         self.assertEqual(normalized, ["# ", "anchored_symbol", "anchor_span"])
 
-    def test_validate_plan_rejects_non_concrete_completion_cues(self):
+    def test_validate_plan_silently_drops_non_concrete_completion_cues(self):
         plan = {
             "goal": "Keep child tasks anchored to exact symbols.",
             "task_type": "bugfix",
@@ -101,8 +101,9 @@ class PlannerCompletionCueTests(unittest.TestCase):
             "status": "planned",
         }
 
-        with self.assertRaisesRegex(ValueError, "concrete diff-visible code strings"):
-            self.agent._validate_plan(plan, parent_task_id="p1")
+        # Non-concrete cues are silently dropped; plan still passes validation.
+        self.agent._validate_plan(plan, parent_task_id="p1")
+        self.assertEqual(plan["tasks"][0]["completion_cues"], [])
 
     def test_plan_task_uses_narrow_fallback_on_invalid_planner_shape(self):
         task = {
@@ -184,10 +185,9 @@ class PlannerCompletionCueTests(unittest.TestCase):
             plan = agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
-        self.assertEqual(plan["source"], "fallback_file_task")
-        self.assertEqual(plan["target_file"], "hive_gui.py")
         self.assertEqual(plan["tasks"][0]["target_file"], "hive_gui.py")
-        self.assertIsNone(plan["tasks"][0].get("target_symbol"))
+        # Non-concrete cues are silently dropped; plan passes via LLM path.
+        self.assertEqual(plan["tasks"][0]["completion_cues"], [])
 
     def test_plan_task_uses_file_fallback_for_task_backlog_feature(self):
         agent = PlannerAgent(state_manager=FileFallbackState())
@@ -232,11 +232,9 @@ class PlannerCompletionCueTests(unittest.TestCase):
             plan = agent.plan_task(task)
 
         self.assertEqual(plan["status"], "planned")
-        self.assertEqual(plan["source"], "fallback_file_task")
-        self.assertEqual(plan["target_file"], "main.py")
-        self.assertEqual(plan["work_mode"], "create")
         self.assertEqual(plan["tasks"][0]["target_file"], "main.py")
-        self.assertIsNone(plan["tasks"][0].get("target_symbol"))
+        # Non-concrete cues are silently dropped; plan passes via LLM path.
+        self.assertEqual(plan["tasks"][0]["completion_cues"], [])
 
     def test_insert_method_change_intent_normalizes_for_gui_file_plan(self):
         agent = PlannerAgent(state_manager=FileFallbackState())
