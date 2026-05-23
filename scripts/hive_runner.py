@@ -226,6 +226,19 @@ def run_task(entry, memory, state, router, reflector, lesson_memory):
     print(f"Task: {entry.get('note', '')[:80]}")
     print(f"{'='*60}")
 
+    # Stub creation: if the target file doesn't exist, create a minimal
+    # placeholder so the planner can anchor to it properly.
+    target_file = entry.get("target_file", "")
+    if target_file and not Path(target_file).exists():
+        stub_path = Path(target_file)
+        stub_path.parent.mkdir(parents=True, exist_ok=True)
+        stub_path.write_text(
+            f'"""{entry.get("note", "").strip()[:200]}"""\n',
+            encoding="utf-8",
+        )
+        state.rebuild_repo_map()
+        print(f"  Created stub: {target_file}")
+
     task_id = store_task(entry, memory, state)
 
     plan = plan_task(task_id, memory, state, router)
