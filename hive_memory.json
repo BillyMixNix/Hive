@@ -22477,5 +22477,485 @@
       }
     },
     "timestamp": "2026-05-04 02:33:38.541340"
+  },
+  {
+    "id": 600,
+    "tag": "self-improvement",
+    "note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+    "status": "active",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_get_known_files",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      }
+    },
+    "timestamp": "2026-05-23 19:05:14.457258"
+  },
+  {
+    "id": 601,
+    "tag": "self-improvement",
+    "note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_get_known_files",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+      "lineno": 447,
+      "end_lineno": 452,
+      "col_offset": 4,
+      "end_col_offset": 31
+    },
+    "timestamp": "2026-05-23 19:06:02.979227"
+  },
+  {
+    "id": 602,
+    "tag": "self-improvement",
+    "note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_get_known_files",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+      "lineno": 447,
+      "end_lineno": 452,
+      "col_offset": 4,
+      "end_col_offset": 31
+    },
+    "timestamp": "2026-05-23 19:07:00.978303"
+  },
+  {
+    "id": 603,
+    "tag": "self-improvement",
+    "note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_get_known_files",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+      "lineno": 447,
+      "end_lineno": 452,
+      "col_offset": 4,
+      "end_col_offset": 31
+    },
+    "timestamp": "2026-05-23 19:07:39.603824"
+  },
+  {
+    "id": 604,
+    "tag": "plan",
+    "note": "Task 603 planned | Make planner's known files set dynamic by discovering Python files from repo state | next: Edit _get_known_files in planner.py to union hardcoded KNOWN_FILES with dynamically discovered .py files from the repo",
+    "status": "planned",
+    "metadata": {
+      "task_id": 603,
+      "plan_id": "plan-603",
+      "plan": {
+        "goal": "Make planner's known files set dynamic by discovering Python files from repo state",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "planner known-files lookup",
+        "operation": "extend _get_known_files to merge dynamic repo discovery with hardcoded set",
+        "validation": "AST parse and confirm _get_known_files returns union of hardcoded set and discovered .py files",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-603-1",
+            "title": "Dynamically discover Python files in _get_known_files",
+            "description": "Modify _get_known_files in planner.py to merge the hardcoded KNOWN_FILES set with Python files discovered from the repo state (e.g., via repo_map or filesystem scan) so existing repo files are not rejected.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_get_known_files",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              ".py"
+            ],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_get_known_files",
+            "operation": "extend lookup to include dynamically discovered .py files",
+            "validation": "AST parses planner.py and _get_known_files returns a superset of the hardcoded KNOWN_FILES containing real repo .py files",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_get_known_files",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_get_known_files",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+                "lineno": 447,
+                "end_lineno": 452,
+                "col_offset": 4,
+                "end_col_offset": 31
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+              "lineno": 447,
+              "end_lineno": 452,
+              "col_offset": 4,
+              "end_col_offset": 31
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+            "lineno": 447,
+            "end_lineno": 452,
+            "col_offset": 4,
+            "end_col_offset": 31
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "Discovery may include files outside the intended project scope",
+          "Filesystem access during planning could slow down task validation"
+        ],
+        "next_action": "Edit _get_known_files in planner.py to union hardcoded KNOWN_FILES with dynamically discovered .py files from the repo",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_get_known_files",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+            "lineno": 447,
+            "end_lineno": 452,
+            "col_offset": 4,
+            "end_col_offset": 31
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 603,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      }
+    },
+    "timestamp": "2026-05-23 19:07:50.545943"
+  },
+  {
+    "id": 605,
+    "tag": "patch",
+    "note": "Task 603 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Merge KNOWN_FILES with discovered .py files from state/repo",
+      "patch": "--- planner.py\n+++ planner.py\n@@\n     def _get_known_files(self):\n-        if self.state_manager is not None:\n-            files = self.state_manager.get_known_files()\n-            if files:\n-                return set(files)\n-        return set(KNOWN_FILES)\n+        merged = set(KNOWN_FILES)\n+        if self.state_manager is not None:\n+            try:\n+                state_files = self.state_manager.get_known_files() or []\n+            except Exception:\n+                state_files = []\n+            for f in state_files:\n+                if isinstance(f, str) and f.endswith(\".py\"):\n+                    merged.add(f)\n+            repo_map = getattr(self.state_manager, \"repo_map\", None)\n+            if isinstance(repo_map, dict):\n+                for f in repo_map.keys():\n+                    if isinstance(f, str) and f.endswith(\".py\"):\n+                        merged.add(f)\n+        return merged",
+      "task_id": 603,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_get_known_files",
+      "context_window": [
+        438,
+        460
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._get_known_files",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 646,
+        "trimmed_context_length": 646,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      },
+      "completion_cue_result": {
+        "provided_cues": [
+          ".py"
+        ],
+        "matched_cues": [
+          ".py"
+        ],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "/tmp/tmp6rdov4w2/planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "Patch cleanly rewrites _get_known_files in place to merge hardcoded KNOWN_FILES with state_manager.get_known_files() and repo_map keys, filtered to .py. Stays within method boundary, single file, matches completion cue, sandbox passed.",
+        "confidence": 0.84,
+        "next_step": "Apply patch and validate planner accepts real repo .py files previously rejected.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-603",
+      "patch_id": "patch-603",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+        "lineno": 447,
+        "end_lineno": 452,
+        "col_offset": 4,
+        "end_col_offset": 31
+      },
+      "task_type": null,
+      "task_note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-603-1",
+      "child_task_description": "Modify _get_known_files in planner.py to merge the hardcoded KNOWN_FILES set with Python files discovered from the repo state (e.g., via repo_map or filesystem scan) so existing repo files are not rejected.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_get_known_files",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [
+        ".py"
+      ],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-603",
+        "task_id": 603,
+        "plan_id": "plan-603",
+        "task_note": "The KNOWN_FILES set in planner.py is hardcoded and will reject tasks targeting files that exist in the repo but are not listed. Extend _get_known_files to dynamically discover Python files from the repo state instead of relying solely on the hardcoded set.",
+        "child_task_id": "task-603-1",
+        "child_task_title": null,
+        "child_task_description": "Modify _get_known_files in planner.py to merge the hardcoded KNOWN_FILES set with Python files discovered from the repo state (e.g., via repo_map or filesystem scan) so existing repo files are not rejected.",
+        "target_file": "planner.py",
+        "target_symbol": "_get_known_files",
+        "coder_reason": "Merge KNOWN_FILES with discovered .py files from state/repo",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "Patch cleanly rewrites _get_known_files in place to merge hardcoded KNOWN_FILES with state_manager.get_known_files() and repo_map keys, filtered to .py. Stays within method boundary, single file, matches completion cue, sandbox passed.",
+        "reflector_next_step": "Apply patch and validate planner accepts real repo .py files previously rejected.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 15,
+          "deletions": 5
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@\n     def _get_known_files(self):\n-        if self.state_manager is not None:\n-            files = self.state_manager.get_known_files()\n-            if files:\n-                return set(files)\n-        return set(KNOWN_FILES)\n+        merged = set(KNOWN_FILES)\n+        if self.state_manager is not None:\n+            try:\n+                state_files = self.state_manager.get_known_files() or []\n+            except Exception:\n+                state_files = []\n+            for f in state_files:\n+                if isinstance(f, str) and f.endswith(\".py\"):\n+                    merged.add(f)\n+            repo_map = getattr(self.state_manager, \"repo_map\", None)\n+            if isinstance(repo_map, dict):",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-23 19:08:00.465660"
+  },
+  {
+    "id": 606,
+    "tag": "plan",
+    "note": "Task 603 plan updated | Make planner's known files set dynamic by discovering Python files from repo state",
+    "status": "planned",
+    "metadata": {
+      "task_id": 603,
+      "plan_id": "plan-603",
+      "plan": {
+        "goal": "Make planner's known files set dynamic by discovering Python files from repo state",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "planner known-files lookup",
+        "operation": "extend _get_known_files to merge dynamic repo discovery with hardcoded set",
+        "validation": "AST parse and confirm _get_known_files returns union of hardcoded set and discovered .py files",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-603-1",
+            "title": "Dynamically discover Python files in _get_known_files",
+            "description": "Modify _get_known_files in planner.py to merge the hardcoded KNOWN_FILES set with Python files discovered from the repo state (e.g., via repo_map or filesystem scan) so existing repo files are not rejected.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_get_known_files",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              ".py"
+            ],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_get_known_files",
+            "operation": "extend lookup to include dynamically discovered .py files",
+            "validation": "AST parses planner.py and _get_known_files returns a superset of the hardcoded KNOWN_FILES containing real repo .py files",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_get_known_files",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_get_known_files",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+                "lineno": 447,
+                "end_lineno": 452,
+                "col_offset": 4,
+                "end_col_offset": 31
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+              "lineno": 447,
+              "end_lineno": 452,
+              "col_offset": 4,
+              "end_col_offset": 31
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+            "lineno": 447,
+            "end_lineno": 452,
+            "col_offset": 4,
+            "end_col_offset": 31
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "Discovery may include files outside the intended project scope",
+          "Filesystem access during planning could slow down task validation"
+        ],
+        "next_action": "Edit _get_known_files in planner.py to union hardcoded KNOWN_FILES with dynamically discovered .py files from the repo",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_get_known_files",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._get_known_files",
+            "lineno": 447,
+            "end_lineno": 452,
+            "col_offset": 4,
+            "end_col_offset": 31
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 603,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-23 19:08:02.369018"
   }
 ]
