@@ -20,7 +20,7 @@ _RETRY_BASE_WAIT = 2  # seconds — doubles each attempt: 2, 4, 8
 # Passing model= explicitly bypasses this routing entirely.
 # ---------------------------------------------------------------------------
 
-CLAUDE_ROLES = {"reflector", "math", "strategic"}
+CLAUDE_ROLES = {"reflector", "math", "strategic", "planner", "coder"}
 
 ROLE_MODEL = {
     "coder":      DEFAULT_MODEL,
