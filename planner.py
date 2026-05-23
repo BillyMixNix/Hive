@@ -332,6 +332,24 @@ class PlannerAgent:
         normalized = INTENT_NORMALIZATION.get(change_intent.strip(), change_intent.strip())
         return normalized
 
+    def _fuzzy_match_change_intent(self, intent):
+        tokens = set(re.sub(r"[^a-z]", "_", intent.lower()).split("_")) - {""}
+        best, best_score = "modify_existing_logic", 0
+        for candidate in ALLOWED_CHANGE_INTENTS:
+            score = len(tokens & set(candidate.split("_")))
+            if score > best_score:
+                best, best_score = candidate, score
+        return best
+
+    def _fuzzy_match_expected_operation(self, operation):
+        tokens = set(re.sub(r"[^a-z]", "_", operation.lower()).split("_")) - {""}
+        best, best_score = "modify_logic", 0
+        for candidate in ALLOWED_EXPECTED_OPERATIONS:
+            score = len(tokens & set(candidate.split("_")))
+            if score > best_score:
+                best, best_score = candidate, score
+        return best
+
     def _normalize_task_kind(self, task_kind, task_type=None, description=""):
         return normalize_work_mode(task_kind, task_type=task_type, text=description)
 
@@ -1349,7 +1367,8 @@ class PlannerAgent:
             if not isinstance(change_intent, str) or not change_intent.strip():
                 raise ValueError(f"Child task missing change_intent: {child}")
             if change_intent not in ALLOWED_CHANGE_INTENTS:
-                raise ValueError(f"Unsupported change_intent: {change_intent}")
+                change_intent = self._fuzzy_match_change_intent(change_intent)
+                child["change_intent"] = change_intent
 
             child["expected_operation"] = self._normalize_expected_operation(child)
             expected_operation = child.get("expected_operation")
@@ -1357,7 +1376,8 @@ class PlannerAgent:
                 if not isinstance(expected_operation, str) or not expected_operation.strip():
                     raise ValueError(f"Child task has invalid expected_operation: {child}")
                 if expected_operation not in ALLOWED_EXPECTED_OPERATIONS:
-                    raise ValueError(f"Unsupported expected_operation: {expected_operation}")
+                    child["expected_operation"] = self._fuzzy_match_expected_operation(expected_operation)
+                    expected_operation = child["expected_operation"]
 
             child["completion_cues"] = self._normalize_completion_cues(child)
             completion_cues = child.get("completion_cues")
