@@ -297,15 +297,21 @@ def run_task(entry, memory, state, router, reflector, lesson_memory):
 
 def main():
     entries = load_queue()
-    if not entries:
-        print(f"Queue is empty: {QUEUE_PATH}")
-        print("Add tasks to hive_queue.jsonl, one JSON object per line:")
-        print('  {"note": "Fix the bug in executor.py where ...", "target_file": "executor.py"}')
-        return
-
     pending = [e for e in entries if e.get("status", "pending") == "pending"]
+
+    # Auto-refill: if fewer than 2 pending tasks, generate new ones from codebase scan.
+    if len(pending) < 2:
+        try:
+            from scripts.task_generator import generate
+            print(f"Queue low ({len(pending)} pending) — running task generator...")
+            generate(top=5)
+            entries = load_queue()
+            pending = [e for e in entries if e.get("status", "pending") == "pending"]
+        except Exception as exc:
+            print(f"  Task generator failed (continuing): {exc}")
+
     if not pending:
-        print("No pending tasks in queue.")
+        print(f"Queue is empty: {QUEUE_PATH}")
         return
 
     print(f"Hive Runner — {len(pending)} task(s) pending")

@@ -50,6 +50,9 @@
         "router.py",
         "run_memes.py",
         "stress_runner.py",
+        "task_generator.py",
+        "task_ranker.py",
+        "task_scanner.py",
         "test_adversarial_agent_run.py",
         "test_block_rewrite_minimality.py",
         "test_coder_retries.py",
@@ -924,6 +927,9 @@
           "run_stress",
           "run_tier2"
         ],
+        "task_generator.py": [],
+        "task_ranker.py": [],
+        "task_scanner.py": [],
         "conftest.py": [
           "_mock_ask_model",
           "_ask_hive"
@@ -8960,7 +8966,7 @@
           "file": "hive_runner.py",
           "symbol": "run_task",
           "lineno": 224,
-          "end_lineno": 282,
+          "end_lineno": 295,
           "col_offset": 0,
           "end_col_offset": 40,
           "type": "function"
@@ -18832,7 +18838,7 @@
           "file": "hive_runner.py",
           "symbol": "run_task",
           "lineno": 224,
-          "end_lineno": 282,
+          "end_lineno": 295,
           "col_offset": 0,
           "end_col_offset": 40,
           "type": "function"
@@ -18841,8 +18847,8 @@
           "symbol_id": "hive_runner.py::main",
           "file": "hive_runner.py",
           "symbol": "main",
-          "lineno": 285,
-          "end_lineno": 317,
+          "lineno": 298,
+          "end_lineno": 330,
           "col_offset": 0,
           "end_col_offset": 46,
           "type": "function"
@@ -21848,6 +21854,9 @@
         "stress_runner.py": [
           "executor.py"
         ],
+        "task_generator.py": [],
+        "task_ranker.py": [],
+        "task_scanner.py": [],
         "conftest.py": [
           "hive_llm.py"
         ],
@@ -21982,17 +21991,16 @@
           "test_planner_anchor_canonicalization.py",
           "test_repo_map.py"
         ],
-        "coder_prompting.py": [
+        "reflector.py": [
           "benchmark_harness.py",
-          "coder.py",
-          "coder_block_ops.py",
-          "coder_context.py",
-          "packet_experiment.py",
-          "test_coder_retries.py",
-          "test_context_budgeting.py",
+          "main.py",
+          "hive_runner.py",
           "test_phase1_live_benchmark.py",
-          "test_phase2_context_discipline.py",
-          "test_pilot_intent_loop.py"
+          "test_reflector.py"
+        ],
+        "benchmark_pack.py": [
+          "benchmark_harness.py",
+          "test_reliability_benchmark_harness.py"
         ],
         "HiveStateManager.py": [
           "benchmark_harness.py",
@@ -22014,6 +22022,18 @@
           "test_phase2_context_discipline.py",
           "test_pilot_review_gate.py"
         ],
+        "coder_prompting.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "coder_block_ops.py",
+          "coder_context.py",
+          "packet_experiment.py",
+          "test_coder_retries.py",
+          "test_context_budgeting.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase2_context_discipline.py",
+          "test_pilot_intent_loop.py"
+        ],
         "executor.py": [
           "benchmark_harness.py",
           "router.py",
@@ -22024,22 +22044,15 @@
           "test_executor.py",
           "test_phase1_live_benchmark.py"
         ],
-        "reflector.py": [
+        "failure_intelligence.py": [
           "benchmark_harness.py",
+          "coder.py",
           "main.py",
-          "hive_runner.py",
-          "test_phase1_live_benchmark.py",
-          "test_reflector.py"
-        ],
-        "planner.py": [
-          "benchmark_harness.py",
-          "router.py",
+          "test_coder_retries.py",
+          "test_failure_intelligence.py",
           "test_phase1_live_benchmark.py",
           "test_phase1_stability.py",
-          "test_pilot_intent_loop.py",
-          "test_planner_anchor_canonicalization.py",
-          "test_planner_completion_cues.py",
-          "test_planner_intent_fuzzy.py"
+          "test_phase2_context_discipline.py"
         ],
         "HiveLessonMemory.py": [
           "benchmark_harness.py",
@@ -22066,19 +22079,15 @@
           "test_block_rewrite_minimality.py",
           "test_phase1_stability.py"
         ],
-        "failure_intelligence.py": [
+        "planner.py": [
           "benchmark_harness.py",
-          "coder.py",
-          "main.py",
-          "test_coder_retries.py",
-          "test_failure_intelligence.py",
+          "router.py",
           "test_phase1_live_benchmark.py",
           "test_phase1_stability.py",
-          "test_phase2_context_discipline.py"
-        ],
-        "benchmark_pack.py": [
-          "benchmark_harness.py",
-          "test_reliability_benchmark_harness.py"
+          "test_pilot_intent_loop.py",
+          "test_planner_anchor_canonicalization.py",
+          "test_planner_completion_cues.py",
+          "test_planner_intent_fuzzy.py"
         ],
         "work_ontology.py": [
           "builder.py",
@@ -22091,14 +22100,11 @@
           "planner.py",
           "test_work_ontology.py"
         ],
-        "coder_constraints.py": [
+        "coder_validation.py": [
           "coder.py",
-          "coder_block_ops.py",
-          "coder_prompting.py"
-        ],
-        "coder_failures.py": [
-          "coder.py",
-          "failure_intelligence.py"
+          "test_comment_only_tasks.py",
+          "test_hard_anchor_enforcement.py",
+          "test_phase1_stability.py"
         ],
         "hive_llm.py": [
           "coder.py",
@@ -22108,14 +22114,14 @@
           "packet_experiment.py",
           "conftest.py"
         ],
-        "coder_validation.py": [
+        "coder_constraints.py": [
           "coder.py",
-          "test_comment_only_tasks.py",
-          "test_hard_anchor_enforcement.py",
-          "test_phase1_stability.py"
-        ],
-        "coder_prompt.py": [
+          "coder_block_ops.py",
           "coder_prompting.py"
+        ],
+        "coder_failures.py": [
+          "coder.py",
+          "failure_intelligence.py"
         ],
         "builder.py": [
           "coder_prompting.py",
@@ -22124,14 +22130,8 @@
           "router.py",
           "test_pilot_intent_loop.py"
         ],
-        "HiveMemoryAgent.py": [
-          "main.py",
-          "run_memes.py",
-          "hive_runner.py"
-        ],
-        "code_domain.py": [
-          "main.py",
-          "test_adversarial_agent_run.py"
+        "coder_prompt.py": [
+          "coder_prompting.py"
         ],
         "anchor_utils.py": [
           "main.py",
@@ -22143,12 +22143,18 @@
           "test_pilot_intent_loop.py",
           "test_pilot_review_gate.py"
         ],
+        "code_domain.py": [
+          "main.py",
+          "test_adversarial_agent_run.py"
+        ],
+        "HiveMemoryAgent.py": [
+          "main.py",
+          "run_memes.py",
+          "hive_runner.py"
+        ],
         "router.py": [
           "main.py",
           "hive_runner.py"
-        ],
-        "planner_prompt.py": [
-          "planner.py"
         ],
         "main.py": [
           "planner.py",
@@ -22156,6 +22162,9 @@
           "test_pilot_intent_loop.py",
           "test_pilot_review_gate.py",
           "test_planner_anchor_canonicalization.py"
+        ],
+        "planner_prompt.py": [
+          "planner.py"
         ],
         "reflector_prompt.py": [
           "reflector.py"
@@ -22170,48 +22179,51 @@
         "benchmark_harness.py": [
           "test_reliability_benchmark_harness.py"
         ],
-        "run_memes.py": [],
-        "create_tmp_dirs.py": [],
-        "test_work_ontology.py": [],
-        "hive_gui.py": [],
-        "test_reflector.py": [],
-        "test_state_manager_disk_sync.py": [],
         "adversarial_task_generator.py": [],
-        "test_pilot_review_gate.py": [],
-        "test_executor.py": [],
-        "test_planner_intent_fuzzy.py": [],
-        "conftest.py": [],
-        "test_block_rewrite_minimality.py": [],
-        "test_lesson_routing.py": [],
-        "fuzzer_patch_generator.py": [],
-        "intent_detector.py": [],
-        "stress_runner.py": [],
-        "integration_harness.py": [],
-        "test_reliability_benchmark_harness.py": [],
-        "test_adversarial_agent_run.py": [],
-        "test_phase1_stability.py": [],
-        "test_math_research_agents.py": [],
-        "test_coder_retries.py": [],
-        "ci_target.py": [],
-        "hive_cockpit.py": [],
-        "packet_experiment.py": [],
-        "test_planner_anchor_canonicalization.py": [],
         "test_planner_completion_cues.py": [],
-        "codex_runner.py": [],
-        "generate_repo_map.py": [],
-        "test_hard_anchor_enforcement.py": [],
-        "test_phase2_context_discipline.py": [],
-        "ci_gate.py": [],
-        "test_context_budgeting.py": [],
-        "test_comment_only_tasks.py": [],
-        "test_failure_intelligence.py": [],
-        "check_llm.py": [],
-        "test_hive_agent_feedback_real.py": [],
-        "test_phase1_live_benchmark.py": [],
-        "test_repo_map.py": [],
-        "hive_runner.py": [],
         "test_pilot_intent_loop.py": [],
-        "lesson_loader.py": []
+        "test_work_ontology.py": [],
+        "codex_runner.py": [],
+        "lesson_loader.py": [],
+        "conftest.py": [],
+        "hive_runner.py": [],
+        "test_coder_retries.py": [],
+        "test_phase1_stability.py": [],
+        "test_state_manager_disk_sync.py": [],
+        "ci_gate.py": [],
+        "hive_gui.py": [],
+        "generate_repo_map.py": [],
+        "intent_detector.py": [],
+        "test_adversarial_agent_run.py": [],
+        "test_failure_intelligence.py": [],
+        "test_lesson_routing.py": [],
+        "test_math_research_agents.py": [],
+        "test_hard_anchor_enforcement.py": [],
+        "test_reliability_benchmark_harness.py": [],
+        "ci_target.py": [],
+        "test_repo_map.py": [],
+        "hive_cockpit.py": [],
+        "task_generator.py": [],
+        "integration_harness.py": [],
+        "test_pilot_review_gate.py": [],
+        "test_planner_anchor_canonicalization.py": [],
+        "test_block_rewrite_minimality.py": [],
+        "test_hive_agent_feedback_real.py": [],
+        "task_scanner.py": [],
+        "test_phase1_live_benchmark.py": [],
+        "test_reflector.py": [],
+        "create_tmp_dirs.py": [],
+        "test_comment_only_tasks.py": [],
+        "check_llm.py": [],
+        "packet_experiment.py": [],
+        "stress_runner.py": [],
+        "test_context_budgeting.py": [],
+        "test_planner_intent_fuzzy.py": [],
+        "test_executor.py": [],
+        "fuzzer_patch_generator.py": [],
+        "test_phase2_context_discipline.py": [],
+        "task_ranker.py": [],
+        "run_memes.py": []
       },
       "symbol_references": {
         "__init__": [
@@ -27030,22 +27042,28 @@
           "update_patch_entry"
         ],
         "run_task": [
+          "Path",
           "_get_first_ready_child_task",
           "_resolve_code_task_anchor",
           "_store_code_task_result",
           "apply_patch",
           "auto_accept_patch",
+          "exists",
           "find_plan_for_task",
           "generate_patch_with_revisions",
           "get",
           "get_task_by_id",
           "len",
           "list_pending_pilot_review_patches",
+          "mkdir",
           "plan_task",
           "print",
           "range",
+          "rebuild_repo_map",
           "store_task",
-          "update_task_status"
+          "strip",
+          "update_task_status",
+          "write_text"
         ],
         "run_function_from_file": [
           "RuntimeError",
@@ -33699,8 +33717,8 @@
         },
         "hive_runner.py": {
           "file": "hive_runner.py",
-          "char_count": 11950,
-          "line_count": 321,
+          "char_count": 12496,
+          "line_count": 334,
           "symbol_count": 10,
           "symbol_inventory": [
             {
@@ -33764,14 +33782,14 @@
               "symbol_id": "hive_runner.py::run_task",
               "type": "function",
               "lineno": 224,
-              "end_lineno": 282
+              "end_lineno": 295
             },
             {
               "symbol": "main",
               "symbol_id": "hive_runner.py::main",
               "type": "function",
-              "lineno": 285,
-              "end_lineno": 317
+              "lineno": 298,
+              "end_lineno": 330
             }
           ],
           "import_summary": [
@@ -33795,8 +33813,8 @@
               "symbol": "main",
               "symbol_id": "hive_runner.py::main",
               "type": "function",
-              "lineno": 285,
-              "end_lineno": 317
+              "lineno": 298,
+              "end_lineno": 330
             },
             {
               "symbol": "plan_task",
@@ -33810,7 +33828,7 @@
               "symbol_id": "hive_runner.py::run_task",
               "type": "function",
               "lineno": 224,
-              "end_lineno": 282
+              "end_lineno": 295
             },
             {
               "symbol": "auto_accept_patch",
@@ -34064,6 +34082,36 @@
               "end_lineno": 92
             }
           ],
+          "route_branch_inventory": []
+        },
+        "task_generator.py": {
+          "file": "task_generator.py",
+          "char_count": 207,
+          "line_count": 1,
+          "symbol_count": 0,
+          "symbol_inventory": [],
+          "import_summary": [],
+          "high_value_symbols": [],
+          "route_branch_inventory": []
+        },
+        "task_ranker.py": {
+          "file": "task_ranker.py",
+          "char_count": 207,
+          "line_count": 1,
+          "symbol_count": 0,
+          "symbol_inventory": [],
+          "import_summary": [],
+          "high_value_symbols": [],
+          "route_branch_inventory": []
+        },
+        "task_scanner.py": {
+          "file": "task_scanner.py",
+          "char_count": 207,
+          "line_count": 1,
+          "symbol_count": 0,
+          "symbol_inventory": [],
+          "import_summary": [],
+          "high_value_symbols": [],
           "route_branch_inventory": []
         },
         "conftest.py": {
@@ -37341,7 +37389,7 @@
         }
       }
     },
-    "updated_at": "2026-05-23T20:06:27.226463"
+    "updated_at": "2026-05-23T20:19:50.338791"
   },
   "file_state": {
     "router.py": {
@@ -37944,10 +37992,10 @@
   "observability": {
     "current": {
       "active_goal": "Modify hive_runner.py to call task_generator before draining the queue: if the queue has fewer than 2 pending tasks, run task_generator to refill it before starting the main loop. This makes the autonomous loop self-sustaining \u2014 Hive finds its own work instead of waiting for a human to add tasks.",
-      "active_task_id": 628,
-      "active_plan_id": "plan-628",
-      "active_child_task_id": "task-628-1",
-      "current_child_task_title": "Auto-refill queue when pending tasks below threshold",
+      "active_task_id": 668,
+      "active_plan_id": "plan-668",
+      "active_child_task_id": "task-668-1",
+      "current_child_task_title": "Refill queue via task_generator before draining",
       "task_status": "planned",
       "target_file": "benchmark_harness.py",
       "target_symbol": "main",
@@ -37957,7 +38005,7 @@
         "if pending < 2",
         "task_generator("
       ],
-      "updated_at": "2026-05-23T20:16:11.954014",
+      "updated_at": "2026-05-23T20:20:31.406155",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
@@ -37987,63 +38035,7 @@
     "failures": {
       "recent": [
         {
-          "task_id": 628,
-          "target_file": "benchmark_harness.py",
-          "target_symbol": "main",
-          "change_intent": "modify_existing_logic",
-          "expected_operation": "modify_logic",
-          "failure_family": "unknown",
-          "failure_class": "unknown",
-          "failure_code": "unknown_failure",
-          "failure_category": "unknown_failure",
-          "confidence": 0.2,
-          "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
-          "reason": "Unknown target file: benchmark_harness.py",
-          "stage": "exception",
-          "source": "coder_exception",
-          "context_mode": "exact_symbol_block",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 327,
-            "trimmed_context_length": 327,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-23T20:17:17.498546"
-        },
-        {
-          "task_id": 628,
+          "task_id": 668,
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
           "change_intent": "modify_existing_logic",
@@ -38070,10 +38062,10 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-23T20:17:11.504189"
+          "timestamp": "2026-05-23T20:23:11.624091"
         },
         {
-          "task_id": 628,
+          "task_id": 668,
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
           "change_intent": "modify_existing_logic",
@@ -38126,10 +38118,10 @@
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-23T20:17:11.432287"
+          "timestamp": "2026-05-23T20:23:11.545681"
         },
         {
-          "task_id": 628,
+          "task_id": 668,
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
           "change_intent": "modify_existing_logic",
@@ -38182,10 +38174,10 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-23T20:17:11.358572"
+          "timestamp": "2026-05-23T20:23:11.471725"
         },
         {
-          "task_id": 628,
+          "task_id": 668,
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
           "change_intent": "modify_existing_logic",
@@ -38238,16 +38230,72 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-23T20:17:05.278205"
+          "timestamp": "2026-05-23T20:23:04.996290"
+        },
+        {
+          "task_id": 668,
+          "target_file": "benchmark_harness.py",
+          "target_symbol": "main",
+          "change_intent": "modify_existing_logic",
+          "expected_operation": "modify_logic",
+          "failure_family": "unknown",
+          "failure_class": "unknown",
+          "failure_code": "unknown_failure",
+          "failure_category": "unknown_failure",
+          "confidence": 0.2,
+          "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
+          "reason": "Unknown target file: benchmark_harness.py",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 327,
+            "trimmed_context_length": 327,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-23T20:22:59.708132"
         }
       ],
       "counts_by_category": {
         "sandbox_apply_failed": 12,
-        "unknown_failure": 107,
+        "unknown_failure": 171,
         "multiple_patch_sections": 1,
-        "new_method_not_allowed": 5,
+        "new_method_not_allowed": 16,
         "local_assignment_at_module_scope": 48,
-        "sandbox_retry_exhausted": 25,
+        "sandbox_retry_exhausted": 38,
         "non_diff_commentary": 4,
         "reflector_reject": 10,
         "symbol_anchor_drift": 11,
@@ -38258,7 +38306,7 @@
         "scope_alignment_mismatch": 1,
         "bad_method_indent": 15
       },
-      "updated_at": "2026-05-23T20:17:17.498551"
+      "updated_at": "2026-05-23T20:23:11.624102"
     },
     "lessons": {
       "recent": [
@@ -38268,7 +38316,7 @@
           "source": "retry_exhausted",
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
-          "lesson_id": "c1284ae1-e7fa-481b-8986-6ea1e953d6ec",
+          "lesson_id": "41692fad-a70e-4121-a144-a5b418dcd819",
           "lesson_level": "exact",
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
@@ -38280,7 +38328,7 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-23T20:17:11.431528"
+          "timestamp": "2026-05-23T20:23:11.544887"
         },
         {
           "tag": "unknown_failure",
@@ -38288,7 +38336,7 @@
           "source": "coder_exception",
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
-          "lesson_id": "8e8a60cf-4b51-48e1-9b38-7afd04127130",
+          "lesson_id": "3086e85d-e12e-4e0b-b877-add9a55aa5b7",
           "lesson_level": "exact",
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
@@ -38300,7 +38348,7 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-23T20:17:11.357953"
+          "timestamp": "2026-05-23T20:23:11.471026"
         },
         {
           "tag": "unknown_failure",
@@ -38308,7 +38356,7 @@
           "source": "coder_exception",
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
-          "lesson_id": "6c8034e6-5c01-4296-a1e2-e652ed1baf1e",
+          "lesson_id": "04a6427a-e819-4bed-b154-f15fdab5a1d6",
           "lesson_level": "exact",
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
@@ -38316,7 +38364,7 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-23T20:17:05.375336",
+          "last_used_at": "2026-05-23T20:23:05.095436",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -38328,23 +38376,23 @@
           ],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-23T20:17:05.277290"
+          "timestamp": "2026-05-23T20:23:04.995576"
         },
         {
-          "tag": "new_method_not_allowed",
-          "summary": "Do not add helper methods. Rewrite the existing target method in place.",
+          "tag": "unknown_failure",
+          "summary": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
           "source": "coder_exception",
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
-          "lesson_id": "b3e5fdd3-cec8-4302-8a52-a0580fa14821",
+          "lesson_id": "4b4e58a0-d531-4a86-9cb0-3b97841e09d9",
           "lesson_level": "exact",
-          "trigger_pattern": "doctrine::policy::new_method_not_allowed::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "policy::new_method_not_allowed::modify_existing_logic",
-          "times_used": 1,
+          "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
+          "times_used": 2,
           "success_after_use": 0,
-          "failure_after_use": 1,
+          "failure_after_use": 2,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-23T20:16:53.113639",
+          "last_used_at": "2026-05-23T20:23:05.107435",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -38356,7 +38404,7 @@
           ],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-23T20:16:53.005394"
+          "timestamp": "2026-05-23T20:22:59.707091"
         },
         {
           "tag": "sandbox_retry_exhausted",
@@ -38364,7 +38412,7 @@
           "source": "retry_exhausted",
           "target_file": "benchmark_harness.py",
           "target_symbol": "main",
-          "lesson_id": "6e66dc77-2283-4328-8ece-637d262cf288",
+          "lesson_id": "3c185108-3f46-4630-94ce-00defa4d9d32",
           "lesson_level": "exact",
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
@@ -38372,22 +38420,22 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-23T20:16:47.142515",
+          "last_used_at": "2026-05-23T20:22:54.300076",
           "last_match_reasons": [],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-23T20:16:46.782012"
+          "timestamp": "2026-05-23T20:22:53.857545"
         }
       ],
-      "updated_at": "2026-05-23T20:17:11.557714"
+      "updated_at": "2026-05-23T20:23:11.681853"
     },
     "system": {
       "repo_loaded": true,
-      "known_files_count": 73,
+      "known_files_count": 76,
       "known_symbols_count": 918,
       "active_route": "plan_task",
       "active_mode": null,
-      "updated_at": "2026-05-23T20:06:27.226494"
+      "updated_at": "2026-05-23T20:19:50.338820"
     }
   }
 }
