@@ -49459,5 +49459,430 @@
       }
     },
     "timestamp": "2026-05-24 20:22:26.604179"
+  },
+  {
+    "id": 919,
+    "tag": "complexity",
+    "note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "done",
+    "metadata": {
+      "target_file": "executor.py",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 20:22:29.031179"
+  },
+  {
+    "id": 920,
+    "tag": "plan",
+    "note": "Task 919 planned | reduce cyclomatic complexity of build_candidate_text in executor.py by extracting branch logic into a dispatch table or named helpers | next: Add named helper function(s) above build_candidate_text in executor.py that cover the individual case categories currently branched inline",
+    "status": "planned",
+    "metadata": {
+      "task_id": 919,
+      "plan_id": "plan-919",
+      "plan": {
+        "goal": "reduce cyclomatic complexity of build_candidate_text in executor.py by extracting branch logic into a dispatch table or named helpers",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "build_candidate_text",
+        "operation": "extract repeated decision logic into named helpers or dispatch table",
+        "validation": "build_candidate_text branch count visibly reduced; existing callers unchanged; smoke check passes",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-919-1",
+            "title": "Add dispatch helpers for build_candidate_text cases",
+            "description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "build_candidate_text",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _build_candidate_for_task_type",
+              "return handler("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "case-handling logic in build_candidate_text",
+            "operation": "extract case branches into named helpers",
+            "validation": "new helper(s) exist in executor.py and cover the extracted case logic; no behavior change yet since build_candidate_text still calls old paths",
+            "creates_symbols": [
+              "_build_candidate_for_task_type"
+            ],
+            "wires_into_symbols": [
+              "build_candidate_text"
+            ],
+            "insertion_region": "module-level area above build_candidate_text in executor.py",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "build_candidate_text",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "build_candidate_text",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+                "lineno": 420,
+                "end_lineno": 502,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+              "lineno": 420,
+              "end_lineno": 502,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+            "lineno": 420,
+            "end_lineno": 502,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          {
+            "task_id": "task-919-2",
+            "title": "Refactor build_candidate_text to use dispatch helpers",
+            "description": "Rewrite the body of build_candidate_text in executor.py to delegate to the new helper(s) or dispatch table, replacing the inline if/elif chain and reducing the visible branch count to a small lookup-and-call pattern.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "build_candidate_text",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "handler = _build_candidate_for_task_type",
+              "return handler(",
+              "dispatch["
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "build_candidate_text",
+            "operation": "replace inline branch chain with dispatch lookup",
+            "validation": "build_candidate_text body is substantially shorter with fewer if/elif branches; existing callers produce identical output; AST parse succeeds",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "build_candidate_text",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "build_candidate_text",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+                "lineno": 420,
+                "end_lineno": 502,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+              "lineno": 420,
+              "end_lineno": 502,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+            "lineno": 420,
+            "end_lineno": 502,
+            "col_offset": 4,
+            "end_col_offset": 9
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "dispatch table key mismatches could silently fall through to a default instead of the old branch, changing output",
+          "helper extraction may inadvertently capture closure variables that were implicit in the original inline context"
+        ],
+        "next_action": "Add named helper function(s) above build_candidate_text in executor.py that cover the individual case categories currently branched inline",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "build_candidate_text",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+            "lineno": 420,
+            "end_lineno": 502,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 919,
+        "source": "llm",
+        "active_child_task_id": "task-919-1",
+        "active_child_task_title": "Add dispatch helpers for build_candidate_text cases",
+        "active_child_target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 20:22:53.181180"
+  },
+  {
+    "id": 921,
+    "tag": "patch",
+    "note": "Task 919 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 919,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
+      "plan_id": "plan-919",
+      "patch_id": "patch-919",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+        "lineno": 420,
+        "end_lineno": 502,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-919-1",
+      "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "build_candidate_text",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _build_candidate_for_task_type",
+        "return handler("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-919",
+        "task_id": 919,
+        "plan_id": "plan-919",
+        "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-919-1",
+        "child_task_title": null,
+        "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "coder_reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 20:28:15.986691"
+  },
+  {
+    "id": 922,
+    "tag": "patch",
+    "note": "Task 919 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 919,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2dXraM3gMe4MKHHNwo'}",
+      "plan_id": "plan-919",
+      "patch_id": "patch-919",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+        "lineno": 420,
+        "end_lineno": 502,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-919-1",
+      "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "build_candidate_text",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _build_candidate_for_task_type",
+        "return handler("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-919",
+        "task_id": 919,
+        "plan_id": "plan-919",
+        "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-919-1",
+        "child_task_title": null,
+        "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "coder_reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 20:31:26.090987"
+  },
+  {
+    "id": 923,
+    "tag": "patch",
+    "note": "Task 919 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 919,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2dhSHbkmA8JTRtATvh'}",
+      "plan_id": "plan-919",
+      "patch_id": "patch-919",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.build_candidate_text",
+        "lineno": 420,
+        "end_lineno": 502,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-919-1",
+      "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "build_candidate_text",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _build_candidate_for_task_type",
+        "return handler("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-919",
+        "task_id": 919,
+        "plan_id": "plan-919",
+        "task_note": "The function build_candidate_text in executor.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-919-1",
+        "child_task_title": null,
+        "child_task_description": "Define one or more small named helper functions (or a dispatch dict) in executor.py that each handle a single case or category of cases currently branched inside build_candidate_text, so the main function can delegate instead of inlining all decisions.",
+        "target_file": "executor.py",
+        "target_symbol": "build_candidate_text",
+        "coder_reason": "Hard anchor enforcement blocked patch for build_candidate_text",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 20:31:28.285108"
   }
 ]
