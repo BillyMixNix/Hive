@@ -42865,7 +42865,7 @@
     "id": 843,
     "tag": "complexity",
     "note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-    "status": "done",
+    "status": "planned",
     "metadata": {
       "target_file": "coder.py",
       "target_symbol": "generate_patch_with_revisions",
@@ -43222,89 +43222,9 @@
   },
   {
     "id": 847,
-    "tag": "patch",
-    "note": "Task 843 patch blocked | coder.py",
-    "status": "blocked",
-    "metadata": {
-      "task_id": 843,
-      "target_file": "coder.py",
-      "change_type": "diff_patch",
-      "patch": "--- coder.py\n+++ coder.py\n",
-      "reason": "Hard anchor enforcement blocked patch for generate_patch_with_revisions",
-      "risk_level": "high",
-      "status": "blocked",
-      "source": "fallback",
-      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
-      "plan_id": "plan-843",
-      "patch_id": "patch-843",
-      "anchor": {
-        "target_file": "coder.py",
-        "target_symbol": "generate_patch_with_revisions",
-        "scope": "single_file",
-        "anchor_level": "symbol",
-        "anchor_source": "child_task",
-        "target_symbol_id": "coder.py::CoderAgent.generate_patch_with_revisions",
-        "lineno": 1934,
-        "end_lineno": 2186,
-        "col_offset": 4,
-        "end_col_offset": 9
-      },
-      "task_type": null,
-      "task_note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "pilot_verdict": null,
-      "pilot_reason": null,
-      "pilot_guidance": null,
-      "location_correct": null,
-      "task_alignment": null,
-      "plan_step_alignment": null,
-      "child_task_id": "task-843-1",
-      "child_task_description": "Extract the repeated per-case decision logic from generate_patch_with_revisions into a new private helper function _build_revision_context that accepts the current revision state and returns a structured context dict, replacing inline branching with a single dispatch call site.",
-      "child_target_file": "coder.py",
-      "child_target_symbol": "generate_patch_with_revisions",
-      "child_change_intent": "add_method_or_function",
-      "child_expected_operation": "add_symbol",
-      "child_completion_cues": [
-        "def _build_revision_context(",
-        "return {"
-      ],
-      "child_task_type": "refactor",
-      "recovery_action": null,
-      "recovery_status": null,
-      "recovery_reason": null,
-      "review_packet": {
-        "patch_id": "patch-843",
-        "task_id": 843,
-        "plan_id": "plan-843",
-        "task_note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "child_task_id": "task-843-1",
-        "child_task_title": null,
-        "child_task_description": "Extract the repeated per-case decision logic from generate_patch_with_revisions into a new private helper function _build_revision_context that accepts the current revision state and returns a structured context dict, replacing inline branching with a single dispatch call site.",
-        "target_file": "coder.py",
-        "target_symbol": "generate_patch_with_revisions",
-        "coder_reason": "Hard anchor enforcement blocked patch for generate_patch_with_revisions",
-        "reflector_verdict": null,
-        "reflector_reflection": null,
-        "reflector_next_step": null,
-        "patch_stats": {
-          "hunks": 0,
-          "additions": 0,
-          "deletions": 0
-        },
-        "patch_excerpt": "--- coder.py\n+++ coder.py",
-        "review_questions": [
-          "Is this the right place to patch?",
-          "Does this solve the active child step rather than adjacent behavior?",
-          "Does this solve the planned task without intent drift?"
-        ]
-      }
-    },
-    "timestamp": "2026-05-24 18:05:30.498956"
-  },
-  {
-    "id": 848,
     "tag": "complexity",
     "note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-    "status": "active",
+    "status": "done",
     "metadata": {
       "target_file": "executor.py",
       "anchor": {
@@ -43317,6 +43237,312 @@
       "target_symbol": null,
       "completion_cues": []
     },
-    "timestamp": "2026-05-24 18:05:32.838092"
+    "timestamp": "2026-05-24 18:04:20.096932"
+  },
+  {
+    "id": 848,
+    "tag": "plan",
+    "note": "Task 847 planned | The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count. | next: Implement the requested change in executor.py.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 847,
+      "plan_id": "plan-847",
+      "plan": {
+        "task_id": 847,
+        "goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "task_type": "feature",
+        "task_kind": "create",
+        "work_mode": "create",
+        "tasks": [
+          {
+            "task_id": "task-847-1",
+            "title": "Update executor.py",
+            "description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "add_capability",
+            "completion_cues": [],
+            "task_type": "feature",
+            "task_kind": "create",
+            "work_mode": "create",
+            "artifact": "",
+            "operation": "",
+            "validation": "",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": null,
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": null,
+                "scope": "single_file",
+                "anchor_level": "file",
+                "anchor_source": "file_level_inference"
+              }
+            }
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Planner fallback was used after planner validation failed.",
+          "File-level anchor: coder must keep the patch narrowly scoped inside the target file."
+        ],
+        "next_action": "Implement the requested change in executor.py.",
+        "status": "planned",
+        "source": "fallback_file_task",
+        "llm_error": "name 'logging' is not defined",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "scope": "single_file",
+            "anchor_level": "file",
+            "anchor_source": "file_level_inference"
+          },
+          "planner_source": "fallback_file_task",
+          "planner_failure_code": "planner_validation_failure",
+          "planner_failure_detail": "name 'logging' is not defined"
+        },
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null,
+        "target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 18:04:47.705759"
+  },
+  {
+    "id": 849,
+    "tag": "patch",
+    "note": "Task 847 patch pending_pilot_review | executor.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Replace the four sequential anchor-finding if-blocks inside verify_patch_context with an inline dispatch table loop plus one combined fallback, reducing branch count without adding new methods.",
+      "patch": "--- executor.py\n+++ executor.py\n@@ -1,4 +1,4 @@\n-        # 1. Best case: exact contiguous removal block\n-        if removals:\n-            block_start, block_end = self._find_block_index(file_lines, removals)\n-            if block_start is not None:\n-                checks[\"exact_removal_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = block_start\n-                block_span = (block_start, block_end)\n-\n-        # 2. Fallback: contiguous context block\n-        if anchor_index is None and context:\n-            ctx_start, ctx_end = self._find_context_block_index(file_lines, context)\n-            if ctx_start is not None:\n-                checks[\"context_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = ctx_start\n-                block_span = (ctx_start, ctx_end)\n-\n-        # 3. Final fallback: single-line removal match\n-        if anchor_index is None:\n-            for removal in removals:\n-                idx = self._find_line_index(file_lines, removal)\n-                if idx is not None:\n-                    checks[\"anchor_found\"] = True\n-                    anchor_index = idx\n-                    break\n-\n-        # 4. Last resort: single-line context match\n-        if anchor_index is None:\n-            for ctx in context:\n-                idx = self._find_line_index(file_lines, ctx)\n-                if idx is not None:\n-                    checks[\"anchor_found\"] = True\n-                    anchor_index = idx\n-                    break\n+        # Anchor resolution: ordered dispatch table reduces branch count\n+        for _check_key, _lines, _finder in [\n+            (\"exact_removal_block_found\", removals, self._find_block_index),\n+            (\"context_block_found\", context, self._find_context_block_index),\n+        ]:\n+            if anchor_index is None and _lines:\n+                _s, _e = _finder(file_lines, _lines)\n+                if _s is not None:\n+                    checks[_check_key] = True\n+                    checks[\"anchor_found\"] = True\n+                    anchor_index, block_span = _s, (_s, _e)\n+\n+        # Single-line fallback: removals then context\n+        if anchor_index is None:\n+            for _line in removals + context:\n+                _idx = self._find_line_index(file_lines, _line)\n+                if _idx is not None:\n+                    checks[\"anchor_found\"] = True\n+                    anchor_index = _idx\n+                    break",
+      "task_id": 847,
+      "source": "llm",
+      "context_mode": "block_window",
+      "context_target": "verify_patch_context",
+      "context_window": [
+        0,
+        290
+      ],
+      "context_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+      "context_budget": {
+        "selected_mode": "block_window",
+        "raw_context_length": 10372,
+        "trimmed_context_length": 5446,
+        "trimmed": true,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "trimmed_related_context",
+        "dropped_related_context": true,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "fallback_file_task",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 184,
+        "end_lineno": 290,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "executor.py",
+        "sandbox_file": "/tmp/tmpr4iy7t6c/executor.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "Patch consolidates four anchor-finding branches into a dispatch loop plus a combined single-line fallback, staying inside verify_patch_context with no new methods. Sandbox passed syntax and semantic checks. Localized, in-place rewrite aligned with the complexity-reduction child step. Minor concern: the dispatch loop lacks a break after a successful match, so the second iteration still runs (harmless since guarded by anchor_index is None, but slightly wasteful). Behavior preserved otherwise.",
+        "confidence": 0.78,
+        "next_step": "Apply patch; optionally add a break after successful anchor assignment in the dispatch loop for clarity.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-847",
+      "patch_id": "patch-847",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "child_task"
+      },
+      "task_type": null,
+      "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-847-1",
+      "child_task_description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": null,
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "add_capability",
+      "child_completion_cues": [],
+      "child_task_type": "feature",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-847",
+        "task_id": 847,
+        "plan_id": "plan-847",
+        "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-847-1",
+        "child_task_title": null,
+        "child_task_description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "coder_reason": "Replace the four sequential anchor-finding if-blocks inside verify_patch_context with an inline dispatch table loop plus one combined fallback, reducing branch count without adding new methods.",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "Patch consolidates four anchor-finding branches into a dispatch loop plus a combined single-line fallback, staying inside verify_patch_context with no new methods. Sandbox passed syntax and semantic checks. Localized, in-place rewrite aligned with the complexity-reduction child step. Minor concern: the dispatch loop lacks a break after a successful match, so the second iteration still runs (harmless since guarded by anchor_index is None, but slightly wasteful). Behavior preserved otherwise.",
+        "reflector_next_step": "Apply patch; optionally add a break after successful anchor assignment in the dispatch loop for clarity.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 20,
+          "deletions": 35
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py\n@@ -1,4 +1,4 @@\n-        # 1. Best case: exact contiguous removal block\n-        if removals:\n-            block_start, block_end = self._find_block_index(file_lines, removals)\n-            if block_start is not None:\n-                checks[\"exact_removal_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = block_start\n-                block_span = (block_start, block_end)\n-\n-        # 2. Fallback: contiguous context block\n-        if anchor_index is None and context:\n-            ctx_start, ctx_end = self._find_context_block_index(file_lines, context)\n-            if ctx_start is not None:\n-                checks[\"context_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = ctx_start\n-                block_span = (ctx_start, ctx_end)",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:06:20.834016"
+  },
+  {
+    "id": 850,
+    "tag": "plan",
+    "note": "Task 847 plan updated | The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 847,
+      "plan_id": "plan-847",
+      "plan": {
+        "task_id": 847,
+        "goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "task_type": "feature",
+        "task_kind": "create",
+        "work_mode": "create",
+        "tasks": [
+          {
+            "task_id": "task-847-1",
+            "title": "Update executor.py",
+            "description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "add_capability",
+            "completion_cues": [],
+            "task_type": "feature",
+            "task_kind": "create",
+            "work_mode": "create",
+            "artifact": "",
+            "operation": "",
+            "validation": "",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": null,
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": null,
+                "scope": "single_file",
+                "anchor_level": "file",
+                "anchor_source": "file_level_inference"
+              }
+            }
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Planner fallback was used after planner validation failed.",
+          "File-level anchor: coder must keep the patch narrowly scoped inside the target file."
+        ],
+        "next_action": "Implement the requested change in executor.py.",
+        "status": "planned",
+        "source": "fallback_file_task",
+        "llm_error": "name 'logging' is not defined",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "scope": "single_file",
+            "anchor_level": "file",
+            "anchor_source": "file_level_inference"
+          },
+          "planner_source": "fallback_file_task",
+          "planner_failure_code": "planner_validation_failure",
+          "planner_failure_detail": "name 'logging' is not defined"
+        },
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null,
+        "target_file": "executor.py"
+      }
+    },
+    "timestamp": "2026-05-24 18:06:22.379194"
   }
 ]
