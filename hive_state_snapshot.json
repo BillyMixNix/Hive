@@ -41,6 +41,7 @@
         "lesson_loader.py",
         "main.py",
         "math_domain.py",
+        "metrics.py",
         "packet_experiment.py",
         "planner.py",
         "planner_prompt.py",
@@ -905,7 +906,8 @@
           "auto_accept_patch",
           "apply_patch",
           "run_task",
-          "main"
+          "main",
+          "loop"
         ],
         "intent_detector.py": [
           "run_function_from_file",
@@ -918,6 +920,20 @@
           "success_score",
           "format_lessons",
           "main"
+        ],
+        "metrics.py": [
+          "_pylint_score",
+          "_cyclomatic_complexity",
+          "_maintainability_index",
+          "_code_quality_snapshot",
+          "_lesson_snapshot",
+          "_patch_success_rate",
+          "RunMetrics",
+          "__init__",
+          "capture_pre_run",
+          "capture_post_run",
+          "save",
+          "report"
         ],
         "packet_experiment.py": [
           "run_experiment",
@@ -1956,12 +1972,24 @@
         "store_task": "hive_runner.py",
         "auto_accept_patch": "hive_runner.py",
         "run_task": "hive_runner.py",
+        "loop": "hive_runner.py",
         "run_function_from_file": "intent_detector.py",
         "_eval_simple_expr": "intent_detector.py",
         "derive_expected_outputs_from_task": "intent_detector.py",
         "check_intent_with_patch": "intent_detector.py",
         "success_score": "lesson_loader.py",
         "format_lessons": "lesson_loader.py",
+        "_pylint_score": "metrics.py",
+        "_cyclomatic_complexity": "metrics.py",
+        "_maintainability_index": "metrics.py",
+        "_code_quality_snapshot": "metrics.py",
+        "_lesson_snapshot": "metrics.py",
+        "_patch_success_rate": "metrics.py",
+        "RunMetrics": "metrics.py",
+        "capture_pre_run": "metrics.py",
+        "capture_post_run": "metrics.py",
+        "save": "metrics.py",
+        "report": "metrics.py",
         "run_experiment": "packet_experiment.py",
         "run_stress": "stress_runner.py",
         "run_tier2": "stress_runner.py",
@@ -8942,8 +8970,8 @@
           "symbol_id": "hive_runner.py::load_queue",
           "file": "hive_runner.py",
           "symbol": "load_queue",
-          "lineno": 74,
-          "end_lineno": 86,
+          "lineno": 75,
+          "end_lineno": 87,
           "col_offset": 0,
           "end_col_offset": 18,
           "type": "function"
@@ -8952,8 +8980,8 @@
           "symbol_id": "hive_runner.py::save_queue",
           "file": "hive_runner.py",
           "symbol": "save_queue",
-          "lineno": 89,
-          "end_lineno": 93,
+          "lineno": 90,
+          "end_lineno": 94,
           "col_offset": 0,
           "end_col_offset": 5,
           "type": "function"
@@ -8962,8 +8990,8 @@
           "symbol_id": "hive_runner.py::setup_components",
           "file": "hive_runner.py",
           "symbol": "setup_components",
-          "lineno": 96,
-          "end_lineno": 112,
+          "lineno": 97,
+          "end_lineno": 113,
           "col_offset": 0,
           "end_col_offset": 58,
           "type": "function"
@@ -8972,8 +9000,8 @@
           "symbol_id": "hive_runner.py::store_task",
           "file": "hive_runner.py",
           "symbol": "store_task",
-          "lineno": 115,
-          "end_lineno": 133,
+          "lineno": 116,
+          "end_lineno": 134,
           "col_offset": 0,
           "end_col_offset": 18,
           "type": "function"
@@ -8982,8 +9010,8 @@
           "symbol_id": "hive_runner.py::auto_accept_patch",
           "file": "hive_runner.py",
           "symbol": "auto_accept_patch",
-          "lineno": 162,
-          "end_lineno": 181,
+          "lineno": 163,
+          "end_lineno": 182,
           "col_offset": 0,
           "end_col_offset": 46,
           "type": "function"
@@ -8992,10 +9020,20 @@
           "symbol_id": "hive_runner.py::run_task",
           "file": "hive_runner.py",
           "symbol": "run_task",
-          "lineno": 224,
-          "end_lineno": 323,
+          "lineno": 225,
+          "end_lineno": 324,
           "col_offset": 0,
           "end_col_offset": 40,
+          "type": "function"
+        },
+        "loop": {
+          "symbol_id": "hive_runner.py::loop",
+          "file": "hive_runner.py",
+          "symbol": "loop",
+          "lineno": 385,
+          "end_lineno": 451,
+          "col_offset": 0,
+          "end_col_offset": 75,
           "type": "function"
         },
         "run_function_from_file": {
@@ -9056,6 +9094,116 @@
           "end_lineno": 55,
           "col_offset": 0,
           "end_col_offset": 27,
+          "type": "function"
+        },
+        "_pylint_score": {
+          "symbol_id": "metrics.py::_pylint_score",
+          "file": "metrics.py",
+          "symbol": "_pylint_score",
+          "lineno": 34,
+          "end_lineno": 48,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "_cyclomatic_complexity": {
+          "symbol_id": "metrics.py::_cyclomatic_complexity",
+          "file": "metrics.py",
+          "symbol": "_cyclomatic_complexity",
+          "lineno": 51,
+          "end_lineno": 63,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "_maintainability_index": {
+          "symbol_id": "metrics.py::_maintainability_index",
+          "file": "metrics.py",
+          "symbol": "_maintainability_index",
+          "lineno": 66,
+          "end_lineno": 81,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "_code_quality_snapshot": {
+          "symbol_id": "metrics.py::_code_quality_snapshot",
+          "file": "metrics.py",
+          "symbol": "_code_quality_snapshot",
+          "lineno": 84,
+          "end_lineno": 96,
+          "col_offset": 0,
+          "end_col_offset": 19,
+          "type": "function"
+        },
+        "_lesson_snapshot": {
+          "symbol_id": "metrics.py::_lesson_snapshot",
+          "file": "metrics.py",
+          "symbol": "_lesson_snapshot",
+          "lineno": 99,
+          "end_lineno": 116,
+          "col_offset": 0,
+          "end_col_offset": 58,
+          "type": "function"
+        },
+        "_patch_success_rate": {
+          "symbol_id": "metrics.py::_patch_success_rate",
+          "file": "metrics.py",
+          "symbol": "_patch_success_rate",
+          "lineno": 119,
+          "end_lineno": 130,
+          "col_offset": 0,
+          "end_col_offset": 19,
+          "type": "function"
+        },
+        "RunMetrics": {
+          "symbol_id": "metrics.py::RunMetrics",
+          "file": "metrics.py",
+          "symbol": "RunMetrics",
+          "lineno": 133,
+          "end_lineno": 186,
+          "col_offset": 0,
+          "end_col_offset": 21,
+          "type": "class"
+        },
+        "capture_pre_run": {
+          "symbol_id": "metrics.py::RunMetrics.capture_pre_run",
+          "file": "metrics.py",
+          "symbol": "capture_pre_run",
+          "lineno": 140,
+          "end_lineno": 148,
+          "col_offset": 4,
+          "end_col_offset": 65,
+          "type": "method"
+        },
+        "capture_post_run": {
+          "symbol_id": "metrics.py::RunMetrics.capture_post_run",
+          "file": "metrics.py",
+          "symbol": "capture_post_run",
+          "lineno": 150,
+          "end_lineno": 173,
+          "col_offset": 4,
+          "end_col_offset": 71,
+          "type": "method"
+        },
+        "save": {
+          "symbol_id": "metrics.py::RunMetrics.save",
+          "file": "metrics.py",
+          "symbol": "save",
+          "lineno": 175,
+          "end_lineno": 186,
+          "col_offset": 4,
+          "end_col_offset": 21,
+          "type": "method"
+        },
+        "report": {
+          "symbol_id": "metrics.py::report",
+          "file": "metrics.py",
+          "symbol": "report",
+          "lineno": 189,
+          "end_lineno": 258,
+          "col_offset": 0,
+          "end_col_offset": 24,
           "type": "function"
         },
         "run_experiment": {
@@ -9163,7 +9311,7 @@
           "file": "task_scanner.py",
           "symbol": "_find_hardcoded_sets",
           "lineno": 43,
-          "end_lineno": 63,
+          "end_lineno": 79,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -9172,8 +9320,8 @@
           "symbol_id": "task_scanner.py::_find_bare_raises",
           "file": "task_scanner.py",
           "symbol": "_find_bare_raises",
-          "lineno": 66,
-          "end_lineno": 94,
+          "lineno": 82,
+          "end_lineno": 110,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -9182,8 +9330,8 @@
           "symbol_id": "task_scanner.py::_find_todos",
           "file": "task_scanner.py",
           "symbol": "_find_todos",
-          "lineno": 97,
-          "end_lineno": 109,
+          "lineno": 113,
+          "end_lineno": 125,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -9192,8 +9340,8 @@
           "symbol_id": "task_scanner.py::scan_repo",
           "file": "task_scanner.py",
           "symbol": "scan_repo",
-          "lineno": 112,
-          "end_lineno": 121,
+          "lineno": 128,
+          "end_lineno": 137,
           "col_offset": 0,
           "end_col_offset": 21,
           "type": "function"
@@ -18904,8 +19052,8 @@
           "symbol_id": "hive_runner.py::load_queue",
           "file": "hive_runner.py",
           "symbol": "load_queue",
-          "lineno": 74,
-          "end_lineno": 86,
+          "lineno": 75,
+          "end_lineno": 87,
           "col_offset": 0,
           "end_col_offset": 18,
           "type": "function"
@@ -18914,8 +19062,8 @@
           "symbol_id": "hive_runner.py::save_queue",
           "file": "hive_runner.py",
           "symbol": "save_queue",
-          "lineno": 89,
-          "end_lineno": 93,
+          "lineno": 90,
+          "end_lineno": 94,
           "col_offset": 0,
           "end_col_offset": 5,
           "type": "function"
@@ -18924,8 +19072,8 @@
           "symbol_id": "hive_runner.py::setup_components",
           "file": "hive_runner.py",
           "symbol": "setup_components",
-          "lineno": 96,
-          "end_lineno": 112,
+          "lineno": 97,
+          "end_lineno": 113,
           "col_offset": 0,
           "end_col_offset": 58,
           "type": "function"
@@ -18934,8 +19082,8 @@
           "symbol_id": "hive_runner.py::store_task",
           "file": "hive_runner.py",
           "symbol": "store_task",
-          "lineno": 115,
-          "end_lineno": 133,
+          "lineno": 116,
+          "end_lineno": 134,
           "col_offset": 0,
           "end_col_offset": 18,
           "type": "function"
@@ -18944,8 +19092,8 @@
           "symbol_id": "hive_runner.py::plan_task",
           "file": "hive_runner.py",
           "symbol": "plan_task",
-          "lineno": 136,
-          "end_lineno": 159,
+          "lineno": 137,
+          "end_lineno": 160,
           "col_offset": 0,
           "end_col_offset": 17,
           "type": "function"
@@ -18954,8 +19102,8 @@
           "symbol_id": "hive_runner.py::auto_accept_patch",
           "file": "hive_runner.py",
           "symbol": "auto_accept_patch",
-          "lineno": 162,
-          "end_lineno": 181,
+          "lineno": 163,
+          "end_lineno": 182,
           "col_offset": 0,
           "end_col_offset": 46,
           "type": "function"
@@ -18964,8 +19112,8 @@
           "symbol_id": "hive_runner.py::apply_patch",
           "file": "hive_runner.py",
           "symbol": "apply_patch",
-          "lineno": 184,
-          "end_lineno": 221,
+          "lineno": 185,
+          "end_lineno": 222,
           "col_offset": 0,
           "end_col_offset": 13,
           "type": "function"
@@ -18974,8 +19122,8 @@
           "symbol_id": "hive_runner.py::run_task",
           "file": "hive_runner.py",
           "symbol": "run_task",
-          "lineno": 224,
-          "end_lineno": 323,
+          "lineno": 225,
+          "end_lineno": 324,
           "col_offset": 0,
           "end_col_offset": 40,
           "type": "function"
@@ -18984,10 +19132,20 @@
           "symbol_id": "hive_runner.py::main",
           "file": "hive_runner.py",
           "symbol": "main",
-          "lineno": 326,
-          "end_lineno": 364,
+          "lineno": 327,
+          "end_lineno": 382,
           "col_offset": 0,
-          "end_col_offset": 46,
+          "end_col_offset": 18,
+          "type": "function"
+        },
+        "hive_runner.py::loop": {
+          "symbol_id": "hive_runner.py::loop",
+          "file": "hive_runner.py",
+          "symbol": "loop",
+          "lineno": 385,
+          "end_lineno": 451,
+          "col_offset": 0,
+          "end_col_offset": 75,
           "type": "function"
         },
         "intent_detector.py::run_function_from_file": {
@@ -19068,6 +19226,126 @@
           "end_lineno": 71,
           "col_offset": 0,
           "end_col_offset": 34,
+          "type": "function"
+        },
+        "metrics.py::_pylint_score": {
+          "symbol_id": "metrics.py::_pylint_score",
+          "file": "metrics.py",
+          "symbol": "_pylint_score",
+          "lineno": 34,
+          "end_lineno": 48,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "metrics.py::_cyclomatic_complexity": {
+          "symbol_id": "metrics.py::_cyclomatic_complexity",
+          "file": "metrics.py",
+          "symbol": "_cyclomatic_complexity",
+          "lineno": 51,
+          "end_lineno": 63,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "metrics.py::_maintainability_index": {
+          "symbol_id": "metrics.py::_maintainability_index",
+          "file": "metrics.py",
+          "symbol": "_maintainability_index",
+          "lineno": 66,
+          "end_lineno": 81,
+          "col_offset": 0,
+          "end_col_offset": 15,
+          "type": "function"
+        },
+        "metrics.py::_code_quality_snapshot": {
+          "symbol_id": "metrics.py::_code_quality_snapshot",
+          "file": "metrics.py",
+          "symbol": "_code_quality_snapshot",
+          "lineno": 84,
+          "end_lineno": 96,
+          "col_offset": 0,
+          "end_col_offset": 19,
+          "type": "function"
+        },
+        "metrics.py::_lesson_snapshot": {
+          "symbol_id": "metrics.py::_lesson_snapshot",
+          "file": "metrics.py",
+          "symbol": "_lesson_snapshot",
+          "lineno": 99,
+          "end_lineno": 116,
+          "col_offset": 0,
+          "end_col_offset": 58,
+          "type": "function"
+        },
+        "metrics.py::_patch_success_rate": {
+          "symbol_id": "metrics.py::_patch_success_rate",
+          "file": "metrics.py",
+          "symbol": "_patch_success_rate",
+          "lineno": 119,
+          "end_lineno": 130,
+          "col_offset": 0,
+          "end_col_offset": 19,
+          "type": "function"
+        },
+        "metrics.py::RunMetrics": {
+          "symbol_id": "metrics.py::RunMetrics",
+          "file": "metrics.py",
+          "symbol": "RunMetrics",
+          "lineno": 133,
+          "end_lineno": 186,
+          "col_offset": 0,
+          "end_col_offset": 21,
+          "type": "class"
+        },
+        "metrics.py::RunMetrics.__init__": {
+          "symbol_id": "metrics.py::RunMetrics.__init__",
+          "file": "metrics.py",
+          "symbol": "__init__",
+          "lineno": 134,
+          "end_lineno": 138,
+          "col_offset": 4,
+          "end_col_offset": 22,
+          "type": "method"
+        },
+        "metrics.py::RunMetrics.capture_pre_run": {
+          "symbol_id": "metrics.py::RunMetrics.capture_pre_run",
+          "file": "metrics.py",
+          "symbol": "capture_pre_run",
+          "lineno": 140,
+          "end_lineno": 148,
+          "col_offset": 4,
+          "end_col_offset": 65,
+          "type": "method"
+        },
+        "metrics.py::RunMetrics.capture_post_run": {
+          "symbol_id": "metrics.py::RunMetrics.capture_post_run",
+          "file": "metrics.py",
+          "symbol": "capture_post_run",
+          "lineno": 150,
+          "end_lineno": 173,
+          "col_offset": 4,
+          "end_col_offset": 71,
+          "type": "method"
+        },
+        "metrics.py::RunMetrics.save": {
+          "symbol_id": "metrics.py::RunMetrics.save",
+          "file": "metrics.py",
+          "symbol": "save",
+          "lineno": 175,
+          "end_lineno": 186,
+          "col_offset": 4,
+          "end_col_offset": 21,
+          "type": "method"
+        },
+        "metrics.py::report": {
+          "symbol_id": "metrics.py::report",
+          "file": "metrics.py",
+          "symbol": "report",
+          "lineno": 189,
+          "end_lineno": 258,
+          "col_offset": 0,
+          "end_col_offset": 24,
           "type": "function"
         },
         "packet_experiment.py::run_experiment": {
@@ -19205,7 +19483,7 @@
           "file": "task_scanner.py",
           "symbol": "_find_hardcoded_sets",
           "lineno": 43,
-          "end_lineno": 63,
+          "end_lineno": 79,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -19214,8 +19492,8 @@
           "symbol_id": "task_scanner.py::_find_bare_raises",
           "file": "task_scanner.py",
           "symbol": "_find_bare_raises",
-          "lineno": 66,
-          "end_lineno": 94,
+          "lineno": 82,
+          "end_lineno": 110,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -19224,8 +19502,8 @@
           "symbol_id": "task_scanner.py::_find_todos",
           "file": "task_scanner.py",
           "symbol": "_find_todos",
-          "lineno": 97,
-          "end_lineno": 109,
+          "lineno": 113,
+          "end_lineno": 125,
           "col_offset": 0,
           "end_col_offset": 19,
           "type": "function"
@@ -19234,8 +19512,8 @@
           "symbol_id": "task_scanner.py::scan_repo",
           "file": "task_scanner.py",
           "symbol": "scan_repo",
-          "lineno": 112,
-          "end_lineno": 121,
+          "lineno": 128,
+          "end_lineno": 137,
           "col_offset": 0,
           "end_col_offset": 21,
           "type": "function"
@@ -22114,6 +22392,7 @@
           "executor.py"
         ],
         "lesson_loader.py": [],
+        "metrics.py": [],
         "packet_experiment.py": [
           "coder_prompting.py",
           "hive_llm.py"
@@ -22258,6 +22537,16 @@
           "test_planner_anchor_canonicalization.py",
           "test_repo_map.py"
         ],
+        "failure_intelligence.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "main.py",
+          "test_coder_retries.py",
+          "test_failure_intelligence.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase1_stability.py",
+          "test_phase2_context_discipline.py"
+        ],
         "HiveLessonMemory.py": [
           "benchmark_harness.py",
           "coder.py",
@@ -22269,15 +22558,28 @@
           "test_phase1_stability.py",
           "test_pilot_review_gate.py"
         ],
-        "executor.py": [
+        "coder.py": [
           "benchmark_harness.py",
           "router.py",
-          "codex_runner.py",
-          "intent_detector.py",
-          "stress_runner.py",
-          "integration_harness.py",
-          "test_executor.py",
-          "test_phase1_live_benchmark.py"
+          "test_block_rewrite_minimality.py",
+          "test_coder_retries.py",
+          "test_hard_anchor_enforcement.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase2_context_discipline.py",
+          "test_pilot_review_gate.py"
+        ],
+        "coder_block_ops.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "test_block_rewrite_minimality.py",
+          "test_phase1_stability.py"
+        ],
+        "reflector.py": [
+          "benchmark_harness.py",
+          "main.py",
+          "hive_runner.py",
+          "test_phase1_live_benchmark.py",
+          "test_reflector.py"
         ],
         "coder_prompting.py": [
           "benchmark_harness.py",
@@ -22291,12 +22593,6 @@
           "test_phase2_context_discipline.py",
           "test_pilot_intent_loop.py"
         ],
-        "coder_block_ops.py": [
-          "benchmark_harness.py",
-          "coder.py",
-          "test_block_rewrite_minimality.py",
-          "test_phase1_stability.py"
-        ],
         "HiveStateManager.py": [
           "benchmark_harness.py",
           "main.py",
@@ -22307,36 +22603,17 @@
           "test_phase2_context_discipline.py",
           "test_state_manager_disk_sync.py"
         ],
-        "failure_intelligence.py": [
+        "coder_context.py": [
           "benchmark_harness.py",
           "coder.py",
-          "main.py",
-          "test_coder_retries.py",
-          "test_failure_intelligence.py",
-          "test_phase1_live_benchmark.py",
+          "coder_block_ops.py",
+          "coder_prompting.py",
           "test_phase1_stability.py",
           "test_phase2_context_discipline.py"
-        ],
-        "reflector.py": [
-          "benchmark_harness.py",
-          "main.py",
-          "hive_runner.py",
-          "test_phase1_live_benchmark.py",
-          "test_reflector.py"
         ],
         "benchmark_pack.py": [
           "benchmark_harness.py",
           "test_reliability_benchmark_harness.py"
-        ],
-        "coder.py": [
-          "benchmark_harness.py",
-          "router.py",
-          "test_block_rewrite_minimality.py",
-          "test_coder_retries.py",
-          "test_hard_anchor_enforcement.py",
-          "test_phase1_live_benchmark.py",
-          "test_phase2_context_discipline.py",
-          "test_pilot_review_gate.py"
         ],
         "planner.py": [
           "benchmark_harness.py",
@@ -22348,13 +22625,15 @@
           "test_planner_completion_cues.py",
           "test_planner_intent_fuzzy.py"
         ],
-        "coder_context.py": [
+        "executor.py": [
           "benchmark_harness.py",
-          "coder.py",
-          "coder_block_ops.py",
-          "coder_prompting.py",
-          "test_phase1_stability.py",
-          "test_phase2_context_discipline.py"
+          "router.py",
+          "codex_runner.py",
+          "intent_detector.py",
+          "stress_runner.py",
+          "integration_harness.py",
+          "test_executor.py",
+          "test_phase1_live_benchmark.py"
         ],
         "work_ontology.py": [
           "builder.py",
@@ -22366,12 +22645,6 @@
           "main.py",
           "planner.py",
           "test_work_ontology.py"
-        ],
-        "coder_validation.py": [
-          "coder.py",
-          "test_comment_only_tasks.py",
-          "test_hard_anchor_enforcement.py",
-          "test_phase1_stability.py"
         ],
         "hive_llm.py": [
           "coder.py",
@@ -22390,6 +22663,12 @@
           "coder.py",
           "failure_intelligence.py"
         ],
+        "coder_validation.py": [
+          "coder.py",
+          "test_comment_only_tasks.py",
+          "test_hard_anchor_enforcement.py",
+          "test_phase1_stability.py"
+        ],
         "coder_prompt.py": [
           "coder_prompting.py"
         ],
@@ -22400,28 +22679,31 @@
           "router.py",
           "test_pilot_intent_loop.py"
         ],
+        "router.py": [
+          "main.py",
+          "hive_runner.py"
+        ],
         "HiveMemoryAgent.py": [
           "main.py",
           "run_memes.py",
           "hive_runner.py"
-        ],
-        "anchor_utils.py": [
-          "main.py",
-          "planner.py",
-          "test_pilot_intent_loop.py"
         ],
         "interface.py": [
           "main.py",
           "test_pilot_intent_loop.py",
           "test_pilot_review_gate.py"
         ],
-        "router.py": [
-          "main.py",
-          "hive_runner.py"
-        ],
         "code_domain.py": [
           "main.py",
           "test_adversarial_agent_run.py"
+        ],
+        "anchor_utils.py": [
+          "main.py",
+          "planner.py",
+          "test_pilot_intent_loop.py"
+        ],
+        "planner_prompt.py": [
+          "planner.py"
         ],
         "main.py": [
           "planner.py",
@@ -22429,9 +22711,6 @@
           "test_pilot_intent_loop.py",
           "test_pilot_review_gate.py",
           "test_planner_anchor_canonicalization.py"
-        ],
-        "planner_prompt.py": [
-          "planner.py"
         ],
         "reflector_prompt.py": [
           "reflector.py"
@@ -22446,51 +22725,52 @@
         "benchmark_harness.py": [
           "test_reliability_benchmark_harness.py"
         ],
-        "test_coder_retries.py": [],
-        "test_reflector.py": [],
-        "conftest.py": [],
-        "ci_target.py": [],
-        "test_planner_completion_cues.py": [],
-        "test_state_manager_disk_sync.py": [],
-        "hive_runner.py": [],
-        "test_phase1_live_benchmark.py": [],
-        "packet_experiment.py": [],
-        "hive_cockpit.py": [],
-        "adversarial_task_generator.py": [],
-        "integration_harness.py": [],
-        "test_adversarial_agent_run.py": [],
-        "test_phase2_context_discipline.py": [],
-        "test_pilot_review_gate.py": [],
-        "create_tmp_dirs.py": [],
-        "test_work_ontology.py": [],
-        "task_ranker.py": [],
-        "test_phase1_stability.py": [],
-        "test_block_rewrite_minimality.py": [],
-        "fuzzer_patch_generator.py": [],
-        "ci_gate.py": [],
-        "test_math_research_agents.py": [],
+        "test_comment_only_tasks.py": [],
         "check_llm.py": [],
-        "test_pilot_intent_loop.py": [],
-        "hive_gui.py": [],
-        "test_reliability_benchmark_harness.py": [],
-        "test_executor.py": [],
-        "stress_runner.py": [],
-        "codex_runner.py": [],
-        "intent_detector.py": [],
-        "lesson_loader.py": [],
-        "generate_repo_map.py": [],
-        "test_lesson_routing.py": [],
-        "test_planner_anchor_canonicalization.py": [],
-        "test_context_budgeting.py": [],
-        "test_repo_map.py": [],
-        "test_planner_intent_fuzzy.py": [],
-        "test_hard_anchor_enforcement.py": [],
+        "test_block_rewrite_minimality.py": [],
+        "test_planner_completion_cues.py": [],
+        "test_coder_retries.py": [],
         "test_failure_intelligence.py": [],
-        "task_generator.py": [],
-        "task_scanner.py": [],
-        "run_memes.py": [],
+        "stress_runner.py": [],
         "test_hive_agent_feedback_real.py": [],
-        "test_comment_only_tasks.py": []
+        "hive_runner.py": [],
+        "ci_gate.py": [],
+        "test_pilot_review_gate.py": [],
+        "test_work_ontology.py": [],
+        "test_repo_map.py": [],
+        "conftest.py": [],
+        "test_hard_anchor_enforcement.py": [],
+        "task_scanner.py": [],
+        "test_phase1_live_benchmark.py": [],
+        "test_phase1_stability.py": [],
+        "run_memes.py": [],
+        "test_lesson_routing.py": [],
+        "intent_detector.py": [],
+        "metrics.py": [],
+        "test_state_manager_disk_sync.py": [],
+        "test_math_research_agents.py": [],
+        "codex_runner.py": [],
+        "ci_target.py": [],
+        "test_reliability_benchmark_harness.py": [],
+        "packet_experiment.py": [],
+        "test_planner_anchor_canonicalization.py": [],
+        "test_executor.py": [],
+        "task_generator.py": [],
+        "hive_gui.py": [],
+        "fuzzer_patch_generator.py": [],
+        "adversarial_task_generator.py": [],
+        "task_ranker.py": [],
+        "hive_cockpit.py": [],
+        "test_adversarial_agent_run.py": [],
+        "create_tmp_dirs.py": [],
+        "test_planner_intent_fuzzy.py": [],
+        "test_phase2_context_discipline.py": [],
+        "test_pilot_intent_loop.py": [],
+        "test_context_budgeting.py": [],
+        "integration_harness.py": [],
+        "test_reflector.py": [],
+        "lesson_loader.py": [],
+        "generate_repo_map.py": []
       },
       "symbol_references": {
         "__init__": [
@@ -22522,10 +22802,13 @@
           "load_memory",
           "minsize",
           "mkdir",
+          "now",
           "protocol",
           "resolve",
           "set",
+          "strftime",
           "super",
+          "time",
           "title",
           "to",
           "write_text",
@@ -23376,6 +23659,7 @@
           "ReliabilityBenchmarkHarness",
           "RepoMap",
           "Router",
+          "RunMetrics",
           "TemporalFitHead",
           "ThreadingHTTPServer",
           "VisionAgent",
@@ -23395,6 +23679,8 @@
           "append",
           "build",
           "build_anchor_from_text",
+          "capture_post_run",
+          "capture_pre_run",
           "check_intent_with_patch",
           "close",
           "convert",
@@ -23447,6 +23733,7 @@
           "run_stress",
           "run_task",
           "run_tier2",
+          "save",
           "save_queue",
           "save_snapshot",
           "serve_forever",
@@ -27346,6 +27633,18 @@
           "update_task_status",
           "write_text"
         ],
+        "loop": [
+          "generate",
+          "get",
+          "len",
+          "load_queue",
+          "main",
+          "print",
+          "range",
+          "signal",
+          "sleep",
+          "sum"
+        ],
         "run_function_from_file": [
           "RuntimeError",
           "append",
@@ -27397,6 +27696,96 @@
           "len",
           "sorted",
           "strip"
+        ],
+        "_pylint_score": [
+          "float",
+          "run",
+          "split",
+          "splitlines",
+          "str",
+          "strip"
+        ],
+        "_cyclomatic_complexity": [
+          "float",
+          "rstrip",
+          "run",
+          "split",
+          "splitlines",
+          "str"
+        ],
+        "_maintainability_index": [
+          "float",
+          "len",
+          "run",
+          "split",
+          "splitlines",
+          "str",
+          "strip"
+        ],
+        "_code_quality_snapshot": [
+          "_cyclomatic_complexity",
+          "_maintainability_index",
+          "_pylint_score",
+          "exists",
+          "len",
+          "read_text",
+          "splitlines"
+        ],
+        "_lesson_snapshot": [
+          "exists",
+          "get",
+          "hasattr",
+          "len",
+          "loads",
+          "read_text",
+          "split",
+          "splitlines",
+          "strip",
+          "sum"
+        ],
+        "_patch_success_rate": [
+          "get",
+          "isinstance",
+          "len",
+          "loads",
+          "read_text",
+          "round",
+          "sum"
+        ],
+        "capture_pre_run": [
+          "_code_quality_snapshot",
+          "_lesson_snapshot",
+          "_patch_success_rate",
+          "get",
+          "print"
+        ],
+        "capture_post_run": [
+          "_code_quality_snapshot",
+          "_lesson_snapshot",
+          "_patch_success_rate",
+          "get",
+          "print",
+          "round"
+        ],
+        "save": [
+          "dumps",
+          "open",
+          "print",
+          "round",
+          "time",
+          "write"
+        ],
+        "report": [
+          "abs",
+          "append",
+          "exists",
+          "get",
+          "len",
+          "loads",
+          "print",
+          "read_text",
+          "round",
+          "splitlines"
         ],
         "run_experiment": [
           "append",
@@ -27509,6 +27898,7 @@
         ],
         "_find_hardcoded_sets": [
           "append",
+          "get",
           "isinstance",
           "walk"
         ],
@@ -34073,9 +34463,9 @@
         },
         "hive_runner.py": {
           "file": "hive_runner.py",
-          "char_count": 14052,
-          "line_count": 368,
-          "symbol_count": 10,
+          "char_count": 17665,
+          "line_count": 466,
+          "symbol_count": 11,
           "symbol_inventory": [
             {
               "symbol": "_bootstrap_api_key",
@@ -34088,64 +34478,71 @@
               "symbol": "load_queue",
               "symbol_id": "hive_runner.py::load_queue",
               "type": "function",
-              "lineno": 74,
-              "end_lineno": 86
+              "lineno": 75,
+              "end_lineno": 87
             },
             {
               "symbol": "save_queue",
               "symbol_id": "hive_runner.py::save_queue",
               "type": "function",
-              "lineno": 89,
-              "end_lineno": 93
+              "lineno": 90,
+              "end_lineno": 94
             },
             {
               "symbol": "setup_components",
               "symbol_id": "hive_runner.py::setup_components",
               "type": "function",
-              "lineno": 96,
-              "end_lineno": 112
+              "lineno": 97,
+              "end_lineno": 113
             },
             {
               "symbol": "store_task",
               "symbol_id": "hive_runner.py::store_task",
               "type": "function",
-              "lineno": 115,
-              "end_lineno": 133
+              "lineno": 116,
+              "end_lineno": 134
             },
             {
               "symbol": "plan_task",
               "symbol_id": "hive_runner.py::plan_task",
               "type": "function",
-              "lineno": 136,
-              "end_lineno": 159
+              "lineno": 137,
+              "end_lineno": 160
             },
             {
               "symbol": "auto_accept_patch",
               "symbol_id": "hive_runner.py::auto_accept_patch",
               "type": "function",
-              "lineno": 162,
-              "end_lineno": 181
+              "lineno": 163,
+              "end_lineno": 182
             },
             {
               "symbol": "apply_patch",
               "symbol_id": "hive_runner.py::apply_patch",
               "type": "function",
-              "lineno": 184,
-              "end_lineno": 221
+              "lineno": 185,
+              "end_lineno": 222
             },
             {
               "symbol": "run_task",
               "symbol_id": "hive_runner.py::run_task",
               "type": "function",
-              "lineno": 224,
-              "end_lineno": 323
+              "lineno": 225,
+              "end_lineno": 324
             },
             {
               "symbol": "main",
               "symbol_id": "hive_runner.py::main",
               "type": "function",
-              "lineno": 326,
-              "end_lineno": 364
+              "lineno": 327,
+              "end_lineno": 382
+            },
+            {
+              "symbol": "loop",
+              "symbol_id": "hive_runner.py::loop",
+              "type": "function",
+              "lineno": 385,
+              "end_lineno": 451
             }
           ],
           "import_summary": [
@@ -34162,43 +34559,50 @@
               "symbol": "main",
               "symbol_id": "hive_runner.py::main",
               "type": "function",
-              "lineno": 326,
-              "end_lineno": 364
+              "lineno": 327,
+              "end_lineno": 382
             },
             {
               "symbol": "apply_patch",
               "symbol_id": "hive_runner.py::apply_patch",
               "type": "function",
-              "lineno": 184,
-              "end_lineno": 221
+              "lineno": 185,
+              "end_lineno": 222
             },
             {
               "symbol": "plan_task",
               "symbol_id": "hive_runner.py::plan_task",
               "type": "function",
-              "lineno": 136,
-              "end_lineno": 159
+              "lineno": 137,
+              "end_lineno": 160
             },
             {
               "symbol": "run_task",
               "symbol_id": "hive_runner.py::run_task",
               "type": "function",
-              "lineno": 224,
-              "end_lineno": 323
+              "lineno": 225,
+              "end_lineno": 324
+            },
+            {
+              "symbol": "loop",
+              "symbol_id": "hive_runner.py::loop",
+              "type": "function",
+              "lineno": 385,
+              "end_lineno": 451
             },
             {
               "symbol": "auto_accept_patch",
               "symbol_id": "hive_runner.py::auto_accept_patch",
               "type": "function",
-              "lineno": 162,
-              "end_lineno": 181
+              "lineno": 163,
+              "end_lineno": 182
             },
             {
               "symbol": "store_task",
               "symbol_id": "hive_runner.py::store_task",
               "type": "function",
-              "lineno": 115,
-              "end_lineno": 133
+              "lineno": 116,
+              "end_lineno": 134
             },
             {
               "symbol": "_bootstrap_api_key",
@@ -34206,13 +34610,6 @@
               "type": "function",
               "lineno": 22,
               "end_lineno": 38
-            },
-            {
-              "symbol": "setup_components",
-              "symbol_id": "hive_runner.py::setup_components",
-              "type": "function",
-              "lineno": 96,
-              "end_lineno": 112
             }
           ],
           "route_branch_inventory": []
@@ -34351,6 +34748,158 @@
               "type": "function",
               "lineno": 21,
               "end_lineno": 25
+            }
+          ],
+          "route_branch_inventory": []
+        },
+        "metrics.py": {
+          "file": "metrics.py",
+          "char_count": 10122,
+          "line_count": 262,
+          "symbol_count": 12,
+          "symbol_inventory": [
+            {
+              "symbol": "_pylint_score",
+              "symbol_id": "metrics.py::_pylint_score",
+              "type": "function",
+              "lineno": 34,
+              "end_lineno": 48
+            },
+            {
+              "symbol": "_cyclomatic_complexity",
+              "symbol_id": "metrics.py::_cyclomatic_complexity",
+              "type": "function",
+              "lineno": 51,
+              "end_lineno": 63
+            },
+            {
+              "symbol": "_maintainability_index",
+              "symbol_id": "metrics.py::_maintainability_index",
+              "type": "function",
+              "lineno": 66,
+              "end_lineno": 81
+            },
+            {
+              "symbol": "_code_quality_snapshot",
+              "symbol_id": "metrics.py::_code_quality_snapshot",
+              "type": "function",
+              "lineno": 84,
+              "end_lineno": 96
+            },
+            {
+              "symbol": "_lesson_snapshot",
+              "symbol_id": "metrics.py::_lesson_snapshot",
+              "type": "function",
+              "lineno": 99,
+              "end_lineno": 116
+            },
+            {
+              "symbol": "_patch_success_rate",
+              "symbol_id": "metrics.py::_patch_success_rate",
+              "type": "function",
+              "lineno": 119,
+              "end_lineno": 130
+            },
+            {
+              "symbol": "RunMetrics",
+              "symbol_id": "metrics.py::RunMetrics",
+              "type": "class",
+              "lineno": 133,
+              "end_lineno": 186
+            },
+            {
+              "symbol": "__init__",
+              "symbol_id": "metrics.py::RunMetrics.__init__",
+              "type": "method",
+              "lineno": 134,
+              "end_lineno": 138
+            },
+            {
+              "symbol": "capture_pre_run",
+              "symbol_id": "metrics.py::RunMetrics.capture_pre_run",
+              "type": "method",
+              "lineno": 140,
+              "end_lineno": 148
+            },
+            {
+              "symbol": "capture_post_run",
+              "symbol_id": "metrics.py::RunMetrics.capture_post_run",
+              "type": "method",
+              "lineno": 150,
+              "end_lineno": 173
+            },
+            {
+              "symbol": "save",
+              "symbol_id": "metrics.py::RunMetrics.save",
+              "type": "method",
+              "lineno": 175,
+              "end_lineno": 186
+            },
+            {
+              "symbol": "report",
+              "symbol_id": "metrics.py::report",
+              "type": "function",
+              "lineno": 189,
+              "end_lineno": 258
+            }
+          ],
+          "import_summary": [],
+          "high_value_symbols": [
+            {
+              "symbol": "report",
+              "symbol_id": "metrics.py::report",
+              "type": "function",
+              "lineno": 189,
+              "end_lineno": 258
+            },
+            {
+              "symbol": "RunMetrics",
+              "symbol_id": "metrics.py::RunMetrics",
+              "type": "class",
+              "lineno": 133,
+              "end_lineno": 186
+            },
+            {
+              "symbol": "capture_post_run",
+              "symbol_id": "metrics.py::RunMetrics.capture_post_run",
+              "type": "method",
+              "lineno": 150,
+              "end_lineno": 173
+            },
+            {
+              "symbol": "_lesson_snapshot",
+              "symbol_id": "metrics.py::_lesson_snapshot",
+              "type": "function",
+              "lineno": 99,
+              "end_lineno": 116
+            },
+            {
+              "symbol": "_maintainability_index",
+              "symbol_id": "metrics.py::_maintainability_index",
+              "type": "function",
+              "lineno": 66,
+              "end_lineno": 81
+            },
+            {
+              "symbol": "_pylint_score",
+              "symbol_id": "metrics.py::_pylint_score",
+              "type": "function",
+              "lineno": 34,
+              "end_lineno": 48
+            },
+            {
+              "symbol": "_cyclomatic_complexity",
+              "symbol_id": "metrics.py::_cyclomatic_complexity",
+              "type": "function",
+              "lineno": 51,
+              "end_lineno": 63
+            },
+            {
+              "symbol": "_code_quality_snapshot",
+              "symbol_id": "metrics.py::_code_quality_snapshot",
+              "type": "function",
+              "lineno": 84,
+              "end_lineno": 96
             }
           ],
           "route_branch_inventory": []
@@ -34578,8 +35127,8 @@
         },
         "task_scanner.py": {
           "file": "task_scanner.py",
-          "char_count": 4596,
-          "line_count": 129,
+          "char_count": 5306,
+          "line_count": 145,
           "symbol_count": 5,
           "symbol_inventory": [
             {
@@ -34594,45 +35143,45 @@
               "symbol_id": "task_scanner.py::_find_hardcoded_sets",
               "type": "function",
               "lineno": 43,
-              "end_lineno": 63
+              "end_lineno": 79
             },
             {
               "symbol": "_find_bare_raises",
               "symbol_id": "task_scanner.py::_find_bare_raises",
               "type": "function",
-              "lineno": 66,
-              "end_lineno": 94
+              "lineno": 82,
+              "end_lineno": 110
             },
             {
               "symbol": "_find_todos",
               "symbol_id": "task_scanner.py::_find_todos",
               "type": "function",
-              "lineno": 97,
-              "end_lineno": 109
+              "lineno": 113,
+              "end_lineno": 125
             },
             {
               "symbol": "scan_repo",
               "symbol_id": "task_scanner.py::scan_repo",
               "type": "function",
-              "lineno": 112,
-              "end_lineno": 121
+              "lineno": 128,
+              "end_lineno": 137
             }
           ],
           "import_summary": [],
           "high_value_symbols": [
             {
-              "symbol": "_find_bare_raises",
-              "symbol_id": "task_scanner.py::_find_bare_raises",
-              "type": "function",
-              "lineno": 66,
-              "end_lineno": 94
-            },
-            {
               "symbol": "_find_hardcoded_sets",
               "symbol_id": "task_scanner.py::_find_hardcoded_sets",
               "type": "function",
               "lineno": 43,
-              "end_lineno": 63
+              "end_lineno": 79
+            },
+            {
+              "symbol": "_find_bare_raises",
+              "symbol_id": "task_scanner.py::_find_bare_raises",
+              "type": "function",
+              "lineno": 82,
+              "end_lineno": 110
             },
             {
               "symbol": "scan_file",
@@ -34645,15 +35194,15 @@
               "symbol": "_find_todos",
               "symbol_id": "task_scanner.py::_find_todos",
               "type": "function",
-              "lineno": 97,
-              "end_lineno": 109
+              "lineno": 113,
+              "end_lineno": 125
             },
             {
               "symbol": "scan_repo",
               "symbol_id": "task_scanner.py::scan_repo",
               "type": "function",
-              "lineno": 112,
-              "end_lineno": 121
+              "lineno": 128,
+              "end_lineno": 137
             }
           ],
           "route_branch_inventory": []
@@ -37933,7 +38482,7 @@
         }
       }
     },
-    "updated_at": "2026-05-24T03:35:14.738754"
+    "updated_at": "2026-05-24T06:13:29.291032"
   },
   "file_state": {
     "router.py": {
@@ -38951,15 +39500,15 @@
           "timestamp": "2026-05-24T03:43:39.617917"
         }
       ],
-      "updated_at": "2026-05-24T03:44:59.509842"
+      "updated_at": "2026-05-24T06:13:29.304005"
     },
     "system": {
       "repo_loaded": true,
-      "known_files_count": 76,
-      "known_symbols_count": 929,
+      "known_files_count": 77,
+      "known_symbols_count": 941,
       "active_route": "plan_task",
       "active_mode": null,
-      "updated_at": "2026-05-24T03:35:14.738785"
+      "updated_at": "2026-05-24T06:13:29.296265"
     }
   }
 }
