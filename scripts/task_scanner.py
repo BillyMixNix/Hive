@@ -34,12 +34,18 @@ LONG_FUNCTION_THRESHOLD = 60
 # Very large functions (CC > this) are skipped — too risky for in-place rewrite.
 COMPLEXITY_SKIP_THRESHOLD = 50
 
+# Files larger than this (in bytes) are skipped entirely — context trimming
+# makes patches on giant files too wide for surgical diffs.
+FILE_SIZE_SKIP_BYTES = 80_000
+
 
 def scan_file(path):
     """Scan a single .py file and return a list of candidate task dicts."""
     findings = []
     try:
         source = Path(path).read_text(encoding="utf-8")
+        if len(source.encode()) > FILE_SIZE_SKIP_BYTES:
+            return findings
         tree = ast.parse(source, filename=str(path))
     except Exception:
         return findings
