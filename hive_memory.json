@@ -43219,5 +43219,110 @@
       }
     },
     "timestamp": "2026-05-24 18:01:25.620087"
+  },
+  {
+    "id": 847,
+    "tag": "complexity",
+    "note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "executor.py",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 18:04:20.096932"
+  },
+  {
+    "id": 848,
+    "tag": "plan",
+    "note": "Task 847 planned | The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count. | next: Implement the requested change in executor.py.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 847,
+      "plan_id": "plan-847",
+      "plan": {
+        "task_id": 847,
+        "goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "task_type": "feature",
+        "task_kind": "create",
+        "work_mode": "create",
+        "tasks": [
+          {
+            "task_id": "task-847-1",
+            "title": "Update executor.py",
+            "description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "add_capability",
+            "completion_cues": [],
+            "task_type": "feature",
+            "task_kind": "create",
+            "work_mode": "create",
+            "artifact": "",
+            "operation": "",
+            "validation": "",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": null,
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": null,
+                "scope": "single_file",
+                "anchor_level": "file",
+                "anchor_source": "file_level_inference"
+              }
+            }
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Planner fallback was used after planner validation failed.",
+          "File-level anchor: coder must keep the patch narrowly scoped inside the target file."
+        ],
+        "next_action": "Implement the requested change in executor.py.",
+        "status": "planned",
+        "source": "fallback_file_task",
+        "llm_error": "name 'logging' is not defined",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": null,
+            "scope": "single_file",
+            "anchor_level": "file",
+            "anchor_source": "file_level_inference"
+          },
+          "planner_source": "fallback_file_task",
+          "planner_failure_code": "planner_validation_failure",
+          "planner_failure_detail": "name 'logging' is not defined"
+        },
+        "active_child_task_id": "task-847-1",
+        "active_child_task_title": "Update executor.py",
+        "active_child_target_file": "executor.py",
+        "target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 18:04:47.705759"
   }
 ]
