@@ -1438,21 +1438,9 @@ class PlannerAgent:
         plan_metadata["anchor"] = anchor
         plan["metadata"] = plan_metadata
 
-        non_executable = [
-            child for child in plan["tasks"]
-            if self._is_analysis_only_description(child.get("description", ""))
-        ]
-        if non_executable:
-            logging.warning(
-                "Filtering non-coder-executable child tasks: %s",
-                [c.get("description") for c in non_executable],
-            )
-            filtered_plan = dict(plan)
-            filtered_plan["tasks"] = [
-                c for c in plan["tasks"]
-                if not self._is_analysis_only_description(c.get("description", ""))
-            ]
-            return filtered_plan
+        for child in plan["tasks"]:
+            if self._is_analysis_only_description(child.get("description", "")):
+                raise ValueError(f"Child task is not coder-executable: {child.get('description')}")
 
         plan["dependencies"] = self._normalize_dependencies(plan["dependencies"])
 
