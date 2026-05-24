@@ -50255,5 +50255,24 @@
       }
     },
     "timestamp": "2026-05-24 20:31:36.171340"
+  },
+  {
+    "id": 929,
+    "tag": "complexity",
+    "note": "The function _build_anchor_from_task in planner.py has high cyclomatic complexity (~29 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "planner.py",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 20:31:38.602136"
   }
 ]
