@@ -39563,18 +39563,22 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function _build_retry_profile in coder.py is 150 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
-      "active_task_id": 906,
-      "active_plan_id": "plan-906",
-      "active_child_task_id": "task-906-1",
-      "current_child_task_title": "Update coder.py",
+      "active_goal": "The function _score_symbols_for_text in main.py has high cyclomatic complexity (~33 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 911,
+      "active_plan_id": "plan-911",
+      "active_child_task_id": "task-911-1",
+      "current_child_task_title": "Add _build_symbol_score_dispatch helper in main.py",
       "task_status": "planned",
-      "target_file": "coder.py",
-      "target_symbol": null,
-      "change_intent": "refactor_local_block",
-      "expected_operation": "add_capability",
-      "completion_cues": [],
-      "updated_at": "2026-05-24T19:29:57.654629",
+      "target_file": "main.py",
+      "target_symbol": "_score_symbols_for_text",
+      "change_intent": "add_method_or_function",
+      "expected_operation": "add_symbol",
+      "completion_cues": [
+        "def _build_symbol_score_dispatch(",
+        "return [",
+        "(lambda sym, text:"
+      ],
+      "updated_at": "2026-05-24T19:33:06.936872",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
@@ -39603,6 +39607,62 @@
     },
     "failures": {
       "recent": [
+        {
+          "task_id": 911,
+          "target_file": "main.py",
+          "target_symbol": "_score_symbols_for_text",
+          "change_intent": "add_method_or_function",
+          "expected_operation": "add_symbol",
+          "failure_family": "formatting",
+          "failure_class": "parser_contract",
+          "failure_code": "empty_model_response",
+          "failure_category": "empty_model_response",
+          "confidence": 0.99,
+          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
+          "reason": "Empty model response.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 3847,
+            "trimmed_context_length": 3847,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "parser_contract::empty_model_response::add_method_or_function",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T19:34:04.846311"
+        },
         {
           "task_id": 906,
           "target_file": "coder.py",
@@ -39794,60 +39854,6 @@
           "fix_strategy": "parser_contract::empty_patch::refactor_local_block",
           "lesson_level": "exact",
           "timestamp": "2026-05-24T19:32:27.655908"
-        },
-        {
-          "task_id": 906,
-          "target_file": "coder.py",
-          "target_symbol": "_build_retry_profile",
-          "change_intent": "refactor_local_block",
-          "expected_operation": "add_capability",
-          "failure_family": "formatting",
-          "failure_class": "parser_contract",
-          "failure_code": "empty_patch",
-          "failure_category": "empty_patch",
-          "confidence": 0.55,
-          "retry_instruction": "Do not leave PATCH empty; provide a minimal anchored diff or return a blocked patch header with a clear reason.",
-          "reason": "PATCH section is empty.",
-          "stage": "exception",
-          "source": "coder_exception",
-          "context_mode": "block_window",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "block_window",
-            "raw_context_length": 18364,
-            "trimmed_context_length": 1241,
-            "trimmed": true,
-            "summary_used": true,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "summary_used",
-            "dropped_related_context": true,
-            "dropped_helper_blocks": true,
-            "dropped_import_blocks": true,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "summary_used",
-          "context_priority": [
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "formatting::parser_contract::empty_patch::refactor_local_block::add_capability::block_window",
-          "fix_strategy": "parser_contract::empty_patch::refactor_local_block",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T19:32:13.840775"
         }
       ],
       "counts_by_category": {
@@ -39866,14 +39872,14 @@
         "comment_task_rejected_as_nonfunctional": 3,
         "scope_alignment_mismatch": 19,
         "bad_method_indent": 17,
-        "empty_model_response": 26,
+        "empty_model_response": 27,
         "missing_patch_section": 2,
         "empty_patch": 12,
         "unfinished_block_insertion": 2,
         "patch_too_large": 7,
         "too_many_new_methods": 2
       },
-      "updated_at": "2026-05-24T19:32:40.013377"
+      "updated_at": "2026-05-24T19:34:04.846316"
     },
     "lessons": {
       "recent": [
