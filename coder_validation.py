@@ -132,8 +132,15 @@ def preflight_patch_contract(raw_response, constraints=None):
 
     added_method_names = []
     for line in patch_lines:
-        if line.startswith("+") and line.lstrip("+").strip().startswith("def "):
-            name = line.split("def ", 1)[1].split("(", 1)[0].strip()
+        if not line.startswith("+"):
+            continue
+        content = line[1:]  # strip leading +
+        if not content.lstrip().startswith("def "):
+            continue
+        # Only count class-level methods (4 spaces indent), not nested functions (8+ spaces)
+        indent = len(content) - len(content.lstrip())
+        if indent <= 4:
+            name = content.split("def ", 1)[1].split("(", 1)[0].strip()
             added_method_names.append(name)
 
     if len(set(added_method_names)) != len(added_method_names):
