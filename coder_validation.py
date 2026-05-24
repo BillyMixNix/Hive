@@ -355,6 +355,13 @@ def extract_changed_def_names(patch_text):
         if not stripped.startswith("def "):
             continue
 
+        # Only count top-level or class-level defs (indent <= 4).
+        # Nested functions inside method bodies (indent > 4) are not
+        # independent symbols — they belong to the enclosing method.
+        indent = len(content) - len(stripped)
+        if indent > 4:
+            continue
+
         name = stripped.split("def ", 1)[1].split("(", 1)[0].strip()
         if name:
             changed_defs.add(name)
