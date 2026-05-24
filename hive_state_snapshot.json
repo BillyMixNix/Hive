@@ -39598,62 +39598,6 @@
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
           "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': False}",
-          "stage": "sandbox",
-          "source": "sandbox",
-          "context_mode": "exact_symbol_block",
-          "planner_source": "llm",
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 1344,
-            "trimmed_context_length": 1344,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:38:20.388717"
-        },
-        {
-          "task_id": 879,
-          "target_file": "planner.py",
-          "target_symbol": "_normalize_completion_cues",
-          "change_intent": "add_method_or_function",
-          "expected_operation": "add_symbol",
-          "failure_family": "semantics",
-          "failure_class": "scope_boundary",
-          "failure_code": "local_assignment_at_module_scope",
-          "failure_category": "local_assignment_at_module_scope",
-          "confidence": 0.82,
-          "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
           "stage": "observability",
           "source": "observability",
           "context_mode": null,
@@ -39669,7 +39613,7 @@
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:38:02.448460"
+          "timestamp": "2026-05-24T18:39:47.700955"
         },
         {
           "task_id": 879,
@@ -39683,7 +39627,7 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Retry exhausted: Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Retry exhausted: Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': False}",
           "stage": "retry_exhausted",
           "source": "retry_exhausted",
           "context_mode": "exact_symbol_block",
@@ -39725,7 +39669,7 @@
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:38:02.352878"
+          "timestamp": "2026-05-24T18:39:47.599763"
         },
         {
           "task_id": 879,
@@ -39739,7 +39683,7 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': False}",
           "stage": "sandbox",
           "source": "sandbox",
           "context_mode": "exact_symbol_block",
@@ -39781,7 +39725,7 @@
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:38:02.277315"
+          "timestamp": "2026-05-24T18:39:47.521383"
         },
         {
           "task_id": 879,
@@ -39795,7 +39739,7 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': False, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': False}",
           "stage": "sandbox",
           "source": "sandbox",
           "context_mode": "exact_symbol_block",
@@ -39837,7 +39781,63 @@
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:37:41.829899"
+          "timestamp": "2026-05-24T18:39:32.777841"
+        },
+        {
+          "task_id": 879,
+          "target_file": "planner.py",
+          "target_symbol": "_normalize_completion_cues",
+          "change_intent": "add_method_or_function",
+          "expected_operation": "add_symbol",
+          "failure_family": "semantics",
+          "failure_class": "scope_boundary",
+          "failure_code": "local_assignment_at_module_scope",
+          "failure_category": "local_assignment_at_module_scope",
+          "confidence": 0.82,
+          "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
+          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': False}",
+          "stage": "sandbox",
+          "source": "sandbox",
+          "context_mode": "exact_symbol_block",
+          "planner_source": "llm",
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 1344,
+            "trimmed_context_length": 1344,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T18:39:13.937842"
         }
       ],
       "counts_by_category": {
@@ -39845,7 +39845,7 @@
         "unknown_failure": 245,
         "multiple_patch_sections": 6,
         "new_method_not_allowed": 47,
-        "local_assignment_at_module_scope": 130,
+        "local_assignment_at_module_scope": 139,
         "sandbox_retry_exhausted": 69,
         "non_diff_commentary": 7,
         "reflector_reject": 20,
@@ -39861,7 +39861,7 @@
         "empty_patch": 2,
         "unfinished_block_insertion": 2
       },
-      "updated_at": "2026-05-24T18:38:20.388723"
+      "updated_at": "2026-05-24T18:39:47.700963"
     },
     "lessons": {
       "recent": [
@@ -39871,7 +39871,7 @@
           "source": "retry_exhausted",
           "target_file": "planner.py",
           "target_symbol": "_normalize_completion_cues",
-          "lesson_id": "c0aea007-8f07-41f8-b341-931a09b7eedc",
+          "lesson_id": "23043608-1284-4027-ac5d-c5be77e3c4c3",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
@@ -39883,7 +39883,7 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T18:38:02.352207"
+          "timestamp": "2026-05-24T18:39:47.599088"
         },
         {
           "tag": "local_assignment_at_module_scope",
@@ -39891,7 +39891,7 @@
           "source": "sandbox",
           "target_file": "planner.py",
           "target_symbol": "_normalize_completion_cues",
-          "lesson_id": "d44b0faf-f392-42e6-9533-e86d922f8022",
+          "lesson_id": "9d83497f-3cd3-4dff-b941-a25419b90c91",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
@@ -39903,7 +39903,7 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T18:38:02.276699"
+          "timestamp": "2026-05-24T18:39:47.520877"
         },
         {
           "tag": "local_assignment_at_module_scope",
@@ -39911,7 +39911,7 @@
           "source": "sandbox",
           "target_file": "planner.py",
           "target_symbol": "_normalize_completion_cues",
-          "lesson_id": "ae909503-c2a8-4586-b301-de3c3b6e02bb",
+          "lesson_id": "131bc066-b29c-44a4-9f5e-6da0495842bb",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
@@ -39919,7 +39919,7 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T18:37:41.920394",
+          "last_used_at": "2026-05-24T18:39:32.870368",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -39931,7 +39931,7 @@
           ],
           "last_guidance_changed": false,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T18:37:41.829317"
+          "timestamp": "2026-05-24T18:39:32.777259"
         },
         {
           "tag": "local_assignment_at_module_scope",
@@ -39939,7 +39939,7 @@
           "source": "sandbox",
           "target_file": "planner.py",
           "target_symbol": "_normalize_completion_cues",
-          "lesson_id": "58fdaf99-d921-49e1-9d5f-3eb0cb5a5fda",
+          "lesson_id": "4cf8d809-2306-4de5-a92e-fc883336c3cf",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
@@ -39947,7 +39947,7 @@
           "success_after_use": 0,
           "failure_after_use": 2,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T18:37:41.928715",
+          "last_used_at": "2026-05-24T18:39:32.878825",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -39959,23 +39959,23 @@
           ],
           "last_guidance_changed": false,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T18:37:25.093910"
+          "timestamp": "2026-05-24T18:39:13.937169"
         },
         {
-          "tag": "empty_model_response",
-          "summary": "Return the required fields and a minimal unified diff patch.",
-          "source": "coder_exception",
+          "tag": "local_assignment_at_module_scope",
+          "summary": "Insert the assignment inside the target function body near existing local setup lines.",
+          "source": "retry_exhausted",
           "target_file": "planner.py",
-          "target_symbol": "plan_task",
-          "lesson_id": "ba2b6e56-68d7-43d6-aa9b-8af70c5bbc40",
+          "target_symbol": "_normalize_completion_cues",
+          "lesson_id": "389b2fa8-c197-4e84-8250-c61483c4ba38",
           "lesson_level": "exact",
-          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_method_or_function::add_symbol::exact_symbol_block",
-          "fix_strategy": "parser_contract::empty_model_response::add_method_or_function",
-          "times_used": 1,
+          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::add_method_or_function",
+          "times_used": 3,
           "success_after_use": 0,
-          "failure_after_use": 0,
+          "failure_after_use": 3,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T18:34:59.986813",
+          "last_used_at": "2026-05-24T18:39:32.887467",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -39985,12 +39985,12 @@
             "trigger_pattern",
             "fix_strategy"
           ],
-          "last_guidance_changed": true,
-          "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T18:34:59.880338"
+          "last_guidance_changed": false,
+          "last_reuse_outcome": "hurt",
+          "timestamp": "2026-05-24T18:38:56.499244"
         }
       ],
-      "updated_at": "2026-05-24T18:38:02.505495"
+      "updated_at": "2026-05-24T18:39:47.758087"
     },
     "system": {
       "repo_loaded": true,
