@@ -43299,5 +43299,24 @@
       }
     },
     "timestamp": "2026-05-24 18:05:30.498956"
+  },
+  {
+    "id": 848,
+    "tag": "complexity",
+    "note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "active",
+    "metadata": {
+      "target_file": "executor.py",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 18:05:32.838092"
   }
 ]
