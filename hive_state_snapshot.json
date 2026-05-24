@@ -39542,20 +39542,21 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function plan_task in planner.py is 62 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
-      "active_task_id": 867,
-      "active_plan_id": "plan-867",
-      "active_child_task_id": "task-867-1",
-      "current_child_task_title": "Extract response-parsing helper from plan_task",
+      "active_goal": "The function _normalize_completion_cues in planner.py has high cyclomatic complexity (~11 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 879,
+      "active_plan_id": "plan-879",
+      "active_child_task_id": "task-879-1",
+      "current_child_task_title": "Add _normalize_single_cue helper in planner.py",
       "task_status": "planned",
       "target_file": "planner.py",
-      "target_symbol": "plan_task",
+      "target_symbol": "_normalize_completion_cues",
       "change_intent": "add_method_or_function",
       "expected_operation": "add_symbol",
       "completion_cues": [
-        "def _parse_plan_response("
+        "def _normalize_single_cue(",
+        "return None"
       ],
-      "updated_at": "2026-05-24T18:29:34.644775",
+      "updated_at": "2026-05-24T18:37:03.436846",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
