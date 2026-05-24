@@ -44402,5 +44402,34 @@
       }
     },
     "timestamp": "2026-05-24 18:22:58.652794"
+  },
+  {
+    "id": 861,
+    "tag": "complexity",
+    "note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "executor.py",
+      "target_symbol": "apply_patch",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 504,
+        "end_lineno": 566,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cues": [],
+      "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+      "lineno": 504,
+      "end_lineno": 566,
+      "col_offset": 4,
+      "end_col_offset": 19
+    },
+    "timestamp": "2026-05-24 18:23:00.936555"
   }
 ]
