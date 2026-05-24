@@ -46579,7 +46579,7 @@
     "id": 886,
     "tag": "complexity",
     "note": "The function update_current_snapshot in main.py has high cyclomatic complexity (~42 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-    "status": "active",
+    "status": "planned",
     "metadata": {
       "target_file": "main.py",
       "target_symbol": "update_current_snapshot",
@@ -46603,5 +46603,178 @@
       "end_col_offset": 23
     },
     "timestamp": "2026-05-24 18:40:58.125748"
+  },
+  {
+    "id": 887,
+    "tag": "plan",
+    "note": "Task 886 planned | Reduce cyclomatic complexity of update_current_snapshot in main.py by extracting repeated branch logic into a dispatch table or named helpers | next: Add _build_snapshot_dispatch and _apply_snapshot_field as module-level functions in main.py immediately before update_current_snapshot, mapping each branch key to its update action",
+    "status": "planned",
+    "metadata": {
+      "task_id": 886,
+      "plan_id": "plan-886",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity of update_current_snapshot in main.py by extracting repeated branch logic into a dispatch table or named helpers",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "update_current_snapshot branching logic",
+        "operation": "extract dispatch table and helpers from high-complexity function",
+        "validation": "update_current_snapshot body visibly reduced in branch count; all prior call paths still resolve",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-886-1",
+            "title": "Add snapshot-field dispatch table or named helpers in main.py",
+            "description": "Define a module-level dispatch table or set of focused helper functions in main.py that map the repeated decision keys from update_current_snapshot to their corresponding update actions, so the branching logic lives outside the main function body.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "main.py",
+            "target_symbol": "update_current_snapshot",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _build_snapshot_dispatch(",
+              "def _apply_snapshot_field(",
+              "return dispatch"
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "dispatch table or helper functions for snapshot field updates",
+            "operation": "add dispatch table or helper symbols near update_current_snapshot",
+            "validation": "new symbols are importable and callable from update_current_snapshot without error",
+            "creates_symbols": [
+              "_build_snapshot_dispatch",
+              "_apply_snapshot_field"
+            ],
+            "wires_into_symbols": [
+              "update_current_snapshot"
+            ],
+            "insertion_region": "module-level region immediately before update_current_snapshot",
+            "metadata": {
+              "target_file": "main.py",
+              "target_symbol": "update_current_snapshot",
+              "anchor": {
+                "target_file": "main.py",
+                "target_symbol": "update_current_snapshot",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "main.py::update_current_snapshot",
+                "lineno": 1105,
+                "end_lineno": 1152,
+                "col_offset": 0,
+                "end_col_offset": 23
+              },
+              "target_symbol_id": "main.py::update_current_snapshot",
+              "lineno": 1105,
+              "end_lineno": 1152,
+              "col_offset": 0,
+              "end_col_offset": 23
+            },
+            "target_symbol_id": "main.py::update_current_snapshot",
+            "lineno": 1105,
+            "end_lineno": 1152,
+            "col_offset": 0,
+            "end_col_offset": 23
+          },
+          {
+            "task_id": "task-886-2",
+            "title": "Refactor update_current_snapshot to delegate to dispatch table",
+            "description": "Replace the inline if/elif decision chains inside update_current_snapshot with calls to the new dispatch table or helper, collapsing the ~42 decision paths into a single lookup-and-apply pattern.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "main.py",
+            "target_symbol": "update_current_snapshot",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "dispatch = _build_snapshot_dispatch()",
+              "handler = dispatch.get(",
+              "handler("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "update_current_snapshot control flow",
+            "operation": "replace repeated if/elif branches with dispatch lookup",
+            "validation": "cyclomatic complexity measurably reduced and function body shorter; existing snapshot update behavior unchanged in smoke test",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "main.py",
+              "target_symbol": "update_current_snapshot",
+              "anchor": {
+                "target_file": "main.py",
+                "target_symbol": "update_current_snapshot",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "main.py::update_current_snapshot",
+                "lineno": 1105,
+                "end_lineno": 1152,
+                "col_offset": 0,
+                "end_col_offset": 23
+              },
+              "target_symbol_id": "main.py::update_current_snapshot",
+              "lineno": 1105,
+              "end_lineno": 1152,
+              "col_offset": 0,
+              "end_col_offset": 23
+            },
+            "target_symbol_id": "main.py::update_current_snapshot",
+            "lineno": 1105,
+            "end_lineno": 1152,
+            "col_offset": 0,
+            "end_col_offset": 23
+          }
+        ],
+        "dependencies": [
+          "main.py"
+        ],
+        "risks": [
+          "Dispatch table key mismatches could silently drop update branches that existed in the original if/elif chain",
+          "Any caller that passes an unexpected field key may now get a no-op instead of an explicit error if dispatch.get returns None without a fallback guard"
+        ],
+        "next_action": "Add _build_snapshot_dispatch and _apply_snapshot_field as module-level functions in main.py immediately before update_current_snapshot, mapping each branch key to its update action",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "main.py",
+            "target_symbol": "update_current_snapshot",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "main.py::update_current_snapshot",
+            "lineno": 1105,
+            "end_lineno": 1152,
+            "col_offset": 0,
+            "end_col_offset": 23
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 886,
+        "source": "llm",
+        "active_child_task_id": "task-886-1",
+        "active_child_task_title": "Add snapshot-field dispatch table or named helpers in main.py",
+        "active_child_target_file": "main.py"
+      },
+      "anchor": {
+        "target_file": "main.py",
+        "target_symbol": "update_current_snapshot",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "main.py::update_current_snapshot",
+        "lineno": 1105,
+        "end_lineno": 1152,
+        "col_offset": 0,
+        "end_col_offset": 23
+      }
+    },
+    "timestamp": "2026-05-24 18:41:21.660199"
   }
 ]
