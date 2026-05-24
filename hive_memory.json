@@ -47019,5 +47019,203 @@
       }
     },
     "timestamp": "2026-05-24 18:53:59.878304"
+  },
+  {
+    "id": 891,
+    "tag": "complexity",
+    "note": "The function update_last_patch_snapshot in main.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "main.py",
+      "target_symbol": "update_last_patch_snapshot",
+      "anchor": {
+        "target_file": "main.py",
+        "target_symbol": "update_last_patch_snapshot",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "main.py::update_last_patch_snapshot",
+        "lineno": 1200,
+        "end_lineno": 1252,
+        "col_offset": 0,
+        "end_col_offset": 15
+      },
+      "completion_cues": [],
+      "target_symbol_id": "main.py::update_last_patch_snapshot",
+      "lineno": 1200,
+      "end_lineno": 1252,
+      "col_offset": 0,
+      "end_col_offset": 15
+    },
+    "timestamp": "2026-05-24 18:54:02.167340"
+  },
+  {
+    "id": 892,
+    "tag": "plan",
+    "note": "Task 891 planned | reduce cyclomatic complexity of update_last_patch_snapshot in main.py by extracting repeated branch logic into a dispatch table or named helper | next: Add _resolve_snapshot_field helper function immediately before update_last_patch_snapshot in main.py, mapping each decision case to its field-update logic",
+    "status": "planned",
+    "metadata": {
+      "task_id": 891,
+      "plan_id": "plan-891",
+      "plan": {
+        "goal": "reduce cyclomatic complexity of update_last_patch_snapshot in main.py by extracting repeated branch logic into a dispatch table or named helper",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "update_last_patch_snapshot function",
+        "operation": "extract repeated branching logic into helper, simplify function body",
+        "validation": "function body branch count visibly reduced; all original field-update paths still reachable through helper",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-891-1",
+            "title": "Add dispatch helper for snapshot field resolution in main.py",
+            "description": "Add a module-level helper function or dispatch table in main.py that maps each decision case from update_last_patch_snapshot to its corresponding field-update logic, consolidating the repeated branch arms into one named structure.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "main.py",
+            "target_symbol": "update_last_patch_snapshot",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _resolve_snapshot_field("
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "snapshot field dispatch helper",
+            "operation": "add named helper or dispatch table that owns the per-case logic",
+            "validation": "new helper or dispatch table is importable and covers all cases previously handled inline in update_last_patch_snapshot",
+            "creates_symbols": [
+              "_resolve_snapshot_field"
+            ],
+            "wires_into_symbols": [
+              "update_last_patch_snapshot"
+            ],
+            "insertion_region": "module-level, immediately before update_last_patch_snapshot",
+            "metadata": {
+              "target_file": "main.py",
+              "target_symbol": "update_last_patch_snapshot",
+              "anchor": {
+                "target_file": "main.py",
+                "target_symbol": "update_last_patch_snapshot",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "main.py::update_last_patch_snapshot",
+                "lineno": 1200,
+                "end_lineno": 1252,
+                "col_offset": 0,
+                "end_col_offset": 15
+              },
+              "target_symbol_id": "main.py::update_last_patch_snapshot",
+              "lineno": 1200,
+              "end_lineno": 1252,
+              "col_offset": 0,
+              "end_col_offset": 15
+            },
+            "target_symbol_id": "main.py::update_last_patch_snapshot",
+            "lineno": 1200,
+            "end_lineno": 1252,
+            "col_offset": 0,
+            "end_col_offset": 15
+          },
+          {
+            "task_id": "task-891-2",
+            "title": "Refactor update_last_patch_snapshot to delegate to helper",
+            "description": "Replace the inline chain of decision branches in update_last_patch_snapshot with calls to _resolve_snapshot_field, reducing the function's own branch count to a single loop or small dispatch call.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "main.py",
+            "target_symbol": "update_last_patch_snapshot",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_resolve_snapshot_field(",
+              "if key in"
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "update_last_patch_snapshot",
+            "operation": "replace inline branch chain with helper delegation",
+            "validation": "function body fits in significantly fewer lines with branch count reduced from ~14 to 3 or fewer visible decision points",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "main.py",
+              "target_symbol": "update_last_patch_snapshot",
+              "anchor": {
+                "target_file": "main.py",
+                "target_symbol": "update_last_patch_snapshot",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "main.py::update_last_patch_snapshot",
+                "lineno": 1200,
+                "end_lineno": 1252,
+                "col_offset": 0,
+                "end_col_offset": 15
+              },
+              "target_symbol_id": "main.py::update_last_patch_snapshot",
+              "lineno": 1200,
+              "end_lineno": 1252,
+              "col_offset": 0,
+              "end_col_offset": 15
+            },
+            "target_symbol_id": "main.py::update_last_patch_snapshot",
+            "lineno": 1200,
+            "end_lineno": 1252,
+            "col_offset": 0,
+            "end_col_offset": 15
+          }
+        ],
+        "dependencies": [
+          "main.py"
+        ],
+        "risks": [
+          "dispatch table or helper may not cover all edge-case branches if any are context-dependent and require surrounding state not easily passed as arguments",
+          "refactored function must preserve exact field-update side effects for all original code paths or downstream snapshot reads will silently regress"
+        ],
+        "next_action": "Add _resolve_snapshot_field helper function immediately before update_last_patch_snapshot in main.py, mapping each decision case to its field-update logic",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "main.py",
+            "target_symbol": "update_last_patch_snapshot",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "main.py::update_last_patch_snapshot",
+            "lineno": 1200,
+            "end_lineno": 1252,
+            "col_offset": 0,
+            "end_col_offset": 15
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 891,
+        "source": "llm",
+        "active_child_task_id": "task-891-1",
+        "active_child_task_title": "Add dispatch helper for snapshot field resolution in main.py",
+        "active_child_target_file": "main.py"
+      },
+      "anchor": {
+        "target_file": "main.py",
+        "target_symbol": "update_last_patch_snapshot",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "main.py::update_last_patch_snapshot",
+        "lineno": 1200,
+        "end_lineno": 1252,
+        "col_offset": 0,
+        "end_col_offset": 15
+      }
+    },
+    "timestamp": "2026-05-24 18:54:23.037884"
   }
 ]

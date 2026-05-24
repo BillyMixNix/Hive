@@ -39547,22 +39547,20 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function update_current_snapshot in main.py has high cyclomatic complexity (~42 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "active_task_id": 886,
-      "active_plan_id": "plan-886",
-      "active_child_task_id": "task-886-1",
-      "current_child_task_title": "Add snapshot-field dispatch table or named helpers in main.py",
+      "active_goal": "The function update_last_patch_snapshot in main.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 891,
+      "active_plan_id": "plan-891",
+      "active_child_task_id": "task-891-1",
+      "current_child_task_title": "Add dispatch helper for snapshot field resolution in main.py",
       "task_status": "planned",
       "target_file": "main.py",
-      "target_symbol": "update_current_snapshot",
+      "target_symbol": "update_last_patch_snapshot",
       "change_intent": "add_method_or_function",
       "expected_operation": "add_symbol",
       "completion_cues": [
-        "def _build_snapshot_dispatch(",
-        "def _apply_snapshot_field(",
-        "return dispatch"
+        "def _resolve_snapshot_field("
       ],
-      "updated_at": "2026-05-24T18:41:21.706321",
+      "updated_at": "2026-05-24T18:54:23.082362",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
