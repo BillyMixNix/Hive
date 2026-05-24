@@ -528,9 +528,13 @@ def validate_symbol_locked_patch(patch_data, task, selected_block=None):
 
         unrelated_defs = sorted(name for name in changed_defs if name != target_symbol)
         if unrelated_defs:
-            raise ValueError(
-                f"symbol_anchor_drift: patch modifies unrelated symbols {unrelated_defs}; only {target_symbol} may change."
-            )
+            task_tag = (task.get("tag") or task_metadata.get("tag") or "").lower()
+            if task_tag == "complexity" and len(unrelated_defs) == 1:
+                pass  # one new adjacent helper is expected for complexity-reduction tasks
+            else:
+                raise ValueError(
+                    f"symbol_anchor_drift: patch modifies unrelated symbols {unrelated_defs}; only {target_symbol} may change."
+                )
 
     return True
 
