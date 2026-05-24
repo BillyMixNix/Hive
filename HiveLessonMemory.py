@@ -1,8 +1,43 @@
 import json
 import os
+import re
 import tempfile
 import uuid
 from datetime import datetime
+
+# Failure families whose lessons are universal — they apply to any Python
+# codebase, not just Hive's own code.
+_UNIVERSAL_FAMILIES = {
+    "formatting",   # missing PATCH section, empty patch, wrong format
+    "orchestration", # retry exhausted, budget exceeded
+    "doctrine",     # no new methods, in-place rewrite only
+    "runtime",      # rate limits, timeouts, empty responses
+}
+
+# Patterns that indicate a lesson is domain-specific (references a specific
+# file, symbol, or codebase artifact).
+_DOMAIN_HINT_RE = re.compile(
+    r"\b\w+\.py\b"              # specific .py file reference
+    r"|\bsymbol\s+[a-z_]\w+"   # "symbol normalize_command" etc.
+    r"|\bfunction\s+[a-z_]\w+" # "function validate_patch" etc.
+    r"|\bmodify\s+[a-z_]\w+"   # "modify requested symbol X"
+    r"|\bdoes not modify\s+\w+" # anchor drift messages
+, re.IGNORECASE)
+
+
+def _classify_lesson_scope(lesson):
+    """Return 'universal', 'domain', or 'unclassified' for a lesson."""
+    family = (lesson.get("failure_family") or "").split("/")[0].lower()
+    if family in _UNIVERSAL_FAMILIES:
+        return "universal"
+
+    pattern = lesson.get("failure_pattern") or ""
+    reason = lesson.get("failure_reason") or ""
+    combined = f"{pattern} {reason}"
+    if _DOMAIN_HINT_RE.search(combined):
+        return "domain"
+
+    return "unclassified"
 
 
 class LessonMemory:
@@ -60,7 +95,10 @@ class LessonMemory:
             "context_requirements": extra_fields.pop("context_requirements", {}),
             "do_not_apply_when": extra_fields.pop("do_not_apply_when", []),
             "lesson_level": extra_fields.pop("lesson_level", "exact"),
+            "scope": extra_fields.pop("scope", None),
         }
+        if lesson["scope"] is None:
+            lesson["scope"] = _classify_lesson_scope(lesson)
         lesson.update(extra_fields)
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(json.dumps(lesson) + "\n")
@@ -126,6 +164,9 @@ class LessonMemory:
 
         if normalized.get("failure_code") is None and normalized.get("failure_reason") is not None:
             normalized["failure_code"] = normalized["failure_reason"]
+
+        if normalized.get("scope") not in {"universal", "domain", "unclassified"}:
+            normalized["scope"] = _classify_lesson_scope(normalized)
 
         return normalized
 
@@ -565,6 +606,89 @@ class LessonMemory:
                 continue
             filtered.append(lesson)
         return filtered[:limit]
+
+    def get_universal_lessons(self, min_promotion_state="trusted", limit=20):
+        """Return universal-scope lessons at or above the given promotion state.
+
+        These lessons apply to any Python codebase and can be loaded as a
+        portable knowledge base when Hive starts on an unfamiliar project.
+        """
+        rank = {"trusted": 3, "candidate": 2, "raw": 1, "retired": 0}
+        min_rank = rank.get(min_promotion_state, 1)
+        results = []
+        try:
+            with open(self.path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        lesson = self._normalize_lesson_record(json.loads(line))
+                    except Exception:
+                        continue
+                    if lesson.get("scope") != "universal":
+                        continue
+                    if rank.get(lesson.get("promotion_state", "raw"), 0) < min_rank:
+                        continue
+                    results.append(lesson)
+        except Exception:
+            pass
+        results.sort(key=lambda l: (
+            rank.get(l.get("promotion_state", "raw"), 0),
+            l.get("success_after_use", 0),
+        ), reverse=True)
+        return results[:limit]
+
+    def import_universal_lessons(self, source_path):
+        """Copy universal trusted lessons from another project's lesson file.
+
+        Only imports lessons that are universal-scope and at least candidate-rank.
+        Skips duplicates (matched by failure_pattern + retry_instruction).
+        Returns the count of lessons imported.
+        """
+        rank = {"trusted": 3, "candidate": 2, "raw": 1, "retired": 0}
+        source = LessonMemory(path=source_path)
+        incoming = source.get_universal_lessons(min_promotion_state="candidate", limit=100)
+        if not incoming:
+            return 0
+
+        # Build a dedup key set from existing lessons.
+        existing_keys = set()
+        try:
+            with open(self.path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        lesson = json.loads(line)
+                        key = (
+                            (lesson.get("failure_pattern") or "").strip(),
+                            (lesson.get("retry_instruction") or "").strip(),
+                        )
+                        existing_keys.add(key)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        imported = 0
+        with open(self.path, "a", encoding="utf-8") as f:
+            for lesson in incoming:
+                key = (
+                    (lesson.get("failure_pattern") or "").strip(),
+                    (lesson.get("retry_instruction") or "").strip(),
+                )
+                if key in existing_keys:
+                    continue
+                lesson = dict(lesson)
+                lesson["lesson_id"] = str(uuid.uuid4())
+                lesson["scope"] = "universal"
+                lesson["source"] = lesson.get("source", "imported")
+                f.write(json.dumps(lesson) + "\n")
+                existing_keys.add(key)
+                imported += 1
+        return imported
 
     def format_pilot_guardrails_for_prompt(self, lessons):
         if not lessons:

@@ -89,6 +89,9 @@ def has_bad_method_indent(diff_lines):
             continue
 
         indent = len(content) - len(stripped)
+        # Nested functions inside method bodies have indent > 4 — allow them.
+        if indent > 4:
+            continue
         if indent != 4:
             return True
 
@@ -352,6 +355,13 @@ def extract_changed_def_names(patch_text):
         if not stripped.startswith("def "):
             continue
 
+        # Only count top-level or class-level defs (indent <= 4).
+        # Nested functions inside method bodies (indent > 4) are not
+        # independent symbols — they belong to the enclosing method.
+        indent = len(content) - len(stripped)
+        if indent > 4:
+            continue
+
         name = stripped.split("def ", 1)[1].split("(", 1)[0].strip()
         if name:
             changed_defs.add(name)
@@ -518,9 +528,13 @@ def validate_symbol_locked_patch(patch_data, task, selected_block=None):
 
         unrelated_defs = sorted(name for name in changed_defs if name != target_symbol)
         if unrelated_defs:
-            raise ValueError(
-                f"symbol_anchor_drift: patch modifies unrelated symbols {unrelated_defs}; only {target_symbol} may change."
-            )
+            task_tag = (task.get("tag") or task_metadata.get("tag") or "").lower()
+            if task_tag == "complexity" and len(unrelated_defs) == 1:
+                pass  # one new adjacent helper is expected for complexity-reduction tasks
+            else:
+                raise ValueError(
+                    f"symbol_anchor_drift: patch modifies unrelated symbols {unrelated_defs}; only {target_symbol} may change."
+                )
 
     return True
 
