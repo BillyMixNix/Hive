@@ -43732,5 +43732,434 @@
       }
     },
     "timestamp": "2026-05-24 18:10:10.477712"
+  },
+  {
+    "id": 853,
+    "tag": "complexity",
+    "note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "done",
+    "metadata": {
+      "target_file": "executor.py",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 18:10:12.968740"
+  },
+  {
+    "id": 854,
+    "tag": "plan",
+    "note": "Task 853 planned | Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the if-elif chain with a dispatch table | next: Add named helper functions in executor.py that each implement one semantic-validation branch currently inside validate_patch_semantics",
+    "status": "planned",
+    "metadata": {
+      "task_id": 853,
+      "plan_id": "plan-853",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the if-elif chain with a dispatch table",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "validate_patch_semantics",
+        "operation": "extract helpers and dispatch table to reduce branch count",
+        "validation": "validate_patch_semantics body shrinks to a flat dispatch call with no nested if-elif chain; all existing semantic validation paths still reachable",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-853-1",
+            "title": "Extract branch logic into named validator helpers",
+            "description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _validate_semantic_",
+              "return True",
+              "return False"
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "validate_patch_semantics branch logic",
+            "operation": "extract repeated decision branches into named helper functions",
+            "validation": "each extracted helper is independently callable and covers exactly one former branch from validate_patch_semantics",
+            "creates_symbols": [
+              "_validate_semantic_case"
+            ],
+            "wires_into_symbols": [
+              "validate_patch_semantics"
+            ],
+            "insertion_region": "module level near validate_patch_semantics",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "validate_patch_semantics",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "validate_patch_semantics",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+                "lineno": 292,
+                "end_lineno": 433,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+              "lineno": 292,
+              "end_lineno": 433,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 292,
+            "end_lineno": 433,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          {
+            "task_id": "task-853-2",
+            "title": "Replace if-elif chain in validate_patch_semantics with dispatch table",
+            "description": "Rewrite validate_patch_semantics to build a dispatch table mapping each case key to its extracted helper, then resolve and call the matched helper, removing the original if-elif chain and reducing branch count to a single dispatch lookup.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_dispatch = {",
+              "handler = _dispatch.get(",
+              "return handler("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "validate_patch_semantics",
+            "operation": "replace if-elif chain with dispatch table lookup",
+            "validation": "validate_patch_semantics cyclomatic complexity drops below 4 and all former branches still exercise the correct helper via the dispatch table",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "validate_patch_semantics",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "validate_patch_semantics",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+                "lineno": 292,
+                "end_lineno": 433,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+              "lineno": 292,
+              "end_lineno": 433,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 292,
+            "end_lineno": 433,
+            "col_offset": 4,
+            "end_col_offset": 9
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "An extracted helper that silently changes a guard condition or return value could alter validation outcomes without a visible test failure",
+          "Dispatch table key mismatches between the old if-elif conditions and the new keys could silently skip validation branches"
+        ],
+        "next_action": "Add named helper functions in executor.py that each implement one semantic-validation branch currently inside validate_patch_semantics",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 292,
+            "end_lineno": 433,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 853,
+        "source": "llm",
+        "active_child_task_id": "task-853-1",
+        "active_child_task_title": "Extract branch logic into named validator helpers",
+        "active_child_target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 18:10:37.854088"
+  },
+  {
+    "id": 855,
+    "tag": "patch",
+    "note": "Task 853 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 853,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+        "lineno": 292,
+        "end_lineno": 433,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "validate_patch_semantics",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _validate_semantic_",
+        "return True",
+        "return False"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
+        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-853-1",
+        "child_task_title": null,
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:38.032310"
+  },
+  {
+    "id": 856,
+    "tag": "patch",
+    "note": "Task 853 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 853,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+        "lineno": 292,
+        "end_lineno": 433,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "validate_patch_semantics",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _validate_semantic_",
+        "return True",
+        "return False"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
+        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-853-1",
+        "child_task_title": null,
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:38.261711"
+  },
+  {
+    "id": 857,
+    "tag": "patch",
+    "note": "Task 853 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 853,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+        "lineno": 292,
+        "end_lineno": 433,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "validate_patch_semantics",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _validate_semantic_",
+        "return True",
+        "return False"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
+        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-853-1",
+        "child_task_title": null,
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:38.489457"
   }
 ]
