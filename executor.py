@@ -634,11 +634,11 @@ class ExecutorAgent:
                 candidate_text = candidate["candidate_text"]
 
             candidate_tree = ast.parse(candidate_text)
-        except Exception as e:
-            return True, {
-                "reason": "could not build or parse candidate text for structural validation",
-                "error": str(e),
-            }
+        except Exception:
+            # Build or parse failure means the patch itself is broken — that's
+            # caught by the syntax/apply checks elsewhere. Don't report it as
+            # a structural scope violation.
+            return False, None
 
         # Pre-flight: check original file with the same rules.
         # If the original already fails, the allowlist doesn't cover this codebase —
