@@ -33561,5 +33561,454 @@
       }
     },
     "timestamp": "2026-05-24 07:40:51.737448"
+  },
+  {
+    "id": 736,
+    "tag": "self-improvement",
+    "note": "The function _validate_block_against_anchor_span in coder_context.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+    "status": "done",
+    "metadata": {
+      "target_file": "coder_context.py",
+      "anchor": {
+        "target_file": "coder_context.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 07:40:54.795231"
+  },
+  {
+    "id": 737,
+    "tag": "plan",
+    "note": "Task 736 planned | Refactor _validate_block_against_anchor_span to use a fuzzy fallback or soft filter instead of bare raise ValueError | next: Modify the _validate_block_against_anchor_span function in coder_context.py",
+    "status": "planned",
+    "metadata": {
+      "task_id": 736,
+      "plan_id": "plan-736",
+      "plan": {
+        "goal": "Refactor _validate_block_against_anchor_span to use a fuzzy fallback or soft filter instead of bare raise ValueError",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_validate_block_against_anchor_span function",
+        "operation": "modify_existing_logic",
+        "validation": "AST parse and focused smoke check on main.py and coder_context.py",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-736-1",
+            "title": "Replace bare raise ValueError with fuzzy fallback",
+            "description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "coder_context.py",
+            "target_symbol": "_validate_block_against_anchor_span",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_validate_block_against_anchor_span function",
+            "operation": "modify_logic",
+            "validation": "Run focused smoke checks on main.py and coder_context.py to ensure the function behaves as expected with the fuzzy fallback.",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "coder_context.py",
+              "target_symbol": "_validate_block_against_anchor_span",
+              "anchor": {
+                "target_file": "coder_context.py",
+                "target_symbol": "_validate_block_against_anchor_span",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+                "lineno": 256,
+                "end_lineno": 289,
+                "col_offset": 0,
+                "end_col_offset": 13
+              },
+              "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+              "lineno": 256,
+              "end_lineno": 289,
+              "col_offset": 0,
+              "end_col_offset": 13
+            },
+            "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+            "lineno": 256,
+            "end_lineno": 289,
+            "col_offset": 0,
+            "end_col_offset": 13
+          }
+        ],
+        "dependencies": [
+          "coder_context.py"
+        ],
+        "risks": [
+          "Possible loss of strict validation, need to ensure fuzzy fallback maintains correctness"
+        ],
+        "next_action": "Modify the _validate_block_against_anchor_span function in coder_context.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "coder_context.py",
+            "target_symbol": "_validate_block_against_anchor_span",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+            "lineno": 256,
+            "end_lineno": 289,
+            "col_offset": 0,
+            "end_col_offset": 13
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 736,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "coder_context.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 07:42:12.229348"
+  },
+  {
+    "id": 738,
+    "tag": "patch",
+    "note": "Task 736 patch blocked | coder_context.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 736,
+      "target_file": "coder_context.py",
+      "change_type": "diff_patch",
+      "patch": "--- coder_context.py\n+++ coder_context.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_block_against_anchor_span",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+      "plan_id": "plan-736",
+      "patch_id": "patch-736",
+      "anchor": {
+        "target_file": "coder_context.py",
+        "target_symbol": "_validate_block_against_anchor_span",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+        "lineno": 256,
+        "end_lineno": 289,
+        "col_offset": 0,
+        "end_col_offset": 13
+      },
+      "task_type": null,
+      "task_note": "The function _validate_block_against_anchor_span in coder_context.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-736-1",
+      "child_task_description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+      "child_target_file": "coder_context.py",
+      "child_target_symbol": "_validate_block_against_anchor_span",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-736",
+        "task_id": 736,
+        "plan_id": "plan-736",
+        "task_note": "The function _validate_block_against_anchor_span in coder_context.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-736-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+        "target_file": "coder_context.py",
+        "target_symbol": "_validate_block_against_anchor_span",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_block_against_anchor_span",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- coder_context.py\n+++ coder_context.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 07:47:26.219178"
+  },
+  {
+    "id": 739,
+    "tag": "patch",
+    "note": "Task 736 patch pending_pilot_review | coder_context.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "coder_context.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+      "patch": "--- coder_context.py\n+++ coder_context.py\n@@ -256,13 +256,19 @@ def _validate_block_against_anchor_span(selected_block, anchor_span, anchored_sym\n         and selected_block.get(\"lineno\") == anchor_span.get(\"lineno\")\n         and selected_block.get(\"end_lineno\") == anchor_span.get(\"end_lineno\")\n     ):\n-        return block\n+        return block\n\n-    return None\n+    # Fuzzy fallback mechanism\n+    if block.get(\"lineno\") in range(anchor_span.get(\"lineno\") - 1, anchor_span.get(\"lineno\") + 2) and \\\n+       block.get(\"end_lineno\") in range(anchor_span.get(\"end_lineno\") - 1, anchor_span.get(\"end_lineno\") + 2):\n+        return block\n+\n+    return None",
+      "task_id": 736,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_validate_block_against_anchor_span",
+      "context_window": [
+        247,
+        297
+      ],
+      "context_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2273,
+        "trimmed_context_length": 2273,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 256,
+        "end_lineno": 289,
+        "col_offset": 0,
+        "end_col_offset": 13
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "coder_context.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmplmd539g3\\coder_context.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch is localized, minimal, and directly addresses the issue by adding a fuzzy fallback mechanism to an existing method without introducing new logic or breaking method boundaries.",
+        "confidence": 0.9,
+        "next_step": "Run focused smoke checks on main.py and coder_context.py to ensure the function behaves as expected with the fuzzy fallback.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-736",
+      "patch_id": "patch-736",
+      "anchor": {
+        "target_file": "coder_context.py",
+        "target_symbol": "_validate_block_against_anchor_span",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+        "lineno": 256,
+        "end_lineno": 289,
+        "col_offset": 0,
+        "end_col_offset": 13
+      },
+      "task_type": null,
+      "task_note": "The function _validate_block_against_anchor_span in coder_context.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-736-1",
+      "child_task_description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+      "child_target_file": "coder_context.py",
+      "child_target_symbol": "_validate_block_against_anchor_span",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-736",
+        "task_id": 736,
+        "plan_id": "plan-736",
+        "task_note": "The function _validate_block_against_anchor_span in coder_context.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-736-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+        "target_file": "coder_context.py",
+        "target_symbol": "_validate_block_against_anchor_span",
+        "coder_reason": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "The patch is localized, minimal, and directly addresses the issue by adding a fuzzy fallback mechanism to an existing method without introducing new logic or breaking method boundaries.",
+        "reflector_next_step": "Run focused smoke checks on main.py and coder_context.py to ensure the function behaves as expected with the fuzzy fallback.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 7,
+          "deletions": 2
+        },
+        "patch_excerpt": "--- coder_context.py\n+++ coder_context.py\n@@ -256,13 +256,19 @@ def _validate_block_against_anchor_span(selected_block, anchor_span, anchored_sym\n         and selected_block.get(\"lineno\") == anchor_span.get(\"lineno\")\n         and selected_block.get(\"end_lineno\") == anchor_span.get(\"end_lineno\")\n     ):\n-        return block\n+        return block\n\n-    return None\n+    # Fuzzy fallback mechanism\n+    if block.get(\"lineno\") in range(anchor_span.get(\"lineno\") - 1, anchor_span.get(\"lineno\") + 2) and \\\n+       block.get(\"end_lineno\") in range(anchor_span.get(\"end_lineno\") - 1, anchor_span.get(\"end_lineno\") + 2):\n+        return block\n+\n+    return None",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 07:50:27.868496"
+  },
+  {
+    "id": 740,
+    "tag": "plan",
+    "note": "Task 736 plan updated | Refactor _validate_block_against_anchor_span to use a fuzzy fallback or soft filter instead of bare raise ValueError",
+    "status": "planned",
+    "metadata": {
+      "task_id": 736,
+      "plan_id": "plan-736",
+      "plan": {
+        "goal": "Refactor _validate_block_against_anchor_span to use a fuzzy fallback or soft filter instead of bare raise ValueError",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_validate_block_against_anchor_span function",
+        "operation": "modify_existing_logic",
+        "validation": "AST parse and focused smoke check on main.py and coder_context.py",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-736-1",
+            "title": "Replace bare raise ValueError with fuzzy fallback",
+            "description": "Modify the _validate_block_against_anchor_span function to include a fuzzy fallback mechanism instead of raising a bare ValueError.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "coder_context.py",
+            "target_symbol": "_validate_block_against_anchor_span",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_validate_block_against_anchor_span function",
+            "operation": "modify_logic",
+            "validation": "Run focused smoke checks on main.py and coder_context.py to ensure the function behaves as expected with the fuzzy fallback.",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "coder_context.py",
+              "target_symbol": "_validate_block_against_anchor_span",
+              "anchor": {
+                "target_file": "coder_context.py",
+                "target_symbol": "_validate_block_against_anchor_span",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+                "lineno": 256,
+                "end_lineno": 289,
+                "col_offset": 0,
+                "end_col_offset": 13
+              },
+              "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+              "lineno": 256,
+              "end_lineno": 289,
+              "col_offset": 0,
+              "end_col_offset": 13
+            },
+            "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+            "lineno": 256,
+            "end_lineno": 289,
+            "col_offset": 0,
+            "end_col_offset": 13
+          }
+        ],
+        "dependencies": [
+          "coder_context.py"
+        ],
+        "risks": [
+          "Possible loss of strict validation, need to ensure fuzzy fallback maintains correctness"
+        ],
+        "next_action": "Modify the _validate_block_against_anchor_span function in coder_context.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "coder_context.py",
+            "target_symbol": "_validate_block_against_anchor_span",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "coder_context.py::_validate_block_against_anchor_span",
+            "lineno": 256,
+            "end_lineno": 289,
+            "col_offset": 0,
+            "end_col_offset": 13
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 736,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-24 07:50:29.450172"
   }
 ]
