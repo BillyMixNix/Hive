@@ -22517,65 +22517,6 @@
         "work_ontology.py": []
       },
       "file_imported_by": {
-        "executor.py": [
-          "benchmark_harness.py",
-          "router.py",
-          "codex_runner.py",
-          "intent_detector.py",
-          "stress_runner.py",
-          "integration_harness.py",
-          "test_executor.py",
-          "test_phase1_live_benchmark.py"
-        ],
-        "HiveLessonMemory.py": [
-          "benchmark_harness.py",
-          "coder.py",
-          "main.py",
-          "planner.py",
-          "hive_runner.py",
-          "test_lesson_routing.py",
-          "test_phase1_live_benchmark.py",
-          "test_phase1_stability.py",
-          "test_pilot_review_gate.py"
-        ],
-        "failure_intelligence.py": [
-          "benchmark_harness.py",
-          "coder.py",
-          "main.py",
-          "test_coder_retries.py",
-          "test_failure_intelligence.py",
-          "test_phase1_live_benchmark.py",
-          "test_phase1_stability.py",
-          "test_phase2_context_discipline.py"
-        ],
-        "coder.py": [
-          "benchmark_harness.py",
-          "router.py",
-          "test_block_rewrite_minimality.py",
-          "test_coder_retries.py",
-          "test_hard_anchor_enforcement.py",
-          "test_phase1_live_benchmark.py",
-          "test_phase2_context_discipline.py",
-          "test_pilot_review_gate.py"
-        ],
-        "coder_block_ops.py": [
-          "benchmark_harness.py",
-          "coder.py",
-          "test_block_rewrite_minimality.py",
-          "test_phase1_stability.py"
-        ],
-        "benchmark_pack.py": [
-          "benchmark_harness.py",
-          "test_reliability_benchmark_harness.py"
-        ],
-        "coder_context.py": [
-          "benchmark_harness.py",
-          "coder.py",
-          "coder_block_ops.py",
-          "coder_prompting.py",
-          "test_phase1_stability.py",
-          "test_phase2_context_discipline.py"
-        ],
         "coder_prompting.py": [
           "benchmark_harness.py",
           "coder.py",
@@ -22588,15 +22529,30 @@
           "test_phase2_context_discipline.py",
           "test_pilot_intent_loop.py"
         ],
-        "planner.py": [
+        "HiveLessonMemory.py": [
           "benchmark_harness.py",
-          "router.py",
+          "coder.py",
+          "main.py",
+          "planner.py",
+          "hive_runner.py",
+          "test_lesson_routing.py",
           "test_phase1_live_benchmark.py",
           "test_phase1_stability.py",
-          "test_pilot_intent_loop.py",
-          "test_planner_anchor_canonicalization.py",
-          "test_planner_completion_cues.py",
-          "test_planner_intent_fuzzy.py"
+          "test_pilot_review_gate.py"
+        ],
+        "coder_block_ops.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "test_block_rewrite_minimality.py",
+          "test_phase1_stability.py"
+        ],
+        "coder_context.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "coder_block_ops.py",
+          "coder_prompting.py",
+          "test_phase1_stability.py",
+          "test_phase2_context_discipline.py"
         ],
         "reflector.py": [
           "benchmark_harness.py",
@@ -22615,6 +22571,50 @@
           "test_phase2_context_discipline.py",
           "test_state_manager_disk_sync.py"
         ],
+        "failure_intelligence.py": [
+          "benchmark_harness.py",
+          "coder.py",
+          "main.py",
+          "test_coder_retries.py",
+          "test_failure_intelligence.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase1_stability.py",
+          "test_phase2_context_discipline.py"
+        ],
+        "planner.py": [
+          "benchmark_harness.py",
+          "router.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase1_stability.py",
+          "test_pilot_intent_loop.py",
+          "test_planner_anchor_canonicalization.py",
+          "test_planner_completion_cues.py",
+          "test_planner_intent_fuzzy.py"
+        ],
+        "benchmark_pack.py": [
+          "benchmark_harness.py",
+          "test_reliability_benchmark_harness.py"
+        ],
+        "executor.py": [
+          "benchmark_harness.py",
+          "router.py",
+          "codex_runner.py",
+          "intent_detector.py",
+          "stress_runner.py",
+          "integration_harness.py",
+          "test_executor.py",
+          "test_phase1_live_benchmark.py"
+        ],
+        "coder.py": [
+          "benchmark_harness.py",
+          "router.py",
+          "test_block_rewrite_minimality.py",
+          "test_coder_retries.py",
+          "test_hard_anchor_enforcement.py",
+          "test_phase1_live_benchmark.py",
+          "test_phase2_context_discipline.py",
+          "test_pilot_review_gate.py"
+        ],
         "work_ontology.py": [
           "builder.py",
           "coder.py",
@@ -22626,21 +22626,6 @@
           "planner.py",
           "test_work_ontology.py"
         ],
-        "coder_constraints.py": [
-          "coder.py",
-          "coder_block_ops.py",
-          "coder_prompting.py"
-        ],
-        "coder_failures.py": [
-          "coder.py",
-          "failure_intelligence.py"
-        ],
-        "coder_validation.py": [
-          "coder.py",
-          "test_comment_only_tasks.py",
-          "test_hard_anchor_enforcement.py",
-          "test_phase1_stability.py"
-        ],
         "hive_llm.py": [
           "coder.py",
           "planner.py",
@@ -22648,6 +22633,21 @@
           "check_llm.py",
           "packet_experiment.py",
           "conftest.py"
+        ],
+        "coder_failures.py": [
+          "coder.py",
+          "failure_intelligence.py"
+        ],
+        "coder_constraints.py": [
+          "coder.py",
+          "coder_block_ops.py",
+          "coder_prompting.py"
+        ],
+        "coder_validation.py": [
+          "coder.py",
+          "test_comment_only_tasks.py",
+          "test_hard_anchor_enforcement.py",
+          "test_phase1_stability.py"
         ],
         "builder.py": [
           "coder_prompting.py",
@@ -22680,23 +22680,26 @@
           "planner.py",
           "test_pilot_intent_loop.py"
         ],
+        "interface.py": [
+          "main.py",
+          "test_pilot_intent_loop.py",
+          "test_pilot_review_gate.py"
+        ],
         "HiveMemoryAgent.py": [
           "main.py",
           "run_memes.py",
-          "hive_runner.py"
-        ],
-        "router.py": [
-          "main.py",
           "hive_runner.py"
         ],
         "code_domain.py": [
           "main.py",
           "test_adversarial_agent_run.py"
         ],
-        "interface.py": [
+        "router.py": [
           "main.py",
-          "test_pilot_intent_loop.py",
-          "test_pilot_review_gate.py"
+          "hive_runner.py"
+        ],
+        "planner_prompt.py": [
+          "planner.py"
         ],
         "main.py": [
           "planner.py",
@@ -22704,9 +22707,6 @@
           "test_pilot_intent_loop.py",
           "test_pilot_review_gate.py",
           "test_planner_anchor_canonicalization.py"
-        ],
-        "planner_prompt.py": [
-          "planner.py"
         ],
         "reflector_prompt.py": [
           "reflector.py"
@@ -22721,51 +22721,51 @@
         "benchmark_harness.py": [
           "test_reliability_benchmark_harness.py"
         ],
-        "fuzzer_patch_generator.py": [],
-        "stress_runner.py": [],
-        "test_pilot_intent_loop.py": [],
-        "test_work_ontology.py": [],
-        "test_coder_retries.py": [],
-        "hive_gui.py": [],
-        "run_memes.py": [],
-        "ci_gate.py": [],
-        "packet_experiment.py": [],
-        "task_ranker.py": [],
-        "test_hive_agent_feedback_real.py": [],
-        "test_state_manager_disk_sync.py": [],
-        "intent_detector.py": [],
         "adversarial_task_generator.py": [],
-        "task_scanner.py": [],
-        "create_tmp_dirs.py": [],
-        "test_block_rewrite_minimality.py": [],
-        "test_comment_only_tasks.py": [],
-        "test_lesson_routing.py": [],
-        "test_phase2_context_discipline.py": [],
-        "lesson_loader.py": [],
-        "test_hard_anchor_enforcement.py": [],
-        "codex_runner.py": [],
-        "check_llm.py": [],
-        "test_reliability_benchmark_harness.py": [],
-        "generate_repo_map.py": [],
-        "metrics.py": [],
-        "test_executor.py": [],
         "test_phase1_live_benchmark.py": [],
-        "test_pilot_review_gate.py": [],
-        "test_repo_map.py": [],
-        "hive_runner.py": [],
-        "test_planner_intent_fuzzy.py": [],
-        "task_generator.py": [],
-        "test_adversarial_agent_run.py": [],
+        "test_comment_only_tasks.py": [],
+        "test_coder_retries.py": [],
+        "lesson_loader.py": [],
+        "fuzzer_patch_generator.py": [],
+        "metrics.py": [],
+        "task_ranker.py": [],
         "integration_harness.py": [],
-        "hive_cockpit.py": [],
-        "test_phase1_stability.py": [],
-        "test_context_budgeting.py": [],
-        "test_reflector.py": [],
-        "test_failure_intelligence.py": [],
         "test_planner_completion_cues.py": [],
+        "test_state_manager_disk_sync.py": [],
+        "test_planner_intent_fuzzy.py": [],
+        "hive_gui.py": [],
+        "task_generator.py": [],
+        "conftest.py": [],
+        "test_reliability_benchmark_harness.py": [],
+        "check_llm.py": [],
+        "codex_runner.py": [],
+        "create_tmp_dirs.py": [],
+        "stress_runner.py": [],
+        "test_adversarial_agent_run.py": [],
+        "test_context_budgeting.py": [],
+        "test_phase1_stability.py": [],
+        "hive_cockpit.py": [],
+        "intent_detector.py": [],
+        "test_pilot_review_gate.py": [],
+        "test_failure_intelligence.py": [],
+        "test_phase2_context_discipline.py": [],
         "test_math_research_agents.py": [],
-        "test_planner_anchor_canonicalization.py": [],
-        "conftest.py": []
+        "test_hard_anchor_enforcement.py": [],
+        "ci_gate.py": [],
+        "test_executor.py": [],
+        "test_reflector.py": [],
+        "task_scanner.py": [],
+        "generate_repo_map.py": [],
+        "hive_runner.py": [],
+        "test_hive_agent_feedback_real.py": [],
+        "test_block_rewrite_minimality.py": [],
+        "run_memes.py": [],
+        "packet_experiment.py": [],
+        "test_lesson_routing.py": [],
+        "test_repo_map.py": [],
+        "test_work_ontology.py": [],
+        "test_pilot_intent_loop.py": [],
+        "test_planner_anchor_canonicalization.py": []
       },
       "symbol_references": {
         "get_anchor_span_data": [
@@ -38481,7 +38481,7 @@
         }
       }
     },
-    "updated_at": "2026-05-24T10:34:34.624328"
+    "updated_at": "2026-05-24T21:28:45.093564"
   },
   "file_state": {
     "router.py": {
@@ -39706,7 +39706,7 @@
           "timestamp": "2026-05-24T03:30:26.440269"
         }
       ],
-      "updated_at": "2026-05-24T10:34:33.299270"
+      "updated_at": "2026-05-24T21:28:45.105037"
     },
     "system": {
       "repo_loaded": true,
@@ -39714,7 +39714,7 @@
       "known_symbols_count": 941,
       "active_route": "plan_task",
       "active_mode": null,
-      "updated_at": "2026-05-24T10:34:34.624346"
+      "updated_at": "2026-05-24T21:28:45.093590"
     }
   }
 }
