@@ -8618,7 +8618,7 @@
           "file": "reflector.py",
           "symbol": "Reflector",
           "lineno": 64,
-          "end_lineno": 192,
+          "end_lineno": 195,
           "col_offset": 0,
           "end_col_offset": 9,
           "type": "class"
@@ -8638,7 +8638,7 @@
           "file": "reflector.py",
           "symbol": "_validate_reflection",
           "lineno": 92,
-          "end_lineno": 108,
+          "end_lineno": 111,
           "col_offset": 4,
           "end_col_offset": 25,
           "type": "method"
@@ -8647,8 +8647,8 @@
           "symbol_id": "reflector.py::Reflector.evaluate",
           "file": "reflector.py",
           "symbol": "evaluate",
-          "lineno": 110,
-          "end_lineno": 184,
+          "lineno": 113,
+          "end_lineno": 187,
           "col_offset": 4,
           "end_col_offset": 13,
           "type": "method"
@@ -8657,8 +8657,8 @@
           "symbol_id": "reflector.py::Reflector.format_summary",
           "file": "reflector.py",
           "symbol": "format_summary",
-          "lineno": 186,
-          "end_lineno": 192,
+          "lineno": 189,
+          "end_lineno": 195,
           "col_offset": 4,
           "end_col_offset": 9,
           "type": "method"
@@ -18520,7 +18520,7 @@
           "file": "reflector.py",
           "symbol": "Reflector",
           "lineno": 64,
-          "end_lineno": 192,
+          "end_lineno": 195,
           "col_offset": 0,
           "end_col_offset": 9,
           "type": "class"
@@ -18560,7 +18560,7 @@
           "file": "reflector.py",
           "symbol": "_validate_reflection",
           "lineno": 92,
-          "end_lineno": 108,
+          "end_lineno": 111,
           "col_offset": 4,
           "end_col_offset": 25,
           "type": "method"
@@ -18569,8 +18569,8 @@
           "symbol_id": "reflector.py::Reflector.evaluate",
           "file": "reflector.py",
           "symbol": "evaluate",
-          "lineno": 110,
-          "end_lineno": 184,
+          "lineno": 113,
+          "end_lineno": 187,
           "col_offset": 4,
           "end_col_offset": 13,
           "type": "method"
@@ -18579,8 +18579,8 @@
           "symbol_id": "reflector.py::Reflector.format_summary",
           "file": "reflector.py",
           "symbol": "format_summary",
-          "lineno": 186,
-          "end_lineno": 192,
+          "lineno": 189,
+          "end_lineno": 195,
           "col_offset": 4,
           "end_col_offset": 9,
           "type": "method"
@@ -33659,8 +33659,8 @@
         },
         "reflector.py": {
           "file": "reflector.py",
-          "char_count": 7601,
-          "line_count": 192,
+          "char_count": 7720,
+          "line_count": 195,
           "symbol_count": 9,
           "symbol_inventory": [
             {
@@ -33682,7 +33682,7 @@
               "symbol_id": "reflector.py::Reflector",
               "type": "class",
               "lineno": 64,
-              "end_lineno": 192
+              "end_lineno": 195
             },
             {
               "symbol": "_build_prompt",
@@ -33710,21 +33710,21 @@
               "symbol_id": "reflector.py::Reflector._validate_reflection",
               "type": "method",
               "lineno": 92,
-              "end_lineno": 108
+              "end_lineno": 111
             },
             {
               "symbol": "evaluate",
               "symbol_id": "reflector.py::Reflector.evaluate",
               "type": "method",
-              "lineno": 110,
-              "end_lineno": 184
+              "lineno": 113,
+              "end_lineno": 187
             },
             {
               "symbol": "format_summary",
               "symbol_id": "reflector.py::Reflector.format_summary",
               "type": "method",
-              "lineno": 186,
-              "end_lineno": 192
+              "lineno": 189,
+              "end_lineno": 195
             }
           ],
           "import_summary": [
@@ -33737,14 +33737,14 @@
               "symbol_id": "reflector.py::Reflector",
               "type": "class",
               "lineno": 64,
-              "end_lineno": 192
+              "end_lineno": 195
             },
             {
               "symbol": "evaluate",
               "symbol_id": "reflector.py::Reflector.evaluate",
               "type": "method",
-              "lineno": 110,
-              "end_lineno": 184
+              "lineno": 113,
+              "end_lineno": 187
             },
             {
               "symbol": "_load_code_lessons",
@@ -33765,7 +33765,7 @@
               "symbol_id": "reflector.py::Reflector._validate_reflection",
               "type": "method",
               "lineno": 92,
-              "end_lineno": 108
+              "end_lineno": 111
             },
             {
               "symbol": "_build_prompt",
@@ -38481,7 +38481,7 @@
         }
       }
     },
-    "updated_at": "2026-05-24T10:17:25.956648"
+    "updated_at": "2026-05-24T10:34:34.624328"
   },
   "file_state": {
     "router.py": {
@@ -38595,6 +38595,14 @@
       "last_patch_id": null,
       "updated_at": "2026-05-24T08:00:51.388918",
       "previous_source": null
+    },
+    "reflector.py": {
+      "target_file": "reflector.py",
+      "content": "from hive_llm import ask_hive\nimport json\n\nfrom reflector_prompt import REFLECTOR_PROMPT_TEMPLATE\n\n\ndef _load_math_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent math failure lessons from math_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"math_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior math failure lessons (do not repeat these strategies):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed at: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\ndef _load_code_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent code strategy failure lessons from code_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"code_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior code strategy failures (do not repeat these):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - [{lesson.get('agent','?')}] \"\n                    f\"Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\nclass Reflector:\n    def _build_prompt(self, output_text, pilot_guardrails=\"No relevant pilot guardrails.\", math_lessons=\"\"):\n        prompt = REFLECTOR_PROMPT_TEMPLATE.format(\n            output=output_text,\n            pilot_guardrails=pilot_guardrails,\n        )\n        if math_lessons:\n            prompt = prompt + f\"\\n\\n{math_lessons}\"\n        return prompt\n\n    def _stringify_output(self, output):\n        if isinstance(output, str):\n            return output\n\n        try:\n            return json.dumps(output, ensure_ascii=False)\n        except TypeError:\n            return str(output)\n\n    def _extract_json_object(self, raw_response):\n        start = raw_response.find(\"{\")\n        end = raw_response.rfind(\"}\")\n\n        if start == -1 or end == -1 or end < start:\n            raise ValueError(\"No JSON object found in model response.\")\n\n        return raw_response[start:end + 1]\n\n    def _validate_reflection(self, reflection):\n        required_fields = [\"reflection\", \"confidence\", \"next_step\", \"verdict\"]\n\n        for field in required_fields:\n            if field not in reflection:\n                raise ValueError(f\"Missing field in model response: {field}\")\n\n        confidence = reflection[\"confidence\"]\n        if not isinstance(confidence, (int, float)):\n            try:\n                confidence = float(confidence)\n            except (ValueError, TypeError):\n                raise ValueError(\"confidence must be numeric.\") from e\n        reflection[\"confidence\"] = max(0.0, min(1.0, float(confidence)))\n\n        verdict = reflection[\"verdict\"]\n        if verdict not in {\"accept\", \"revise\", \"reject\"}:\n            raise ValueError(\"verdict must be one of: accept, revise, reject\")\n\n        return reflection\n\n    def evaluate(self, output, task=None, plan=None, pilot_guardrails=None):\n        \"\"\"\n        Evaluate Hive output safely and consistently.\n\n        Handles patches, plans, errors, and unexpected types without crashing.\n        Injects prior math failure lessons when evaluating mathematical output.\n        \"\"\"\n        try:\n            payload = output\n            if task is not None or plan is not None or pilot_guardrails is not None:\n                payload = {\n                    \"output\": output,\n                    \"task\": task,\n                    \"plan\": plan,\n                    \"pilot_guardrails\": pilot_guardrails or [],\n                }\n\n            output_text = self._stringify_output(payload)\n            guardrail_text = \"No relevant pilot guardrails.\"\n            if isinstance(pilot_guardrails, list) and pilot_guardrails:\n                lines = []\n                for i, lesson in enumerate(pilot_guardrails, start=1):\n                    category = lesson.get(\"guidance_category\") or lesson.get(\"failure_code\") or \"pilot_guardrail\"\n                    text = lesson.get(\"guardrail_text\") or lesson.get(\"retry_instruction\") or lesson.get(\"failure_reason\") or \"\"\n                    lines.append(f\"{i}. [{category}] {text}\".strip())\n                guardrail_text = \"\\n\".join(lines) if lines else guardrail_text\n\n            if \"placeholder\" in output_text.lower():\n                return {\n                    \"reflection\": \"Placeholder patch detected\",\n                    \"confidence\": 0.0,\n                    \"next_step\": \"Remove placeholder logic and try again.\",\n                    \"verdict\": \"reject\",\n                }\n\n            # Inject math lessons when output is mathematical in nature\n            math_lessons = \"\"\n            math_signals = (\"conjecture\", \"stopping time\", \"collatz\", \"trajectory\",\n                            \"modular\", \"symbolic\", \"syracuse\", \"E[T\", \"gap\")\n            if any(sig in output_text.lower() for sig in math_signals):\n                math_lessons = _load_math_lessons()\n\n            # Inject code lessons when output is about code hypotheses or strategies\n            code_lessons = \"\"\n            code_signals = (\"hypothesis\", \"complexity\", \"O(n\", \"benchmark\", \"profil\",\n                            \"boundary\", \"invariant\", \"regression\", \"adversarial test\",\n                            \"architecture trace\", \"nested loop\", \"call graph\")\n            if any(sig in output_text.lower() for sig in code_signals):\n                code_lessons = _load_code_lessons()\n\n            combined_lessons = \"\\n\\n\".join(\n                x for x in [math_lessons, code_lessons] if x\n            )\n\n            prompt = self._build_prompt(\n                output_text,\n                pilot_guardrails=guardrail_text,\n                math_lessons=combined_lessons,\n            )\n            raw_response = ask_hive(prompt, role=\"reflector\").strip()\n            json_text = self._extract_json_object(raw_response)\n            reflection = json.loads(json_text)\n\n            if not isinstance(reflection, dict):\n                raise ValueError(\"Reflection response must be a JSON object.\")\n\n            return self._validate_reflection(reflection)\n\n        except Exception as e:\n            return {\n                \"reflection\": f\"Reflection unavailable: {e}\",\n                \"confidence\": 0.4,\n                \"next_step\": \"Pilot review recommended. Check for scope drift, duplicated logic, or malformed model output.\",\n                \"verdict\": \"revise\",\n            }\n\n    def format_summary(self, reflection):\n        return (\n            f\"Reflection: {reflection['reflection']}\\n\"\n            f\"Confidence: {reflection['confidence']:.2f}\\n\"\n            f\"Next Step: {reflection['next_step']}\\n\"\n            f\"Verdict: {reflection['verdict']}\"\n        )\n",
+      "source": "applied_patch",
+      "last_patch_id": 841,
+      "updated_at": "2026-05-24T10:34:33.398006",
+      "previous_source": "disk"
     }
   },
   "patch_history": {
@@ -39243,44 +39251,58 @@
         "patch_id": null,
         "content": "import os\nimport requests\nimport time\n\nOLLAMA_URL = \"http://localhost:11434/api/generate\"\n\n# Default model used by Hive\nDEFAULT_MODEL = \"qwen2.5-coder:7b\"\nCLAUDE_MODEL = \"claude-opus-4-7\"\n\n# Retry configuration\n_MAX_RETRIES = 3\n_RETRY_BASE_WAIT = 2  # seconds \u2014 doubles each attempt: 2, 4, 8\n\n# ---------------------------------------------------------------------------\n# Role-aware model routing\n#\n# Roles listed in CLAUDE_ROLES are sent to the Claude API when\n# ANTHROPIC_API_KEY is set in the environment; all others use Ollama.\n# Passing model= explicitly bypasses this routing entirely.\n# ---------------------------------------------------------------------------\n\nCLAUDE_ROLES = {\"reflector\", \"math\", \"strategic\", \"planner\", \"coder\"}\n\n# Per-role Claude model overrides.\n# Planner and coder use Sonnet (5x cheaper, sufficient for code tasks).\n# Reflector, math, strategic keep Opus for quality of judgment.\nCLAUDE_ROLE_MODEL = {\n    \"planner\":   \"claude-sonnet-4-6\",\n    \"coder\":     \"claude-sonnet-4-6\",\n    \"reflector\": \"claude-opus-4-7\",\n    \"math\":      \"claude-opus-4-7\",\n    \"strategic\": \"claude-opus-4-7\",\n}\n\nROLE_MODEL = {\n    \"coder\":      DEFAULT_MODEL,\n    \"planner\":    DEFAULT_MODEL,\n    \"reflector\":  DEFAULT_MODEL,\n    \"builder\":    DEFAULT_MODEL,\n    \"math\":       DEFAULT_MODEL,\n    \"strategic\":  DEFAULT_MODEL,\n    \"default\":    DEFAULT_MODEL,\n}\n\nROLE_TIMEOUT = {\n    \"coder\":      180,  # patch generation needs more time\n    \"planner\":    120,\n    \"reflector\":  120,\n    \"builder\":    120,\n    \"math\":       240,  # symbolic/formal work can be slow\n    \"strategic\":  180,\n    \"default\":    120,\n}\n\n\ndef _ask_claude(prompt, system=None, model=None, timeout=120):\n    \"\"\"\n    Call Claude API for roles that benefit from stronger reasoning.\n\n    system: stable system-prompt text; cached with ephemeral cache_control\n            so repeated calls with the same system don't re-bill full tokens.\n    \"\"\"\n    try:\n        import anthropic\n    except ImportError:\n        raise RuntimeError(\"anthropic package not installed. Run: pip install anthropic\")\n\n    resolved_model = model or CLAUDE_MODEL\n    print(f\"[LLM] Sending request to Claude ({resolved_model})\")\n    print(f\"[LLM] Prompt length: {len(prompt)} chars\")\n\n    client = anthropic.Anthropic(timeout=float(timeout))\n    start = time.time()\n\n    kwargs = {\n        \"model\": resolved_model,\n        \"max_tokens\": 4096,\n        \"thinking\": {\"type\": \"adaptive\"},\n        \"messages\": [{\"role\": \"user\", \"content\": prompt}],\n    }\n\n    if system:\n        kwargs[\"system\"] = [\n            {\n                \"type\": \"text\",\n                \"text\": system,\n                \"cache_control\": {\"type\": \"ephemeral\"},\n            }\n        ]\n\n    response = client.messages.create(**kwargs)\n    elapsed = time.time() - start\n\n    text = next(\n        (block.text for block in response.content if hasattr(block, \"text\")),\n        \"\",\n    )\n    print(f\"[LLM] Claude response received in {elapsed:.2f}s, {len(text)} chars\")\n    return text\n\n\ndef ask_hive(prompt, role=\"default\", timeout=None, model=None, system=None):\n    \"\"\"\n    Role-aware LLM interface for all Hive agents.\n\n    Use this instead of ask_model() for new code.\n    Existing ask_model() calls continue to work unchanged.\n\n    role:    'coder' | 'planner' | 'reflector' | 'math' | 'strategic' | 'default'\n    timeout: override default role timeout\n    model:   override role model entirely (bypasses Claude routing)\n    system:  stable system-prompt for Claude roles; cached to save tokens\n    \"\"\"\n    resolved_timeout = timeout or ROLE_TIMEOUT.get(role, 120)\n\n    # Route to Claude when the role calls for it and the API key is available.\n    # An explicit model= override skips this path so callers can force Ollama.\n    if model is None and role in CLAUDE_ROLES and os.environ.get(\"ANTHROPIC_API_KEY\"):\n        claude_model = CLAUDE_ROLE_MODEL.get(role, CLAUDE_MODEL)\n        return _ask_claude(prompt, system=system, model=claude_model, timeout=resolved_timeout)\n\n    resolved_model = model or ROLE_MODEL.get(role, DEFAULT_MODEL)\n    return ask_model(prompt, model=resolved_model, timeout=resolved_timeout)\n\n\ndef ask_model(prompt, model=None, timeout=120):\n    model = model or DEFAULT_MODEL\n\n    print(f\"[LLM] Sending request to {model}\")\n    print(f\"[LLM] Prompt length: {len(prompt)} chars\")\n\n    last_error = None\n\n    for attempt in range(_MAX_RETRIES):\n        if attempt > 0:\n            wait = _RETRY_BASE_WAIT * (2 ** (attempt - 1))\n            print(f\"[LLM] Retry {attempt}/{_MAX_RETRIES - 1} after {wait}s wait...\")\n            time.sleep(wait)\n\n        start = time.time()\n\n        try:\n            response = requests.post(\n                OLLAMA_URL,\n                json={\n                    \"model\": model,\n                    \"prompt\": prompt,\n                    \"stream\": False,\n                },\n                timeout=timeout,\n            )\n\n            elapsed = time.time() - start\n            print(f\"[LLM] Response received in {elapsed:.2f}s with status {response.status_code}\")\n\n            response.raise_for_status()\n            data = response.json()\n\n            if \"response\" not in data:\n                raise ValueError(f\"Ollama response missing 'response': {data}\")\n\n            print(f\"[LLM] Model output length: {len(data['response'])} chars\")\n            return data[\"response\"]\n\n        except requests.exceptions.Timeout as e:\n            last_error = TimeoutError(f\"Ollama request timed out after {timeout} seconds.\")\n            print(f\"[LLM] Timeout on attempt {attempt + 1}/{_MAX_RETRIES}\")\n\n        except requests.exceptions.RequestException as e:\n            last_error = RuntimeError(f\"Ollama request failed: {e}\")\n            print(f\"[LLM] Request error on attempt {attempt + 1}/{_MAX_RETRIES}: {e}\")\n\n    raise last_error or RuntimeError(f\"ask_model failed after {_MAX_RETRIES} attempts.\")"
       }
+    ],
+    "reflector.py": [
+      {
+        "timestamp": "2026-05-24T10:29:04.801776",
+        "source": "disk",
+        "patch_id": null,
+        "content": "from hive_llm import ask_hive\nimport json\n\nfrom reflector_prompt import REFLECTOR_PROMPT_TEMPLATE\n\n\ndef _load_math_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent math failure lessons from math_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"math_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior math failure lessons (do not repeat these strategies):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed at: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\ndef _load_code_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent code strategy failure lessons from code_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"code_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior code strategy failures (do not repeat these):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - [{lesson.get('agent','?')}] \"\n                    f\"Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\nclass Reflector:\n    def _build_prompt(self, output_text, pilot_guardrails=\"No relevant pilot guardrails.\", math_lessons=\"\"):\n        prompt = REFLECTOR_PROMPT_TEMPLATE.format(\n            output=output_text,\n            pilot_guardrails=pilot_guardrails,\n        )\n        if math_lessons:\n            prompt = prompt + f\"\\n\\n{math_lessons}\"\n        return prompt\n\n    def _stringify_output(self, output):\n        if isinstance(output, str):\n            return output\n\n        try:\n            return json.dumps(output, ensure_ascii=False)\n        except TypeError:\n            return str(output)\n\n    def _extract_json_object(self, raw_response):\n        start = raw_response.find(\"{\")\n        end = raw_response.rfind(\"}\")\n\n        if start == -1 or end == -1 or end < start:\n            raise ValueError(\"No JSON object found in model response.\")\n\n        return raw_response[start:end + 1]\n\n    def _validate_reflection(self, reflection):\n        required_fields = [\"reflection\", \"confidence\", \"next_step\", \"verdict\"]\n\n        for field in required_fields:\n            if field not in reflection:\n                raise ValueError(f\"Missing field in model response: {field}\")\n\n        confidence = reflection[\"confidence\"]\n        if not isinstance(confidence, (int, float)):\n            raise ValueError(\"confidence must be numeric.\")\n        reflection[\"confidence\"] = max(0.0, min(1.0, float(confidence)))\n\n        verdict = reflection[\"verdict\"]\n        if verdict not in {\"accept\", \"revise\", \"reject\"}:\n            raise ValueError(\"verdict must be one of: accept, revise, reject\")\n\n        return reflection\n\n    def evaluate(self, output, task=None, plan=None, pilot_guardrails=None):\n        \"\"\"\n        Evaluate Hive output safely and consistently.\n\n        Handles patches, plans, errors, and unexpected types without crashing.\n        Injects prior math failure lessons when evaluating mathematical output.\n        \"\"\"\n        try:\n            payload = output\n            if task is not None or plan is not None or pilot_guardrails is not None:\n                payload = {\n                    \"output\": output,\n                    \"task\": task,\n                    \"plan\": plan,\n                    \"pilot_guardrails\": pilot_guardrails or [],\n                }\n\n            output_text = self._stringify_output(payload)\n            guardrail_text = \"No relevant pilot guardrails.\"\n            if isinstance(pilot_guardrails, list) and pilot_guardrails:\n                lines = []\n                for i, lesson in enumerate(pilot_guardrails, start=1):\n                    category = lesson.get(\"guidance_category\") or lesson.get(\"failure_code\") or \"pilot_guardrail\"\n                    text = lesson.get(\"guardrail_text\") or lesson.get(\"retry_instruction\") or lesson.get(\"failure_reason\") or \"\"\n                    lines.append(f\"{i}. [{category}] {text}\".strip())\n                guardrail_text = \"\\n\".join(lines) if lines else guardrail_text\n\n            if \"placeholder\" in output_text.lower():\n                return {\n                    \"reflection\": \"Placeholder patch detected\",\n                    \"confidence\": 0.0,\n                    \"next_step\": \"Remove placeholder logic and try again.\",\n                    \"verdict\": \"reject\",\n                }\n\n            # Inject math lessons when output is mathematical in nature\n            math_lessons = \"\"\n            math_signals = (\"conjecture\", \"stopping time\", \"collatz\", \"trajectory\",\n                            \"modular\", \"symbolic\", \"syracuse\", \"E[T\", \"gap\")\n            if any(sig in output_text.lower() for sig in math_signals):\n                math_lessons = _load_math_lessons()\n\n            # Inject code lessons when output is about code hypotheses or strategies\n            code_lessons = \"\"\n            code_signals = (\"hypothesis\", \"complexity\", \"O(n\", \"benchmark\", \"profil\",\n                            \"boundary\", \"invariant\", \"regression\", \"adversarial test\",\n                            \"architecture trace\", \"nested loop\", \"call graph\")\n            if any(sig in output_text.lower() for sig in code_signals):\n                code_lessons = _load_code_lessons()\n\n            combined_lessons = \"\\n\\n\".join(\n                x for x in [math_lessons, code_lessons] if x\n            )\n\n            prompt = self._build_prompt(\n                output_text,\n                pilot_guardrails=guardrail_text,\n                math_lessons=combined_lessons,\n            )\n            raw_response = ask_hive(prompt, role=\"reflector\").strip()\n            json_text = self._extract_json_object(raw_response)\n            reflection = json.loads(json_text)\n\n            if not isinstance(reflection, dict):\n                raise ValueError(\"Reflection response must be a JSON object.\")\n\n            return self._validate_reflection(reflection)\n\n        except Exception as e:\n            return {\n                \"reflection\": f\"Reflection unavailable: {e}\",\n                \"confidence\": 0.4,\n                \"next_step\": \"Pilot review recommended. Check for scope drift, duplicated logic, or malformed model output.\",\n                \"verdict\": \"revise\",\n            }\n\n    def format_summary(self, reflection):\n        return (\n            f\"Reflection: {reflection['reflection']}\\n\"\n            f\"Confidence: {reflection['confidence']:.2f}\\n\"\n            f\"Next Step: {reflection['next_step']}\\n\"\n            f\"Verdict: {reflection['verdict']}\"\n        )\n"
+      },
+      {
+        "timestamp": "2026-05-24T10:34:33.398006",
+        "source": "applied_patch",
+        "patch_id": 841,
+        "content": "from hive_llm import ask_hive\nimport json\n\nfrom reflector_prompt import REFLECTOR_PROMPT_TEMPLATE\n\n\ndef _load_math_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent math failure lessons from math_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"math_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior math failure lessons (do not repeat these strategies):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed at: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\ndef _load_code_lessons(max_lessons: int = 6) -> str:\n    \"\"\"\n    Load recent code strategy failure lessons from code_lessons.jsonl.\n    Returns a formatted string for injection into the reflector prompt.\n    Returns empty string if no lessons exist.\n    \"\"\"\n    try:\n        with open(\"code_lessons.jsonl\") as f:\n            lines = [l.strip() for l in f if l.strip()]\n        if not lines:\n            return \"\"\n        recent = lines[-max_lessons:]\n        parts = [\"Prior code strategy failures (do not repeat these):\"]\n        for line in recent:\n            try:\n                lesson = json.loads(line)\n                parts.append(\n                    f\"  - [{lesson.get('agent','?')}] \"\n                    f\"Strategy: {lesson.get('strategy','?')} | \"\n                    f\"Failed: {lesson.get('failure_point','?')} | \"\n                    f\"Insight: {lesson.get('insight','?')}\"\n                )\n            except json.JSONDecodeError:\n                continue\n        return \"\\n\".join(parts)\n    except FileNotFoundError:\n        return \"\"\n\n\nclass Reflector:\n    def _build_prompt(self, output_text, pilot_guardrails=\"No relevant pilot guardrails.\", math_lessons=\"\"):\n        prompt = REFLECTOR_PROMPT_TEMPLATE.format(\n            output=output_text,\n            pilot_guardrails=pilot_guardrails,\n        )\n        if math_lessons:\n            prompt = prompt + f\"\\n\\n{math_lessons}\"\n        return prompt\n\n    def _stringify_output(self, output):\n        if isinstance(output, str):\n            return output\n\n        try:\n            return json.dumps(output, ensure_ascii=False)\n        except TypeError:\n            return str(output)\n\n    def _extract_json_object(self, raw_response):\n        start = raw_response.find(\"{\")\n        end = raw_response.rfind(\"}\")\n\n        if start == -1 or end == -1 or end < start:\n            raise ValueError(\"No JSON object found in model response.\")\n\n        return raw_response[start:end + 1]\n\n    def _validate_reflection(self, reflection):\n        required_fields = [\"reflection\", \"confidence\", \"next_step\", \"verdict\"]\n\n        for field in required_fields:\n            if field not in reflection:\n                raise ValueError(f\"Missing field in model response: {field}\")\n\n        confidence = reflection[\"confidence\"]\n        if not isinstance(confidence, (int, float)):\n            try:\n                confidence = float(confidence)\n            except (ValueError, TypeError):\n                raise ValueError(\"confidence must be numeric.\") from e\n        reflection[\"confidence\"] = max(0.0, min(1.0, float(confidence)))\n\n        verdict = reflection[\"verdict\"]\n        if verdict not in {\"accept\", \"revise\", \"reject\"}:\n            raise ValueError(\"verdict must be one of: accept, revise, reject\")\n\n        return reflection\n\n    def evaluate(self, output, task=None, plan=None, pilot_guardrails=None):\n        \"\"\"\n        Evaluate Hive output safely and consistently.\n\n        Handles patches, plans, errors, and unexpected types without crashing.\n        Injects prior math failure lessons when evaluating mathematical output.\n        \"\"\"\n        try:\n            payload = output\n            if task is not None or plan is not None or pilot_guardrails is not None:\n                payload = {\n                    \"output\": output,\n                    \"task\": task,\n                    \"plan\": plan,\n                    \"pilot_guardrails\": pilot_guardrails or [],\n                }\n\n            output_text = self._stringify_output(payload)\n            guardrail_text = \"No relevant pilot guardrails.\"\n            if isinstance(pilot_guardrails, list) and pilot_guardrails:\n                lines = []\n                for i, lesson in enumerate(pilot_guardrails, start=1):\n                    category = lesson.get(\"guidance_category\") or lesson.get(\"failure_code\") or \"pilot_guardrail\"\n                    text = lesson.get(\"guardrail_text\") or lesson.get(\"retry_instruction\") or lesson.get(\"failure_reason\") or \"\"\n                    lines.append(f\"{i}. [{category}] {text}\".strip())\n                guardrail_text = \"\\n\".join(lines) if lines else guardrail_text\n\n            if \"placeholder\" in output_text.lower():\n                return {\n                    \"reflection\": \"Placeholder patch detected\",\n                    \"confidence\": 0.0,\n                    \"next_step\": \"Remove placeholder logic and try again.\",\n                    \"verdict\": \"reject\",\n                }\n\n            # Inject math lessons when output is mathematical in nature\n            math_lessons = \"\"\n            math_signals = (\"conjecture\", \"stopping time\", \"collatz\", \"trajectory\",\n                            \"modular\", \"symbolic\", \"syracuse\", \"E[T\", \"gap\")\n            if any(sig in output_text.lower() for sig in math_signals):\n                math_lessons = _load_math_lessons()\n\n            # Inject code lessons when output is about code hypotheses or strategies\n            code_lessons = \"\"\n            code_signals = (\"hypothesis\", \"complexity\", \"O(n\", \"benchmark\", \"profil\",\n                            \"boundary\", \"invariant\", \"regression\", \"adversarial test\",\n                            \"architecture trace\", \"nested loop\", \"call graph\")\n            if any(sig in output_text.lower() for sig in code_signals):\n                code_lessons = _load_code_lessons()\n\n            combined_lessons = \"\\n\\n\".join(\n                x for x in [math_lessons, code_lessons] if x\n            )\n\n            prompt = self._build_prompt(\n                output_text,\n                pilot_guardrails=guardrail_text,\n                math_lessons=combined_lessons,\n            )\n            raw_response = ask_hive(prompt, role=\"reflector\").strip()\n            json_text = self._extract_json_object(raw_response)\n            reflection = json.loads(json_text)\n\n            if not isinstance(reflection, dict):\n                raise ValueError(\"Reflection response must be a JSON object.\")\n\n            return self._validate_reflection(reflection)\n\n        except Exception as e:\n            return {\n                \"reflection\": f\"Reflection unavailable: {e}\",\n                \"confidence\": 0.4,\n                \"next_step\": \"Pilot review recommended. Check for scope drift, duplicated logic, or malformed model output.\",\n                \"verdict\": \"revise\",\n            }\n\n    def format_summary(self, reflection):\n        return (\n            f\"Reflection: {reflection['reflection']}\\n\"\n            f\"Confidence: {reflection['confidence']:.2f}\\n\"\n            f\"Next Step: {reflection['next_step']}\\n\"\n            f\"Verdict: {reflection['verdict']}\"\n        )\n"
+      }
     ]
   },
   "task_state": {},
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function validate_expected_operation in coder_validation.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
-      "active_task_id": 833,
-      "active_plan_id": "plan-833",
-      "active_child_task_id": "task-833-1",
-      "current_child_task_title": "Add fuzzy fallback to validate_expected_operation",
+      "active_goal": "The function _validate_reflection in reflector.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "active_task_id": 838,
+      "active_plan_id": "plan-838",
+      "active_child_task_id": "task-838-1",
+      "current_child_task_title": "Refactor _validate_reflection to use a fuzzy fallback",
       "task_status": "planned",
-      "target_file": "coder_validation.py",
-      "target_symbol": "validate_expected_operation",
+      "target_file": "reflector.py",
+      "target_symbol": "_validate_reflection",
       "change_intent": "modify_existing_logic",
       "expected_operation": "modify_logic",
       "completion_cues": [],
-      "updated_at": "2026-05-24T10:18:27.448974",
+      "updated_at": "2026-05-24T10:29:04.705525",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
       "recovery_reason": null
     },
     "last_patch": {
-      "target_file": "coder_validation.py",
-      "target_symbol": "validate_update_help_text_operation",
+      "target_file": "reflector.py",
+      "target_symbol": "_validate_reflection",
       "patch_status": "approved",
       "validation_outcome": "passed",
       "rejection_reason": null,
-      "reflection_verdict": "revise",
-      "confidence": 0.6,
-      "timestamp": "2026-05-24T10:17:24.552871",
-      "patch_id": 831,
-      "task_id": 828,
-      "plan_id": "plan-828",
+      "reflection_verdict": "accept",
+      "confidence": 0.95,
+      "timestamp": "2026-05-24T10:34:33.253689",
+      "patch_id": 841,
+      "task_id": 838,
+      "plan_id": "plan-838",
       "change_intent": "modify_existing_logic",
       "expected_operation": "modify_logic",
-      "updated_at": "2026-05-24T10:17:24.552897",
+      "updated_at": "2026-05-24T10:34:33.253716",
       "pilot_verdict": "accept",
       "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
       "pilot_guidance": null,
@@ -39290,9 +39312,121 @@
     "failures": {
       "recent": [
         {
-          "task_id": 833,
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
+          "task_id": 838,
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "change_intent": "modify_existing_logic",
+          "expected_operation": "modify_logic",
+          "failure_family": "targeting",
+          "failure_class": "explicit_target",
+          "failure_code": "scope_alignment_mismatch",
+          "failure_category": "scope_alignment_mismatch",
+          "confidence": 0.95,
+          "retry_instruction": "Realign the patch to the exact requested task scope and remove unrelated changes.",
+          "reason": "scope_alignment_mismatch: Patch appears misaligned with task scope for change_intent=modify_existing_logic: no meaningful keyword overlap with task note.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 1284,
+            "trimmed_context_length": 1284,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": false,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": false,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 2,
+          "trigger_pattern": "targeting::explicit_target::scope_alignment_mismatch::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "realign_to_task_scope::scope_alignment_mismatch::modify_existing_logic",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T10:32:52.300522"
+        },
+        {
+          "task_id": 838,
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "change_intent": "modify_existing_logic",
+          "expected_operation": "modify_logic",
+          "failure_family": "targeting",
+          "failure_class": "explicit_target",
+          "failure_code": "symbol_anchor_drift",
+          "failure_category": "symbol_anchor_drift",
+          "confidence": 0.98,
+          "retry_instruction": "Rewrite only the target symbol and do not modify unrelated symbols.",
+          "reason": "symbol_anchor_drift: patch does not modify requested symbol _validate_reflection.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 1284,
+            "trimmed_context_length": 1284,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": false,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": false,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "targeting::explicit_target::symbol_anchor_drift::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "rewrite_target_symbol_only::symbol_anchor_drift::modify_existing_logic",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T10:32:18.719379"
+        },
+        {
+          "task_id": 838,
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "semantics",
@@ -39301,7 +39435,7 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': False, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
           "stage": "observability",
           "source": "observability",
           "context_mode": null,
@@ -39317,12 +39451,12 @@
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T10:27:49.451455"
+          "timestamp": "2026-05-24T10:31:11.050601"
         },
         {
-          "task_id": 833,
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
+          "task_id": 838,
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "semantics",
@@ -39331,15 +39465,15 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Retry exhausted: Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': False, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Retry exhausted: Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
           "stage": "retry_exhausted",
           "source": "retry_exhausted",
           "context_mode": "exact_symbol_block",
           "planner_source": "llm",
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 3084,
-            "trimmed_context_length": 3084,
+            "raw_context_length": 1284,
+            "trimmed_context_length": 1284,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39348,7 +39482,7 @@
             "dropped_related_context": false,
             "dropped_helper_blocks": false,
             "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
+            "large_file_policy_applied": false,
             "under_anchored_after_trim": false,
             "context_priority": [
               "exact_symbol_block",
@@ -39366,19 +39500,19 @@
             "file_head_fallback"
           ],
           "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
+          "large_file_policy_applied": false,
           "under_anchored_after_trim": false,
           "benchmark_case_id": null,
           "attempt_index": 3,
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T10:27:49.355927"
+          "timestamp": "2026-05-24T10:31:10.957942"
         },
         {
-          "task_id": 833,
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
+          "task_id": 838,
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "semantics",
@@ -39387,15 +39521,15 @@
           "failure_category": "local_assignment_at_module_scope",
           "confidence": 0.82,
           "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': False, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
+          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
           "stage": "sandbox",
           "source": "sandbox",
           "context_mode": "exact_symbol_block",
           "planner_source": "llm",
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 3084,
-            "trimmed_context_length": 3084,
+            "raw_context_length": 1284,
+            "trimmed_context_length": 1284,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39404,7 +39538,7 @@
             "dropped_related_context": false,
             "dropped_helper_blocks": false,
             "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
+            "large_file_policy_applied": false,
             "under_anchored_after_trim": false,
             "context_priority": [
               "exact_symbol_block",
@@ -39422,126 +39556,14 @@
             "file_head_fallback"
           ],
           "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
+          "large_file_policy_applied": false,
           "under_anchored_after_trim": false,
           "benchmark_case_id": null,
           "attempt_index": 3,
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T10:27:49.275882"
-        },
-        {
-          "task_id": 833,
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "change_intent": "modify_existing_logic",
-          "expected_operation": "modify_logic",
-          "failure_family": "semantics",
-          "failure_class": "scope_boundary",
-          "failure_code": "local_assignment_at_module_scope",
-          "failure_category": "local_assignment_at_module_scope",
-          "confidence": 0.82,
-          "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': False, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
-          "stage": "sandbox",
-          "source": "sandbox",
-          "context_mode": "exact_symbol_block",
-          "planner_source": "llm",
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 3084,
-            "trimmed_context_length": 3084,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 2,
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T10:26:32.308402"
-        },
-        {
-          "task_id": 833,
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "change_intent": "modify_existing_logic",
-          "expected_operation": "modify_logic",
-          "failure_family": "semantics",
-          "failure_class": "scope_boundary",
-          "failure_code": "local_assignment_at_module_scope",
-          "failure_category": "local_assignment_at_module_scope",
-          "confidence": 0.82,
-          "retry_instruction": "Insert the assignment inside the target function body near existing local setup lines.",
-          "reason": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': False, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': True, 'structural_scope_valid': False}",
-          "stage": "sandbox",
-          "source": "sandbox",
-          "context_mode": "exact_symbol_block",
-          "planner_source": "llm",
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 3084,
-            "trimmed_context_length": 3084,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T10:25:51.731817"
+          "timestamp": "2026-05-24T10:31:10.881242"
         }
       ],
       "counts_by_category": {
@@ -39549,71 +39571,87 @@
         "unknown_failure": 219,
         "multiple_patch_sections": 6,
         "new_method_not_allowed": 47,
-        "local_assignment_at_module_scope": 119,
+        "local_assignment_at_module_scope": 124,
         "sandbox_retry_exhausted": 59,
         "non_diff_commentary": 7,
         "reflector_reject": 20,
-        "symbol_anchor_drift": 18,
+        "symbol_anchor_drift": 19,
         "completion_cue_mismatch": 3,
         "reflector_revision": 3,
         "planner_fallback_used": 6,
         "comment_task_rejected_as_nonfunctional": 3,
-        "scope_alignment_mismatch": 18,
+        "scope_alignment_mismatch": 19,
         "bad_method_indent": 15,
         "empty_model_response": 3,
         "missing_patch_section": 2
       },
-      "updated_at": "2026-05-24T10:27:49.451466"
+      "updated_at": "2026-05-24T10:32:52.300532"
     },
     "lessons": {
       "recent": [
         {
+          "tag": "scope_alignment_mismatch",
+          "summary": "Realign the patch to the exact requested task scope and remove unrelated changes.",
+          "source": "coder_exception",
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "lesson_id": "c7e1c35f-e139-49ee-9d3c-b5ec4301f559",
+          "lesson_level": "exact",
+          "trigger_pattern": "targeting::explicit_target::scope_alignment_mismatch::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "realign_to_task_scope::scope_alignment_mismatch::modify_existing_logic",
+          "times_used": 1,
+          "success_after_use": 1,
+          "failure_after_use": 0,
+          "promotion_state": "raw",
+          "last_used_at": "2026-05-24T03:32:52.409165",
+          "last_match_reasons": [
+            "file",
+            "change_type",
+            "failure_code",
+            "target_symbol",
+            "context_mode",
+            "trigger_pattern",
+            "fix_strategy"
+          ],
+          "last_guidance_changed": true,
+          "last_reuse_outcome": "helped",
+          "timestamp": "2026-05-24T03:32:52.289285"
+        },
+        {
+          "tag": "symbol_anchor_drift",
+          "summary": "Rewrite only the target symbol and do not modify unrelated symbols.",
+          "source": "coder_exception",
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "lesson_id": "a86e0f42-1fb8-47ed-9571-7fef550d4425",
+          "lesson_level": "exact",
+          "trigger_pattern": "targeting::explicit_target::symbol_anchor_drift::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "rewrite_target_symbol_only::symbol_anchor_drift::modify_existing_logic",
+          "times_used": 1,
+          "success_after_use": 0,
+          "failure_after_use": 1,
+          "promotion_state": "raw",
+          "last_used_at": "2026-05-24T03:32:18.833830",
+          "last_match_reasons": [
+            "file",
+            "change_type",
+            "failure_code",
+            "target_symbol",
+            "context_mode",
+            "trigger_pattern",
+            "fix_strategy"
+          ],
+          "last_guidance_changed": true,
+          "last_reuse_outcome": "hurt",
+          "timestamp": "2026-05-24T03:32:18.707782"
+        },
+        {
           "tag": "local_assignment_at_module_scope",
           "summary": "Insert the assignment inside the target function body near existing local setup lines.",
           "source": "retry_exhausted",
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "lesson_id": "a51dd2ca-4be0-41bc-ae5b-6ee20ab6ab18",
-          "lesson_level": "exact",
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
-          "times_used": 0,
-          "success_after_use": 0,
-          "failure_after_use": 0,
-          "promotion_state": "raw",
-          "last_used_at": null,
-          "last_match_reasons": [],
-          "last_guidance_changed": null,
-          "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T03:27:49.343163"
-        },
-        {
-          "tag": "local_assignment_at_module_scope",
-          "summary": "Insert the assignment inside the target function body near existing local setup lines.",
-          "source": "sandbox",
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "lesson_id": "f193e76c-e814-49aa-8452-98778f3546aa",
-          "lesson_level": "exact",
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
-          "times_used": 0,
-          "success_after_use": 0,
-          "failure_after_use": 0,
-          "promotion_state": "raw",
-          "last_used_at": null,
-          "last_match_reasons": [],
-          "last_guidance_changed": null,
-          "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T03:27:49.264369"
-        },
-        {
-          "tag": "local_assignment_at_module_scope",
-          "summary": "Insert the assignment inside the target function body near existing local setup lines.",
-          "source": "sandbox",
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "lesson_id": "64be2740-a425-444e-aa63-1f3d9d478f85",
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "lesson_id": "39b23f49-318d-4624-a098-ea7a66d36e0a",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
@@ -39621,27 +39659,39 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T03:26:32.421933",
-          "last_match_reasons": [
-            "file",
-            "change_type",
-            "failure_code",
-            "target_symbol",
-            "context_mode",
-            "trigger_pattern",
-            "fix_strategy"
-          ],
+          "last_used_at": "2026-05-24T03:31:11.326941",
+          "last_match_reasons": [],
           "last_guidance_changed": false,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T03:26:32.296573"
+          "timestamp": "2026-05-24T03:31:10.945616"
         },
         {
           "tag": "local_assignment_at_module_scope",
           "summary": "Insert the assignment inside the target function body near existing local setup lines.",
           "source": "sandbox",
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "lesson_id": "56f513bb-f467-4c6f-9942-118f91ed36b5",
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "lesson_id": "2cfd84a1-2ca0-408e-ac55-6a6eb3336037",
+          "lesson_level": "exact",
+          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
+          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
+          "times_used": 1,
+          "success_after_use": 0,
+          "failure_after_use": 1,
+          "promotion_state": "raw",
+          "last_used_at": "2026-05-24T03:31:11.298599",
+          "last_match_reasons": [],
+          "last_guidance_changed": false,
+          "last_reuse_outcome": "hurt",
+          "timestamp": "2026-05-24T03:31:10.868825"
+        },
+        {
+          "tag": "local_assignment_at_module_scope",
+          "summary": "Insert the assignment inside the target function body near existing local setup lines.",
+          "source": "sandbox",
+          "target_file": "reflector.py",
+          "target_symbol": "_validate_reflection",
+          "lesson_id": "e3d9165a-0163-4a3e-856d-6207f8c83ff7",
           "lesson_level": "exact",
           "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
@@ -39649,50 +39699,14 @@
           "success_after_use": 0,
           "failure_after_use": 2,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T03:26:32.442111",
-          "last_match_reasons": [
-            "file",
-            "change_type",
-            "failure_code",
-            "target_symbol",
-            "context_mode",
-            "trigger_pattern",
-            "fix_strategy"
-          ],
+          "last_used_at": "2026-05-24T03:31:11.269681",
+          "last_match_reasons": [],
           "last_guidance_changed": false,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T03:25:51.720122"
-        },
-        {
-          "tag": "local_assignment_at_module_scope",
-          "summary": "Insert the assignment inside the target function body near existing local setup lines.",
-          "source": "retry_exhausted",
-          "target_file": "coder_validation.py",
-          "target_symbol": "validate_expected_operation",
-          "lesson_id": "a2f7d816-5efc-45c8-bb57-2c672c9a0c45",
-          "lesson_level": "exact",
-          "trigger_pattern": "semantics::scope_boundary::local_assignment_at_module_scope::modify_existing_logic::modify_logic::exact_symbol_block",
-          "fix_strategy": "move_assignment_inside_function::local_assignment_at_module_scope::modify_existing_logic",
-          "times_used": 3,
-          "success_after_use": 0,
-          "failure_after_use": 3,
-          "promotion_state": "raw",
-          "last_used_at": "2026-05-24T03:26:32.469373",
-          "last_match_reasons": [
-            "file",
-            "change_type",
-            "failure_code",
-            "target_symbol",
-            "context_mode",
-            "trigger_pattern",
-            "fix_strategy"
-          ],
-          "last_guidance_changed": false,
-          "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T03:24:31.577537"
+          "timestamp": "2026-05-24T03:30:26.440269"
         }
       ],
-      "updated_at": "2026-05-24T10:27:49.508320"
+      "updated_at": "2026-05-24T10:34:33.299270"
     },
     "system": {
       "repo_loaded": true,
@@ -39700,7 +39714,7 @@
       "known_symbols_count": 941,
       "active_route": "plan_task",
       "active_mode": null,
-      "updated_at": "2026-05-24T10:17:25.956667"
+      "updated_at": "2026-05-24T10:34:34.624346"
     }
   }
 }
