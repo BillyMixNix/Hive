@@ -49016,5 +49016,34 @@
       }
     },
     "timestamp": "2026-05-24 19:43:09.988836"
+  },
+  {
+    "id": 914,
+    "tag": "complexity",
+    "note": "The function _normalize_expected_operation in planner.py has high cyclomatic complexity (~34 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "active",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_expected_operation",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_normalize_expected_operation",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+        "lineno": 151,
+        "end_lineno": 265,
+        "col_offset": 4,
+        "end_col_offset": 33
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+      "lineno": 151,
+      "end_lineno": 265,
+      "col_offset": 4,
+      "end_col_offset": 33
+    },
+    "timestamp": "2026-05-24 20:05:50.042803"
   }
 ]
