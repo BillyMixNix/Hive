@@ -29380,7 +29380,7 @@
     "id": 690,
     "tag": "self-improvement",
     "note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
-    "status": "active",
+    "status": "planned",
     "metadata": {
       "target_file": "planner.py",
       "target_symbol": "_validate_plan_child_tasks",
@@ -29404,5 +29404,173 @@
       "end_col_offset": 54
     },
     "timestamp": "2026-05-24 06:13:46.629996"
+  },
+  {
+    "id": 691,
+    "tag": "plan",
+    "note": "Task 690 planned | add fuzzy fallback for change_intent validation in planner.py to handle novel inputs gracefully instead of hard-failing | next: Add resolve_change_intent function in planner.py using difflib.get_close_matches against ALLOWED_CHANGE_INTENTS with 'modify_existing_logic' as the default fallback",
+    "status": "planned",
+    "metadata": {
+      "task_id": 690,
+      "plan_id": "plan-690",
+      "plan": {
+        "goal": "add fuzzy fallback for change_intent validation in planner.py to handle novel inputs gracefully instead of hard-failing",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "change_intent validation",
+        "operation": "add fuzzy resolution fallback",
+        "validation": "novel change_intent value is coerced to nearest allowed value without raising",
+        "task_type": "feature",
+        "tasks": [
+          {
+            "task_id": "task-690-1",
+            "title": "Add resolve_change_intent fuzzy helper in planner.py",
+            "description": "Add a resolve_change_intent(raw: str) -> str function in planner.py that uses difflib.get_close_matches against ALLOWED_CHANGE_INTENTS and returns the closest match or 'modify_existing_logic' as a safe default when no close match is found. (target method: _validate_plan_child_tasks)",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_child_tasks",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def resolve_change_intent"
+            ],
+            "task_type": "feature",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "change_intent resolver",
+            "operation": "add fuzzy matching helper function",
+            "validation": "calling resolve_change_intent with an unrecognized string returns a valid member of ALLOWED_CHANGE_INTENTS without raising",
+            "creates_symbols": [
+              "resolve_change_intent"
+            ],
+            "wires_into_symbols": [
+              "ALLOWED_CHANGE_INTENTS"
+            ],
+            "insertion_region": "planner.py module level immediately after ALLOWED_CHANGE_INTENTS definition",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_validate_plan_child_tasks",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_validate_plan_child_tasks",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+                "lineno": 1342,
+                "end_lineno": 1406,
+                "col_offset": 4,
+                "end_col_offset": 54
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+              "lineno": 1342,
+              "end_lineno": 1406,
+              "col_offset": 4,
+              "end_col_offset": 54
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+            "lineno": 1342,
+            "end_lineno": 1406,
+            "col_offset": 4,
+            "end_col_offset": 54
+          },
+          {
+            "task_id": "task-690-2",
+            "title": "Replace hard-fail change_intent guard with fuzzy resolve call",
+            "description": "In planner.py, update the existing guard that rejects tasks with an invalid change_intent to call resolve_change_intent instead, coercing the value in-place and emitting a warning log when a substitution is made. (target method: _validate_plan_child_tasks)",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_child_tasks",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              "resolve_change_intent("
+            ],
+            "task_type": "feature",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "change_intent validation guard",
+            "operation": "replace membership rejection with fuzzy coercion",
+            "validation": "a task dict carrying an unrecognized change_intent passes validation with the nearest valid value substituted and a warning logged",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_validate_plan_child_tasks",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_validate_plan_child_tasks",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+                "lineno": 1342,
+                "end_lineno": 1406,
+                "col_offset": 4,
+                "end_col_offset": 54
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+              "lineno": 1342,
+              "end_lineno": 1406,
+              "col_offset": 4,
+              "end_col_offset": 54
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+            "lineno": 1342,
+            "end_lineno": 1406,
+            "col_offset": 4,
+            "end_col_offset": 54
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "difflib fuzzy match may silently coerce a badly malformed intent to a semantically wrong allowed value",
+          "if ALLOWED_CHANGE_INTENTS is later extended the cutoff threshold may need tuning to avoid false positives"
+        ],
+        "next_action": "Add resolve_change_intent function in planner.py using difflib.get_close_matches against ALLOWED_CHANGE_INTENTS with 'modify_existing_logic' as the default fallback",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_child_tasks",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+            "lineno": 1342,
+            "end_lineno": 1406,
+            "col_offset": 4,
+            "end_col_offset": 54
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 690,
+        "source": "llm",
+        "active_child_task_id": "task-690-1",
+        "active_child_task_title": "Add resolve_change_intent fuzzy helper in planner.py",
+        "active_child_target_file": "planner.py"
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_child_tasks",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan_child_tasks",
+        "lineno": 1342,
+        "end_lineno": 1406,
+        "col_offset": 4,
+        "end_col_offset": 54
+      }
+    },
+    "timestamp": "2026-05-24 06:14:37.604978"
   }
 ]
