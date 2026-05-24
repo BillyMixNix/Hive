@@ -39658,18 +39658,18 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
-      "active_task_id": 924,
-      "active_plan_id": "plan-924",
-      "active_child_task_id": "task-924-1",
-      "current_child_task_title": "Fallback narrow task for _detect_structural_scope_inconsistency",
+      "active_goal": "The function _find_method_end_from_anchor in executor.py has high cyclomatic complexity (~11 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 930,
+      "active_plan_id": "plan-930",
+      "active_child_task_id": "task-930-1",
+      "current_child_task_title": "Fallback narrow task for _find_method_end_from_anchor",
       "task_status": "planned",
       "target_file": "executor.py",
-      "target_symbol": "_detect_structural_scope_inconsistency",
+      "target_symbol": "_find_method_end_from_anchor",
       "change_intent": "modify_existing_logic",
       "expected_operation": "modify_logic",
       "completion_cues": [],
-      "updated_at": "2026-05-24T20:31:31.354055",
+      "updated_at": "2026-05-24T20:31:40.775919",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
@@ -39699,9 +39699,9 @@
     "failures": {
       "recent": [
         {
-          "task_id": 924,
+          "task_id": 930,
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
+          "target_symbol": "_find_method_end_from_anchor",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "unknown",
@@ -39710,7 +39710,7 @@
           "failure_category": "unknown_failure",
           "confidence": 0.2,
           "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
-          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eH8aT5VM2E2mTQqoZ'}",
+          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2f1Gd1GrUzePXhPuyc'}",
           "stage": "observability",
           "source": "observability",
           "context_mode": null,
@@ -39726,12 +39726,12 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T20:31:36.220643"
+          "timestamp": "2026-05-24T20:31:46.074924"
         },
         {
-          "task_id": 924,
+          "task_id": 930,
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
+          "target_symbol": "_find_method_end_from_anchor",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "orchestration",
@@ -39740,15 +39740,15 @@
           "failure_category": "sandbox_retry_exhausted",
           "confidence": 0.78,
           "retry_instruction": "Stop repeating the same patch shape. Escalate or substantially change the approach before retrying.",
-          "reason": "Retry exhausted: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eH8aT5VM2E2mTQqoZ'}",
+          "reason": "Retry exhausted: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2f1Gd1GrUzePXhPuyc'}",
           "stage": "retry_exhausted",
           "source": "retry_exhausted",
           "context_mode": "exact_symbol_block",
           "planner_source": null,
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2721,
-            "trimmed_context_length": 2721,
+            "raw_context_length": 1786,
+            "trimmed_context_length": 1786,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39782,12 +39782,12 @@
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T20:31:36.108282"
+          "timestamp": "2026-05-24T20:31:45.962711"
         },
         {
-          "task_id": 924,
+          "task_id": 930,
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
+          "target_symbol": "_find_method_end_from_anchor",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "unknown",
@@ -39796,15 +39796,15 @@
           "failure_category": "unknown_failure",
           "confidence": 0.2,
           "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
-          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eH8aT5VM2E2mTQqoZ'}",
+          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2f1Gd1GrUzePXhPuyc'}",
           "stage": "exception",
           "source": "coder_exception",
           "context_mode": "exact_symbol_block",
           "planner_source": null,
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2721,
-            "trimmed_context_length": 2721,
+            "raw_context_length": 1786,
+            "trimmed_context_length": 1786,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39838,12 +39838,12 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T20:31:36.016384"
+          "timestamp": "2026-05-24T20:31:45.870878"
         },
         {
-          "task_id": 924,
+          "task_id": 930,
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
+          "target_symbol": "_find_method_end_from_anchor",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "unknown",
@@ -39852,15 +39852,15 @@
           "failure_category": "unknown_failure",
           "confidence": 0.2,
           "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
-          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eFiVhnD89Gysn8R8Q'}",
+          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eytXG7c1nCkgizYbD'}",
           "stage": "exception",
           "source": "coder_exception",
           "context_mode": "exact_symbol_block",
           "planner_source": null,
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2721,
-            "trimmed_context_length": 2721,
+            "raw_context_length": 1786,
+            "trimmed_context_length": 1786,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39894,12 +39894,12 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T20:31:35.686418"
+          "timestamp": "2026-05-24T20:31:45.544853"
         },
         {
-          "task_id": 924,
+          "task_id": 930,
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
+          "target_symbol": "_find_method_end_from_anchor",
           "change_intent": "modify_existing_logic",
           "expected_operation": "modify_logic",
           "failure_family": "unknown",
@@ -39908,15 +39908,15 @@
           "failure_category": "unknown_failure",
           "confidence": 0.2,
           "retry_instruction": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
-          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2eDSaA4oDpXMAMpBB4'}",
+          "reason": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CbN2ewjntZ6fcxZxUaLzm'}",
           "stage": "exception",
           "source": "coder_exception",
           "context_mode": "exact_symbol_block",
           "planner_source": null,
           "context_budget": {
             "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2721,
-            "trimmed_context_length": 2721,
+            "raw_context_length": 1786,
+            "trimmed_context_length": 1786,
             "trimmed": false,
             "summary_used": false,
             "full_file_omitted": true,
@@ -39950,16 +39950,16 @@
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
           "lesson_level": "exact",
-          "timestamp": "2026-05-24T20:31:35.355521"
+          "timestamp": "2026-05-24T20:31:45.209018"
         }
       ],
       "counts_by_category": {
         "sandbox_apply_failed": 12,
-        "unknown_failure": 299,
+        "unknown_failure": 311,
         "multiple_patch_sections": 6,
         "new_method_not_allowed": 48,
         "local_assignment_at_module_scope": 150,
-        "sandbox_retry_exhausted": 90,
+        "sandbox_retry_exhausted": 93,
         "non_diff_commentary": 7,
         "reflector_reject": 20,
         "symbol_anchor_drift": 39,
@@ -39977,7 +39977,7 @@
         "too_many_new_methods": 2,
         "missing_context_block": 2
       },
-      "updated_at": "2026-05-24T20:31:36.220655"
+      "updated_at": "2026-05-24T20:31:46.074937"
     },
     "lessons": {
       "recent": [
@@ -39986,8 +39986,8 @@
           "summary": "Stop repeating the same patch shape. Escalate or substantially change the approach before retrying.",
           "source": "retry_exhausted",
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
-          "lesson_id": "0954132b-85ab-4b03-9ed7-69ad6f9039f8",
+          "target_symbol": "_find_method_end_from_anchor",
+          "lesson_id": "e167abd4-f56d-4f81-ad70-ee989fa0aaad",
           "lesson_level": "exact",
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
@@ -39999,15 +39999,15 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T20:31:36.107255"
+          "timestamp": "2026-05-24T20:31:45.961690"
         },
         {
           "tag": "unknown_failure",
           "summary": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
           "source": "coder_exception",
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
-          "lesson_id": "1ef5a97c-e9fc-4237-9bae-6e0de30d884e",
+          "target_symbol": "_find_method_end_from_anchor",
+          "lesson_id": "56d67fd4-eebc-460e-a1d9-97c8bbeb2766",
           "lesson_level": "exact",
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
@@ -40019,15 +40019,15 @@
           "last_match_reasons": [],
           "last_guidance_changed": null,
           "last_reuse_outcome": null,
-          "timestamp": "2026-05-24T20:31:36.015259"
+          "timestamp": "2026-05-24T20:31:45.869903"
         },
         {
           "tag": "unknown_failure",
           "summary": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
           "source": "coder_exception",
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
-          "lesson_id": "120d1008-e0f4-4530-ac56-6318860c28b0",
+          "target_symbol": "_find_method_end_from_anchor",
+          "lesson_id": "641ca2be-c5d6-48bd-aa1b-d87fdb0b6719",
           "lesson_level": "exact",
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
@@ -40035,7 +40035,7 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T20:31:35.794455",
+          "last_used_at": "2026-05-24T20:31:45.661402",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -40047,15 +40047,15 @@
           ],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T20:31:35.685245"
+          "timestamp": "2026-05-24T20:31:45.543930"
         },
         {
           "tag": "unknown_failure",
           "summary": "Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.",
           "source": "coder_exception",
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
-          "lesson_id": "b13355b0-0b9d-4283-be73-cb9fead3db3a",
+          "target_symbol": "_find_method_end_from_anchor",
+          "lesson_id": "3727a557-75b9-4da2-abda-7d4aaf692bdf",
           "lesson_level": "exact",
           "trigger_pattern": "unknown::unknown_failure::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "unknown::unknown_failure::modify_existing_logic",
@@ -40063,7 +40063,7 @@
           "success_after_use": 0,
           "failure_after_use": 2,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T20:31:35.807803",
+          "last_used_at": "2026-05-24T20:31:45.676200",
           "last_match_reasons": [
             "file",
             "change_type",
@@ -40075,15 +40075,15 @@
           ],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T20:31:35.354619"
+          "timestamp": "2026-05-24T20:31:45.208216"
         },
         {
           "tag": "sandbox_retry_exhausted",
           "summary": "Stop repeating the same patch shape. Escalate or substantially change the approach before retrying.",
           "source": "retry_exhausted",
           "target_file": "executor.py",
-          "target_symbol": "_detect_structural_scope_inconsistency",
-          "lesson_id": "99c2d539-819c-4ae9-bc32-07a61aa4c8d5",
+          "target_symbol": "_find_method_end_from_anchor",
+          "lesson_id": "d909b57e-199d-4abd-9a8d-6ab2d2a238c2",
           "lesson_level": "exact",
           "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::modify_existing_logic::modify_logic::exact_symbol_block",
           "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::modify_existing_logic",
@@ -40091,14 +40091,14 @@
           "success_after_use": 0,
           "failure_after_use": 1,
           "promotion_state": "raw",
-          "last_used_at": "2026-05-24T20:31:34.871025",
+          "last_used_at": "2026-05-24T20:31:44.756213",
           "last_match_reasons": [],
           "last_guidance_changed": true,
           "last_reuse_outcome": "hurt",
-          "timestamp": "2026-05-24T20:31:34.407833"
+          "timestamp": "2026-05-24T20:31:44.272353"
         }
       ],
-      "updated_at": "2026-05-24T20:31:36.289096"
+      "updated_at": "2026-05-24T20:31:46.145953"
     },
     "system": {
       "repo_loaded": true,
