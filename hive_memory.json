@@ -43544,5 +43544,189 @@
       }
     },
     "timestamp": "2026-05-24 18:06:22.379194"
+  },
+  {
+    "id": 851,
+    "tag": "complexity",
+    "note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "executor.py",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 18:06:24.543248"
+  },
+  {
+    "id": 852,
+    "tag": "plan",
+    "note": "Task 851 planned | Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the flat if/elif chain with a dispatch table | next: Add private helper functions in executor.py that each encapsulate one named decision branch from validate_patch_semantics",
+    "status": "planned",
+    "metadata": {
+      "task_id": 851,
+      "plan_id": "plan-851",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the flat if/elif chain with a dispatch table",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "validate_patch_semantics decision logic",
+        "operation": "extract helpers and dispatch table to reduce branch count",
+        "validation": "validate_patch_semantics body shrinks to a short dispatch loop with no repeated decision patterns; existing callers pass unchanged",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-851-1",
+            "title": "Extract per-case validation helpers from validate_patch_semantics",
+            "description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _validate_",
+              "return _validate_"
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "per-case validation branch logic",
+            "operation": "add named helper functions for each repeated decision branch",
+            "validation": "each extracted helper is independently readable and covers exactly the logic it replaces; no logic is duplicated between helpers",
+            "creates_symbols": [
+              "_validate_case"
+            ],
+            "wires_into_symbols": [
+              "validate_patch_semantics"
+            ],
+            "insertion_region": "module-level functions near validate_patch_semantics in executor.py",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "validate_patch_semantics",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "validate_patch_semantics",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+                "lineno": 277,
+                "end_lineno": 418,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+              "lineno": 277,
+              "end_lineno": 418,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 277,
+            "end_lineno": 418,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          {
+            "task_id": "task-851-2",
+            "title": "Rewrite validate_patch_semantics to dispatch through helpers",
+            "description": "Replace the flat if/elif chain inside validate_patch_semantics with a dispatch table or short loop that delegates each case to the extracted helpers, reducing the function's branch count to under 5.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_dispatch = {",
+              "handler("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "validate_patch_semantics",
+            "operation": "replace multi-branch if/elif body with dispatch table delegation",
+            "validation": "validate_patch_semantics cyclomatic complexity drops to under 5 decision paths and all existing callers return identical results",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "validate_patch_semantics",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "validate_patch_semantics",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+                "lineno": 277,
+                "end_lineno": 418,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+              "lineno": 277,
+              "end_lineno": 418,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 277,
+            "end_lineno": 418,
+            "col_offset": 4,
+            "end_col_offset": 9
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Extracted helpers may silently change early-return or short-circuit behavior if branch ordering is not preserved exactly",
+          "Dispatch table keys must cover every case that the original if/elif handled or callers may silently receive wrong validation results"
+        ],
+        "next_action": "Add private helper functions in executor.py that each encapsulate one named decision branch from validate_patch_semantics",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "validate_patch_semantics",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+            "lineno": 277,
+            "end_lineno": 418,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 851,
+        "source": "llm",
+        "active_child_task_id": "task-851-1",
+        "active_child_task_title": "Extract per-case validation helpers from validate_patch_semantics",
+        "active_child_target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 18:06:46.857491"
   }
 ]

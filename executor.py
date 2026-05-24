@@ -239,40 +239,25 @@ class ExecutorAgent:
         anchor_index = None
         block_span = None
 
-        # 1. Best case: exact contiguous removal block
-        if removals:
-            block_start, block_end = self._find_block_index(file_lines, removals)
-            if block_start is not None:
-                checks["exact_removal_block_found"] = True
-                checks["anchor_found"] = True
-                anchor_index = block_start
-                block_span = (block_start, block_end)
-
-        # 2. Fallback: contiguous context block
-        if anchor_index is None and context:
-            ctx_start, ctx_end = self._find_context_block_index(file_lines, context)
-            if ctx_start is not None:
-                checks["context_block_found"] = True
-                checks["anchor_found"] = True
-                anchor_index = ctx_start
-                block_span = (ctx_start, ctx_end)
-
-        # 3. Final fallback: single-line removal match
-        if anchor_index is None:
-            for removal in removals:
-                idx = self._find_line_index(file_lines, removal)
-                if idx is not None:
+        # Anchor resolution: ordered dispatch table reduces branch count
+        for _check_key, _lines, _finder in [
+            ("exact_removal_block_found", removals, self._find_block_index),
+            ("context_block_found", context, self._find_context_block_index),
+        ]:
+            if anchor_index is None and _lines:
+                _s, _e = _finder(file_lines, _lines)
+                if _s is not None:
+                    checks[_check_key] = True
                     checks["anchor_found"] = True
-                    anchor_index = idx
-                    break
+                    anchor_index, block_span = _s, (_s, _e)
 
-        # 4. Last resort: single-line context match
+        # Single-line fallback: removals then context
         if anchor_index is None:
-            for ctx in context:
-                idx = self._find_line_index(file_lines, ctx)
-                if idx is not None:
+            for _line in removals + context:
+                _idx = self._find_line_index(file_lines, _line)
+                if _idx is not None:
                     checks["anchor_found"] = True
-                    anchor_index = idx
+                    anchor_index = _idx
                     break
 
         checks["safe_to_apply"] = (
