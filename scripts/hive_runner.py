@@ -68,7 +68,7 @@ from main import (
 )
 
 QUEUE_PATH = Path(__file__).parent.parent / "hive_queue.jsonl"
-MAX_CODE_CYCLES = 8  # max child tasks per parent before giving up
+MAX_CODE_CYCLES = 3  # max child tasks per parent before giving up
 
 
 def load_queue():
@@ -243,6 +243,34 @@ def run_task(entry, memory, state, router, reflector, lesson_memory):
 
     plan = plan_task(task_id, memory, state, router)
     child_count = len(plan.get("tasks", []))
+
+    # Planner anchor drift detection: if every child task targets a different
+    # file than what was requested, record a lesson and abort early.
+    requested_file = (entry.get("target_file") or "").strip()
+    if requested_file:
+        child_files = {(c.get("target_file") or "").strip() for c in plan.get("tasks", [])}
+        child_files.discard("")
+        if child_files and not any(
+            requested_file in f or f in requested_file for f in child_files
+        ):
+            drift_note = (
+                f"Planner anchor drift: task requested {requested_file} "
+                f"but plan targets {child_files}. "
+                f"Ensure target_file exists before planning."
+            )
+            print(f"  WARNING: {drift_note}")
+            lesson_memory.add_lesson(
+                file=requested_file,
+                change_type="diff_patch",
+                failure_reason="planner_anchor_drift",
+                failure_pattern=drift_note,
+                retry_instruction=(
+                    "Create a stub of the target file before planning so the planner "
+                    "can anchor to the correct file instead of drifting to an existing one."
+                ),
+                source="hive_runner",
+                severity="high",
+            )
 
     for cycle in range(MAX_CODE_CYCLES):
         ready_child = _get_first_ready_child_task(plan)

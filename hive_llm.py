@@ -22,6 +22,17 @@ _RETRY_BASE_WAIT = 2  # seconds — doubles each attempt: 2, 4, 8
 
 CLAUDE_ROLES = {"reflector", "math", "strategic", "planner", "coder"}
 
+# Per-role Claude model overrides.
+# Planner and coder use Sonnet (5x cheaper, sufficient for code tasks).
+# Reflector, math, strategic keep Opus for quality of judgment.
+CLAUDE_ROLE_MODEL = {
+    "planner":   "claude-sonnet-4-6",
+    "coder":     "claude-sonnet-4-6",
+    "reflector": "claude-opus-4-7",
+    "math":      "claude-opus-4-7",
+    "strategic": "claude-opus-4-7",
+}
+
 ROLE_MODEL = {
     "coder":      DEFAULT_MODEL,
     "planner":    DEFAULT_MODEL,
@@ -106,7 +117,8 @@ def ask_hive(prompt, role="default", timeout=None, model=None, system=None):
     # Route to Claude when the role calls for it and the API key is available.
     # An explicit model= override skips this path so callers can force Ollama.
     if model is None and role in CLAUDE_ROLES and os.environ.get("ANTHROPIC_API_KEY"):
-        return _ask_claude(prompt, system=system, model=None, timeout=resolved_timeout)
+        claude_model = CLAUDE_ROLE_MODEL.get(role, CLAUDE_MODEL)
+        return _ask_claude(prompt, system=system, model=claude_model, timeout=resolved_timeout)
 
     resolved_model = model or ROLE_MODEL.get(role, DEFAULT_MODEL)
     return ask_model(prompt, model=resolved_model, timeout=resolved_timeout)
