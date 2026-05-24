@@ -46374,5 +46374,234 @@
       }
     },
     "timestamp": "2026-05-24 18:39:47.653410"
+  },
+  {
+    "id": 884,
+    "tag": "complexity",
+    "note": "The function _normalize_expected_operation in planner.py has high cyclomatic complexity (~34 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_expected_operation",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_normalize_expected_operation",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+        "lineno": 151,
+        "end_lineno": 265,
+        "col_offset": 4,
+        "end_col_offset": 33
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+      "lineno": 151,
+      "end_lineno": 265,
+      "col_offset": 4,
+      "end_col_offset": 33
+    },
+    "timestamp": "2026-05-24 18:39:49.987617"
+  },
+  {
+    "id": 885,
+    "tag": "plan",
+    "note": "Task 884 planned | Reduce cyclomatic complexity of _normalize_expected_operation in planner.py by replacing the multi-branch if/elif chain with a dispatch table lookup | next: Add _EXPECTED_OPERATION_MAP dict constant at module level in planner.py immediately before _normalize_expected_operation, mapping change_intent and keyword-hint keys to expected_operation strings",
+    "status": "planned",
+    "metadata": {
+      "task_id": 884,
+      "plan_id": "plan-884",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity of _normalize_expected_operation in planner.py by replacing the multi-branch if/elif chain with a dispatch table lookup",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_normalize_expected_operation function",
+        "operation": "extract dispatch table and simplify branch logic",
+        "validation": "function branch count drops significantly; existing planner output behavior is unchanged under smoke check",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-884-1",
+            "title": "Add _EXPECTED_OPERATION_MAP dispatch table to planner.py",
+            "description": "Define a module-level dict constant _EXPECTED_OPERATION_MAP that maps (change_intent, keyword_hint) or (change_intent,) keys to expected_operation string values, covering the majority of the ~34 branches currently inside _normalize_expected_operation.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_normalize_expected_operation",
+            "change_intent": "add_new_capability",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "_EXPECTED_OPERATION_MAP = {",
+              "\"modify_existing_logic\": \"modify_logic\"",
+              "\"adjust_routing_order\": \"reorder_logic\""
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "dispatch table constant",
+            "operation": "add_symbol",
+            "validation": "AST parse confirms _EXPECTED_OPERATION_MAP dict literal exists at module level in planner.py with at least 10 key-value entries",
+            "creates_symbols": [
+              "_EXPECTED_OPERATION_MAP"
+            ],
+            "wires_into_symbols": [
+              "_normalize_expected_operation"
+            ],
+            "insertion_region": "module-level, immediately before _normalize_expected_operation",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_normalize_expected_operation",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_normalize_expected_operation",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+                "lineno": 151,
+                "end_lineno": 265,
+                "col_offset": 4,
+                "end_col_offset": 33
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+              "lineno": 151,
+              "end_lineno": 265,
+              "col_offset": 4,
+              "end_col_offset": 33
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+            "lineno": 151,
+            "end_lineno": 265,
+            "col_offset": 4,
+            "end_col_offset": 33
+          },
+          {
+            "task_id": "task-884-2",
+            "title": "Refactor _normalize_expected_operation to use dispatch table",
+            "description": "Rewrite _normalize_expected_operation to perform a dict lookup against _EXPECTED_OPERATION_MAP for the primary decision paths, retaining only a minimal fallback branch for any cases the table does not cover, reducing the function's branch count from ~34 to under 8.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_normalize_expected_operation",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "return _EXPECTED_OPERATION_MAP.get(",
+              "# fallback"
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "_normalize_expected_operation function",
+            "operation": "refactor_block",
+            "validation": "cyclomatic complexity of _normalize_expected_operation measurably lower; planner smoke test produces identical expected_operation values for representative task inputs before and after",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_normalize_expected_operation",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_normalize_expected_operation",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+                "lineno": 151,
+                "end_lineno": 265,
+                "col_offset": 4,
+                "end_col_offset": 33
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+              "lineno": 151,
+              "end_lineno": 265,
+              "col_offset": 4,
+              "end_col_offset": 33
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+            "lineno": 151,
+            "end_lineno": 265,
+            "col_offset": 4,
+            "end_col_offset": 33
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "Dispatch table keys must exactly reproduce the original branching conditions or subtle mismatches will silently change planner output",
+          "Any branch that depends on runtime context beyond change_intent (e.g. other task fields) must be preserved in the fallback block rather than collapsed into the table"
+        ],
+        "next_action": "Add _EXPECTED_OPERATION_MAP dict constant at module level in planner.py immediately before _normalize_expected_operation, mapping change_intent and keyword-hint keys to expected_operation strings",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_normalize_expected_operation",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+            "lineno": 151,
+            "end_lineno": 265,
+            "col_offset": 4,
+            "end_col_offset": 33
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 884,
+        "source": "llm",
+        "active_child_task_id": "task-884-1",
+        "active_child_task_title": "Add _EXPECTED_OPERATION_MAP dispatch table to planner.py",
+        "active_child_target_file": "planner.py"
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_normalize_expected_operation",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._normalize_expected_operation",
+        "lineno": 151,
+        "end_lineno": 265,
+        "col_offset": 4,
+        "end_col_offset": 33
+      }
+    },
+    "timestamp": "2026-05-24 18:40:15.222517"
+  },
+  {
+    "id": 886,
+    "tag": "complexity",
+    "note": "The function update_current_snapshot in main.py has high cyclomatic complexity (~42 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "active",
+    "metadata": {
+      "target_file": "main.py",
+      "target_symbol": "update_current_snapshot",
+      "anchor": {
+        "target_file": "main.py",
+        "target_symbol": "update_current_snapshot",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "main.py::update_current_snapshot",
+        "lineno": 1105,
+        "end_lineno": 1152,
+        "col_offset": 0,
+        "end_col_offset": 23
+      },
+      "completion_cues": [],
+      "target_symbol_id": "main.py::update_current_snapshot",
+      "lineno": 1105,
+      "end_lineno": 1152,
+      "col_offset": 0,
+      "end_col_offset": 23
+    },
+    "timestamp": "2026-05-24 18:40:58.125748"
   }
 ]
