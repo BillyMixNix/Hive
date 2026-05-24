@@ -351,10 +351,19 @@ def prepare_context_for_prompt(
             return prompt_text, metadata
 
     selected_block_text = str(selected_block.get("text") or "").strip()
-    if selected_block_text and len(selected_block_text) <= budget_chars and not metadata["under_anchored_after_trim"]:
-        metadata["trimmed_context_length"] = len(selected_block_text)
-        metadata["budget_decision"] = "trimmed_to_selected_block"
-        return selected_block_text, metadata
+    if selected_block_text and not metadata["under_anchored_after_trim"]:
+        block_fits = len(selected_block_text) <= budget_chars
+        # For exact_symbol_block mode the selected block IS the minimum viable
+        # context — a summary cannot substitute. Serve it up to 20k chars
+        # (≈500 lines) regardless of the normal budget ceiling.
+        exact_symbol_override = (
+            context.get("mode") == "exact_symbol_block"
+            and len(selected_block_text) <= 20000
+        )
+        if block_fits or exact_symbol_override:
+            metadata["trimmed_context_length"] = len(selected_block_text)
+            metadata["budget_decision"] = "trimmed_to_selected_block"
+            return selected_block_text, metadata
 
     summary_text = _build_file_summary(
         target_file,
