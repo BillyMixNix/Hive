@@ -39140,6 +39140,62 @@
           "target_symbol": "_build_narrow_fallback_plan",
           "change_intent": "add_new_capability",
           "expected_operation": "add_symbol",
+          "failure_family": "formatting",
+          "failure_class": "parser_contract",
+          "failure_code": "empty_model_response",
+          "failure_category": "empty_model_response",
+          "confidence": 0.99,
+          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
+          "reason": "Empty model response.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 3511,
+            "trimmed_context_length": 3511,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_new_capability::add_symbol::exact_symbol_block",
+          "fix_strategy": "parser_contract::empty_model_response::add_new_capability",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T06:34:33.490812"
+        },
+        {
+          "task_id": 700,
+          "target_file": "planner.py",
+          "target_symbol": "_build_narrow_fallback_plan",
+          "change_intent": "add_new_capability",
+          "expected_operation": "add_symbol",
           "failure_family": "unknown",
           "failure_class": "unknown",
           "failure_code": "unknown_failure",
@@ -39331,62 +39387,6 @@
           "fix_strategy": "policy::new_method_not_allowed::add_new_capability",
           "lesson_level": "exact",
           "timestamp": "2026-05-24T06:31:22.176262"
-        },
-        {
-          "task_id": 700,
-          "target_file": "planner.py",
-          "target_symbol": "_build_narrow_fallback_plan",
-          "change_intent": "add_new_capability",
-          "expected_operation": "add_symbol",
-          "failure_family": "formatting",
-          "failure_class": "parser_contract",
-          "failure_code": "empty_model_response",
-          "failure_category": "empty_model_response",
-          "confidence": 0.99,
-          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
-          "reason": "Empty model response.",
-          "stage": "exception",
-          "source": "coder_exception",
-          "context_mode": "exact_symbol_block",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 3511,
-            "trimmed_context_length": 3511,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_new_capability::add_symbol::exact_symbol_block",
-          "fix_strategy": "parser_contract::empty_model_response::add_new_capability",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T06:30:53.216213"
         }
       ],
       "counts_by_category": {
@@ -39405,9 +39405,9 @@
         "comment_task_rejected_as_nonfunctional": 3,
         "scope_alignment_mismatch": 1,
         "bad_method_indent": 15,
-        "empty_model_response": 4
+        "empty_model_response": 5
       },
-      "updated_at": "2026-05-24T06:33:39.045792"
+      "updated_at": "2026-05-24T06:34:33.490821"
     },
     "lessons": {
       "recent": [
