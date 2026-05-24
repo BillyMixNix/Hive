@@ -44166,7 +44166,7 @@
     "id": 858,
     "tag": "complexity",
     "note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
-    "status": "planned",
+    "status": "done",
     "metadata": {
       "target_file": "executor.py",
       "target_symbol": "test_patch_in_sandbox",
@@ -44516,5 +44516,547 @@
       }
     },
     "timestamp": "2026-05-24 18:16:49.699422"
+  },
+  {
+    "id": 862,
+    "tag": "patch",
+    "note": "Task 858 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 858,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
+      "plan_id": "plan-858",
+      "patch_id": "patch-858",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+        "lineno": 100,
+        "end_lineno": 182,
+        "col_offset": 4,
+        "end_col_offset": 21
+      },
+      "task_type": null,
+      "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-858-1",
+      "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "test_patch_in_sandbox",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _prepare_sandbox_copy("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-858",
+        "task_id": 858,
+        "plan_id": "plan-858",
+        "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-858-1",
+        "child_task_title": null,
+        "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "coder_reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:18:49.768242"
+  },
+  {
+    "id": 863,
+    "tag": "complexity",
+    "note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+    "status": "done",
+    "metadata": {
+      "target_file": "executor.py",
+      "target_symbol": "apply_patch",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 519,
+        "end_lineno": 581,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cues": [],
+      "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+      "lineno": 519,
+      "end_lineno": 581,
+      "col_offset": 4,
+      "end_col_offset": 19
+    },
+    "timestamp": "2026-05-24 18:18:50.029889"
+  },
+  {
+    "id": 864,
+    "tag": "plan",
+    "note": "Task 863 planned | Refactor apply_patch in executor.py by extracting a named helper to reduce its length and improve testability | next: Add _apply_patch_hunk as a named helper in executor.py by extracting the self-contained hunk-application or file-write block from apply_patch",
+    "status": "planned",
+    "metadata": {
+      "task_id": 863,
+      "plan_id": "plan-863",
+      "plan": {
+        "goal": "Refactor apply_patch in executor.py by extracting a named helper to reduce its length and improve testability",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "apply_patch function in executor.py",
+        "operation": "extract helper and slim apply_patch body",
+        "validation": "apply_patch is shorter, helper is independently callable, existing patch behavior is unchanged",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-863-1",
+            "title": "Extract patch sub-step into named helper in executor.py",
+            "description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "apply_patch",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _apply_patch_hunk("
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "patch sub-step helper",
+            "operation": "add helper function extracting repeated or self-contained logic from apply_patch",
+            "validation": "new helper function exists in executor.py and contains the extracted logic with no duplication",
+            "creates_symbols": [
+              "_apply_patch_hunk"
+            ],
+            "wires_into_symbols": [
+              "apply_patch"
+            ],
+            "insertion_region": "executor.py module level, immediately before apply_patch",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "apply_patch",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "apply_patch",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+                "lineno": 519,
+                "end_lineno": 581,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+              "lineno": 519,
+              "end_lineno": 581,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+            "lineno": 519,
+            "end_lineno": 581,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          {
+            "task_id": "task-863-2",
+            "title": "Slim apply_patch body to delegate to extracted helper",
+            "description": "Rewrite the relevant section of apply_patch in executor.py to call _apply_patch_hunk, removing the inlined logic that was extracted so the function body shrinks meaningfully.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "apply_patch",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_apply_patch_hunk("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "apply_patch",
+            "operation": "replace inlined sub-step block with call to _apply_patch_hunk",
+            "validation": "apply_patch is visibly shorter, calls _apply_patch_hunk, and all existing patch tests or smoke checks pass unchanged",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "apply_patch",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "apply_patch",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+                "lineno": 519,
+                "end_lineno": 581,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+              "lineno": 519,
+              "end_lineno": 581,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+            "lineno": 519,
+            "end_lineno": 581,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Extracted helper may not capture all edge-case state that apply_patch relied on in its original inline form",
+          "If apply_patch accumulates state across the extracted block, the helper signature may need extra parameters to remain correct"
+        ],
+        "next_action": "Add _apply_patch_hunk as a named helper in executor.py by extracting the self-contained hunk-application or file-write block from apply_patch",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "apply_patch",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+            "lineno": 519,
+            "end_lineno": 581,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 863,
+        "source": "llm",
+        "active_child_task_id": "task-863-1",
+        "active_child_task_title": "Extract patch sub-step into named helper in executor.py",
+        "active_child_target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 519,
+        "end_lineno": 581,
+        "col_offset": 4,
+        "end_col_offset": 19
+      }
+    },
+    "timestamp": "2026-05-24 18:19:17.041871"
+  },
+  {
+    "id": 865,
+    "tag": "patch",
+    "note": "Task 863 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 863,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for apply_patch",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for apply_patch in executor.py",
+      "plan_id": "plan-863",
+      "patch_id": "patch-863",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 519,
+        "end_lineno": 581,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-863-1",
+      "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "apply_patch",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _apply_patch_hunk("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-863",
+        "task_id": 863,
+        "plan_id": "plan-863",
+        "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-863-1",
+        "child_task_title": null,
+        "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "coder_reason": "Hard anchor enforcement blocked patch for apply_patch",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:19:17.278385"
+  },
+  {
+    "id": 866,
+    "tag": "patch",
+    "note": "Task 863 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 863,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for apply_patch",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for apply_patch in executor.py",
+      "plan_id": "plan-863",
+      "patch_id": "patch-863",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 519,
+        "end_lineno": 581,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-863-1",
+      "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "apply_patch",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _apply_patch_hunk("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-863",
+        "task_id": 863,
+        "plan_id": "plan-863",
+        "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-863-1",
+        "child_task_title": null,
+        "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "coder_reason": "Hard anchor enforcement blocked patch for apply_patch",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:19:17.496964"
+  },
+  {
+    "id": 867,
+    "tag": "patch",
+    "note": "Task 863 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 863,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for apply_patch",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for apply_patch in executor.py",
+      "plan_id": "plan-863",
+      "patch_id": "patch-863",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.apply_patch",
+        "lineno": 519,
+        "end_lineno": 581,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-863-1",
+      "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "apply_patch",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _apply_patch_hunk("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-863",
+        "task_id": 863,
+        "plan_id": "plan-863",
+        "task_note": "The function apply_patch in executor.py is 63 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-863-1",
+        "child_task_title": null,
+        "child_task_description": "Add a new helper function in executor.py that encapsulates one logical sub-step of apply_patch (such as hunk application, diff parsing, or file write handling) so it can be called and tested independently.",
+        "target_file": "executor.py",
+        "target_symbol": "apply_patch",
+        "coder_reason": "Hard anchor enforcement blocked patch for apply_patch",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:19:17.712427"
+  },
+  {
+    "id": 868,
+    "tag": "complexity",
+    "note": "The function _normalize_completion_cues in planner.py has high cyclomatic complexity (~11 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_normalize_completion_cues",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._normalize_completion_cues",
+        "lineno": 267,
+        "end_lineno": 287,
+        "col_offset": 4,
+        "end_col_offset": 29
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._normalize_completion_cues",
+      "lineno": 267,
+      "end_lineno": 287,
+      "col_offset": 4,
+      "end_col_offset": 29
+    },
+    "timestamp": "2026-05-24 18:19:17.961975"
   }
 ]
