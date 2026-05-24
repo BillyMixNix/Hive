@@ -39535,18 +39535,21 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "active_task_id": 847,
-      "active_plan_id": "plan-847",
-      "active_child_task_id": "task-847-1",
-      "current_child_task_title": "Update executor.py",
+      "active_goal": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 851,
+      "active_plan_id": "plan-851",
+      "active_child_task_id": "task-851-1",
+      "current_child_task_title": "Extract per-case validation helpers from validate_patch_semantics",
       "task_status": "planned",
       "target_file": "executor.py",
-      "target_symbol": null,
-      "change_intent": "modify_existing_logic",
-      "expected_operation": "add_capability",
-      "completion_cues": [],
-      "updated_at": "2026-05-24T18:04:47.743316",
+      "target_symbol": "validate_patch_semantics",
+      "change_intent": "add_method_or_function",
+      "expected_operation": "add_symbol",
+      "completion_cues": [
+        "def _validate_",
+        "return _validate_"
+      ],
+      "updated_at": "2026-05-24T18:06:46.894943",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
@@ -39575,6 +39578,62 @@
     },
     "failures": {
       "recent": [
+        {
+          "task_id": 851,
+          "target_file": "executor.py",
+          "target_symbol": "validate_patch_semantics",
+          "change_intent": "add_method_or_function",
+          "expected_operation": "add_symbol",
+          "failure_family": "formatting",
+          "failure_class": "parser_contract",
+          "failure_code": "empty_model_response",
+          "failure_category": "empty_model_response",
+          "confidence": 0.99,
+          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
+          "reason": "Empty model response.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 5027,
+            "trimmed_context_length": 5027,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "parser_contract::empty_model_response::add_method_or_function",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T18:07:37.605149"
+        },
         {
           "task_id": 847,
           "target_file": "executor.py",
@@ -39770,62 +39829,6 @@
           "fix_strategy": "unknown::unknown_failure::add_method_or_function",
           "lesson_level": "exact",
           "timestamp": "2026-05-24T18:01:25.659167"
-        },
-        {
-          "task_id": 843,
-          "target_file": "coder.py",
-          "target_symbol": "generate_patch_with_revisions",
-          "change_intent": "add_method_or_function",
-          "expected_operation": "add_symbol",
-          "failure_family": "orchestration",
-          "failure_class": "retry_budget",
-          "failure_code": "sandbox_retry_exhausted",
-          "failure_category": "sandbox_retry_exhausted",
-          "confidence": 0.78,
-          "retry_instruction": "Stop repeating the same patch shape. Escalate or substantially change the approach before retrying.",
-          "reason": "Retry exhausted: Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
-          "stage": "retry_exhausted",
-          "source": "retry_exhausted",
-          "context_mode": "exact_symbol_block",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 14931,
-            "trimmed_context_length": 1263,
-            "trimmed": true,
-            "summary_used": true,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "summary_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "summary_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 3,
-          "trigger_pattern": "orchestration::retry_budget::sandbox_retry_exhausted::add_method_or_function::add_symbol::exact_symbol_block",
-          "fix_strategy": "stop_repeating_failed_retry_shape::sandbox_retry_exhausted::add_method_or_function",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:01:25.568895"
         }
       ],
       "counts_by_category": {
@@ -39844,11 +39847,11 @@
         "comment_task_rejected_as_nonfunctional": 3,
         "scope_alignment_mismatch": 19,
         "bad_method_indent": 17,
-        "empty_model_response": 7,
+        "empty_model_response": 8,
         "missing_patch_section": 2,
         "empty_patch": 2
       },
-      "updated_at": "2026-05-24T18:05:37.141447"
+      "updated_at": "2026-05-24T18:07:37.605159"
     },
     "lessons": {
       "recent": [
