@@ -39547,20 +39547,21 @@
   "agent_state": {},
   "observability": {
     "current": {
-      "active_goal": "The function update_last_patch_snapshot in main.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "active_task_id": 891,
-      "active_plan_id": "plan-891",
-      "active_child_task_id": "task-891-1",
-      "current_child_task_title": "Add dispatch helper for snapshot field resolution in main.py",
+      "active_goal": "The function _get_task_anchor in coder.py has high cyclomatic complexity (~26 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "active_task_id": 896,
+      "active_plan_id": "plan-896",
+      "active_child_task_id": "task-896-1",
+      "current_child_task_title": "Add anchor-resolution dispatch helper in coder.py",
       "task_status": "planned",
-      "target_file": "main.py",
-      "target_symbol": "update_last_patch_snapshot",
+      "target_file": "coder.py",
+      "target_symbol": "_get_task_anchor",
       "change_intent": "add_method_or_function",
       "expected_operation": "add_symbol",
       "completion_cues": [
-        "def _resolve_snapshot_field("
+        "def _resolve_anchor_for_operation",
+        "return anchor"
       ],
-      "updated_at": "2026-05-24T18:54:23.082362",
+      "updated_at": "2026-05-24T19:06:14.569238",
       "pilot_intent": null,
       "recovery_action": null,
       "recovery_status": null,
@@ -39589,6 +39590,62 @@
     },
     "failures": {
       "recent": [
+        {
+          "task_id": 896,
+          "target_file": "coder.py",
+          "target_symbol": "_get_task_anchor",
+          "change_intent": "add_method_or_function",
+          "expected_operation": "add_symbol",
+          "failure_family": "formatting",
+          "failure_class": "parser_contract",
+          "failure_code": "empty_model_response",
+          "failure_category": "empty_model_response",
+          "confidence": 0.99,
+          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
+          "reason": "Empty model response.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 3729,
+            "trimmed_context_length": 3729,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "parser_contract::empty_model_response::add_method_or_function",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T19:07:06.764000"
+        },
         {
           "task_id": 891,
           "target_file": "main.py",
@@ -39786,62 +39843,6 @@
           "fix_strategy": "policy::new_method_not_allowed::add_method_or_function",
           "lesson_level": "exact",
           "timestamp": "2026-05-24T19:04:07.689453"
-        },
-        {
-          "task_id": 891,
-          "target_file": "main.py",
-          "target_symbol": "update_last_patch_snapshot",
-          "change_intent": "add_method_or_function",
-          "expected_operation": "add_symbol",
-          "failure_family": "structure",
-          "failure_class": "class_scope",
-          "failure_code": "too_many_new_methods",
-          "failure_category": "too_many_new_methods",
-          "confidence": 0.55,
-          "retry_instruction": "Reduce scope to one localized change. Prefer revising one existing shared method in place instead of adding new methods.",
-          "reason": "Patch is too broad: more than one new method added.",
-          "stage": "exception",
-          "source": "coder_exception",
-          "context_mode": "exact_symbol_block",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2307,
-            "trimmed_context_length": 2307,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "structure::class_scope::too_many_new_methods::add_method_or_function::add_symbol::exact_symbol_block",
-          "fix_strategy": "class_scope::too_many_new_methods::add_method_or_function",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T19:03:23.948273"
         }
       ],
       "counts_by_category": {
@@ -39860,14 +39861,14 @@
         "comment_task_rejected_as_nonfunctional": 3,
         "scope_alignment_mismatch": 19,
         "bad_method_indent": 17,
-        "empty_model_response": 19,
+        "empty_model_response": 20,
         "missing_patch_section": 2,
         "empty_patch": 4,
         "unfinished_block_insertion": 2,
         "patch_too_large": 7,
         "too_many_new_methods": 2
       },
-      "updated_at": "2026-05-24T19:05:50.819547"
+      "updated_at": "2026-05-24T19:07:06.764006"
     },
     "lessons": {
       "recent": [
