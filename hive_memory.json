@@ -47893,5 +47893,202 @@
       }
     },
     "timestamp": "2026-05-24 19:19:23.165788"
+  },
+  {
+    "id": 901,
+    "tag": "complexity",
+    "note": "The function _strip_markdown_fences_harder in coder.py has high cyclomatic complexity (~14 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "coder.py",
+      "target_symbol": "_strip_markdown_fences_harder",
+      "anchor": {
+        "target_file": "coder.py",
+        "target_symbol": "_strip_markdown_fences_harder",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+        "lineno": 1545,
+        "end_lineno": 1583,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cues": [],
+      "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+      "lineno": 1545,
+      "end_lineno": 1583,
+      "col_offset": 4,
+      "end_col_offset": 19
+    },
+    "timestamp": "2026-05-24 19:19:25.621339"
+  },
+  {
+    "id": 902,
+    "tag": "plan",
+    "note": "Task 901 planned | Reduce cyclomatic complexity of _strip_markdown_fences_harder in coder.py by extracting repeated branch logic into a named helper | next: Add the _fence_strip_line helper function in coder.py, near _strip_markdown_fences_harder, encapsulating the repeated per-line decision logic",
+    "status": "planned",
+    "metadata": {
+      "task_id": 901,
+      "plan_id": "plan-901",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity of _strip_markdown_fences_harder in coder.py by extracting repeated branch logic into a named helper",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_strip_markdown_fences_harder function",
+        "operation": "extract repeated decision logic into a named helper and delegate from the original function",
+        "validation": "function branch count visibly reduced; existing fence-stripping behavior preserved under smoke check",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-901-1",
+            "title": "Add _fence_strip_line helper to coder.py",
+            "description": "Extract the repeated per-line decision logic from _strip_markdown_fences_harder into a new private helper function _fence_strip_line that accepts a line and current state and returns the appropriate strip action or transformed line.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "coder.py",
+            "target_symbol": "_strip_markdown_fences_harder",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _fence_strip_line("
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "fence-stripping line classifier",
+            "operation": "add_symbol",
+            "validation": "new _fence_strip_line function exists in coder.py and covers the cases previously inlined in _strip_markdown_fences_harder",
+            "creates_symbols": [
+              "_fence_strip_line"
+            ],
+            "wires_into_symbols": [
+              "_strip_markdown_fences_harder"
+            ],
+            "insertion_region": "_strip_markdown_fences_harder function area in coder.py",
+            "metadata": {
+              "target_file": "coder.py",
+              "target_symbol": "_strip_markdown_fences_harder",
+              "anchor": {
+                "target_file": "coder.py",
+                "target_symbol": "_strip_markdown_fences_harder",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+                "lineno": 1545,
+                "end_lineno": 1583,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+              "lineno": 1545,
+              "end_lineno": 1583,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+            "lineno": 1545,
+            "end_lineno": 1583,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          {
+            "task_id": "task-901-2",
+            "title": "Refactor _strip_markdown_fences_harder to delegate to _fence_strip_line",
+            "description": "Rewrite _strip_markdown_fences_harder to replace its inlined branch chains with calls to _fence_strip_line, reducing the function's decision paths from ~14 to a small dispatch loop.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "coder.py",
+            "target_symbol": "_strip_markdown_fences_harder",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_fence_strip_line("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "_strip_markdown_fences_harder function",
+            "operation": "refactor_block",
+            "validation": "cyclomatic complexity of _strip_markdown_fences_harder is materially lower and all existing fence-stripping smoke tests pass unchanged",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "coder.py",
+              "target_symbol": "_strip_markdown_fences_harder",
+              "anchor": {
+                "target_file": "coder.py",
+                "target_symbol": "_strip_markdown_fences_harder",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+                "lineno": 1545,
+                "end_lineno": 1583,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+              "lineno": 1545,
+              "end_lineno": 1583,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+            "lineno": 1545,
+            "end_lineno": 1583,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "coder.py"
+        ],
+        "risks": [
+          "Edge cases in the original branch chain may not be fully covered by the extracted helper if any implicit ordering between branches is not preserved",
+          "State mutation across iterations (e.g. inside/outside fence tracking) must be carried cleanly through the helper interface to avoid subtle behavioral regressions"
+        ],
+        "next_action": "Add the _fence_strip_line helper function in coder.py, near _strip_markdown_fences_harder, encapsulating the repeated per-line decision logic",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "coder.py",
+            "target_symbol": "_strip_markdown_fences_harder",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+            "lineno": 1545,
+            "end_lineno": 1583,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 901,
+        "source": "llm",
+        "active_child_task_id": "task-901-1",
+        "active_child_task_title": "Add _fence_strip_line helper to coder.py",
+        "active_child_target_file": "coder.py"
+      },
+      "anchor": {
+        "target_file": "coder.py",
+        "target_symbol": "_strip_markdown_fences_harder",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "coder.py::CoderAgent._strip_markdown_fences_harder",
+        "lineno": 1545,
+        "end_lineno": 1583,
+        "col_offset": 4,
+        "end_col_offset": 19
+      }
+    },
+    "timestamp": "2026-05-24 19:19:47.116488"
   }
 ]
