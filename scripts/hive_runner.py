@@ -382,5 +382,85 @@ def main():
     metrics.save()
 
 
+def loop(max_runs=None, rest_seconds=30, tasks_per_refill=10):
+    """
+    Run continuously until stopped (Ctrl-C) or max_runs is reached.
+    After each run, sleeps briefly then starts the next one.
+    The queue auto-refills so Hive always has work.
+    """
+    import signal
+
+    stop = {"flag": False}
+
+    def _handle_signal(sig, frame):
+        print("\n[loop] Stop signal received — finishing current run then exiting.")
+        stop["flag"] = True
+
+    signal.signal(signal.SIGINT, _handle_signal)
+    signal.signal(signal.SIGTERM, _handle_signal)
+
+    run_count = 0
+    total_done = 0
+    total_failed = 0
+
+    print(f"[loop] Starting continuous loop (max_runs={max_runs or '∞'}, "
+          f"rest={rest_seconds}s, tasks_per_refill={tasks_per_refill})")
+
+    while not stop["flag"]:
+        if max_runs is not None and run_count >= max_runs:
+            print(f"[loop] Reached max_runs={max_runs}, stopping.")
+            break
+
+        run_count += 1
+        print(f"\n[loop] ══════ Run {run_count} ══════")
+
+        # Refill queue before every run
+        try:
+            from scripts.task_generator import generate
+            entries = load_queue()
+            pending = [e for e in entries if e.get("status", "pending") == "pending"]
+            if len(pending) < tasks_per_refill:
+                print(f"[loop] Queue has {len(pending)} pending — refilling to {tasks_per_refill}...")
+                generate(top=tasks_per_refill)
+        except Exception as exc:
+            print(f"[loop] Refill failed (continuing): {exc}")
+
+        try:
+            done_before = sum(1 for e in load_queue() if e.get("status") == "done")
+            main()
+            done_after = sum(1 for e in load_queue() if e.get("status") == "done")
+            failed_after = sum(1 for e in load_queue() if e.get("status") == "failed")
+            run_done = done_after - done_before
+            total_done += run_done
+            total_failed = failed_after
+        except Exception as exc:
+            print(f"[loop] Run {run_count} raised: {exc}")
+
+        print(f"\n[loop] Cumulative: {total_done} done, {total_failed} failed across {run_count} run(s)")
+
+        if stop["flag"]:
+            break
+
+        print(f"[loop] Resting {rest_seconds}s before next run...")
+        for _ in range(rest_seconds):
+            if stop["flag"]:
+                break
+            time.sleep(1)
+
+    print(f"\n[loop] Loop complete. {run_count} run(s), {total_done} tasks done.")
+    print("[loop] Run `python -m scripts.metrics` to see the full report.")
+
+
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Hive autonomous runner")
+    parser.add_argument("--loop", action="store_true", help="Run continuously until stopped")
+    parser.add_argument("--max-runs", type=int, default=None, help="Max loop iterations")
+    parser.add_argument("--rest", type=int, default=30, help="Seconds between runs (default 30)")
+    parser.add_argument("--tasks", type=int, default=10, help="Tasks to generate per refill (default 10)")
+    args = parser.parse_args()
+
+    if args.loop:
+        loop(max_runs=args.max_runs, rest_seconds=args.rest, tasks_per_refill=args.tasks)
+    else:
+        main()
