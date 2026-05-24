@@ -89,6 +89,9 @@ def has_bad_method_indent(diff_lines):
             continue
 
         indent = len(content) - len(stripped)
+        # Nested functions inside method bodies have indent > 4 — allow them.
+        if indent > 4:
+            continue
         if indent != 4:
             return True
 
