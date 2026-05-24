@@ -12,6 +12,7 @@ Status values written back: "pending" → "running" → "done" | "failed"
 """
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -70,6 +71,41 @@ from main import (
 
 QUEUE_PATH = Path(__file__).parent.parent / "hive_queue.jsonl"
 MAX_CODE_CYCLES = 3  # max child tasks per parent before giving up
+
+
+STATE_FILES = [
+    "hive_lessons.jsonl",
+    "hive_memory.json",
+    "hive_queue.jsonl",
+    "hive_state_snapshot.json",
+    "hive_metrics.jsonl",
+]
+
+
+def auto_commit_state(message="Persist loop state [auto]"):
+    try:
+        repo_root = str(Path(__file__).parent.parent)
+        existing = [f for f in STATE_FILES if (Path(repo_root) / f).exists()]
+        subprocess.run(
+            ["git", "add"] + existing,
+            cwd=repo_root, capture_output=True,
+        )
+        result = subprocess.run(
+            ["git", "diff", "--cached", "--quiet"],
+            cwd=repo_root, capture_output=True,
+        )
+        if result.returncode != 0:  # staged changes exist
+            subprocess.run(
+                ["git", "commit", "-m", message],
+                cwd=repo_root, capture_output=True,
+            )
+            subprocess.run(
+                ["git", "push"],
+                cwd=repo_root, capture_output=True,
+            )
+            print(f"  [runner] Auto-committed state.")
+    except Exception as exc:
+        print(f"  [runner] Auto-commit failed (non-fatal): {exc}")
 
 
 def load_queue():
@@ -367,6 +403,7 @@ def main():
             entry["error"] = str(exc)
             patches_rejected += 1
         save_queue(entries)
+        auto_commit_state()
 
     done = sum(1 for e in entries if e.get("status") == "done")
     failed = sum(1 for e in entries if e.get("status") == "failed")
@@ -380,6 +417,7 @@ def main():
         patches_rejected=patches_rejected,
     )
     metrics.save()
+    auto_commit_state("Persist run metrics and state [auto]")
 
 
 def loop(max_runs=None, rest_seconds=30, tasks_per_refill=10):
