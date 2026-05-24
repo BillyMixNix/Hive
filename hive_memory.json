@@ -44431,5 +44431,34 @@
       "end_col_offset": 19
     },
     "timestamp": "2026-05-24 18:23:00.936555"
+  },
+  {
+    "id": 862,
+    "tag": "complexity",
+    "note": "The function _normalize_completion_cues in planner.py has high cyclomatic complexity (~11 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "active",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_normalize_completion_cues",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_normalize_completion_cues",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._normalize_completion_cues",
+        "lineno": 267,
+        "end_lineno": 287,
+        "col_offset": 4,
+        "end_col_offset": 29
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._normalize_completion_cues",
+      "lineno": 267,
+      "end_lineno": 287,
+      "col_offset": 4,
+      "end_col_offset": 29
+    },
+    "timestamp": "2026-05-24 18:23:25.482387"
   }
 ]
