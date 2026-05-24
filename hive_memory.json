@@ -31503,5 +31503,531 @@
       }
     },
     "timestamp": "2026-05-24 07:15:23.131577"
+  },
+  {
+    "id": 713,
+    "tag": "self-improvement",
+    "note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 07:15:26.080949"
+  },
+  {
+    "id": 714,
+    "tag": "plan",
+    "note": "Task 713 planned | Refactor _validate_plan_required_fields in planner.py to use a fuzzy fallback instead of a bare raise ValueError. | next: Refactor _validate_plan_required_fields to use a fuzzy fallback.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 713,
+      "plan_id": "plan-713",
+      "plan": {
+        "goal": "Refactor _validate_plan_required_fields in planner.py to use a fuzzy fallback instead of a bare raise ValueError.",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_validate_plan_required_fields function",
+        "operation": "modify_existing_logic",
+        "validation": "AST parse or focused smoke check",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-713-1",
+            "title": "Refactor _validate_plan_required_fields to use a fuzzy fallback",
+            "description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_required_fields",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_validate_plan_required_fields function",
+            "operation": "modify_logic",
+            "validation": "AST parse or focused smoke check",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_validate_plan_required_fields",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_validate_plan_required_fields",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+                "lineno": 1320,
+                "end_lineno": 1333,
+                "col_offset": 4,
+                "end_col_offset": 66
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+              "lineno": 1320,
+              "end_lineno": 1333,
+              "col_offset": 4,
+              "end_col_offset": 66
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+            "lineno": 1320,
+            "end_lineno": 1333,
+            "col_offset": 4,
+            "end_col_offset": 66
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "risk of unintended behavior due to changes in validation logic"
+        ],
+        "next_action": "Refactor _validate_plan_required_fields to use a fuzzy fallback.",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_required_fields",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+            "lineno": 1320,
+            "end_lineno": 1333,
+            "col_offset": 4,
+            "end_col_offset": 66
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 713,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 07:16:33.075659"
+  },
+  {
+    "id": 715,
+    "tag": "patch",
+    "note": "Task 713 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 713,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_plan_required_fields",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Ollama request timed out after 45 seconds.",
+      "plan_id": "plan-713",
+      "patch_id": "patch-713",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+        "lineno": 1320,
+        "end_lineno": 1333,
+        "col_offset": 4,
+        "end_col_offset": 66
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-713-1",
+      "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan_required_fields",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-713",
+        "task_id": 713,
+        "plan_id": "plan-713",
+        "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-713-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_plan_required_fields",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 07:20:32.817598"
+  },
+  {
+    "id": 716,
+    "tag": "patch",
+    "note": "Task 713 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 713,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_plan_required_fields",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Ollama request timed out after 45 seconds.",
+      "plan_id": "plan-713",
+      "patch_id": "patch-713",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+        "lineno": 1320,
+        "end_lineno": 1333,
+        "col_offset": 4,
+        "end_col_offset": 66
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-713-1",
+      "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan_required_fields",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-713",
+        "task_id": 713,
+        "plan_id": "plan-713",
+        "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-713-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_plan_required_fields",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 07:26:01.314277"
+  },
+  {
+    "id": 717,
+    "tag": "patch",
+    "note": "Task 713 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+      "patch": "--- planner.py\n+++ planner.py\n@@ -1324,7 +1324,8 @@ def _validate_plan_required_fields(self, plan):\n         if not isinstance(plan[\"goal\"], str) or not plan[\"goal\"].strip():\n             raise ValueError(\"goal must be a non-empty string.\")\n         if not isinstance(plan[\"risks\"], list):\n-            raise ValueError(\"risks must be a list.\")\n+            try:\n+                plan[\"risks\"] = list(plan[\"risks\"])\n+            except Exception as e:\n+                raise ValueError(f\"risks must be convertible to a list: {e}\")\n         if not isinstance(plan[\"next_action\"], str) or not plan[\"next_action\"].strip():\n             raise ValueError(\"next_action must be a non-empty string.\")\n         if not isinstance(plan[\"status\"], str) or not plan[\"status\"].strip():",
+      "task_id": 713,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_validate_plan_required_fields",
+      "context_window": [
+        1311,
+        1341
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1576,
+        "trimmed_context_length": 1576,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 1320,
+        "end_lineno": 1333,
+        "col_offset": 4,
+        "end_col_offset": 66
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmp45yvsuhc\\planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch is localized and modifies existing logic in a safe manner.",
+        "confidence": 0.9,
+        "next_step": "Review the output from sandbox testing.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-713",
+      "patch_id": "patch-713",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+        "lineno": 1320,
+        "end_lineno": 1333,
+        "col_offset": 4,
+        "end_col_offset": 66
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-713-1",
+      "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan_required_fields",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-713",
+        "task_id": 713,
+        "plan_id": "plan-713",
+        "task_note": "The function _validate_plan_required_fields in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-713-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan_required_fields",
+        "coder_reason": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "The patch is localized and modifies existing logic in a safe manner.",
+        "reflector_next_step": "Review the output from sandbox testing.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 4,
+          "deletions": 1
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@ -1324,7 +1324,8 @@ def _validate_plan_required_fields(self, plan):\n         if not isinstance(plan[\"goal\"], str) or not plan[\"goal\"].strip():\n             raise ValueError(\"goal must be a non-empty string.\")\n         if not isinstance(plan[\"risks\"], list):\n-            raise ValueError(\"risks must be a list.\")\n+            try:\n+                plan[\"risks\"] = list(plan[\"risks\"])\n+            except Exception as e:\n+                raise ValueError(f\"risks must be convertible to a list: {e}\")\n         if not isinstance(plan[\"next_action\"], str) or not plan[\"next_action\"].strip():\n             raise ValueError(\"next_action must be a non-empty string.\")\n         if not isinstance(plan[\"status\"], str) or not plan[\"status\"].strip():",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 07:29:15.806387"
+  },
+  {
+    "id": 718,
+    "tag": "plan",
+    "note": "Task 713 plan updated | Refactor _validate_plan_required_fields in planner.py to use a fuzzy fallback instead of a bare raise ValueError.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 713,
+      "plan_id": "plan-713",
+      "plan": {
+        "goal": "Refactor _validate_plan_required_fields in planner.py to use a fuzzy fallback instead of a bare raise ValueError.",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_validate_plan_required_fields function",
+        "operation": "modify_existing_logic",
+        "validation": "AST parse or focused smoke check",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-713-1",
+            "title": "Refactor _validate_plan_required_fields to use a fuzzy fallback",
+            "description": "Modify the logic in _validate_plan_required_fields to include a fuzzy fallback mechanism instead of raising ValueError.",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_required_fields",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_validate_plan_required_fields function",
+            "operation": "modify_logic",
+            "validation": "AST parse or focused smoke check",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_validate_plan_required_fields",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_validate_plan_required_fields",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+                "lineno": 1320,
+                "end_lineno": 1333,
+                "col_offset": 4,
+                "end_col_offset": 66
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+              "lineno": 1320,
+              "end_lineno": 1333,
+              "col_offset": 4,
+              "end_col_offset": 66
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+            "lineno": 1320,
+            "end_lineno": 1333,
+            "col_offset": 4,
+            "end_col_offset": 66
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "risk of unintended behavior due to changes in validation logic"
+        ],
+        "next_action": "Refactor _validate_plan_required_fields to use a fuzzy fallback.",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan_required_fields",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan_required_fields",
+            "lineno": 1320,
+            "end_lineno": 1333,
+            "col_offset": 4,
+            "end_col_offset": 66
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 713,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-24 07:29:17.376668"
   }
 ]
