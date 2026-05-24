@@ -41,6 +41,16 @@ def scan_file(path):
 
 
 def _find_hardcoded_sets(tree, filename, priority):
+    # Build a map: constant name → first function that references it
+    const_to_func = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        for child in ast.walk(node):
+            if isinstance(child, ast.Name) and child.id in HARDCODED_SET_NAMES:
+                if child.id not in const_to_func:
+                    const_to_func[child.id] = node.name
+
     findings = []
     for node in ast.walk(tree):
         if not isinstance(node, ast.Assign):
@@ -48,18 +58,24 @@ def _find_hardcoded_sets(tree, filename, priority):
         for target in node.targets:
             if not isinstance(target, ast.Name):
                 continue
-            if target.id in HARDCODED_SET_NAMES:
-                findings.append({
-                    "note": (
-                        f"The {target.id} set in {filename} is hardcoded. "
-                        f"Consider making it dynamic or adding a fuzzy fallback "
-                        f"so novel inputs are handled gracefully instead of hard-failing."
-                    ),
-                    "target_file": filename,
-                    "target_symbol": target.id,
-                    "tag": "self-improvement",
-                    "priority_hint": priority,
-                })
+            if target.id not in HARDCODED_SET_NAMES:
+                continue
+            # Use the referencing function as the anchor, not the constant itself.
+            # If no function references it, skip — no valid anchor exists.
+            anchor_symbol = const_to_func.get(target.id)
+            if anchor_symbol is None:
+                continue
+            findings.append({
+                "note": (
+                    f"The {target.id} set in {filename} is hardcoded. "
+                    f"Consider making it dynamic or adding a fuzzy fallback "
+                    f"so novel inputs are handled gracefully instead of hard-failing."
+                ),
+                "target_file": filename,
+                "target_symbol": anchor_symbol,
+                "tag": "self-improvement",
+                "priority_hint": priority,
+            })
     return findings
 
 
