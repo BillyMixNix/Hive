@@ -42865,7 +42865,7 @@
     "id": 843,
     "tag": "complexity",
     "note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-    "status": "planned",
+    "status": "done",
     "metadata": {
       "target_file": "coder.py",
       "target_symbol": "generate_patch_with_revisions",
@@ -43222,6 +43222,86 @@
   },
   {
     "id": 847,
+    "tag": "patch",
+    "note": "Task 843 patch blocked | coder.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 843,
+      "target_file": "coder.py",
+      "change_type": "diff_patch",
+      "patch": "--- coder.py\n+++ coder.py\n",
+      "reason": "Hard anchor enforcement blocked patch for generate_patch_with_revisions",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
+      "plan_id": "plan-843",
+      "patch_id": "patch-843",
+      "anchor": {
+        "target_file": "coder.py",
+        "target_symbol": "generate_patch_with_revisions",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "coder.py::CoderAgent.generate_patch_with_revisions",
+        "lineno": 1934,
+        "end_lineno": 2186,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-843-1",
+      "child_task_description": "Extract the repeated per-case decision logic from generate_patch_with_revisions into a new private helper function _build_revision_context that accepts the current revision state and returns a structured context dict, replacing inline branching with a single dispatch call site.",
+      "child_target_file": "coder.py",
+      "child_target_symbol": "generate_patch_with_revisions",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _build_revision_context(",
+        "return {"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-843",
+        "task_id": 843,
+        "plan_id": "plan-843",
+        "task_note": "The function generate_patch_with_revisions in coder.py has high cyclomatic complexity (~35 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-843-1",
+        "child_task_title": null,
+        "child_task_description": "Extract the repeated per-case decision logic from generate_patch_with_revisions into a new private helper function _build_revision_context that accepts the current revision state and returns a structured context dict, replacing inline branching with a single dispatch call site.",
+        "target_file": "coder.py",
+        "target_symbol": "generate_patch_with_revisions",
+        "coder_reason": "Hard anchor enforcement blocked patch for generate_patch_with_revisions",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- coder.py\n+++ coder.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:05:30.498956"
+  },
+  {
+    "id": 848,
     "tag": "complexity",
     "note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
     "status": "done",
@@ -43237,83 +43317,168 @@
       "target_symbol": null,
       "completion_cues": []
     },
-    "timestamp": "2026-05-24 18:04:20.096932"
+    "timestamp": "2026-05-24 18:05:32.838092"
   },
   {
-    "id": 848,
+    "id": 849,
     "tag": "plan",
-    "note": "Task 847 planned | The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count. | next: Implement the requested change in executor.py.",
+    "note": "Task 848 planned | reduce cyclomatic complexity of verify_patch_context in executor.py by extracting repeated decision logic into named helpers | next: In executor.py, extract the repeated conditional groups from verify_patch_context into named helper functions (_check_symbol_context, _check_region_context, _check_anchor_context) placed immediately above that function.",
     "status": "planned",
     "metadata": {
-      "task_id": 847,
-      "plan_id": "plan-847",
+      "task_id": 848,
+      "plan_id": "plan-848",
       "plan": {
-        "task_id": 847,
-        "goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "task_type": "feature",
-        "task_kind": "create",
-        "work_mode": "create",
+        "goal": "reduce cyclomatic complexity of verify_patch_context in executor.py by extracting repeated decision logic into named helpers",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "verify_patch_context",
+        "operation": "extract decision branches into named helpers and rewrite dispatch in verify_patch_context",
+        "validation": "verify_patch_context branch count visibly reduced; all existing executor smoke checks pass",
+        "task_type": "refactor",
         "tasks": [
           {
-            "task_id": "task-847-1",
-            "title": "Update executor.py",
-            "description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-            "status": "complete",
+            "task_id": "task-848-1",
+            "title": "Add named helper functions for repeated branch groups in executor.py",
+            "description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
+            "status": "current",
             "depends_on": [],
             "target_file": "executor.py",
-            "target_symbol": null,
-            "change_intent": "modify_existing_logic",
-            "expected_operation": "add_capability",
-            "completion_cues": [],
-            "task_type": "feature",
-            "task_kind": "create",
-            "work_mode": "create",
-            "artifact": "",
-            "operation": "",
-            "validation": "",
-            "creates_symbols": [],
+            "target_symbol": "verify_patch_context",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _check_symbol_context(",
+              "def _check_region_context(",
+              "def _check_anchor_context("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "verify_patch_context branch logic",
+            "operation": "extract repeated conditional groups into named helpers",
+            "validation": "each new helper covers a distinct subset of the original branches and is importable without error",
+            "creates_symbols": [
+              "_check_symbol_context",
+              "_check_region_context",
+              "_check_anchor_context"
+            ],
             "wires_into_symbols": [],
+            "insertion_region": "module-level area immediately above verify_patch_context",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "verify_patch_context",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "verify_patch_context",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+                "lineno": 184,
+                "end_lineno": 290,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+              "lineno": 184,
+              "end_lineno": 290,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+            "lineno": 184,
+            "end_lineno": 290,
+            "col_offset": 4,
+            "end_col_offset": 9
+          },
+          {
+            "task_id": "task-848-2",
+            "title": "Rewrite verify_patch_context to delegate to new helpers",
+            "description": "Replace the sprawling if/elif chain inside verify_patch_context with a dispatch table or short delegation block that calls the extracted helpers, reducing the function's visible branch count to under ten.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "verify_patch_context",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_check_symbol_context(",
+              "_check_region_context(",
+              "_check_anchor_context("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "verify_patch_context",
+            "operation": "replace inline branch chain with dispatch delegation",
+            "validation": "verify_patch_context body is shorter and branch count measurably reduced; existing executor tests pass unchanged",
+            "creates_symbols": [],
+            "wires_into_symbols": [
+              "_check_symbol_context",
+              "_check_region_context",
+              "_check_anchor_context"
+            ],
             "insertion_region": "",
             "metadata": {
               "target_file": "executor.py",
-              "target_symbol": null,
+              "target_symbol": "verify_patch_context",
               "anchor": {
                 "target_file": "executor.py",
-                "target_symbol": null,
+                "target_symbol": "verify_patch_context",
                 "scope": "single_file",
-                "anchor_level": "file",
-                "anchor_source": "file_level_inference"
-              }
-            }
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+                "lineno": 184,
+                "end_lineno": 290,
+                "col_offset": 4,
+                "end_col_offset": 9
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+              "lineno": 184,
+              "end_lineno": 290,
+              "col_offset": 4,
+              "end_col_offset": 9
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+            "lineno": 184,
+            "end_lineno": 290,
+            "col_offset": 4,
+            "end_col_offset": 9
           }
         ],
         "dependencies": [
           "executor.py"
         ],
         "risks": [
-          "Planner fallback was used after planner validation failed.",
-          "File-level anchor: coder must keep the patch narrowly scoped inside the target file."
+          "helper extraction may miss an edge-case branch that silently changes verification behavior",
+          "dispatch table key mapping may not cover all change_intent or operation values present in the original chain"
         ],
-        "next_action": "Implement the requested change in executor.py.",
+        "next_action": "In executor.py, extract the repeated conditional groups from verify_patch_context into named helper functions (_check_symbol_context, _check_region_context, _check_anchor_context) placed immediately above that function.",
         "status": "planned",
-        "source": "fallback_file_task",
-        "llm_error": "name 'logging' is not defined",
         "metadata": {
           "anchor": {
             "target_file": "executor.py",
-            "target_symbol": null,
+            "target_symbol": "verify_patch_context",
             "scope": "single_file",
-            "anchor_level": "file",
-            "anchor_source": "file_level_inference"
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+            "lineno": 184,
+            "end_lineno": 290,
+            "col_offset": 4,
+            "end_col_offset": 9
           },
-          "planner_source": "fallback_file_task",
-          "planner_failure_code": "planner_validation_failure",
-          "planner_failure_detail": "name 'logging' is not defined"
+          "planner_source": "llm"
         },
-        "active_child_task_id": null,
-        "active_child_task_title": null,
-        "active_child_target_file": null,
-        "target_file": "executor.py"
+        "task_kind": "refactor",
+        "task_id": 848,
+        "source": "llm",
+        "active_child_task_id": "task-848-1",
+        "active_child_task_title": "Add named helper functions for repeated branch groups in executor.py",
+        "active_child_target_file": "executor.py"
       },
       "anchor": {
         "target_file": "executor.py",
@@ -43323,140 +43488,80 @@
         "anchor_source": "file_level_inference"
       }
     },
-    "timestamp": "2026-05-24 18:04:47.705759"
+    "timestamp": "2026-05-24 18:05:53.908869"
   },
   {
-    "id": 849,
+    "id": 850,
     "tag": "patch",
-    "note": "Task 847 patch pending_pilot_review | executor.py",
-    "status": "applied",
+    "note": "Task 848 patch blocked | executor.py",
+    "status": "blocked",
     "metadata": {
+      "task_id": 848,
       "target_file": "executor.py",
       "change_type": "diff_patch",
-      "risk_level": "low",
-      "status": "proposed",
-      "reason": "Replace the four sequential anchor-finding if-blocks inside verify_patch_context with an inline dispatch table loop plus one combined fallback, reducing branch count without adding new methods.",
-      "patch": "--- executor.py\n+++ executor.py\n@@ -1,4 +1,4 @@\n-        # 1. Best case: exact contiguous removal block\n-        if removals:\n-            block_start, block_end = self._find_block_index(file_lines, removals)\n-            if block_start is not None:\n-                checks[\"exact_removal_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = block_start\n-                block_span = (block_start, block_end)\n-\n-        # 2. Fallback: contiguous context block\n-        if anchor_index is None and context:\n-            ctx_start, ctx_end = self._find_context_block_index(file_lines, context)\n-            if ctx_start is not None:\n-                checks[\"context_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = ctx_start\n-                block_span = (ctx_start, ctx_end)\n-\n-        # 3. Final fallback: single-line removal match\n-        if anchor_index is None:\n-            for removal in removals:\n-                idx = self._find_line_index(file_lines, removal)\n-                if idx is not None:\n-                    checks[\"anchor_found\"] = True\n-                    anchor_index = idx\n-                    break\n-\n-        # 4. Last resort: single-line context match\n-        if anchor_index is None:\n-            for ctx in context:\n-                idx = self._find_line_index(file_lines, ctx)\n-                if idx is not None:\n-                    checks[\"anchor_found\"] = True\n-                    anchor_index = idx\n-                    break\n+        # Anchor resolution: ordered dispatch table reduces branch count\n+        for _check_key, _lines, _finder in [\n+            (\"exact_removal_block_found\", removals, self._find_block_index),\n+            (\"context_block_found\", context, self._find_context_block_index),\n+        ]:\n+            if anchor_index is None and _lines:\n+                _s, _e = _finder(file_lines, _lines)\n+                if _s is not None:\n+                    checks[_check_key] = True\n+                    checks[\"anchor_found\"] = True\n+                    anchor_index, block_span = _s, (_s, _e)\n+\n+        # Single-line fallback: removals then context\n+        if anchor_index is None:\n+            for _line in removals + context:\n+                _idx = self._find_line_index(file_lines, _line)\n+                if _idx is not None:\n+                    checks[\"anchor_found\"] = True\n+                    anchor_index = _idx\n+                    break",
-      "task_id": 847,
-      "source": "llm",
-      "context_mode": "block_window",
-      "context_target": "verify_patch_context",
-      "context_window": [
-        0,
-        290
-      ],
-      "context_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
-      "context_budget": {
-        "selected_mode": "block_window",
-        "raw_context_length": 10372,
-        "trimmed_context_length": 5446,
-        "trimmed": true,
-        "summary_used": false,
-        "full_file_omitted": true,
-        "budget_chars": 6800,
-        "budget_decision": "trimmed_related_context",
-        "dropped_related_context": true,
-        "dropped_helper_blocks": false,
-        "dropped_import_blocks": false,
-        "large_file_policy_applied": true,
-        "under_anchored_after_trim": false,
-        "context_priority": [
-          "block_window",
-          "line_window",
-          "file_head_fallback"
-        ],
-        "anchoring_confidence": "high"
-      },
-      "context_priority": [
-        "block_window",
-        "line_window",
-        "file_head_fallback"
-      ],
-      "anchoring_confidence": "high",
-      "large_file_policy_applied": true,
-      "under_anchored_after_trim": false,
-      "planner_source": "fallback_file_task",
-      "benchmark_case_id": null,
-      "context_span": {
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
+      "plan_id": "plan-848",
+      "patch_id": "patch-848",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
         "lineno": 184,
         "end_lineno": 290,
         "col_offset": 4,
         "end_col_offset": 9
       },
-      "completion_cue_result": {
-        "provided_cues": [],
-        "matched_cues": [],
-        "missing_cues": [],
-        "all_matched": true
-      },
-      "intent_check": {
-        "skipped": true,
-        "reason": "no explicit simple return-expression intent detected"
-      },
-      "sandbox_report": {
-        "patch_id": null,
-        "target_file": "executor.py",
-        "sandbox_file": "/tmp/tmpr4iy7t6c/executor.py",
-        "applied": true,
-        "syntax_valid": true,
-        "semantic_valid": true,
-        "errors": [],
-        "notes": "Patch passed sandbox testing successfully."
-      },
-      "reflection": {
-        "reflection": "Patch consolidates four anchor-finding branches into a dispatch loop plus a combined single-line fallback, staying inside verify_patch_context with no new methods. Sandbox passed syntax and semantic checks. Localized, in-place rewrite aligned with the complexity-reduction child step. Minor concern: the dispatch loop lacks a break after a successful match, so the second iteration still runs (harmless since guarded by anchor_index is None, but slightly wasteful). Behavior preserved otherwise.",
-        "confidence": 0.78,
-        "next_step": "Apply patch; optionally add a break after successful anchor assignment in the dispatch loop for clarity.",
-        "verdict": "accept"
-      },
-      "plan_id": "plan-847",
-      "patch_id": "patch-847",
-      "anchor": {
-        "target_file": "executor.py",
-        "target_symbol": null,
-        "scope": "single_file",
-        "anchor_level": "file",
-        "anchor_source": "child_task"
-      },
       "task_type": null,
       "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "pilot_verdict": "accept",
-      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_verdict": null,
+      "pilot_reason": null,
       "pilot_guidance": null,
-      "location_correct": true,
-      "task_alignment": true,
-      "plan_step_alignment": true,
-      "child_task_id": "task-847-1",
-      "child_task_description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-848-1",
+      "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
       "child_target_file": "executor.py",
-      "child_target_symbol": null,
-      "child_change_intent": "modify_existing_logic",
-      "child_expected_operation": "add_capability",
-      "child_completion_cues": [],
-      "child_task_type": "feature",
+      "child_target_symbol": "verify_patch_context",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _check_symbol_context(",
+        "def _check_region_context(",
+        "def _check_anchor_context("
+      ],
+      "child_task_type": "refactor",
       "recovery_action": null,
       "recovery_status": null,
       "recovery_reason": null,
       "review_packet": {
-        "patch_id": "patch-847",
-        "task_id": 847,
-        "plan_id": "plan-847",
+        "patch_id": "patch-848",
+        "task_id": 848,
+        "plan_id": "plan-848",
         "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "child_task_id": "task-847-1",
+        "child_task_id": "task-848-1",
         "child_task_title": null,
-        "child_task_description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
         "target_file": "executor.py",
         "target_symbol": "verify_patch_context",
-        "coder_reason": "Replace the four sequential anchor-finding if-blocks inside verify_patch_context with an inline dispatch table loop plus one combined fallback, reducing branch count without adding new methods.",
-        "reflector_verdict": "accept",
-        "reflector_reflection": "Patch consolidates four anchor-finding branches into a dispatch loop plus a combined single-line fallback, staying inside verify_patch_context with no new methods. Sandbox passed syntax and semantic checks. Localized, in-place rewrite aligned with the complexity-reduction child step. Minor concern: the dispatch loop lacks a break after a successful match, so the second iteration still runs (harmless since guarded by anchor_index is None, but slightly wasteful). Behavior preserved otherwise.",
-        "reflector_next_step": "Apply patch; optionally add a break after successful anchor assignment in the dispatch loop for clarity.",
+        "coder_reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
         "patch_stats": {
-          "hunks": 1,
-          "additions": 20,
-          "deletions": 35
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
         },
-        "patch_excerpt": "--- executor.py\n+++ executor.py\n@@ -1,4 +1,4 @@\n-        # 1. Best case: exact contiguous removal block\n-        if removals:\n-            block_start, block_end = self._find_block_index(file_lines, removals)\n-            if block_start is not None:\n-                checks[\"exact_removal_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = block_start\n-                block_span = (block_start, block_end)\n-\n-        # 2. Fallback: contiguous context block\n-        if anchor_index is None and context:\n-            ctx_start, ctx_end = self._find_context_block_index(file_lines, context)\n-            if ctx_start is not None:\n-                checks[\"context_block_found\"] = True\n-                checks[\"anchor_found\"] = True\n-                anchor_index = ctx_start\n-                block_span = (ctx_start, ctx_end)",
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
         "review_questions": [
           "Is this the right place to patch?",
           "Does this solve the active child step rather than adjacent behavior?",
@@ -43464,89 +43569,172 @@
         ]
       }
     },
-    "timestamp": "2026-05-24 18:06:20.834016"
-  },
-  {
-    "id": 850,
-    "tag": "plan",
-    "note": "Task 847 plan updated | The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-    "status": "planned",
-    "metadata": {
-      "task_id": 847,
-      "plan_id": "plan-847",
-      "plan": {
-        "task_id": 847,
-        "goal": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "task_type": "feature",
-        "task_kind": "create",
-        "work_mode": "create",
-        "tasks": [
-          {
-            "task_id": "task-847-1",
-            "title": "Update executor.py",
-            "description": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-            "status": "complete",
-            "depends_on": [],
-            "target_file": "executor.py",
-            "target_symbol": null,
-            "change_intent": "modify_existing_logic",
-            "expected_operation": "add_capability",
-            "completion_cues": [],
-            "task_type": "feature",
-            "task_kind": "create",
-            "work_mode": "create",
-            "artifact": "",
-            "operation": "",
-            "validation": "",
-            "creates_symbols": [],
-            "wires_into_symbols": [],
-            "insertion_region": "",
-            "metadata": {
-              "target_file": "executor.py",
-              "target_symbol": null,
-              "anchor": {
-                "target_file": "executor.py",
-                "target_symbol": null,
-                "scope": "single_file",
-                "anchor_level": "file",
-                "anchor_source": "file_level_inference"
-              }
-            }
-          }
-        ],
-        "dependencies": [
-          "executor.py"
-        ],
-        "risks": [
-          "Planner fallback was used after planner validation failed.",
-          "File-level anchor: coder must keep the patch narrowly scoped inside the target file."
-        ],
-        "next_action": "Implement the requested change in executor.py.",
-        "status": "planned",
-        "source": "fallback_file_task",
-        "llm_error": "name 'logging' is not defined",
-        "metadata": {
-          "anchor": {
-            "target_file": "executor.py",
-            "target_symbol": null,
-            "scope": "single_file",
-            "anchor_level": "file",
-            "anchor_source": "file_level_inference"
-          },
-          "planner_source": "fallback_file_task",
-          "planner_failure_code": "planner_validation_failure",
-          "planner_failure_detail": "name 'logging' is not defined"
-        },
-        "active_child_task_id": null,
-        "active_child_task_title": null,
-        "active_child_target_file": null,
-        "target_file": "executor.py"
-      }
-    },
-    "timestamp": "2026-05-24 18:06:22.379194"
+    "timestamp": "2026-05-24 18:10:10.008211"
   },
   {
     "id": 851,
+    "tag": "patch",
+    "note": "Task 848 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 848,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for verify_patch_context in executor.py",
+      "plan_id": "plan-848",
+      "patch_id": "patch-848",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+        "lineno": 184,
+        "end_lineno": 290,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-848-1",
+      "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "verify_patch_context",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _check_symbol_context(",
+        "def _check_region_context(",
+        "def _check_anchor_context("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-848",
+        "task_id": 848,
+        "plan_id": "plan-848",
+        "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-848-1",
+        "child_task_title": null,
+        "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "coder_reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:10.233391"
+  },
+  {
+    "id": 852,
+    "tag": "patch",
+    "note": "Task 848 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 848,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for verify_patch_context in executor.py",
+      "plan_id": "plan-848",
+      "patch_id": "patch-848",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.verify_patch_context",
+        "lineno": 184,
+        "end_lineno": 290,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-848-1",
+      "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "verify_patch_context",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _check_symbol_context(",
+        "def _check_region_context(",
+        "def _check_anchor_context("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-848",
+        "task_id": 848,
+        "plan_id": "plan-848",
+        "task_note": "The function verify_patch_context in executor.py has high cyclomatic complexity (~24 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-848-1",
+        "child_task_title": null,
+        "child_task_description": "Extract the repeated decision branch groups inside verify_patch_context into two or three focused named helper functions (e.g. _check_symbol_context, _check_region_context, _check_anchor_context) placed above verify_patch_context in executor.py.",
+        "target_file": "executor.py",
+        "target_symbol": "verify_patch_context",
+        "coder_reason": "Hard anchor enforcement blocked patch for verify_patch_context",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:10.477712"
+  },
+  {
+    "id": 853,
     "tag": "complexity",
     "note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
     "status": "done",
@@ -43562,29 +43750,29 @@
       "target_symbol": null,
       "completion_cues": []
     },
-    "timestamp": "2026-05-24 18:06:24.543248"
+    "timestamp": "2026-05-24 18:10:12.968740"
   },
   {
-    "id": 852,
+    "id": 854,
     "tag": "plan",
-    "note": "Task 851 planned | Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the flat if/elif chain with a dispatch table | next: Add private helper functions in executor.py that each encapsulate one named decision branch from validate_patch_semantics",
+    "note": "Task 853 planned | Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the if-elif chain with a dispatch table | next: Add named helper functions in executor.py that each implement one semantic-validation branch currently inside validate_patch_semantics",
     "status": "planned",
     "metadata": {
-      "task_id": 851,
-      "plan_id": "plan-851",
+      "task_id": 853,
+      "plan_id": "plan-853",
       "plan": {
-        "goal": "Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the flat if/elif chain with a dispatch table",
+        "goal": "Reduce cyclomatic complexity of validate_patch_semantics in executor.py by extracting branch logic into named helpers and replacing the if-elif chain with a dispatch table",
         "work_mode": "refactor",
         "domain": "code",
-        "artifact": "validate_patch_semantics decision logic",
+        "artifact": "validate_patch_semantics",
         "operation": "extract helpers and dispatch table to reduce branch count",
-        "validation": "validate_patch_semantics body shrinks to a short dispatch loop with no repeated decision patterns; existing callers pass unchanged",
+        "validation": "validate_patch_semantics body shrinks to a flat dispatch call with no nested if-elif chain; all existing semantic validation paths still reachable",
         "task_type": "refactor",
         "tasks": [
           {
-            "task_id": "task-851-1",
-            "title": "Extract per-case validation helpers from validate_patch_semantics",
-            "description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
+            "task_id": "task-853-1",
+            "title": "Extract branch logic into named validator helpers",
+            "description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
             "status": "current",
             "depends_on": [],
             "target_file": "executor.py",
@@ -43592,23 +43780,24 @@
             "change_intent": "add_method_or_function",
             "expected_operation": "add_symbol",
             "completion_cues": [
-              "def _validate_",
-              "return _validate_"
+              "def _validate_semantic_",
+              "return True",
+              "return False"
             ],
             "task_type": "refactor",
             "task_kind": "refactor",
             "work_mode": "refactor",
             "domain": "code",
-            "artifact": "per-case validation branch logic",
-            "operation": "add named helper functions for each repeated decision branch",
-            "validation": "each extracted helper is independently readable and covers exactly the logic it replaces; no logic is duplicated between helpers",
+            "artifact": "validate_patch_semantics branch logic",
+            "operation": "extract repeated decision branches into named helper functions",
+            "validation": "each extracted helper is independently callable and covers exactly one former branch from validate_patch_semantics",
             "creates_symbols": [
-              "_validate_case"
+              "_validate_semantic_case"
             ],
             "wires_into_symbols": [
               "validate_patch_semantics"
             ],
-            "insertion_region": "module-level functions near validate_patch_semantics in executor.py",
+            "insertion_region": "module level near validate_patch_semantics",
             "metadata": {
               "target_file": "executor.py",
               "target_symbol": "validate_patch_semantics",
@@ -43619,27 +43808,27 @@
                 "anchor_level": "symbol",
                 "anchor_source": "planner_normalized",
                 "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-                "lineno": 277,
-                "end_lineno": 418,
+                "lineno": 292,
+                "end_lineno": 433,
                 "col_offset": 4,
                 "end_col_offset": 9
               },
               "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-              "lineno": 277,
-              "end_lineno": 418,
+              "lineno": 292,
+              "end_lineno": 433,
               "col_offset": 4,
               "end_col_offset": 9
             },
             "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-            "lineno": 277,
-            "end_lineno": 418,
+            "lineno": 292,
+            "end_lineno": 433,
             "col_offset": 4,
             "end_col_offset": 9
           },
           {
-            "task_id": "task-851-2",
-            "title": "Rewrite validate_patch_semantics to dispatch through helpers",
-            "description": "Replace the flat if/elif chain inside validate_patch_semantics with a dispatch table or short loop that delegates each case to the extracted helpers, reducing the function's branch count to under 5.",
+            "task_id": "task-853-2",
+            "title": "Replace if-elif chain in validate_patch_semantics with dispatch table",
+            "description": "Rewrite validate_patch_semantics to build a dispatch table mapping each case key to its extracted helper, then resolve and call the matched helper, removing the original if-elif chain and reducing branch count to a single dispatch lookup.",
             "status": "next",
             "depends_on": [],
             "target_file": "executor.py",
@@ -43648,15 +43837,16 @@
             "expected_operation": "refactor_block",
             "completion_cues": [
               "_dispatch = {",
-              "handler("
+              "handler = _dispatch.get(",
+              "return handler("
             ],
             "task_type": "refactor",
             "task_kind": "refactor",
             "work_mode": "refactor",
             "domain": "code",
             "artifact": "validate_patch_semantics",
-            "operation": "replace multi-branch if/elif body with dispatch table delegation",
-            "validation": "validate_patch_semantics cyclomatic complexity drops to under 5 decision paths and all existing callers return identical results",
+            "operation": "replace if-elif chain with dispatch table lookup",
+            "validation": "validate_patch_semantics cyclomatic complexity drops below 4 and all former branches still exercise the correct helper via the dispatch table",
             "creates_symbols": [],
             "wires_into_symbols": [],
             "insertion_region": "",
@@ -43670,20 +43860,20 @@
                 "anchor_level": "symbol",
                 "anchor_source": "planner_normalized",
                 "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-                "lineno": 277,
-                "end_lineno": 418,
+                "lineno": 292,
+                "end_lineno": 433,
                 "col_offset": 4,
                 "end_col_offset": 9
               },
               "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-              "lineno": 277,
-              "end_lineno": 418,
+              "lineno": 292,
+              "end_lineno": 433,
               "col_offset": 4,
               "end_col_offset": 9
             },
             "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-            "lineno": 277,
-            "end_lineno": 418,
+            "lineno": 292,
+            "end_lineno": 433,
             "col_offset": 4,
             "end_col_offset": 9
           }
@@ -43692,10 +43882,10 @@
           "executor.py"
         ],
         "risks": [
-          "Extracted helpers may silently change early-return or short-circuit behavior if branch ordering is not preserved exactly",
-          "Dispatch table keys must cover every case that the original if/elif handled or callers may silently receive wrong validation results"
+          "An extracted helper that silently changes a guard condition or return value could alter validation outcomes without a visible test failure",
+          "Dispatch table key mismatches between the old if-elif conditions and the new keys could silently skip validation branches"
         ],
-        "next_action": "Add private helper functions in executor.py that each encapsulate one named decision branch from validate_patch_semantics",
+        "next_action": "Add named helper functions in executor.py that each implement one semantic-validation branch currently inside validate_patch_semantics",
         "status": "planned",
         "metadata": {
           "anchor": {
@@ -43705,18 +43895,18 @@
             "anchor_level": "symbol",
             "anchor_source": "file_level_inference",
             "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-            "lineno": 277,
-            "end_lineno": 418,
+            "lineno": 292,
+            "end_lineno": 433,
             "col_offset": 4,
             "end_col_offset": 9
           },
           "planner_source": "llm"
         },
         "task_kind": "refactor",
-        "task_id": 851,
+        "task_id": 853,
         "source": "llm",
-        "active_child_task_id": "task-851-1",
-        "active_child_task_title": "Extract per-case validation helpers from validate_patch_semantics",
+        "active_child_task_id": "task-853-1",
+        "active_child_task_title": "Extract branch logic into named validator helpers",
         "active_child_target_file": "executor.py"
       },
       "anchor": {
@@ -43727,175 +43917,15 @@
         "anchor_source": "file_level_inference"
       }
     },
-    "timestamp": "2026-05-24 18:06:46.857491"
-  },
-  {
-    "id": 853,
-    "tag": "patch",
-    "note": "Task 851 patch blocked | executor.py",
-    "status": "blocked",
-    "metadata": {
-      "task_id": 851,
-      "target_file": "executor.py",
-      "change_type": "diff_patch",
-      "patch": "--- executor.py\n+++ executor.py\n",
-      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
-      "risk_level": "high",
-      "status": "blocked",
-      "source": "fallback",
-      "llm_error": "Patch inserts a method into an unfinished block.",
-      "plan_id": "plan-851",
-      "patch_id": "patch-851",
-      "anchor": {
-        "target_file": "executor.py",
-        "target_symbol": "validate_patch_semantics",
-        "scope": "single_file",
-        "anchor_level": "symbol",
-        "anchor_source": "child_task",
-        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-        "lineno": 277,
-        "end_lineno": 418,
-        "col_offset": 4,
-        "end_col_offset": 9
-      },
-      "task_type": null,
-      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "pilot_verdict": null,
-      "pilot_reason": null,
-      "pilot_guidance": null,
-      "location_correct": null,
-      "task_alignment": null,
-      "plan_step_alignment": null,
-      "child_task_id": "task-851-1",
-      "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
-      "child_target_file": "executor.py",
-      "child_target_symbol": "validate_patch_semantics",
-      "child_change_intent": "add_method_or_function",
-      "child_expected_operation": "add_symbol",
-      "child_completion_cues": [
-        "def _validate_",
-        "return _validate_"
-      ],
-      "child_task_type": "refactor",
-      "recovery_action": null,
-      "recovery_status": null,
-      "recovery_reason": null,
-      "review_packet": {
-        "patch_id": "patch-851",
-        "task_id": 851,
-        "plan_id": "plan-851",
-        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "child_task_id": "task-851-1",
-        "child_task_title": null,
-        "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
-        "target_file": "executor.py",
-        "target_symbol": "validate_patch_semantics",
-        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
-        "reflector_verdict": null,
-        "reflector_reflection": null,
-        "reflector_next_step": null,
-        "patch_stats": {
-          "hunks": 0,
-          "additions": 0,
-          "deletions": 0
-        },
-        "patch_excerpt": "--- executor.py\n+++ executor.py",
-        "review_questions": [
-          "Is this the right place to patch?",
-          "Does this solve the active child step rather than adjacent behavior?",
-          "Does this solve the planned task without intent drift?"
-        ]
-      }
-    },
-    "timestamp": "2026-05-24 18:10:02.876240"
-  },
-  {
-    "id": 854,
-    "tag": "patch",
-    "note": "Task 851 patch blocked | executor.py",
-    "status": "blocked",
-    "metadata": {
-      "task_id": 851,
-      "target_file": "executor.py",
-      "change_type": "diff_patch",
-      "patch": "--- executor.py\n+++ executor.py\n",
-      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
-      "risk_level": "high",
-      "status": "blocked",
-      "source": "fallback",
-      "llm_error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 8,000 output tokens per minute (org: a710ccc0-b8eb-4c0a-afa2-ef7daab12c53, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Reduce the prompt length or the maximum tokens requested, or try again later. View your current limits at https://console.anthropic.com/settings/limits. To raise this limit, purchase credits to advance to the next usage tier at https://console.anthropic.com/settings/billing.\"}, 'request_id': 'req_011CbMr6gQkALBpHx15rR4ES'}",
-      "plan_id": "plan-851",
-      "patch_id": "patch-851",
-      "anchor": {
-        "target_file": "executor.py",
-        "target_symbol": "validate_patch_semantics",
-        "scope": "single_file",
-        "anchor_level": "symbol",
-        "anchor_source": "child_task",
-        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-        "lineno": 277,
-        "end_lineno": 418,
-        "col_offset": 4,
-        "end_col_offset": 9
-      },
-      "task_type": null,
-      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-      "pilot_verdict": null,
-      "pilot_reason": null,
-      "pilot_guidance": null,
-      "location_correct": null,
-      "task_alignment": null,
-      "plan_step_alignment": null,
-      "child_task_id": "task-851-1",
-      "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
-      "child_target_file": "executor.py",
-      "child_target_symbol": "validate_patch_semantics",
-      "child_change_intent": "add_method_or_function",
-      "child_expected_operation": "add_symbol",
-      "child_completion_cues": [
-        "def _validate_",
-        "return _validate_"
-      ],
-      "child_task_type": "refactor",
-      "recovery_action": null,
-      "recovery_status": null,
-      "recovery_reason": null,
-      "review_packet": {
-        "patch_id": "patch-851",
-        "task_id": 851,
-        "plan_id": "plan-851",
-        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "child_task_id": "task-851-1",
-        "child_task_title": null,
-        "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
-        "target_file": "executor.py",
-        "target_symbol": "validate_patch_semantics",
-        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
-        "reflector_verdict": null,
-        "reflector_reflection": null,
-        "reflector_next_step": null,
-        "patch_stats": {
-          "hunks": 0,
-          "additions": 0,
-          "deletions": 0
-        },
-        "patch_excerpt": "--- executor.py\n+++ executor.py",
-        "review_questions": [
-          "Is this the right place to patch?",
-          "Does this solve the active child step rather than adjacent behavior?",
-          "Does this solve the planned task without intent drift?"
-        ]
-      }
-    },
-    "timestamp": "2026-05-24 18:13:19.351096"
+    "timestamp": "2026-05-24 18:10:37.854088"
   },
   {
     "id": 855,
     "tag": "patch",
-    "note": "Task 851 patch blocked | executor.py",
+    "note": "Task 853 patch blocked | executor.py",
     "status": "blocked",
     "metadata": {
-      "task_id": 851,
+      "task_id": 853,
       "target_file": "executor.py",
       "change_type": "diff_patch",
       "patch": "--- executor.py\n+++ executor.py\n",
@@ -43903,9 +43933,9 @@
       "risk_level": "high",
       "status": "blocked",
       "source": "fallback",
-      "llm_error": "Request timed out or interrupted. This could be due to a network timeout, dropped connection, or request cancellation. See https://docs.anthropic.com/en/api/errors#long-requests for more details.",
-      "plan_id": "plan-851",
-      "patch_id": "patch-851",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
       "anchor": {
         "target_file": "executor.py",
         "target_symbol": "validate_patch_semantics",
@@ -43913,8 +43943,8 @@
         "anchor_level": "symbol",
         "anchor_source": "child_task",
         "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
-        "lineno": 277,
-        "end_lineno": 418,
+        "lineno": 292,
+        "end_lineno": 433,
         "col_offset": 4,
         "end_col_offset": 9
       },
@@ -43926,28 +43956,29 @@
       "location_correct": null,
       "task_alignment": null,
       "plan_step_alignment": null,
-      "child_task_id": "task-851-1",
-      "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
       "child_target_file": "executor.py",
       "child_target_symbol": "validate_patch_semantics",
       "child_change_intent": "add_method_or_function",
       "child_expected_operation": "add_symbol",
       "child_completion_cues": [
-        "def _validate_",
-        "return _validate_"
+        "def _validate_semantic_",
+        "return True",
+        "return False"
       ],
       "child_task_type": "refactor",
       "recovery_action": null,
       "recovery_status": null,
       "recovery_reason": null,
       "review_packet": {
-        "patch_id": "patch-851",
-        "task_id": 851,
-        "plan_id": "plan-851",
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
         "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
-        "child_task_id": "task-851-1",
+        "child_task_id": "task-853-1",
         "child_task_title": null,
-        "child_task_description": "Add one or more private helper functions in executor.py that each handle one named decision branch currently inlined inside validate_patch_semantics, covering the repeated case logic without duplicating shared state.",
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
         "target_file": "executor.py",
         "target_symbol": "validate_patch_semantics",
         "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
@@ -43967,6 +43998,523 @@
         ]
       }
     },
-    "timestamp": "2026-05-24 18:15:14.913380"
+    "timestamp": "2026-05-24 18:10:38.032310"
+  },
+  {
+    "id": 856,
+    "tag": "patch",
+    "note": "Task 853 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 853,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+        "lineno": 292,
+        "end_lineno": 433,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "validate_patch_semantics",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _validate_semantic_",
+        "return True",
+        "return False"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
+        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-853-1",
+        "child_task_title": null,
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:38.261711"
+  },
+  {
+    "id": 857,
+    "tag": "patch",
+    "note": "Task 853 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 853,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Could not read target file executor.py: CRITICAL: exact anchor span could not be resolved for validate_patch_semantics in executor.py",
+      "plan_id": "plan-853",
+      "patch_id": "patch-853",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.validate_patch_semantics",
+        "lineno": 292,
+        "end_lineno": 433,
+        "col_offset": 4,
+        "end_col_offset": 9
+      },
+      "task_type": null,
+      "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-853-1",
+      "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "validate_patch_semantics",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _validate_semantic_",
+        "return True",
+        "return False"
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-853",
+        "task_id": 853,
+        "plan_id": "plan-853",
+        "task_note": "The function validate_patch_semantics in executor.py has high cyclomatic complexity (~12 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-853-1",
+        "child_task_title": null,
+        "child_task_description": "Add a small set of named helper functions in executor.py that each handle one semantic-validation case currently embedded as a branch inside validate_patch_semantics, so each helper is a single-responsibility predicate or check.",
+        "target_file": "executor.py",
+        "target_symbol": "validate_patch_semantics",
+        "coder_reason": "Hard anchor enforcement blocked patch for validate_patch_semantics",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:10:38.489457"
+  },
+  {
+    "id": 858,
+    "tag": "complexity",
+    "note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+    "status": "planned",
+    "metadata": {
+      "target_file": "executor.py",
+      "target_symbol": "test_patch_in_sandbox",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+        "lineno": 100,
+        "end_lineno": 182,
+        "col_offset": 4,
+        "end_col_offset": 21
+      },
+      "completion_cues": [],
+      "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+      "lineno": 100,
+      "end_lineno": 182,
+      "col_offset": 4,
+      "end_col_offset": 21
+    },
+    "timestamp": "2026-05-24 18:10:40.817582"
+  },
+  {
+    "id": 859,
+    "tag": "plan",
+    "note": "Task 858 planned | reduce test_patch_in_sandbox in executor.py from 83 lines by extracting a named helper for a logical sub-step | next: In executor.py, identify the file-setup block inside test_patch_in_sandbox and extract it into a new module-level function _prepare_sandbox_copy placed immediately before test_patch_in_sandbox.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 858,
+      "plan_id": "plan-858",
+      "plan": {
+        "goal": "reduce test_patch_in_sandbox in executor.py from 83 lines by extracting a named helper for a logical sub-step",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "test_patch_in_sandbox function",
+        "operation": "extract sub-step into named helper",
+        "validation": "executor.py parses cleanly and test_patch_in_sandbox delegates to the new helper with same observable behavior",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-858-1",
+            "title": "Extract sandbox file-setup sub-step into helper",
+            "description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "test_patch_in_sandbox",
+            "change_intent": "add_method_or_function",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def _prepare_sandbox_copy("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "sandbox file-setup sub-step",
+            "operation": "extract function from inline block",
+            "validation": "executor.py parses without error and _prepare_sandbox_copy is callable with the inputs formerly handled inline",
+            "creates_symbols": [
+              "_prepare_sandbox_copy"
+            ],
+            "wires_into_symbols": [
+              "test_patch_in_sandbox"
+            ],
+            "insertion_region": "executor.py module level, immediately before test_patch_in_sandbox",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "test_patch_in_sandbox",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "test_patch_in_sandbox",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+                "lineno": 100,
+                "end_lineno": 182,
+                "col_offset": 4,
+                "end_col_offset": 21
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+              "lineno": 100,
+              "end_lineno": 182,
+              "col_offset": 4,
+              "end_col_offset": 21
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+            "lineno": 100,
+            "end_lineno": 182,
+            "col_offset": 4,
+            "end_col_offset": 21
+          },
+          {
+            "task_id": "task-858-2",
+            "title": "Replace inline setup block in test_patch_in_sandbox with helper call",
+            "description": "In executor.py, replace the extracted setup block in test_patch_in_sandbox with a single call to _prepare_sandbox_copy, reducing the function body to its core validation and result-collection logic.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "test_patch_in_sandbox",
+            "change_intent": "refactor_local_block",
+            "expected_operation": "refactor_block",
+            "completion_cues": [
+              "_prepare_sandbox_copy("
+            ],
+            "task_type": "refactor",
+            "task_kind": "refactor",
+            "work_mode": "refactor",
+            "domain": "code",
+            "artifact": "test_patch_in_sandbox",
+            "operation": "replace inline block with helper call",
+            "validation": "test_patch_in_sandbox is shorter than 65 lines, executor.py parses cleanly, and existing smoke paths through the function reach the same return values",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "test_patch_in_sandbox",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "test_patch_in_sandbox",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+                "lineno": 100,
+                "end_lineno": 182,
+                "col_offset": 4,
+                "end_col_offset": 21
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+              "lineno": 100,
+              "end_lineno": 182,
+              "col_offset": 4,
+              "end_col_offset": 21
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+            "lineno": 100,
+            "end_lineno": 182,
+            "col_offset": 4,
+            "end_col_offset": 21
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "extracted helper may need to return multiple values if the setup block assigns several locals used later in test_patch_in_sandbox",
+          "if the setup block contains early-return error paths those must be preserved in the helper signature or re-raised at the call site"
+        ],
+        "next_action": "In executor.py, identify the file-setup block inside test_patch_in_sandbox and extract it into a new module-level function _prepare_sandbox_copy placed immediately before test_patch_in_sandbox.",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "test_patch_in_sandbox",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+            "lineno": 100,
+            "end_lineno": 182,
+            "col_offset": 4,
+            "end_col_offset": 21
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 858,
+        "source": "llm",
+        "active_child_task_id": "task-858-1",
+        "active_child_task_title": "Extract sandbox file-setup sub-step into helper",
+        "active_child_target_file": "executor.py"
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+        "lineno": 100,
+        "end_lineno": 182,
+        "col_offset": 4,
+        "end_col_offset": 21
+      }
+    },
+    "timestamp": "2026-05-24 18:11:09.987111"
+  },
+  {
+    "id": 860,
+    "tag": "patch",
+    "note": "Task 858 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 858,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 8,000 output tokens per minute (org: a710ccc0-b8eb-4c0a-afa2-ef7daab12c53, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Reduce the prompt length or the maximum tokens requested, or try again later. View your current limits at https://console.anthropic.com/settings/limits. To raise this limit, purchase credits to advance to the next usage tier at https://console.anthropic.com/settings/billing.\"}, 'request_id': 'req_011CbMrAEjX9vnry3BxDovfj'}",
+      "plan_id": "plan-858",
+      "patch_id": "patch-858",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+        "lineno": 100,
+        "end_lineno": 182,
+        "col_offset": 4,
+        "end_col_offset": 21
+      },
+      "task_type": null,
+      "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-858-1",
+      "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "test_patch_in_sandbox",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _prepare_sandbox_copy("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-858",
+        "task_id": 858,
+        "plan_id": "plan-858",
+        "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-858-1",
+        "child_task_title": null,
+        "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "coder_reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:14:07.629446"
+  },
+  {
+    "id": 861,
+    "tag": "patch",
+    "note": "Task 858 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 858,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Error code: 429 - {'type': 'error', 'error': {'type': 'rate_limit_error', 'message': \"This request would exceed your organization's rate limit of 8,000 output tokens per minute (org: a710ccc0-b8eb-4c0a-afa2-ef7daab12c53, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Reduce the prompt length or the maximum tokens requested, or try again later. View your current limits at https://console.anthropic.com/settings/limits. To raise this limit, purchase credits to advance to the next usage tier at https://console.anthropic.com/settings/billing.\"}, 'request_id': 'req_011CbMrNBm1Sgjq5aSXapAB9'}",
+      "plan_id": "plan-858",
+      "patch_id": "patch-858",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent.test_patch_in_sandbox",
+        "lineno": 100,
+        "end_lineno": 182,
+        "col_offset": 4,
+        "end_col_offset": 21
+      },
+      "task_type": null,
+      "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-858-1",
+      "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "test_patch_in_sandbox",
+      "child_change_intent": "add_method_or_function",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def _prepare_sandbox_copy("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-858",
+        "task_id": 858,
+        "plan_id": "plan-858",
+        "task_note": "The function test_patch_in_sandbox in executor.py is 83 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-858-1",
+        "child_task_title": null,
+        "child_task_description": "In executor.py, extract the block inside test_patch_in_sandbox that builds or prepares the sandbox working copy (temp file creation, source copying, or path wiring) into a new module-level helper function named _prepare_sandbox_copy.",
+        "target_file": "executor.py",
+        "target_symbol": "test_patch_in_sandbox",
+        "coder_reason": "Hard anchor enforcement blocked patch for test_patch_in_sandbox",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 18:16:49.699422"
   }
 ]
