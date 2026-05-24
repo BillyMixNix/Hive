@@ -39597,6 +39597,62 @@
           "target_symbol": "update_current_snapshot",
           "change_intent": "add_method_or_function",
           "expected_operation": "add_symbol",
+          "failure_family": "doctrine",
+          "failure_class": "policy",
+          "failure_code": "patch_too_large",
+          "failure_category": "patch_too_large",
+          "confidence": 0.55,
+          "retry_instruction": "Reduce scope. Keep the patch smaller and more localized.",
+          "reason": "Patch is too large for first-pass review.",
+          "stage": "exception",
+          "source": "coder_exception",
+          "context_mode": "exact_symbol_block",
+          "planner_source": null,
+          "context_budget": {
+            "selected_mode": "exact_symbol_block",
+            "raw_context_length": 2434,
+            "trimmed_context_length": 2434,
+            "trimmed": false,
+            "summary_used": false,
+            "full_file_omitted": true,
+            "budget_chars": 6800,
+            "budget_decision": "full_context_used",
+            "dropped_related_context": false,
+            "dropped_helper_blocks": false,
+            "dropped_import_blocks": false,
+            "large_file_policy_applied": true,
+            "under_anchored_after_trim": false,
+            "context_priority": [
+              "exact_symbol_block",
+              "block_window",
+              "line_window",
+              "file_head_fallback"
+            ],
+            "anchoring_confidence": "high"
+          },
+          "budget_decision": "full_context_used",
+          "context_priority": [
+            "exact_symbol_block",
+            "block_window",
+            "line_window",
+            "file_head_fallback"
+          ],
+          "anchoring_confidence": "high",
+          "large_file_policy_applied": true,
+          "under_anchored_after_trim": false,
+          "benchmark_case_id": null,
+          "attempt_index": 1,
+          "trigger_pattern": "doctrine::policy::patch_too_large::add_method_or_function::add_symbol::exact_symbol_block",
+          "fix_strategy": "policy::patch_too_large::add_method_or_function",
+          "lesson_level": "exact",
+          "timestamp": "2026-05-24T18:45:39.428412"
+        },
+        {
+          "task_id": 886,
+          "target_file": "main.py",
+          "target_symbol": "update_current_snapshot",
+          "change_intent": "add_method_or_function",
+          "expected_operation": "add_symbol",
           "failure_family": "unknown",
           "failure_class": "unknown",
           "failure_code": "unknown_failure",
@@ -39788,62 +39844,6 @@
           "fix_strategy": "policy::patch_too_large::add_method_or_function",
           "lesson_level": "exact",
           "timestamp": "2026-05-24T18:42:45.232296"
-        },
-        {
-          "task_id": 886,
-          "target_file": "main.py",
-          "target_symbol": "update_current_snapshot",
-          "change_intent": "add_method_or_function",
-          "expected_operation": "add_symbol",
-          "failure_family": "formatting",
-          "failure_class": "parser_contract",
-          "failure_code": "empty_model_response",
-          "failure_category": "empty_model_response",
-          "confidence": 0.99,
-          "retry_instruction": "Return the required fields and a minimal unified diff patch.",
-          "reason": "Empty model response.",
-          "stage": "exception",
-          "source": "coder_exception",
-          "context_mode": "exact_symbol_block",
-          "planner_source": null,
-          "context_budget": {
-            "selected_mode": "exact_symbol_block",
-            "raw_context_length": 2434,
-            "trimmed_context_length": 2434,
-            "trimmed": false,
-            "summary_used": false,
-            "full_file_omitted": true,
-            "budget_chars": 6800,
-            "budget_decision": "full_context_used",
-            "dropped_related_context": false,
-            "dropped_helper_blocks": false,
-            "dropped_import_blocks": false,
-            "large_file_policy_applied": true,
-            "under_anchored_after_trim": false,
-            "context_priority": [
-              "exact_symbol_block",
-              "block_window",
-              "line_window",
-              "file_head_fallback"
-            ],
-            "anchoring_confidence": "high"
-          },
-          "budget_decision": "full_context_used",
-          "context_priority": [
-            "exact_symbol_block",
-            "block_window",
-            "line_window",
-            "file_head_fallback"
-          ],
-          "anchoring_confidence": "high",
-          "large_file_policy_applied": true,
-          "under_anchored_after_trim": false,
-          "benchmark_case_id": null,
-          "attempt_index": 1,
-          "trigger_pattern": "formatting::parser_contract::empty_model_response::add_method_or_function::add_symbol::exact_symbol_block",
-          "fix_strategy": "parser_contract::empty_model_response::add_method_or_function",
-          "lesson_level": "exact",
-          "timestamp": "2026-05-24T18:42:05.546639"
         }
       ],
       "counts_by_category": {
@@ -39866,9 +39866,9 @@
         "missing_patch_section": 2,
         "empty_patch": 2,
         "unfinished_block_insertion": 2,
-        "patch_too_large": 1
+        "patch_too_large": 2
       },
-      "updated_at": "2026-05-24T18:45:02.077133"
+      "updated_at": "2026-05-24T18:45:39.428417"
     },
     "lessons": {
       "recent": [
