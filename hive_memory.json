@@ -43320,5 +43320,380 @@
       "end_col_offset": 19
     },
     "timestamp": "2026-05-24 21:29:53.501344"
+  },
+  {
+    "id": 863,
+    "tag": "self-improvement",
+    "note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input.",
+    "status": "active",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": null,
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "user_input"
+      },
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 21:31:44.593405"
+  },
+  {
+    "id": 864,
+    "tag": "self-improvement",
+    "note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-24 21:37:12.063544"
+  },
+  {
+    "id": 865,
+    "tag": "plan",
+    "note": "Task 864 planned | Refactor _validate_plan in planner.py to use a fuzzy fallback or soft filter instead of a bare raise ValueError. | next: Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 864,
+      "plan_id": "plan-864",
+      "plan": {
+        "goal": "Refactor _validate_plan in planner.py to use a fuzzy fallback or soft filter instead of a bare raise ValueError.",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_validate_plan function",
+        "operation": "modify_logic",
+        "validation": "AST parse or focused smoke check",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-864-1",
+            "title": "Replace bare raise ValueError with fuzzy fallback in _validate_plan",
+            "description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_validate_plan function",
+            "operation": "modify_logic",
+            "validation": "AST parse or focused smoke check",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_validate_plan",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_validate_plan",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+                "lineno": 1441,
+                "end_lineno": 1510,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+              "lineno": 1441,
+              "end_lineno": 1510,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+            "lineno": 1441,
+            "end_lineno": 1510,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "Potential loss of strict validation"
+        ],
+        "next_action": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_validate_plan",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+            "lineno": 1441,
+            "end_lineno": 1510,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 864,
+        "source": "llm",
+        "active_child_task_id": "task-864-1",
+        "active_child_task_title": "Replace bare raise ValueError with fuzzy fallback in _validate_plan",
+        "active_child_target_file": "planner.py"
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-24 21:38:34.391489"
+  },
+  {
+    "id": 866,
+    "tag": "patch",
+    "note": "Task 864 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 864,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_plan",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "name 'selected_block' is not defined",
+      "plan_id": "plan-864",
+      "patch_id": "patch-864",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+        "lineno": 1441,
+        "end_lineno": 1510,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-864-1",
+      "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-864",
+        "task_id": 864,
+        "plan_id": "plan-864",
+        "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-864-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_plan",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 21:40:20.566782"
+  },
+  {
+    "id": 867,
+    "tag": "patch",
+    "note": "Task 864 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 864,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_plan",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "name 'selected_block' is not defined",
+      "plan_id": "plan-864",
+      "patch_id": "patch-864",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+        "lineno": 1441,
+        "end_lineno": 1510,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-864-1",
+      "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-864",
+        "task_id": 864,
+        "plan_id": "plan-864",
+        "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-864-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_plan",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 21:42:33.962899"
+  },
+  {
+    "id": 868,
+    "tag": "patch",
+    "note": "Task 864 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 864,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _validate_plan",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "name 'selected_block' is not defined",
+      "plan_id": "plan-864",
+      "patch_id": "patch-864",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._validate_plan",
+        "lineno": 1441,
+        "end_lineno": 1510,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-864-1",
+      "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_validate_plan",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-864",
+        "task_id": 864,
+        "plan_id": "plan-864",
+        "task_note": "The function _validate_plan in planner.py contains a bare raise ValueError that hard-fails on unexpected input. Consider a fuzzy fallback or soft filter instead.",
+        "child_task_id": "task-864-1",
+        "child_task_title": null,
+        "child_task_description": "Modify the _validate_plan function to handle unexpected input using a fuzzy fallback instead of raising a bare ValueError.",
+        "target_file": "planner.py",
+        "target_symbol": "_validate_plan",
+        "coder_reason": "Hard anchor enforcement blocked patch for _validate_plan",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 21:44:33.133530"
   }
 ]
