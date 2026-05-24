@@ -42,6 +42,7 @@ _bootstrap_api_key()
 
 from router import Router
 from reflector import Reflector
+from scripts.metrics import RunMetrics
 from HiveMemoryAgent import HiveMemoryAgent
 from HiveLessonMemory import LessonMemory
 from HiveStateManager import HiveStateManager
@@ -345,6 +346,12 @@ def main():
     print(f"Hive Runner — {len(pending)} task(s) pending")
     memory, state, router, reflector, lesson_memory = setup_components()
 
+    metrics = RunMetrics()
+    metrics.capture_pre_run(lesson_memory)
+
+    patches_applied = 0
+    patches_rejected = 0
+
     for i, entry in enumerate(entries):
         if entry.get("status", "pending") != "pending":
             continue
@@ -353,15 +360,26 @@ def main():
         try:
             run_task(entry, memory, state, router, reflector, lesson_memory)
             entry["status"] = "done"
+            patches_applied += 1
         except Exception as exc:
             print(f"  FAILED: {exc}")
             entry["status"] = "failed"
             entry["error"] = str(exc)
+            patches_rejected += 1
         save_queue(entries)
 
     done = sum(1 for e in entries if e.get("status") == "done")
     failed = sum(1 for e in entries if e.get("status") == "failed")
     print(f"\nDone: {done}  Failed: {failed}")
+
+    metrics.capture_post_run(
+        lesson_memory,
+        done=done,
+        failed=failed,
+        patches_applied=patches_applied,
+        patches_rejected=patches_rejected,
+    )
+    metrics.save()
 
 
 if __name__ == "__main__":
