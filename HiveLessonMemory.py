@@ -639,6 +639,57 @@ class LessonMemory:
         ), reverse=True)
         return results[:limit]
 
+    def import_universal_lessons(self, source_path):
+        """Copy universal trusted lessons from another project's lesson file.
+
+        Only imports lessons that are universal-scope and at least candidate-rank.
+        Skips duplicates (matched by failure_pattern + retry_instruction).
+        Returns the count of lessons imported.
+        """
+        rank = {"trusted": 3, "candidate": 2, "raw": 1, "retired": 0}
+        source = LessonMemory(path=source_path)
+        incoming = source.get_universal_lessons(min_promotion_state="candidate", limit=100)
+        if not incoming:
+            return 0
+
+        # Build a dedup key set from existing lessons.
+        existing_keys = set()
+        try:
+            with open(self.path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        lesson = json.loads(line)
+                        key = (
+                            (lesson.get("failure_pattern") or "").strip(),
+                            (lesson.get("retry_instruction") or "").strip(),
+                        )
+                        existing_keys.add(key)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        imported = 0
+        with open(self.path, "a", encoding="utf-8") as f:
+            for lesson in incoming:
+                key = (
+                    (lesson.get("failure_pattern") or "").strip(),
+                    (lesson.get("retry_instruction") or "").strip(),
+                )
+                if key in existing_keys:
+                    continue
+                lesson = dict(lesson)
+                lesson["lesson_id"] = str(uuid.uuid4())
+                lesson["scope"] = "universal"
+                lesson["source"] = lesson.get("source", "imported")
+                f.write(json.dumps(lesson) + "\n")
+                existing_keys.add(key)
+                imported += 1
+        return imported
+
     def format_pilot_guardrails_for_prompt(self, lessons):
         if not lessons:
             return "No relevant pilot guardrails."

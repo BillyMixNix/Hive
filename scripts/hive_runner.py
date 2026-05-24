@@ -146,6 +146,8 @@ def setup_components():
     reflector = Reflector()
     lesson_memory = LessonMemory()
     sync_lessons_observability(state, lesson_memory)
+    universal = lesson_memory.get_universal_lessons(min_promotion_state="trusted")
+    print(f"  [lessons] {len(universal)} universal trusted lesson(s) active")
     return memory, state, router, reflector, lesson_memory
 
 
@@ -496,7 +498,14 @@ if __name__ == "__main__":
     parser.add_argument("--max-runs", type=int, default=None, help="Max loop iterations")
     parser.add_argument("--rest", type=int, default=30, help="Seconds between runs (default 30)")
     parser.add_argument("--tasks", type=int, default=10, help="Tasks to generate per refill (default 10)")
+    parser.add_argument("--seed", metavar="PATH", default=None,
+                        help="Seed lessons from another project's hive_lessons.jsonl before running")
     args = parser.parse_args()
+
+    if args.seed:
+        seed_memory = LessonMemory()
+        n = seed_memory.import_universal_lessons(args.seed)
+        print(f"[seed] Imported {n} universal lesson(s) from {args.seed}")
 
     if args.loop:
         loop(max_runs=args.max_runs, rest_seconds=args.rest, tasks_per_refill=args.tasks)
