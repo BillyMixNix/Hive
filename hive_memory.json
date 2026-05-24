@@ -40795,5 +40795,811 @@
       }
     },
     "timestamp": "2026-05-24 10:03:05.941121"
+  },
+  {
+    "id": 822,
+    "tag": "self-improvement",
+    "note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_fuzzy_match_change_intent",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+        "lineno": 335,
+        "end_lineno": 340,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+      "lineno": 335,
+      "end_lineno": 340,
+      "col_offset": 4,
+      "end_col_offset": 19
+    },
+    "timestamp": "2026-05-24 10:03:49.656074"
+  },
+  {
+    "id": 823,
+    "tag": "plan",
+    "note": "Task 822 planned | Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback | next: replace the hardcoded ALLOWED_CHANGE_INTENTS set with a dictionary in planner.py",
+    "status": "planned",
+    "metadata": {
+      "task_id": 822,
+      "plan_id": "plan-822",
+      "plan": {
+        "goal": "Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+        "operation": "modify_existing_logic",
+        "validation": "run unit tests for planner functions using different change intents",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-822-1",
+            "title": "Create a dynamic version of ALLOWED_CHANGE_INTENTS",
+            "description": "Replace the hardcoded set with a dictionary that maps input strings to their corresponding change intents (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "refactor_local_block",
+            "validation": "run unit tests for planner functions using different change intents",
+            "creates_symbols": [
+              "DYNAMIC_ALLOWED_CHANGE_INTENTS"
+            ],
+            "wires_into_symbols": [
+              "ALLOWED_CHANGE_INTENTS"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          {
+            "task_id": "task-822-2",
+            "title": "Add a fuzzy fallback for ALLOWED_CHANGE_INTENTS",
+            "description": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "add_method_or_function",
+            "validation": "run unit tests for planner functions using different change intents, including unrecognized ones",
+            "creates_symbols": [
+              "fuzzy_map_change_intent"
+            ],
+            "wires_into_symbols": [
+              "get_allowed_change_intents"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "breaking existing change intent handling",
+          "introducing new bugs in fuzzy fallback logic"
+        ],
+        "next_action": "replace the hardcoded ALLOWED_CHANGE_INTENTS set with a dictionary in planner.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 822,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "user_input",
+        "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+        "lineno": 335,
+        "end_lineno": 340,
+        "col_offset": 4,
+        "end_col_offset": 19
+      }
+    },
+    "timestamp": "2026-05-24 10:05:47.261696"
+  },
+  {
+    "id": 824,
+    "tag": "patch",
+    "note": "Task 822 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Replace hardcoded set with dictionary mapping | Returning best validated patch after revision failure.",
+      "patch": "--- planner.py\n+++ planner.py\n@@ -340,6 +340,7 @@ def _fuzzy_match_change_intent(self, intent):\n         tokens = set(re.sub(r\"[^a-z]\", \"_\", intent.lower()).split(\"_\")) - {\"\"}\n         best, best_score = \"modify_existing_logic\", 0\n+        change_intents_map = {\"add\": \"create_new_method\", \"delete\": \"remove_element\"}\n         for candidate in ALLOWED_CHANGE_INTENTS:\n             if candidate in change_intents_map:\n                 return change_intents_map[candidate]\n             best = candidate\n         return best",
+      "task_id": 822,
+      "source": "best_candidate",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_fuzzy_match_change_intent",
+      "context_window": [
+        326,
+        348
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 952,
+        "trimmed_context_length": 952,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 335,
+        "end_lineno": 340,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmp58cgbiys\\planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch introduces a new variable at module scope, which is disallowed by Hive doctrine. The change should be localized to the method body.",
+        "confidence": 0.75,
+        "next_step": "Modify the patch to add the dictionary inside the method body instead of at module scope.",
+        "verdict": "reject"
+      },
+      "needs_review": true,
+      "plan_id": "plan-822",
+      "patch_id": "patch-822",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+        "lineno": 335,
+        "end_lineno": 340,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-822-1",
+      "child_task_description": "Replace the hardcoded set with a dictionary that maps input strings to their corresponding change intents (target method: _fuzzy_match_change_intent)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_fuzzy_match_change_intent",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-822",
+        "task_id": 822,
+        "plan_id": "plan-822",
+        "task_note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
+        "child_task_id": "task-822-1",
+        "child_task_title": null,
+        "child_task_description": "Replace the hardcoded set with a dictionary that maps input strings to their corresponding change intents (target method: _fuzzy_match_change_intent)",
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "coder_reason": "Replace hardcoded set with dictionary mapping | Returning best validated patch after revision failure.",
+        "reflector_verdict": "reject",
+        "reflector_reflection": "The patch introduces a new variable at module scope, which is disallowed by Hive doctrine. The change should be localized to the method body.",
+        "reflector_next_step": "Modify the patch to add the dictionary inside the method body instead of at module scope.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 1,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@ -340,6 +340,7 @@ def _fuzzy_match_change_intent(self, intent):\n         tokens = set(re.sub(r\"[^a-z]\", \"_\", intent.lower()).split(\"_\")) - {\"\"}\n         best, best_score = \"modify_existing_logic\", 0\n+        change_intents_map = {\"add\": \"create_new_method\", \"delete\": \"remove_element\"}\n         for candidate in ALLOWED_CHANGE_INTENTS:\n             if candidate in change_intents_map:\n                 return change_intents_map[candidate]\n             best = candidate\n         return best",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 10:07:49.247859"
+  },
+  {
+    "id": 825,
+    "tag": "plan",
+    "note": "Task 822 plan updated | Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback",
+    "status": "planned",
+    "metadata": {
+      "task_id": 822,
+      "plan_id": "plan-822",
+      "plan": {
+        "goal": "Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+        "operation": "modify_existing_logic",
+        "validation": "run unit tests for planner functions using different change intents",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-822-1",
+            "title": "Create a dynamic version of ALLOWED_CHANGE_INTENTS",
+            "description": "Replace the hardcoded set with a dictionary that maps input strings to their corresponding change intents (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "refactor_local_block",
+            "validation": "run unit tests for planner functions using different change intents",
+            "creates_symbols": [
+              "DYNAMIC_ALLOWED_CHANGE_INTENTS"
+            ],
+            "wires_into_symbols": [
+              "ALLOWED_CHANGE_INTENTS"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          {
+            "task_id": "task-822-2",
+            "title": "Add a fuzzy fallback for ALLOWED_CHANGE_INTENTS",
+            "description": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "add_method_or_function",
+            "validation": "run unit tests for planner functions using different change intents, including unrecognized ones",
+            "creates_symbols": [
+              "fuzzy_map_change_intent"
+            ],
+            "wires_into_symbols": [
+              "get_allowed_change_intents"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "breaking existing change intent handling",
+          "introducing new bugs in fuzzy fallback logic"
+        ],
+        "next_action": "replace the hardcoded ALLOWED_CHANGE_INTENTS set with a dictionary in planner.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 822,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-24 10:07:50.934069"
+  },
+  {
+    "id": 826,
+    "tag": "patch",
+    "note": "Task 822 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning.",
+      "patch": "--- planner.py\n+++ planner.py\n@@ -340,6 +340,12 @@ def _fuzzy_match_change_intent(self, intent):\n         tokens = set(re.sub(r\"[^a-z]\", \"_\", intent.lower()).split(\"_\")) - {\"\"}\n         change_intents_map = {\"add\": \"create_new_method\", \"delete\": \"remove_element\"}\n         best, best_score = \"modify_existing_logic\", 0\n+        for candidate in ALLOWED_CHANGE_INTENTS:\n+            score = len(tokens & set(candidate.split(\"_\")))\n+            if score > best_score:\n+                best, best_score = candidate, score\n+\n+        if best == \"modify_existing_logic\":\n+            raise ValueError(f\"Unrecognized change intent: {intent}\")\n         return best",
+      "task_id": 822,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_fuzzy_match_change_intent",
+      "context_window": [
+        326,
+        349
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1038,
+        "trimmed_context_length": 1038,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 335,
+        "end_lineno": 341,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmp6kwd3ts9\\planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "Introduces a fuzzy fallback logic within the existing method, which is minimal and localized.",
+        "confidence": 0.95,
+        "next_step": "Run unit tests for planner functions using different change intents, including unrecognized ones.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-822",
+      "patch_id": "patch-822",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+        "lineno": 335,
+        "end_lineno": 341,
+        "col_offset": 4,
+        "end_col_offset": 19
+      },
+      "task_type": null,
+      "task_note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-822-2",
+      "child_task_description": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning (target method: _fuzzy_match_change_intent)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_fuzzy_match_change_intent",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-822",
+        "task_id": 822,
+        "plan_id": "plan-822",
+        "task_note": "The ALLOWED_CHANGE_INTENTS set in planner.py is hardcoded. Consider making it dynamic or adding a fuzzy fallback so novel inputs are handled gracefully instead of hard-failing.",
+        "child_task_id": "task-822-2",
+        "child_task_title": null,
+        "child_task_description": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning (target method: _fuzzy_match_change_intent)",
+        "target_file": "planner.py",
+        "target_symbol": "_fuzzy_match_change_intent",
+        "coder_reason": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning.",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "Introduces a fuzzy fallback logic within the existing method, which is minimal and localized.",
+        "reflector_next_step": "Run unit tests for planner functions using different change intents, including unrecognized ones.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 7,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@ -340,6 +340,12 @@ def _fuzzy_match_change_intent(self, intent):\n         tokens = set(re.sub(r\"[^a-z]\", \"_\", intent.lower()).split(\"_\")) - {\"\"}\n         change_intents_map = {\"add\": \"create_new_method\", \"delete\": \"remove_element\"}\n         best, best_score = \"modify_existing_logic\", 0\n+        for candidate in ALLOWED_CHANGE_INTENTS:\n+            score = len(tokens & set(candidate.split(\"_\")))\n+            if score > best_score:\n+                best, best_score = candidate, score\n+\n+        if best == \"modify_existing_logic\":\n+            raise ValueError(f\"Unrecognized change intent: {intent}\")\n         return best",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-24 10:08:53.223165"
+  },
+  {
+    "id": 827,
+    "tag": "plan",
+    "note": "Task 822 plan updated | Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback",
+    "status": "planned",
+    "metadata": {
+      "task_id": 822,
+      "plan_id": "plan-822",
+      "plan": {
+        "goal": "Make ALLOWED_CHANGE_INTENTS in planner.py dynamic or add a fuzzy fallback",
+        "work_mode": "modify",
+        "domain": "code",
+        "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+        "operation": "modify_existing_logic",
+        "validation": "run unit tests for planner functions using different change intents",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-822-1",
+            "title": "Create a dynamic version of ALLOWED_CHANGE_INTENTS",
+            "description": "Replace the hardcoded set with a dictionary that maps input strings to their corresponding change intents (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "refactor_local_block",
+            "validation": "run unit tests for planner functions using different change intents",
+            "creates_symbols": [
+              "DYNAMIC_ALLOWED_CHANGE_INTENTS"
+            ],
+            "wires_into_symbols": [
+              "ALLOWED_CHANGE_INTENTS"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          {
+            "task_id": "task-822-2",
+            "title": "Add a fuzzy fallback for ALLOWED_CHANGE_INTENTS",
+            "description": "Introduce logic to map unrecognized change intents to the nearest valid intent or raise a warning (target method: _fuzzy_match_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "bugfix",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "ALLOWED_CHANGE_INTENTS in planner.py",
+            "operation": "add_method_or_function",
+            "validation": "run unit tests for planner functions using different change intents, including unrecognized ones",
+            "creates_symbols": [
+              "fuzzy_map_change_intent"
+            ],
+            "wires_into_symbols": [
+              "get_allowed_change_intents"
+            ],
+            "insertion_region": "def get_allowed_change_intents(): ...",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_fuzzy_match_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_fuzzy_match_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+                "lineno": 335,
+                "end_lineno": 340,
+                "col_offset": 4,
+                "end_col_offset": 19
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+              "lineno": 335,
+              "end_lineno": 340,
+              "col_offset": 4,
+              "end_col_offset": 19
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "breaking existing change intent handling",
+          "introducing new bugs in fuzzy fallback logic"
+        ],
+        "next_action": "replace the hardcoded ALLOWED_CHANGE_INTENTS set with a dictionary in planner.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_fuzzy_match_change_intent",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "user_input",
+            "target_symbol_id": "planner.py::PlannerAgent._fuzzy_match_change_intent",
+            "lineno": 335,
+            "end_lineno": 340,
+            "col_offset": 4,
+            "end_col_offset": 19
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "modify",
+        "task_id": 822,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-24 10:08:54.900658"
   }
 ]
