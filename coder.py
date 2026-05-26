@@ -6,7 +6,7 @@ from dataclasses import asdict
 from typing import Any
 
 PatchData = dict[str, Any]
-from hive_llm import ask_model, ask_hive
+from hive_llm import ask_model, ask_hive, CreditsExhaustedError
 from HiveLessonMemory import LessonMemory
 
 from coder_prompting import (
@@ -2122,6 +2122,16 @@ class CoderAgent:
                 current_prompt = state["current_prompt"]
                 rejected_patches = state["rejected_patches"]
                 previous_patch_text = candidate_patch_data.get("patch", "")
+
+            except CreditsExhaustedError as e:
+                # Don't retry — no amount of retrying will work without credits.
+                # Park the task cleanly without burning the retry budget or recording lessons.
+                print(f"[Coder] Credits exhausted — parking task immediately: {e}")
+                last_error = str(e)
+                if candidate_patch_data:
+                    candidate_patch_data["llm_error"] = last_error
+                    candidate_patch_data["source"] = "credits_exhausted"
+                break
 
             except Exception as e:
                 print(f"[Coder] Exception: {e}")

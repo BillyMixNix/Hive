@@ -1,4 +1,4 @@
-from hive_llm import ask_model, ask_hive
+from hive_llm import ask_model, ask_hive, CreditsExhaustedError
 from builder import format_pilot_brief
 from HiveLessonMemory import LessonMemory
 from planner_prompt import PLANNER_PROMPT_TEMPLATE
@@ -1521,6 +1521,15 @@ class PlannerAgent:
             plan["metadata"] = plan_metadata
 
             return plan
+
+        except CreditsExhaustedError as e:
+            # Don't attempt LLM fallbacks — they'll all fail for the same reason.
+            return {
+                "status": "blocked",
+                "llm_error": str(e),
+                "source": "credits_exhausted",
+                "plan_id": f"plan-{task['id']}",
+            }
 
         except Exception as e:
             failure_code = self._classify_plan_failure(e)

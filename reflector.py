@@ -1,4 +1,4 @@
-from hive_llm import ask_hive
+from hive_llm import ask_hive, CreditsExhaustedError
 import json
 
 from reflector_prompt import REFLECTOR_PROMPT_TEMPLATE
@@ -174,6 +174,14 @@ class Reflector:
                 raise ValueError("Reflection response must be a JSON object.")
 
             return self._validate_reflection(reflection)
+
+        except CreditsExhaustedError as e:
+            return {
+                "reflection": f"Reflector unavailable: {e}",
+                "confidence": 0.0,
+                "next_step": "API credits exhausted. Restore credits before retrying.",
+                "verdict": "revise",
+            }
 
         except Exception as e:
             return {
