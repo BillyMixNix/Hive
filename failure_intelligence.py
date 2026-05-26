@@ -576,14 +576,20 @@ def _classify_placement_evidence(text, details, evidence):
 
 def _classify_semantic_evidence(text, details, evidence):
     """Classify AST/scope semantic failures. Returns FailureClassification or None."""
-    if "variable_scope_sanity" in text or "local variable referenced before assignment" in text:
-        return _match("local_assignment_at_module_scope", 0.82, "Patch likely inserted a local assignment outside the intended function scope.", "semantic_scope_local_assignment")
+    # Check details dict first — keys are only present when that specific check failed.
+    # Do NOT use `"variable_scope_sanity" in text`: the sandbox serialises the entire
+    # checks dict into the error string, so the key appears even when the check passed.
 
     scope_info = _coerce_dict(details.get("variable_scope_sanity"))
-    scope_reason = str(scope_info.get("reason") or "").lower()
-    scope_problematic = str(scope_info.get("problematic_line") or "").lower()
-    if "module scope" in scope_reason or "module scope" in scope_problematic:
-        return _match("local_assignment_at_module_scope", 0.93, "Patch introduced a local-style assignment at module scope.", "semantic_scope_local_assignment")
+    if scope_info:
+        scope_reason = str(scope_info.get("reason") or "").lower()
+        scope_problematic = str(scope_info.get("problematic_line") or "").lower()
+        if "module scope" in scope_reason or "module scope" in scope_problematic:
+            return _match("local_assignment_at_module_scope", 0.93, "Patch introduced a local-style assignment at module scope.", "semantic_scope_local_assignment")
+        return _match("local_assignment_at_module_scope", 0.82, "Patch inserted a method that references bare names not in scope; pass all needed variables as explicit parameters.", "semantic_scope_local_assignment")
+
+    if "local variable referenced before assignment" in text:
+        return _match("local_assignment_at_module_scope", 0.82, "Patch likely inserted a local assignment outside the intended function scope.", "semantic_scope_local_assignment")
 
     unreachable_info = _coerce_dict(details.get("no_unreachable_code_after_return"))
     if unreachable_info:
