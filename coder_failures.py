@@ -375,10 +375,16 @@ FAILURE_TAXONOMY = {
     "local_assignment_at_module_scope": _taxonomy_entry(
         "semantics",
         "scope_boundary",
-        "Insert the assignment inside the target function body near existing local setup lines.",
+        (
+            "If the patch added a helper method that references bare names: pass all needed "
+            "variables as explicit parameters to the helper. "
+            "If the patch placed a local assignment at module scope: move it inside the "
+            "target function body near existing local setup lines."
+        ),
         [
+            "Do not reference variables from the enclosing scope inside a helper — pass them explicitly.",
             "Do not place local setup variables at module scope.",
-            "Keep the assignment inside the intended function body.",
+            "Keep any new assignment inside the intended function body.",
         ],
         strategy_code="move_assignment_inside_function",
     ),
