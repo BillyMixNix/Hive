@@ -1,5 +1,8 @@
 """
 System prompt and tool schema definitions for Hive's conversational layer.
+
+OLLAMA_TOOLS uses the Ollama /api/chat tool format:
+  { "type": "function", "function": { "name", "description", "parameters" } }
 """
 
 SYSTEM_PROMPT = """You are Hive — an intelligent software development operator and co-pilot.
@@ -16,218 +19,188 @@ Format: Plain text. Short paragraphs or numbered lists. No markdown headers. No 
 Keep responses tight. If something needs the Pilot's attention, say so plainly."""
 
 
-TOOLS = [
-    {
-        "name": "get_status",
-        "description": (
+def _fn(name, description, properties=None, required=None):
+    """Build a single Ollama-format tool definition."""
+    return {
+        "type": "function",
+        "function": {
+            "name": name,
+            "description": description,
+            "parameters": {
+                "type": "object",
+                "properties": properties or {},
+                "required": required or [],
+            },
+        },
+    }
+
+
+OLLAMA_TOOLS = [
+    _fn(
+        "get_status",
+        (
             "Get the current Hive system status: active task, last patch outcome, "
             "recent failures, and system readiness. Call this when the Pilot asks "
             "what's going on, what the current state is, or for an overview."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "list_tasks",
-        "description": (
+    ),
+    _fn(
+        "list_tasks",
+        (
             "List recent entries from Hive memory. Filter by tag (e.g. 'patch', 'plan', "
-            "'complexity', 'self-improvement') or by status. Use without filters to see all recent work."
+            "'complexity', 'self-improvement') or by status. "
+            "Use without filters to see all recent work."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "n": {
-                    "type": "integer",
-                    "description": "How many recent memory entries to scan. Default 60.",
-                },
-                "status": {
-                    "type": "string",
-                    "description": (
-                        "Filter by status. Task statuses: drafted, active, complete, blocked. "
-                        "Patch statuses: pending_pilot_review, applied, rejected."
-                    ),
-                },
-                "tag": {
-                    "type": "string",
-                    "description": (
-                        "Filter by memory tag. Common values: 'patch', 'plan', "
-                        "'complexity', 'self-improvement', 'error-handling'."
-                    ),
-                },
+        properties={
+            "n": {
+                "type": "integer",
+                "description": "How many recent memory entries to scan. Default 60.",
             },
-            "required": [],
-        },
-    },
-    {
-        "name": "show_task",
-        "description": "Get full details on a specific memory entry by ID.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "task_id": {
-                    "type": "integer",
-                    "description": "The memory entry ID number.",
-                },
+            "status": {
+                "type": "string",
+                "description": (
+                    "Filter by status. Task statuses: drafted, active, complete, blocked. "
+                    "Patch statuses: pending_pilot_review, applied, rejected, blocked."
+                ),
             },
-            "required": ["task_id"],
+            "tag": {
+                "type": "string",
+                "description": (
+                    "Filter by memory tag. Common values: 'patch', 'plan', "
+                    "'complexity', 'self-improvement', 'error-handling', 'builder'."
+                ),
+            },
         },
-    },
-    {
-        "name": "list_patches",
-        "description": (
-            "List patches currently awaiting pilot review. Returns patch IDs, "
-            "target files, and reflector verdicts."
+    ),
+    _fn(
+        "show_task",
+        "Get full details on a specific memory entry by ID.",
+        properties={
+            "task_id": {
+                "type": "integer",
+                "description": "The memory entry ID number.",
+            },
+        },
+        required=["task_id"],
+    ),
+    _fn(
+        "list_patches",
+        (
+            "List patches awaiting pilot review or recently processed. "
+            "Returns patch IDs, target files, and reflector verdicts."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string",
-                    "description": "Filter by status. Default: pending_pilot_review.",
-                },
-                "n": {
-                    "type": "integer",
-                    "description": "How many recent memory entries to scan. Default 50.",
-                },
+        properties={
+            "status": {
+                "type": "string",
+                "description": (
+                    "Filter by patch status. Default: pending_pilot_review. "
+                    "Other values: applied, rejected, blocked, approved_pilot."
+                ),
             },
-            "required": [],
+            "n": {
+                "type": "integer",
+                "description": "How many recent memory entries to scan. Default 50.",
+            },
         },
-    },
-    {
-        "name": "show_patch",
-        "description": (
+    ),
+    _fn(
+        "show_patch",
+        (
             "Get full details on a specific patch: target file, target symbol, "
             "coder reason, reflector verdict, and the first 20 lines of the diff."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "patch_id": {
-                    "type": "integer",
-                    "description": "The patch memory entry ID.",
-                },
+        properties={
+            "patch_id": {
+                "type": "integer",
+                "description": "The patch memory entry ID.",
             },
-            "required": ["patch_id"],
         },
-    },
-    {
-        "name": "approve_patch",
-        "description": (
-            "Mark a patch as pilot-approved. Updates status to 'approved_pilot'. "
-            "Note: this records approval — actual file application happens via the "
-            "executor in the main workflow."
+        required=["patch_id"],
+    ),
+    _fn(
+        "approve_patch",
+        (
+            "Mark a patch as pilot-approved (status: approved_pilot). "
+            "Actual file application still requires running apply in main.py."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "patch_id": {
-                    "type": "integer",
-                    "description": "The patch memory entry ID to approve.",
-                },
+        properties={
+            "patch_id": {
+                "type": "integer",
+                "description": "The patch memory entry ID to approve.",
             },
-            "required": ["patch_id"],
         },
-    },
-    {
-        "name": "reject_patch",
-        "description": "Reject a patch and record the reason. Updates status to 'rejected_pilot'.",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "patch_id": {
-                    "type": "integer",
-                    "description": "The patch memory entry ID to reject.",
-                },
-                "reason": {
-                    "type": "string",
-                    "description": "Why the patch is being rejected.",
-                },
+        required=["patch_id"],
+    ),
+    _fn(
+        "reject_patch",
+        "Reject a patch and record the reason. Sets status to rejected_pilot.",
+        properties={
+            "patch_id": {
+                "type": "integer",
+                "description": "The patch memory entry ID to reject.",
             },
-            "required": ["patch_id", "reason"],
-        },
-    },
-    {
-        "name": "update_task_status",
-        "description": (
-            "Update a task's status in memory. Use to mark tasks active, blocked, "
-            "complete, or drafted."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "task_id": {
-                    "type": "integer",
-                    "description": "The memory entry ID of the task.",
-                },
-                "status": {
-                    "type": "string",
-                    "description": "New status: active, blocked, complete, drafted, pending.",
-                },
+            "reason": {
+                "type": "string",
+                "description": "Why the patch is being rejected.",
             },
-            "required": ["task_id", "status"],
         },
-    },
-    {
-        "name": "recall_memory",
-        "description": (
+        required=["patch_id", "reason"],
+    ),
+    _fn(
+        "update_task_status",
+        "Update a task's status in memory. Use to mark tasks active, blocked, complete, or drafted.",
+        properties={
+            "task_id": {
+                "type": "integer",
+                "description": "The memory entry ID of the task.",
+            },
+            "status": {
+                "type": "string",
+                "description": "New status: active, blocked, complete, drafted, pending.",
+            },
+        },
+        required=["task_id", "status"],
+    ),
+    _fn(
+        "recall_memory",
+        (
             "Search Hive memory by keyword. Returns notes that contain the query string. "
             "Use when the Pilot asks what Hive knows about a topic, file, or symbol."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query": {
-                    "type": "string",
-                    "description": "Keyword or phrase to search for in memory notes.",
-                },
+        properties={
+            "query": {
+                "type": "string",
+                "description": "Keyword or phrase to search for in memory notes.",
             },
-            "required": ["query"],
         },
-    },
-    {
-        "name": "show_failures",
-        "description": "Show recent failures recorded in the Hive system.",
-        "input_schema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "show_lessons",
-        "description": (
+        required=["query"],
+    ),
+    _fn(
+        "show_failures",
+        "Show recent failures recorded in the Hive system along with failure counts by category.",
+    ),
+    _fn(
+        "show_lessons",
+        (
             "Show recent failure lessons from the Hive lesson database. "
-            "These are patterns extracted from past failures."
+            "These are patterns extracted from past failures with retry instructions."
         ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "n": {
-                    "type": "integer",
-                    "description": "Number of recent lessons to retrieve. Default 8.",
-                },
+        properties={
+            "n": {
+                "type": "integer",
+                "description": "Number of recent lessons to retrieve. Default 8.",
             },
-            "required": [],
         },
-    },
-    {
-        "name": "create_task",
-        "description": (
-            "Create a new task from a goal description and store it in Hive memory. "
-            "Returns the assigned task ID."
-        ),
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "goal": {
-                    "type": "string",
-                    "description": "What needs to be done. Be specific.",
-                },
+    ),
+    _fn(
+        "create_task",
+        "Create a new task from a goal description and store it in Hive memory. Returns the assigned task ID.",
+        properties={
+            "goal": {
+                "type": "string",
+                "description": "What needs to be done. Be specific.",
             },
-            "required": ["goal"],
         },
-    },
+        required=["goal"],
+    ),
 ]

@@ -1,36 +1,21 @@
 """
 Hive Conversational Interface — parallel entry point to main.py.
 
-Natural language dialogue between the Pilot and Hive.
-The existing main.py CLI is unchanged.
+Natural language dialogue between the Pilot and Hive, powered by a
+local Ollama model. The existing main.py CLI is unchanged.
 
 Usage:
     python HiveConverse.py
+    python HiveConverse.py --model qwen2.5:14b
 """
 
-import os
 import sys
 import textwrap
-
-
-def _check_api_key():
-    """Warn if no obvious API credential is available."""
-    has_key = (
-        os.environ.get("ANTHROPIC_API_KEY")
-        or os.environ.get("ANTHROPIC_AUTH_TOKEN")
-        or os.environ.get("ANTHROPIC_PROFILE")
-    )
-    if not has_key:
-        print("Warning: ANTHROPIC_API_KEY is not set.")
-        print("Set it with: export ANTHROPIC_API_KEY=<your-key>")
-        print("Continuing — will fail on first message if no other auth is configured.")
-        print()
 
 
 def _print_response(text: str):
     """Print Hive's response with consistent formatting."""
     print()
-    # Wrap long lines at 80 chars but preserve intentional line breaks
     lines = text.split("\n")
     wrapped = []
     for line in lines:
@@ -38,27 +23,35 @@ def _print_response(text: str):
             wrapped.append(textwrap.fill(line, width=80))
         else:
             wrapped.append(line)
-    print("Hive: " + "\n      ".join("\n".join(wrapped).split("\n")))
+    formatted = "\n      ".join("\n".join(wrapped).split("\n"))
+    print(f"Hive: {formatted}")
     print()
 
 
-def _print_banner():
+def _print_banner(model: str):
     print("=" * 60)
     print("  Hive Conversational Interface")
+    print(f"  Model: {model}")
     print("  Type 'exit' or press Ctrl+C to end the session.")
     print("=" * 60)
     print()
 
 
 def main():
-    _check_api_key()
+    model = None
+    args = sys.argv[1:]
+    if "--model" in args:
+        idx = args.index("--model")
+        if idx + 1 < len(args):
+            model = args[idx + 1]
 
-    from conversation_manager import ConversationManager
+    from conversation_manager import ConversationManager, DEFAULT_MODEL
 
-    _print_banner()
+    resolved_model = model or DEFAULT_MODEL
+    _print_banner(resolved_model)
 
     try:
-        manager = ConversationManager()
+        manager = ConversationManager(model=resolved_model)
     except Exception as exc:
         print(f"Failed to initialize Hive: {exc}")
         sys.exit(1)
@@ -82,11 +75,11 @@ def main():
 
         try:
             response = manager.chat(raw)
+        except RuntimeError as exc:
+            print(f"\nHive: {exc}\n")
+            continue
         except KeyboardInterrupt:
             print("\n[interrupted]")
-            continue
-        except Exception as exc:
-            print(f"\nHive: Error — {exc}\n")
             continue
 
         _print_response(response)

@@ -1,15 +1,17 @@
 """
 Conversational layer manager for Hive.
 
-Maintains chat history, injects system state context, executes tools,
-and drives the Claude API conversation loop.
+Uses Ollama's /api/chat endpoint with native tool calling.
+Maintains conversation history, executes tool calls, and returns
+Hive's natural language responses.
 """
 
 import json
-import os
+import requests
+import time
 from datetime import datetime
 
-from conversation_prompt import SYSTEM_PROMPT, TOOLS
+from conversation_prompt import SYSTEM_PROMPT, OLLAMA_TOOLS
 from HiveMemoryAgent import HiveMemoryAgent
 from HiveStateManager import HiveStateManager
 from HiveLessonMemory import LessonMemory
@@ -21,27 +23,24 @@ except ImportError:
     torch = None
 
 
+OLLAMA_CHAT_URL = "http://localhost:11434/api/chat"
+DEFAULT_MODEL = "qwen2.5-coder:7b"
+_MAX_HISTORY_TURNS = 20
+_REQUEST_TIMEOUT = 120
+
+
 def _dummy_vector():
     if torch is not None:
         return torch.randn(256).to("cpu")
     return [0.0] * 256
 
 
-_MAX_HISTORY_TURNS = 20
-
-
 class ConversationManager:
-    def __init__(self, repo_root="."):
-        try:
-            import anthropic as _anthropic
-            self._anthropic = _anthropic
-        except ImportError:
-            raise RuntimeError(
-                "anthropic package required. Install with: pip install anthropic"
-            )
-
-        self.client = self._anthropic.Anthropic()
-        self.messages = []
+    def __init__(self, repo_root=".", model=None):
+        self.model = model or DEFAULT_MODEL
+        # System message is the first entry; never trimmed
+        self._system_message = {"role": "system", "content": SYSTEM_PROMPT}
+        self.history = []  # user/assistant/tool turns only
 
         self.memory = HiveMemoryAgent(device="cpu")
         self.state = HiveStateManager(repo_root=repo_root)
@@ -55,11 +54,8 @@ class ConversationManager:
 
     def chat(self, user_text: str) -> str:
         """Send a message and return Hive's natural language response."""
-        self.messages.append({"role": "user", "content": user_text})
-        self._trim_history()
-
-        response_text = self._run_conversation_turn()
-
+        self.history.append({"role": "user", "content": user_text})
+        response_text = self._run_turn()
         self._trim_history()
         return response_text
 
@@ -67,59 +63,92 @@ class ConversationManager:
     # Conversation loop
     # ------------------------------------------------------------------
 
-    def _run_conversation_turn(self) -> str:
-        model = "claude-sonnet-4-6"
-        system_block = [
-            {
-                "type": "text",
-                "text": SYSTEM_PROMPT,
-                "cache_control": {"type": "ephemeral"},
-            }
-        ]
+    def _build_messages(self) -> list:
+        return [self._system_message] + self.history
 
+    def _run_turn(self) -> str:
+        """Run one full conversation turn, handling tool calls until done."""
         while True:
-            response = self.client.messages.create(
-                model=model,
-                max_tokens=2048,
-                system=system_block,
-                tools=TOOLS,
-                messages=self.messages,
-            )
+            payload = {
+                "model": self.model,
+                "messages": self._build_messages(),
+                "tools": OLLAMA_TOOLS,
+                "stream": False,
+            }
 
-            if response.stop_reason == "tool_use":
-                self.messages.append(
-                    {"role": "assistant", "content": response.content}
+            resp = self._ollama_post(payload)
+            message = resp.get("message") or {}
+            tool_calls = message.get("tool_calls") or []
+            content = message.get("content") or ""
+
+            if tool_calls:
+                # Record assistant turn with tool calls
+                self.history.append(
+                    {
+                        "role": "assistant",
+                        "content": content,
+                        "tool_calls": tool_calls,
+                    }
                 )
-                tool_results = self._execute_tool_calls(response.content)
-                self.messages.append(
-                    {"role": "user", "content": tool_results}
-                )
+                # Execute each tool and append results
+                for call in tool_calls:
+                    fn = call.get("function") or {}
+                    name = fn.get("name") or ""
+                    args = fn.get("arguments") or {}
+                    if isinstance(args, str):
+                        try:
+                            args = json.loads(args)
+                        except json.JSONDecodeError:
+                            args = {}
+
+                    result = self._dispatch_tool(name, args)
+                    self.history.append(
+                        {
+                            "role": "tool",
+                            "content": json.dumps(result, default=str),
+                        }
+                    )
+                # Loop back to let model see results
                 continue
 
-            # end_turn or other stop reason — extract text
-            text = next(
-                (b.text for b in response.content if hasattr(b, "text")),
-                "",
-            )
-            self.messages.append(
-                {"role": "assistant", "content": response.content}
-            )
-            return text
+            # No tool calls — final response
+            self.history.append({"role": "assistant", "content": content})
+            return content
 
-    def _execute_tool_calls(self, content_blocks) -> list:
-        results = []
-        for block in content_blocks:
-            if not hasattr(block, "type") or block.type != "tool_use":
-                continue
-            tool_output = self._dispatch_tool(block.name, block.input)
-            results.append(
-                {
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": json.dumps(tool_output, default=str),
-                }
+    def _ollama_post(self, payload: dict) -> dict:
+        try:
+            resp = requests.post(
+                OLLAMA_CHAT_URL,
+                json=payload,
+                timeout=_REQUEST_TIMEOUT,
             )
-        return results
+            resp.raise_for_status()
+            return resp.json()
+        except requests.exceptions.ConnectionError:
+            raise RuntimeError(
+                f"Cannot reach Ollama at {OLLAMA_CHAT_URL}. "
+                "Is Ollama running? Start it with: ollama serve"
+            )
+        except requests.exceptions.Timeout:
+            raise RuntimeError(
+                f"Ollama request timed out after {_REQUEST_TIMEOUT}s."
+            )
+        except requests.exceptions.RequestException as exc:
+            raise RuntimeError(f"Ollama request failed: {exc}")
+
+    # ------------------------------------------------------------------
+    # History management
+    # ------------------------------------------------------------------
+
+    def _trim_history(self):
+        """Cap history at N turns to control context length."""
+        max_messages = _MAX_HISTORY_TURNS * 2
+        if len(self.history) > max_messages:
+            self.history = self.history[-max_messages:]
+
+    # ------------------------------------------------------------------
+    # Tool dispatch
+    # ------------------------------------------------------------------
 
     def _dispatch_tool(self, name: str, inputs: dict) -> dict:
         handlers = {
@@ -145,16 +174,6 @@ class ConversationManager:
             return {"error": str(exc)}
 
     # ------------------------------------------------------------------
-    # History management
-    # ------------------------------------------------------------------
-
-    def _trim_history(self):
-        """Keep only the last N turns to control token usage."""
-        max_messages = _MAX_HISTORY_TURNS * 2
-        if len(self.messages) > max_messages:
-            self.messages = self.messages[-max_messages:]
-
-    # ------------------------------------------------------------------
     # Tool implementations
     # ------------------------------------------------------------------
 
@@ -166,15 +185,14 @@ class ConversationManager:
         system = obs.get("system") or {}
 
         recent_failures = failures.get("recent") or []
-        summary_failures = []
-        for f in recent_failures[:3]:
-            summary_failures.append(
-                {
-                    "category": f.get("failure_category"),
-                    "reason": (str(f.get("reason") or "")[:120]),
-                    "timestamp": f.get("timestamp"),
-                }
-            )
+        summary_failures = [
+            {
+                "category": f.get("failure_category"),
+                "reason": str(f.get("reason") or "")[:120],
+                "timestamp": f.get("timestamp"),
+            }
+            for f in recent_failures[:3]
+        ]
 
         return {
             "active_goal": current.get("active_goal"),
@@ -207,8 +225,6 @@ class ConversationManager:
                 continue
             if status is not None and entry_status != status:
                 continue
-
-            # Default: exclude raw noise tags, show task-like and patch-like entries
             if tag is None and entry_tag in ("", "none"):
                 continue
 
@@ -328,7 +344,10 @@ class ConversationManager:
             "patch_id": patch_id,
             "status": "approved_pilot",
             "target_file": meta.get("target_file"),
-            "message": f"Patch {patch_id} marked approved. Run 'apply patch {patch_id}' in main.py to apply to disk.",
+            "message": (
+                f"Patch {patch_id} approved. "
+                "Run 'apply patch {patch_id}' in main.py to write it to disk."
+            ),
         }
 
     def _tool_reject_patch(self, patch_id: int, reason: str):
@@ -351,7 +370,6 @@ class ConversationManager:
             "patch_id": patch_id,
             "status": "rejected_pilot",
             "reason": reason,
-            "message": f"Patch {patch_id} rejected. Reason recorded in metadata.",
         }
 
     def _tool_update_task_status(self, task_id: int, status: str):
@@ -382,17 +400,16 @@ class ConversationManager:
         failures = obs.get("failures") or {}
         recent = failures.get("recent") or []
 
-        formatted = []
-        for f in recent:
-            formatted.append(
-                {
-                    "category": f.get("failure_category"),
-                    "reason": (str(f.get("reason") or "")[:200]),
-                    "task_id": f.get("task_id"),
-                    "target_file": f.get("target_file"),
-                    "timestamp": f.get("timestamp"),
-                }
-            )
+        formatted = [
+            {
+                "category": f.get("failure_category"),
+                "reason": str(f.get("reason") or "")[:200],
+                "task_id": f.get("task_id"),
+                "target_file": f.get("target_file"),
+                "timestamp": f.get("timestamp"),
+            }
+            for f in recent
+        ]
 
         return {
             "recent_failures": formatted,
@@ -405,24 +422,21 @@ class ConversationManager:
         except Exception:
             lessons = []
 
-        formatted = []
-        for lesson in lessons:
-            formatted.append(
-                {
-                    "family": lesson.get("failure_family") or lesson.get("lesson_family"),
-                    "reason": (lesson.get("failure_reason") or "")[:150],
-                    "instruction": (lesson.get("retry_instruction") or "")[:150],
-                    "scope": lesson.get("scope"),
-                    "source": lesson.get("source"),
-                }
-            )
+        formatted = [
+            {
+                "family": lesson.get("failure_family") or lesson.get("lesson_family"),
+                "reason": (lesson.get("failure_reason") or "")[:150],
+                "instruction": (lesson.get("retry_instruction") or "")[:150],
+                "scope": lesson.get("scope"),
+                "source": lesson.get("source"),
+            }
+            for lesson in lessons
+        ]
 
         return {"count": len(formatted), "lessons": formatted}
 
     def _tool_create_task(self, goal: str):
-        message = {"intent": goal}
-        task = self.builder.build(message)
-
+        task = self.builder.build({"intent": goal})
         task_id = self.memory.ptr + 1
 
         self.memory.store(
