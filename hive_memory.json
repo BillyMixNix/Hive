@@ -57965,5 +57965,392 @@
       }
     },
     "timestamp": "2026-05-27 12:47:51.394650"
+  },
+  {
+    "id": 1034,
+    "tag": "complexity",
+    "note": "The function _infer_change_intent in planner.py has high cyclomatic complexity (~18 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_infer_change_intent",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_infer_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+        "lineno": 395,
+        "end_lineno": 412,
+        "col_offset": 4,
+        "end_col_offset": 38
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+      "lineno": 395,
+      "end_lineno": 412,
+      "col_offset": 4,
+      "end_col_offset": 38
+    },
+    "timestamp": "2026-05-27 12:49:23.001318"
+  },
+  {
+    "id": 1035,
+    "tag": "plan",
+    "note": "Task 1034 planned | Refactor _infer_change_intent in planner.py to reduce cyclomatic complexity | next: Create dispatch table for change intents",
+    "status": "planned",
+    "metadata": {
+      "task_id": 1034,
+      "plan_id": "plan-1034",
+      "plan": {
+        "goal": "Refactor _infer_change_intent in planner.py to reduce cyclomatic complexity",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_infer_change_intent function",
+        "operation": "create_dispatch_table",
+        "validation": "AST parse and unit tests for each case",
+        "task_type": "architecture",
+        "tasks": [
+          {
+            "task_id": "task-1034-1",
+            "title": "Create dispatch table for change intents",
+            "description": "Extract repeated decision logic into a dispatch table in planner.py (target method: _infer_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_infer_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "architecture",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_infer_change_intent function",
+            "operation": "insert_after_anchor",
+            "validation": "AST parse and unit tests for each case",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_infer_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_infer_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+                "lineno": 395,
+                "end_lineno": 412,
+                "col_offset": 4,
+                "end_col_offset": 38
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+              "lineno": 395,
+              "end_lineno": 412,
+              "col_offset": 4,
+              "end_col_offset": 38
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+            "lineno": 395,
+            "end_lineno": 412,
+            "col_offset": 4,
+            "end_col_offset": 38
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "regression in existing logic handling"
+        ],
+        "next_action": "Create dispatch table for change intents",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_infer_change_intent",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+            "lineno": 395,
+            "end_lineno": 412,
+            "col_offset": 4,
+            "end_col_offset": 38
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 1034,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_infer_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+        "lineno": 395,
+        "end_lineno": 412,
+        "col_offset": 4,
+        "end_col_offset": 38
+      }
+    },
+    "timestamp": "2026-05-27 12:50:22.142114"
+  },
+  {
+    "id": 1036,
+    "tag": "patch",
+    "note": "Task 1034 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Extract repeated decision logic into a dispatch table in _infer_change_intent",
+      "patch": "--- planner.py\n+++ planner.py\n@@ -401,35 +401,27 @@ class PlannerAgent:\n             return resolved == target_file\n\n         def infer_change_intent(description):\n-            text = (description or \"\").lower()\n-\n-            if any(token in text for token in (\"add \", \"create \", \"introduce \", \"new capability\", \"new feature\", \"switch\", \"toggle\", \"button\")):\n-                return \"add_new_capability\"\n-            if \"insert\" in text and \"immediately after\" in text:\n-                return \"insert_line_after_anchor\"\n-            if \"prompt\" in text or \"response contract\" in text or \"json response\" in text:\n-                return \"update_prompt_contract\"\n-            if \"validate\" in text or \"validation\" in text or \"reject\" in text:\n-                return \"tighten_validation\"\n-            if \"route\" in text or \"routing\" in text:\n-                return \"adjust_routing_order\"\n-            if \"state\" in text or \"snapshot\" in text or \"persist\" in text:\n-                return \"update_state_handling\"\n-            if \"refactor\" in text:\n-                return \"refactor_local_block\"\n-            return \"modify_existing_logic\"\n+            dispatch_table = {\n+                (\"add \", \"create \", \"introduce \", \"new capability\", \"new feature\", \"switch\", \"toggle\", \"button\"): \"add_new_capability\",\n+                (\"insert\" in text and \"immediately after\" in text): \"insert_line_after_anchor\",\n+                (\"prompt\" in text or \"response contract\" in text or \"json response\" in text): \"update_prompt_contract\",\n+                (\"validate\" in text or \"validation\" in text or \"reject\" in text): \"tighten_validation\",\n+                (\"route\" in text or \"routing\" in text): \"adjust_routing_order\",\n+                (\"state\" in text or \"snapshot\" in text or \"persist\" in text): \"update_state_handling\",\n+                (\"refactor\" in text): \"refactor_local_block\"\n+            }\n+\n+            for condition, intent in dispatch_table.items():\n+                if isinstance(condition, tuple):\n+                    if any(tok in description.lower() for tok in condition):\n+                        return intent\n+                else:\n+                    if condition and intent:\n+                        return intent\n+            return \"modify_existing_logic\"\n \n         return infer_change_intent(description)",
+      "task_id": 1034,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_infer_change_intent",
+      "context_window": [
+        386,
+        420
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 1458,
+        "trimmed_context_length": 1458,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 395,
+        "end_lineno": 412,
+        "col_offset": 4,
+        "end_col_offset": 38
+      },
+      "completion_cue_result": {
+        "provided_cues": [],
+        "matched_cues": [],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmpb4rdeacy\\planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch is minimal, aligns with the intended task of extracting repeated decision logic into a dispatch table in _infer_change_intent, and stays within one file. It improves readability and maintainability by using a dispatch table approach.",
+        "confidence": 0.9,
+        "next_step": "Run unit tests to ensure all cases are covered and no existing functionality is broken.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-1034",
+      "patch_id": "patch-1034",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_infer_change_intent",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+        "lineno": 395,
+        "end_lineno": 412,
+        "col_offset": 4,
+        "end_col_offset": 38
+      },
+      "task_type": null,
+      "task_note": "The function _infer_change_intent in planner.py has high cyclomatic complexity (~18 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-1034-1",
+      "child_task_description": "Extract repeated decision logic into a dispatch table in planner.py (target method: _infer_change_intent)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_infer_change_intent",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "architecture",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-1034",
+        "task_id": 1034,
+        "plan_id": "plan-1034",
+        "task_note": "The function _infer_change_intent in planner.py has high cyclomatic complexity (~18 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-1034-1",
+        "child_task_title": null,
+        "child_task_description": "Extract repeated decision logic into a dispatch table in planner.py (target method: _infer_change_intent)",
+        "target_file": "planner.py",
+        "target_symbol": "_infer_change_intent",
+        "coder_reason": "Extract repeated decision logic into a dispatch table in _infer_change_intent",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "The patch is minimal, aligns with the intended task of extracting repeated decision logic into a dispatch table in _infer_change_intent, and stays within one file. It improves readability and maintainability by using a dispatch table approach.",
+        "reflector_next_step": "Run unit tests to ensure all cases are covered and no existing functionality is broken.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 18,
+          "deletions": 17
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@ -401,35 +401,27 @@ class PlannerAgent:\n             return resolved == target_file\n\n         def infer_change_intent(description):\n-            text = (description or \"\").lower()\n-\n-            if any(token in text for token in (\"add \", \"create \", \"introduce \", \"new capability\", \"new feature\", \"switch\", \"toggle\", \"button\")):\n-                return \"add_new_capability\"\n-            if \"insert\" in text and \"immediately after\" in text:\n-                return \"insert_line_after_anchor\"\n-            if \"prompt\" in text or \"response contract\" in text or \"json response\" in text:\n-                return \"update_prompt_contract\"\n-            if \"validate\" in text or \"validation\" in text or \"reject\" in text:\n-                return \"tighten_validation\"\n-            if \"route\" in text or \"routing\" in text:\n-                return \"adjust_routing_order\"\n-            if \"state\" in text or \"snapshot\" in text or \"persist\" in text:\n-                return \"update_state_handling\"",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 12:52:26.996050"
+  },
+  {
+    "id": 1037,
+    "tag": "plan",
+    "note": "Task 1034 plan updated | Refactor _infer_change_intent in planner.py to reduce cyclomatic complexity",
+    "status": "planned",
+    "metadata": {
+      "task_id": 1034,
+      "plan_id": "plan-1034",
+      "plan": {
+        "goal": "Refactor _infer_change_intent in planner.py to reduce cyclomatic complexity",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_infer_change_intent function",
+        "operation": "create_dispatch_table",
+        "validation": "AST parse and unit tests for each case",
+        "task_type": "architecture",
+        "tasks": [
+          {
+            "task_id": "task-1034-1",
+            "title": "Create dispatch table for change intents",
+            "description": "Extract repeated decision logic into a dispatch table in planner.py (target method: _infer_change_intent)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_infer_change_intent",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "architecture",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_infer_change_intent function",
+            "operation": "insert_after_anchor",
+            "validation": "AST parse and unit tests for each case",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_infer_change_intent",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_infer_change_intent",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+                "lineno": 395,
+                "end_lineno": 412,
+                "col_offset": 4,
+                "end_col_offset": 38
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+              "lineno": 395,
+              "end_lineno": 412,
+              "col_offset": 4,
+              "end_col_offset": 38
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+            "lineno": 395,
+            "end_lineno": 412,
+            "col_offset": 4,
+            "end_col_offset": 38
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "regression in existing logic handling"
+        ],
+        "next_action": "Create dispatch table for change intents",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_infer_change_intent",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._infer_change_intent",
+            "lineno": 395,
+            "end_lineno": 412,
+            "col_offset": 4,
+            "end_col_offset": 38
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 1034,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-27 12:52:28.897809"
   }
 ]
