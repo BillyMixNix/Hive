@@ -81,6 +81,13 @@ class ConversationManager:
             tool_calls = message.get("tool_calls") or []
             content = message.get("content") or ""
 
+            # Some models output tool calls as text rather than via the native
+            # tool_calls field. Detect and normalise that here.
+            if not tool_calls and content:
+                tool_calls = self._extract_text_tool_calls(content)
+                if tool_calls:
+                    content = ""
+
             if tool_calls:
                 # Record assistant turn with tool calls
                 self.history.append(
@@ -114,6 +121,44 @@ class ConversationManager:
             # No tool calls — final response
             self.history.append({"role": "assistant", "content": content})
             return content
+
+    def _extract_text_tool_calls(self, content: str) -> list:
+        """
+        Detect tool calls embedded as JSON in the model's text output.
+        Handles both single-object and array formats.
+        Returns a normalised tool_calls list or empty list if none found.
+        """
+        valid_names = {t["function"]["name"] for t in OLLAMA_TOOLS}
+        stripped = content.strip()
+
+        # Try to find JSON block — may be wrapped in markdown fences
+        import re
+        json_candidates = re.findall(r"```(?:json)?\s*([\s\S]*?)```", stripped)
+        if not json_candidates:
+            # Try bare JSON object or array
+            if stripped.startswith("{") or stripped.startswith("["):
+                json_candidates = [stripped]
+
+        for candidate in json_candidates:
+            candidate = candidate.strip()
+            try:
+                parsed = json.loads(candidate)
+            except json.JSONDecodeError:
+                continue
+
+            # Normalise to list
+            items = parsed if isinstance(parsed, list) else [parsed]
+            calls = []
+            for item in items:
+                name = item.get("name") or item.get("function", {}).get("name", "")
+                args = item.get("arguments") or item.get("parameters") or {}
+                if name in valid_names:
+                    calls.append({"function": {"name": name, "arguments": args}})
+
+            if calls:
+                return calls
+
+        return []
 
     def _ollama_post(self, payload: dict) -> dict:
         try:
