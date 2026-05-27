@@ -196,6 +196,7 @@ class ConversationManager:
     # ------------------------------------------------------------------
 
     def _dispatch_tool(self, name: str, inputs: dict) -> dict:
+        print(f"[Tool] {name}({inputs})")
         handlers = {
             "get_status": self._tool_get_status,
             "list_tasks": self._tool_list_tasks,
