@@ -4,6 +4,11 @@ import time
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
+
+class CreditsExhaustedError(RuntimeError):
+    """Raised when the Anthropic API refuses a request due to insufficient credits."""
+    pass
+
 # Default model used by Hive
 DEFAULT_MODEL = "qwen2.5-coder:7b"
 CLAUDE_MODEL = "claude-opus-4-7"
@@ -89,7 +94,15 @@ def _ask_claude(prompt, system=None, model=None, timeout=120):
             }
         ]
 
-    response = client.messages.create(**kwargs)
+    try:
+        response = client.messages.create(**kwargs)
+    except Exception as exc:
+        exc_text = str(exc).lower()
+        if "credit balance" in exc_text or "too low" in exc_text:
+            raise CreditsExhaustedError(
+                "Anthropic API credits exhausted. Restore credits before retrying this task."
+            ) from exc
+        raise RuntimeError(f"Claude API error: {exc}") from exc
     elapsed = time.time() - start
 
     text = next(

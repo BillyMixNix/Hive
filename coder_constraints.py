@@ -104,6 +104,18 @@ def derive_patch_constraints(task, plan, target_file):
     if target_file in {"executor.py", "coder.py", "router.py", "reflector.py", "planner.py", "main.py"}:
         constraints["notes"].append("Preserve architecture and avoid introducing new subsystems.")
 
+    # Complexity-reduction tasks explicitly require adding a helper — override any
+    # architectural restriction that would block it.
+    tag = task.get("tag") or metadata.get("tag") or ""
+    if tag == "complexity":
+        constraints["allow_new_method"] = True
+        constraints["max_new_methods"] = 1
+        constraints["preferred_edit_style"] = "add_helper"
+        constraints["notes"].append(
+            "Complexity-reduction task: one new adjacent or nested helper is allowed. "
+            "Rewrite the target symbol in-place to use it."
+        )
+
     return constraints
 
 
