@@ -50262,5 +50262,439 @@
       }
     },
     "timestamp": "2026-05-27 08:55:20.618004"
+  },
+  {
+    "id": 948,
+    "tag": "complexity",
+    "note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "plan_task",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+        "lineno": 1496,
+        "end_lineno": 1566,
+        "col_offset": 4,
+        "end_col_offset": 13
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+      "lineno": 1496,
+      "end_lineno": 1566,
+      "col_offset": 4,
+      "end_col_offset": 13
+    },
+    "timestamp": "2026-05-27 08:55:22.501662"
+  },
+  {
+    "id": 949,
+    "tag": "plan",
+    "note": "Task 948 planned | Refactor plan_task in planner.py by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop. | next: write unit tests for the new helper function and ensure they pass.",
+    "status": "planned",
+    "metadata": {
+      "task_id": 948,
+      "plan_id": "plan-948",
+      "plan": {
+        "goal": "Refactor plan_task in planner.py by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "plan_task function in planner.py",
+        "operation": "localize and simplify logic",
+        "validation": "unit tests for the extracted helper",
+        "task_type": "refactor",
+        "tasks": [
+          {
+            "task_id": "task-948-1",
+            "title": "Extract task decomposition into a helper",
+            "description": "Create a new helper function that decomposes part of plan_task.",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "plan_task",
+            "change_intent": "add_new_capability",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "def decompose_plan_task("
+            ],
+            "task_type": "refactor",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "new helper function in planner.py",
+            "operation": "add_capability",
+            "validation": "unit tests for the new helper",
+            "creates_symbols": [
+              "decompose_plan_task"
+            ],
+            "wires_into_symbols": [
+              "plan_task"
+            ],
+            "insertion_region": "before plan_task",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "plan_task",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "plan_task",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+                "lineno": 1496,
+                "end_lineno": 1566,
+                "col_offset": 4,
+                "end_col_offset": 13
+              },
+              "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+              "lineno": 1496,
+              "end_lineno": 1566,
+              "col_offset": 4,
+              "end_col_offset": 13
+            },
+            "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+            "lineno": 1496,
+            "end_lineno": 1566,
+            "col_offset": 4,
+            "end_col_offset": 13
+          },
+          {
+            "task_id": "task-948-2",
+            "title": "Refactor plan_task to use the helper",
+            "description": "Modify plan_task to call the new helper function.",
+            "status": "next",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "plan_task",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              "decompose_plan_task("
+            ],
+            "task_type": "refactor",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "plan_task function in planner.py",
+            "operation": "modify_logic",
+            "validation": "unit tests for plan_task with new logic",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "plan_task",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "plan_task",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+                "lineno": 1496,
+                "end_lineno": 1566,
+                "col_offset": 4,
+                "end_col_offset": 13
+              },
+              "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+              "lineno": 1496,
+              "end_lineno": 1566,
+              "col_offset": 4,
+              "end_col_offset": 13
+            },
+            "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+            "lineno": 1496,
+            "end_lineno": 1566,
+            "col_offset": 4,
+            "end_col_offset": 13
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "risk of breaking existing logic",
+          "unit tests may not cover all edge cases"
+        ],
+        "next_action": "write unit tests for the new helper function and ensure they pass.",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "plan_task",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+            "lineno": 1496,
+            "end_lineno": 1566,
+            "col_offset": 4,
+            "end_col_offset": 13
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 948,
+        "source": "llm",
+        "active_child_task_id": "task-948-1",
+        "active_child_task_title": "Extract task decomposition into a helper",
+        "active_child_target_file": "planner.py"
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+        "lineno": 1496,
+        "end_lineno": 1566,
+        "col_offset": 4,
+        "end_col_offset": 13
+      }
+    },
+    "timestamp": "2026-05-27 08:57:06.200103"
+  },
+  {
+    "id": 950,
+    "tag": "patch",
+    "note": "Task 948 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 948,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for plan_task",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "symbol_anchor_drift: patch does not modify requested symbol plan_task.",
+      "plan_id": "plan-948",
+      "patch_id": "patch-948",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+        "lineno": 1496,
+        "end_lineno": 1566,
+        "col_offset": 4,
+        "end_col_offset": 13
+      },
+      "task_type": null,
+      "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-948-1",
+      "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "plan_task",
+      "child_change_intent": "add_new_capability",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def decompose_plan_task("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-948",
+        "task_id": 948,
+        "plan_id": "plan-948",
+        "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-948-1",
+        "child_task_title": null,
+        "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "coder_reason": "Hard anchor enforcement blocked patch for plan_task",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 08:59:56.482205"
+  },
+  {
+    "id": 951,
+    "tag": "patch",
+    "note": "Task 948 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 948,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for plan_task",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Ollama request timed out after 45 seconds.",
+      "plan_id": "plan-948",
+      "patch_id": "patch-948",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+        "lineno": 1496,
+        "end_lineno": 1566,
+        "col_offset": 4,
+        "end_col_offset": 13
+      },
+      "task_type": null,
+      "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-948-1",
+      "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "plan_task",
+      "child_change_intent": "add_new_capability",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def decompose_plan_task("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-948",
+        "task_id": 948,
+        "plan_id": "plan-948",
+        "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-948-1",
+        "child_task_title": null,
+        "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "coder_reason": "Hard anchor enforcement blocked patch for plan_task",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 09:03:48.174485"
+  },
+  {
+    "id": 952,
+    "tag": "patch",
+    "note": "Task 948 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 948,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for plan_task",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Sandbox apply failed: Patch apply failed: Patch semantic validation failed: {'no_method_insertion_inside_live_body': True, 'no_unreachable_code_after_return': True, 'no_undefined_method_call': True, 'helper_call_definition_consistency': True, 'reason_to_diff_consistency': True, 'variable_scope_sanity': False, 'structural_scope_valid': True}",
+      "plan_id": "plan-948",
+      "patch_id": "patch-948",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent.plan_task",
+        "lineno": 1496,
+        "end_lineno": 1566,
+        "col_offset": 4,
+        "end_col_offset": 13
+      },
+      "task_type": null,
+      "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-948-1",
+      "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "plan_task",
+      "child_change_intent": "add_new_capability",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "def decompose_plan_task("
+      ],
+      "child_task_type": "refactor",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-948",
+        "task_id": 948,
+        "plan_id": "plan-948",
+        "task_note": "The function plan_task in planner.py is 71 lines long. Functions this long are hard to test and modify safely. Refactor by extracting a logical sub-step into a named helper or collapsing repeated patterns into a loop.",
+        "child_task_id": "task-948-1",
+        "child_task_title": null,
+        "child_task_description": "Create a new helper function that decomposes part of plan_task.",
+        "target_file": "planner.py",
+        "target_symbol": "plan_task",
+        "coder_reason": "Hard anchor enforcement blocked patch for plan_task",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 09:07:40.300460"
   }
 ]
