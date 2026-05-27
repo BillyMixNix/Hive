@@ -59463,5 +59463,34 @@
       }
     },
     "timestamp": "2026-05-27 13:23:51.588082"
+  },
+  {
+    "id": 1049,
+    "tag": "complexity",
+    "note": "The function _extract_explicit_symbol_from_text in planner.py has high cyclomatic complexity (~36 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "blocked",
+    "metadata": {
+      "target_file": "planner.py",
+      "target_symbol": "_extract_explicit_symbol_from_text",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_extract_explicit_symbol_from_text",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "planner.py::PlannerAgent._extract_explicit_symbol_from_text",
+        "lineno": 704,
+        "end_lineno": 821,
+        "col_offset": 4,
+        "end_col_offset": 29
+      },
+      "completion_cues": [],
+      "target_symbol_id": "planner.py::PlannerAgent._extract_explicit_symbol_from_text",
+      "lineno": 704,
+      "end_lineno": 821,
+      "col_offset": 4,
+      "end_col_offset": 29
+    },
+    "timestamp": "2026-05-27 13:23:53.549544"
   }
 ]
