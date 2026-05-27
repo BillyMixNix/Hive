@@ -72,7 +72,6 @@ class ConversationManager:
             payload = {
                 "model": self.model,
                 "messages": self._build_messages(),
-                "tools": OLLAMA_TOOLS,
                 "stream": False,
             }
 
