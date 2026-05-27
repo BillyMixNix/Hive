@@ -38,8 +38,6 @@ def _dummy_vector():
 class ConversationManager:
     def __init__(self, repo_root=".", model=None):
         self.model = model or DEFAULT_MODEL
-        # System message is the first entry; never trimmed
-        self._system_message = {"role": "system", "content": SYSTEM_PROMPT}
         self.history = []  # user/assistant/tool turns only
 
         self.memory = HiveMemoryAgent(device="cpu")
@@ -47,6 +45,67 @@ class ConversationManager:
         self.state.load_snapshot()
         self.lesson_memory = LessonMemory()
         self.builder = BuilderAgent()
+
+        # System message built after lesson_memory is ready so trusted
+        # lessons can be injected into the prompt at session start.
+        self._system_message = {
+            "role": "system",
+            "content": self._build_system_prompt(),
+        }
+
+    def _build_system_prompt(self) -> str:
+        """Build the system prompt, injecting trusted lessons at the bottom."""
+        lessons = self._load_trusted_lessons()
+        if not lessons:
+            return SYSTEM_PROMPT
+
+        lines = [SYSTEM_PROMPT, "", "--- LEARNED PATTERNS ---",
+                 "These patterns have been validated through experience. Apply them automatically:"]
+        for lesson in lessons:
+            family = lesson.get("failure_family") or lesson.get("lesson_family") or "general"
+            when = (lesson.get("failure_reason") or lesson.get("trigger_pattern") or "")[:120]
+            instruction = (lesson.get("retry_instruction") or "")[:200]
+            if instruction:
+                entry = f"- [{family}]"
+                if when:
+                    entry += f" When: {when}."
+                entry += f" Do: {instruction}"
+                lines.append(entry)
+
+        return "\n".join(lines)
+
+    def _load_trusted_lessons(self) -> list:
+        """Load trusted lessons relevant to conversational reasoning."""
+        try:
+            import json
+            trusted = []
+            universal_extra = []
+            seen = set()
+            with open(self.lesson_memory.path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        lesson = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    lid = lesson.get("lesson_id") or lesson.get("timestamp")
+                    if lid in seen:
+                        continue
+                    seen.add(lid)
+                    state = lesson.get("promotion_state", "")
+                    scope = lesson.get("scope", "")
+                    if state == "trusted":
+                        trusted.append(lesson)
+                    elif scope == "universal" and state not in ("retired",):
+                        universal_extra.append(lesson)
+            # Pilot-seeded reasoning lessons first, then other trusted
+            seeded = [l for l in trusted if l.get("source") == "pilot_seeded"]
+            other = [l for l in trusted if l.get("source") != "pilot_seeded"]
+            return (seeded + other + universal_extra)[:20]
+        except Exception:
+            return []
 
     # ------------------------------------------------------------------
     # Public interface
