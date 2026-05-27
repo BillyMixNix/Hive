@@ -59492,5 +59492,647 @@
       "end_col_offset": 29
     },
     "timestamp": "2026-05-27 13:23:53.549544"
+  },
+  {
+    "id": 1050,
+    "tag": "complexity",
+    "note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+    "status": "done",
+    "metadata": {
+      "target_file": "planner.py",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      },
+      "target_symbol": null,
+      "completion_cues": []
+    },
+    "timestamp": "2026-05-27 13:25:28.413714"
+  },
+  {
+    "id": 1051,
+    "tag": "plan",
+    "note": "Task 1050 planned | Reduce cyclomatic complexity in _build_anchor_from_plan | next: Write unit tests for the dispatch table in planner.py",
+    "status": "planned",
+    "metadata": {
+      "task_id": 1050,
+      "plan_id": "plan-1050",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity in _build_anchor_from_plan",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_build_anchor_from_plan function",
+        "operation": "extract repeated logic into a dispatch table",
+        "validation": "unit tests for all branches of the dispatch table",
+        "task_type": "architecture",
+        "tasks": [
+          {
+            "task_id": "task-1050-1",
+            "title": "Create dispatch table for _build_anchor_from_plan",
+            "description": "Extract repeated decision logic into a dictionary mapping conditions to actions. (target method: _build_anchor_from_plan)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "change_intent": "add_new_capability",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "dispatch_table = {...}"
+            ],
+            "task_type": "architecture",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "dispatch_table in planner.py",
+            "operation": "add dictionary with condition-action pairs",
+            "validation": "unit tests for all branches of the dispatch table",
+            "creates_symbols": [
+              "dispatch_table"
+            ],
+            "wires_into_symbols": [],
+            "insertion_region": "def _build_anchor_from_plan(self, plan):",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_build_anchor_from_plan",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_build_anchor_from_plan",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+                "lineno": 939,
+                "end_lineno": 973,
+                "col_offset": 4,
+                "end_col_offset": 78
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+              "lineno": 939,
+              "end_lineno": 973,
+              "col_offset": 4,
+              "end_col_offset": 78
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          },
+          {
+            "task_id": "task-1050-2",
+            "title": "Refactor _build_anchor_from_plan to use dispatch table",
+            "description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "architecture",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_build_anchor_from_plan function",
+            "operation": "replace conditionals with dispatch table lookup",
+            "validation": "unit tests for all branches of the dispatch table",
+            "creates_symbols": [],
+            "wires_into_symbols": [
+              "dispatch_table"
+            ],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_build_anchor_from_plan",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_build_anchor_from_plan",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+                "lineno": 939,
+                "end_lineno": 973,
+                "col_offset": 4,
+                "end_col_offset": 78
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+              "lineno": 939,
+              "end_lineno": 973,
+              "col_offset": 4,
+              "end_col_offset": 78
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "potential logical errors in dispatch table logic",
+          "impact on existing behavior with refactoring"
+        ],
+        "next_action": "Write unit tests for the dispatch table in planner.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 1050,
+        "source": "llm",
+        "active_child_task_id": "task-1050-2",
+        "active_child_task_title": "Refactor _build_anchor_from_plan to use dispatch table",
+        "active_child_target_file": "planner.py"
+      },
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": null,
+        "scope": "single_file",
+        "anchor_level": "file",
+        "anchor_source": "file_level_inference"
+      }
+    },
+    "timestamp": "2026-05-27 13:27:10.013100"
+  },
+  {
+    "id": 1052,
+    "tag": "patch",
+    "note": "Task 1050 patch pending_pilot_review | planner.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Extract repeated decision logic into a dictionary mapping conditions to actions.",
+      "patch": "--- planner.py\n+++ planner.py\n@@ -940,6 +940,15 @@ def _build_anchor_from_plan(self, task, plan):\n         effective_symbol = parent_anchor.get(\"target_symbol\") or plan_symbol\n \n         effective_file = parent_anchor.get(\"target_file\")\n+        symbol_resolvers = {\n+            work_mode not in FILE_LEVEL_TASK_KINDS: lambda: self._extract_explicit_symbol_from_text(plan.get(\"goal\")) or self._extract_explicit_symbol_from_text(plan.get(\"next_action\")),\n+            True: lambda: None\n+        }\n+        resolved_file = symbol_resolvers[True]()\n+        if resolved_file:\n+            effective_file = resolved_file\n+\n         if not effective_file:\n             effective_file = (\n                 self._extract_explicit_file_from_text(plan.get(\"goal\"))",
+      "task_id": 1050,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_build_anchor_from_plan",
+      "context_window": [
+        930,
+        981
+      ],
+      "context_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2403,
+        "trimmed_context_length": 2403,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 939,
+        "end_lineno": 973,
+        "col_offset": 4,
+        "end_col_offset": 78
+      },
+      "completion_cue_result": {
+        "provided_cues": [
+          "dispatch_table = {...}"
+        ],
+        "matched_cues": [],
+        "missing_cues": [
+          "dispatch_table = {...}"
+        ],
+        "all_matched": false
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "planner.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmp3n_9r63q\\planner.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch extends existing structures cleanly and stays narrow in scope. It introduces a new dictionary `symbol_resolvers` to map conditions to actions, which is aligned with the intended task.",
+        "confidence": 0.85,
+        "next_step": "Add unit tests for all branches of the dispatch table to ensure correctness.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-1050",
+      "patch_id": "patch-1050",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+        "lineno": 939,
+        "end_lineno": 973,
+        "col_offset": 4,
+        "end_col_offset": 78
+      },
+      "task_type": null,
+      "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-1050-1",
+      "child_task_description": "Extract repeated decision logic into a dictionary mapping conditions to actions. (target method: _build_anchor_from_plan)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_build_anchor_from_plan",
+      "child_change_intent": "add_new_capability",
+      "child_expected_operation": "add_symbol",
+      "child_completion_cues": [
+        "dispatch_table = {...}"
+      ],
+      "child_task_type": "architecture",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-1050",
+        "task_id": 1050,
+        "plan_id": "plan-1050",
+        "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-1050-1",
+        "child_task_title": null,
+        "child_task_description": "Extract repeated decision logic into a dictionary mapping conditions to actions. (target method: _build_anchor_from_plan)",
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "coder_reason": "Extract repeated decision logic into a dictionary mapping conditions to actions.",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "The patch extends existing structures cleanly and stays narrow in scope. It introduces a new dictionary `symbol_resolvers` to map conditions to actions, which is aligned with the intended task.",
+        "reflector_next_step": "Add unit tests for all branches of the dispatch table to ensure correctness.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 8,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py\n@@ -940,6 +940,15 @@ def _build_anchor_from_plan(self, task, plan):\n         effective_symbol = parent_anchor.get(\"target_symbol\") or plan_symbol\n \n         effective_file = parent_anchor.get(\"target_file\")\n+        symbol_resolvers = {\n+            work_mode not in FILE_LEVEL_TASK_KINDS: lambda: self._extract_explicit_symbol_from_text(plan.get(\"goal\")) or self._extract_explicit_symbol_from_text(plan.get(\"next_action\")),\n+            True: lambda: None\n+        }\n+        resolved_file = symbol_resolvers[True]()\n+        if resolved_file:\n+            effective_file = resolved_file\n+\n         if not effective_file:\n             effective_file = (\n                 self._extract_explicit_file_from_text(plan.get(\"goal\"))",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 13:30:27.476681"
+  },
+  {
+    "id": 1053,
+    "tag": "plan",
+    "note": "Task 1050 plan updated | Reduce cyclomatic complexity in _build_anchor_from_plan",
+    "status": "planned",
+    "metadata": {
+      "task_id": 1050,
+      "plan_id": "plan-1050",
+      "plan": {
+        "goal": "Reduce cyclomatic complexity in _build_anchor_from_plan",
+        "work_mode": "refactor",
+        "domain": "code",
+        "artifact": "_build_anchor_from_plan function",
+        "operation": "extract repeated logic into a dispatch table",
+        "validation": "unit tests for all branches of the dispatch table",
+        "task_type": "architecture",
+        "tasks": [
+          {
+            "task_id": "task-1050-1",
+            "title": "Create dispatch table for _build_anchor_from_plan",
+            "description": "Extract repeated decision logic into a dictionary mapping conditions to actions. (target method: _build_anchor_from_plan)",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "change_intent": "add_new_capability",
+            "expected_operation": "add_symbol",
+            "completion_cues": [
+              "dispatch_table = {...}"
+            ],
+            "task_type": "architecture",
+            "task_kind": "create",
+            "work_mode": "create",
+            "domain": "code",
+            "artifact": "dispatch_table in planner.py",
+            "operation": "add dictionary with condition-action pairs",
+            "validation": "unit tests for all branches of the dispatch table",
+            "creates_symbols": [
+              "dispatch_table"
+            ],
+            "wires_into_symbols": [],
+            "insertion_region": "def _build_anchor_from_plan(self, plan):",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_build_anchor_from_plan",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_build_anchor_from_plan",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+                "lineno": 939,
+                "end_lineno": 973,
+                "col_offset": 4,
+                "end_col_offset": 78
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+              "lineno": 939,
+              "end_lineno": 973,
+              "col_offset": 4,
+              "end_col_offset": 78
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          },
+          {
+            "task_id": "task-1050-2",
+            "title": "Refactor _build_anchor_from_plan to use dispatch table",
+            "description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+            "status": "current",
+            "depends_on": [],
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [],
+            "task_type": "architecture",
+            "task_kind": "modify",
+            "work_mode": "modify",
+            "domain": "code",
+            "artifact": "_build_anchor_from_plan function",
+            "operation": "replace conditionals with dispatch table lookup",
+            "validation": "unit tests for all branches of the dispatch table",
+            "creates_symbols": [],
+            "wires_into_symbols": [
+              "dispatch_table"
+            ],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "planner.py",
+              "target_symbol": "_build_anchor_from_plan",
+              "anchor": {
+                "target_file": "planner.py",
+                "target_symbol": "_build_anchor_from_plan",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+                "lineno": 939,
+                "end_lineno": 973,
+                "col_offset": 4,
+                "end_col_offset": 78
+              },
+              "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+              "lineno": 939,
+              "end_lineno": 973,
+              "col_offset": 4,
+              "end_col_offset": 78
+            },
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          }
+        ],
+        "dependencies": [
+          "planner.py"
+        ],
+        "risks": [
+          "potential logical errors in dispatch table logic",
+          "impact on existing behavior with refactoring"
+        ],
+        "next_action": "Write unit tests for the dispatch table in planner.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "planner.py",
+            "target_symbol": "_build_anchor_from_plan",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "file_level_inference",
+            "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+            "lineno": 939,
+            "end_lineno": 973,
+            "col_offset": 4,
+            "end_col_offset": 78
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "refactor",
+        "task_id": 1050,
+        "source": "llm",
+        "active_child_task_id": "task-1050-2",
+        "active_child_task_title": "Refactor _build_anchor_from_plan to use dispatch table",
+        "active_child_target_file": "planner.py"
+      }
+    },
+    "timestamp": "2026-05-27 13:30:29.408504"
+  },
+  {
+    "id": 1054,
+    "tag": "patch",
+    "note": "Task 1050 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 1050,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _build_anchor_from_plan",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Ollama request timed out after 45 seconds.",
+      "plan_id": "plan-1050",
+      "patch_id": "patch-1050",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+        "lineno": 939,
+        "end_lineno": 981,
+        "col_offset": 4,
+        "end_col_offset": 78
+      },
+      "task_type": null,
+      "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-1050-2",
+      "child_task_description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_build_anchor_from_plan",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "architecture",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-1050",
+        "task_id": 1050,
+        "plan_id": "plan-1050",
+        "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-1050-2",
+        "child_task_title": null,
+        "child_task_description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "coder_reason": "Hard anchor enforcement blocked patch for _build_anchor_from_plan",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 13:38:18.967126"
+  },
+  {
+    "id": 1055,
+    "tag": "patch",
+    "note": "Task 1050 patch blocked | planner.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 1050,
+      "target_file": "planner.py",
+      "change_type": "diff_patch",
+      "patch": "--- planner.py\n+++ planner.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _build_anchor_from_plan",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "Ollama request timed out after 45 seconds.",
+      "plan_id": "plan-1050",
+      "patch_id": "patch-1050",
+      "anchor": {
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "planner.py::PlannerAgent._build_anchor_from_plan",
+        "lineno": 939,
+        "end_lineno": 981,
+        "col_offset": 4,
+        "end_col_offset": 78
+      },
+      "task_type": null,
+      "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-1050-2",
+      "child_task_description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+      "child_target_file": "planner.py",
+      "child_target_symbol": "_build_anchor_from_plan",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [],
+      "child_task_type": "architecture",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-1050",
+        "task_id": 1050,
+        "plan_id": "plan-1050",
+        "task_note": "The function _build_anchor_from_plan in planner.py has high cyclomatic complexity (~13 decision paths). It handles too many cases in one place. Simplify by extracting repeated decision logic into a dispatch table or named helper, reducing branch count.",
+        "child_task_id": "task-1050-2",
+        "child_task_title": null,
+        "child_task_description": "Replace conditional logic with dispatch table lookups. (target method: _build_anchor_from_plan)",
+        "target_file": "planner.py",
+        "target_symbol": "_build_anchor_from_plan",
+        "coder_reason": "Hard anchor enforcement blocked patch for _build_anchor_from_plan",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- planner.py\n+++ planner.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 13:44:00.947923"
   }
 ]
