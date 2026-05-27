@@ -189,13 +189,19 @@ class ConversationManager:
         valid_names = {t["function"]["name"] for t in OLLAMA_TOOLS}
         stripped = content.strip()
 
-        # Try to find JSON block — may be wrapped in markdown fences
         import re
+        # 1. Check markdown code fences first
         json_candidates = re.findall(r"```(?:json)?\s*([\s\S]*?)```", stripped)
+
         if not json_candidates:
-            # Try bare JSON object or array
-            if stripped.startswith("{") or stripped.startswith("["):
-                json_candidates = [stripped]
+            # 2. Scan line by line — catches JSON embedded after preamble text
+            for line in stripped.splitlines():
+                line = line.strip()
+                if line.startswith("{") and line.endswith("}"):
+                    json_candidates.append(line)
+            # 3. Whole-content JSON object or array as last resort
+            if not json_candidates and (stripped.startswith("{") or stripped.startswith("[")):
+                json_candidates.append(stripped)
 
         for candidate in json_candidates:
             candidate = candidate.strip()
