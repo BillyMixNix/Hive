@@ -2762,7 +2762,14 @@ def main():
     print("Hive Zero v0.1.2.0 Online")
 
     while True:
-        user_input = input("\nPilot > ")
+        try:
+            user_input = input("\nPilot > ")
+        except EOFError:
+            print("\n[Hive] stdin closed — batch run complete.")
+            break
+        if user_input.strip().lower() in ("quit", "exit", "q"):
+            print("[Hive] Shutting down.")
+            break
         message = interface.process_input(user_input)
         route, payload = router.route(user_input, message)
         state.set_active_route(route)
