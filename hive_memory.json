@@ -51723,5 +51723,481 @@
       }
     },
     "timestamp": "2026-05-27 09:23:14.937601"
+  },
+  {
+    "id": 963,
+    "tag": "error-handling",
+    "note": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
+    "status": "done",
+    "metadata": {
+      "target_file": "executor.py",
+      "target_symbol": "_detect_structural_scope_inconsistency",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+        "lineno": 630,
+        "end_lineno": 676,
+        "col_offset": 4,
+        "end_col_offset": 26
+      },
+      "completion_cues": [],
+      "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+      "lineno": 630,
+      "end_lineno": 676,
+      "col_offset": 4,
+      "end_col_offset": 26
+    },
+    "timestamp": "2026-05-27 09:23:16.584985"
+  },
+  {
+    "id": 964,
+    "tag": "plan",
+    "note": "Task 963 planned | Add logging to exception handler in _detect_structural_scope_inconsistency | next: Add logging statement to exception handler in executor.py",
+    "status": "planned",
+    "metadata": {
+      "task_id": 963,
+      "plan_id": "plan-963",
+      "plan": {
+        "goal": "Add logging to exception handler in _detect_structural_scope_inconsistency",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_detect_structural_scope_inconsistency function",
+        "operation": "modify_logic",
+        "validation": "AST parse or focused smoke check",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-963-1",
+            "title": "Add logging to exception handler",
+            "description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "_detect_structural_scope_inconsistency",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              "logger.error(str(e))"
+            ],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_detect_structural_scope_inconsistency function",
+            "operation": "insert_after_anchor",
+            "validation": "Check if log message is correctly added and exception handling works as expected.",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "_detect_structural_scope_inconsistency",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "_detect_structural_scope_inconsistency",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+                "lineno": 630,
+                "end_lineno": 676,
+                "col_offset": 4,
+                "end_col_offset": 26
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+              "lineno": 630,
+              "end_lineno": 676,
+              "col_offset": 4,
+              "end_col_offset": 26
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+            "lineno": 630,
+            "end_lineno": 676,
+            "col_offset": 4,
+            "end_col_offset": 26
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Potential performance impact of adding additional log messages"
+        ],
+        "next_action": "Add logging statement to exception handler in executor.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "_detect_structural_scope_inconsistency",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+            "lineno": 630,
+            "end_lineno": 676,
+            "col_offset": 4,
+            "end_col_offset": 26
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 963,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      },
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "repo_symbol_inference",
+        "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+        "lineno": 630,
+        "end_lineno": 676,
+        "col_offset": 4,
+        "end_col_offset": 26
+      }
+    },
+    "timestamp": "2026-05-27 09:24:22.291290"
+  },
+  {
+    "id": 965,
+    "tag": "patch",
+    "note": "Task 963 patch blocked | executor.py",
+    "status": "blocked",
+    "metadata": {
+      "task_id": 963,
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "patch": "--- executor.py\n+++ executor.py\n",
+      "reason": "Hard anchor enforcement blocked patch for _detect_structural_scope_inconsistency",
+      "risk_level": "high",
+      "status": "blocked",
+      "source": "fallback",
+      "llm_error": "scope_alignment_mismatch: Patch appears misaligned with task scope for change_intent=modify_existing_logic: no meaningful keyword overlap with task note.",
+      "plan_id": "plan-963",
+      "patch_id": "patch-963",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+        "lineno": 630,
+        "end_lineno": 676,
+        "col_offset": 4,
+        "end_col_offset": 26
+      },
+      "task_type": null,
+      "task_note": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
+      "pilot_verdict": null,
+      "pilot_reason": null,
+      "pilot_guidance": null,
+      "location_correct": null,
+      "task_alignment": null,
+      "plan_step_alignment": null,
+      "child_task_id": "task-963-1",
+      "child_task_description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "_detect_structural_scope_inconsistency",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [
+        "logger.error(str(e))"
+      ],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-963",
+        "task_id": 963,
+        "plan_id": "plan-963",
+        "task_note": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
+        "child_task_id": "task-963-1",
+        "child_task_title": null,
+        "child_task_description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "coder_reason": "Hard anchor enforcement blocked patch for _detect_structural_scope_inconsistency",
+        "reflector_verdict": null,
+        "reflector_reflection": null,
+        "reflector_next_step": null,
+        "patch_stats": {
+          "hunks": 0,
+          "additions": 0,
+          "deletions": 0
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 09:25:53.653365"
+  },
+  {
+    "id": 966,
+    "tag": "patch",
+    "note": "Task 963 patch pending_pilot_review | executor.py",
+    "status": "applied",
+    "metadata": {
+      "target_file": "executor.py",
+      "change_type": "diff_patch",
+      "risk_level": "low",
+      "status": "proposed",
+      "reason": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+      "patch": "--- executor.py\n+++ executor.py\n@@ -658,7 +658,7 @@ def _detect_structural_scope_inconsistenc\n             return False, None\n         except Exception as e:\n             # Build or parse failure means the patch itself is broken \u2014 that's\n-            # caught by the syntax/apply checks elsewhere. Don't report it as\n+            logger.error(str(e))\n+            # a structural scope violation.\n             return False, None\n\n         # Pre-flight: check original file with the same rules.",
+      "task_id": 963,
+      "source": "llm",
+      "context_mode": "exact_symbol_block",
+      "context_target": "_detect_structural_scope_inconsistency",
+      "context_window": [
+        621,
+        684
+      ],
+      "context_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+      "context_budget": {
+        "selected_mode": "exact_symbol_block",
+        "raw_context_length": 2721,
+        "trimmed_context_length": 2721,
+        "trimmed": false,
+        "summary_used": false,
+        "full_file_omitted": true,
+        "budget_chars": 6800,
+        "budget_decision": "full_context_used",
+        "dropped_related_context": false,
+        "dropped_helper_blocks": false,
+        "dropped_import_blocks": false,
+        "large_file_policy_applied": true,
+        "under_anchored_after_trim": false,
+        "context_priority": [
+          "exact_symbol_block",
+          "block_window",
+          "line_window",
+          "file_head_fallback"
+        ],
+        "anchoring_confidence": "high"
+      },
+      "context_priority": [
+        "exact_symbol_block",
+        "block_window",
+        "line_window",
+        "file_head_fallback"
+      ],
+      "anchoring_confidence": "high",
+      "large_file_policy_applied": true,
+      "under_anchored_after_trim": false,
+      "planner_source": "llm",
+      "benchmark_case_id": null,
+      "context_span": {
+        "lineno": 630,
+        "end_lineno": 676,
+        "col_offset": 4,
+        "end_col_offset": 26
+      },
+      "completion_cue_result": {
+        "provided_cues": [
+          "logger.error(str(e))"
+        ],
+        "matched_cues": [
+          "logger.error(str(e))"
+        ],
+        "missing_cues": [],
+        "all_matched": true
+      },
+      "intent_check": {
+        "skipped": true,
+        "reason": "no explicit simple return-expression intent detected"
+      },
+      "sandbox_report": {
+        "patch_id": null,
+        "target_file": "executor.py",
+        "sandbox_file": "C:\\Users\\billy\\AppData\\Local\\Temp\\tmp8du15bhu\\executor.py",
+        "applied": true,
+        "syntax_valid": true,
+        "semantic_valid": true,
+        "errors": [],
+        "notes": "Patch passed sandbox testing successfully."
+      },
+      "reflection": {
+        "reflection": "The patch inserts a log statement inside the except block of _detect_structural_scope_inconsistency function in executor.py. This appears correct for the intended target location and aligns with the active child step.",
+        "confidence": 0.9,
+        "next_step": "Sandbox the updated code to ensure it behaves as expected after logging is added.",
+        "verdict": "accept"
+      },
+      "plan_id": "plan-963",
+      "patch_id": "patch-963",
+      "anchor": {
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "scope": "single_file",
+        "anchor_level": "symbol",
+        "anchor_source": "child_task",
+        "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+        "lineno": 630,
+        "end_lineno": 676,
+        "col_offset": 4,
+        "end_col_offset": 26
+      },
+      "task_type": null,
+      "task_note": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
+      "pilot_verdict": "accept",
+      "pilot_reason": "Auto-accepted by hive_runner (autonomous mode).",
+      "pilot_guidance": null,
+      "location_correct": true,
+      "task_alignment": true,
+      "plan_step_alignment": true,
+      "child_task_id": "task-963-1",
+      "child_task_description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+      "child_target_file": "executor.py",
+      "child_target_symbol": "_detect_structural_scope_inconsistency",
+      "child_change_intent": "modify_existing_logic",
+      "child_expected_operation": "modify_logic",
+      "child_completion_cues": [
+        "logger.error(str(e))"
+      ],
+      "child_task_type": "bugfix",
+      "recovery_action": null,
+      "recovery_status": null,
+      "recovery_reason": null,
+      "review_packet": {
+        "patch_id": "patch-963",
+        "task_id": 963,
+        "plan_id": "plan-963",
+        "task_note": "The function _detect_structural_scope_inconsistency in executor.py contains an except handler that silently discards exceptions with bare pass. At minimum, log the exception so failures are visible rather than silently swallowed.",
+        "child_task_id": "task-963-1",
+        "child_task_title": null,
+        "child_task_description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+        "target_file": "executor.py",
+        "target_symbol": "_detect_structural_scope_inconsistency",
+        "coder_reason": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+        "reflector_verdict": "accept",
+        "reflector_reflection": "The patch inserts a log statement inside the except block of _detect_structural_scope_inconsistency function in executor.py. This appears correct for the intended target location and aligns with the active child step.",
+        "reflector_next_step": "Sandbox the updated code to ensure it behaves as expected after logging is added.",
+        "patch_stats": {
+          "hunks": 1,
+          "additions": 2,
+          "deletions": 1
+        },
+        "patch_excerpt": "--- executor.py\n+++ executor.py\n@@ -658,7 +658,7 @@ def _detect_structural_scope_inconsistenc\n             return False, None\n         except Exception as e:\n             # Build or parse failure means the patch itself is broken \u2014 that's\n-            # caught by the syntax/apply checks elsewhere. Don't report it as\n+            logger.error(str(e))\n+            # a structural scope violation.\n             return False, None\n\n         # Pre-flight: check original file with the same rules.",
+        "review_questions": [
+          "Is this the right place to patch?",
+          "Does this solve the active child step rather than adjacent behavior?",
+          "Does this solve the planned task without intent drift?"
+        ]
+      }
+    },
+    "timestamp": "2026-05-27 09:27:58.403028"
+  },
+  {
+    "id": 967,
+    "tag": "plan",
+    "note": "Task 963 plan updated | Add logging to exception handler in _detect_structural_scope_inconsistency",
+    "status": "planned",
+    "metadata": {
+      "task_id": 963,
+      "plan_id": "plan-963",
+      "plan": {
+        "goal": "Add logging to exception handler in _detect_structural_scope_inconsistency",
+        "work_mode": "repair",
+        "domain": "code",
+        "artifact": "_detect_structural_scope_inconsistency function",
+        "operation": "modify_logic",
+        "validation": "AST parse or focused smoke check",
+        "task_type": "bugfix",
+        "tasks": [
+          {
+            "task_id": "task-963-1",
+            "title": "Add logging to exception handler",
+            "description": "Insert log statement inside except block of _detect_structural_scope_inconsistency function in executor.py",
+            "status": "complete",
+            "depends_on": [],
+            "target_file": "executor.py",
+            "target_symbol": "_detect_structural_scope_inconsistency",
+            "change_intent": "modify_existing_logic",
+            "expected_operation": "modify_logic",
+            "completion_cues": [
+              "logger.error(str(e))"
+            ],
+            "task_type": "bugfix",
+            "task_kind": "repair",
+            "work_mode": "repair",
+            "domain": "code",
+            "artifact": "_detect_structural_scope_inconsistency function",
+            "operation": "insert_after_anchor",
+            "validation": "Check if log message is correctly added and exception handling works as expected.",
+            "creates_symbols": [],
+            "wires_into_symbols": [],
+            "insertion_region": "",
+            "metadata": {
+              "target_file": "executor.py",
+              "target_symbol": "_detect_structural_scope_inconsistency",
+              "anchor": {
+                "target_file": "executor.py",
+                "target_symbol": "_detect_structural_scope_inconsistency",
+                "scope": "single_file",
+                "anchor_level": "symbol",
+                "anchor_source": "planner_normalized",
+                "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+                "lineno": 630,
+                "end_lineno": 676,
+                "col_offset": 4,
+                "end_col_offset": 26
+              },
+              "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+              "lineno": 630,
+              "end_lineno": 676,
+              "col_offset": 4,
+              "end_col_offset": 26
+            },
+            "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+            "lineno": 630,
+            "end_lineno": 676,
+            "col_offset": 4,
+            "end_col_offset": 26
+          }
+        ],
+        "dependencies": [
+          "executor.py"
+        ],
+        "risks": [
+          "Potential performance impact of adding additional log messages"
+        ],
+        "next_action": "Add logging statement to exception handler in executor.py",
+        "status": "planned",
+        "metadata": {
+          "anchor": {
+            "target_file": "executor.py",
+            "target_symbol": "_detect_structural_scope_inconsistency",
+            "scope": "single_file",
+            "anchor_level": "symbol",
+            "anchor_source": "repo_symbol_inference",
+            "target_symbol_id": "executor.py::ExecutorAgent._detect_structural_scope_inconsistency",
+            "lineno": 630,
+            "end_lineno": 676,
+            "col_offset": 4,
+            "end_col_offset": 26
+          },
+          "planner_source": "llm"
+        },
+        "task_kind": "repair",
+        "task_id": 963,
+        "source": "llm",
+        "active_child_task_id": null,
+        "active_child_task_title": null,
+        "active_child_target_file": null
+      }
+    },
+    "timestamp": "2026-05-27 09:28:00.289269"
   }
 ]
