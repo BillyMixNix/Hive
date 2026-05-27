@@ -470,7 +470,12 @@ def _classify_planner_evidence(text, details, evidence):
     }:
         return _match("planner_validation_failure", 0.95, "Planner output failed validation for an anchored task.", "planner_validation_failure")
     if str(evidence.planner_source or "").lower() == "fallback_narrow_task":
-        return _match("planner_fallback_used", 0.9, "Planner fallback was used to keep a narrow anchored task executable.", "planner_fallback_used")
+        # Only classify as planner fallback when there is no specific sandbox/semantic
+        # failure to report. If the sandbox caught a real error (details populated),
+        # let the semantic or placement classifiers handle it — they run next and give
+        # a more actionable retry instruction than the planner-level one.
+        if not _coerce_dict(evidence.sandbox_report.get("details")):
+            return _match("planner_fallback_used", 0.9, "Planner fallback was used to keep a narrow anchored task executable.", "planner_fallback_used")
     if evidence.under_anchored_after_trim:
         return _match("under_anchored_after_trim", 0.95, "Context trimming removed too much anchor confidence to continue safely.", "prompt_budget_under_anchored")
     if budget_decision == "summary_used" and evidence.stage in {"context_budget", "prompt_budget"}:
@@ -576,14 +581,20 @@ def _classify_placement_evidence(text, details, evidence):
 
 def _classify_semantic_evidence(text, details, evidence):
     """Classify AST/scope semantic failures. Returns FailureClassification or None."""
-    if "variable_scope_sanity" in text or "local variable referenced before assignment" in text:
-        return _match("local_assignment_at_module_scope", 0.82, "Patch likely inserted a local assignment outside the intended function scope.", "semantic_scope_local_assignment")
+    # Check details dict first — keys are only present when that specific check failed.
+    # Do NOT use `"variable_scope_sanity" in text`: the sandbox serialises the entire
+    # checks dict into the error string, so the key appears even when the check passed.
 
     scope_info = _coerce_dict(details.get("variable_scope_sanity"))
-    scope_reason = str(scope_info.get("reason") or "").lower()
-    scope_problematic = str(scope_info.get("problematic_line") or "").lower()
-    if "module scope" in scope_reason or "module scope" in scope_problematic:
-        return _match("local_assignment_at_module_scope", 0.93, "Patch introduced a local-style assignment at module scope.", "semantic_scope_local_assignment")
+    if scope_info:
+        scope_reason = str(scope_info.get("reason") or "").lower()
+        scope_problematic = str(scope_info.get("problematic_line") or "").lower()
+        if "module scope" in scope_reason or "module scope" in scope_problematic:
+            return _match("local_assignment_at_module_scope", 0.93, "Patch introduced a local-style assignment at module scope.", "semantic_scope_local_assignment")
+        return _match("local_assignment_at_module_scope", 0.82, "Patch inserted a method that references bare names not in scope; pass all needed variables as explicit parameters.", "semantic_scope_bare_name_ref")
+
+    if "local variable referenced before assignment" in text:
+        return _match("local_assignment_at_module_scope", 0.82, "Patch likely inserted a local assignment outside the intended function scope.", "semantic_scope_local_assignment")
 
     unreachable_info = _coerce_dict(details.get("no_unreachable_code_after_return"))
     if unreachable_info:
@@ -652,11 +663,22 @@ def build_revision_strategy(evidence: FailureEvidence, classification: FailureCl
     retry_recommended = classification.failure_code != "reflector_reject"
 
     if classification.failure_code == "local_assignment_at_module_scope":
-        retry_instruction = "Insert the assignment inside the target function body near existing local setup lines."
-        extra_constraints.extend([
-            "Do not add the assignment at module scope.",
-            "Keep the edit inside the anchored function body.",
-        ])
+        if classification.retry_template_key == "semantic_scope_bare_name_ref":
+            retry_instruction = (
+                "When adding a helper method, pass all needed variables from the parent "
+                "function scope as explicit parameters — do not reference bare names from "
+                "the enclosing scope."
+            )
+            extra_constraints.extend([
+                "Do not reference variables from the enclosing function scope directly inside a helper.",
+                "Pass all required values as explicit parameters to the new helper method.",
+            ])
+        else:
+            retry_instruction = "Insert the assignment inside the target function body near existing local setup lines."
+            extra_constraints.extend([
+                "Do not add the assignment at module scope.",
+                "Keep the edit inside the anchored function body.",
+            ])
     elif classification.failure_code == "inserted_after_terminal_statement":
         retry_instruction = "Move the inserted lines above the return/raise boundary in the same block."
         extra_constraints.extend([
