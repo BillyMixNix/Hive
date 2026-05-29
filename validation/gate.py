@@ -9,7 +9,13 @@ The live repo_root is ONLY modified when decision == "accept" (at the promote
 step).  Everything before that runs in an isolated variant copy.
 
 Acceptance criterion (stated once):
-  self_verified AND anchors_ok AND (variant_mean - baseline_mean) > k * pooled_stdev
+  self_verified AND anchors_ok AND NOT grader_tamper
+  AND (variant_mean - baseline_mean) > k * standard_error_of_difference(base, var)
+
+Note on the statistic: noise_band uses Welch's SE of the difference in means,
+NOT pooled stdev of the merged set.  Pooled stdev folds the between-group
+signal into the noise, making larger improvements harder to detect — backwards.
+Welch SE shrinks with N and is independent of effect size.  Requires N≥2.
 
 After every decision:
   - The full record + diff are appended to validation/archive.jsonl.
@@ -40,6 +46,27 @@ def _now():
 
 def _repo_root_default():
     return Path(__file__).resolve().parent.parent
+
+
+# ------------------------------------------------------------------ grader protection
+
+# Patches that modify the harness or pack would be graded by their own edited
+# grader — the classic reward-hacking failure.  Hard-reject them regardless of
+# anchor or score.
+_GRADER_FILES = frozenset({"benchmark_harness.py", "benchmark_pack.py"})
+
+
+def _touches_grader(patch_text):
+    """Return True if the patch targets the harness or benchmark pack."""
+    target = _extract_target_file(patch_text)
+    if target in _GRADER_FILES:
+        return True
+    for line in patch_text.splitlines():
+        if line.startswith("--- ") or line.startswith("+++ "):
+            fname = line[4:].strip().split("\t")[0].lstrip("a/").lstrip("b/")
+            if fname in _GRADER_FILES:
+                return True
+    return False
 
 
 # ------------------------------------------------------------------ anchors
@@ -163,6 +190,13 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
         repo_root = _repo_root_default()
     repo_root = Path(repo_root)
 
+    if n < 2:
+        raise ValueError(
+            f"N={n} is too small: noise estimation requires N≥2 runs per side. "
+            f"With N=1, noise_band = k × |delta| × √2 ≥ |delta|, so acceptance is "
+            f"mathematically impossible for any delta. Spec recommends N=5."
+        )
+
     vid = variant_id or (
         f"v_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
     )
@@ -192,7 +226,15 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
     variant_dir = None
 
     try:
-        # Step 1 — Anchor check
+        # Step 1a — Grader tamper check (must run before variant creation)
+        if _touches_grader(patch):
+            record["reason"] = (
+                "grader_tamper_rejected: patch targets benchmark_harness.py or "
+                "benchmark_pack.py — variant would be scored by its own edited grader"
+            )
+            return record
+
+        # Step 1b — Anchor check
         anchors_ok, violations = anchors_satisfied(patch, anchors)
         if not anchors_ok:
             record["reason"] = f"anchor_violation: {'; '.join(violations)}"
@@ -267,7 +309,7 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
 
 # ------------------------------------------------------------------ live-loop helper
 
-def gated_apply(patch_text, task_note, anchors=None, repo_root=None, n=1, k=2.0):
+def gated_apply(patch_text, task_note, anchors=None, repo_root=None, n=3, k=2.0):
     """
     Gate-aware drop-in for executor.apply_patch() in the live loop (Phase 5).
 
@@ -275,7 +317,9 @@ def gated_apply(patch_text, task_note, anchors=None, repo_root=None, n=1, k=2.0)
     If accepted, the file is already written to repo_root by _promote().
     The caller (main.py apply_patch route) still handles memory/state updates.
 
-    n defaults to 1 here for low latency; raise it for higher confidence.
+    n defaults to 3 (minimum for meaningful noise estimation is 2; spec
+    recommends 5).  Override via HIVE_GATE_N env var.  Never set n=1:
+    with N=1 acceptance is mathematically impossible (see scoring.py).
     """
     record = evaluate(patch_text, task_note, anchors=anchors, repo_root=repo_root, n=n, k=k)
     return record["decision"] == "accept", record
@@ -307,7 +351,7 @@ if __name__ == "__main__":
         '             "raw_text": text,\n'
         "         }\n"
     )
-    n_runs = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    n_runs = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     print(f"[gate demo] n={n_runs}, k=2.0 — routing demo patch through the gate...")
     result = evaluate(
         patch=_DEMO_PATCH,

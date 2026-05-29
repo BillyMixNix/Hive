@@ -844,9 +844,19 @@ class ReliabilityBenchmarkHarness:
 
         return report
 
-    def score(self) -> dict:
-        """Return a structured numeric score (0.0–1.0 pass rate) over the fixed benchmark pack."""
-        report = self.run_pack(include_reproducibility=False)
+    def score(self, cases=None) -> dict:
+        """
+        Return a structured numeric score (0.0–1.0) over the benchmark pack.
+
+        Uses the provided cases list, or the standard reliability pack if None.
+        Pass build_challenge_pack() from benchmark_pack to score against the
+        harder tier that has headroom for improvement detection.
+
+        When score == 1.0 on the standard pack, a ceiling_warning is included:
+        the gate can only detect regressions at that point, not improvements.
+        Use the challenge pack (target baseline 0.4-0.7) for improvement runs.
+        """
+        report = self.run_pack(cases=cases, include_reproducibility=False)
         s = report["summary"]
         total = s["total_cases"]
         passed = s["passed_cases"]
@@ -859,13 +869,21 @@ class ReliabilityBenchmarkHarness:
             bands[b]["total"] += 1
             if rec["pass_fail_record"]["passed"]:
                 bands[b]["passed"] += 1
-        return {
+        result = {
             "score": rate,
             "passed": passed,
             "total": total,
             "failed": s["failed_cases"],
             "per_band": bands,
         }
+        if rate >= 1.0 and (cases is None or total == len(list(build_reliability_benchmark_pack()))):
+            result["ceiling_warning"] = (
+                "Baseline at 1.0 (all cases pass): no headroom for improvement detection. "
+                "The gate can catch regressions but cannot confirm gains. "
+                "Populate build_challenge_pack() in benchmark_pack.py with harder cases "
+                "where baseline scores 0.4-0.7, then pass them to score(cases=build_challenge_pack())."
+            )
+        return result
 
     def run_reproducibility_check(self, cases=None, repeats=2, output_path=None):
         if repeats < 2:

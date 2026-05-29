@@ -348,5 +348,38 @@ def build_reliability_benchmark_pack():
     return cases
 
 
+def build_challenge_pack():
+    """
+    Harder cases designed so that baseline scores 0.4-0.7, leaving headroom
+    for improvement detection.
+
+    The standard 40-case pack scores 1.0 at baseline because mock responses
+    always land cleanly on one side of the accept/reject boundary.  That is
+    the right regression guard — but it is useless as an improvement yardstick
+    because there is nowhere to climb.
+
+    Populate this tier with cases where the current pipeline actually struggles:
+      - Near-boundary patches: almost-correct context, subtle scope issues
+      - Multi-hunk patches that stress executor context alignment
+      - Retry-dependent cases: first response is borderline, recovery logic
+        determines the outcome
+      - Patterns mined from hive_lessons.jsonl (the real failure record)
+
+    How to build a case that scores below 1.0:
+      1. Pick a failure pattern from hive_lessons.jsonl (e.g. a real
+         symbol_anchor_drift or scope_alignment_mismatch example).
+      2. Construct a coder_side_effect where the borderline response sometimes
+         passes and sometimes fails depending on harness state.
+      3. Set expected_final_status so that PASSING the case requires the
+         improved pipeline behavior.
+      4. Run build_challenge_pack() against the unmodified codebase and
+         confirm baseline is below 0.8 before using it for gate scoring.
+
+    Until this is populated, use build_reliability_benchmark_pack() for
+    regression detection only.
+    """
+    return []  # TODO: populate from empirical failure patterns
+
+
 def benchmark_pack_as_json():
     return json.dumps(build_reliability_benchmark_pack(), indent=2)
