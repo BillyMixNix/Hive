@@ -460,6 +460,64 @@ class HiveStateManager:
         )
         return str(self.snapshot_path)
 
+    def save_tagged_snapshot(self, tag, notes=None):
+        """
+        Save current state to backups/hive_snapshot_{tag}.json.
+        Used by the validation gate before and after promotion so every
+        promotion is reversible by tag.
+        Returns the path written.
+        """
+        backups_dir = self.repo_root / "backups"
+        backups_dir.mkdir(exist_ok=True)
+        tagged_path = backups_dir / f"hive_snapshot_{tag}.json"
+        data = self.to_dict()
+        data["_snapshot_tag"] = tag
+        data["_snapshot_timestamp"] = datetime.utcnow().isoformat() + "Z"
+        if notes:
+            data["_snapshot_notes"] = notes
+        tagged_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        return str(tagged_path)
+
+    def restore_tagged_snapshot(self, tag):
+        """
+        Restore state from backups/hive_snapshot_{tag}.json.
+        Returns True on success, False if the snapshot doesn't exist.
+        """
+        tagged_path = self.repo_root / "backups" / f"hive_snapshot_{tag}.json"
+        if not tagged_path.exists():
+            return False
+        data = json.loads(tagged_path.read_text(encoding="utf-8"))
+        self.file_state = data.get("file_state", {})
+        self.patch_history = data.get("patch_history", {})
+        self.task_state = data.get("task_state", {})
+        self.agent_state = data.get("agent_state", {})
+        self.repo_state = data.get("repo_state", {"repo_map": None, "updated_at": None})
+        self.observability = data.get("observability", self._build_default_observability_snapshot())
+        self.sync_tracked_files_with_disk()
+        return True
+
+    def list_tagged_snapshots(self):
+        """
+        List all tagged snapshots in the backups directory, newest first.
+        Returns list of dicts with tag, timestamp, notes, path.
+        """
+        backups_dir = self.repo_root / "backups"
+        if not backups_dir.exists():
+            return []
+        snapshots = []
+        for p in sorted(backups_dir.glob("hive_snapshot_*.json"), reverse=True):
+            try:
+                data = json.loads(p.read_text(encoding="utf-8"))
+                snapshots.append({
+                    "tag": data.get("_snapshot_tag", p.stem.replace("hive_snapshot_", "")),
+                    "timestamp": data.get("_snapshot_timestamp"),
+                    "notes": data.get("_snapshot_notes"),
+                    "path": str(p),
+                })
+            except Exception:
+                pass
+        return snapshots
+
     def load_snapshot(self):
         if not self.snapshot_path.exists():
             return False

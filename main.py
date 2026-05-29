@@ -2660,7 +2660,32 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
                 return f"Patch {patch_id} failed verification: {verification['checks']}"
 
             backup = router.executor.backup_file(target_file)
-            router.executor.apply_patch(patch_text, target_file, patch_reason=patch_reason, file_text=file_text)
+
+            # Phase 5: route through empirical validation gate when HIVE_GATE_MODE=1.
+            # The gate applies the file only if the variant beats baseline; otherwise
+            # it returns a rejection and the disk is never written.
+            import os as _os
+            if _os.environ.get("HIVE_GATE_MODE", "0").lower() in ("1", "true", "yes"):
+                from validation.gate import gated_apply as _gated_apply
+                _gate_n = int(_os.environ.get("HIVE_GATE_N", "1"))
+                _gate_k = float(_os.environ.get("HIVE_GATE_K", "2.0"))
+                _gate_accepted, _gate_record = _gated_apply(
+                    patch_text=patch_text,
+                    task_note=patch_reason or meta.get("note", task_note if "task_note" in dir() else ""),
+                    anchors={"target_file": target_file},
+                    n=_gate_n,
+                    k=_gate_k,
+                )
+                if not _gate_accepted:
+                    _gate_reason = _gate_record.get("reason", "gate_reject")
+                    record_failure_observability(state, f"Gate rejected patch {patch_id}: {_gate_reason}", patch_data=meta)
+                    update_last_patch_snapshot(state, meta, patch_id=patch_id, patch_status="gate_rejected",
+                                               validation_outcome="failed", rejection_reason=_gate_reason)
+                    return f"Gate rejected patch {patch_id}: {_gate_reason}"
+                # Gate accepted — _promote() inside gated_apply already wrote the file.
+            else:
+                router.executor.apply_patch(patch_text, target_file, patch_reason=patch_reason, file_text=file_text)
+
             memory.update_task_status(patch_id, "applied")
             updated_text = Path(target_file).read_text(encoding="utf-8")
             state.record_patch_apply(target_file, patch_id, updated_text)

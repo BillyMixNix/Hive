@@ -803,6 +803,50 @@ class LessonMemory:
             self._promote_generalized_lesson_from_evidence(lesson_id)
         return updated
 
+    # ------------------------------------------------------------------ ExpeL ops
+
+    def upvote_lesson(self, lesson_id, delta=0.1):
+        """
+        UPVOTE — the lesson signal recurred and predicted a real win.
+        Increases weight (new field, defaults to 1.0) and success_after_use.
+        """
+        def update_fn(lesson):
+            if lesson.get("lesson_id") != lesson_id:
+                return lesson, False
+            lesson["weight"] = round(float(lesson.get("weight", 1.0)) + delta, 4)
+            lesson["success_after_use"] = int(lesson.get("success_after_use", 0)) + 1
+            lesson["promotion_state"] = self._compute_promotion_state(lesson)
+            return lesson, True
+        return self._rewrite_lessons(update_fn)
+
+    def downvote_lesson(self, lesson_id, delta=0.1):
+        """
+        DOWNVOTE — the lesson signal was present but the patch got rejected.
+        Decreases weight (floor 0) and increments failure_after_use.
+        """
+        def update_fn(lesson):
+            if lesson.get("lesson_id") != lesson_id:
+                return lesson, False
+            lesson["weight"] = round(max(0.0, float(lesson.get("weight", 1.0)) - delta), 4)
+            lesson["failure_after_use"] = int(lesson.get("failure_after_use", 0)) + 1
+            lesson["promotion_state"] = self._compute_promotion_state(lesson)
+            return lesson, True
+        return self._rewrite_lessons(update_fn)
+
+    def edit_lesson(self, lesson_id, **updates):
+        """
+        EDIT — update specific fields on an existing lesson.
+        Protected fields (lesson_id, timestamp) are silently ignored.
+        """
+        def update_fn(lesson):
+            if lesson.get("lesson_id") != lesson_id:
+                return lesson, False
+            for k, v in updates.items():
+                if k not in ("lesson_id", "timestamp"):
+                    lesson[k] = v
+            return lesson, True
+        return self._rewrite_lessons(update_fn)
+
     def _generalized_candidate_from_lesson(self, lesson):
         lesson = self._normalize_lesson_record(lesson)
         if lesson.get("lesson_level") == "generalized":

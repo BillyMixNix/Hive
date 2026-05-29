@@ -3,12 +3,18 @@ Empirical validation gate — Darwin Gödel Machine §4/§5 pattern.
 
 Public API:
   evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0) -> dict
+  anchors_satisfied(patch_text, anchors) -> (bool, list[str])
 
-The live repo_root is ONLY modified when decision == "accept" (at the promote step).
-Everything before that runs in an isolated variant copy.
+The live repo_root is ONLY modified when decision == "accept" (at the promote
+step).  Everything before that runs in an isolated variant copy.
 
 Acceptance criterion (stated once):
   self_verified AND anchors_ok AND (variant_mean - baseline_mean) > k * pooled_stdev
+
+After every decision:
+  - The full record + diff are appended to validation/archive.jsonl.
+  - Accept: a win entry is written to success_memory.jsonl.
+  - Reject: a failure lesson is written to hive_lessons.jsonl.
 """
 
 import datetime
@@ -16,14 +22,15 @@ import shutil
 import uuid
 from pathlib import Path
 
+from validation.archive import append as _archive_append
 from validation.scoring import compute_stats
 from validation.variant import (
+    _extract_target_file,
     apply_patch_to_variant,
     discard_variant,
     make_variant,
     score_variant,
     self_verify,
-    _extract_target_file,
 )
 
 
@@ -34,6 +41,8 @@ def _now():
 def _repo_root_default():
     return Path(__file__).resolve().parent.parent
 
+
+# ------------------------------------------------------------------ anchors
 
 def anchors_satisfied(patch_text, anchors):
     """
@@ -67,12 +76,62 @@ def anchors_satisfied(patch_text, anchors):
     return len(violations) == 0, violations
 
 
+# ------------------------------------------------------------------ promote
+
 def _promote(variant_dir, repo_root, target_file):
     """Copy the single patched file from variant back into the live repo."""
-    src = Path(variant_dir) / target_file
-    dst = Path(repo_root) / target_file
-    shutil.copy2(str(src), str(dst))
+    shutil.copy2(str(Path(variant_dir) / target_file), str(Path(repo_root) / target_file))
 
+
+# ------------------------------------------------------------------ memory writes
+
+def _write_success_memory(record, patch_text, repo_root):
+    """Phase 6: write a win entry to success_memory.jsonl on accept."""
+    try:
+        from success_memory import SuccessMemory
+        sm = SuccessMemory(path=str(Path(repo_root) / "success_memory.jsonl"))
+        target_file = record.get("target_file") or _extract_target_file(patch_text) or "unknown"
+        sm.add_win(
+            signal=f"patch targeting {target_file} accepted by gate",
+            trajectory_ref=f"archive.jsonl:{record['variant_id']}",
+            abstract_insight=record.get("task_note", ""),
+            delta=record.get("delta", 0.0),
+            target_file=target_file,
+            variant_id=record["variant_id"],
+        )
+    except Exception:
+        pass
+
+
+def _write_failure_lesson(record, patch_text, repo_root):
+    """Phase 6: write a failure lesson to hive_lessons.jsonl on reject."""
+    try:
+        from HiveLessonMemory import LessonMemory
+        lm = LessonMemory(path=str(Path(repo_root) / "hive_lessons.jsonl"))
+        target_file = record.get("target_file") or _extract_target_file(patch_text) or "unknown"
+        reason = record.get("reason", "gate_reject")
+        failure_code = reason.split(":")[0].strip()
+        lm.add_lesson(
+            file=target_file,
+            change_type="empirical_validation",
+            failure_reason=reason,
+            failure_pattern=failure_code,
+            retry_instruction=(
+                "Re-evaluate the patch approach. "
+                "The variant did not score significantly above the baseline noise band."
+            ),
+            source="validation_gate",
+            severity="medium",
+            failure_code=failure_code,
+            variant_id=record["variant_id"],
+            delta=record.get("delta", 0.0),
+            noise_band=record.get("noise_band", 0.0),
+        )
+    except Exception:
+        pass
+
+
+# ------------------------------------------------------------------ helpers
 
 def _patch_summary(patch_text):
     for line in patch_text.splitlines():
@@ -80,6 +139,8 @@ def _patch_summary(patch_text):
             return line.split(":", 1)[1].strip()
     return patch_text[:80].replace("\n", " ")
 
+
+# ------------------------------------------------------------------ evaluate
 
 def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant_id=None):
     """
@@ -96,6 +157,7 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
 
     Returns a validation_record dict. Check record["decision"] for "accept" or "reject".
     The live repo is only touched when decision == "accept".
+    All decisions are appended to validation/archive.jsonl.
     """
     if repo_root is None:
         repo_root = _repo_root_default()
@@ -105,11 +167,14 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
         f"v_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
     )
 
+    target_file = _extract_target_file(patch)
+
     record = {
         "variant_id": vid,
         "parent_id": f"main@{repo_root}",
         "task_note": task_note,
         "patch_summary": _patch_summary(patch),
+        "target_file": target_file,
         "anchors_checked": sorted(anchors.keys()) if anchors else [],
         "self_verified": False,
         "baseline_scores": [],
@@ -123,20 +188,26 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
         "timestamp": _now(),
     }
 
-    # Step 1 — Anchor check
-    anchors_ok, violations = anchors_satisfied(patch, anchors)
-    if not anchors_ok:
-        record["reason"] = f"anchor_violation: {'; '.join(violations)}"
-        return record
-
-    # Step 2 — Build isolated variant and apply patch
-    target_file = _extract_target_file(patch)
-    if target_file is None:
-        record["reason"] = "patch_apply_failed: TARGET_FILE header missing from patch"
-        return record
-
+    pre_patch_content = None
     variant_dir = None
+
     try:
+        # Step 1 — Anchor check
+        anchors_ok, violations = anchors_satisfied(patch, anchors)
+        if not anchors_ok:
+            record["reason"] = f"anchor_violation: {'; '.join(violations)}"
+            return record
+
+        if target_file is None:
+            record["reason"] = "patch_apply_failed: TARGET_FILE header missing from patch"
+            return record
+
+        # Capture file content before any promotion (enables rollback in archive)
+        target_path = repo_root / target_file
+        if target_path.exists():
+            pre_patch_content = target_path.read_text(encoding="utf-8")
+
+        # Step 2 — Build isolated variant and apply patch
         variant_dir, _ = make_variant(repo_root, variant_id=vid)
 
         ok, err = apply_patch_to_variant(variant_dir, patch, target_file=target_file)
@@ -175,28 +246,49 @@ def evaluate(patch, task_note, anchors=None, repo_root=None, n=5, k=2.0, variant
                 f"delta {stats['delta']:.4f} > noise_band {stats['noise_band']:.4f} "
                 f"and self_verified and anchors_ok"
             )
+            _write_success_memory(record, patch, repo_root)
         else:
             record["decision"] = "reject"
             record["reason"] = (
                 f"no_significant_gain: delta {stats['delta']:.4f} "
                 f"<= noise_band {stats['noise_band']:.4f}"
             )
+            _write_failure_lesson(record, patch, repo_root)
 
         return record
 
     finally:
+        # Archive every attempt — accepted or rejected, pass or fail.
+        # Rejected variants are data, not garbage (DGM principle).
+        _archive_append(record, patch, pre_patch_content=pre_patch_content)
         if variant_dir is not None:
             discard_variant(variant_dir)
 
+
+# ------------------------------------------------------------------ live-loop helper
+
+def gated_apply(patch_text, task_note, anchors=None, repo_root=None, n=1, k=2.0):
+    """
+    Gate-aware drop-in for executor.apply_patch() in the live loop (Phase 5).
+
+    Runs evaluate() and returns (accepted: bool, record: dict).
+    If accepted, the file is already written to repo_root by _promote().
+    The caller (main.py apply_patch route) still handles memory/state updates.
+
+    n defaults to 1 here for low latency; raise it for higher confidence.
+    """
+    record = evaluate(patch_text, task_note, anchors=anchors, repo_root=repo_root, n=n, k=k)
+    return record["decision"] == "accept", record
+
+
+# ------------------------------------------------------------------ demo / manual test
 
 if __name__ == "__main__":
     import json
     import sys
 
-    # Phase 3 manual demo: route a hand-written patch through the gate.
-    # Usage: python -m validation.gate  (from the Hive root)
-    #
-    # This uses a known-good patch from benchmark_pack as the test case.
+    # Phase 3/4 manual demo: route a hand-written patch through the gate.
+    # Usage: python -m validation.gate [n_runs]  (from the Hive root)
     _DEMO_PATCH = (
         "TARGET_FILE: interface.py\n"
         "CHANGE_TYPE: diff_patch\n"
