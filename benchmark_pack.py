@@ -1,5 +1,9 @@
 import json
 
+# Frozen at 1.0 — never change this value during an evolution run.
+# If the task set changes, scores from different runs are not comparable.
+BENCHMARK_PACK_VERSION = "1.0"
+
 
 def _base_plan(*, goal, task_type, title, description, target_file, target_symbol, change_intent, expected_operation, completion_cues, next_action, risks=None):
     return {

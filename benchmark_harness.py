@@ -844,6 +844,29 @@ class ReliabilityBenchmarkHarness:
 
         return report
 
+    def score(self) -> dict:
+        """Return a structured numeric score (0.0–1.0 pass rate) over the fixed benchmark pack."""
+        report = self.run_pack(include_reproducibility=False)
+        s = report["summary"]
+        total = s["total_cases"]
+        passed = s["passed_cases"]
+        rate = round(passed / total, 4) if total > 0 else 0.0
+        bands: dict = {}
+        for rec in report["records"]:
+            b = rec["band"]
+            if b not in bands:
+                bands[b] = {"passed": 0, "total": 0}
+            bands[b]["total"] += 1
+            if rec["pass_fail_record"]["passed"]:
+                bands[b]["passed"] += 1
+        return {
+            "score": rate,
+            "passed": passed,
+            "total": total,
+            "failed": s["failed_cases"],
+            "per_band": bands,
+        }
+
     def run_reproducibility_check(self, cases=None, repeats=2, output_path=None):
         if repeats < 2:
             raise ValueError("Reproducibility checks require at least two repeats.")
@@ -892,10 +915,26 @@ class ReliabilityBenchmarkHarness:
         return report
 
 
+def score_main(repo_root=None):
+    """Module-level convenience: return a structured score for the codebase at repo_root."""
+    harness = ReliabilityBenchmarkHarness(repo_root=repo_root)
+    return harness.score()
+
+
 def main():
     harness = ReliabilityBenchmarkHarness()
-    report = harness.run_pack()
-    print(json.dumps(report["summary"], indent=2))
+    if "--score" in sys.argv:
+        # Redirect all debug prints to stderr so only the JSON score reaches stdout.
+        _real_stdout = sys.stdout
+        sys.stdout = sys.stderr
+        try:
+            result = harness.score()
+        finally:
+            sys.stdout = _real_stdout
+        print(json.dumps(result))
+    else:
+        report = harness.run_pack()
+        print(json.dumps(report["summary"], indent=2))
 
 
 if __name__ == "__main__":
