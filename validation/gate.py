@@ -63,7 +63,7 @@ def _touches_grader(patch_text):
         return True
     for line in patch_text.splitlines():
         if line.startswith("--- ") or line.startswith("+++ "):
-            fname = line[4:].strip().split("\t")[0].lstrip("a/").lstrip("b/")
+            fname = line[4:].strip().split("\t")[0].removeprefix("a/").removeprefix("b/")
             if fname in _GRADER_FILES:
                 return True
     return False

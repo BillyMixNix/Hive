@@ -121,8 +121,10 @@ def self_verify(variant_dir, task_note, patch_text, target_file=None):
     except SyntaxError as exc:
         return False, f"Syntax error in patched file: {exc}"
 
-    # Check 2: importability
-    module_name = target_path.stem
+    # Check 2: importability — derive dotted module path so subdirectory files
+    # like validation/variant.py resolve as "validation.variant", not "variant".
+    rel = target_path.relative_to(variant_dir).with_suffix("")
+    module_name = ".".join(rel.parts)
     result = subprocess.run(
         [sys.executable, "-c", f"import {module_name}"],
         cwd=str(variant_dir),
