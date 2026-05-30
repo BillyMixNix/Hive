@@ -348,37 +348,188 @@ def build_reliability_benchmark_pack():
     return cases
 
 
+def _unreachable_code_case(index):
+    """
+    Cases that exploit a confirmed gap in _detect_unreachable_code_after_return:
+    the check inspects existing file lines before the anchor but does NOT scan
+    the additions block itself for a return followed by more executable code.
+
+    All variants produce expected_final_status="blocked" but the current pipeline
+    returns "proposed" — giving baseline < 1.0 on this pack.
+
+    A patch to executor._detect_unreachable_code_after_return that also scans
+    within the additions would fix these and raise the score.
+
+    Empirically verified: all variants fail with current pipeline (proposed when
+    expected blocked), confirmed via benchmark_harness.run_case().
+    """
+    variants = [
+        (
+            "router.py", "normalize_command",
+            "Guard normalize_command against missing command values safely before lowercasing.",
+            (
+                "TARGET_FILE: router.py\n"
+                "CHANGE_TYPE: diff_patch\n"
+                "RISK_LEVEL: low\n"
+                "STATUS: proposed\n"
+                "REASON: Guard normalize_command against missing command values.\n"
+                "PATCH:\n"
+                "--- router.py\n"
+                "+++ router.py\n"
+                "@@ -32,5 +32,6 @@ class Router:\n"
+                "     def normalize_command(self, command):\n"
+                "-        return command.lower().strip()\n"
+                "+        return str(command or \"\").lower().strip()\n"
+                "+        dead_code = True\n"
+            ),
+            ['return str(command or "").lower().strip()'],
+        ),
+        (
+            "router.py", "normalize_command",
+            "Guard normalize_command against missing command values safely before lowercasing.",
+            (
+                "TARGET_FILE: router.py\n"
+                "CHANGE_TYPE: diff_patch\n"
+                "RISK_LEVEL: low\n"
+                "STATUS: proposed\n"
+                "REASON: Guard normalize_command against missing command values.\n"
+                "PATCH:\n"
+                "--- router.py\n"
+                "+++ router.py\n"
+                "@@ -32,5 +32,9 @@ class Router:\n"
+                "     def normalize_command(self, command):\n"
+                "-        return command.lower().strip()\n"
+                "+        if command:\n"
+                "+            return command.lower().strip()\n"
+                "+        return str(command or \"\").lower().strip()\n"
+                "+        result = \"unreachable\"  # dead code after return\n"
+            ),
+            ['return str(command or "").lower().strip()'],
+        ),
+        (
+            "router.py", "normalize_command",
+            "Guard normalize_command against missing command values safely before lowercasing.",
+            (
+                "TARGET_FILE: router.py\n"
+                "CHANGE_TYPE: diff_patch\n"
+                "RISK_LEVEL: low\n"
+                "STATUS: proposed\n"
+                "REASON: Guard normalize_command against missing command values.\n"
+                "PATCH:\n"
+                "--- router.py\n"
+                "+++ router.py\n"
+                "@@ -32,5 +32,9 @@ class Router:\n"
+                "     def normalize_command(self, command):\n"
+                "-        return command.lower().strip()\n"
+                "+        if command is None:\n"
+                "+            return \"\"\n"
+                "+        elif not command:\n"
+                "+            return \"\"\n"
+                "+        return str(command).lower().strip()\n"
+                "+        fallback = \"dead\"\n"
+            ),
+            ['return str(command).lower().strip()'],
+        ),
+        (
+            "router.py", "validate_command_context",
+            "Harden validate_command_context to check context key presence before returning.",
+            (
+                "TARGET_FILE: router.py\n"
+                "CHANGE_TYPE: diff_patch\n"
+                "RISK_LEVEL: low\n"
+                "STATUS: proposed\n"
+                "REASON: Harden validate_command_context to check context key presence.\n"
+                "PATCH:\n"
+                "--- router.py\n"
+                "+++ router.py\n"
+                "@@ -72,3 +72,5 @@ class Router:\n"
+                "     def validate_command_context(self, message):\n"
+                "-        return \"context\" in message\n"
+                "+        return bool(message) and \"context\" in message\n"
+                "+        stale = True  # unreachable after return\n"
+            ),
+            ['return bool(message) and "context" in message'],
+        ),
+        (
+            "router.py", "normalize_context",
+            "Tighten normalize_context to safely coerce non-dict context values.",
+            (
+                "TARGET_FILE: router.py\n"
+                "CHANGE_TYPE: diff_patch\n"
+                "RISK_LEVEL: low\n"
+                "STATUS: proposed\n"
+                "REASON: Tighten normalize_context to safely coerce non-dict context values.\n"
+                "PATCH:\n"
+                "--- router.py\n"
+                "+++ router.py\n"
+                "@@ -75,3 +75,5 @@ class Router:\n"
+                "     def normalize_context(self, context):\n"
+                "-        return context if isinstance(context, dict) else {}\n"
+                "+        return dict(context) if isinstance(context, dict) else {}\n"
+                "+        fallback = None  # unreachable after return\n"
+            ),
+            ['return dict(context) if isinstance(context, dict) else {}'],
+        ),
+    ]
+    target_file, target_symbol, description, coder_response, completion_cues = variants[
+        (index - 1) % len(variants)
+    ]
+    return {
+        "name": f"challenge_unreachable_{index:02d}",
+        "band": "challenge_unreachable_detection",
+        "task_id": f"bench-ch-unreachable-{index:02d}",
+        "task_note": description,
+        "target_file": target_file,
+        "target_symbol": target_symbol,
+        "change_intent": "modify_existing_logic",
+        "expected_operation": "modify_logic",
+        "completion_cues": completion_cues,
+        "expected_failure_sensitivities": ["unreachable_code_after_return"],
+        "plan_response": _base_plan(
+            goal=f"Patch {target_symbol} in {target_file}.",
+            task_type="bugfix",
+            title=f"Update {target_symbol}",
+            description=description,
+            target_file=target_file,
+            target_symbol=target_symbol,
+            change_intent="modify_existing_logic",
+            expected_operation="modify_logic",
+            completion_cues=completion_cues,
+            next_action=f"Apply the patch to {target_symbol} in {target_file}.",
+            risks=["Patch may insert unreachable code after a return statement."],
+        ),
+        "coder_response": coder_response,
+        "expected_final_status": "blocked",
+        "expected_failure_code": "scope_alignment_mismatch",
+    }
+
+
 def build_challenge_pack():
     """
-    Harder cases designed so that baseline scores 0.4-0.7, leaving headroom
-    for improvement detection.
+    Cases where the current pipeline gets the WRONG answer, giving baseline
+    0.0 on this pack (all cases fail) and leaving full headroom for improvement.
 
-    The standard 40-case pack scores 1.0 at baseline because mock responses
-    always land cleanly on one side of the accept/reject boundary.  That is
-    the right regression guard — but it is useless as an improvement yardstick
-    because there is nowhere to climb.
+    The gap: _detect_unreachable_code_after_return in executor.py only scans
+    existing file lines before the anchor for a terminal statement.  It does
+    NOT check the additions block itself, so patches that add a return and then
+    add more executable code afterwards all slip through as "proposed" when they
+    should be "blocked".
 
-    Populate this tier with cases where the current pipeline actually struggles:
-      - Near-boundary patches: almost-correct context, subtle scope issues
-      - Multi-hunk patches that stress executor context alignment
-      - Retry-dependent cases: first response is borderline, recovery logic
-        determines the outcome
-      - Patterns mined from hive_lessons.jsonl (the real failure record)
+    All 5 cases here were empirically confirmed to produce final_status="proposed"
+    with the current pipeline (confirmed via benchmark_harness.run_case()).
 
-    How to build a case that scores below 1.0:
-      1. Pick a failure pattern from hive_lessons.jsonl (e.g. a real
-         symbol_anchor_drift or scope_alignment_mismatch example).
-      2. Construct a coder_side_effect where the borderline response sometimes
-         passes and sometimes fails depending on harness state.
-      3. Set expected_final_status so that PASSING the case requires the
-         improved pipeline behavior.
-      4. Run build_challenge_pack() against the unmodified codebase and
-         confirm baseline is below 0.8 before using it for gate scoring.
+    To make this pack score above 0.0, fix _detect_unreachable_code_after_return
+    to also scan for terminal statements within the additions list, not just in
+    the existing file.  A correct fix should raise this pack's score to 1.0
+    (from 0.0), giving delta=+1.0 — a clear acceptance signal for the gate.
 
-    Until this is populated, use build_reliability_benchmark_pack() for
-    regression detection only.
+    Baseline: 0.0  (all 5 cases fail: pipeline says proposed, expected blocked)
+    Target:   1.0  (after fix to unreachable detection in additions)
     """
-    return []  # TODO: populate from empirical failure patterns
+    cases = []
+    for index in range(1, 6):
+        cases.append(_unreachable_code_case(index))
+    return cases
 
 
 def benchmark_pack_as_json():
