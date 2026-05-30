@@ -991,8 +991,35 @@ class ExecutorAgent:
         if not additions:
             return False, None
 
-        # If we are replacing a verified contiguous block, skip this check for now.
-        # Later phases can make this smarter by inspecting the replacement body.
+        # Scan the additions themselves for a terminal followed by more executable code.
+        # This runs before the block_span guard so it catches dead code even when the
+        # patch replaces a verified contiguous block (the replacement body must be clean).
+        non_empty_adds = [l for l in additions if l.strip() and not l.strip().startswith("#")]
+        for i, line in enumerate(non_empty_adds):
+            stripped = line.strip()
+            is_terminal = (
+                stripped.startswith("return ")
+                or stripped == "return"
+                or stripped.startswith("raise ")
+                or stripped.startswith("break")
+                or stripped.startswith("continue")
+            )
+            if not is_terminal:
+                continue
+            terminal_indent = self._count_indent(line)
+            for following in non_empty_adds[i + 1:]:
+                following_stripped = following.strip()
+                if following_stripped.startswith("#"):
+                    continue
+                if self._count_indent(following) >= terminal_indent:
+                    return True, {
+                        "terminal_line": stripped,
+                        "dead_line": following_stripped,
+                        "reason": "additions contain executable code after a terminal statement",
+                    }
+                break
+
+        # If we are replacing a verified contiguous block, skip the file-based check below.
         if block_span is not None and removals:
             return False, None
 

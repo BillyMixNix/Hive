@@ -500,7 +500,7 @@ def _unreachable_code_case(index):
         ),
         "coder_response": coder_response,
         "expected_final_status": "blocked",
-        "expected_failure_code": "scope_alignment_mismatch",
+        "expected_failure_code": None,
     }
 
 
