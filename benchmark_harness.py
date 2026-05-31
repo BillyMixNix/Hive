@@ -946,7 +946,11 @@ def main():
         _real_stdout = sys.stdout
         sys.stdout = sys.stderr
         try:
-            result = harness.score()
+            if "--challenge" in sys.argv:
+                from benchmark_pack import build_challenge_pack
+                result = harness.score(cases=build_challenge_pack())
+            else:
+                result = harness.score()
         finally:
             sys.stdout = _real_stdout
         print(json.dumps(result))
