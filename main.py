@@ -2665,7 +2665,7 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
             # The gate applies the file only if the variant beats baseline; otherwise
             # it returns a rejection and the disk is never written.
             import os as _os
-            if _os.environ.get("HIVE_GATE_MODE", "0").lower() in ("1", "true", "yes"):
+            if _os.environ.get("HIVE_GATE_MODE", "1").lower() in ("1", "true", "yes"):
                 from validation.gate import gated_apply as _gated_apply
                 _gate_n = int(_os.environ.get("HIVE_GATE_N", "1"))
                 _gate_k = float(_os.environ.get("HIVE_GATE_K", "2.0"))
@@ -2681,8 +2681,28 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
                     record_failure_observability(state, f"Gate rejected patch {patch_id}: {_gate_reason}", patch_data=meta)
                     update_last_patch_snapshot(state, meta, patch_id=patch_id, patch_status="gate_rejected",
                                                validation_outcome="failed", rejection_reason=_gate_reason)
+                    state.save_snapshot()
                     return f"Gate rejected patch {patch_id}: {_gate_reason}"
                 # Gate accepted — _promote() inside gated_apply already wrote the file.
+                # Capture this accepted patch as a benchmark candidate for future pack growth.
+                try:
+                    import json as _json, datetime as _dt
+                    _candidate = {
+                        "timestamp": _dt.datetime.utcnow().isoformat(),
+                        "patch_id": patch_id,
+                        "target_file": target_file,
+                        "task_note": patch_reason or meta.get("note", ""),
+                        "target_symbol": meta.get("target_symbol", ""),
+                        "patch_text": patch_text,
+                        "gate_delta": _gate_record.get("delta"),
+                        "gate_baseline": _gate_record.get("baseline_mean"),
+                        "gate_variant": _gate_record.get("variant_mean"),
+                    }
+                    _candidates_path = Path(__file__).parent / "benchmark_candidates.jsonl"
+                    with open(_candidates_path, "a", encoding="utf-8") as _f:
+                        _f.write(_json.dumps(_candidate) + "\n")
+                except Exception:
+                    pass
             else:
                 router.executor.apply_patch(patch_text, target_file, patch_reason=patch_reason, file_text=file_text)
 
