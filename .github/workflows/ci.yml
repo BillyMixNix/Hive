@@ -21,4 +21,5 @@ jobs:
           pip install -r requirements.txt
       - name: Run tests
         run: |
-          pytest -q
+          pytest tests/ -q
+          cd hive_v05 && pytest -q
