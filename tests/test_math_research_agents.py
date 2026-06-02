@@ -15,6 +15,12 @@ from HiveAgent import (
     StrategicMathAgent,
 )
 
+try:
+    import z3 as _z3
+    _Z3_AVAILABLE = True
+except ImportError:
+    _Z3_AVAILABLE = False
+
 REQUIRED_KEYS = {"role", "output", "confidence", "next_step"}
 
 
@@ -134,6 +140,7 @@ class TestSymbolicMathAgent:
 # FormalMathAgent
 # ---------------------------------------------------------------------------
 
+@pytest.mark.skipif(not _Z3_AVAILABLE, reason="z3-solver not installed")
 class TestFormalMathAgent:
 
     def test_returns_required_keys(self):

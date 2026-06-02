@@ -32,6 +32,9 @@ class FakeStateManager:
     def get_symbol_span(self, target_file, target_symbol):
         return self.spans.get((target_file, target_symbol))
 
+    def get_symbols_for_file(self, target_file):
+        return [sym for sym, f in self.repo_map["symbol_to_file"].items() if f == target_file]
+
 
 class PlannerAnchorCanonicalizationTests(unittest.TestCase):
     def setUp(self):
