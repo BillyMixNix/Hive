@@ -377,14 +377,14 @@ class ReliabilityBenchmarkHarness:
             "verdict": "accept",
         })
 
-        with patch("planner.ask_hive", return_value=planner_response):
+        with patch("planner.ask_model", return_value=planner_response):
             plan = planner.plan_task(parent_task)
 
         coder_task, effective_plan = self._build_coder_task(parent_task, plan)
         preview = self._preview_generation(coder, coder_task, effective_plan)
 
-        with patch("coder.ask_hive", side_effect=list(case["coder_side_effect"])) as coder_mock:
-            with patch("reflector.ask_hive", return_value=reflection_response):
+        with patch("coder.ask_model", side_effect=list(case["coder_side_effect"])) as coder_mock:
+            with patch("reflector.ask_model", return_value=reflection_response):
                 with patch.object(
                     coder.executor,
                     "test_patch_in_sandbox",
@@ -666,7 +666,7 @@ class ReliabilityBenchmarkHarness:
                 "verdict": "accept",
             })
 
-            with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
+            with patch("planner.ask_model", return_value=planner_response) as planner_mock:
                 plan = planner.plan_task(parent_task)
 
             coder_task, effective_plan = self._build_coder_task(parent_task, plan)
@@ -674,12 +674,12 @@ class ReliabilityBenchmarkHarness:
 
             coder_side_effect = case.get("coder_side_effect")
             if coder_side_effect is None:
-                coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
+                coder_patch = patch("coder.ask_model", return_value=case["coder_response"])
             else:
-                coder_patch = patch("coder.ask_hive", side_effect=list(coder_side_effect))
+                coder_patch = patch("coder.ask_model", side_effect=list(coder_side_effect))
 
             with coder_patch as coder_mock:
-                with patch("reflector.ask_hive", return_value=reflection_response):
+                with patch("reflector.ask_model", return_value=reflection_response):
                     with patch.object(
                         coder.executor,
                         "test_patch_in_sandbox",

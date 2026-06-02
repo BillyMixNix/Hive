@@ -1,4 +1,4 @@
-from hive_llm import ask_hive
+from hive_llm import ask_hive, ask_model
 import json
 
 from reflector_prompt import REFLECTOR_PROMPT_TEMPLATE
@@ -166,7 +166,7 @@ class Reflector:
                 pilot_guardrails=guardrail_text,
                 math_lessons=combined_lessons,
             )
-            raw_response = ask_hive(prompt, role="reflector").strip()
+            raw_response = ask_model(prompt).strip()
             json_text = self._extract_json_object(raw_response)
             reflection = json.loads(json_text)
 
