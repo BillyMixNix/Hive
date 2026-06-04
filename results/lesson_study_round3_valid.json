@@ -1,0 +1,192 @@
+{
+  "n_per_arm_per_pair": 25,
+  "retry_budget": 3,
+  "pairs": 5,
+  "pooled": {
+    "mean_retries_off": 0.872,
+    "mean_retries_on": 0.832,
+    "retry_reduction_off_minus_on": 0.040000000000000036,
+    "retry_reduction_95ci": [
+      -0.17600000000000005,
+      0.256
+    ],
+    "mann_whitney_z": 0.38570240163820874,
+    "mann_whitney_p": 0.6997170839670575,
+    "solve_rate_off": 0.824,
+    "solve_rate_on": 0.832,
+    "solve_rate_lift_on_minus_off": 0.008000000000000007,
+    "two_proportion_z": 0.1675909658301561,
+    "two_proportion_p": 0.8669050788990678
+  },
+  "blocked": {
+    "retries_van_elteren_z": -0.5287772673573464,
+    "retries_van_elteren_p": 0.5969599692117868,
+    "retries_within_pair_mean_reduction_off_minus_on": 0.04,
+    "retries_within_pair_reduction_95ci": [
+      -0.15999999999999998,
+      0.24
+    ],
+    "solve_cmh_chi2": 0.0,
+    "solve_cmh_p": 0.8637101770474631,
+    "per_pair_retry_reduction_off_minus_on": {
+      "anc_pair_1": 0.12,
+      "anc_pair_2": 0.12,
+      "anc_pair_3": -0.36,
+      "anc_pair_4": 0.0,
+      "anc_pair_6": 0.32
+    }
+  },
+  "verdict": "no significant effect \u2014 check preflight headroom/injection before concluding",
+  "diagnostics": {
+    "_comment": "Did the lesson actually reach the model when it mattered?",
+    "on_failure_family_counts": {
+      "mixed_scope_patch": 4,
+      "new_method_not_allowed": 28,
+      "symbol_anchor_drift": 27,
+      "sandbox_apply_failed": 38,
+      "non_diff_commentary": 2,
+      "sandbox_retry_exhausted": 16,
+      "scope_alignment_mismatch": 22,
+      "comment_task_rejected_as_nonfunctional": 3,
+      "missing_patch_section": 3,
+      "unknown_failure": 2,
+      "removes_existing_methods": 1
+    },
+    "on_trials_that_failed": 63,
+    "on_trials_guidance_fired": 43,
+    "guidance_fire_rate_among_failing_on_trials": 0.6825396825396826,
+    "on_drift_trials": 18,
+    "on_drift_trials_with_guidance": 18,
+    "guidance_fire_rate_on_drift_trials": 1.0
+  },
+  "per_pair": [
+    {
+      "name": "anc_pair_1",
+      "band": "anchor_logic",
+      "seed_file": "coder_context.py",
+      "reuse_file": "builder.py",
+      "n": 25,
+      "budget": 3,
+      "on_solve_rate": 0.92,
+      "off_solve_rate": 0.8,
+      "on_mean_retries": 0.88,
+      "off_mean_retries": 1.0,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "mixed_scope_patch": 1,
+        "new_method_not_allowed": 4,
+        "symbol_anchor_drift": 13,
+        "sandbox_apply_failed": 6,
+        "non_diff_commentary": 1,
+        "sandbox_retry_exhausted": 1
+      },
+      "on_trials_that_failed": 15,
+      "on_trials_guidance_fired": 10,
+      "on_drift_trials": 9,
+      "on_drift_trials_with_guidance": 9
+    },
+    {
+      "name": "anc_pair_2",
+      "band": "anchor_logic",
+      "seed_file": "planner.py",
+      "reuse_file": "builder.py",
+      "n": 25,
+      "budget": 3,
+      "on_solve_rate": 0.76,
+      "off_solve_rate": 0.72,
+      "on_mean_retries": 0.92,
+      "off_mean_retries": 1.04,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "new_method_not_allowed": 14,
+        "scope_alignment_mismatch": 4,
+        "sandbox_retry_exhausted": 6,
+        "sandbox_apply_failed": 10,
+        "comment_task_rejected_as_nonfunctional": 1
+      },
+      "on_trials_that_failed": 13,
+      "on_trials_guidance_fired": 11,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    },
+    {
+      "name": "anc_pair_3",
+      "band": "anchor_logic",
+      "seed_file": "coder.py",
+      "reuse_file": "interface.py",
+      "n": 25,
+      "budget": 3,
+      "on_solve_rate": 0.68,
+      "off_solve_rate": 0.8,
+      "on_mean_retries": 1.28,
+      "off_mean_retries": 0.92,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "comment_task_rejected_as_nonfunctional": 1,
+        "new_method_not_allowed": 8,
+        "symbol_anchor_drift": 14,
+        "sandbox_apply_failed": 15,
+        "sandbox_retry_exhausted": 6,
+        "mixed_scope_patch": 1,
+        "missing_patch_section": 2,
+        "scope_alignment_mismatch": 1
+      },
+      "on_trials_that_failed": 19,
+      "on_trials_guidance_fired": 12,
+      "on_drift_trials": 9,
+      "on_drift_trials_with_guidance": 9
+    },
+    {
+      "name": "anc_pair_4",
+      "band": "anchor_logic",
+      "seed_file": "executor.py",
+      "reuse_file": "work_ontology.py",
+      "n": 25,
+      "budget": 3,
+      "on_solve_rate": 0.8,
+      "off_solve_rate": 0.8,
+      "on_mean_retries": 1.08,
+      "off_mean_retries": 1.08,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "scope_alignment_mismatch": 17,
+        "unknown_failure": 2,
+        "sandbox_apply_failed": 7,
+        "sandbox_retry_exhausted": 3,
+        "new_method_not_allowed": 2,
+        "non_diff_commentary": 1,
+        "comment_task_rejected_as_nonfunctional": 1,
+        "mixed_scope_patch": 2,
+        "removes_existing_methods": 1,
+        "missing_patch_section": 1
+      },
+      "on_trials_that_failed": 16,
+      "on_trials_guidance_fired": 10,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    },
+    {
+      "name": "anc_pair_6",
+      "band": "anchor_logic",
+      "seed_file": "reflector.py",
+      "reuse_file": "work_ontology.py",
+      "n": 25,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 0.0,
+      "off_mean_retries": 0.32,
+      "headroom_ok": false,
+      "on_failure_family_counts": {},
+      "on_trials_that_failed": 0,
+      "on_trials_guidance_fired": 0,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    }
+  ],
+  "caveats": [
+    "Cross-file effect is reactive (retry reduction), not first-attempt \u2014 by design.",
+    "Pairs with off_solve_rate 0.0 or 1.0 have no headroom and prove nothing; recalibrate.",
+    "Generalized lessons are seeded directly (trusted) to isolate presence-vs-absence; this tests transfer, not the organic promotion threshold."
+  ]
+}

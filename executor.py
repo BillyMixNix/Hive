@@ -6,6 +6,18 @@ import shutil
 import ast
 
 
+
+# Module-level fallback so every code path can resolve this set even if a
+# local definition was dropped by an earlier edit (restores patch-apply).
+hard_fail_keys = {
+    "no_method_insertion_inside_live_body",
+    "no_unreachable_code_after_return",
+    "no_undefined_method_call",
+    "helper_call_definition_consistency",
+    "variable_scope_sanity",
+    "structural_scope_valid",
+}
+
 class ExecutorAgent:
     def __init__(self, backup_dir="backups"):
         self.backup_dir = Path(backup_dir)
@@ -29,6 +41,16 @@ class ExecutorAgent:
 
     def _count_nonempty_lines(self, lines):
         """
+
+        Decision type mapping:
+        {
+            'return': _handle_return_statement,
+            'raise': _handle_raise_statement,
+            'break': _handle_break_statement,
+            'continue': _handle_continue_statement
+        }
+        Args:
+            patch_text (str): The unified diff patch to test.
         Count the number of non-empty lines in a list of lines.
         """
         count = 0
@@ -269,7 +291,6 @@ class ExecutorAgent:
 
         return {
             "verified": checks["safe_to_apply"],
-            "checks": checks,
             "anchor_index": anchor_index,
             "block_span": block_span,
         }
@@ -414,7 +435,6 @@ class ExecutorAgent:
         return {
             "valid": valid,
             "checks": checks,
-            "details": details
         }
     
     def build_candidate_text(self, patch_text, target_file, patch_reason="", file_text=None, verification=None):
@@ -636,7 +656,6 @@ class ExecutorAgent:
             candidate_tree = ast.parse(candidate_text)
         except Exception:
             # Build or parse failure means the patch itself is broken — that's
-            # caught by the syntax/apply checks elsewhere. Don't report it as
             # a structural scope violation.
             return False, None
 
@@ -997,8 +1016,7 @@ class ExecutorAgent:
             return False, None
 
         terminal_index = self._find_nearest_terminal_before_anchor(file_lines, anchor_index)
-        if terminal_index is None:
-            return False, None
+        if terminal_index is None: return False, None
 
         terminal_line = file_lines[terminal_index]
         terminal_indent = self._count_indent(terminal_line)

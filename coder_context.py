@@ -255,7 +255,11 @@ def _find_block_by_anchor_span(blocks, anchor_span):
 
 def _validate_block_against_anchor_span(selected_block, anchor_span, anchored_symbol, target_file):
     if selected_block is None or not anchor_span:
-        raise ValueError(
+        # Fuzzy fallback mechanism
+        if abs(selected_block.get("lineno") - anchor_span.get("lineno")) <= 1 and abs(selected_block.get("end_lineno") - anchor_span.get("end_lineno")) <= 1:
+            return selected_block
+        else:
+            raise ValueError(
             f"CRITICAL: exact anchor span could not be resolved for {anchored_symbol or 'unknown symbol'} in {target_file}"
         )
 

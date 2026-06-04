@@ -86,7 +86,7 @@ def format_pilot_brief(task_or_context):
     if not current_intent:
         current_intent = _normalize_text(
             (task_or_context or {}).get("note")
-            or (task_or_context or {}).get("goal")
+            or (task_or_context or {}).get("goal") or "No additional pilot intent recorded."
         ) or "No additional pilot intent recorded."
 
     lines = [

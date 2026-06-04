@@ -648,109 +648,147 @@ class ReliabilityBenchmarkHarness:
             self._cleanup_session(session)
 
     def run_case(self, case, lessons_enabled=True):
+        """Run a single case in its own throwaway session (back-compat wrapper)."""
         session = self._create_session(lessons_enabled=lessons_enabled)
         try:
-            state = session["state"]
-            planner = session["planner"]
-            coder = session["coder"]
-            reflector = session["reflector"]
-
-            parent_task = self._make_parent_task(state, case)
-            planner_response = case.get("planner_raw_response")
-            if planner_response is None:
-                planner_response = json.dumps(case["plan_response"])
-            reflection_response = json.dumps({
-                "reflection": "Patch stays within the requested symbol and is safe to review.",
-                "confidence": 0.92,
-                "next_step": "Approve patch.",
-                "verdict": "accept",
-            })
-
-            with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
-                plan = planner.plan_task(parent_task)
-
-            coder_task, effective_plan = self._build_coder_task(parent_task, plan)
-            preview = self._preview_generation(coder, coder_task, effective_plan)
-
-            coder_side_effect = case.get("coder_side_effect")
-            if coder_side_effect is None:
-                coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
-            else:
-                coder_patch = patch("coder.ask_hive", side_effect=list(coder_side_effect))
-
-            with coder_patch as coder_mock:
-                with patch("reflector.ask_hive", return_value=reflection_response):
-                    with patch.object(
-                        coder.executor,
-                        "test_patch_in_sandbox",
-                        side_effect=lambda patch_text, target_file, patch_reason="": self._workspace_sandbox_test(
-                            session,
-                            patch_text,
-                            target_file,
-                            patch_reason=patch_reason,
-                        ),
-                    ):
-                        result = coder.generate_patch_with_revisions(coder_task, effective_plan, reflector)
-
-            final_status = result.get("status")
-            failure_code = None
-            if final_status != "proposed":
-                interpretation = interpret_failure(
-                    stage=case.get("failure_stage", "benchmark"),
-                    error_text=result.get("llm_error"),
-                    task=coder_task,
-                    patch_data=result,
-                    metadata={
-                        "planner_source": effective_plan.get("source"),
-                        "benchmark_case_id": case["name"],
-                    },
-                )
-                failure_code = interpretation.classification.failure_code
-
-            sandbox = result.get("sandbox_report") or {}
-            expected_final_status = case.get("expected_final_status", "proposed")
-            expected_failure_code = case.get("expected_failure_code")
-            expected_to_succeed = expected_final_status == "proposed"
-            passed = final_status == case.get("expected_final_status", "proposed")
-            if expected_failure_code is not None:
-                passed = passed and failure_code == expected_failure_code
-
-            return {
-                "name": case["name"],
-                "band": case["band"],
-                "task_note": case["task_note"],
-                "target_file": case["target_file"],
-                "target_symbol": case["target_symbol"],
-                "change_intent": case.get("change_intent"),
-                "expected_operation": case.get("expected_operation"),
-                "completion_cues": list(case.get("completion_cues") or []),
-                "expected_failure_sensitivities": list(case.get("expected_failure_sensitivities") or []),
-                "selected_context_mode": preview["context_mode"],
-                "prompt_length": preview["prompt_length"],
-                "context_budget": preview["context_budget"],
-                "planner_source": effective_plan.get("source"),
-                "planner_success": effective_plan.get("status") == "planned",
-                "patch_accepted": final_status == "proposed",
-                "patch_rejected": final_status != "proposed",
-                "sandbox_result": {
-                    "applied": sandbox.get("applied"),
-                    "syntax_valid": sandbox.get("syntax_valid"),
-                    "semantic_valid": sandbox.get("semantic_valid"),
-                },
-                "apply_result": "not_run",
-                "retry_count": max(0, coder_mock.call_count - 1),
-                "retry_succeeded": final_status == "proposed" and coder_mock.call_count > 1,
-                "failure_code": failure_code,
-                "final_status": final_status,
-                "expected_to_succeed": expected_to_succeed,
-                "pass_fail_record": {
-                    "expected_final_status": expected_final_status,
-                    "expected_failure_code": expected_failure_code,
-                    "passed": passed,
-                },
-            }
+            return self._run_one(session, case)
         finally:
             self._cleanup_session(session)
+
+    def run_sequence(self, cases, lessons_enabled=True):
+        """Run an ordered list of cases against ONE shared session/lesson store.
+
+        Unlike run_pack (fresh empty lesson store per case), this preserves
+        coder.lesson_memory across cases, so a lesson recorded while handling an
+        earlier case is available to later ones. This is what makes cross-case
+        learning observable.
+        """
+        session = self._create_session(lessons_enabled=lessons_enabled)
+        results = []
+        try:
+            for case in cases:
+                results.append(self._run_one(session, case))
+        finally:
+            self._cleanup_session(session)
+        return results
+
+    def _run_one(self, session, case):
+        """Run one case against an existing session. Does NOT create or clean it."""
+        state = session["state"]
+        planner = session["planner"]
+        coder = session["coder"]
+        reflector = session["reflector"]
+
+        parent_task = self._make_parent_task(state, case)
+        planner_response = case.get("planner_raw_response")
+        if planner_response is None:
+            planner_response = json.dumps(case["plan_response"])
+        reflection_response = json.dumps({
+            "reflection": "Patch stays within the requested symbol and is safe to review.",
+            "confidence": 0.92,
+            "next_step": "Approve patch.",
+            "verdict": "accept",
+        })
+
+        with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
+            plan = planner.plan_task(parent_task)
+
+        coder_task, effective_plan = self._build_coder_task(parent_task, plan)
+        preview = self._preview_generation(coder, coder_task, effective_plan)
+
+        coder_side_effect = case.get("coder_side_effect")
+        if case.get("live_coder"):
+            # Live mode: do NOT stub the coder — let coder.ask_hive hit the real model
+            # (Ollama). `wraps` passes calls through while still recording call_count, so
+            # the retry_count accounting below is unchanged.
+            import coder as _coder_module
+            coder_patch = patch("coder.ask_hive", wraps=_coder_module.ask_hive)
+        elif coder_side_effect is not None:
+            coder_patch = patch("coder.ask_hive", side_effect=list(coder_side_effect))
+        elif callable(case.get("coder_response")):
+            # Guidance-sensitive case: the callable receives the composed prompt and
+            # may return a different patch depending on whether injected lesson
+            # guidance is present. This is what lets a shared-store sequence show learning.
+            coder_patch = patch("coder.ask_hive", side_effect=case["coder_response"])
+        else:
+            coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
+
+        from contextlib import nullcontext
+        reflector_patch = (
+            nullcontext() if case.get("live_reflector")
+            else patch("reflector.ask_hive", return_value=reflection_response)
+        )
+        with coder_patch as coder_mock:
+            with reflector_patch:
+                with patch.object(
+                    coder.executor,
+                    "test_patch_in_sandbox",
+                    side_effect=lambda patch_text, target_file, patch_reason="": self._workspace_sandbox_test(
+                        session,
+                        patch_text,
+                        target_file,
+                        patch_reason=patch_reason,
+                    ),
+                ):
+                    result = coder.generate_patch_with_revisions(coder_task, effective_plan, reflector)
+
+        final_status = result.get("status")
+        failure_code = None
+        if final_status != "proposed":
+            interpretation = interpret_failure(
+                stage=case.get("failure_stage", "benchmark"),
+                error_text=result.get("llm_error"),
+                task=coder_task,
+                patch_data=result,
+                metadata={
+                    "planner_source": effective_plan.get("source"),
+                    "benchmark_case_id": case["name"],
+                },
+            )
+            failure_code = interpretation.classification.failure_code
+
+        sandbox = result.get("sandbox_report") or {}
+        expected_final_status = case.get("expected_final_status", "proposed")
+        expected_failure_code = case.get("expected_failure_code")
+        expected_to_succeed = expected_final_status == "proposed"
+        passed = final_status == case.get("expected_final_status", "proposed")
+        if expected_failure_code is not None:
+            passed = passed and failure_code == expected_failure_code
+
+        return {
+            "name": case["name"],
+            "band": case["band"],
+            "task_note": case["task_note"],
+            "target_file": case["target_file"],
+            "target_symbol": case["target_symbol"],
+            "change_intent": case.get("change_intent"),
+            "expected_operation": case.get("expected_operation"),
+            "completion_cues": list(case.get("completion_cues") or []),
+            "expected_failure_sensitivities": list(case.get("expected_failure_sensitivities") or []),
+            "selected_context_mode": preview["context_mode"],
+            "prompt_length": preview["prompt_length"],
+            "context_budget": preview["context_budget"],
+            "planner_source": effective_plan.get("source"),
+            "planner_success": effective_plan.get("status") == "planned",
+            "patch_accepted": final_status == "proposed",
+            "patch_rejected": final_status != "proposed",
+            "sandbox_result": {
+                "applied": sandbox.get("applied"),
+                "syntax_valid": sandbox.get("syntax_valid"),
+                "semantic_valid": sandbox.get("semantic_valid"),
+            },
+            "apply_result": "not_run",
+            "retry_count": max(0, coder_mock.call_count - 1),
+            "retry_succeeded": final_status == "proposed" and coder_mock.call_count > 1,
+            "failure_code": failure_code,
+            "final_status": final_status,
+            "expected_to_succeed": expected_to_succeed,
+            "pass_fail_record": {
+                "expected_final_status": expected_final_status,
+                "expected_failure_code": expected_failure_code,
+                "passed": passed,
+            },
+        }
 
     def run_pack_ab(self, cases=None, output_path=None):
         """Run the benchmark twice — with and without lesson memory — and report the delta."""

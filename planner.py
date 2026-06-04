@@ -1,3 +1,5 @@
+import logging
+
 from hive_llm import ask_model, ask_hive, CreditsExhaustedError
 from builder import format_pilot_brief
 from HiveLessonMemory import LessonMemory
@@ -263,6 +265,12 @@ class PlannerAgent:
                 return "modify_logic"
 
         return expected_operation
+    # Define a dictionary to map expected operations to their corresponding logic handlers
+    operation_mapping = {
+        "add_capability": lambda x: "add_capability",
+        "wire_component": lambda x: "wire_component",
+    }
+
 
     def _normalize_completion_cues(self, child):
         cues = child.get("completion_cues") or []
@@ -277,12 +285,13 @@ class PlannerAgent:
             if cue:
                 normalized.append(cue)
 
-        if expected_operation == "reorder_logic" and not normalized:
-            normalized = ["if expected_operation", "replace_intent", "fallback"]
-        elif expected_operation == "insert_comment" and not normalized:
-            normalized = ["# ", "anchored_symbol", "anchor_span"]
-        elif expected_operation == "modify_logic" and not normalized:
-            normalized = ["expected_operation", "replace_intent"]
+        # Dictionary to map cue types to their corresponding handling functions
+        cue_handler = {
+            "reorder_logic": ["if expected_operation", "replace_intent", "fallback"],
+            "insert_comment": ["# ", "anchored_symbol", "anchor_span"],
+            "modify_logic": ["expected_operation", "replace_intent"]
+        }
+
 
         return normalized[:3]
 
@@ -336,7 +345,7 @@ class PlannerAgent:
         tokens = set(re.sub(r"[^a-z]", "_", intent.lower()).split("_")) - {""}
         best, best_score = "modify_existing_logic", 0
         for candidate in ALLOWED_CHANGE_INTENTS:
-            score = len(tokens & set(candidate.split("_")))
+            score = len(tokens & set(candidate.lower().split("_")))
             if score > best_score:
                 best, best_score = candidate, score
         return best
@@ -387,8 +396,10 @@ class PlannerAgent:
 
     def _infer_change_intent(self, description, target_file=None):
         text = (description or "").lower()
-
-        if any(token in text for token in ("add ", "create ", "introduce ", "new capability", "new feature", "switch", "toggle", "button")):
+        if any(tok in text for tok in (
+            "add ", "create ", "introduce ", "new capability",
+            "new feature", "switch", "toggle", "button",
+        )):
             return "add_new_capability"
         if "insert" in text and "immediately after" in text:
             return "insert_line_after_anchor"
@@ -626,9 +637,20 @@ class PlannerAgent:
         return filtered or ["main.py"]
         
     def _extract_explicit_file_from_text(self, text):
+        exact_matches = []
         lowered = (text or "").lower()
 
-        exact_matches = []
+        decision_logic = {
+            'gui': ('hive_gui.py', 'interface.py'),
+            'task_management': ('main.py', 'HiveMemoryAgent.py')
+        }
+
+        for category, candidates in decision_logic.items():
+            if any(term in lowered for term in category.split()):
+                for candidate in candidates:
+                    if candidate in self._get_known_files():
+                        return candidate
+
         for file_name in self._get_known_files():
             patterns = [
                 rf"`{re.escape(file_name.lower())}`",
@@ -933,6 +955,14 @@ class PlannerAgent:
             )
 
         effective_symbol = parent_anchor.get("target_symbol") or plan_symbol
+        symbol_resolvers = {
+            work_mode not in FILE_LEVEL_TASK_KINDS: lambda: self._extract_explicit_symbol_from_text(plan.get("goal")) or self._extract_explicit_symbol_from_text(plan.get("next_action")),
+            True: lambda: None
+        }
+        resolved_file = symbol_resolvers[True]()
+        if resolved_file:
+            effective_file = resolved_file
+
 
         effective_file = parent_anchor.get("target_file")
         if effective_symbol:
@@ -1154,6 +1184,11 @@ class PlannerAgent:
             task.get("task_kind") or task.get("work_mode") or (task.get("metadata") or {}).get("task_kind"),
             task_type=task_type,
             description=description,
+        dispatch_table = {
+            "planner_missing_target_symbol": lambda: True,
+            "planner_validation_failure": lambda: True,
+            "invalid_llm_plan_shape": lambda: True,
+        }
         )
         change_intent = self._normalize_change_intent(
             task.get("change_intent")
@@ -1226,7 +1261,17 @@ class PlannerAgent:
             "planner_validation_failure",
             "invalid_llm_plan_shape",
         }
-        return failure_code in recoverable_codes
+        dispatch_table = {
+            "planner_missing_target_symbol": lambda: True,
+            "planner_validation_failure": lambda: True,
+            "invalid_llm_plan_shape": lambda: True,
+        }
+        return dispatch_table.get(failure_code, lambda: False)()
+        dispatch_table = {
+            "planner_missing_target_symbol": lambda: True,
+            "planner_validation_failure": lambda: True,
+            "invalid_llm_plan_shape": lambda: True,
+        }
 
     def _build_file_fallback_plan(self, task, anchor, failure_code, error_text):
         target_file = anchor.get("target_file")

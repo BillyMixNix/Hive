@@ -1,0 +1,113 @@
+{
+  "n_per_arm_per_pair": 4,
+  "retry_budget": 3,
+  "pairs": 6,
+  "pooled": {
+    "mean_retries_off": 1.125,
+    "mean_retries_on": 1.1666666666666667,
+    "retry_reduction_off_minus_on": -0.04166666666666674,
+    "retry_reduction_95ci": [
+      -0.5416666666666667,
+      0.45833333333333337
+    ],
+    "mann_whitney_z": -0.1958866984750516,
+    "mann_whitney_p": 0.844698848656418,
+    "solve_rate_off": 0.7083333333333334,
+    "solve_rate_on": 0.6666666666666666,
+    "solve_rate_lift_on_minus_off": -0.04166666666666674,
+    "two_proportion_z": -0.31139957766460974,
+    "two_proportion_p": 0.7554968749288824
+  },
+  "verdict": "no significant effect \u2014 check preflight headroom/injection before concluding",
+  "per_pair": [
+    {
+      "name": "anc_pair_1",
+      "band": "anchor_logic",
+      "seed_file": "coder_context.py",
+      "reuse_file": "builder.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 1.5,
+      "off_mean_retries": 0.75,
+      "headroom_ok": false,
+      "injection_fires_on_retry": true
+    },
+    {
+      "name": "anc_pair_2",
+      "band": "anchor_logic",
+      "seed_file": "planner.py",
+      "reuse_file": "builder.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 0.75,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 1.0,
+      "off_mean_retries": 1.0,
+      "headroom_ok": false,
+      "injection_fires_on_retry": true
+    },
+    {
+      "name": "anc_pair_3",
+      "band": "anchor_logic",
+      "seed_file": "coder.py",
+      "reuse_file": "interface.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 0.25,
+      "off_solve_rate": 0.5,
+      "on_mean_retries": 1.75,
+      "off_mean_retries": 1.75,
+      "headroom_ok": true,
+      "injection_fires_on_retry": true
+    },
+    {
+      "name": "anc_pair_4",
+      "band": "anchor_logic",
+      "seed_file": "executor.py",
+      "reuse_file": "work_ontology.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 0.75,
+      "on_mean_retries": 0.75,
+      "off_mean_retries": 1.0,
+      "headroom_ok": true,
+      "injection_fires_on_retry": true
+    },
+    {
+      "name": "anc_pair_5",
+      "band": "anchor_logic",
+      "seed_file": "router.py",
+      "reuse_file": "anchor_utils.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 0.0,
+      "off_solve_rate": 0.0,
+      "on_mean_retries": 2.0,
+      "off_mean_retries": 2.0,
+      "headroom_ok": false,
+      "injection_fires_on_retry": true
+    },
+    {
+      "name": "anc_pair_6",
+      "band": "anchor_logic",
+      "seed_file": "reflector.py",
+      "reuse_file": "work_ontology.py",
+      "n": 4,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 0.0,
+      "off_mean_retries": 0.25,
+      "headroom_ok": false,
+      "injection_fires_on_retry": true
+    }
+  ],
+  "caveats": [
+    "Cross-file effect is reactive (retry reduction), not first-attempt \u2014 by design.",
+    "Pairs with off_solve_rate 0.0 or 1.0 have no headroom and prove nothing; recalibrate.",
+    "Generalized lessons are seeded directly (trusted) to isolate presence-vs-absence; this tests transfer, not the organic promotion threshold."
+  ]
+}

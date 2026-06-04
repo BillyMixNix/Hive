@@ -1,0 +1,155 @@
+{
+  "n_per_arm_per_pair": 5,
+  "retry_budget": 3,
+  "pairs": 5,
+  "pooled": {
+    "mean_retries_off": 0.92,
+    "mean_retries_on": 0.6,
+    "retry_reduction_off_minus_on": 0.32000000000000006,
+    "retry_reduction_95ci": [
+      -0.16000000000000003,
+      0.8
+    ],
+    "mann_whitney_z": 1.0865596001627718,
+    "mann_whitney_p": 0.2772314876173121,
+    "solve_rate_off": 0.84,
+    "solve_rate_on": 0.84,
+    "solve_rate_lift_on_minus_off": 0.0,
+    "two_proportion_z": 0.0,
+    "two_proportion_p": 1.0
+  },
+  "verdict": "no significant effect \u2014 check preflight headroom/injection before concluding",
+  "diagnostics": {
+    "_comment": "Did the lesson actually reach the model when it mattered?",
+    "on_failure_family_counts": {
+      "new_method_not_allowed": 5,
+      "sandbox_apply_failed": 6,
+      "symbol_anchor_drift": 6,
+      "sandbox_retry_exhausted": 2,
+      "scope_alignment_mismatch": 3,
+      "removes_existing_methods": 1
+    },
+    "on_trials_that_failed": 9,
+    "on_trials_guidance_fired": 8,
+    "guidance_fire_rate_among_failing_on_trials": 0.8888888888888888,
+    "on_drift_trials": 4,
+    "on_drift_trials_with_guidance": 4,
+    "guidance_fire_rate_on_drift_trials": 1.0
+  },
+  "per_pair": [
+    {
+      "name": "anc_pair_1",
+      "band": "anchor_logic",
+      "seed_file": "coder_context.py",
+      "reuse_file": "builder.py",
+      "n": 5,
+      "budget": 3,
+      "on_solve_rate": 0.6,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 1.0,
+      "off_mean_retries": 0.4,
+      "headroom_ok": false,
+      "on_failure_family_counts": {
+        "new_method_not_allowed": 3,
+        "sandbox_apply_failed": 1,
+        "symbol_anchor_drift": 5
+      },
+      "on_trials_that_failed": 3,
+      "on_trials_guidance_fired": 3,
+      "on_drift_trials": 3,
+      "on_drift_trials_with_guidance": 3
+    },
+    {
+      "name": "anc_pair_2",
+      "band": "anchor_logic",
+      "seed_file": "planner.py",
+      "reuse_file": "builder.py",
+      "n": 5,
+      "budget": 3,
+      "on_solve_rate": 0.8,
+      "off_solve_rate": 0.8,
+      "on_mean_retries": 0.4,
+      "off_mean_retries": 1.4,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "new_method_not_allowed": 1,
+        "sandbox_apply_failed": 2,
+        "sandbox_retry_exhausted": 1
+      },
+      "on_trials_that_failed": 1,
+      "on_trials_guidance_fired": 1,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    },
+    {
+      "name": "anc_pair_3",
+      "band": "anchor_logic",
+      "seed_file": "coder.py",
+      "reuse_file": "interface.py",
+      "n": 5,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 0.6,
+      "on_mean_retries": 0.2,
+      "off_mean_retries": 1.2,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "scope_alignment_mismatch": 1
+      },
+      "on_trials_that_failed": 1,
+      "on_trials_guidance_fired": 1,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    },
+    {
+      "name": "anc_pair_4",
+      "band": "anchor_logic",
+      "seed_file": "executor.py",
+      "reuse_file": "work_ontology.py",
+      "n": 5,
+      "budget": 3,
+      "on_solve_rate": 0.8,
+      "off_solve_rate": 0.8,
+      "on_mean_retries": 1.2,
+      "off_mean_retries": 1.4,
+      "headroom_ok": true,
+      "on_failure_family_counts": {
+        "symbol_anchor_drift": 1,
+        "removes_existing_methods": 1,
+        "new_method_not_allowed": 1,
+        "scope_alignment_mismatch": 2,
+        "sandbox_apply_failed": 2,
+        "sandbox_retry_exhausted": 1
+      },
+      "on_trials_that_failed": 3,
+      "on_trials_guidance_fired": 3,
+      "on_drift_trials": 1,
+      "on_drift_trials_with_guidance": 1
+    },
+    {
+      "name": "anc_pair_6",
+      "band": "anchor_logic",
+      "seed_file": "reflector.py",
+      "reuse_file": "work_ontology.py",
+      "n": 5,
+      "budget": 3,
+      "on_solve_rate": 1.0,
+      "off_solve_rate": 1.0,
+      "on_mean_retries": 0.2,
+      "off_mean_retries": 0.2,
+      "headroom_ok": false,
+      "on_failure_family_counts": {
+        "sandbox_apply_failed": 1
+      },
+      "on_trials_that_failed": 1,
+      "on_trials_guidance_fired": 0,
+      "on_drift_trials": 0,
+      "on_drift_trials_with_guidance": 0
+    }
+  ],
+  "caveats": [
+    "Cross-file effect is reactive (retry reduction), not first-attempt \u2014 by design.",
+    "Pairs with off_solve_rate 0.0 or 1.0 have no headroom and prove nothing; recalibrate.",
+    "Generalized lessons are seeded directly (trusted) to isolate presence-vs-absence; this tests transfer, not the organic promotion threshold."
+  ]
+}

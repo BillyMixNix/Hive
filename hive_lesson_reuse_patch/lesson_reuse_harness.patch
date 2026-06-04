@@ -1,0 +1,881 @@
+diff --git a/benchmark_harness.py b/benchmark_harness.py
+index 39645b4..c6f527b 100644
+--- a/benchmark_harness.py
++++ b/benchmark_harness.py
+@@ -648,109 +648,147 @@ class ReliabilityBenchmarkHarness:
+             self._cleanup_session(session)
+ 
+     def run_case(self, case, lessons_enabled=True):
++        """Run a single case in its own throwaway session (back-compat wrapper)."""
+         session = self._create_session(lessons_enabled=lessons_enabled)
+         try:
+-            state = session["state"]
+-            planner = session["planner"]
+-            coder = session["coder"]
+-            reflector = session["reflector"]
+-
+-            parent_task = self._make_parent_task(state, case)
+-            planner_response = case.get("planner_raw_response")
+-            if planner_response is None:
+-                planner_response = json.dumps(case["plan_response"])
+-            reflection_response = json.dumps({
+-                "reflection": "Patch stays within the requested symbol and is safe to review.",
+-                "confidence": 0.92,
+-                "next_step": "Approve patch.",
+-                "verdict": "accept",
+-            })
++            return self._run_one(session, case)
++        finally:
++            self._cleanup_session(session)
++
++    def run_sequence(self, cases, lessons_enabled=True):
++        """Run an ordered list of cases against ONE shared session/lesson store.
+ 
+-            with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
+-                plan = planner.plan_task(parent_task)
++        Unlike run_pack (fresh empty lesson store per case), this preserves
++        coder.lesson_memory across cases, so a lesson recorded while handling an
++        earlier case is available to later ones. This is what makes cross-case
++        learning observable.
++        """
++        session = self._create_session(lessons_enabled=lessons_enabled)
++        results = []
++        try:
++            for case in cases:
++                results.append(self._run_one(session, case))
++        finally:
++            self._cleanup_session(session)
++        return results
+ 
+-            coder_task, effective_plan = self._build_coder_task(parent_task, plan)
+-            preview = self._preview_generation(coder, coder_task, effective_plan)
++    def _run_one(self, session, case):
++        """Run one case against an existing session. Does NOT create or clean it."""
++        state = session["state"]
++        planner = session["planner"]
++        coder = session["coder"]
++        reflector = session["reflector"]
+ 
+-            coder_side_effect = case.get("coder_side_effect")
+-            if coder_side_effect is None:
+-                coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
+-            else:
+-                coder_patch = patch("coder.ask_hive", side_effect=list(coder_side_effect))
+-
+-            with coder_patch as coder_mock:
+-                with patch("reflector.ask_hive", return_value=reflection_response):
+-                    with patch.object(
+-                        coder.executor,
+-                        "test_patch_in_sandbox",
+-                        side_effect=lambda patch_text, target_file, patch_reason="": self._workspace_sandbox_test(
+-                            session,
+-                            patch_text,
+-                            target_file,
+-                            patch_reason=patch_reason,
+-                        ),
+-                    ):
+-                        result = coder.generate_patch_with_revisions(coder_task, effective_plan, reflector)
+-
+-            final_status = result.get("status")
+-            failure_code = None
+-            if final_status != "proposed":
+-                interpretation = interpret_failure(
+-                    stage=case.get("failure_stage", "benchmark"),
+-                    error_text=result.get("llm_error"),
+-                    task=coder_task,
+-                    patch_data=result,
+-                    metadata={
+-                        "planner_source": effective_plan.get("source"),
+-                        "benchmark_case_id": case["name"],
+-                    },
+-                )
+-                failure_code = interpretation.classification.failure_code
++        parent_task = self._make_parent_task(state, case)
++        planner_response = case.get("planner_raw_response")
++        if planner_response is None:
++            planner_response = json.dumps(case["plan_response"])
++        reflection_response = json.dumps({
++            "reflection": "Patch stays within the requested symbol and is safe to review.",
++            "confidence": 0.92,
++            "next_step": "Approve patch.",
++            "verdict": "accept",
++        })
+ 
+-            sandbox = result.get("sandbox_report") or {}
+-            expected_final_status = case.get("expected_final_status", "proposed")
+-            expected_failure_code = case.get("expected_failure_code")
+-            expected_to_succeed = expected_final_status == "proposed"
+-            passed = final_status == case.get("expected_final_status", "proposed")
+-            if expected_failure_code is not None:
+-                passed = passed and failure_code == expected_failure_code
++        with patch("planner.ask_hive", return_value=planner_response) as planner_mock:
++            plan = planner.plan_task(parent_task)
+ 
+-            return {
+-                "name": case["name"],
+-                "band": case["band"],
+-                "task_note": case["task_note"],
+-                "target_file": case["target_file"],
+-                "target_symbol": case["target_symbol"],
+-                "change_intent": case.get("change_intent"),
+-                "expected_operation": case.get("expected_operation"),
+-                "completion_cues": list(case.get("completion_cues") or []),
+-                "expected_failure_sensitivities": list(case.get("expected_failure_sensitivities") or []),
+-                "selected_context_mode": preview["context_mode"],
+-                "prompt_length": preview["prompt_length"],
+-                "context_budget": preview["context_budget"],
+-                "planner_source": effective_plan.get("source"),
+-                "planner_success": effective_plan.get("status") == "planned",
+-                "patch_accepted": final_status == "proposed",
+-                "patch_rejected": final_status != "proposed",
+-                "sandbox_result": {
+-                    "applied": sandbox.get("applied"),
+-                    "syntax_valid": sandbox.get("syntax_valid"),
+-                    "semantic_valid": sandbox.get("semantic_valid"),
+-                },
+-                "apply_result": "not_run",
+-                "retry_count": max(0, coder_mock.call_count - 1),
+-                "retry_succeeded": final_status == "proposed" and coder_mock.call_count > 1,
+-                "failure_code": failure_code,
+-                "final_status": final_status,
+-                "expected_to_succeed": expected_to_succeed,
+-                "pass_fail_record": {
+-                    "expected_final_status": expected_final_status,
+-                    "expected_failure_code": expected_failure_code,
+-                    "passed": passed,
++        coder_task, effective_plan = self._build_coder_task(parent_task, plan)
++        preview = self._preview_generation(coder, coder_task, effective_plan)
++
++        coder_side_effect = case.get("coder_side_effect")
++        if case.get("live_coder"):
++            # Live mode: do NOT stub the coder — let coder.ask_hive hit the real model
++            # (Ollama). `wraps` passes calls through while still recording call_count, so
++            # the retry_count accounting below is unchanged.
++            import coder as _coder_module
++            coder_patch = patch("coder.ask_hive", wraps=_coder_module.ask_hive)
++        elif coder_side_effect is not None:
++            coder_patch = patch("coder.ask_hive", side_effect=list(coder_side_effect))
++        elif callable(case.get("coder_response")):
++            # Guidance-sensitive case: the callable receives the composed prompt and
++            # may return a different patch depending on whether injected lesson
++            # guidance is present. This is what lets a shared-store sequence show learning.
++            coder_patch = patch("coder.ask_hive", side_effect=case["coder_response"])
++        else:
++            coder_patch = patch("coder.ask_hive", return_value=case["coder_response"])
++
++        from contextlib import nullcontext
++        reflector_patch = (
++            nullcontext() if case.get("live_reflector")
++            else patch("reflector.ask_hive", return_value=reflection_response)
++        )
++        with coder_patch as coder_mock:
++            with reflector_patch:
++                with patch.object(
++                    coder.executor,
++                    "test_patch_in_sandbox",
++                    side_effect=lambda patch_text, target_file, patch_reason="": self._workspace_sandbox_test(
++                        session,
++                        patch_text,
++                        target_file,
++                        patch_reason=patch_reason,
++                    ),
++                ):
++                    result = coder.generate_patch_with_revisions(coder_task, effective_plan, reflector)
++
++        final_status = result.get("status")
++        failure_code = None
++        if final_status != "proposed":
++            interpretation = interpret_failure(
++                stage=case.get("failure_stage", "benchmark"),
++                error_text=result.get("llm_error"),
++                task=coder_task,
++                patch_data=result,
++                metadata={
++                    "planner_source": effective_plan.get("source"),
++                    "benchmark_case_id": case["name"],
+                 },
+-            }
+-        finally:
+-            self._cleanup_session(session)
++            )
++            failure_code = interpretation.classification.failure_code
++
++        sandbox = result.get("sandbox_report") or {}
++        expected_final_status = case.get("expected_final_status", "proposed")
++        expected_failure_code = case.get("expected_failure_code")
++        expected_to_succeed = expected_final_status == "proposed"
++        passed = final_status == case.get("expected_final_status", "proposed")
++        if expected_failure_code is not None:
++            passed = passed and failure_code == expected_failure_code
++
++        return {
++            "name": case["name"],
++            "band": case["band"],
++            "task_note": case["task_note"],
++            "target_file": case["target_file"],
++            "target_symbol": case["target_symbol"],
++            "change_intent": case.get("change_intent"),
++            "expected_operation": case.get("expected_operation"),
++            "completion_cues": list(case.get("completion_cues") or []),
++            "expected_failure_sensitivities": list(case.get("expected_failure_sensitivities") or []),
++            "selected_context_mode": preview["context_mode"],
++            "prompt_length": preview["prompt_length"],
++            "context_budget": preview["context_budget"],
++            "planner_source": effective_plan.get("source"),
++            "planner_success": effective_plan.get("status") == "planned",
++            "patch_accepted": final_status == "proposed",
++            "patch_rejected": final_status != "proposed",
++            "sandbox_result": {
++                "applied": sandbox.get("applied"),
++                "syntax_valid": sandbox.get("syntax_valid"),
++                "semantic_valid": sandbox.get("semantic_valid"),
++            },
++            "apply_result": "not_run",
++            "retry_count": max(0, coder_mock.call_count - 1),
++            "retry_succeeded": final_status == "proposed" and coder_mock.call_count > 1,
++            "failure_code": failure_code,
++            "final_status": final_status,
++            "expected_to_succeed": expected_to_succeed,
++            "pass_fail_record": {
++                "expected_final_status": expected_final_status,
++                "expected_failure_code": expected_failure_code,
++                "passed": passed,
++            },
++        }
+ 
+     def run_pack_ab(self, cases=None, output_path=None):
+         """Run the benchmark twice — with and without lesson memory — and report the delta."""
+diff --git a/coder.py b/coder.py
+index beb0afc..4252a44 100644
+--- a/coder.py
++++ b/coder.py
+@@ -58,6 +58,7 @@ from work_ontology import FILE_LEVEL_WORK_MODES, normalize_work_mode
+ class CoderAgent:
+     def __init__(self, memory=None, state_manager=None, executor=None):
+         self.lesson_memory = LessonMemory()
++        self._lessons_enabled = True  # honored by lesson-fetch chokepoints; toggled by benchmarks
+         self.memory = memory
+         self.state_manager = state_manager
+         self.executor = executor
+@@ -149,6 +150,8 @@ class CoderAgent:
+         )
+ 
+     def _get_pilot_guardrails(self, task, plan=None, target_file=None, limit=5):
++        if not getattr(self, "_lessons_enabled", True):
++            return []
+         task = task or {}
+         metadata = task.get("metadata") or {}
+         resolved_target_file = target_file or task.get("target_file") or metadata.get("target_file")
+@@ -395,6 +398,8 @@ class CoderAgent:
+         interpretation=None,
+         limit=3,
+     ):
++        if not getattr(self, "_lessons_enabled", True):
++            return []
+         lookup = self._build_retry_lesson_context(
+             task=task,
+             target_file=target_file,
+diff --git a/tests/test_lesson_reuse_sequence.py b/tests/test_lesson_reuse_sequence.py
+new file mode 100755
+index 0000000..4356659
+--- /dev/null
++++ b/tests/test_lesson_reuse_sequence.py
+@@ -0,0 +1,127 @@
++"""Cross-case learning test for the shared-store sequence harness.
++
++This is the test the original A/B benchmark could not express: it runs an
++ordered [seed, reuse] sequence against ONE shared lesson store and checks that
++a lesson recorded while handling the seed case is surfaced into the reuse
++case's prompt and changes the coder's behaviour.
++
++Two arms:
++  - lessons ON : seed records a lesson -> reuse sees guidance -> good patch -> proposed
++  - lessons OFF: empty store           -> reuse sees no guidance -> bad patch -> blocked
++
++If the ON arm ever stops out-performing the OFF arm, either the refactor or the
++lesson retrieval/injection path has regressed.
++"""
++
++import unittest
++
++from benchmark_harness import ReliabilityBenchmarkHarness
++
++TARGET_FILE = "coder_context.py"
++TARGET_SYMBOL = "select_edit_context"
++MARKER = "missing_diff_headers"  # failure_code; appears in the prompt only when a lesson is injected
++
++_MALFORMED = (
++    "TARGET_FILE: coder_context.py\n"
++    "CHANGE_TYPE: diff_patch\nRISK_LEVEL: low\nSTATUS: proposed\n"
++    "REASON: Attempt malformed diff.\nPATCH:\n"
++    "@@ -1,0 +1,1 @@\n+        return revised_value\n"
++)
++
++_GOOD = (
++    "TARGET_FILE: coder_context.py\n"
++    "CHANGE_TYPE: diff_patch\nRISK_LEVEL: low\nSTATUS: proposed\n"
++    "REASON: Add a narrow explanatory comment inside select_edit_context.\nPATCH:\n"
++    "--- coder_context.py\n+++ coder_context.py\n"
++    "@@ -971,6 +971,7 @@ def select_edit_context(task, plan, target_file, file_text, radius=0, padding_lines=40):\n"
++    "         if anchor_span:\n"
++    "+            # Enforce span-locked selection before building exact-symbol context.\n"
++    "             selected_block = _find_block_by_anchor_span(all_blocks, anchor_span)\n"
++    "             _validate_block_against_anchor_span(\n"
++)
++
++_PLAN = {
++    "goal": "Insert a comment above the anchor_span lookup in select_edit_context.",
++    "task_type": "bugfix",
++    "tasks": [{
++        "title": "Document anchor span lookup",
++        "description": "Insert a comment above the anchor_span lookup in select_edit_context.",
++        "target_file": TARGET_FILE,
++        "target_symbol": TARGET_SYMBOL,
++        "change_intent": "modify_existing_logic",
++        "expected_operation": "insert_comment",
++        "completion_cues": ["# Enforce span-locked selection before building exact-symbol context."],
++    }],
++    "dependencies": [], "risks": [], "next_action": "code", "status": "planned",
++}
++
++
++def _seed_case():
++    return {
++        "name": "seed_missing_diff_headers",
++        "task_id": "seed-1",
++        "band": "lesson_reuse",
++        "task_note": "Insert a comment above the anchor_span lookup in select_edit_context.",
++        "target_file": TARGET_FILE, "target_symbol": TARGET_SYMBOL,
++        "change_intent": "modify_existing_logic", "expected_operation": "insert_comment",
++        "completion_cues": ["# Enforce span-locked selection before building exact-symbol context."],
++        "plan_response": _PLAN,
++        "coder_side_effect": [_MALFORMED, _MALFORMED, _MALFORMED],  # always malformed -> records a lesson
++        "expected_final_status": "blocked",
++        "expected_failure_code": MARKER,
++    }
++
++
++def _reuse_case(observed):
++    """Reuse case whose coder output reacts to whether lesson guidance is in the prompt."""
++    def responder(prompt, *args, **kwargs):
++        # Only the FIRST attempt is decisive: at that point the reuse case has not
++        # failed yet in-case, so any MARKER in the prompt must have come from the
++        # cross-case shared lesson store (i.e. the seed's lesson), not in-case retries.
++        seen = MARKER in prompt
++        observed.append(seen)
++        return _GOOD if seen else _MALFORMED
++    return {
++        "name": "reuse_missing_diff_headers",
++        "task_id": "reuse-1",
++        "band": "lesson_reuse",
++        "task_note": "Insert a comment above the anchor_span lookup in select_edit_context.",
++        "target_file": TARGET_FILE, "target_symbol": TARGET_SYMBOL,
++        "change_intent": "modify_existing_logic", "expected_operation": "insert_comment",
++        "completion_cues": ["# Enforce span-locked selection before building exact-symbol context."],
++        "plan_response": _PLAN,
++        "coder_response": responder,  # callable -> guidance-sensitive
++        "expected_final_status": "proposed",
++        "expected_failure_code": None,
++    }
++
++
++class LessonReuseSequenceTests(unittest.TestCase):
++    def test_lessons_on_surface_guidance_into_later_case(self):
++        observed = []
++        h = ReliabilityBenchmarkHarness()
++        seed_res, reuse_res = h.run_sequence([_seed_case(), _reuse_case(observed)], lessons_enabled=True)
++        self.assertEqual(seed_res["final_status"], "blocked")
++        self.assertTrue(observed, "reuse coder was never invoked")
++        self.assertTrue(observed[0], "reuse first attempt did not see the seeded lesson (cross-case injection failed)")
++        self.assertEqual(reuse_res["final_status"], "proposed", "reuse should succeed first try once guidance is present")
++        self.assertEqual(reuse_res["retry_count"], 0, "with the seeded lesson, reuse should need no retries")
++
++    def test_lessons_reduce_retries_vs_off(self):
++        """The headline signal: lessons ON solves the reuse case in fewer retries than OFF."""
++        on_obs, off_obs = [], []
++        on = ReliabilityBenchmarkHarness().run_sequence([_seed_case(), _reuse_case(on_obs)], lessons_enabled=True)[1]
++        off = ReliabilityBenchmarkHarness().run_sequence([_seed_case(), _reuse_case(off_obs)], lessons_enabled=False)[1]
++        self.assertLess(on["retry_count"], off["retry_count"],
++                        "lessons ON did not reduce retries vs OFF — learning path regressed")
++
++    def test_lessons_off_no_guidance(self):
++        observed = []
++        h = ReliabilityBenchmarkHarness()
++        h.run_sequence([_seed_case(), _reuse_case(observed)], lessons_enabled=False)
++        self.assertTrue(observed, "reuse coder was never invoked")
++        self.assertFalse(observed[0], "reuse first attempt saw guidance even though lessons were OFF")
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/validation/lesson_study.py b/validation/lesson_study.py
+new file mode 100644
+index 0000000..6d9794f
+--- /dev/null
++++ b/validation/lesson_study.py
+@@ -0,0 +1,325 @@
++"""
++Live lesson-efficacy study — the "big enough test to prove the hypothesis".
++
++Hypothesis under test
++---------------------
++    Accumulated failure lessons make Hive's coder measurably better at NEW tasks:
++    it solves them in fewer attempts (and/or solves more of them within a fixed
++    retry budget) when a relevant lesson is present than when it is not.
++
++Why this design (read before trusting any number)
++--------------------------------------------------
++1.  REAL MODEL, NOT A MOCK.  The deterministic CI test
++    (tests/test_lesson_reuse_sequence.py) proves the *plumbing* — lessons get
++    recorded, retrieved, injected, and change behaviour.  It cannot prove a real
++    model benefits, because the mock is rigged to react to guidance.  This study
++    runs the live coder (Ollama / qwen2.5-coder:7b) with `live_coder=True`, so the
++    only thing that differs between arms is whether a lesson is in the store.
++
++2.  GENERALIZATION, NOT MEMORIZATION.  Each pair seeds a lesson whose origin file
++    differs from the reuse task's file.  A win therefore requires a *generalized*
++    lesson to transfer across files — not exact-match recall.
++
++3.  THE METRIC IS RETRIES-TO-SOLVE, NOT FIRST-ATTEMPT SUCCESS.  Verified
++    empirically against this codebase: on a task's FIRST attempt `failure_code`
++    is None, so `LessonMemory.get_retry_lessons` skips `find_relevant_lessons`
++    (HiveLessonMemory.py ~line 510) and only `get_recent_lessons(file=...)` runs,
++    which filters by exact file.  Cross-file generalized lessons are thus injected
++    only on attempt 2+ (after the task fails once and yields a matching
++    failure_code).  So Hive's cross-file learning is *reactive*: it reduces
++    retries, it does not lift first-attempt success.  Measuring first-attempt
++    success would understate (and misframe) the real effect.
++
++4.  TWO ARMS, N REPEATS, STATISTICS.  For each pair we run the reuse task N times
++    with lessons ON (store seeded) and N times with lessons OFF (empty store),
++    pooled across pairs.  We report mean retries, solve-rate-within-budget, the
++    differences with bootstrap 95% CIs, a Mann-Whitney U on retries, and a
++    two-proportion z on solve-rate.  Verdict requires the CI to exclude zero.
++
++5.  CALIBRATION IS MANDATORY.  Because the author could not run the model, the
++    starter cases are NOT guaranteed to sit in the sensitive band (baseline solve
++    rate strictly between 0 and 1).  Run `--preflight` first; if a pair's OFF-arm
++    solve rate is 0.0 or 1.0 there is no headroom and that pair proves nothing —
++    adjust its difficulty (see LESSON_STUDY.md) before trusting the main run.
++
++Usage
++-----
++    # 1) sanity + calibration (small N), checks injection fires and headroom:
++    python -m validation.lesson_study --preflight --n 4
++
++    # 2) full study (this is the proof; expect to run for a while):
++    python -m validation.lesson_study --n 20 --budget 3 --out results/lesson_study.json
++
++Requires a running Ollama with the model in hive_llm.DEFAULT_MODEL.
++"""
++
++import argparse
++import json
++import math
++import random
++import statistics
++import sys
++from pathlib import Path
++
++_ROOT = Path(__file__).resolve().parent.parent
++if str(_ROOT) not in sys.path:
++    sys.path.insert(0, str(_ROOT))
++
++from benchmark_harness import ReliabilityBenchmarkHarness
++from validation.lesson_study_cases import build_pairs
++
++
++# --------------------------------------------------------------------------- #
++# Seeding
++# --------------------------------------------------------------------------- #
++def seed_lesson(session, spec):
++    """Inject a crafted, trusted, GENERALIZED lesson (file=None) so it can transfer
++    across files. Mirrors what organic promotion would eventually produce, but
++    deterministically, so the experiment isolates 'lesson present vs absent'."""
++    session["coder"].lesson_memory.add_lesson(
++        file=None,
++        change_type="diff_patch",
++        failure_reason=spec["failure_code"],
++        retry_instruction=spec["retry_instruction"],
++        source="coder",
++        failure_code=spec["failure_code"],
++        lesson_level="generalized",
++        promotion_state="trusted",
++        times_used=5,
++        success_after_use=4,
++        trigger_pattern=spec.get("trigger_pattern"),
++        fix_strategy=spec.get("fix_strategy"),
++        context_requirements={},
++    )
++
++
++# --------------------------------------------------------------------------- #
++# One trial
++# --------------------------------------------------------------------------- #
++def run_trial(pair, lessons_on, budget):
++    """Run the reuse task once, live. Returns (solved: bool, retries: int)."""
++    h = ReliabilityBenchmarkHarness()
++    session = h._create_session(lessons_enabled=lessons_on)
++    try:
++        if lessons_on:
++            seed_lesson(session, pair["lesson"])
++        reuse = dict(pair["reuse"])
++        reuse["live_coder"] = True
++        reuse.setdefault("max_revisions", budget)
++        res = h._run_one(session, reuse)
++        solved = res.get("final_status") == "proposed"
++        retries = int(res.get("retry_count", 0) or 0)
++        return solved, retries
++    finally:
++        h._cleanup_session(session)
++
++
++# --------------------------------------------------------------------------- #
++# Statistics
++# --------------------------------------------------------------------------- #
++def _bootstrap_diff_ci(a, b, iters=10000, seed=0):
++    """95% CI for mean(a) - mean(b) by bootstrap resampling."""
++    rng = random.Random(seed)
++    diffs = []
++    for _ in range(iters):
++        ra = [a[rng.randrange(len(a))] for _ in a]
++        rb = [b[rng.randrange(len(b))] for _ in b]
++        diffs.append(statistics.fmean(ra) - statistics.fmean(rb))
++    diffs.sort()
++    lo = diffs[int(0.025 * iters)]
++    hi = diffs[int(0.975 * iters)]
++    return lo, hi
++
++
++def _mann_whitney_u(a, b):
++    """Two-sided Mann-Whitney U with normal approximation. Returns (U, z, p)."""
++    n1, n2 = len(a), len(b)
++    if n1 == 0 or n2 == 0:
++        return float("nan"), float("nan"), float("nan")
++    combined = sorted([(v, 0) for v in a] + [(v, 1) for v in b])
++    ranks = [0.0] * len(combined)
++    i = 0
++    while i < len(combined):
++        j = i
++        while j + 1 < len(combined) and combined[j + 1][0] == combined[i][0]:
++            j += 1
++        avg = (i + j) / 2.0 + 1.0
++        for k in range(i, j + 1):
++            ranks[k] = avg
++        i = j + 1
++    r1 = sum(r for r, (_, grp) in zip(ranks, combined) if grp == 0)
++    u1 = r1 - n1 * (n1 + 1) / 2.0
++    mu = n1 * n2 / 2.0
++    sigma = math.sqrt(n1 * n2 * (n1 + n2 + 1) / 12.0)
++    if sigma == 0:
++        return u1, 0.0, 1.0
++    z = (u1 - mu) / sigma
++    p = 2 * (1 - _norm_cdf(abs(z)))
++    return u1, z, p
++
++
++def _two_prop_z(succ_a, n_a, succ_b, n_b):
++    """Two-proportion z-test (a vs b). Returns (diff, z, p)."""
++    if n_a == 0 or n_b == 0:
++        return float("nan"), float("nan"), float("nan")
++    pa, pb = succ_a / n_a, succ_b / n_b
++    pool = (succ_a + succ_b) / (n_a + n_b)
++    se = math.sqrt(pool * (1 - pool) * (1 / n_a + 1 / n_b))
++    if se == 0:
++        return pa - pb, 0.0, 1.0
++    z = (pa - pb) / se
++    p = 2 * (1 - _norm_cdf(abs(z)))
++    return pa - pb, z, p
++
++
++def _norm_cdf(x):
++    return 0.5 * (1 + math.erf(x / math.sqrt(2)))
++
++
++# --------------------------------------------------------------------------- #
++# Study
++# --------------------------------------------------------------------------- #
++def run_study(n, budget, pairs=None, out=None, preflight=False):
++    pairs = pairs if pairs is not None else build_pairs()
++    per_pair = []
++    pooled = {"on_retries": [], "off_retries": [], "on_solved": [], "off_solved": []}
++
++    for pair in pairs:
++        on_r, off_r, on_s, off_s = [], [], [], []
++        for _ in range(n):
++            s, r = run_trial(pair, lessons_on=True, budget=budget)
++            on_s.append(1 if s else 0); on_r.append(r)
++            s, r = run_trial(pair, lessons_on=False, budget=budget)
++            off_s.append(1 if s else 0); off_r.append(r)
++
++        rec = {
++            "name": pair["name"], "band": pair["band"],
++            "seed_file": pair["lesson"].get("origin_file"),
++            "reuse_file": pair["reuse"]["target_file"],
++            "n": n, "budget": budget,
++            "on_solve_rate": statistics.fmean(on_s), "off_solve_rate": statistics.fmean(off_s),
++            "on_mean_retries": statistics.fmean(on_r), "off_mean_retries": statistics.fmean(off_r),
++            "headroom_ok": 0.0 < statistics.fmean(off_s) < 1.0,
++        }
++        per_pair.append(rec)
++        pooled["on_retries"] += on_r; pooled["off_retries"] += off_r
++        pooled["on_solved"] += on_s; pooled["off_solved"] += off_s
++
++        if preflight:
++            inj = _injection_fires(pair)
++            rec["injection_fires_on_retry"] = inj
++            print(f"[preflight] {pair['name']:<28} off_solve={rec['off_solve_rate']:.2f} "
++                  f"on_solve={rec['on_solve_rate']:.2f} headroom={'OK' if rec['headroom_ok'] else 'NONE'} "
++                  f"injection={'OK' if inj else 'FAIL'}")
++
++    # Pooled stats
++    rr_lo, rr_hi = _bootstrap_diff_ci(pooled["off_retries"], pooled["on_retries"])  # off - on (>0 => lessons help)
++    u, z, p_ret = _mann_whitney_u(pooled["off_retries"], pooled["on_retries"])
++    diff_solve, z_s, p_solve = _two_prop_z(
++        sum(pooled["on_solved"]), len(pooled["on_solved"]),
++        sum(pooled["off_solved"]), len(pooled["off_solved"]),
++    )
++    retry_drop = statistics.fmean(pooled["off_retries"]) - statistics.fmean(pooled["on_retries"])
++    solve_lift = statistics.fmean(pooled["on_solved"]) - statistics.fmean(pooled["off_solved"])
++
++    helps = (rr_lo > 0) or (diff_solve > 0 and p_solve < 0.05)
++    verdict = (
++        "LESSONS HELP (significant)" if helps
++        else "no significant effect — check preflight headroom/injection before concluding"
++    )
++
++    summary = {
++        "n_per_arm_per_pair": n, "retry_budget": budget, "pairs": len(pairs),
++        "pooled": {
++            "mean_retries_off": statistics.fmean(pooled["off_retries"]),
++            "mean_retries_on": statistics.fmean(pooled["on_retries"]),
++            "retry_reduction_off_minus_on": retry_drop,
++            "retry_reduction_95ci": [rr_lo, rr_hi],
++            "mann_whitney_z": z, "mann_whitney_p": p_ret,
++            "solve_rate_off": statistics.fmean(pooled["off_solved"]),
++            "solve_rate_on": statistics.fmean(pooled["on_solved"]),
++            "solve_rate_lift_on_minus_off": solve_lift,
++            "two_proportion_z": z_s, "two_proportion_p": p_solve,
++        },
++        "verdict": verdict,
++        "per_pair": per_pair,
++        "caveats": [
++            "Cross-file effect is reactive (retry reduction), not first-attempt — by design.",
++            "Pairs with off_solve_rate 0.0 or 1.0 have no headroom and prove nothing; recalibrate.",
++            "Generalized lessons are seeded directly (trusted) to isolate presence-vs-absence; "
++            "this tests transfer, not the organic promotion threshold.",
++        ],
++    }
++    if out:
++        Path(out).parent.mkdir(parents=True, exist_ok=True)
++        Path(out).write_text(json.dumps(summary, indent=2))
++        _write_markdown(summary, Path(out).with_suffix(".md"))
++    return summary
++
++
++def _injection_fires(pair):
++    """Deterministic check (no model): does the seeded generalized lesson reach the
++    reuse task's prompt on a retry across files? Uses a guidance-sensitive stub."""
++    marker = pair["lesson"]["retry_instruction"].split()[0]
++    h = ReliabilityBenchmarkHarness()
++    session = h._create_session(lessons_enabled=True)
++    seen = []
++    try:
++        seed_lesson(session, pair["lesson"])
++        malformed = ("TARGET_FILE: %s\nCHANGE_TYPE: diff_patch\nRISK_LEVEL: low\n"
++                     "STATUS: proposed\nREASON: x\nPATCH:\n@@ -1,0 +1,1 @@\n+    pass\n"
++                     % pair["reuse"]["target_file"])
++        def responder(prompt, *a, **k):
++            seen.append(marker in prompt); return malformed
++        reuse = dict(pair["reuse"]); reuse["coder_response"] = responder
++        h._run_one(session, reuse)
++        return any(seen)
++    finally:
++        h._cleanup_session(session)
++
++
++def _write_markdown(summary, path):
++    p = summary["pooled"]
++    lo, hi = p["retry_reduction_95ci"]
++    lines = [
++        "# Lesson-efficacy study — results", "",
++        f"- Pairs: {summary['pairs']} | N per arm per pair: {summary['n_per_arm_per_pair']} | "
++        f"retry budget: {summary['retry_budget']}", "",
++        f"**Verdict: {summary['verdict']}**", "",
++        "## Pooled", "",
++        f"- Mean retries — OFF {p['mean_retries_off']:.3f} vs ON {p['mean_retries_on']:.3f}",
++        f"- Retry reduction (OFF − ON): **{p['retry_reduction_off_minus_on']:.3f}** "
++        f"(95% CI [{lo:.3f}, {hi:.3f}]) — CI excluding 0 ⇒ real effect",
++        f"- Mann-Whitney p (retries): {p['mann_whitney_p']:.4f}",
++        f"- Solve-rate — OFF {p['solve_rate_off']:.3f} vs ON {p['solve_rate_on']:.3f} "
++        f"(lift {p['solve_rate_lift_on_minus_off']:+.3f}, two-prop p {p['two_proportion_p']:.4f})", "",
++        "## Per pair", "",
++        "| pair | band | seed→reuse files | OFF solve | ON solve | OFF retries | ON retries | headroom |",
++        "|---|---|---|---|---|---|---|---|",
++    ]
++    for r in summary["per_pair"]:
++        lines.append(
++            f"| {r['name']} | {r['band']} | {r['seed_file']}→{r['reuse_file']} | "
++            f"{r['off_solve_rate']:.2f} | {r['on_solve_rate']:.2f} | "
++            f"{r['off_mean_retries']:.2f} | {r['on_mean_retries']:.2f} | "
++            f"{'OK' if r['headroom_ok'] else 'NONE'} |")
++    lines += ["", "## Caveats", ""] + [f"- {c}" for c in summary["caveats"]]
++    path.write_text("\n".join(lines))
++
++
++def main():
++    ap = argparse.ArgumentParser(description="Live lesson-efficacy study")
++    ap.add_argument("--n", type=int, default=20, help="trials per arm per pair")
++    ap.add_argument("--budget", type=int, default=3, help="retry budget (max_revisions)")
++    ap.add_argument("--out", default="results/lesson_study.json")
++    ap.add_argument("--preflight", action="store_true",
++                    help="small calibration run: prints headroom + injection per pair")
++    args = ap.parse_args()
++    n = min(args.n, 4) if args.preflight else args.n
++    summary = run_study(n=n, budget=args.budget, out=args.out, preflight=args.preflight)
++    print(json.dumps(summary["pooled"], indent=2))
++    print("VERDICT:", summary["verdict"])
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/validation/lesson_study_cases.py b/validation/lesson_study_cases.py
+new file mode 100644
+index 0000000..aae8d53
+--- /dev/null
++++ b/validation/lesson_study_cases.py
+@@ -0,0 +1,134 @@
++"""
++Generalization seed->reuse pairs for the live lesson-efficacy study.
++
++Each pair:
++  - lesson : a crafted GENERALIZED lesson in some failure family, whose `origin_file`
++             DIFFERS from the reuse task's file (so transfer != memorization).
++             retry_instruction begins with a unique MARKER token so injection can be
++             verified deterministically (_injection_fires in lesson_study.py).
++  - reuse  : a real, low-risk editing task against a real repo symbol, run live.
++
++Bands mirror the reliability pack: comment_docstring, narrow_logic_edits,
++architectural_in_place_rewrites, route_flow_state.
++
++IMPORTANT — calibration: difficulty was authored without access to the live model.
++Run `--preflight` and check each pair's OFF-arm solve rate is strictly between 0 and 1.
++Pairs at 0.0 or 1.0 have no headroom; raise/lower difficulty (see LESSON_STUDY.md).
++"""
++
++
++def _reuse(name, band, target_file, target_symbol, task_note, cue,
++           change_intent="modify_existing_logic", expected_operation="insert_comment"):
++    plan = {
++        "goal": task_note,
++        "task_type": "bugfix",
++        "tasks": [{
++            "title": name,
++            "description": task_note,
++            "target_file": target_file,
++            "target_symbol": target_symbol,
++            "change_intent": change_intent,
++            "expected_operation": expected_operation,
++            "completion_cues": [cue],
++        }],
++        "dependencies": [target_file], "risks": [], "next_action": "code", "status": "planned",
++    }
++    return {
++        "name": name, "task_id": name, "band": band,
++        "task_note": task_note,
++        "target_file": target_file, "target_symbol": target_symbol,
++        "change_intent": change_intent, "expected_operation": expected_operation,
++        "completion_cues": [cue],
++        "plan_response": plan,
++        "expected_final_status": "proposed", "expected_failure_code": None,
++    }
++
++
++def _lesson(marker, failure_code, origin_file, instruction, trigger=None, fix=None):
++    return {
++        "origin_file": origin_file,
++        "failure_code": failure_code,
++        "retry_instruction": f"{marker} {instruction}",
++        "trigger_pattern": trigger or "diff_patch::modify_existing_logic",
++        "fix_strategy": fix or "emit_valid_unified_diff",
++    }
++
++
++def build_pairs():
++    return [
++        # ---- comment_docstring ----
++        {
++            "name": "cd_pair_1", "band": "comment_docstring",
++            "lesson": _lesson("MKR_CD1", "missing_diff_headers", "coder_context.py",
++                              "Always emit ---/+++ file headers and an @@ hunk in the unified diff."),
++            "reuse": _reuse("cd_pair_1", "comment_docstring", "interface.py", "_build_response",
++                            "Add a one-line comment above the return in _build_response explaining the response shape.",
++                            "# Build the normalized response payload."),
++        },
++        {
++            "name": "cd_pair_2", "band": "comment_docstring",
++            "lesson": _lesson("MKR_CD2", "missing_diff_headers", "planner.py",
++                              "A unified diff must start with ---/+++ headers before any @@ hunk."),
++            "reuse": _reuse("cd_pair_2", "comment_docstring", "work_ontology.py", "infer_work_mode",
++                            "Add a comment at the top of infer_work_mode describing what it returns.",
++                            "# Infer the work mode from free text."),
++        },
++        # ---- narrow_logic_edits ----
++        {
++            "name": "nl_pair_1", "band": "narrow_logic_edits",
++            "lesson": _lesson("MKR_NL1", "missing_diff_headers", "coder.py",
++                              "Emit a unified diff with ---/+++ headers and an @@ hunk; no prose outside PATCH:."),
++            "reuse": _reuse("nl_pair_1", "narrow_logic_edits", "builder.py", "_normalize_text",
++                            "In _normalize_text, guard against a None input by returning an empty string.",
++                            "if value is None:", change_intent="modify_existing_logic",
++                            expected_operation="modify_logic"),
++        },
++        {
++            "name": "nl_pair_2", "band": "narrow_logic_edits",
++            "lesson": _lesson("MKR_NL2", "missing_diff_headers", "reflector.py",
++                              "Emit only a clean unified diff with ---/+++ headers; no commentary."),
++            "reuse": _reuse("nl_pair_2", "narrow_logic_edits", "interface.py", "_parse_int_suffix",
++                            "In _parse_int_suffix, return None when the suffix is not a digit string.",
++                            "return None", change_intent="modify_existing_logic",
++                            expected_operation="modify_logic"),
++        },
++        # ---- architectural_in_place_rewrites ----
++        {
++            "name": "ar_pair_1", "band": "architectural_in_place_rewrites",
++            "lesson": _lesson("MKR_AR1", "missing_diff_headers", "router.py",
++                              "Produce a valid unified diff with ---/+++ headers; keep it within one scope.",
++                              trigger="diff_patch::architectural", fix="emit_valid_unified_diff"),
++            "reuse": _reuse("ar_pair_1", "architectural_in_place_rewrites", "coder_constraints.py",
++                            "derive_patch_constraints",
++                            "Add an inline comment inside derive_patch_constraints documenting the constraint order.",
++                            "# Constraints are applied in priority order."),
++        },
++        {
++            "name": "ar_pair_2", "band": "architectural_in_place_rewrites",
++            "lesson": _lesson("MKR_AR2", "missing_diff_headers", "executor.py",
++                              "Emit a unified diff with ---/+++ headers for one function body.",
++                              trigger="diff_patch::architectural", fix="emit_valid_unified_diff"),
++            "reuse": _reuse("ar_pair_2", "architectural_in_place_rewrites", "repo_map.py", "_compact_symbol_record",
++                            "Add a comment above the return in _compact_symbol_record explaining the compaction.",
++                            "# Compact the symbol record for the repo map."),
++        },
++        # ---- route_flow_state ----
++        {
++            "name": "rf_pair_1", "band": "route_flow_state",
++            "lesson": _lesson("MKR_RF1", "missing_diff_headers", "main.py",
++                              "Anchor to the named symbol and emit a valid unified diff with ---/+++ headers.",
++                              trigger="diff_patch::route_flow", fix="emit_valid_unified_diff"),
++            "reuse": _reuse("rf_pair_1", "route_flow_state", "work_ontology.py", "normalize_work_mode",
++                            "Add a guard at the top of normalize_work_mode returning the default when mode is falsy.",
++                            "return", change_intent="modify_existing_logic", expected_operation="modify_logic"),
++        },
++        {
++            "name": "rf_pair_2", "band": "route_flow_state",
++            "lesson": _lesson("MKR_RF2", "missing_diff_headers", "router.py",
++                              "Keep the hunk aligned to the anchor and emit valid ---/+++ diff headers.",
++                              trigger="diff_patch::route_flow", fix="emit_valid_unified_diff"),
++            "reuse": _reuse("rf_pair_2", "route_flow_state", "builder.py", "merge_pilot_context",
++                            "Add a comment in merge_pilot_context describing the merge precedence.",
++                            "# New input takes precedence over existing context."),
++        },
++    ]
