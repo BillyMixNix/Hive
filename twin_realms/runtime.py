@@ -102,7 +102,7 @@ class TwinRealmsRuntime:
                     self._forward_event(player_observer, result.event)
                 npc_results.append(result)
                 knowledge_events.extend(self._learn_from(result.event))
-        npc_results.extend(self._core_hostile_turns())
+        npc_results.extend(self._core_hostile_turns(player_result))
         world_results = self._advance_world_time()
         return RuntimeTurn(
             player_result,
@@ -123,7 +123,7 @@ class TwinRealmsRuntime:
             )
         return results
 
-    def _core_hostile_turns(self):
+    def _core_hostile_turns(self, player_result=None):
         state = self.engine.state
         if not state.flags.get("core_loop") or state.flags.get("game_over"):
             return []
@@ -138,14 +138,68 @@ class TwinRealmsRuntime:
                 and "hostile" in hostile.tags
                 and hostile.location_id == player.location_id
             ):
-                results.append(
-                    self.engine.apply_intent(
-                        ActionIntent("attack", hostile.id, target_id=player.id)
-                    )
-                )
+                intent = self._core_hostile_intent(hostile, player, player_result)
+                if intent is None:
+                    continue
+                results.append(self.engine.apply_intent(intent))
                 if state.flags.get("game_over") or not player.alive:
                     break
         return results
+
+    def _core_hostile_intent(self, hostile, player, player_result=None):
+        state = self.engine.state
+        combat = (state.flags.get("combat_state") or {}).get(hostile.id, {})
+        cooldowns = combat.get("cooldowns", {})
+        next_turn = state.turn + 1
+        player_action = (
+            player_result.intent.action
+            if player_result is not None
+            else ""
+        )
+        if player_action in {"move", "block"} and hostile.stamina >= 10:
+            return ActionIntent(
+                "attack",
+                hostile.id,
+                target_id=player.id,
+                parameters={"enemy_intent": "test_player_guard"},
+            )
+        if player_action == "dodge":
+            if hostile.stamina < hostile.max_stamina:
+                return ActionIntent(
+                    "rest",
+                    hostile.id,
+                    parameters={"enemy_intent": "wait_out_dodge"},
+                )
+            return ActionIntent(
+                "block",
+                hostile.id,
+                parameters={"enemy_intent": "hold_guard"},
+            )
+        if hostile.health <= hostile.max_health // 2 and hostile.stamina >= 6:
+            return ActionIntent(
+                "block",
+                hostile.id,
+                parameters={"enemy_intent": "survive_next_exchange"},
+            )
+        if hostile.stamina >= 18 and int(cooldowns.get("heavy_attack", 0)) < next_turn:
+            return ActionIntent(
+                "heavy_attack",
+                hostile.id,
+                target_id=player.id,
+                parameters={"enemy_intent": "press_with_heavy_attack"},
+            )
+        if hostile.stamina >= 10:
+            return ActionIntent(
+                "attack",
+                hostile.id,
+                target_id=player.id,
+                parameters={"enemy_intent": "attack_player"},
+            )
+        return ActionIntent(
+            "rest",
+            hostile.id,
+            parameters={"enemy_intent": "recover_stamina"},
+        )
 
     def _npc_ids_for_turn(self):
         state = self.engine.state

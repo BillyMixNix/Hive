@@ -12,6 +12,10 @@ class WorldSimulator:
     SPACE_FOLD_COST = 18
     SPACE_FOLD_MAX_DISTANCE = 10
     ATTACK_COST = 10
+    BLOCK_COST = 6
+    DODGE_COST = 8
+    HEAVY_ATTACK_COST = 18
+    HEAVY_ATTACK_COOLDOWN = 2
     WORK_COST = 12
     TRAIN_COST = 8
     GATHER_COST = 8
@@ -111,16 +115,81 @@ class WorldSimulator:
         return "space_folded", True, facts, None
 
     def _resolve_attack(self, state, intent, knowledge, turn):
+        return self._resolve_strike(
+            state,
+            intent,
+            turn,
+            action_name="attack",
+            stamina_cost=self.ATTACK_COST,
+            damage_multiplier=1.0,
+        )
+
+    def _resolve_heavy_attack(self, state, intent, knowledge, turn):
+        if not self._cooldown_ready(state, intent.actor_id, "heavy_attack", turn):
+            return "action_rejected", False, {}, "heavy attack is cooling down"
+        return self._resolve_strike(
+            state,
+            intent,
+            turn,
+            action_name="heavy_attack",
+            stamina_cost=self.HEAVY_ATTACK_COST,
+            damage_multiplier=1.7,
+            cooldown=self.HEAVY_ATTACK_COOLDOWN,
+        )
+
+    def _resolve_block(self, state, intent, knowledge, turn):
+        actor = self._actor(state, intent)
+        if actor.stamina < self.BLOCK_COST:
+            return "action_rejected", False, {}, "insufficient stamina"
+        actor.stamina -= self.BLOCK_COST
+        combat = self._actor_combat_state(state, actor.id)
+        combat["guard"] = "block"
+        combat["guard_expires_turn"] = turn + 1
+        return "blocked", True, {
+            "stamina_spent": self.BLOCK_COST,
+            "stamina_after": actor.stamina,
+            "guard": "block",
+            "guard_expires_turn": turn + 1,
+            "combat_log": f"{actor.name} blocks; next incoming damage is reduced.",
+        }, None
+
+    def _resolve_dodge(self, state, intent, knowledge, turn):
+        actor = self._actor(state, intent)
+        if actor.stamina < self.DODGE_COST:
+            return "action_rejected", False, {}, "insufficient stamina"
+        actor.stamina -= self.DODGE_COST
+        combat = self._actor_combat_state(state, actor.id)
+        combat["guard"] = "dodge"
+        combat["guard_expires_turn"] = turn + 1
+        return "dodged", True, {
+            "stamina_spent": self.DODGE_COST,
+            "stamina_after": actor.stamina,
+            "guard": "dodge",
+            "guard_expires_turn": turn + 1,
+            "combat_log": f"{actor.name} prepares to dodge the next attack.",
+        }, None
+
+    def _resolve_strike(
+        self,
+        state,
+        intent,
+        turn,
+        *,
+        action_name,
+        stamina_cost,
+        damage_multiplier,
+        cooldown=0,
+    ):
         actor = self._actor(state, intent)
         target = state.characters.get(intent.target_id or "")
         if not target or not target.alive or not target.active:
             return "action_rejected", False, {}, "a living target is required"
         if actor.location_id != target.location_id:
             return "action_rejected", False, {}, "target is not present"
-        if actor.stamina < self.ATTACK_COST:
+        if actor.stamina < stamina_cost:
             return "action_rejected", False, {}, "insufficient stamina"
-        actor.stamina -= self.ATTACK_COST
-        rng = random.Random(f"{state.seed}:{turn}:{actor.id}:{target.id}:attack")
+        actor.stamina -= stamina_cost
+        rng = random.Random(f"{state.seed}:{turn}:{actor.id}:{target.id}:{action_name}")
         weapon_power = self._equipment_power(state, actor, "main_hand")
         defense_power = (
             self._equipment_power(state, target, "body")
@@ -130,18 +199,29 @@ class WorldSimulator:
             actor.skill_mastery.get("swordsmanship", 0),
             actor.skill_mastery.get("archery", 0),
         )
-        base_damage = 8 + (actor.realm * 3) + weapon_power + combat_mastery
+        base_damage = int((8 + (actor.realm * 3) + weapon_power + combat_mastery) * damage_multiplier)
         variance = rng.randint(0, 5)
         countered = "distortion_hide" in target.techniques and rng.random() < 0.25
+        guard = self._consume_guard(state, target.id, turn)
+        missed = False
         raw_damage = (
             max(1, (base_damage + variance) // 2)
             if countered
             else base_damage + variance
         )
+        if guard == "dodge":
+            missed = rng.random() < 0.65
+            raw_damage = 0 if missed else max(1, raw_damage // 2)
+        elif guard == "block":
+            raw_damage = max(1, raw_damage // 3)
         damage = max(1, raw_damage - defense_power)
+        if missed:
+            damage = 0
         target.health = max(0, target.health - damage)
         if target.health == 0:
             target.alive = False
+        if cooldown:
+            self._set_cooldown(state, actor.id, action_name, turn + cooldown)
         game_state = self._update_game_state_after_attack(state, actor, target)
         pressure_changes = self._update_world_pressures_after_attack(
             state,
@@ -149,16 +229,30 @@ class WorldSimulator:
             target,
         )
         progression = self._grant_experience(actor, 8 if target.alive else 20)
+        combat_log = (
+            f"{actor.name} uses {action_name.replace('_', ' ')} for {stamina_cost} stamina"
+            f" against {target.name}: "
+        )
+        if missed:
+            combat_log += "the attack misses."
+        else:
+            guard_text = f" through {guard}" if guard else ""
+            combat_log += f"{damage} damage{guard_text}."
         return "attack_resolved", True, {
+            "action_name": action_name,
             "damage": damage,
+            "missed": missed,
             "countered": countered,
+            "target_guard": guard,
             "target_health_after": target.health,
             "target_alive": target.alive,
-            "stamina_spent": self.ATTACK_COST,
+            "stamina_spent": stamina_cost,
             "stamina_after": actor.stamina,
             "weapon_power": weapon_power,
             "defense_power": defense_power,
             "combat_mastery": combat_mastery,
+            "cooldown_until": turn + cooldown if cooldown else None,
+            "combat_log": combat_log,
             "world_pressure_changes": pressure_changes,
             **game_state,
             **progression,
@@ -797,6 +891,34 @@ class WorldSimulator:
             "victory": bool(state.flags.get("victory")),
             "defeat": bool(state.flags.get("defeat")),
         }
+
+    @staticmethod
+    def _actor_combat_state(state, actor_id):
+        combat_state = state.flags.setdefault("combat_state", {})
+        return combat_state.setdefault(actor_id, {})
+
+    @classmethod
+    def _cooldown_ready(cls, state, actor_id, action, turn):
+        combat = (state.flags.get("combat_state") or {}).get(actor_id, {})
+        cooldowns = combat.get("cooldowns", {})
+        return int(cooldowns.get(action, 0)) < turn
+
+    @classmethod
+    def _set_cooldown(cls, state, actor_id, action, ready_after_turn):
+        combat = cls._actor_combat_state(state, actor_id)
+        cooldowns = combat.setdefault("cooldowns", {})
+        cooldowns[action] = int(ready_after_turn)
+
+    @classmethod
+    def _consume_guard(cls, state, actor_id, turn):
+        combat = cls._actor_combat_state(state, actor_id)
+        guard = combat.get("guard")
+        expires = int(combat.get("guard_expires_turn", -1))
+        combat.pop("guard", None)
+        combat.pop("guard_expires_turn", None)
+        if expires < turn:
+            return None
+        return guard
 
     @staticmethod
     def _advance_village_pressures(state, turn):

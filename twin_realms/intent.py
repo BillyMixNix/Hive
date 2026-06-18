@@ -127,6 +127,12 @@ class IntentInterpreter:
                 distance=distance or 5,
                 raw_text=text,
             )
+        if "heavy attack" in lowered or any(term in lowered for term in ("power attack", "strong attack")):
+            return ActionIntent("heavy_attack", actor_id, target_id=target_id, raw_text=text)
+        if any(term in lowered for term in ("block", "guard", "defend")):
+            return ActionIntent("block", actor_id, raw_text=text)
+        if any(term in lowered for term in ("dodge", "evade", "sidestep")):
+            return ActionIntent("dodge", actor_id, raw_text=text)
         if any(term in lowered for term in ("attack", "strike", "slash", "stab", "fight")):
             return ActionIntent("attack", actor_id, target_id=target_id, raw_text=text)
         if any(term in lowered for term in ("cultivate", "cycle qi", "advance realm")):

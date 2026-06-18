@@ -61,8 +61,20 @@ class AffordanceBuilder:
             target = state.characters[target_id]
             if "hostile" in actor.tags or "hostile" in target.tags:
                 add(
+                    ActionIntent("block", actor_id),
+                    "Block the next attack for 6 stamina.",
+                )
+                add(
+                    ActionIntent("dodge", actor_id),
+                    "Dodge the next attack for 8 stamina.",
+                )
+                add(
                     ActionIntent("attack", actor_id, target_id=target_id),
-                    f"Attack {target_id}.",
+                    f"Attack {target_id} for 10 stamina.",
+                )
+                add(
+                    ActionIntent("heavy_attack", actor_id, target_id=target_id),
+                    f"Heavy attack {target_id} for 18 stamina.",
                 )
             if "merchant" in target.tags:
                 for item_id in sorted(target.inventory):

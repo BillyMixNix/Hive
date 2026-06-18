@@ -143,10 +143,17 @@ class NarrativeGenerator:
                 f"The technique consumes {facts['stamina_spent']} stamina.{strain}"
             )
         if event.event_type == "attack_resolved":
+            if facts.get("combat_log"):
+                ending = " The target falls." if not facts["target_alive"] else ""
+                return facts["combat_log"] + ending
             if facts.get("missed"):
                 return f"{actor}'s attack misses {target_name}."
             ending = " The target falls." if not facts["target_alive"] else ""
             return f"{actor} strikes {target_name} for {facts['damage']} damage.{ending}"
+        if event.event_type == "blocked":
+            return facts.get("combat_log") or f"{actor} raises a guard."
+        if event.event_type == "dodged":
+            return facts.get("combat_log") or f"{actor} prepares to dodge."
         if event.event_type == "rested":
             return f"{actor} steadies their breath and recovers {facts['stamina_recovered']} stamina."
         if event.event_type == "observed_character":
