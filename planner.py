@@ -292,6 +292,8 @@ class PlannerAgent:
             "modify_logic": ["expected_operation", "replace_intent"]
         }
 
+        if not normalized and expected_operation in cue_handler:
+            normalized = cue_handler[expected_operation]
 
         return normalized[:3]
 
@@ -385,10 +387,12 @@ class PlannerAgent:
         if self.state_manager is None:
             return True
         if self.state_manager is not None:
-            symbols = self.state_manager.get_symbols_for_file(target_file) or []
+            get_symbols = getattr(self.state_manager, "get_symbols_for_file", None)
+            symbols = get_symbols(target_file) if callable(get_symbols) else []
             if symbol in symbols:
                 return True
-            span = self.state_manager.get_symbol_span(target_file, symbol)
+            get_span = getattr(self.state_manager, "get_symbol_span", None)
+            span = get_span(target_file, symbol) if callable(get_span) else None
             if isinstance(span, dict):
                 return True
         resolved = self._resolve_symbol_to_file(symbol)
@@ -1184,11 +1188,6 @@ class PlannerAgent:
             task.get("task_kind") or task.get("work_mode") or (task.get("metadata") or {}).get("task_kind"),
             task_type=task_type,
             description=description,
-        dispatch_table = {
-            "planner_missing_target_symbol": lambda: True,
-            "planner_validation_failure": lambda: True,
-            "invalid_llm_plan_shape": lambda: True,
-        }
         )
         change_intent = self._normalize_change_intent(
             task.get("change_intent")
@@ -1543,6 +1542,8 @@ class PlannerAgent:
 
         try:
             raw_response = ask_hive(prompt, role="planner").strip()
+            if "Auto-reflection OK" in raw_response:
+                raw_response = ask_model(prompt).strip()
             json_text = self._extract_json_object(raw_response)
             plan = json.loads(json_text)
 

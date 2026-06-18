@@ -261,7 +261,7 @@ def scan_repo(root=None, skip_dirs=None):
     """Scan all .py files in the repo and return all candidate task dicts."""
     root = Path(root or REPO_ROOT)
     skip_dirs = set(skip_dirs or {
-        "backups", ".git", "__pycache__", "tmp_stress", "hive_v05", "tests",
+        "backups", ".git", "__pycache__", "tmp_stress", "tests",
     })
     candidates = []
     for py_file in sorted(root.rglob("*.py")):

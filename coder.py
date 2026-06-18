@@ -1113,8 +1113,11 @@ class CoderAgent:
 
     def _generate_candidate_patch_data(self, task, plan, target_file, session, current_prompt, attempt):
         timeout = 120 if attempt == 0 else 45
+        model_response = ask_hive(current_prompt, role="coder", timeout=timeout)
+        if "Auto-reflection OK" in str(model_response):
+            model_response = ask_model(current_prompt)
         raw_response = self._strip_markdown_fences_harder(
-            ask_hive(current_prompt, role="coder", timeout=timeout),
+            model_response,
             expect_patch_contract=not (
                 session["use_block_rewrite"] and session["selected_block"] is not None
             ),
@@ -1369,7 +1372,7 @@ class CoderAgent:
             fallback["llm_error"] = last_error or "Patch generation failed after revision attempts."
 
         if last_error:
-            self._interpret_failure(
+            interpretation = self._interpret_failure(
                 stage="retry_exhausted",
                 error_text=f"Retry exhausted: {last_error}",
                 task=task,
@@ -1381,6 +1384,7 @@ class CoderAgent:
                 source="retry_exhausted",
                 metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
             )
+            fallback["failure_code"] = interpretation.classification.failure_code
         return fallback
 
     def _build_initial_pass_reflector(self):

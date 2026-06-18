@@ -550,8 +550,9 @@ def _classify_targeting_evidence(text, details, evidence):
 def _classify_placement_evidence(text, details, evidence):
     """Classify patch placement and context failures. Returns FailureClassification or None."""
     budget_decision = str((evidence.context_budget or {}).get("budget_decision") or "").lower()
+    patch_text = str(evidence.patch_text or "")
 
-    if "patch has no anchor context or removal lines" in text:
+    if "patch has no anchor context or removal lines" in text or "@@ -1,0 +1,1 @@" in patch_text:
         return _match("missing_context_block", 0.97, "Patch omitted real context lines for placement.", "placement_missing_context_block")
     if (
         "anchor_found': false" in text
@@ -621,6 +622,9 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
     details = _coerce_dict(evidence.sandbox_report.get("details"))
     reflection_verdict = str(evidence.reflection_verdict or "").lower()
     reflection_reason = str(evidence.reflection_reason or "")
+    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
+    if explicit_failure_code in FAILURE_TAXONOMY:
+        return _match(explicit_failure_code, 0.99, "Patch result carried an explicit failure code.", "explicit_failure_code")
 
     for classifier in (
         _classify_planner_evidence,

@@ -28,7 +28,7 @@ from reflector import Reflector
 
 class ReliabilityBenchmarkHarness:
     def __init__(self, repo_root=None):
-        self.repo_root = Path(repo_root or Path(__file__).resolve().parent)
+        self.repo_root = Path(repo_root or Path(__file__).resolve().parent.parent)
 
     def _stable_json(self, data):
         return json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=True)

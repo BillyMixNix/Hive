@@ -13,7 +13,6 @@ DEFAULT_SKIP_DIRS = {
     "env",
     "__pycache__",
     "backups",
-    "hive_v05",
     "results",
 }
 
