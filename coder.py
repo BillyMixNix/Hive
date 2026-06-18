@@ -1370,15 +1370,28 @@ class CoderAgent:
             fallback = self._fallback_patch(task, plan, target_file)
             fallback["llm_error"] = last_error or "Patch generation failed after revision attempts."
 
-        if previous_failure_code in FAILURE_TAXONOMY:
-            fallback["failure_code"] = previous_failure_code
+        candidate_failure_code = (
+            candidate_patch_data.get("failure_code")
+            if isinstance(candidate_patch_data, dict)
+            else None
+        )
+        final_failure_code = (
+            previous_failure_code
+            if previous_failure_code in FAILURE_TAXONOMY
+            else candidate_failure_code
+            if candidate_failure_code in FAILURE_TAXONOMY
+            else None
+        )
+
+        if final_failure_code in FAILURE_TAXONOMY:
+            fallback["failure_code"] = final_failure_code
 
         if last_error:
             interpretation_patch_data = candidate_patch_data
-            if previous_failure_code in FAILURE_TAXONOMY:
+            if final_failure_code in FAILURE_TAXONOMY:
                 interpretation_patch_data = dict(candidate_patch_data or fallback)
                 interpretation_patch_data["status"] = "blocked"
-                interpretation_patch_data["failure_code"] = previous_failure_code
+                interpretation_patch_data["failure_code"] = final_failure_code
             interpretation = self._interpret_failure(
                 stage="retry_exhausted",
                 error_text=f"Retry exhausted: {last_error}",
@@ -1392,8 +1405,8 @@ class CoderAgent:
                 metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
             )
             fallback["failure_code"] = (
-                previous_failure_code
-                if previous_failure_code in FAILURE_TAXONOMY
+                final_failure_code
+                if final_failure_code in FAILURE_TAXONOMY
                 else interpretation.classification.failure_code
             )
             if candidate_patch_data:
@@ -1848,6 +1861,7 @@ class CoderAgent:
             attempt_index=attempt + 1, context=context, source="sandbox",
             metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
         )
+        candidate_patch_data["failure_code"] = interpretation.classification.failure_code
         print(f"[Coder] Lesson recorded: {interpretation.classification.failure_code}")
 
         new_repeated = (repeated_failure_count + 1

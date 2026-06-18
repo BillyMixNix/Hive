@@ -240,17 +240,19 @@ class Phase1LiveBenchmarkTests(unittest.TestCase):
             self.assertTrue(sandbox.get("semantic_valid"), msg=f"semantic failed for {case['name']}: {sandbox}")
             self.assertEqual((result.get("reflection") or {}).get("verdict"), "accept")
         else:
-            interpretation = interpret_failure(
-                stage=case.get("failure_stage", "benchmark"),
-                error_text=result.get("llm_error"),
-                task=coder_task,
-                patch_data=result,
-                metadata={
-                    "planner_source": plan.get("source"),
-                    "benchmark_case_id": case["name"],
-                },
-            )
-            failure_code = interpretation.classification.failure_code
+            failure_code = result.get("failure_code")
+            if not failure_code:
+                interpretation = interpret_failure(
+                    stage=case.get("failure_stage", "benchmark"),
+                    error_text=result.get("llm_error"),
+                    task=coder_task,
+                    patch_data=result,
+                    metadata={
+                        "planner_source": plan.get("source"),
+                        "benchmark_case_id": case["name"],
+                    },
+                )
+                failure_code = interpretation.classification.failure_code
             self.assertEqual(failure_code, case.get("expected_failure_code"))
 
         return self._build_benchmark_record(
