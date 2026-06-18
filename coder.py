@@ -39,6 +39,7 @@ from coder_block_ops import (
     validate_block_rewrite_minimality,
 )
 from coder_failures import (
+    FAILURE_TAXONOMY,
     classify_failure,
     build_retry_guidance,
     build_symbol_drift_retry,
@@ -1338,6 +1339,7 @@ class CoderAgent:
         rejected_patches,
         context,
         max_revisions,
+        previous_failure_code=None,
     ):
         if best_patch_data is not None and best_confidence >= 0.6:
             best_patch_data["reflection"] = best_reflection or {
@@ -1368,12 +1370,20 @@ class CoderAgent:
             fallback = self._fallback_patch(task, plan, target_file)
             fallback["llm_error"] = last_error or "Patch generation failed after revision attempts."
 
+        if previous_failure_code in FAILURE_TAXONOMY:
+            fallback["failure_code"] = previous_failure_code
+
         if last_error:
+            interpretation_patch_data = candidate_patch_data
+            if previous_failure_code in FAILURE_TAXONOMY:
+                interpretation_patch_data = dict(candidate_patch_data or fallback)
+                interpretation_patch_data.setdefault("status", "blocked")
+                interpretation_patch_data["failure_code"] = previous_failure_code
             interpretation = self._interpret_failure(
                 stage="retry_exhausted",
                 error_text=f"Retry exhausted: {last_error}",
                 task=task,
-                patch_data=candidate_patch_data,
+                patch_data=interpretation_patch_data,
                 recent_lessons=recent_lessons,
                 rejected_patches=rejected_patches,
                 attempt_index=max_revisions + 1,
@@ -2202,4 +2212,5 @@ class CoderAgent:
             best_confidence=best_confidence, candidate_patch_data=candidate_patch_data,
             recent_lessons=recent_lessons, rejected_patches=rejected_patches,
             context=context if "context" in locals() else None, max_revisions=max_revisions,
+            previous_failure_code=previous_failure_code,
         )
