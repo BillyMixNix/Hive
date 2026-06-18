@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from .fidelity import (
     FIDELITY_BACKGROUND,
     FIDELITY_HIVE,
@@ -8,7 +10,58 @@ from .fidelity import (
     FIDELITY_SCHEDULED,
     set_fidelity,
 )
+from .engine import TwinRealmsEngine
 from .models import Character, Faction, Item, Location, ResourceNode, WorldState
+from .models import ActionIntent
+
+
+@dataclass(frozen=True)
+class TarrowHeartbeatReport:
+    scenario_id: str
+    start_day: int
+    end_day: int
+    turns_advanced: int
+    pressure_before: dict
+    pressure_after: dict
+    memory_counts_before: dict
+    memory_counts_after: dict
+    replay_consistent: bool
+    state_digest: str
+
+    @property
+    def pressure_deltas(self):
+        return {
+            key: self.pressure_after.get(key, 0) - before
+            for key, before in self.pressure_before.items()
+            if self.pressure_after.get(key, before) != before
+        }
+
+    @property
+    def memory_delta(self):
+        return sum(self.memory_counts_after.values()) - sum(
+            self.memory_counts_before.values()
+        )
+
+    @property
+    def changed_without_player_force(self):
+        return bool(self.pressure_deltas) and self.memory_delta > 0
+
+    def to_dict(self):
+        return {
+            "scenario_id": self.scenario_id,
+            "start_day": self.start_day,
+            "end_day": self.end_day,
+            "turns_advanced": self.turns_advanced,
+            "pressure_before": dict(self.pressure_before),
+            "pressure_after": dict(self.pressure_after),
+            "pressure_deltas": self.pressure_deltas,
+            "memory_counts_before": dict(self.memory_counts_before),
+            "memory_counts_after": dict(self.memory_counts_after),
+            "memory_delta": self.memory_delta,
+            "changed_without_player_force": self.changed_without_player_force,
+            "replay_consistent": self.replay_consistent,
+            "state_digest": self.state_digest,
+        }
 
 
 def build_tarrow_aftermath_world(seed=17):
@@ -383,6 +436,45 @@ def build_tarrow_aftermath_world(seed=17):
                 }
             ],
         },
+    )
+
+
+def run_tarrow_heartbeat(*, days=7, seed=17, engine=None):
+    """Advance Tarrow with world ticks only and report autonomous drift."""
+
+    if days < 1:
+        raise ValueError("days must be at least 1")
+    engine = engine or TwinRealmsEngine(build_tarrow_aftermath_world(seed=seed))
+    state = engine.state
+    day_length = int(state.flags.get("day_length", 24))
+    turns_to_advance = (days - 1) * day_length
+    pressure_before = dict(state.flags.get("village_pressures", {}))
+    memory_counts_before = {
+        actor_id: len(character.memories)
+        for actor_id, character in state.characters.items()
+    }
+    start_day = int(state.flags.get("current_day", 1))
+
+    for _ in range(turns_to_advance):
+        result = engine.apply_intent(ActionIntent("world_tick", state.player_id))
+        if not result.event.accepted:
+            raise RuntimeError(result.event.reason or "world tick was rejected")
+
+    memory_counts_after = {
+        actor_id: len(character.memories)
+        for actor_id, character in state.characters.items()
+    }
+    return TarrowHeartbeatReport(
+        scenario_id=state.flags.get("scenario_id"),
+        start_day=start_day,
+        end_day=int(state.flags.get("current_day", start_day)),
+        turns_advanced=turns_to_advance,
+        pressure_before=pressure_before,
+        pressure_after=dict(state.flags.get("village_pressures", {})),
+        memory_counts_before=memory_counts_before,
+        memory_counts_after=memory_counts_after,
+        replay_consistent=engine.verify_replay(),
+        state_digest=engine.simulator.state_digest(state),
     )
 
 

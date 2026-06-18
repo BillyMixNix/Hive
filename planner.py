@@ -285,13 +285,11 @@ class PlannerAgent:
             if cue:
                 normalized.append(cue)
 
-        # Dictionary to map cue types to their corresponding handling functions
         cue_handler = {
             "reorder_logic": ["if expected_operation", "replace_intent", "fallback"],
             "insert_comment": ["# ", "anchored_symbol", "anchor_span"],
-            "modify_logic": ["expected_operation", "replace_intent"]
+            "modify_logic": ["expected_operation", "replace_intent"],
         }
-
         if not normalized and expected_operation in cue_handler:
             normalized = cue_handler[expected_operation]
 
@@ -1542,8 +1540,6 @@ class PlannerAgent:
 
         try:
             raw_response = ask_hive(prompt, role="planner").strip()
-            if "Auto-reflection OK" in raw_response:
-                raw_response = ask_model(prompt).strip()
             json_text = self._extract_json_object(raw_response)
             plan = json.loads(json_text)
 

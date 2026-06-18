@@ -12,7 +12,11 @@ from .benchmark import TwinRealmsBenchmark
 from .complexity import ComplexityStressRunner
 from .content import build_complexity_world, build_foundation_world
 from .region import build_willow_region_world
-from .tarrow import build_tarrow_aftermath_world
+from .tarrow import (
+    TarrowHeartbeatReport,
+    build_tarrow_aftermath_world,
+    run_tarrow_heartbeat,
+)
 from .engine import TwinRealmsEngine
 from .intent import IntentInterpreter
 from .knowledge import WorldKnowledge
@@ -48,4 +52,6 @@ __all__ = [
     "build_complexity_world",
     "build_willow_region_world",
     "build_tarrow_aftermath_world",
+    "run_tarrow_heartbeat",
+    "TarrowHeartbeatReport",
 ]

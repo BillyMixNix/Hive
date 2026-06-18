@@ -406,7 +406,11 @@ def normalize_failure_event(
         benchmark_case_id=benchmark_case_id,
         attempt_index=attempt_index if attempt_index is not None else patch_data.get("attempt_index"),
         raw_response=_first_nonempty(raw_response, patch_data.get("raw_response")),
-        patch_text=_first_nonempty(patch_data.get("patch"), patch_data.get("patch_text")),
+        patch_text=_first_nonempty(
+            patch_data.get("patch"),
+            patch_data.get("patch_text"),
+            patch_data.get("failed_patch_text"),
+        ),
         task_metadata=task_metadata,
         patch_metadata=patch_data,
         sandbox_report=sandbox_report,
@@ -622,9 +626,6 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
     details = _coerce_dict(evidence.sandbox_report.get("details"))
     reflection_verdict = str(evidence.reflection_verdict or "").lower()
     reflection_reason = str(evidence.reflection_reason or "")
-    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
-    if explicit_failure_code in FAILURE_TAXONOMY:
-        return _match(explicit_failure_code, 0.99, "Patch result carried an explicit failure code.", "explicit_failure_code")
 
     for classifier in (
         _classify_planner_evidence,
@@ -639,6 +640,10 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
 
     if "reflector rejected patch" in text or reflection_verdict == "reject":
         return _match("reflector_reject", 0.9, reflection_reason or "Reflector rejected the patch.", "reflection_reject")
+
+    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
+    if explicit_failure_code in FAILURE_TAXONOMY:
+        return _match(explicit_failure_code, 0.72, "Patch result carried a prior failure code after evidence classifiers found no narrower match.", "explicit_failure_code_fallback")
 
     if evidence.stage == "retry_exhausted" or "retry exhausted" in text:
         return _match("sandbox_retry_exhausted", 0.78, "Retry budget was exhausted without reaching a valid patch.", "orchestration_retry_exhausted")

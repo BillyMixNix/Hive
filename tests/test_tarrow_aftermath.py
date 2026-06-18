@@ -1,6 +1,7 @@
 from twin_realms import (
     TwinRealmsEngine,
     build_tarrow_aftermath_world,
+    run_tarrow_heartbeat,
 )
 from twin_realms.fidelity import (
     FIDELITY_BACKGROUND,
@@ -10,7 +11,6 @@ from twin_realms.fidelity import (
     FIDELITY_SCHEDULED,
     get_fidelity,
 )
-from twin_realms.models import ActionIntent
 
 
 def test_tarrow_aftermath_has_composable_demo_parts():
@@ -43,32 +43,19 @@ def test_tarrow_aftermath_has_composable_demo_parts():
 
 def test_tarrow_day_seven_differs_without_player_forcing_changes(tmp_path):
     engine = TwinRealmsEngine(build_tarrow_aftermath_world())
-    initial_pressures = dict(engine.state.flags["village_pressures"])
-    initial_memories = {
-        actor_id: len(character.memories)
-        for actor_id, character in engine.state.characters.items()
-    }
+    report = run_tarrow_heartbeat(engine=engine)
 
-    for _ in range(6 * 24):
-        result = engine.apply_intent(ActionIntent(
-            "world_tick",
-            engine.state.player_id,
-        ))
-        assert result.event.accepted
-
-    changed_pressures = engine.state.flags["village_pressures"]
-    changed_memories = {
-        actor_id: len(character.memories)
-        for actor_id, character in engine.state.characters.items()
-    }
-
+    assert report.scenario_id == "tarrow_aftermath"
+    assert report.start_day == 1
+    assert report.end_day == 7
+    assert report.turns_advanced == 6 * 24
     assert engine.state.flags["current_day"] == 7
-    assert changed_pressures != initial_pressures
-    assert any(
-        changed_memories[actor_id] > count
-        for actor_id, count in initial_memories.items()
-    )
-    assert engine.verify_replay()
+    assert report.pressure_deltas
+    assert report.memory_delta > 0
+    assert report.changed_without_player_force
+    assert report.replay_consistent
+    assert report.to_dict()["changed_without_player_force"]
+    assert report.state_digest == engine.simulator.state_digest(engine.state)
 
     save_path = tmp_path / "tarrow-day-seven.json"
     engine.save(save_path)
