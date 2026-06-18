@@ -381,6 +381,17 @@ def normalize_failure_event(
 
     raw_error_text = _build_error_text(stage, error_text, sandbox_report, reflection)
 
+    patch_text = _first_nonempty(
+        patch_data.get("patch"),
+        patch_data.get("patch_text"),
+        patch_data.get("failed_patch_text"),
+    )
+    if (
+        str(patch_data.get("status") or "").lower() == "blocked"
+        and _first_nonempty(patch_data.get("failed_patch_text"))
+    ):
+        patch_text = patch_data.get("failed_patch_text")
+
     return FailureEvidence(
         stage=stage,
         source=source,
@@ -406,11 +417,7 @@ def normalize_failure_event(
         benchmark_case_id=benchmark_case_id,
         attempt_index=attempt_index if attempt_index is not None else patch_data.get("attempt_index"),
         raw_response=_first_nonempty(raw_response, patch_data.get("raw_response")),
-        patch_text=_first_nonempty(
-            patch_data.get("patch"),
-            patch_data.get("patch_text"),
-            patch_data.get("failed_patch_text"),
-        ),
+        patch_text=patch_text,
         task_metadata=task_metadata,
         patch_metadata=patch_data,
         sandbox_report=sandbox_report,
