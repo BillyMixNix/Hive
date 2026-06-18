@@ -578,6 +578,12 @@ class WorldSimulator:
             actor.skill_mastery[node.required_skill] = min(100, mastery + 1)
         self._increase_need(actor, "hunger", 2)
         self._increase_need(actor, "fatigue", 2)
+        event_changes = self._resolve_core_gather_events(
+            state,
+            actor,
+            node,
+            turn,
+        )
         return "resource_gathered", True, {
             "resource_node_id": node.id,
             "resource_kind": node.resource_kind,
@@ -585,6 +591,7 @@ class WorldSimulator:
             "quantity_after": node.quantity,
             "quality": quality,
             "stamina_after": actor.stamina,
+            "event_changes": event_changes,
         }, None
 
     def _resolve_craft(self, state, intent, knowledge, turn):
@@ -760,12 +767,14 @@ class WorldSimulator:
         village_changes = self._advance_village_pressures(state, turn)
         memory_changes = self._record_pressure_memories(state, turn)
         npc_updates = self._advance_core_npcs(state, turn)
+        emergent_changes = self._advance_core_events(state, turn)
         return "world_tick_resolved", True, {
             "day": current_day,
             "period": self._day_period(state, turn),
             "village_pressure_changes": village_changes,
             "memory_events": memory_changes,
             "npc_updates": npc_updates,
+            "emergent_event_changes": emergent_changes,
         }, None
 
     def _resolve_unknown(self, state, intent, knowledge, turn):
@@ -962,6 +971,219 @@ class WorldSimulator:
             }
             for memory in character.memories
         )
+
+    @classmethod
+    def _advance_core_events(cls, state, turn):
+        if not state.flags.get("core_loop"):
+            return []
+        changes = []
+        events = state.flags.setdefault("emergent_events", {})
+        pressures = state.flags.setdefault("world_pressures", {})
+        supply_event = events.get("core_supply_shortage")
+        if turn >= 2 and not supply_event:
+            supply_event = {
+                "event_id": "core_supply_shortage",
+                "kind": "resource_shortage",
+                "status": "active",
+                "trigger_turn": turn,
+                "deadline_turn": turn + 4,
+                "requester_id": "char:worker",
+                "location_id": "loc:camp",
+                "resource_node_id": "resource:field_supplies",
+                "requested_item_kind": "supplies",
+            }
+            events["core_supply_shortage"] = supply_event
+            pressure = pressures.get("camp_supply_shortage")
+            if pressure:
+                pressure["severity"] = max(int(pressure.get("severity", 0)), 35)
+            cls._append_core_rumor(
+                state,
+                {
+                    "turn": turn,
+                    "event": "worker_requests_supply_help",
+                    "subject_id": "char:worker",
+                    "origin_location_id": "loc:camp",
+                    "confidence": 0.9,
+                },
+            )
+            worker = state.characters.get("char:worker")
+            if worker and worker.alive:
+                cls._append_memory(worker, {
+                    "turn": turn,
+                    "event": "requested_supply_help",
+                    "resource_kind": "supplies",
+                    "deadline_turn": supply_event["deadline_turn"],
+                })
+            changes.append({
+                "event_id": "core_supply_shortage",
+                "change": "triggered",
+                "kind": "resource_shortage",
+                "requester_id": "char:worker",
+                "deadline_turn": supply_event["deadline_turn"],
+            })
+            cls._record_core_event_history(
+                state,
+                turn,
+                "core_supply_shortage",
+                "triggered",
+            )
+        danger_event = events.get("field_danger_tracks")
+        if turn >= 4 and not danger_event:
+            danger_event = {
+                "event_id": "field_danger_tracks",
+                "kind": "danger",
+                "status": "active",
+                "trigger_turn": turn,
+                "location_id": "loc:field",
+            }
+            events["field_danger_tracks"] = danger_event
+            field = state.locations.get("loc:field")
+            if field:
+                field.danger = max(field.danger, 1)
+            pressure = pressures.get("field_danger")
+            if pressure:
+                pressure["severity"] = max(int(pressure.get("severity", 0)), 30)
+            cls._append_core_rumor(
+                state,
+                {
+                    "turn": turn,
+                    "event": "tracks_seen_near_field",
+                    "subject_id": "char:hostile",
+                    "origin_location_id": "loc:field",
+                    "confidence": 0.65,
+                },
+            )
+            changes.append({
+                "event_id": "field_danger_tracks",
+                "change": "triggered",
+                "kind": "danger",
+                "location_id": "loc:field",
+            })
+            cls._record_core_event_history(
+                state,
+                turn,
+                "field_danger_tracks",
+                "triggered",
+            )
+        supply_event = events.get("core_supply_shortage")
+        if (
+            supply_event
+            and supply_event.get("status") == "active"
+            and turn >= int(supply_event.get("deadline_turn", 0))
+        ):
+            supply_event["status"] = "ignored"
+            supply_event["resolved_turn"] = turn
+            pressure = pressures.get("camp_supply_shortage")
+            if pressure:
+                pressure["severity"] = min(
+                    100,
+                    int(pressure.get("severity", 0)) + 35,
+                )
+            worker = state.characters.get("char:worker")
+            if worker and worker.alive:
+                worker.health = max(1, worker.health - 5)
+                cls._append_memory(worker, {
+                    "turn": turn,
+                    "event": "supply_shortage_ignored",
+                    "event_id": "core_supply_shortage",
+                })
+            changes.append({
+                "event_id": "core_supply_shortage",
+                "change": "ignored",
+                "kind": "consequence",
+                "pressure_after": (
+                    pressures.get("camp_supply_shortage") or {}
+                ).get("severity"),
+            })
+            cls._record_core_event_history(
+                state,
+                turn,
+                "core_supply_shortage",
+                "ignored",
+            )
+        return changes
+
+    @classmethod
+    def _resolve_core_gather_events(cls, state, actor, node, turn):
+        if not state.flags.get("core_loop") or actor.id != state.player_id:
+            return []
+        events = state.flags.get("emergent_events") or {}
+        supply_event = events.get("core_supply_shortage")
+        if (
+            node.id != "resource:field_supplies"
+            or not supply_event
+            or supply_event.get("status") != "active"
+        ):
+            return []
+        supply_event["status"] = "resolved"
+        supply_event["resolved_turn"] = turn
+        supply_event["resolved_by"] = actor.id
+        pressures = state.flags.get("world_pressures") or {}
+        pressure = pressures.get("camp_supply_shortage")
+        if pressure:
+            pressure["severity"] = max(0, int(pressure.get("severity", 0)) - 25)
+        worker = state.characters.get("char:worker")
+        if worker and worker.alive:
+            cls._append_memory(worker, {
+                "turn": turn,
+                "event": "player_answered_supply_request",
+                "actor_id": actor.id,
+                "event_id": "core_supply_shortage",
+            })
+            before = worker.relationships.get(actor.id, 0)
+            worker.relationships[actor.id] = min(100, before + 10)
+        cls._append_core_rumor(
+            state,
+            {
+                "turn": turn,
+                "event": "supplies_recovered",
+                "subject_id": actor.id,
+                "origin_location_id": actor.location_id,
+                "confidence": 0.85,
+            },
+        )
+        cls._record_core_event_history(
+            state,
+            turn,
+            "core_supply_shortage",
+            "resolved",
+        )
+        return [{
+            "event_id": "core_supply_shortage",
+            "change": "resolved",
+            "kind": "player_intervention",
+            "pressure_after": (pressure or {}).get("severity"),
+        }]
+
+    @staticmethod
+    def _append_core_rumor(state, rumor):
+        rumors = state.flags.setdefault("rumors", [])
+        key = (
+            rumor.get("event"),
+            rumor.get("subject_id"),
+            rumor.get("origin_location_id"),
+        )
+        if any(
+            (
+                existing.get("event"),
+                existing.get("subject_id"),
+                existing.get("origin_location_id"),
+            ) == key
+            for existing in rumors
+        ):
+            return
+        rumors.append(rumor)
+        state.flags["rumors"] = rumors[-8:]
+
+    @staticmethod
+    def _record_core_event_history(state, turn, event_id, change):
+        history = state.flags.setdefault("event_history", [])
+        history.append({
+            "turn": turn,
+            "event_id": event_id,
+            "change": change,
+        })
+        state.flags["event_history"] = history[-16:]
 
     @staticmethod
     def _update_world_pressures_after_attack(state, actor, target):

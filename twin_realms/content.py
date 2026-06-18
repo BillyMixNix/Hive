@@ -1,4 +1,4 @@
-from .models import Character, Faction, Item, Location, WorldState
+from .models import Character, Faction, Item, Location, ResourceNode, WorldState
 
 
 def build_core_loop_world(seed=3):
@@ -106,6 +106,16 @@ def build_core_loop_world(seed=3):
         items=items,
         ground_items={location_id: [] for location_id in locations},
         factions=factions,
+        resource_nodes={
+            "resource:field_supplies": ResourceNode(
+                id="resource:field_supplies",
+                location_id="loc:field",
+                resource_kind="supplies",
+                quantity=2,
+                capacity=2,
+                regen_interval=99,
+            ),
+        },
         flags={
             "scenario_id": "core_loop",
             "core_loop": True,
@@ -119,6 +129,21 @@ def build_core_loop_world(seed=3):
             "skills": ["labor", "swordsmanship"],
             "jobs": ["worker"],
             "job_sites": {"worker": ["loc:field"]},
+            "world_pressures": {
+                "camp_supply_shortage": {
+                    "source_id": "resource:field_supplies",
+                    "severity": 0,
+                    "affected_locations": ["loc:camp"],
+                },
+                "field_danger": {
+                    "source_id": "loc:field",
+                    "severity": 0,
+                    "affected_locations": ["loc:field"],
+                },
+            },
+            "rumors": [],
+            "emergent_events": {},
+            "event_history": [],
         },
     )
 

@@ -379,7 +379,14 @@ class TerminalPlayer:
             if summary:
                 summaries.append(summary)
         if summaries:
-            self.output_fn("\n".join(f"[Village] {line}" for line in summaries[-4:]))
+            visible = summaries[-4:]
+            for line in summaries:
+                if (
+                    any(marker in line for marker in (" triggered", " ignored", " resolved"))
+                    and line not in visible
+                ):
+                    visible.append(line)
+            self.output_fn("\n".join(f"[Village] {line}" for line in visible[-8:]))
         else:
             self.output_fn("[Village] Time passes without a visible shift.")
 
@@ -388,6 +395,7 @@ class TerminalPlayer:
         changes = facts.get("village_pressure_changes") or {}
         memory_events = facts.get("memory_events") or []
         npc_updates = facts.get("npc_updates") or []
+        emergent_events = facts.get("emergent_event_changes") or []
         day = facts.get("day")
         parts = []
         for key in sorted(changes):
@@ -399,6 +407,11 @@ class TerminalPlayer:
             parts.append(f"{key.replace('_', ' ')} {before}->{after}")
         if memory_events:
             parts.append(f"{len(memory_events)} people remember the change")
+        for event in emergent_events:
+            event_id = str(event.get("event_id", "")).replace("_", " ")
+            change = str(event.get("change", "")).replace("_", " ")
+            kind = str(event.get("kind", "")).replace("_", " ")
+            parts.append(f"{event_id} {change} ({kind})")
         for update in npc_updates:
             actor = self.engine.state.characters.get(update.get("actor_id", ""))
             if not actor:
