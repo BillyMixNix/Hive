@@ -9,12 +9,43 @@ from .engine import TwinRealmsEngine
 from .intent import IntentInterpreter
 from .narrative import NarrativeGenerator
 from .runtime import TwinRealmsRuntime
+from .tarrow import run_tarrow_heartbeat
 from .hive_adapter import TwinRealmsHiveAdapter
 from .play import TerminalPlayer
 
 
+def _print_tarrow_heartbeat_report(report):
+    print("Tarrow heartbeat report")
+    print(f"Scenario: {report.scenario_id}")
+    print(f"Days: {report.start_day} -> {report.end_day}")
+    print(f"World ticks: {report.turns_advanced}")
+    print("Village pressures:")
+    for key in sorted(report.pressure_before):
+        before = report.pressure_before[key]
+        after = report.pressure_after.get(key, before)
+        delta = after - before
+        print(f"  {key}: {before} -> {after} ({delta:+d})")
+    print(f"Memory drift: {report.memory_delta:+d}")
+    changed = "yes" if report.changed_without_player_force else "no"
+    replay = "yes" if report.replay_consistent else "no"
+    print(f"Changed without player force: {changed}")
+    print(f"Replay consistent: {replay}")
+    print(f"State digest: {report.state_digest}")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Run the Twin Realms simulation slice.")
+    parser.add_argument(
+        "--heartbeat-report",
+        action="store_true",
+        help="Print the Tarrow day-1 to day-7 heartbeat proof and exit.",
+    )
+    parser.add_argument(
+        "--heartbeat-days",
+        type=int,
+        default=7,
+        help="Number of in-game days to advance for --heartbeat-report.",
+    )
     parser.add_argument("--save", default="twin_realms_save.json")
     parser.add_argument(
         "--new",
@@ -67,6 +98,11 @@ def main(argv=None):
         help="Human accepts direct commands; agent gives control to Hive cognition.",
     )
     args = parser.parse_args(argv)
+    if args.heartbeat_report:
+        _print_tarrow_heartbeat_report(
+            run_tarrow_heartbeat(days=args.heartbeat_days)
+        )
+        return
     if args.player_control == "agent" and args.mode not in {
         "hive",
         "hive_learning",

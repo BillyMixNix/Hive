@@ -168,3 +168,9 @@ scenario from day 1 to day 7 with world ticks only, then reports pressure
 deltas, memory drift, replay consistency, and the final state digest. This is
 the narrow heartbeat check for whether the village changes without the player
 forcing every event.
+
+Inspect it directly with:
+
+```powershell
+.\.venv\Scripts\python.exe -m twin_realms --heartbeat-report
+```

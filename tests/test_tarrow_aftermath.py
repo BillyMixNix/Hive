@@ -3,6 +3,7 @@ from twin_realms import (
     build_tarrow_aftermath_world,
     run_tarrow_heartbeat,
 )
+from twin_realms.cli import main
 from twin_realms.fidelity import (
     FIDELITY_BACKGROUND,
     FIDELITY_HIVE,
@@ -61,3 +62,14 @@ def test_tarrow_day_seven_differs_without_player_forcing_changes(tmp_path):
     engine.save(save_path)
     loaded = TwinRealmsEngine.load(save_path)
     assert loaded.snapshot() == engine.snapshot()
+
+
+def test_tarrow_heartbeat_report_command_prints_human_summary(capsys):
+    main(["--heartbeat-report"])
+
+    output = capsys.readouterr().out
+    assert "Tarrow heartbeat report" in output
+    assert "Days: 1 -> 7" in output
+    assert "Village pressures:" in output
+    assert "Changed without player force: yes" in output
+    assert "Replay consistent: yes" in output
