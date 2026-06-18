@@ -29,6 +29,7 @@ from .drift import DriftAuditor
 from .simulation import WorldSimulator
 from .runtime import TwinRealmsRuntime
 from .play import TerminalPlayer
+from .frontend_boundary import FrontendBoundary
 
 __all__ = [
     "IntentInterpreter",
@@ -50,6 +51,7 @@ __all__ = [
     "TwinRealmsBenchmark",
     "TwinRealmsRuntime",
     "TerminalPlayer",
+    "FrontendBoundary",
     "WorldKnowledge",
     "WorldSimulator",
     "build_foundation_world",
