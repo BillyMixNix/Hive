@@ -1377,7 +1377,7 @@ class CoderAgent:
             interpretation_patch_data = candidate_patch_data
             if previous_failure_code in FAILURE_TAXONOMY:
                 interpretation_patch_data = dict(candidate_patch_data or fallback)
-                interpretation_patch_data.setdefault("status", "blocked")
+                interpretation_patch_data["status"] = "blocked"
                 interpretation_patch_data["failure_code"] = previous_failure_code
             interpretation = self._interpret_failure(
                 stage="retry_exhausted",
@@ -1391,7 +1391,11 @@ class CoderAgent:
                 source="retry_exhausted",
                 metadata={"plan_id": plan.get("plan_id") if isinstance(plan, dict) else None},
             )
-            fallback["failure_code"] = interpretation.classification.failure_code
+            fallback["failure_code"] = (
+                previous_failure_code
+                if previous_failure_code in FAILURE_TAXONOMY
+                else interpretation.classification.failure_code
+            )
             if candidate_patch_data:
                 fallback["failed_patch_text"] = candidate_patch_data.get("patch")
                 fallback["sandbox_report"] = candidate_patch_data.get("sandbox_report")
