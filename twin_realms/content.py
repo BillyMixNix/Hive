@@ -1,4 +1,4 @@
-from .models import Character, Item, Location, WorldState
+from .models import Character, Faction, Item, Location, WorldState
 
 
 def build_core_loop_world(seed=3):
@@ -6,7 +6,7 @@ def build_core_loop_world(seed=3):
         "loc:camp": Location(
             id="loc:camp",
             name="Camp",
-            connections=["loc:den"],
+            connections=["loc:den", "loc:field"],
             danger=0,
         ),
         "loc:den": Location(
@@ -14,6 +14,12 @@ def build_core_loop_world(seed=3):
             name="Den",
             connections=["loc:camp"],
             danger=2,
+        ),
+        "loc:field": Location(
+            id="loc:field",
+            name="Field",
+            connections=["loc:camp"],
+            danger=0,
         ),
     }
     characters = {
@@ -42,6 +48,30 @@ def build_core_loop_world(seed=3):
             skill_mastery={"swordsmanship": 2},
             tags=["hostile"],
         ),
+        "char:worker": Character(
+            id="char:worker",
+            name="Worker",
+            location_id="loc:camp",
+            realm=1,
+            stamina=32,
+            max_stamina=32,
+            health=30,
+            max_health=30,
+            inventory=["item:field_ration"],
+            relationships={"char:player": 0},
+            skill_mastery={"labor": 2},
+            jobs={"worker": 2},
+            faction_id="faction:camp",
+            home_location_id="loc:camp",
+            schedule={
+                "night": "loc:camp",
+                "dawn": "loc:field",
+                "day": "loc:field",
+                "dusk": "loc:camp",
+            },
+            needs={"hunger": 20, "fatigue": 10, "safety": 80},
+            tags=["worker"],
+        ),
     }
     items = {
         "item:short_sword": Item(
@@ -52,6 +82,20 @@ def build_core_loop_world(seed=3):
             power=4,
             skill="swordsmanship",
         ),
+        "item:field_ration": Item(
+            id="item:field_ration",
+            name="Field Ration",
+            kind="consumable",
+            value=2,
+        ),
+    }
+    factions = {
+        "faction:camp": Faction(
+            id="faction:camp",
+            name="Camp",
+            headquarters_id="loc:camp",
+            values=["safety", "work"],
+        ),
     }
     return WorldState(
         turn=0,
@@ -61,6 +105,7 @@ def build_core_loop_world(seed=3):
         locations=locations,
         items=items,
         ground_items={location_id: [] for location_id in locations},
+        factions=factions,
         flags={
             "scenario_id": "core_loop",
             "core_loop": True,
@@ -69,7 +114,11 @@ def build_core_loop_world(seed=3):
             "defeat": False,
             "twin_realm_stability": 100,
             "item_ids": sorted(items),
-            "skills": ["swordsmanship"],
+            "day_length": 24,
+            "current_day": 1,
+            "skills": ["labor", "swordsmanship"],
+            "jobs": ["worker"],
+            "job_sites": {"worker": ["loc:field"]},
         },
     )
 

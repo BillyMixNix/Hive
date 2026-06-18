@@ -69,6 +69,9 @@ class TerminalPlayer:
         if clean in {"people", "npcs", "characters"}:
             self.output_fn(self.describe_people())
             return True
+        if clean in {"schedules", "schedule", "needs", "jobs"}:
+            self.output_fn(self.describe_schedules())
+            return True
         if clean in {"village", "pressures", "rumors", "factions"}:
             self.output_fn(self.describe_village())
             return True
@@ -178,6 +181,40 @@ class TerminalPlayer:
             )
         return "\n".join(lines)
 
+    def describe_schedules(self):
+        state = self.engine.state
+        lines = [
+            f"Day {state.flags.get('current_day', 1)} | turn {state.turn}",
+            "Schedules:",
+        ]
+        people = [
+            character
+            for character in state.characters.values()
+            if character.id != state.player_id
+            and character.active
+            and character.alive
+            and character.schedule
+        ]
+        if not people:
+            lines.append("- none")
+            return "\n".join(lines)
+        for character in sorted(people, key=lambda actor: actor.id):
+            location = state.locations[character.location_id].name
+            jobs = ", ".join(sorted(character.jobs)) if character.jobs else "none"
+            needs = ", ".join(
+                f"{key} {character.needs[key]}"
+                for key in sorted(character.needs)
+            ) or "none"
+            schedule = ", ".join(
+                f"{period}->{state.locations[location_id].name}"
+                for period, location_id in sorted(character.schedule.items())
+            )
+            lines.append(
+                f"- {character.name} | at {location} | jobs {jobs} | "
+                f"needs {needs} | {schedule}"
+            )
+        return "\n".join(lines)
+
     def describe_village(self):
         state = self.engine.state
         pressures = state.flags.get("village_pressures") or {}
@@ -284,6 +321,7 @@ class TerminalPlayer:
             "  status     Show health, stamina, realm, and progression.",
             "  inventory  Show carried and equipped items.",
             "  people     Show nearby NPCs and active Hive minds.",
+            "  schedules  Show NPC schedules, jobs, needs, and locations.",
             "  village    Show Tarrow pressures, world pressures, and rumors.",
             "  actions    Show exact actions currently allowed.",
             "  do NUMBER  Execute one listed action.",
@@ -349,6 +387,7 @@ class TerminalPlayer:
         facts = result.event.facts or {}
         changes = facts.get("village_pressure_changes") or {}
         memory_events = facts.get("memory_events") or []
+        npc_updates = facts.get("npc_updates") or []
         day = facts.get("day")
         parts = []
         for key in sorted(changes):
@@ -360,6 +399,20 @@ class TerminalPlayer:
             parts.append(f"{key.replace('_', ' ')} {before}->{after}")
         if memory_events:
             parts.append(f"{len(memory_events)} people remember the change")
+        for update in npc_updates:
+            actor = self.engine.state.characters.get(update.get("actor_id", ""))
+            if not actor:
+                continue
+            task = str(update.get("task", "")).replace("_", " ")
+            if update.get("moved"):
+                origin = self.engine.state.locations.get(update.get("origin_id", ""))
+                after = self.engine.state.locations.get(
+                    update.get("location_after", "")
+                )
+                if origin and after:
+                    parts.append(f"{actor.name} {task} {origin.name}->{after.name}")
+                    continue
+            parts.append(f"{actor.name} {task}")
         if not parts:
             return ""
         return f"day {day}: " + "; ".join(parts)

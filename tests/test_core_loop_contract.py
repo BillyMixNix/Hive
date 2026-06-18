@@ -28,7 +28,7 @@ def test_core_loop_new_game_has_player_location_enemy_and_save_load(tmp_path):
 
     assert state.flags["scenario_id"] == "core_loop"
     assert state.player_id == "char:player"
-    assert len(state.locations) == 2
+    assert len(state.locations) == 3
     assert state.characters["char:hostile"].location_id == "loc:den"
 
     save_path = tmp_path / "new-core.json"

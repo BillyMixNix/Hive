@@ -72,7 +72,7 @@ class IntentInterpreter:
                 raw_text=text,
                 parameters={"skill_id": skill_id},
             )
-        if any(term in lowered for term in ("work", "job", "labor")):
+        if self._has_any_term(lowered, ("work", "job", "labor")):
             return ActionIntent(
                 "work",
                 actor_id,
@@ -179,6 +179,13 @@ class IntentInterpreter:
             if value.replace("_", " ") in text
         ]
         return max(candidates, default=(0, None))[1]
+
+    @staticmethod
+    def _has_any_term(text, terms):
+        return any(
+            re.search(rf"\b{re.escape(term)}\b", text)
+            for term in terms
+        )
 
     def _match_location(self, text, state):
         candidates = []

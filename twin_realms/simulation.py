@@ -228,6 +228,13 @@ class WorldSimulator:
             actor,
             target,
         )
+        consequence_changes = self._record_core_attack_consequences(
+            state,
+            actor,
+            target,
+            turn,
+            damage,
+        )
         progression = self._grant_experience(actor, 8 if target.alive else 20)
         combat_log = (
             f"{actor.name} uses {action_name.replace('_', ' ')} for {stamina_cost} stamina"
@@ -254,6 +261,7 @@ class WorldSimulator:
             "cooldown_until": turn + cooldown if cooldown else None,
             "combat_log": combat_log,
             "world_pressure_changes": pressure_changes,
+            "consequence_changes": consequence_changes,
             **game_state,
             **progression,
         }, None
@@ -385,13 +393,23 @@ class WorldSimulator:
             trust_before = witness.relationships.get(actor.id, 0)
             trust_after = max(-100, trust_before - 15)
             witness.relationships[actor.id] = trust_after
+            event = (
+                "player_stole_from_me"
+                if (
+                    state.flags.get("core_loop")
+                    and witness.id == target.id
+                    and actor.id == state.player_id
+                )
+                else "witnessed_theft"
+            )
             witness.memories.append({
                 "turn": turn,
-                "event": "witnessed_theft",
+                "event": event,
                 "actor_id": actor.id,
                 "target_id": target.id,
                 "item_id": item_id,
             })
+            witness.memories = witness.memories[-8:]
             trust_changes[witness_id] = {
                 "before": trust_before,
                 "after": trust_after,
@@ -741,10 +759,13 @@ class WorldSimulator:
         state.flags["current_day"] = current_day
         village_changes = self._advance_village_pressures(state, turn)
         memory_changes = self._record_pressure_memories(state, turn)
+        npc_updates = self._advance_core_npcs(state, turn)
         return "world_tick_resolved", True, {
             "day": current_day,
+            "period": self._day_period(state, turn),
             "village_pressure_changes": village_changes,
             "memory_events": memory_changes,
+            "npc_updates": npc_updates,
         }, None
 
     def _resolve_unknown(self, state, intent, knowledge, turn):
@@ -826,6 +847,122 @@ class WorldSimulator:
                 queue.append((connected_id, step))
         return None
 
+    @classmethod
+    def _advance_core_npcs(cls, state, turn):
+        if not state.flags.get("core_loop"):
+            return []
+        period = cls._day_period(state, turn)
+        updates = []
+        for character in sorted(state.characters.values(), key=lambda actor: actor.id):
+            if (
+                character.id == state.player_id
+                or not character.alive
+                or not character.active
+                or "hostile" in character.tags
+                or not character.schedule
+            ):
+                continue
+            origin_id = character.location_id
+            cls._increase_need(character, "hunger", 1)
+            cls._increase_need(character, "fatigue", 1)
+            task = None
+            destination_id = None
+            danger_id = cls._local_hostile_id(state, character.location_id)
+            if cls._should_avoid_player(state, character):
+                destination_id = character.home_location_id
+                task = "avoid_player"
+            elif danger_id:
+                destination_id = character.home_location_id
+                task = "respond_to_danger"
+                cls._decrease_need(character, "safety", 20)
+            elif cls._should_rest(character, period):
+                destination_id = character.home_location_id or character.schedule.get(period)
+                task = "rest"
+            else:
+                destination_id = character.schedule.get(period)
+                task = "follow_schedule"
+            moved = False
+            if destination_id and destination_id != character.location_id:
+                next_location_id = cls._next_step(
+                    state,
+                    character.location_id,
+                    destination_id,
+                )
+                if next_location_id:
+                    character.location_id = next_location_id
+                    moved = character.location_id != origin_id
+            if not moved and task == "follow_schedule":
+                job = cls._active_job_at_location(state, character)
+                if job and period in {"dawn", "day"}:
+                    task = "work"
+                    cls._increase_need(character, "fatigue", 2)
+                    cls._increase_need(character, "hunger", 1)
+                    character.skill_mastery[job] = min(
+                        100,
+                        character.skill_mastery.get(job, 0) + 1,
+                    )
+            if task == "rest" and character.location_id == character.home_location_id:
+                cls._decrease_need(character, "fatigue", 8)
+                cls._increase_need(character, "safety", 5)
+            updates.append({
+                "actor_id": character.id,
+                "period": period,
+                "task": task,
+                "origin_id": origin_id,
+                "destination_id": destination_id,
+                "location_after": character.location_id,
+                "moved": moved,
+                "danger_id": danger_id,
+                "needs": dict(character.needs),
+            })
+        return updates
+
+    @staticmethod
+    def _local_hostile_id(state, location_id):
+        for character in sorted(state.characters.values(), key=lambda actor: actor.id):
+            if (
+                character.active
+                and character.alive
+                and character.location_id == location_id
+                and "hostile" in character.tags
+            ):
+                return character.id
+        return None
+
+    @staticmethod
+    def _should_rest(character, period):
+        return (
+            period == "night"
+            or character.needs.get("fatigue", 0) >= 70
+            or character.needs.get("hunger", 0) >= 85
+        )
+
+    @staticmethod
+    def _active_job_at_location(state, character):
+        job_sites = state.flags.get("job_sites") or {}
+        for job in sorted(character.jobs):
+            if character.location_id in job_sites.get(job, []):
+                return job
+        return None
+
+    @staticmethod
+    def _should_avoid_player(state, character):
+        player = state.characters[state.player_id]
+        if character.location_id != player.location_id:
+            return False
+        if character.relationships.get(player.id, 0) < 0:
+            return True
+        return any(
+            memory.get("actor_id") == player.id
+            and memory.get("event") in {
+                "player_harmed_me",
+                "player_killed_ally",
+                "player_stole_from_me",
+                "witnessed_theft",
+            }
+            for memory in character.memories
+        )
+
     @staticmethod
     def _update_world_pressures_after_attack(state, actor, target):
         if target.alive:
@@ -861,6 +998,108 @@ class WorldSimulator:
                 "after": pressure["severity"],
             }
         return changes
+
+    @classmethod
+    def _record_core_attack_consequences(cls, state, actor, target, turn, damage):
+        if not state.flags.get("core_loop") or actor.id != state.player_id:
+            return {}
+        if damage <= 0:
+            return {}
+        memory_events = []
+        relationship_changes = {}
+        faction_reputation_changes = {}
+
+        if "hostile" in target.tags and not target.alive:
+            event = "player_removed_hostile"
+            beneficiaries = [
+                character
+                for character in state.characters.values()
+                if (
+                    character.active
+                    and character.alive
+                    and character.id != actor.id
+                    and "hostile" not in character.tags
+                )
+            ]
+            for beneficiary in beneficiaries:
+                cls._append_memory(
+                    beneficiary,
+                    {
+                        "turn": turn,
+                        "event": event,
+                        "actor_id": actor.id,
+                        "target_id": target.id,
+                    },
+                )
+                memory_events.append({
+                    "actor_id": beneficiary.id,
+                    "event": event,
+                })
+                before = beneficiary.relationships.get(actor.id, 0)
+                after = min(100, before + 15)
+                beneficiary.relationships[actor.id] = after
+                relationship_changes[beneficiary.id] = {
+                    "before": before,
+                    "after": after,
+                }
+            faction_ids = sorted({
+                beneficiary.faction_id
+                for beneficiary in beneficiaries
+                if beneficiary.faction_id
+            })
+            for faction_id in faction_ids:
+                before = actor.reputation.get(faction_id, 0)
+                after = min(100, before + 10)
+                actor.reputation[faction_id] = after
+                faction_reputation_changes[faction_id] = {
+                    "before": before,
+                    "after": after,
+                }
+        elif "hostile" not in target.tags:
+            event = "player_killed_npc" if not target.alive else "player_harmed_me"
+            cls._append_memory(
+                target,
+                {
+                    "turn": turn,
+                    "event": event,
+                    "actor_id": actor.id,
+                    "target_id": target.id,
+                    "damage": damage,
+                },
+            )
+            memory_events.append({
+                "actor_id": target.id,
+                "event": event,
+            })
+            before = target.relationships.get(actor.id, 0)
+            penalty = 50 if not target.alive else 20
+            after = max(-100, before - penalty)
+            target.relationships[actor.id] = after
+            relationship_changes[target.id] = {
+                "before": before,
+                "after": after,
+            }
+            if target.faction_id:
+                before = actor.reputation.get(target.faction_id, 0)
+                penalty = 35 if not target.alive else 15
+                after = max(-100, before - penalty)
+                actor.reputation[target.faction_id] = after
+                faction_reputation_changes[target.faction_id] = {
+                    "before": before,
+                    "after": after,
+                }
+        if not memory_events and not relationship_changes and not faction_reputation_changes:
+            return {}
+        return {
+            "memory_events": memory_events,
+            "relationship_changes": relationship_changes,
+            "faction_reputation_changes": faction_reputation_changes,
+        }
+
+    @staticmethod
+    def _append_memory(character, memory):
+        character.memories.append(memory)
+        character.memories = character.memories[-8:]
 
     @staticmethod
     def _update_game_state_after_attack(state, actor, target):
