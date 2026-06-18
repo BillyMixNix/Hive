@@ -29,6 +29,11 @@ def test_tarrow_settlement_layer_starts_inspectable():
     assert tarrow["workplaces"]["fields"]["status"] == "strained"
     assert len(tarrow["guards"]) == 5
     assert len(tarrow["civilians"]) == 13
+    assert tarrow["population"]["total"] == (
+        tarrow["population"]["present"]
+        + tarrow["population"]["fled"]
+        + tarrow["population"]["dead"]
+    )
     assert tarrow["location_states"]["loc:shrine_road"] == "damaged"
     assert tarrow["location_states"]["loc:watch_post"] == "defended"
 
@@ -112,6 +117,62 @@ def test_carpenter_work_can_restore_damaged_tarrow_location():
     }]
     assert tarrow["location_states"]["loc:shrine_road"] == "restored"
     assert tarrow["history"][-1]["actor_id"] == state.player_id
+
+    tick = engine.apply_intent(ActionIntent("world_tick", engine.state.player_id))
+
+    assert _tarrow(engine.state)["location_states"]["loc:shrine_road"] == "restored"
+    assert not any(
+        change["field"] == "location_states.loc:shrine_road"
+        and change["after"] == "damaged"
+        for change in tick.event.facts["settlement_changes"]
+    )
+    assert engine.verify_replay()
+
+
+def test_guard_work_defense_boost_survives_ordinary_tick():
+    state = build_tarrow_aftermath_world()
+    player = state.characters[state.player_id]
+    player.jobs["guard"] = 1
+    player.location_id = "loc:watch_post"
+    engine = TwinRealmsEngine(state)
+
+    result = engine.turn("work guard")
+    defense_after_work = _tarrow(engine.state)["defense_level"]
+
+    assert result.event.accepted
+    assert result.event.facts["settlement_changes"][0]["field"] == "defense_level"
+
+    engine.apply_intent(ActionIntent("world_tick", engine.state.player_id))
+
+    assert _tarrow(engine.state)["defense_level"] >= defense_after_work
+    assert engine.verify_replay()
+
+
+def test_high_pressure_can_explicitly_damage_restored_location():
+    state = build_tarrow_aftermath_world()
+    player = state.characters[state.player_id]
+    player.jobs["carpenter"] = 1
+    state.flags["village_pressures"].update({
+        "fear": 90,
+        "malformed_rumors": 90,
+    })
+    engine = TwinRealmsEngine(state)
+    engine.turn("work carpenter")
+
+    tick = engine.apply_intent(ActionIntent("world_tick", engine.state.player_id))
+    changes = tick.event.facts["settlement_changes"]
+
+    assert _tarrow(engine.state)["location_states"]["loc:shrine_road"] == "damaged"
+    assert {
+        "field": "location_states.loc:shrine_road",
+        "before": "restored",
+        "after": "damaged",
+        "cause": "malformed_activity_damages_shrine_road",
+        "description": "Malformed activity damages Shrine Road again.",
+    } in changes
+    assert _tarrow(engine.state)["history"][-1]["cause"] == (
+        "malformed_activity_damages_shrine_road"
+    )
     assert engine.verify_replay()
 
 

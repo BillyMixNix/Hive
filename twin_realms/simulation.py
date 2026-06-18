@@ -1419,7 +1419,8 @@ class WorldSimulator:
             and state.characters[actor_id].alive
             and state.characters[actor_id].active
         ]
-        guard_score = min(100, len(guards) * 8 + trust // 2)
+        defense_bonus = int(settlement.get("defense_bonus", 0))
+        guard_score = min(100, len(guards) * 8 + trust // 2 + defense_bonus)
         hostility = max(fear, rumors)
         safety = max(0, min(100, guard_score + medicine // 3 - hostility // 2))
         prosperity = max(0, min(100, (food + medicine) // 2 - fear // 4))
@@ -1465,30 +1466,38 @@ class WorldSimulator:
         else:
             settlement["status"] = "strained"
         locations = settlement.setdefault("location_states", {})
-        locations["loc:shrine_road"] = (
-            "restored"
-            if rumors < 55 and trust >= 55
-            else "damaged"
+        location_events = cls._apply_tarrow_location_pressure_events(
+            settlement,
+            turn,
+            fear=fear,
+            rumors=rumors,
         )
-        locations["loc:low_fields"] = (
-            "abandoned"
-            if food < 18
-            else ("poor" if food < 32 else "working")
+        cls._set_pressure_location_state(
+            settlement,
+            "loc:shrine_road",
+            "restored" if rumors < 55 and trust >= 55 else "damaged",
         )
-        locations["loc:healer_hut"] = (
-            "poor"
-            if medicine < 25
-            else ("restored" if medicine >= 40 else "strained")
+        cls._set_pressure_location_state(
+            settlement,
+            "loc:low_fields",
+            "abandoned" if food < 18 else ("poor" if food < 32 else "working"),
         )
-        locations["loc:watch_post"] = (
-            "defended"
-            if guard_score >= 50
-            else ("damaged" if fear > 80 else "strained")
+        cls._set_pressure_location_state(
+            settlement,
+            "loc:healer_hut",
+            "poor" if medicine < 25 else ("restored" if medicine >= 40 else "strained"),
         )
-        locations["loc:tarrow_square"] = (
+        cls._set_pressure_location_state(
+            settlement,
+            "loc:watch_post",
+            "defended" if guard_score >= 50 else ("damaged" if fear > 80 else "strained"),
+        )
+        cls._set_pressure_location_state(
+            settlement,
+            "loc:tarrow_square",
             "abandoned"
             if settlement["status"] == "abandoned"
-            else ("improved" if settlement["status"] == "improved" else "strained")
+            else ("improved" if settlement["status"] == "improved" else "strained"),
         )
         shops = settlement.setdefault("shops", {})
         if "blacksmith" in shops:
@@ -1505,6 +1514,12 @@ class WorldSimulator:
         if "watch" in workplaces:
             workplaces["watch"]["status"] = locations["loc:watch_post"]
         changes = cls._settlement_changes(before, cls._settlement_snapshot(settlement))
+        event_fields = {event["field"] for event in location_events}
+        changes = [
+            change for change in changes
+            if change.get("field") not in event_fields
+        ]
+        changes.extend(location_events)
         if changes:
             cls._record_settlement_history(settlement, turn, changes)
         return changes
@@ -1530,6 +1545,13 @@ class WorldSimulator:
             if damaged:
                 before = locations[damaged]
                 locations[damaged] = "restored"
+                interventions = settlement.setdefault("location_interventions", {})
+                interventions[damaged] = {
+                    "status": "restored",
+                    "cause": "carpenter_repair",
+                    "actor_id": actor.id,
+                    "turn": turn,
+                }
                 settlement["prosperity"] = min(
                     100,
                     int(settlement.get("prosperity", 0)) + 5,
@@ -1541,6 +1563,10 @@ class WorldSimulator:
                 })
         elif job_id in {"guard", "warden"}:
             before = int(settlement.get("defense_level", 0))
+            settlement["defense_bonus"] = min(
+                30,
+                int(settlement.get("defense_bonus", 0)) + 3,
+            )
             settlement["defense_level"] = min(100, before + 3)
             settlement["safety_level"] = min(
                 100,
@@ -1554,6 +1580,46 @@ class WorldSimulator:
         if changes:
             cls._record_settlement_history(settlement, turn, changes, actor.id)
         return changes
+
+    @classmethod
+    def _apply_tarrow_location_pressure_events(
+        cls,
+        settlement,
+        turn,
+        *,
+        fear,
+        rumors,
+    ):
+        interventions = settlement.setdefault("location_interventions", {})
+        locations = settlement.setdefault("location_states", {})
+        changes = []
+        shrine = interventions.get("loc:shrine_road")
+        if (
+            shrine
+            and shrine.get("status") == "restored"
+            and locations.get("loc:shrine_road") == "restored"
+            and fear >= 85
+            and rumors >= 85
+        ):
+            before = locations["loc:shrine_road"]
+            locations["loc:shrine_road"] = "damaged"
+            interventions.pop("loc:shrine_road", None)
+            changes.append({
+                "field": "location_states.loc:shrine_road",
+                "before": before,
+                "after": "damaged",
+                "cause": "malformed_activity_damages_shrine_road",
+                "description": "Malformed activity damages Shrine Road again.",
+            })
+        return changes
+
+    @staticmethod
+    def _set_pressure_location_state(settlement, location_id, pressure_status):
+        interventions = settlement.get("location_interventions") or {}
+        active = interventions.get(location_id)
+        if active and active.get("status") == settlement["location_states"].get(location_id):
+            return
+        settlement["location_states"][location_id] = pressure_status
 
     @staticmethod
     def _settlement_snapshot(settlement):
@@ -1574,12 +1640,23 @@ class WorldSimulator:
                 key: value.get("status")
                 for key, value in (settlement.get("workplaces") or {}).items()
             },
+            "location_interventions": dict(
+                settlement.get("location_interventions") or {}
+            ),
+            "defense_bonus": settlement.get("defense_bonus", 0),
         }
 
     @staticmethod
     def _settlement_changes(before, after):
         changes = []
-        for field in ("status", "safety_level", "hostility_level", "defense_level", "prosperity"):
+        for field in (
+            "status",
+            "safety_level",
+            "hostility_level",
+            "defense_level",
+            "defense_bonus",
+            "prosperity",
+        ):
             if before.get(field) != after.get(field):
                 changes.append({
                     "field": field,
@@ -1609,6 +1686,10 @@ class WorldSimulator:
                 "before": change.get("before"),
                 "after": change.get("after"),
             }
+            if "cause" in change:
+                entry["cause"] = change["cause"]
+            if "description" in change:
+                entry["description"] = change["description"]
             if actor_id:
                 entry["actor_id"] = actor_id
             history.append(entry)

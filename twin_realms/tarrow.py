@@ -488,7 +488,7 @@ def build_tarrow_aftermath_world(seed=17):
                     "prosperity": 38,
                     "population": {
                         "total": 19,
-                        "present": 19,
+                        "present": 18,
                         "guard": 5,
                         "civilian": 13,
                         "wounded": 2,
@@ -502,6 +502,8 @@ def build_tarrow_aftermath_world(seed=17):
                         "loc:healer_hut": "strained",
                         "loc:watch_post": "defended",
                     },
+                    "location_interventions": {},
+                    "defense_bonus": 0,
                     "status": "defended",
                     "history": [],
                 },
