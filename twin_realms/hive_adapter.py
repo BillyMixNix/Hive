@@ -238,6 +238,34 @@ class TwinRealmsHiveAdapter:
             "goal": cognition.goal,
             "lesson_ids": used_lesson_ids,
         })
+        chosen_action = {
+            "action": intent.action,
+            "actor_id": intent.actor_id,
+            "target_id": intent.target_id,
+            "destination_id": intent.destination_id,
+            "distance": intent.distance,
+            "parameters": deepcopy(parameters),
+        }
+        cognition.decision_log.append({
+            "turn": state.turn,
+            "plan_id": plan_id,
+            "observation": deepcopy(observation),
+            "goal": cognition.goal,
+            "available_affordances": [
+                {
+                    "choice_id": option["choice_id"],
+                    "description": option["description"],
+                    "action": option["intent"].action,
+                    "target_id": option["intent"].target_id,
+                    "destination_id": option["intent"].destination_id,
+                }
+                for option in options
+            ],
+            "choice_id": choice_id,
+            "chosen_action": chosen_action,
+            "result": None,
+        })
+        cognition.decision_log = cognition.decision_log[-self.memory_limit:]
         self._sync()
         return ActionIntent(
             action=intent.action,
@@ -279,6 +307,16 @@ class TwinRealmsHiveAdapter:
                 plan["resolved_turn"] = event.turn
                 plan["event_type"] = event.event_type
                 plan["reason"] = event.reason
+                break
+        for decision in reversed(cognition.decision_log):
+            if decision.get("plan_id") == plan_id:
+                decision["result"] = {
+                    "turn": event.turn,
+                    "event_type": event.event_type,
+                    "accepted": event.accepted,
+                    "reason": event.reason,
+                    "state_event_id": event.id,
+                }
                 break
 
         for lesson_id in cognition.pending_lesson_ids:

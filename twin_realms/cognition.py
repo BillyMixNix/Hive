@@ -22,6 +22,7 @@ class ActorCognition:
     observations: list[dict[str, Any]] = field(default_factory=list)
     unresolved_questions: list[str] = field(default_factory=list)
     plans: list[dict[str, Any]] = field(default_factory=list)
+    decision_log: list[dict[str, Any]] = field(default_factory=list)
     visible_events: list[dict[str, Any]] = field(default_factory=list)
     lesson_ids: list[str] = field(default_factory=list)
     last_failure_code: str | None = None
