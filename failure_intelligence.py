@@ -626,6 +626,17 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
     details = _coerce_dict(evidence.sandbox_report.get("details"))
     reflection_verdict = str(evidence.reflection_verdict or "").lower()
     reflection_reason = str(evidence.reflection_reason or "")
+    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
+    if (
+        explicit_failure_code in FAILURE_TAXONOMY
+        and str((evidence.patch_metadata or {}).get("status") or "").lower() == "blocked"
+    ):
+        return _match(
+            explicit_failure_code,
+            0.9,
+            "Blocked patch result carried the retry loop failure code.",
+            "blocked_result_failure_code",
+        )
 
     for classifier in (
         _classify_planner_evidence,
@@ -641,7 +652,6 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
     if "reflector rejected patch" in text or reflection_verdict == "reject":
         return _match("reflector_reject", 0.9, reflection_reason or "Reflector rejected the patch.", "reflection_reject")
 
-    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
     if explicit_failure_code in FAILURE_TAXONOMY:
         return _match(explicit_failure_code, 0.72, "Patch result carried a prior failure code after evidence classifiers found no narrower match.", "explicit_failure_code_fallback")
 
