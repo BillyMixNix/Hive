@@ -10,6 +10,7 @@ from .intent import IntentInterpreter
 from .narrative import NarrativeGenerator
 from .runtime import TwinRealmsRuntime
 from .tarrow import run_tarrow_heartbeat
+from .tarrow import build_tarrow_aftermath_world
 from .hive_adapter import TwinRealmsHiveAdapter
 from .play import TerminalPlayer
 
@@ -47,6 +48,12 @@ def main(argv=None):
         help="Number of in-game days to advance for --heartbeat-report.",
     )
     parser.add_argument("--save", default="twin_realms_save.json")
+    parser.add_argument(
+        "--scenario",
+        choices=["foundation", "complexity", "tarrow"],
+        default="foundation",
+        help="World scenario to start when --new is used or no save exists.",
+    )
     parser.add_argument(
         "--new",
         action="store_true",
@@ -134,9 +141,7 @@ def main(argv=None):
         TwinRealmsEngine.load(save_path, narrator=narrator)
         if save_path.exists() and not args.new
         else TwinRealmsEngine(
-            build_foundation_world()
-            if args.tier == 0
-            else build_complexity_world(args.tier),
+            _build_world_for_args(args),
             narrator=narrator,
         )
     )
@@ -184,6 +189,14 @@ def main(argv=None):
         print(f"Saved turn {engine.state.turn} to {save_path}.")
         return
     TerminalPlayer(runtime, save_path=save_path).run()
+
+
+def _build_world_for_args(args):
+    if args.scenario == "tarrow":
+        return build_tarrow_aftermath_world()
+    if args.scenario == "complexity" or args.tier > 0:
+        return build_complexity_world(args.tier)
+    return build_foundation_world()
 
 
 if __name__ == "__main__":

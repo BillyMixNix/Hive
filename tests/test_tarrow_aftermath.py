@@ -1,9 +1,11 @@
 from twin_realms import (
+    TerminalPlayer,
     TwinRealmsEngine,
+    TwinRealmsRuntime,
     build_tarrow_aftermath_world,
     run_tarrow_heartbeat,
 )
-from twin_realms.cli import main
+from twin_realms.cli import _build_world_for_args, main
 from twin_realms.fidelity import (
     FIDELITY_BACKGROUND,
     FIDELITY_HIVE,
@@ -12,6 +14,7 @@ from twin_realms.fidelity import (
     FIDELITY_SCHEDULED,
     get_fidelity,
 )
+from types import SimpleNamespace
 
 
 def test_tarrow_aftermath_has_composable_demo_parts():
@@ -73,3 +76,30 @@ def test_tarrow_heartbeat_report_command_prints_human_summary(capsys):
     assert "Village pressures:" in output
     assert "Changed without player force: yes" in output
     assert "Replay consistent: yes" in output
+
+
+def test_tarrow_scenario_can_start_from_cli_world_selection():
+    state = _build_world_for_args(SimpleNamespace(scenario="tarrow", tier=0))
+
+    assert state.flags["scenario_id"] == "tarrow_aftermath"
+
+
+def test_terminal_village_command_surfaces_tarrow_pressures(tmp_path):
+    outputs = []
+    runtime = TwinRealmsRuntime(
+        TwinRealmsEngine(build_tarrow_aftermath_world()),
+        mode="baseline",
+    )
+    session = TerminalPlayer(
+        runtime,
+        save_path=tmp_path / "tarrow-human-save.json",
+        output_fn=outputs.append,
+    )
+
+    assert session.handle("village")
+
+    output = outputs[-1]
+    assert "Village pressures:" in output
+    assert "malformed rumors" in output
+    assert "World pressures:" in output
+    assert "Malformed Remnant" in output

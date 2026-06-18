@@ -68,6 +68,9 @@ class TerminalPlayer:
         if clean in {"people", "npcs", "characters"}:
             self.output_fn(self.describe_people())
             return True
+        if clean in {"village", "pressures", "rumors", "factions"}:
+            self.output_fn(self.describe_village())
+            return True
         if clean in {"actions", "choices"}:
             self.output_fn(self.describe_actions())
             return True
@@ -171,6 +174,55 @@ class TerminalPlayer:
             )
         return "\n".join(lines)
 
+    def describe_village(self):
+        state = self.engine.state
+        pressures = state.flags.get("village_pressures") or {}
+        world_pressures = state.flags.get("world_pressures") or {}
+        rumors = state.flags.get("rumors") or []
+        lines = [
+            f"Day {state.flags.get('current_day', 1)} | turn {state.turn}",
+            "Village pressures:",
+        ]
+        if pressures:
+            lines.extend(
+                f"- {key.replace('_', ' ')}: {pressures[key]}"
+                for key in sorted(pressures)
+            )
+        else:
+            lines.append("- none")
+        lines.append("World pressures:")
+        if world_pressures:
+            for key in sorted(world_pressures):
+                pressure = world_pressures[key]
+                if not isinstance(pressure, dict):
+                    continue
+                severity = pressure.get("severity", 0)
+                locations = [
+                    state.locations[location_id].name
+                    for location_id in pressure.get("affected_locations", [])
+                    if location_id in state.locations
+                ]
+                location_text = ", ".join(locations) if locations else "none"
+                lines.append(
+                    f"- {key.replace('_', ' ')}: {severity} | {location_text}"
+                )
+        else:
+            lines.append("- none")
+        lines.append("Rumors:")
+        if rumors:
+            for rumor in rumors:
+                subject = state.characters.get(rumor.get("subject_id", ""))
+                origin = state.locations.get(rumor.get("origin_location_id", ""))
+                confidence = int(float(rumor.get("confidence", 0)) * 100)
+                subject_name = subject.name if subject else rumor.get("subject_id")
+                origin_name = origin.name if origin else rumor.get("origin_location_id")
+                lines.append(
+                    f"- {subject_name} from {origin_name} | confidence {confidence}%"
+                )
+        else:
+            lines.append("- none")
+        return "\n".join(lines)
+
     def describe_actions(self):
         state = self.engine.state
         self._numbered_actions = self.affordances.build(
@@ -228,6 +280,7 @@ class TerminalPlayer:
             "  status     Show health, stamina, realm, and progression.",
             "  inventory  Show carried and equipped items.",
             "  people     Show nearby NPCs and active Hive minds.",
+            "  village    Show Tarrow pressures, world pressures, and rumors.",
             "  actions    Show exact actions currently allowed.",
             "  do NUMBER  Execute one listed action.",
             "  history    Show recent authoritative world events.",
