@@ -219,6 +219,7 @@ class TerminalPlayer:
         state = self.engine.state
         pressures = state.flags.get("village_pressures") or {}
         world_pressures = state.flags.get("world_pressures") or {}
+        settlements = state.flags.get("settlements") or {}
         rumors = state.flags.get("rumors") or []
         lines = [
             f"Day {state.flags.get('current_day', 1)} | turn {state.turn}",
@@ -247,6 +248,66 @@ class TerminalPlayer:
                 lines.append(
                     f"- {key.replace('_', ' ')}: {severity} | {location_text}"
                 )
+        else:
+            lines.append("- none")
+        lines.append("Settlements:")
+        if settlements:
+            for settlement_id in sorted(settlements):
+                settlement = settlements[settlement_id]
+                lines.append(
+                    f"- {settlement.get('name', settlement_id)} | "
+                    f"status {settlement.get('status', 'unknown')} | "
+                    f"safety {settlement.get('safety_level', 0)} | "
+                    f"hostility {settlement.get('hostility_level', 0)} | "
+                    f"defense {settlement.get('defense_level', 0)} | "
+                    f"prosperity {settlement.get('prosperity', 0)}"
+                )
+                population = settlement.get("population") or {}
+                if population:
+                    lines.append(
+                        "  population "
+                        + ", ".join(
+                            f"{key} {population[key]}"
+                            for key in sorted(population)
+                        )
+                    )
+                resources = settlement.get("resources") or {}
+                if resources:
+                    lines.append(
+                        "  resources "
+                        + ", ".join(
+                            f"{key} {resources[key]}"
+                            for key in sorted(resources)
+                        )
+                    )
+                locations = settlement.get("location_states") or {}
+                if locations:
+                    lines.append(
+                        "  locations "
+                        + ", ".join(
+                            f"{state.locations[key].name} {locations[key]}"
+                            for key in sorted(locations)
+                            if key in state.locations
+                        )
+                    )
+                shops = settlement.get("shops") or {}
+                if shops:
+                    lines.append(
+                        "  shops "
+                        + ", ".join(
+                            f"{key} {shops[key].get('status', 'unknown')}"
+                            for key in sorted(shops)
+                        )
+                    )
+                workplaces = settlement.get("workplaces") or {}
+                if workplaces:
+                    lines.append(
+                        "  workplaces "
+                        + ", ".join(
+                            f"{key} {workplaces[key].get('status', 'unknown')}"
+                            for key in sorted(workplaces)
+                        )
+                    )
         else:
             lines.append("- none")
         lines.append("Rumors:")
@@ -396,6 +457,7 @@ class TerminalPlayer:
         memory_events = facts.get("memory_events") or []
         npc_updates = facts.get("npc_updates") or []
         emergent_events = facts.get("emergent_event_changes") or []
+        settlement_changes = facts.get("settlement_changes") or []
         day = facts.get("day")
         parts = []
         for key in sorted(changes):
@@ -412,6 +474,8 @@ class TerminalPlayer:
             change = str(event.get("change", "")).replace("_", " ")
             kind = str(event.get("kind", "")).replace("_", " ")
             parts.append(f"{event_id} {change} ({kind})")
+        if settlement_changes:
+            parts.append(f"{len(settlement_changes)} settlement changes")
         for update in npc_updates:
             actor = self.engine.state.characters.get(update.get("actor_id", ""))
             if not actor:

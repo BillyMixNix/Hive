@@ -536,6 +536,12 @@ class WorldSimulator:
                 100,
                 actor.skill_mastery.get(related_skill, 0) + 1,
             )
+        settlement_changes = self._apply_tarrow_work_settlement_effect(
+            state,
+            actor,
+            job_id,
+            turn,
+        )
         progression = self._grant_experience(actor, 10)
         return "job_worked", True, {
             "job_id": job_id,
@@ -544,6 +550,7 @@ class WorldSimulator:
             "related_skill": related_skill,
             "stamina_after": actor.stamina,
             "coins_after": actor.coins,
+            "settlement_changes": settlement_changes,
             **progression,
         }, None
 
@@ -768,6 +775,7 @@ class WorldSimulator:
         memory_changes = self._record_pressure_memories(state, turn)
         npc_updates = self._advance_core_npcs(state, turn)
         emergent_changes = self._advance_core_events(state, turn)
+        settlement_changes = self._advance_tarrow_settlement(state, turn)
         return "world_tick_resolved", True, {
             "day": current_day,
             "period": self._day_period(state, turn),
@@ -775,6 +783,7 @@ class WorldSimulator:
             "memory_events": memory_changes,
             "npc_updates": npc_updates,
             "emergent_event_changes": emergent_changes,
+            "settlement_changes": settlement_changes,
         }, None
 
     def _resolve_unknown(self, state, intent, knowledge, turn):
@@ -1380,6 +1389,230 @@ class WorldSimulator:
         if expires < turn:
             return None
         return guard
+
+    @classmethod
+    def _advance_tarrow_settlement(cls, state, turn):
+        if state.flags.get("scenario_id") != "tarrow_aftermath":
+            return []
+        settlements = state.flags.get("settlements") or {}
+        settlement = settlements.get("settlement:tarrow")
+        if not settlement:
+            return []
+        before = cls._settlement_snapshot(settlement)
+        pressures = state.flags.get("village_pressures") or {}
+        food = int(pressures.get("food", settlement.get("resources", {}).get("food", 0)))
+        medicine = int(pressures.get("medicine", settlement.get("resources", {}).get("medicine", 0)))
+        fear = int(pressures.get("fear", 0))
+        rumors = int(pressures.get("malformed_rumors", 0))
+        trust = int(pressures.get("trust_in_ren", 0))
+        guards = [
+            state.characters[actor_id]
+            for actor_id in settlement.get("guards", [])
+            if actor_id in state.characters
+            and state.characters[actor_id].alive
+            and state.characters[actor_id].active
+        ]
+        civilians = [
+            state.characters[actor_id]
+            for actor_id in settlement.get("civilians", [])
+            if actor_id in state.characters
+            and state.characters[actor_id].alive
+            and state.characters[actor_id].active
+        ]
+        guard_score = min(100, len(guards) * 8 + trust // 2)
+        hostility = max(fear, rumors)
+        safety = max(0, min(100, guard_score + medicine // 3 - hostility // 2))
+        prosperity = max(0, min(100, (food + medicine) // 2 - fear // 4))
+        fled = 0
+        if food < 25:
+            fled += 3
+        if fear > 82:
+            fled += 3
+        if food < 15:
+            fled += 5
+        wounded = 2 + (2 if medicine < 25 else 0) + (1 if fear > 80 else 0)
+        population = settlement.setdefault("population", {})
+        population["guard"] = len(guards)
+        population["civilian"] = len(civilians)
+        population["dead"] = max(int(population.get("dead", 1)), 1)
+        population["fled"] = max(int(population.get("fled", 0)), fled)
+        population["wounded"] = min(len(civilians), wounded)
+        population["present"] = max(
+            0,
+            len(guards) + len(civilians) - int(population.get("fled", 0)),
+        )
+        population["total"] = (
+            population["present"]
+            + int(population.get("fled", 0))
+            + int(population.get("dead", 0))
+        )
+        resources = settlement.setdefault("resources", {})
+        resources["food"] = food
+        resources["medicine"] = medicine
+        resources["coin"] = state.factions["faction:tarrow_village"].treasury
+        settlement["defense_level"] = guard_score
+        settlement["hostility_level"] = hostility
+        settlement["safety_level"] = safety
+        settlement["prosperity"] = prosperity
+        if population["present"] <= 8:
+            settlement["status"] = "abandoned"
+        elif safety >= 55 and prosperity >= 35:
+            settlement["status"] = "improved"
+        elif guard_score >= 55:
+            settlement["status"] = "defended"
+        elif prosperity < 25:
+            settlement["status"] = "poor"
+        else:
+            settlement["status"] = "strained"
+        locations = settlement.setdefault("location_states", {})
+        locations["loc:shrine_road"] = (
+            "restored"
+            if rumors < 55 and trust >= 55
+            else "damaged"
+        )
+        locations["loc:low_fields"] = (
+            "abandoned"
+            if food < 18
+            else ("poor" if food < 32 else "working")
+        )
+        locations["loc:healer_hut"] = (
+            "poor"
+            if medicine < 25
+            else ("restored" if medicine >= 40 else "strained")
+        )
+        locations["loc:watch_post"] = (
+            "defended"
+            if guard_score >= 50
+            else ("damaged" if fear > 80 else "strained")
+        )
+        locations["loc:tarrow_square"] = (
+            "abandoned"
+            if settlement["status"] == "abandoned"
+            else ("improved" if settlement["status"] == "improved" else "strained")
+        )
+        shops = settlement.setdefault("shops", {})
+        if "blacksmith" in shops:
+            shops["blacksmith"]["status"] = (
+                "closed" if settlement["status"] == "abandoned" else "open"
+            )
+        if "healer" in shops:
+            shops["healer"]["status"] = (
+                "strained" if medicine < 35 else "open"
+            )
+        workplaces = settlement.setdefault("workplaces", {})
+        if "fields" in workplaces:
+            workplaces["fields"]["status"] = locations["loc:low_fields"]
+        if "watch" in workplaces:
+            workplaces["watch"]["status"] = locations["loc:watch_post"]
+        changes = cls._settlement_changes(before, cls._settlement_snapshot(settlement))
+        if changes:
+            cls._record_settlement_history(settlement, turn, changes)
+        return changes
+
+    @classmethod
+    def _apply_tarrow_work_settlement_effect(cls, state, actor, job_id, turn):
+        if state.flags.get("scenario_id") != "tarrow_aftermath":
+            return []
+        settlement = (state.flags.get("settlements") or {}).get("settlement:tarrow")
+        if not settlement:
+            return []
+        changes = []
+        locations = settlement.setdefault("location_states", {})
+        if job_id == "carpenter":
+            damaged = next(
+                (
+                    location_id
+                    for location_id, status in sorted(locations.items())
+                    if status == "damaged"
+                ),
+                None,
+            )
+            if damaged:
+                before = locations[damaged]
+                locations[damaged] = "restored"
+                settlement["prosperity"] = min(
+                    100,
+                    int(settlement.get("prosperity", 0)) + 5,
+                )
+                changes.append({
+                    "field": f"location_states.{damaged}",
+                    "before": before,
+                    "after": "restored",
+                })
+        elif job_id in {"guard", "warden"}:
+            before = int(settlement.get("defense_level", 0))
+            settlement["defense_level"] = min(100, before + 3)
+            settlement["safety_level"] = min(
+                100,
+                int(settlement.get("safety_level", 0)) + 2,
+            )
+            changes.append({
+                "field": "defense_level",
+                "before": before,
+                "after": settlement["defense_level"],
+            })
+        if changes:
+            cls._record_settlement_history(settlement, turn, changes, actor.id)
+        return changes
+
+    @staticmethod
+    def _settlement_snapshot(settlement):
+        return {
+            "status": settlement.get("status"),
+            "resources": dict(settlement.get("resources") or {}),
+            "safety_level": settlement.get("safety_level"),
+            "hostility_level": settlement.get("hostility_level"),
+            "defense_level": settlement.get("defense_level"),
+            "prosperity": settlement.get("prosperity"),
+            "population": dict(settlement.get("population") or {}),
+            "location_states": dict(settlement.get("location_states") or {}),
+            "shops": {
+                key: value.get("status")
+                for key, value in (settlement.get("shops") or {}).items()
+            },
+            "workplaces": {
+                key: value.get("status")
+                for key, value in (settlement.get("workplaces") or {}).items()
+            },
+        }
+
+    @staticmethod
+    def _settlement_changes(before, after):
+        changes = []
+        for field in ("status", "safety_level", "hostility_level", "defense_level", "prosperity"):
+            if before.get(field) != after.get(field):
+                changes.append({
+                    "field": field,
+                    "before": before.get(field),
+                    "after": after.get(field),
+                })
+        for group in ("resources", "population", "location_states", "shops", "workplaces"):
+            keys = sorted(set(before.get(group, {})) | set(after.get(group, {})))
+            for key in keys:
+                old = before.get(group, {}).get(key)
+                new = after.get(group, {}).get(key)
+                if old != new:
+                    changes.append({
+                        "field": f"{group}.{key}",
+                        "before": old,
+                        "after": new,
+                    })
+        return changes
+
+    @staticmethod
+    def _record_settlement_history(settlement, turn, changes, actor_id=None):
+        history = settlement.setdefault("history", [])
+        for change in changes:
+            entry = {
+                "turn": turn,
+                "field": change["field"],
+                "before": change.get("before"),
+                "after": change.get("after"),
+            }
+            if actor_id:
+                entry["actor_id"] = actor_id
+            history.append(entry)
+        settlement["history"] = history[-24:]
 
     @staticmethod
     def _advance_village_pressures(state, turn):
