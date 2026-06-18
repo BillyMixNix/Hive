@@ -10,7 +10,11 @@ from .cognition import ActorCognition, CognitionState, CognitionTrace
 from .hive_adapter import TwinRealmsHiveAdapter
 from .benchmark import TwinRealmsBenchmark
 from .complexity import ComplexityStressRunner
-from .content import build_complexity_world, build_foundation_world
+from .content import (
+    build_complexity_world,
+    build_core_loop_world,
+    build_foundation_world,
+)
 from .region import build_willow_region_world
 from .tarrow import (
     TarrowHeartbeatReport,
@@ -49,6 +53,7 @@ __all__ = [
     "WorldKnowledge",
     "WorldSimulator",
     "build_foundation_world",
+    "build_core_loop_world",
     "build_complexity_world",
     "build_willow_region_world",
     "build_tarrow_aftermath_world",

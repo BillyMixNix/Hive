@@ -102,6 +102,7 @@ class TwinRealmsRuntime:
                     self._forward_event(player_observer, result.event)
                 npc_results.append(result)
                 knowledge_events.extend(self._learn_from(result.event))
+        npc_results.extend(self._core_hostile_turns())
         world_results = self._advance_world_time()
         return RuntimeTurn(
             player_result,
@@ -120,6 +121,30 @@ class TwinRealmsRuntime:
                     ActionIntent("world_tick", self.engine.state.player_id)
                 )
             )
+        return results
+
+    def _core_hostile_turns(self):
+        state = self.engine.state
+        if not state.flags.get("core_loop") or state.flags.get("game_over"):
+            return []
+        player = state.characters[state.player_id]
+        if not player.alive:
+            return []
+        results = []
+        for hostile in sorted(state.characters.values(), key=lambda item: item.id):
+            if (
+                hostile.active
+                and hostile.alive
+                and "hostile" in hostile.tags
+                and hostile.location_id == player.location_id
+            ):
+                results.append(
+                    self.engine.apply_intent(
+                        ActionIntent("attack", hostile.id, target_id=player.id)
+                    )
+                )
+                if state.flags.get("game_over") or not player.alive:
+                    break
         return results
 
     def _npc_ids_for_turn(self):

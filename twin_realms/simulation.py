@@ -142,6 +142,7 @@ class WorldSimulator:
         target.health = max(0, target.health - damage)
         if target.health == 0:
             target.alive = False
+        game_state = self._update_game_state_after_attack(state, actor, target)
         pressure_changes = self._update_world_pressures_after_attack(
             state,
             actor,
@@ -159,6 +160,7 @@ class WorldSimulator:
             "defense_power": defense_power,
             "combat_mastery": combat_mastery,
             "world_pressure_changes": pressure_changes,
+            **game_state,
             **progression,
         }, None
 
@@ -765,6 +767,36 @@ class WorldSimulator:
                 "after": pressure["severity"],
             }
         return changes
+
+    @staticmethod
+    def _update_game_state_after_attack(state, actor, target):
+        if not state.flags.get("core_loop"):
+            return {}
+        if target.alive:
+            return {
+                "game_over": bool(state.flags.get("game_over")),
+                "victory": bool(state.flags.get("victory")),
+                "defeat": bool(state.flags.get("defeat")),
+            }
+        if target.id == state.player_id:
+            state.flags["game_over"] = True
+            state.flags["defeat"] = True
+            state.flags["victory"] = False
+        elif actor.id == state.player_id and "hostile" in target.tags:
+            living_hostiles = [
+                character
+                for character in state.characters.values()
+                if character.active and character.alive and "hostile" in character.tags
+            ]
+            if not living_hostiles:
+                state.flags["game_over"] = True
+                state.flags["victory"] = True
+                state.flags["defeat"] = False
+        return {
+            "game_over": bool(state.flags.get("game_over")),
+            "victory": bool(state.flags.get("victory")),
+            "defeat": bool(state.flags.get("defeat")),
+        }
 
     @staticmethod
     def _advance_village_pressures(state, turn):

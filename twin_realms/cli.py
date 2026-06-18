@@ -4,7 +4,11 @@ import argparse
 from pathlib import Path
 
 from .ai import LLMIntentInterpreter, LLMKnowledgeAgent, LLMNPCPlanner
-from .content import build_complexity_world, build_foundation_world
+from .content import (
+    build_complexity_world,
+    build_core_loop_world,
+    build_foundation_world,
+)
 from .engine import TwinRealmsEngine
 from .intent import IntentInterpreter
 from .narrative import NarrativeGenerator
@@ -50,7 +54,7 @@ def main(argv=None):
     parser.add_argument("--save", default="twin_realms_save.json")
     parser.add_argument(
         "--scenario",
-        choices=["foundation", "complexity", "tarrow"],
+        choices=["core", "foundation", "complexity", "tarrow"],
         default="foundation",
         help="World scenario to start when --new is used or no save exists.",
     )
@@ -192,6 +196,8 @@ def main(argv=None):
 
 
 def _build_world_for_args(args):
+    if args.scenario == "core":
+        return build_core_loop_world()
     if args.scenario == "tarrow":
         return build_tarrow_aftermath_world()
     if args.scenario == "complexity" or args.tier > 0:

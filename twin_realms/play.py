@@ -326,6 +326,9 @@ class TerminalPlayer:
             summary = self._summarize_world_tick(world_result)
             if summary:
                 self.output_fn(f"[Village] {summary}")
+        game_state = self._summarize_game_state()
+        if game_state:
+            self.output_fn(f"[Game] {game_state}")
         self._report_degraded_mode()
 
     def _render_world_time_skip(self, turns):
@@ -360,6 +363,16 @@ class TerminalPlayer:
         if not parts:
             return ""
         return f"day {day}: " + "; ".join(parts)
+
+    def _summarize_game_state(self):
+        flags = self.engine.state.flags
+        if not flags.get("game_over"):
+            return ""
+        if flags.get("victory"):
+            return "Victory."
+        if flags.get("defeat"):
+            return "You died."
+        return "Game over."
 
     def _report_degraded_mode(self):
         narrator = self.engine.narrator

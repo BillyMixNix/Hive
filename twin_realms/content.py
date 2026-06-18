@@ -1,6 +1,79 @@
 from .models import Character, Item, Location, WorldState
 
 
+def build_core_loop_world(seed=3):
+    locations = {
+        "loc:camp": Location(
+            id="loc:camp",
+            name="Camp",
+            connections=["loc:den"],
+            danger=0,
+        ),
+        "loc:den": Location(
+            id="loc:den",
+            name="Den",
+            connections=["loc:camp"],
+            danger=2,
+        ),
+    }
+    characters = {
+        "char:player": Character(
+            id="char:player",
+            name="Player",
+            location_id="loc:camp",
+            realm=1,
+            stamina=40,
+            max_stamina=40,
+            health=36,
+            max_health=36,
+            inventory=["item:short_sword"],
+            equipment={"main_hand": "item:short_sword"},
+            skill_mastery={"swordsmanship": 2},
+        ),
+        "char:hostile": Character(
+            id="char:hostile",
+            name="Hostile",
+            location_id="loc:den",
+            realm=1,
+            stamina=40,
+            max_stamina=40,
+            health=30,
+            max_health=30,
+            skill_mastery={"swordsmanship": 1},
+            tags=["hostile"],
+        ),
+    }
+    items = {
+        "item:short_sword": Item(
+            id="item:short_sword",
+            name="Short Sword",
+            kind="weapon",
+            slot="main_hand",
+            power=4,
+            skill="swordsmanship",
+        ),
+    }
+    return WorldState(
+        turn=0,
+        seed=seed,
+        player_id="char:player",
+        characters=characters,
+        locations=locations,
+        items=items,
+        ground_items={location_id: [] for location_id in locations},
+        flags={
+            "scenario_id": "core_loop",
+            "core_loop": True,
+            "game_over": False,
+            "victory": False,
+            "defeat": False,
+            "twin_realm_stability": 100,
+            "item_ids": sorted(items),
+            "skills": ["swordsmanship"],
+        },
+    )
+
+
 def build_foundation_world(seed=7, *, malformed_spawn_turn=0):
     locations = {
         "loc:willow_village": Location(
