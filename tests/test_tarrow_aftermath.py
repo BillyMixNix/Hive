@@ -103,3 +103,45 @@ def test_terminal_village_command_surfaces_tarrow_pressures(tmp_path):
     assert "malformed rumors" in output
     assert "World pressures:" in output
     assert "Malformed Remnant" in output
+
+
+def test_tarrow_player_turn_advances_world_pressure_tick(tmp_path):
+    outputs = []
+    runtime = TwinRealmsRuntime(
+        TwinRealmsEngine(build_tarrow_aftermath_world()),
+        mode="baseline",
+    )
+    session = TerminalPlayer(
+        runtime,
+        save_path=tmp_path / "tarrow-human-save.json",
+        output_fn=outputs.append,
+    )
+    before = dict(runtime.engine.state.flags["village_pressures"])
+
+    assert session.handle("rest")
+
+    after = runtime.engine.state.flags["village_pressures"]
+    assert runtime.engine.events[-1].intent["action"] == "world_tick"
+    assert after != before
+    assert any(output.startswith("[Village]") for output in outputs)
+    assert runtime.engine.verify_replay()
+
+
+def test_tarrow_wait_day_advances_visible_world_time(tmp_path):
+    outputs = []
+    runtime = TwinRealmsRuntime(
+        TwinRealmsEngine(build_tarrow_aftermath_world()),
+        mode="baseline",
+    )
+    session = TerminalPlayer(
+        runtime,
+        save_path=tmp_path / "tarrow-human-save.json",
+        output_fn=outputs.append,
+    )
+
+    assert session.handle("wait day")
+
+    assert runtime.engine.state.flags["current_day"] == 2
+    assert runtime.engine.state.turn == 25
+    assert any("people remember the change" in output for output in outputs)
+    assert runtime.engine.verify_replay()

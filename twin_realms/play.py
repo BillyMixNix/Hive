@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from .agent_loop import AffordanceBuilder
+from .models import ActionIntent
 
 
 class TerminalPlayer:
@@ -76,6 +77,9 @@ class TerminalPlayer:
             return True
         if clean in {"history", "events"}:
             self.output_fn(self.describe_history())
+            return True
+        if clean in {"wait day", "wait a day", "rest day"}:
+            self._render_world_time_skip(24)
             return True
         if clean == "save":
             self.save()
@@ -284,6 +288,7 @@ class TerminalPlayer:
             "  actions    Show exact actions currently allowed.",
             "  do NUMBER  Execute one listed action.",
             "  history    Show recent authoritative world events.",
+            "  wait day   Advance one day of world time.",
             "  save       Save without exiting.",
             "  quit       Save and exit.",
             "You can also type actions naturally, such as:",
@@ -317,7 +322,44 @@ class TerminalPlayer:
             self.output_fn(f"Rejected: {result.player_result.event.reason}")
         for npc_result in result.npc_results:
             self.output_fn(f"[World] {npc_result.narrative}")
+        for world_result in getattr(result, "world_results", []):
+            summary = self._summarize_world_tick(world_result)
+            if summary:
+                self.output_fn(f"[Village] {summary}")
         self._report_degraded_mode()
+
+    def _render_world_time_skip(self, turns):
+        summaries = []
+        for _ in range(turns):
+            result = self.engine.apply_intent(
+                ActionIntent("world_tick", self.engine.state.player_id)
+            )
+            summary = self._summarize_world_tick(result)
+            if summary:
+                summaries.append(summary)
+        if summaries:
+            self.output_fn("\n".join(f"[Village] {line}" for line in summaries[-4:]))
+        else:
+            self.output_fn("[Village] Time passes without a visible shift.")
+
+    def _summarize_world_tick(self, result):
+        facts = result.event.facts or {}
+        changes = facts.get("village_pressure_changes") or {}
+        memory_events = facts.get("memory_events") or []
+        day = facts.get("day")
+        parts = []
+        for key in sorted(changes):
+            change = changes[key]
+            before = change.get("before")
+            after = change.get("after")
+            if before == after:
+                continue
+            parts.append(f"{key.replace('_', ' ')} {before}->{after}")
+        if memory_events:
+            parts.append(f"{len(memory_events)} people remember the change")
+        if not parts:
+            return ""
+        return f"day {day}: " + "; ".join(parts)
 
     def _report_degraded_mode(self):
         narrator = self.engine.narrator

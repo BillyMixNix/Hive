@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .engine import TwinRealmsEngine
+from .models import ActionIntent
 
 
 @dataclass
@@ -10,6 +11,7 @@ class RuntimeTurn:
     player_result: object
     npc_results: list[object] = field(default_factory=list)
     knowledge_events: list[object] = field(default_factory=list)
+    world_results: list[object] = field(default_factory=list)
 
 
 class TwinRealmsRuntime:
@@ -100,7 +102,25 @@ class TwinRealmsRuntime:
                     self._forward_event(player_observer, result.event)
                 npc_results.append(result)
                 knowledge_events.extend(self._learn_from(result.event))
-        return RuntimeTurn(player_result, npc_results, knowledge_events)
+        world_results = self._advance_world_time()
+        return RuntimeTurn(
+            player_result,
+            npc_results,
+            knowledge_events,
+            world_results,
+        )
+
+    def _advance_world_time(self, turns=1):
+        if self.engine.state.flags.get("scenario_id") != "tarrow_aftermath":
+            return []
+        results = []
+        for _ in range(turns):
+            results.append(
+                self.engine.apply_intent(
+                    ActionIntent("world_tick", self.engine.state.player_id)
+                )
+            )
+        return results
 
     def _npc_ids_for_turn(self):
         state = self.engine.state
