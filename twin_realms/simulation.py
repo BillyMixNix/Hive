@@ -542,6 +542,10 @@ class WorldSimulator:
             job_id,
             turn,
         )
+        pressure_changes = self._apply_tarrow_work_pressure_effect(
+            state,
+            job_id,
+        )
         progression = self._grant_experience(actor, 10)
         return "job_worked", True, {
             "job_id": job_id,
@@ -551,6 +555,7 @@ class WorldSimulator:
             "stamina_after": actor.stamina,
             "coins_after": actor.coins,
             "settlement_changes": settlement_changes,
+            "village_pressure_changes": pressure_changes,
             **progression,
         }, None
 
@@ -1580,6 +1585,43 @@ class WorldSimulator:
         if changes:
             cls._record_settlement_history(settlement, turn, changes, actor.id)
         return changes
+
+    @classmethod
+    def _apply_tarrow_work_pressure_effect(cls, state, job_id):
+        if state.flags.get("scenario_id") != "tarrow_aftermath":
+            return {}
+        pressures = state.flags.get("village_pressures")
+        if not pressures:
+            return {}
+        changes = {}
+        if job_id in {"guard", "warden"}:
+            changes.update(cls._adjust_pressure(pressures, "fear", -5))
+            changes.update(cls._adjust_pressure(pressures, "malformed_rumors", -4))
+            changes.update(cls._adjust_pressure(pressures, "trust_in_ren", 2))
+        elif job_id in {"farmer", "miller", "cook"}:
+            cls._restore_resource_node(state, "resource:tarrow_grain", 4)
+            changes.update(cls._adjust_pressure(pressures, "food", 10))
+            changes.update(cls._adjust_pressure(pressures, "fear", -1))
+        elif job_id == "healer":
+            cls._restore_resource_node(state, "resource:bitterleaf", 4)
+            changes.update(cls._adjust_pressure(pressures, "medicine", 10))
+            changes.update(cls._adjust_pressure(pressures, "fear", -1))
+        return changes
+
+    @staticmethod
+    def _restore_resource_node(state, node_id, amount):
+        node = state.resource_nodes.get(node_id)
+        if node:
+            node.quantity = min(node.capacity, node.quantity + amount)
+
+    @staticmethod
+    def _adjust_pressure(pressures, key, delta):
+        before = int(pressures.get(key, 0))
+        after = max(0, min(100, before + delta))
+        pressures[key] = after
+        if after == before:
+            return {}
+        return {key: {"before": before, "after": after}}
 
     @classmethod
     def _apply_tarrow_location_pressure_events(

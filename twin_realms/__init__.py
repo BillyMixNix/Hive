@@ -21,6 +21,11 @@ from .tarrow import (
     build_tarrow_aftermath_world,
     run_tarrow_heartbeat,
 )
+from .tarrow_scenario import (
+    TarrowScenarioReport,
+    run_tarrow_scenario,
+    run_tarrow_scenario_matrix,
+)
 from .engine import TwinRealmsEngine
 from .intent import IntentInterpreter
 from .knowledge import WorldKnowledge
@@ -61,4 +66,7 @@ __all__ = [
     "build_tarrow_aftermath_world",
     "run_tarrow_heartbeat",
     "TarrowHeartbeatReport",
+    "run_tarrow_scenario",
+    "run_tarrow_scenario_matrix",
+    "TarrowScenarioReport",
 ]

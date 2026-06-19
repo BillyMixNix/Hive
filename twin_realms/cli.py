@@ -15,6 +15,7 @@ from .narrative import NarrativeGenerator
 from .runtime import TwinRealmsRuntime
 from .tarrow import run_tarrow_heartbeat
 from .tarrow import build_tarrow_aftermath_world
+from .tarrow_scenario import run_tarrow_scenario_matrix
 from .hive_adapter import TwinRealmsHiveAdapter
 from .play import TerminalPlayer
 
@@ -38,6 +39,46 @@ def _print_tarrow_heartbeat_report(report):
     print(f"State digest: {report.state_digest}")
 
 
+def _print_tarrow_scenario_reports(reports):
+    print("Tarrow scenario reports")
+    for path in sorted(reports):
+        report = reports[path]
+        settlement = report.settlement_after
+        pressures = report.pressure_after
+        print(f"\nPath: {path}")
+        print(f"Days elapsed: {report.elapsed_days}")
+        print(f"Turn: {report.start_turn} -> {report.end_turn}")
+        print(f"Day: {report.start_day} -> {report.end_day}")
+        print(
+            "Pressures: "
+            + ", ".join(
+                f"{key} {pressures[key]}"
+                for key in sorted(pressures)
+            )
+        )
+        print(
+            "Settlement: "
+            f"status {settlement.get('status')} | "
+            f"safety {settlement.get('safety_level')} | "
+            f"hostility {settlement.get('hostility_level')} | "
+            f"defense {settlement.get('defense_level')} | "
+            f"prosperity {settlement.get('prosperity')}"
+        )
+        population = settlement.get("population") or {}
+        print(
+            "Population: "
+            + ", ".join(
+                f"{key} {population[key]}"
+                for key in sorted(population)
+            )
+        )
+        print(f"Accepted commands: {len(report.accepted_commands)}")
+        print(f"Rejected commands: {len(report.rejected_commands)}")
+        replay = "yes" if report.replay_consistent else "no"
+        print(f"Replay consistent: {replay}")
+        print(f"State digest: {report.state_digest}")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Run the Twin Realms simulation slice.")
     parser.add_argument(
@@ -50,6 +91,17 @@ def main(argv=None):
         type=int,
         default=7,
         help="Number of in-game days to advance for --heartbeat-report.",
+    )
+    parser.add_argument(
+        "--scenario-report",
+        action="store_true",
+        help="Print the orchestrated Tarrow vertical-slice scenario paths.",
+    )
+    parser.add_argument(
+        "--scenario-days",
+        type=int,
+        default=3,
+        help="Number of elapsed days for --scenario-report.",
     )
     parser.add_argument("--save", default="twin_realms_save.json")
     parser.add_argument(
@@ -112,6 +164,11 @@ def main(argv=None):
     if args.heartbeat_report:
         _print_tarrow_heartbeat_report(
             run_tarrow_heartbeat(days=args.heartbeat_days)
+        )
+        return
+    if args.scenario_report:
+        _print_tarrow_scenario_reports(
+            run_tarrow_scenario_matrix(days=args.scenario_days)
         )
         return
     if args.player_control == "agent" and args.mode not in {
