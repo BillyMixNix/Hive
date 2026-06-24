@@ -28,10 +28,12 @@ def _print_response(text: str):
     print()
 
 
-def _print_banner(model: str):
+def _print_banner(model: str, project_dir: str = None):
     print("=" * 60)
     print("  Hive Conversational Interface")
     print(f"  Model: {model}")
+    if project_dir:
+        print(f"  Project: {project_dir}")
     print("  Type 'exit' or press Ctrl+C to end the session.")
     print("=" * 60)
     print()
@@ -39,19 +41,26 @@ def _print_banner(model: str):
 
 def main():
     model = None
+    project_dir = None
     args = sys.argv[1:]
+
     if "--model" in args:
         idx = args.index("--model")
         if idx + 1 < len(args):
             model = args[idx + 1]
 
+    if "--project" in args:
+        idx = args.index("--project")
+        if idx + 1 < len(args):
+            project_dir = args[idx + 1]
+
     from conversation_manager import ConversationManager, DEFAULT_MODEL
 
     resolved_model = model or DEFAULT_MODEL
-    _print_banner(resolved_model)
+    _print_banner(resolved_model, project_dir=project_dir)
 
     try:
-        manager = ConversationManager(model=resolved_model)
+        manager = ConversationManager(model=resolved_model, project_dir=project_dir)
     except Exception as exc:
         print(f"Failed to initialize Hive: {exc}")
         sys.exit(1)
