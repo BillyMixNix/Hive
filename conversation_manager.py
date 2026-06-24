@@ -56,25 +56,44 @@ class ConversationManager:
         }
 
     def _build_system_prompt(self) -> str:
-        """Build the system prompt, injecting trusted lessons at the bottom."""
-        lessons = self._load_trusted_lessons()
-        if not lessons:
-            return SYSTEM_PROMPT
+        """Build the system prompt, injecting trusted lessons and known entities."""
+        lines = [SYSTEM_PROMPT]
 
-        lines = [SYSTEM_PROMPT, "", "--- LEARNED PATTERNS ---",
-                 "These patterns have been validated through experience. Apply them automatically:"]
-        for lesson in lessons:
-            family = lesson.get("failure_family") or lesson.get("lesson_family") or "general"
-            when = (lesson.get("failure_reason") or lesson.get("trigger_pattern") or "")[:120]
-            instruction = (lesson.get("retry_instruction") or "")[:200]
-            if instruction:
-                entry = f"- [{family}]"
-                if when:
-                    entry += f" When: {when}."
-                entry += f" Do: {instruction}"
-                lines.append(entry)
+        lessons = self._load_trusted_lessons()
+        if lessons:
+            lines += ["", "--- LEARNED PATTERNS ---",
+                      "These patterns have been validated through experience. Apply them automatically:"]
+            for lesson in lessons:
+                family = lesson.get("failure_family") or lesson.get("lesson_family") or "general"
+                when = (lesson.get("failure_reason") or lesson.get("trigger_pattern") or "")[:120]
+                instruction = (lesson.get("retry_instruction") or "")[:200]
+                if instruction:
+                    entry = f"- [{family}]"
+                    if when:
+                        entry += f" When: {when}."
+                    entry += f" Do: {instruction}"
+                    lines.append(entry)
+
+        entities = self._load_known_entities()
+        if entities:
+            lines += ["", "--- KNOWN PROJECT ENTITIES ---",
+                      "These entities have been materialized and exist as files in the project:"]
+            by_type = {}
+            for e in entities:
+                by_type.setdefault(e.get("entity_type", "unknown"), []).append(e)
+            for entity_type in sorted(by_type):
+                names = ", ".join(e["name"] for e in by_type[entity_type])
+                lines.append(f"- {entity_type.title()}s: {names}")
 
         return "\n".join(lines)
+
+    def _load_known_entities(self) -> list:
+        """Load the materialized entity index for injection into the system prompt."""
+        try:
+            index = self.materializer._load_index()
+            return list(index.values())
+        except Exception:
+            return []
 
     def _load_trusted_lessons(self) -> list:
         """Load trusted lessons relevant to conversational reasoning."""
