@@ -37,7 +37,12 @@ Available tools:
 - recall_memory(query) — search memory by keyword
 - show_failures — recent failures and counts by category
 - show_lessons(n) — recent lessons from the lesson database
-- create_task(goal) — create a new task from a goal description"""
+- create_task(goal) — create a new task from a goal description
+- materialize_entity(name, entity_type, content, target_file, project) — write an entity to the project as a markdown file; use when the Pilot creates, defines, or establishes something that should persist
+- list_project(entity_type, project) — list all materialized entities in the project index
+- read_entity(name, entity_type) — read a materialized entity's file content
+
+MATERIALIZATION RULE: When the Pilot uses language like "create", "define", "establish", "add", "make", or "remember" in reference to a named thing in a project (character, location, faction, item, rule, note, decision), call materialize_entity immediately. Do not ask for confirmation — write it, then confirm what you wrote."""
 
 
 def _fn(name, description, properties=None, required=None):
@@ -223,5 +228,79 @@ OLLAMA_TOOLS = [
             },
         },
         required=["goal"],
+    ),
+    _fn(
+        "materialize_entity",
+        (
+            "Write a named entity to the project as a markdown file. Call this when the Pilot "
+            "creates, defines, establishes, or declares anything that should persist: a character, "
+            "location, faction, item, rule, decision, note, or any other named thing. "
+            "The file is created or updated immediately on disk."
+        ),
+        properties={
+            "name": {
+                "type": "string",
+                "description": "The entity's name. E.g. 'Vaelen Ashbourne', 'Briar's Hollow'.",
+            },
+            "entity_type": {
+                "type": "string",
+                "description": (
+                    "Category of entity. Common values: character, location, faction, item, "
+                    "event, rule, decision, note, lore, session."
+                ),
+            },
+            "content": {
+                "type": "string",
+                "description": (
+                    "The entity's content in plain text or markdown. Include everything "
+                    "the Pilot has established: description, traits, history, relationships, "
+                    "notes. Be thorough — this is the persistent record."
+                ),
+            },
+            "target_file": {
+                "type": "string",
+                "description": (
+                    "Optional explicit file path relative to the project directory. "
+                    "If omitted, Hive infers it from entity_type and name."
+                ),
+            },
+            "project": {
+                "type": "string",
+                "description": "Optional project name for grouping. E.g. 'Echohollow'.",
+            },
+        },
+        required=["name", "entity_type", "content"],
+    ),
+    _fn(
+        "list_project",
+        (
+            "List all materialized entities in the project index. "
+            "Use when the Pilot asks what exists, what has been created, or wants an overview."
+        ),
+        properties={
+            "entity_type": {
+                "type": "string",
+                "description": "Filter by entity type. E.g. 'character', 'location'.",
+            },
+            "project": {
+                "type": "string",
+                "description": "Filter by project name.",
+            },
+        },
+    ),
+    _fn(
+        "read_entity",
+        "Read a materialized entity's full file content from the project.",
+        properties={
+            "name": {
+                "type": "string",
+                "description": "The entity's name.",
+            },
+            "entity_type": {
+                "type": "string",
+                "description": "The entity's type. E.g. 'character', 'location'.",
+            },
+        },
+        required=["name", "entity_type"],
     ),
 ]
