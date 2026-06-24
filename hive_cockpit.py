@@ -529,6 +529,39 @@ HTML = r"""<!doctype html>
     }
     #transcript { height: 260px; }
     .field-label { color: var(--muted); font-size: 12px; margin: 8px 0 4px; }
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .tab {
+      flex: 1;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .tab.active {
+      background: #172334;
+      border-color: #2c4054;
+      color: var(--text);
+    }
+    #entity-list { display: flex; flex-direction: column; gap: 4px; }
+    #entity-content {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #070d13;
+      border: 1px solid #223140;
+      border-radius: 7px;
+      padding: 10px;
+      max-height: 340px;
+      overflow: auto;
+      color: #d9e3ec;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+    }
     @media (max-width: 1100px) {
       #shell { grid-template-columns: 300px 1fr; }
       #right { display: none; }
@@ -605,23 +638,41 @@ HTML = r"""<!doctype html>
     </main>
 
     <aside id="right">
-      <section class="section" id="detail">
-        <h2>Selected</h2>
-        <div id="detail-body">Select a node to inspect its plan, patch, anchor, or task metadata.</div>
-      </section>
+      <div class="tab-bar">
+        <button class="tab active" data-tab="selected">Selected</button>
+        <button class="tab" data-tab="project">Project</button>
+      </div>
 
-      <section class="section">
-        <h2>Command</h2>
-        <div class="row">
-          <input id="command" placeholder="Raw Hive command" />
-          <button id="send-command">Send</button>
-        </div>
-      </section>
+      <div id="tab-selected">
+        <section class="section" id="detail">
+          <h2>Selected</h2>
+          <div id="detail-body">Select a node to inspect its plan, patch, anchor, or task metadata.</div>
+        </section>
 
-      <section class="section">
-        <h2>Transcript</h2>
-        <pre id="transcript"></pre>
-      </section>
+        <section class="section">
+          <h2>Command</h2>
+          <div class="row">
+            <input id="command" placeholder="Raw Hive command" />
+            <button id="send-command">Send</button>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Transcript</h2>
+          <pre id="transcript"></pre>
+        </section>
+      </div>
+
+      <div id="tab-project" style="display:none">
+        <section class="section">
+          <h2>Project Entities</h2>
+          <div id="entity-list"><div class="meta">Loading...</div></div>
+        </section>
+        <section class="section">
+          <h2>File</h2>
+          <pre id="entity-content">Select an entity to view its file.</pre>
+        </section>
+      </div>
     </aside>
   </div>
 
@@ -1035,6 +1086,67 @@ HTML = r"""<!doctype html>
     refresh();
     pollTranscript();
     setInterval(refresh, 6000);
+
+    // --- Project tab ---
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('tab-selected').style.display = tab === 'selected' ? '' : 'none';
+        document.getElementById('tab-project').style.display = tab === 'project' ? '' : 'none';
+        if (tab === 'project') refreshEntities();
+      });
+    });
+
+    async function refreshEntities() {
+      try {
+        const data = await api('/api/entities');
+        renderEntities(data.entities || []);
+      } catch (err) {
+        document.getElementById('entity-list').textContent = 'Failed to load entities.';
+      }
+    }
+
+    function renderEntities(entities) {
+      const list = document.getElementById('entity-list');
+      if (!entities.length) {
+        list.innerHTML = '<div class="meta">No entities materialized yet. Say "create X" to Hive.</div>';
+        return;
+      }
+      const byType = {};
+      for (const e of entities) {
+        const t = e.entity_type || 'unknown';
+        (byType[t] = byType[t] || []).push(e);
+      }
+      list.innerHTML = Object.keys(byType).sort().map(type => `
+        <div style="margin-bottom:10px">
+          <div class="field-label">${escapeHtml(type.charAt(0).toUpperCase() + type.slice(1))}s</div>
+          ${byType[type].map(e => `
+            <div class="list-item" data-entity-name="${escapeHtml(e.name)}" data-entity-type="${escapeHtml(e.entity_type || '')}">
+              <div class="title">${escapeHtml(e.name)}</div>
+              <div class="meta">${escapeHtml(e.project || '')} · ${escapeHtml(e.file || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+      list.querySelectorAll('.list-item[data-entity-name]').forEach(el => {
+        el.addEventListener('click', async () => {
+          try {
+            const name = el.dataset.entityName;
+            const type = el.dataset.entityType;
+            const data = await api('/api/entity?name=' + encodeURIComponent(name) + '&type=' + encodeURIComponent(type));
+            document.getElementById('entity-content').textContent = data.content || '(empty)';
+          } catch (err) {
+            document.getElementById('entity-content').textContent = 'Failed to load entity file.';
+          }
+        });
+      });
+    }
+
+    setInterval(() => {
+      if (document.querySelector('.tab[data-tab="project"].active')) refreshEntities();
+    }, 5000);
   </script>
 </body>
 </html>"""
@@ -1071,6 +1183,29 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == "/api/transcript":
             cursor = parse_qs(parsed.query).get("cursor", ["0"])[0]
             self._send_json(HIVE.transcript_since(cursor))
+            return
+        if parsed.path == "/api/entities":
+            try:
+                index_path = ROOT / ".hive_index.json"
+                index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else {}
+                entities = sorted(index.values(), key=lambda e: (e.get("entity_type", ""), e.get("name", "")))
+            except Exception:
+                entities = []
+            self._send_json({"entities": entities})
+            return
+        if parsed.path == "/api/entity":
+            qs = parse_qs(parsed.query)
+            name = (qs.get("name") or [""])[0]
+            entity_type = (qs.get("type") or [""])[0]
+            try:
+                from HiveMaterializer import HiveMaterializer
+                content = HiveMaterializer(project_dir=str(ROOT)).read_entity(name, entity_type)
+            except Exception:
+                content = None
+            if content is None:
+                self._send_json({"error": "Entity not found"}, status=404)
+            else:
+                self._send_json({"name": name, "entity_type": entity_type, "content": content})
             return
         self.send_error(404)
 
