@@ -1,3 +1,5 @@
+import re as _re
+
 UNKNOWN_FAILURE_CODE = "unknown_failure"
 
 FAILURE_FAMILIES = (
@@ -662,10 +664,154 @@ def classify_failure(error_text):
     )
 
 
+# ---------------------------------------------------------------------------
+# Flag-level dispatch for sandbox validation failures
+# Each entry is {why: mechanism explanation, do: corrective rule}.
+# "why" states the causal mechanism; "do" is derived from it, not from the error.
+# Fallback to RETRY_TEMPLATE_MAP when no flag maps — never crash on unknown flags.
+# ---------------------------------------------------------------------------
+
+_FLAG_DISPATCH_PRIORITY = [
+    "anchor_found",                        # root of the anchor cascade
+    "no_method_insertion_inside_live_body",
+    "no_unreachable_code_after_return",
+    "structural_scope_valid",
+    "no_undefined_method_call",
+    "helper_call_definition_consistency",
+    "variable_scope_sanity",
+    "reason_to_diff_consistency",
+]
+
+FLAG_DISPATCH = {
+    "anchor_found": {
+        "why": (
+            "the patch's context or removal lines did not match any lines in the target file; "
+            "the anchor resolver could not locate the insertion point"
+        ),
+        "do": (
+            "copy the exact lines from the current file as the patch context; "
+            "do not paraphrase, reformat, or assume the file matches an earlier version"
+        ),
+    },
+    "no_method_insertion_inside_live_body": {
+        "why": (
+            "the patch inserted a new method definition inside an existing method body; "
+            "method definitions must live at class scope, not nested inside another def"
+        ),
+        "do": (
+            "anchor new method definitions on the class definition line or the closing line "
+            "of a sibling method; never place a def inside the indented body of another method"
+        ),
+    },
+    "no_unreachable_code_after_return": {
+        "why": (
+            "the patch added statements after a return statement inside a function body; "
+            "those statements are unreachable and indicate a misplaced insertion point"
+        ),
+        "do": (
+            "insert new logic before the return statement, or replace the return with the "
+            "new logic followed by the original return; never add code after a return"
+        ),
+    },
+    "structural_scope_valid": {
+        "why": (
+            "the patch produced an invalid structural scope — a method, class, or block was "
+            "placed at the wrong indentation level relative to its containing scope"
+        ),
+        "do": (
+            "match the indentation of the surrounding code exactly; a class method must be "
+            "indented one level inside the class body, a nested block one level inside its parent"
+        ),
+    },
+    "no_undefined_method_call": {
+        "why": (
+            "the patch calls a method or function that is not defined anywhere in the file "
+            "and was not introduced by the patch itself"
+        ),
+        "do": (
+            "only call methods that already exist in the file or that the patch explicitly defines; "
+            "do not assume helper methods exist unless you can see their definition"
+        ),
+    },
+    "helper_call_definition_consistency": {
+        "why": (
+            "the patch calls a helper that it also defines, but the call signature does not "
+            "match the definition — wrong argument count, name, or positional order"
+        ),
+        "do": (
+            "ensure every call to a newly-defined helper uses the exact same name and argument "
+            "count as the def line in the same patch"
+        ),
+    },
+    "variable_scope_sanity": {
+        "why": (
+            "the patch references a variable that is not in scope at the point of use — "
+            "defined in a different function, not yet assigned, or at the wrong scope level"
+        ),
+        "do": (
+            "pass variables as explicit parameters rather than relying on enclosing scope; "
+            "do not reference names that are only defined outside the function being modified"
+        ),
+    },
+    "reason_to_diff_consistency": {
+        "why": (
+            "the patch's stated reason describes a different change than what the diff actually does; "
+            "the validator detected a mismatch between the intent description and the implementation"
+        ),
+        "do": (
+            "write a reason that exactly matches the lines being added or removed; "
+            "if the change plan evolved, update the reason to reflect what the diff actually does"
+        ),
+    },
+}
+
+
+def _parse_validation_flags(error_text):
+    """Extract {flag: bool} from a sandbox validation failure string. Returns {} on parse failure."""
+    match = _re.search(r"\{([^}]+)\}", str(error_text))
+    if not match:
+        return {}
+    result = {}
+    for flag, val in _re.findall(r"'(\w+)':\s*(True|False)", match.group(1)):
+        result[flag] = (val == "True")
+    return result
+
+
+def dispatch_flag(error_text):
+    """
+    Parse the validation dict from a sandbox failure and return
+    {flag, why, do} for the first violated flag with a known entry.
+    Returns None if unparseable or no flag maps — caller falls back to template.
+    """
+    flags = _parse_validation_flags(error_text)
+    if not flags:
+        return None
+    for flag in _FLAG_DISPATCH_PRIORITY:
+        if flag in flags and not flags[flag]:  # False = constraint violated
+            entry = FLAG_DISPATCH.get(flag)
+            if entry:
+                return {"flag": flag, "why": entry["why"], "do": entry["do"]}
+    return None
+
+
 def build_retry_instruction(error_text):
     category = classify_failure(error_text)
+    if category in ("sandbox_apply_failed", "sandbox_semantic_failed"):
+        dispatched = dispatch_flag(error_text)
+        if dispatched:
+            return dispatched["do"]
     rule = RETRY_TEMPLATE_MAP.get(category) or RETRY_TEMPLATE_MAP[UNKNOWN_FAILURE_CODE]
     return rule["instruction"]
+
+
+def build_retry_why(error_text):
+    """Return the mechanism explanation for a failure, or None if not dispatchable."""
+    category = classify_failure(error_text)
+    if category in ("sandbox_apply_failed", "sandbox_semantic_failed"):
+        dispatched = dispatch_flag(error_text)
+        if dispatched:
+            return dispatched["why"]
+    return None
 
 
 def build_symbol_drift_retry(task, target_file):
