@@ -13,6 +13,22 @@ from urllib.parse import parse_qs, urlparse
 ROOT = Path(__file__).resolve().parent
 HOST = "127.0.0.1"
 PORT = 8765
+PROJECT_DIR = None  # set by --project arg in main()
+
+CONVERSE_MANAGER = None
+CONVERSE_LOCK = threading.Lock()
+
+
+def get_converse_manager():
+    global CONVERSE_MANAGER
+    if CONVERSE_MANAGER is None:
+        with CONVERSE_LOCK:
+            if CONVERSE_MANAGER is None:
+                from conversation_manager import ConversationManager
+                CONVERSE_MANAGER = ConversationManager(
+                    project_dir=str(PROJECT_DIR or ROOT)
+                )
+    return CONVERSE_MANAGER
 
 
 def _read_json(path, fallback):
@@ -562,6 +578,19 @@ HTML = r"""<!doctype html>
       font-family: Consolas, monospace;
       font-size: 12px;
     }
+    #chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 480px;
+      overflow: auto;
+      margin-bottom: 10px;
+    }
+    .chat-msg { border-radius: 7px; padding: 8px 10px; font-size: 13px; line-height: 1.5; }
+    .chat-msg.pilot { background: #0f1e2d; border: 1px solid #2c4054; }
+    .chat-msg.hive { background: #0b1a10; border: 1px solid #2a5040; }
+    .chat-msg .speaker { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .chat-msg.thinking { opacity: 0.5; font-style: italic; }
     @media (max-width: 1100px) {
       #shell { grid-template-columns: 300px 1fr; }
       #right { display: none; }
@@ -641,6 +670,7 @@ HTML = r"""<!doctype html>
       <div class="tab-bar">
         <button class="tab active" data-tab="selected">Selected</button>
         <button class="tab" data-tab="project">Project</button>
+        <button class="tab" data-tab="chat">Chat</button>
       </div>
 
       <div id="tab-selected">
@@ -671,6 +701,17 @@ HTML = r"""<!doctype html>
         <section class="section">
           <h2>File</h2>
           <pre id="entity-content">Select an entity to view its file.</pre>
+        </section>
+      </div>
+
+      <div id="tab-chat" style="display:none">
+        <section class="section">
+          <h2>Hive Chat</h2>
+          <div id="chat-messages"></div>
+          <div class="row">
+            <input id="chat-input" placeholder="Talk to Hive..." />
+            <button id="chat-send" class="primary">Send</button>
+          </div>
         </section>
       </div>
     </aside>
@@ -1087,14 +1128,16 @@ HTML = r"""<!doctype html>
     pollTranscript();
     setInterval(refresh, 6000);
 
-    // --- Project tab ---
+    // --- Tab switching ---
+    const TABS = ['selected', 'project', 'chat'];
     document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const tab = btn.dataset.tab;
-        document.getElementById('tab-selected').style.display = tab === 'selected' ? '' : 'none';
-        document.getElementById('tab-project').style.display = tab === 'project' ? '' : 'none';
+        TABS.forEach(t => {
+          document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
+        });
         if (tab === 'project') refreshEntities();
       });
     });
@@ -1147,6 +1190,49 @@ HTML = r"""<!doctype html>
     setInterval(() => {
       if (document.querySelector('.tab[data-tab="project"].active')) refreshEntities();
     }, 5000);
+
+    // --- Chat ---
+    function appendChatMsg(speaker, text, cls) {
+      const box = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + speaker + (cls ? ' ' + cls : '');
+      div.innerHTML = `<div class="speaker">${escapeHtml(speaker.charAt(0).toUpperCase() + speaker.slice(1))}</div>${escapeHtml(text)}`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return div;
+    }
+
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      document.getElementById('chat-send').disabled = true;
+      appendChatMsg('pilot', text);
+      const thinking = appendChatMsg('hive', 'Thinking...', 'thinking');
+      try {
+        const data = await api('/api/converse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        thinking.remove();
+        appendChatMsg('hive', data.response || '(no response)');
+        // refresh entity list in case something was materialized
+        refreshEntities();
+      } catch (err) {
+        thinking.remove();
+        appendChatMsg('hive', 'Error: ' + err.message);
+      } finally {
+        document.getElementById('chat-send').disabled = false;
+        input.focus();
+      }
+    }
+
+    document.getElementById('chat-send').addEventListener('click', sendChat);
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+    });
   </script>
 </body>
 </html>"""
@@ -1221,6 +1307,19 @@ class Handler(BaseHTTPRequestHandler):
             HIVE.start()
             self._send_json({"ok": True})
             return
+        if parsed.path == "/api/converse":
+            payload = self._read_body()
+            message = str(payload.get("message") or "").strip()
+            if not message:
+                self._send_json({"ok": False, "error": "Empty message"}, status=400)
+                return
+            try:
+                manager = get_converse_manager()
+                response = manager.chat(message)
+                self._send_json({"ok": True, "response": response})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=500)
+            return
         self.send_error(404)
 
     def log_message(self, fmt, *args):
@@ -1228,9 +1327,18 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    global PROJECT_DIR
+    args = sys.argv[1:]
+    if "--project" in args:
+        idx = args.index("--project")
+        if idx + 1 < len(args):
+            PROJECT_DIR = Path(args[idx + 1]).resolve()
+
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     url = f"http://{HOST}:{PORT}/"
     print(f"Hive Cockpit running at {url}")
+    if PROJECT_DIR:
+        print(f"Project: {PROJECT_DIR}")
     webbrowser.open(url)
     try:
         server.serve_forever()
