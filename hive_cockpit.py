@@ -839,7 +839,12 @@ HTML = r"""<!doctype html>
     function shorten(v, n) { const s = String(v||''); return s.length<=n ? s : s.slice(0,n-3)+'...'; }
     async function api(path, opts) {
       const r = await fetch(path, opts);
-      if (!r.ok) throw new Error(await r.text());
+      if (!r.ok) {
+        let msg;
+        try { const j = await r.json(); msg = j.error || j.message || r.statusText; }
+        catch { msg = await r.text(); }
+        throw new Error(msg);
+      }
       return r.json();
     }
 
@@ -1264,6 +1269,9 @@ class Handler(BaseHTTPRequestHandler):
                 manager = get_converse_manager()
                 response = manager.chat(message)
                 self._send_json({"ok": True, "response": response})
+            except ModuleNotFoundError as exc:
+                pkg = exc.name or str(exc)
+                self._send_json({"ok": False, "error": f"Missing dependency '{pkg}' — run: pip install -r requirements.txt"}, status=500)
             except Exception as exc:
                 self._send_json({"ok": False, "error": str(exc)}, status=500)
             return
