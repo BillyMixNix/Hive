@@ -1281,6 +1281,7 @@ def main():
         if idx + 1 < len(args):
             PROJECT_DIR = Path(args[idx + 1]).resolve()
 
+    HIVE.start()
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     url = f"http://{HOST}:{PORT}/"
     print(f"Hive Cockpit running at {url}")
