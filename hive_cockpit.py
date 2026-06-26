@@ -337,824 +337,588 @@ HTML = r"""<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Hive Cockpit</title>
+  <title>Hive</title>
   <style>
     :root {
       --bg: #090d12;
-      --panel: #101720;
+      --panel: #0e1620;
       --panel-2: #0c131b;
-      --line: #223140;
-      --text: #e6edf3;
-      --muted: #96a5b4;
+      --line: #1e2e3d;
+      --text: #e2eaf3;
+      --muted: #7a8fa0;
       --blue: #4da3ff;
       --green: #37c985;
       --amber: #f3b653;
       --red: #f06b6b;
       --purple: #b08cff;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; }
     body {
-      margin: 0;
       height: 100vh;
       background: var(--bg);
       color: var(--text);
       font-family: Segoe UI, system-ui, sans-serif;
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: 48px 1fr;
       overflow: hidden;
     }
-    button, input, textarea, select {
-      font: inherit;
-    }
+    button, input, textarea, select { font: inherit; }
     button {
-      border: 1px solid #2c4054;
-      background: #172334;
+      border: 1px solid #253545;
+      background: #131f2e;
       color: var(--text);
       border-radius: 6px;
-      padding: 7px 10px;
+      padding: 6px 14px;
       cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
     }
-    button:hover { background: #20314a; }
-    button.primary { background: #1c5f9f; border-color: #2f83d0; }
-    button.danger { background: #733033; border-color: #9b3c40; }
+    button:hover { background: #1a2d42; }
+    button.primary { background: #1a5490; border-color: #2a7acc; }
+    button.primary:hover { background: #1f65ab; }
+    button.danger { background: #5e2428; border-color: #8a3338; }
     input, textarea, select {
-      width: 100%;
       color: var(--text);
-      background: #08111a;
-      border: 1px solid #26394c;
+      background: #07101a;
+      border: 1px solid #1e2e3d;
       border-radius: 6px;
-      padding: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      width: 100%;
     }
-    textarea { resize: vertical; min-height: 86px; }
+    textarea { resize: none; }
+
+    /* Topbar */
     #topbar {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 14px;
+      display: flex;
       align-items: center;
-      padding: 10px 12px;
-      background: #111821;
+      gap: 14px;
+      padding: 0 16px;
+      background: #0a1118;
       border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
     }
-    .brand { font-size: 18px; font-weight: 700; letter-spacing: 0; }
-    .stats { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+    .brand {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+    #stats { display: flex; gap: 6px; flex: 1; }
     .pill {
-      border: 1px solid #2a3b4f;
+      border: 1px solid #1e2e3d;
       border-radius: 999px;
-      padding: 3px 9px;
-      background: #0b121a;
+      padding: 2px 9px;
+      background: #0b1420;
+      color: var(--muted);
+      font-size: 11px;
     }
+    .pill.online { border-color: #1f4a35; color: var(--green); }
+
+    /* Three-column shell */
     #shell {
-      min-height: 0;
       display: grid;
-      grid-template-columns: 330px minmax(420px, 1fr) 390px;
-      gap: 0;
+      grid-template-columns: 240px 1fr 300px;
+      min-height: 0;
     }
-    aside, main { min-height: 0; }
-    #left, #right {
+
+    /* ── Left: conversation log ── */
+    #left {
       background: var(--panel);
       border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .sidebar-header {
+      padding: 10px 12px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    #conv-log {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 6px;
+      gap: 2px;
+    }
+    .conv-entry {
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: background 0.1s;
+    }
+    .conv-entry:hover { background: #0b1825; border-left-color: #2d4a62; }
+    .conv-entry .pilot-line {
+      font-size: 12px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+    .conv-entry .hive-line {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conv-empty {
+      padding: 16px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    /* ── Center: active chat ── */
+    #center {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--bg);
+    }
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 40px;
+      gap: 24px;
+    }
+    #chat-empty {
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    #chat-empty .wordmark {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #1a3050;
+    }
+    #chat-empty .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 740px;
+    }
+    .chat-msg.pilot { align-self: flex-end; align-items: flex-end; }
+    .chat-msg.hive  { align-self: flex-start; align-items: flex-start; }
+    .chat-msg .label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .chat-msg .bubble {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .chat-msg.pilot .bubble { background: #0d1e33; border: 1px solid #1b3352; }
+    .chat-msg.hive  .bubble { background: #0a1a10; border: 1px solid #183322; }
+    .chat-msg.thinking .bubble { opacity: 0.45; font-style: italic; }
+
+    #chat-input-area {
+      border-top: 1px solid var(--line);
+      padding: 12px 28px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--panel);
+      flex-shrink: 0;
+    }
+    #chat-input {
+      flex: 1;
+      min-height: 42px;
+      max-height: 130px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    /* ── Right: entity explorer ── */
+    #right {
+      background: var(--panel);
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    #entity-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .etype-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      padding: 8px 6px 3px;
+    }
+    .entity-item {
+      padding: 6px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .entity-item:hover { background: #0c1825; }
+    .entity-item.active { background: #0d1e33; border-left: 2px solid var(--blue); padding-left: 6px; }
+    .entity-item .e-name { color: var(--text); }
+    .entity-item .e-meta { color: var(--muted); font-size: 11px; margin-top: 1px; }
+    #file-panel {
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      max-height: 220px;
+    }
+    #entity-content {
+      flex: 1;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #060c12;
+      padding: 10px 12px;
+      color: #c8d8e8;
+      font-family: Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      margin: 0;
+      border: none;
+    }
+
+    /* ── Graph overlay ── */
+    #graph-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      flex-direction: column;
+    }
+    #graph-overlay.open { display: flex; }
+    #graph-topbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      height: 44px;
+      background: #0a1118;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    #graph-shell {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 300px 1fr 340px;
+      min-height: 0;
+    }
+    #graph-left, #graph-detail-panel {
+      background: var(--panel);
       overflow: auto;
       padding: 12px;
     }
-    #right {
-      border-right: 0;
-      border-left: 1px solid var(--line);
-    }
-    .section { margin-bottom: 16px; }
-    .section h2 {
-      margin: 0 0 8px;
-      font-size: 13px;
-      text-transform: uppercase;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-    .row { display: flex; gap: 8px; align-items: center; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .filters button.active {
-      background: #245d8d;
-      border-color: #4da3ff;
-    }
-    .current-card {
-      border: 1px solid #294158;
-      background: #0b1420;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 12px;
-    }
-    .current-card .title {
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    .current-card .meta {
-      color: var(--muted);
-      font-size: 12px;
-    }
+    #graph-left { border-right: 1px solid var(--line); }
+    #graph-detail-panel { border-left: 1px solid var(--line); }
     #graph-wrap {
-      position: relative;
-      min-height: 0;
       overflow: auto;
-      background-color: #05080d;
+      background-color: #050910;
       background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 42px 42px;
     }
-    #graph {
-      width: 1600px;
-      height: 1400px;
-      display: block;
-    }
-    .node {
-      cursor: pointer;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.35));
-    }
+    #graph { width: 1600px; height: 1400px; display: block; }
+
+    /* graph nodes/edges */
+    .node { cursor: pointer; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4)); }
     .node rect { stroke-width: 1.4; rx: 7; }
     .node text { fill: var(--text); font-size: 12px; pointer-events: none; }
     .node .meta { fill: var(--muted); font-size: 10px; }
-    .edge { stroke: #31465d; stroke-width: 1.2; fill: none; }
-    .edge-label { fill: #738497; font-size: 10px; }
-    .task rect { fill: #122338; stroke: var(--blue); }
-    .plan rect { fill: #1d1930; stroke: var(--purple); }
-    .child rect { fill: #252015; stroke: var(--amber); }
-    .patch rect { fill: #13291e; stroke: var(--green); }
-    .review rect { fill: #2b1e15; stroke: var(--amber); }
-    .failure rect { fill: #2c1519; stroke: var(--red); }
-    .lesson rect, .memory rect { fill: #111923; stroke: #53677d; }
+    .edge { stroke: #253545; stroke-width: 1.2; fill: none; }
+    .edge-label { fill: #5a7080; font-size: 10px; }
+    .task rect   { fill: #0e1e30; stroke: var(--blue); }
+    .plan rect   { fill: #17122a; stroke: var(--purple); }
+    .child rect  { fill: #1e1a0e; stroke: var(--amber); }
+    .patch rect  { fill: #0c2018; stroke: var(--green); }
+    .review rect { fill: #22180e; stroke: var(--amber); }
+    .failure rect{ fill: #221012; stroke: var(--red); }
+    .lesson rect, .memory rect { fill: #0e1520; stroke: #3a5060; }
     .selected rect { stroke-width: 3; }
-    .invalid rect { stroke: var(--red); stroke-dasharray: 5 4; }
-    #node-list { display: flex; flex-direction: column; gap: 6px; }
-    .list-item {
-      padding: 8px;
-      border: 1px solid #223140;
-      border-radius: 7px;
-      background: var(--panel-2);
-      cursor: pointer;
+    .invalid rect  { stroke: var(--red); stroke-dasharray: 5 4; }
+
+    /* graph sidebar reuse */
+    .g-section { margin-bottom: 16px; }
+    .g-section h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+    .g-row { display: flex; gap: 8px; align-items: center; }
+    .g-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .g-list-item { padding: 7px 9px; border: 1px solid #1e2e3d; border-radius: 6px; background: var(--panel-2); cursor: pointer; margin-bottom: 4px; }
+    .g-list-item:hover { border-color: #2d4a62; }
+    .g-list-item .title { font-size: 12px; }
+    .g-list-item .meta  { color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .g-filters { display: flex; flex-wrap: wrap; gap: 5px; }
+    .g-filters button.active { background: #1a4a70; border-color: var(--blue); }
+    .g-chip { display: inline-block; border-radius: 999px; padding: 2px 7px; border: 1px solid #253545; color: var(--muted); font-size: 11px; margin: 2px 2px 2px 0; }
+    .g-chip.bad  { border-color: #703035; color: #ff9da5; }
+    .g-chip.good { border-color: #236040; color: #7ee0b3; }
+    .current-card { border: 1px solid #1e3548; background: #0a1420; border-radius: 7px; padding: 9px 10px; margin-bottom: 10px; }
+    .current-card .title { font-weight: 600; font-size: 12px; margin-bottom: 4px; }
+    .current-card .meta  { color: var(--muted); font-size: 11px; }
+    #node-list { display: flex; flex-direction: column; }
+    .field-label { color: var(--muted); font-size: 11px; margin: 8px 0 3px; }
+    #detail-pre, #g-transcript {
+      white-space: pre-wrap; word-break: break-word;
+      background: #060c12; border: 1px solid #1e2e3d; border-radius: 6px;
+      padding: 9px; max-height: 260px; overflow: auto;
+      color: #c8d8e8; font-family: Consolas, monospace; font-size: 11px;
     }
-    .list-item:hover { border-color: #3d5b78; }
-    .list-item .title { font-size: 13px; }
-    .list-item .meta { color: var(--muted); font-size: 12px; margin-top: 3px; }
-    .chip {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 2px 7px;
-      border: 1px solid #2d4055;
-      color: var(--muted);
-      font-size: 12px;
-      margin: 2px 3px 2px 0;
-    }
-    .chip.bad { border-color: #884247; color: #ff9da5; }
-    .chip.good { border-color: #2b7b5a; color: #7ee0b3; }
-    .chip.mode { border-color: #5b4f89; color: #c7b8ff; }
-    .work-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .work-row {
-      border: 1px solid #223140;
-      border-radius: 7px;
-      background: #0b121a;
-      padding: 7px 8px;
-    }
-    .work-row b {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 2px;
-    }
-    #detail pre, #transcript {
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: #070d13;
-      border: 1px solid #223140;
-      border-radius: 7px;
-      padding: 10px;
-      max-height: 300px;
-      overflow: auto;
-      color: #d9e3ec;
-      font-family: Consolas, monospace;
-      font-size: 12px;
-    }
-    #transcript { height: 260px; }
-    .field-label { color: var(--muted); font-size: 12px; margin: 8px 0 4px; }
-    .tab-bar {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 8px;
-    }
-    .tab {
-      flex: 1;
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .tab.active {
-      background: #172334;
-      border-color: #2c4054;
-      color: var(--text);
-    }
-    #entity-list { display: flex; flex-direction: column; gap: 4px; }
-    #entity-content {
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: #070d13;
-      border: 1px solid #223140;
-      border-radius: 7px;
-      padding: 10px;
-      max-height: 340px;
-      overflow: auto;
-      color: #d9e3ec;
-      font-family: Consolas, monospace;
-      font-size: 12px;
-    }
-    #chat-messages {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 480px;
-      overflow: auto;
-      margin-bottom: 10px;
-    }
-    .chat-msg { border-radius: 7px; padding: 8px 10px; font-size: 13px; line-height: 1.5; }
-    .chat-msg.pilot { background: #0f1e2d; border: 1px solid #2c4054; }
-    .chat-msg.hive { background: #0b1a10; border: 1px solid #2a5040; }
-    .chat-msg .speaker { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .chat-msg.thinking { opacity: 0.5; font-style: italic; }
-    @media (max-width: 1100px) {
-      #shell { grid-template-columns: 300px 1fr; }
-      #right { display: none; }
-    }
+    #g-transcript { height: 180px; }
   </style>
 </head>
 <body>
   <header id="topbar">
-    <div class="brand">Hive Cockpit</div>
-    <div class="stats" id="stats"></div>
-    <div class="row">
-      <button id="refresh">Refresh</button>
-      <button id="restart">Restart Hive</button>
+    <div class="brand">Hive</div>
+    <div id="stats"></div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="toggle-graph">Graph</button>
+      <button id="btn-restart">Restart Hive</button>
     </div>
   </header>
 
   <div id="shell">
+    <!-- Left: conversation log -->
     <aside id="left">
-      <section class="section">
-        <h2>New Task</h2>
-        <textarea id="new-task" placeholder="Describe what Hive should do..."></textarea>
-        <div class="grid2" style="margin-top:8px">
-          <button class="primary" id="create-task">Create</button>
-          <button id="create-plan">Create + Plan</button>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Current Work</h2>
-        <div id="current-card" class="current-card">Loading...</div>
-        <div class="grid2">
-          <button id="focus-current">Focus Current</button>
-          <button id="focus-latest">Focus Latest</button>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Selected Actions</h2>
-        <div class="grid2">
-          <button data-action="show task">Show</button>
-          <button data-action="plan task">Plan</button>
-          <button data-action="code task">Code</button>
-          <button data-action="review patch">Review Patch</button>
-          <button data-action="apply patch">Apply Patch</button>
-          <button data-action="rollback patch" class="danger">Rollback</button>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Search</h2>
-        <input id="search" type="search" placeholder="Search tasks, files, status..." />
-      </section>
-
-      <section class="section">
-        <h2>View</h2>
-        <div class="filters" id="filters">
-          <button data-filter="active" class="active">Active</button>
-          <button data-filter="current">Current</button>
-          <button data-filter="blocked">Blocked</button>
-          <button data-filter="patches">Patches</button>
-          <button data-filter="invalid">Invalid Anchors</button>
-          <button data-filter="all">All</button>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>Recent Nodes</h2>
-        <div id="node-list"></div>
-      </section>
+      <div class="sidebar-header">Conversation</div>
+      <div id="conv-log">
+        <div class="conv-empty" data-placeholder>Start a conversation.<br>Your history will appear here.</div>
+      </div>
     </aside>
 
-    <main id="graph-wrap">
-      <svg id="graph" aria-label="Hive task graph"></svg>
+    <!-- Center: active chat -->
+    <main id="center">
+      <div id="chat-messages">
+        <div id="chat-empty">
+          <div class="wordmark">HIVE</div>
+          <div class="sub">Say something to begin.</div>
+        </div>
+      </div>
+      <div id="chat-input-area">
+        <textarea id="chat-input" placeholder="Talk to Hive..." rows="2"></textarea>
+        <button id="chat-send" class="primary">Send</button>
+      </div>
     </main>
 
+    <!-- Right: entity / file explorer -->
     <aside id="right">
-      <div class="tab-bar">
-        <button class="tab active" data-tab="selected">Selected</button>
-        <button class="tab" data-tab="project">Project</button>
-        <button class="tab" data-tab="chat">Chat</button>
+      <div class="sidebar-header">Project</div>
+      <div id="entity-list">
+        <div style="padding:12px 8px;color:var(--muted);font-size:12px;">No entities yet. Say &ldquo;create X&rdquo; to Hive.</div>
       </div>
-
-      <div id="tab-selected">
-        <section class="section" id="detail">
-          <h2>Selected</h2>
-          <div id="detail-body">Select a node to inspect its plan, patch, anchor, or task metadata.</div>
-        </section>
-
-        <section class="section">
-          <h2>Command</h2>
-          <div class="row">
-            <input id="command" placeholder="Raw Hive command" />
-            <button id="send-command">Send</button>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>Transcript</h2>
-          <pre id="transcript"></pre>
-        </section>
-      </div>
-
-      <div id="tab-project" style="display:none">
-        <section class="section">
-          <h2>Project Entities</h2>
-          <div id="entity-list"><div class="meta">Loading...</div></div>
-        </section>
-        <section class="section">
-          <h2>File</h2>
-          <pre id="entity-content">Select an entity to view its file.</pre>
-        </section>
-      </div>
-
-      <div id="tab-chat" style="display:none">
-        <section class="section">
-          <h2>Hive Chat</h2>
-          <div id="chat-messages"></div>
-          <div class="row">
-            <input id="chat-input" placeholder="Talk to Hive..." />
-            <button id="chat-send" class="primary">Send</button>
-          </div>
-        </section>
+      <div id="file-panel">
+        <div class="sidebar-header">File</div>
+        <pre id="entity-content">Select an entity.</pre>
       </div>
     </aside>
   </div>
 
+  <!-- Graph overlay -->
+  <div id="graph-overlay">
+    <div id="graph-topbar">
+      <span style="font-weight:700;font-size:13px;letter-spacing:0.05em">Graph</span>
+      <div id="graph-pills" style="flex:1;display:flex;gap:6px;padding:0 10px;"></div>
+      <div style="display:flex;gap:8px">
+        <button id="graph-refresh">Refresh</button>
+        <button id="graph-close">Close</button>
+      </div>
+    </div>
+    <div id="graph-shell">
+      <aside id="graph-left">
+        <div class="g-section">
+          <h2>New Task</h2>
+          <textarea id="new-task" placeholder="Describe what Hive should do..." style="min-height:66px"></textarea>
+          <div class="g-grid2" style="margin-top:7px">
+            <button class="primary" id="create-task">Create</button>
+            <button id="create-plan">Create + Plan</button>
+          </div>
+        </div>
+        <div class="g-section">
+          <h2>Current Work</h2>
+          <div id="current-card" class="current-card">Loading...</div>
+          <div class="g-grid2">
+            <button id="focus-current">Focus Current</button>
+            <button id="focus-latest">Focus Latest</button>
+          </div>
+        </div>
+        <div class="g-section">
+          <h2>Selected Actions</h2>
+          <div class="g-grid2">
+            <button data-action="show task">Show</button>
+            <button data-action="plan task">Plan</button>
+            <button data-action="code task">Code</button>
+            <button data-action="review patch">Review Patch</button>
+            <button data-action="apply patch">Apply Patch</button>
+            <button data-action="rollback patch" class="danger">Rollback</button>
+          </div>
+        </div>
+        <div class="g-section">
+          <h2>Search</h2>
+          <input id="graph-search" type="search" placeholder="Search tasks, files, status..." />
+        </div>
+        <div class="g-section">
+          <h2>View</h2>
+          <div class="g-filters" id="graph-filters">
+            <button data-filter="active" class="active">Active</button>
+            <button data-filter="current">Current</button>
+            <button data-filter="blocked">Blocked</button>
+            <button data-filter="patches">Patches</button>
+            <button data-filter="invalid">Invalid</button>
+            <button data-filter="all">All</button>
+          </div>
+        </div>
+        <div class="g-section">
+          <h2>Recent</h2>
+          <div id="node-list"></div>
+        </div>
+      </aside>
+
+      <div id="graph-wrap">
+        <svg id="graph" aria-label="Hive task graph"></svg>
+      </div>
+
+      <aside id="graph-detail-panel">
+        <div class="g-section" id="g-detail">
+          <h2>Selected</h2>
+          <div id="detail-body" style="color:var(--muted);font-size:12px">Select a node.</div>
+        </div>
+        <div class="g-section">
+          <h2>Command</h2>
+          <div class="g-row">
+            <input id="g-command" placeholder="Raw Hive command" />
+            <button id="g-send-command">Send</button>
+          </div>
+        </div>
+        <div class="g-section">
+          <h2>Transcript</h2>
+          <pre id="g-transcript"></pre>
+        </div>
+      </aside>
+    </div>
+  </div>
+
   <script>
-    let state = { nodes: [], edges: [] };
-    let selected = null;
-    let transcriptCursor = 0;
-    let activeFilter = 'active';
-    let didInitialFocus = false;
-
-    const graph = document.getElementById('graph');
-    const graphWrap = document.getElementById('graph-wrap');
-    const list = document.getElementById('node-list');
-    const stats = document.getElementById('stats');
-    const search = document.getElementById('search');
-    const detail = document.getElementById('detail-body');
-    const transcript = document.getElementById('transcript');
-    const currentCard = document.getElementById('current-card');
-
-    function escapeHtml(value) {
-      return String(value ?? '').replace(/[&<>"']/g, ch => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      })[ch]);
+    // ── Utilities ──
+    function esc(v) {
+      return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+    }
+    function shorten(v, n) { const s = String(v||''); return s.length<=n ? s : s.slice(0,n-3)+'...'; }
+    async function api(path, opts) {
+      const r = await fetch(path, opts);
+      if (!r.ok) throw new Error(await r.text());
+      return r.json();
     }
 
-    async function api(path, options) {
-      const res = await fetch(path, options);
-      if (!res.ok) throw new Error(await res.text());
-      return res.json();
+    // ── Chat ──
+    const chatMessages = document.getElementById('chat-messages');
+    const chatEmpty    = document.getElementById('chat-empty');
+    const convLog      = document.getElementById('conv-log');
+
+    function appendMsg(role, text, extra) {
+      if (chatEmpty) chatEmpty.remove();
+      const d = document.createElement('div');
+      d.className = 'chat-msg ' + role + (extra ? ' '+extra : '');
+      d.innerHTML = `<div class="label">${role==='pilot'?'Pilot':'Hive'}</div><div class="bubble">${esc(text)}</div>`;
+      chatMessages.appendChild(d);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return d;
     }
 
-    async function refresh() {
-      state = await api('/api/state');
-      renderStats();
-      renderCurrentCard();
-      renderList();
-      renderGraph();
-      if (selected) {
-        const next = state.nodes.find(n => String(n.id) === String(selected.id));
-        if (next) selectNode(next.id);
-      } else if (!didInitialFocus) {
-        didInitialFocus = true;
-        focusPreferredNode();
-      }
+    function addToLog(pilotText, hiveText) {
+      const ph = convLog.querySelector('[data-placeholder]');
+      if (ph) ph.remove();
+      const e = document.createElement('div');
+      e.className = 'conv-entry';
+      e.innerHTML = `<div class="pilot-line">▸ ${esc(shorten(pilotText, 48))}</div><div class="hive-line">${esc(shorten(hiveText, 56))}</div>`;
+      e.addEventListener('click', () => chatMessages.scrollTop = chatMessages.scrollHeight);
+      convLog.appendChild(e);
+      convLog.scrollTop = convLog.scrollHeight;
     }
 
-    function renderStats() {
-      const counts = {};
-      for (const node of state.nodes) counts[node.kind] = (counts[node.kind] || 0) + 1;
-      stats.innerHTML = [
-        ['Hive', state.hive_status],
-        ['Known files', state.known_files_count],
-        ['Tasks', counts.task || 0],
-        ['Plans', counts.plan || 0],
-        ['Patches', counts.patch || 0],
-        ['Issues', state.nodes.filter(n => n.anchor && n.anchor.valid_file === false).length],
-      ].map(([k, v]) => `<span class="pill">${escapeHtml(k)}: ${escapeHtml(v)}</span>`).join('');
-    }
-
-    function filteredNodes() {
-      const q = search.value.trim().toLowerCase();
-      let nodes = state.nodes.slice();
-      if (activeFilter === 'active') {
-        const floor = Math.max(0, (state.latest_task_id || 0) - 80);
-        nodes = nodes.filter(n => {
-          if (n.kind === 'child') return true;
-          return typeof n.id !== 'number' || n.id >= floor || n.status === 'current' || n.status === 'blocked' || n.anchor?.valid_file === false;
-        });
-      } else if (activeFilter === 'current') {
-        const current = state.current_task_id || state.latest_task_id;
-        nodes = relatedNodesFor(current);
-      } else if (activeFilter === 'blocked') {
-        nodes = nodes.filter(n => n.status === 'blocked' || n.status === 'pending_pilot_review');
-      } else if (activeFilter === 'patches') {
-        nodes = nodes.filter(n => ['patch', 'review'].includes(n.kind));
-      } else if (activeFilter === 'invalid') {
-        nodes = nodes.filter(n => n.anchor && n.anchor.valid_file === false);
-      }
-      if (!q) return nodes.slice(0, activeFilter === 'all' ? 240 : 120);
-      return nodes.filter(n => {
-        const w = n.work || {};
-        const haystack = [
-          n.id, n.kind, n.status, n.note,
-          n.anchor?.target_file, n.anchor?.target_symbol,
-          w.work_mode, w.domain, w.artifact, w.operation, w.validation, w.task_type
-        ].join(' ').toLowerCase();
-        return haystack.includes(q);
-      }).slice(0, activeFilter === 'all' ? 240 : 120);
-    }
-
-    function relatedNodesFor(rootId) {
-      if (rootId == null) return state.nodes.slice(-60);
-      const keep = new Set([String(rootId)]);
-      let changed = true;
-      while (changed) {
-        changed = false;
-        for (const edge of state.edges) {
-          const from = String(edge.from);
-          const to = String(edge.to);
-          if (keep.has(from) && !keep.has(to)) { keep.add(to); changed = true; }
-          if (keep.has(to) && !keep.has(from)) { keep.add(from); changed = true; }
-        }
-      }
-      return state.nodes.filter(n => keep.has(String(n.id)));
-    }
-
-    function renderCurrentCard() {
-      const currentId = state.current_task_id || state.latest_task_id;
-      const node = state.nodes.find(n => String(n.id) === String(currentId));
-      if (!node) {
-        currentCard.innerHTML = '<div class="meta">No current task recorded.</div>';
-        return;
-      }
-      const a = node.anchor || {};
-      const w = node.work || {};
-      const invalid = a.valid_file === false ? ' bad' : '';
-      currentCard.innerHTML = `
-        <div class="title">${escapeHtml(node.label)}</div>
-        <div class="meta">${escapeHtml(node.status || 'unknown')} / ${escapeHtml(node.kind)}</div>
-        <div style="margin-top:6px">
-          <span class="chip mode">${escapeHtml(w.work_mode || 'no mode')}</span>
-          <span class="chip">${escapeHtml(w.domain || 'no domain')}</span>
-          <span class="chip${invalid}">${escapeHtml(a.target_file || 'no file')}</span>
-          <span class="chip">${escapeHtml(a.target_symbol || 'no symbol')}</span>
-        </div>
-      `;
-      currentCard.onclick = () => selectAndFocus(node.id);
-    }
-
-    function renderList() {
-      const items = filteredNodes();
-      list.innerHTML = items.map(n => `
-        <div class="list-item" data-id="${escapeHtml(n.id)}">
-          <div class="title">${escapeHtml(n.label)}</div>
-          <div class="meta">${escapeHtml(n.kind)} / ${escapeHtml(n.status || 'unknown')} ${workChipText(n)} ${anchorChipText(n)}</div>
-        </div>
-      `).join('');
-      list.querySelectorAll('.list-item').forEach(el => {
-        el.addEventListener('click', () => selectNode(el.dataset.id));
-      });
-    }
-
-    function anchorChipText(node) {
-      const anchor = node.anchor || {};
-      if (!anchor.target_file && !anchor.target_symbol) return '';
-      return ` / ${anchor.target_file || 'none'}::${anchor.target_symbol || 'none'}`;
-    }
-
-    function workChipText(node) {
-      const work = node.work || {};
-      const mode = work.work_mode || '';
-      const domain = work.domain || '';
-      if (!mode && !domain) return '';
-      return ` / ${mode || 'mode?'}:${domain || 'domain?'}`;
-    }
-
-    function laneFor(kind) {
-      return { task: 0, plan: 1, child: 2, patch: 3, review: 4, failure: 4, lesson: 5, memory: 5 }[kind] ?? 5;
-    }
-
-    function renderGraph() {
-      const nodes = filteredNodes();
-      const nodeIds = new Set(nodes.map(n => String(n.id)));
-      const byLane = new Map();
-      for (const node of nodes) {
-        const lane = laneFor(node.kind);
-        if (!byLane.has(lane)) byLane.set(lane, []);
-        byLane.get(lane).push(node);
-      }
-
-      const positions = new Map();
-      for (const [lane, laneNodes] of byLane.entries()) {
-        laneNodes.forEach((node, index) => {
-          positions.set(String(node.id), { x: 70 + lane * 250, y: 60 + index * 112 });
-        });
-      }
-
-      const edgeSvg = state.edges
-        .filter(e => nodeIds.has(String(e.from)) && nodeIds.has(String(e.to)))
-        .map(e => {
-          const from = positions.get(String(e.from));
-          const to = positions.get(String(e.to));
-          if (!from || !to) return '';
-          const x1 = from.x + 210, y1 = from.y + 31, x2 = to.x, y2 = to.y + 31;
-          const mid = (x1 + x2) / 2;
-          return `<path class="edge" d="M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}" />
-                  <text class="edge-label" x="${mid - 18}" y="${(y1 + y2) / 2 - 5}">${escapeHtml(e.label || '')}</text>`;
-        }).join('');
-
-      const nodeSvg = nodes.map(n => {
-        const p = positions.get(String(n.id));
-        const invalid = n.anchor && n.anchor.valid_file === false ? ' invalid' : '';
-        const selectedClass = selected && String(selected.id) === String(n.id) ? ' selected' : '';
-        return `<g class="node ${escapeHtml(n.kind)}${invalid}${selectedClass}" data-id="${escapeHtml(n.id)}" transform="translate(${p.x},${p.y})">
-          <rect width="210" height="72"></rect>
-          <text x="10" y="20">${escapeHtml(shorten(n.label, 30))}</text>
-          <text x="10" y="40" class="meta">${escapeHtml(shorten(`${n.status || 'unknown'} / ${workChipText(n).replace(/^ \/ /, '')}`, 32))}</text>
-          <text x="10" y="58" class="meta">${escapeHtml(shorten(anchorChipText(n).replace(/^ \/ /, ''), 30))}</text>
-        </g>`;
-      }).join('');
-
-      graph.innerHTML = edgeSvg + nodeSvg;
-      graph.querySelectorAll('.node').forEach(el => {
-        el.addEventListener('click', () => selectNode(el.dataset.id));
-      });
-    }
-
-    function shorten(value, limit) {
-      const text = String(value || '');
-      return text.length <= limit ? text : text.slice(0, limit - 3) + '...';
-    }
-
-    function selectNode(id) {
-      selected = state.nodes.find(n => String(n.id) === String(id));
-      renderGraph();
-      renderDetail();
-    }
-
-    function selectAndFocus(id) {
-      selectNode(id);
-      setTimeout(() => scrollToNode(id), 0);
-    }
-
-    function scrollToNode(id) {
-      const el = graph.querySelector(`.node[data-id="${CSS.escape(String(id))}"]`);
-      if (!el) return;
-      const transform = el.getAttribute('transform') || '';
-      const match = /translate\(([-0-9.]+),([-0-9.]+)\)/.exec(transform);
-      if (!match) return;
-      const x = Number(match[1]);
-      const y = Number(match[2]);
-      graphWrap.scrollTo({
-        left: Math.max(0, x - graphWrap.clientWidth / 2 + 120),
-        top: Math.max(0, y - graphWrap.clientHeight / 2 + 80),
-        behavior: 'smooth'
-      });
-    }
-
-    function focusPreferredNode() {
-      const invalid = state.nodes.find(n => n.anchor && n.anchor.valid_file === false);
-      const preferredId = invalid?.id || state.current_task_id || state.latest_task_id;
-      if (preferredId != null) selectAndFocus(preferredId);
-    }
-
-    function renderDetail() {
-      if (!selected) {
-        detail.textContent = 'Select a node to inspect its plan, patch, anchor, or task metadata.';
-        return;
-      }
-      const a = selected.anchor || {};
-      const w = selected.work || {};
-      const anchorClass = a.valid_file === false ? 'bad' : (a.target_file ? 'good' : '');
-      const createSymbols = Array.isArray(w.creates_symbols) ? w.creates_symbols : [];
-      const wireSymbols = Array.isArray(w.wires_into_symbols) ? w.wires_into_symbols : [];
-      detail.innerHTML = `
-        <div class="chip">${escapeHtml(selected.kind)}</div>
-        <div class="chip">${escapeHtml(selected.status || 'unknown')}</div>
-        <div class="chip mode">${escapeHtml(w.work_mode || 'mode unknown')}</div>
-        <div class="chip">${escapeHtml(w.domain || 'domain unknown')}</div>
-        <h3>${escapeHtml(selected.label)}</h3>
-        <div class="field-label">Work Ontology</div>
-        <div class="work-grid">
-          <div class="work-row"><b>Mode</b>${escapeHtml(w.work_mode || 'none')}</div>
-          <div class="work-row"><b>Domain</b>${escapeHtml(w.domain || 'none')}</div>
-          <div class="work-row"><b>Artifact</b>${escapeHtml(w.artifact || 'none')}</div>
-          <div class="work-row"><b>Operation</b>${escapeHtml(w.operation || 'none')}</div>
-          <div class="work-row"><b>Validation</b>${escapeHtml(w.validation || 'none')}</div>
-          ${createSymbols.length ? `<div class="work-row"><b>Creates</b>${escapeHtml(createSymbols.join(', '))}</div>` : ''}
-          ${wireSymbols.length ? `<div class="work-row"><b>Wires Into</b>${escapeHtml(wireSymbols.join(', '))}</div>` : ''}
-          ${w.insertion_region ? `<div class="work-row"><b>Insertion Region</b>${escapeHtml(w.insertion_region)}</div>` : ''}
-        </div>
-        <div class="field-label">Anchor</div>
-        <div>
-          <span class="chip ${anchorClass}">file: ${escapeHtml(a.target_file || 'none')}</span>
-          <span class="chip">symbol: ${escapeHtml(a.target_symbol || 'none')}</span>
-          <span class="chip">confidence: ${escapeHtml(a.confidence || 'none')}</span>
-          <span class="chip">source: ${escapeHtml(a.source || 'none')}</span>
-        </div>
-        <div class="grid2" style="margin-top:10px">
-          <button id="repair-gui-anchor">Set GUI Anchor + Replan</button>
-          <button id="replan-selected">Replan Selected</button>
-        </div>
-        <div class="field-label">Note</div>
-        <pre>${escapeHtml(selected.note || '')}</pre>
-        <div class="field-label">Metadata</div>
-        <pre>${escapeHtml(JSON.stringify(selected.metadata || {}, null, 2))}</pre>
-      `;
-      document.getElementById('repair-gui-anchor').addEventListener('click', repairGuiAnchor);
-      document.getElementById('replan-selected').addEventListener('click', replanSelected);
-    }
-
-    async function sendCommand(command) {
-      command = String(command || '').trim();
-      if (!command) return;
-      await api('/api/command', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command })
-      });
-      document.getElementById('command').value = '';
-      setTimeout(refresh, 1200);
-    }
-
-    function selectedNumericId() {
-      if (!selected) return null;
-      if (typeof selected.id === 'number') return selected.id;
-      const parsed = Number(selected.id);
-      return Number.isInteger(parsed) ? parsed : null;
-    }
-
-    function selectedTaskId() {
-      if (!selected) return null;
-      if (selected.kind === 'task' && typeof selected.id === 'number') return selected.id;
-      const metaTask = selected.metadata && selected.metadata.task_id;
-      if (Number.isInteger(metaTask)) return metaTask;
-      const planTask = selected.metadata && selected.metadata.plan && selected.metadata.plan.task_id;
-      if (Number.isInteger(planTask)) return planTask;
-      return selectedNumericId();
-    }
-
-    function repairGuiAnchor() {
-      const taskId = selectedTaskId();
-      if (taskId == null) return;
-      sendCommand(`pilot task ${taskId} Target file is hive_gui.py. Do not use Bazaar.switch or any vendor/archive symbol. Plan this as a GUI cockpit change.`);
-      setTimeout(() => sendCommand(`plan task ${taskId}`), 1600);
-    }
-
-    function replanSelected() {
-      const taskId = selectedTaskId();
-      if (taskId == null) return;
-      sendCommand(`plan task ${taskId}`);
-    }
-
-    document.getElementById('refresh').addEventListener('click', refresh);
-    document.getElementById('restart').addEventListener('click', async () => {
-      await api('/api/restart', { method: 'POST' });
-      setTimeout(refresh, 800);
-    });
-    document.getElementById('create-task').addEventListener('click', () => {
-      const text = document.getElementById('new-task').value.trim();
+    async function sendChat() {
+      const inp = document.getElementById('chat-input');
+      const text = inp.value.trim();
       if (!text) return;
-      document.getElementById('new-task').value = '';
-      sendCommand(text);
-    });
-    document.getElementById('create-plan').addEventListener('click', async () => {
-      const text = document.getElementById('new-task').value.trim();
-      if (!text) return;
-      const before = highestTaskId();
-      document.getElementById('new-task').value = '';
-      await sendCommand(text);
-      setTimeout(async () => {
-        await refresh();
-        const next = highestTaskId();
-        if (next && next !== before) sendCommand(`plan task ${next}`);
-      }, 2200);
-    });
-    document.getElementById('send-command').addEventListener('click', () => sendCommand(document.getElementById('command').value));
-    document.getElementById('command').addEventListener('keydown', e => {
-      if (e.key === 'Enter') sendCommand(e.target.value);
-    });
-    document.querySelectorAll('[data-action]').forEach(button => {
-      button.addEventListener('click', () => {
-        const id = selectedNumericId();
-        if (id == null) return;
-        sendCommand(`${button.dataset.action} ${id}`);
-      });
-    });
-    search.addEventListener('input', () => {
-      renderList();
-      renderGraph();
-    });
-    document.querySelectorAll('#filters button').forEach(button => {
-      button.addEventListener('click', () => {
-        activeFilter = button.dataset.filter;
-        document.querySelectorAll('#filters button').forEach(b => b.classList.toggle('active', b === button));
-        renderList();
-        renderGraph();
-        focusPreferredNode();
-      });
-    });
-    document.getElementById('focus-current').addEventListener('click', () => {
-      const id = state.current_task_id || state.latest_task_id;
-      if (id != null) selectAndFocus(id);
-    });
-    document.getElementById('focus-latest').addEventListener('click', () => {
-      if (state.latest_task_id != null) selectAndFocus(state.latest_task_id);
-    });
-
-    function highestTaskId() {
-      const ids = state.nodes
-        .filter(n => n.kind === 'task' && typeof n.id === 'number')
-        .map(n => n.id);
-      return ids.length ? Math.max(...ids) : null;
-    }
-
-    async function pollTranscript() {
+      inp.value = '';
+      inp.style.height = '';
+      document.getElementById('chat-send').disabled = true;
+      appendMsg('pilot', text);
+      const thinking = appendMsg('hive', 'Thinking…', 'thinking');
       try {
-        const data = await api(`/api/transcript?cursor=${transcriptCursor}`);
-        transcriptCursor = data.cursor;
-        if (data.text) {
-          transcript.textContent += data.text;
-          transcript.scrollTop = transcript.scrollHeight;
-        }
-      } catch (err) {
-        console.error(err);
+        const data = await api('/api/converse', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({message: text})
+        });
+        thinking.remove();
+        const reply = data.response || '(no response)';
+        appendMsg('hive', reply);
+        addToLog(text, reply);
+        refreshEntities();
+      } catch(err) {
+        thinking.remove();
+        appendMsg('hive', 'Error: ' + err.message);
       } finally {
-        setTimeout(pollTranscript, 500);
+        document.getElementById('chat-send').disabled = false;
+        inp.focus();
       }
     }
 
-    refresh();
-    pollTranscript();
-    setInterval(refresh, 6000);
-
-    // --- Tab switching ---
-    const TABS = ['selected', 'project', 'chat'];
-    document.querySelectorAll('.tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const tab = btn.dataset.tab;
-        TABS.forEach(t => {
-          document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
-        });
-        if (tab === 'project') refreshEntities();
-      });
+    document.getElementById('chat-send').addEventListener('click', sendChat);
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+    });
+    document.getElementById('chat-input').addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 130) + 'px';
     });
 
+    // ── Entity explorer ──
     async function refreshEntities() {
       try {
         const data = await api('/api/entities');
         renderEntities(data.entities || []);
-      } catch (err) {
-        document.getElementById('entity-list').textContent = 'Failed to load entities.';
-      }
+      } catch(_) {}
     }
 
     function renderEntities(entities) {
       const list = document.getElementById('entity-list');
       if (!entities.length) {
-        list.innerHTML = '<div class="meta">No entities materialized yet. Say "create X" to Hive.</div>';
+        list.innerHTML = '<div style="padding:12px 8px;color:var(--muted);font-size:12px;">No entities yet. Say &ldquo;create X&rdquo; to Hive.</div>';
         return;
       }
       const byType = {};
@@ -1162,77 +926,260 @@ HTML = r"""<!doctype html>
         const t = e.entity_type || 'unknown';
         (byType[t] = byType[t] || []).push(e);
       }
-      list.innerHTML = Object.keys(byType).sort().map(type => `
-        <div style="margin-bottom:10px">
-          <div class="field-label">${escapeHtml(type.charAt(0).toUpperCase() + type.slice(1))}s</div>
-          ${byType[type].map(e => `
-            <div class="list-item" data-entity-name="${escapeHtml(e.name)}" data-entity-type="${escapeHtml(e.entity_type || '')}">
-              <div class="title">${escapeHtml(e.name)}</div>
-              <div class="meta">${escapeHtml(e.project || '')} · ${escapeHtml(e.file || '')}</div>
-            </div>
-          `).join('')}
-        </div>
-      `).join('');
-      list.querySelectorAll('.list-item[data-entity-name]').forEach(el => {
+      list.innerHTML = Object.keys(byType).sort().map(t =>
+        `<div class="etype-label">${esc(t)}s</div>` +
+        byType[t].map(e =>
+          `<div class="entity-item" data-name="${esc(e.name)}" data-type="${esc(e.entity_type||'')}">
+            <div class="e-name">${esc(e.name)}</div>
+            <div class="e-meta">${esc(e.project||'')}${e.project?' · ':''}${esc(e.file||'')}</div>
+          </div>`
+        ).join('')
+      ).join('');
+      list.querySelectorAll('.entity-item').forEach(el => {
         el.addEventListener('click', async () => {
+          list.querySelectorAll('.entity-item').forEach(i => i.classList.remove('active'));
+          el.classList.add('active');
           try {
-            const name = el.dataset.entityName;
-            const type = el.dataset.entityType;
-            const data = await api('/api/entity?name=' + encodeURIComponent(name) + '&type=' + encodeURIComponent(type));
-            document.getElementById('entity-content').textContent = data.content || '(empty)';
-          } catch (err) {
-            document.getElementById('entity-content').textContent = 'Failed to load entity file.';
+            const d = await api('/api/entity?name='+encodeURIComponent(el.dataset.name)+'&type='+encodeURIComponent(el.dataset.type));
+            document.getElementById('entity-content').textContent = d.content || '(empty)';
+          } catch(_) {
+            document.getElementById('entity-content').textContent = 'Failed to load.';
           }
         });
       });
     }
 
-    setInterval(() => {
-      if (document.querySelector('.tab[data-tab="project"].active')) refreshEntities();
-    }, 5000);
+    refreshEntities();
+    setInterval(refreshEntities, 5000);
 
-    // --- Chat ---
-    function appendChatMsg(speaker, text, cls) {
-      const box = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = 'chat-msg ' + speaker + (cls ? ' ' + cls : '');
-      div.innerHTML = `<div class="speaker">${escapeHtml(speaker.charAt(0).toUpperCase() + speaker.slice(1))}</div>${escapeHtml(text)}`;
-      box.appendChild(div);
-      box.scrollTop = box.scrollHeight;
-      return div;
+    // ── Status pills ──
+    function updatePills(data) {
+      const counts = {};
+      for (const n of (data.nodes||[])) counts[n.kind] = (counts[n.kind]||0)+1;
+      const online = data.hive_status === 'online';
+      document.getElementById('stats').innerHTML = [
+        [`Hive: ${data.hive_status||'?'}`, online],
+        [`Files: ${data.known_files_count||0}`, false],
+        [`Tasks: ${counts.task||0}`, false],
+      ].map(([t,hi]) => `<span class="pill${hi?' online':''}">${esc(t)}</span>`).join('');
     }
 
-    async function sendChat() {
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = '';
-      document.getElementById('chat-send').disabled = true;
-      appendChatMsg('pilot', text);
-      const thinking = appendChatMsg('hive', 'Thinking...', 'thinking');
-      try {
-        const data = await api('/api/converse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text })
-        });
-        thinking.remove();
-        appendChatMsg('hive', data.response || '(no response)');
-        // refresh entity list in case something was materialized
-        refreshEntities();
-      } catch (err) {
-        thinking.remove();
-        appendChatMsg('hive', 'Error: ' + err.message);
-      } finally {
-        document.getElementById('chat-send').disabled = false;
-        input.focus();
-      }
-    }
+    api('/api/state').then(updatePills).catch(()=>{});
 
-    document.getElementById('chat-send').addEventListener('click', sendChat);
-    document.getElementById('chat-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+    // ── Graph overlay ──
+    let gState = { nodes:[], edges:[] };
+    let gSelected = null;
+    let gFilter = 'active';
+    let gFocused = false;
+    let transcriptCursor = 0;
+
+    document.getElementById('toggle-graph').addEventListener('click', () => {
+      document.getElementById('graph-overlay').classList.add('open');
+      loadGraph();
     });
+    document.getElementById('graph-close').addEventListener('click', () => {
+      document.getElementById('graph-overlay').classList.remove('open');
+    });
+    document.getElementById('graph-refresh').addEventListener('click', loadGraph);
+    document.getElementById('btn-restart').addEventListener('click', async () => {
+      await api('/api/restart', {method:'POST'});
+      setTimeout(loadGraph, 800);
+    });
+
+    async function loadGraph() {
+      gState = await api('/api/state');
+      updatePills(gState);
+      renderGraphPills();
+      renderCurrentCard();
+      renderNodeList();
+      renderGraph();
+      if (!gFocused) { gFocused = true; focusBest(); }
+    }
+
+    function renderGraphPills() {
+      const counts = {};
+      for (const n of gState.nodes) counts[n.kind] = (counts[n.kind]||0)+1;
+      document.getElementById('graph-pills').innerHTML = [
+        ['Tasks', counts.task||0], ['Plans', counts.plan||0],
+        ['Patches', counts.patch||0],
+        ['Issues', gState.nodes.filter(n=>n.anchor&&n.anchor.valid_file===false).length],
+      ].map(([k,v])=>`<span class="pill">${esc(k)}: ${v}</span>`).join('');
+    }
+
+    function filteredNodes() {
+      const q = document.getElementById('graph-search').value.trim().toLowerCase();
+      let nodes = gState.nodes.slice();
+      if (gFilter==='active') {
+        const floor = Math.max(0,(gState.latest_task_id||0)-80);
+        nodes = nodes.filter(n => n.kind==='child' || typeof n.id!=='number' || n.id>=floor || n.status==='current' || n.status==='blocked' || n.anchor?.valid_file===false);
+      } else if (gFilter==='current') {
+        nodes = relatedTo(gState.current_task_id||gState.latest_task_id);
+      } else if (gFilter==='blocked') {
+        nodes = nodes.filter(n=>n.status==='blocked'||n.status==='pending_pilot_review');
+      } else if (gFilter==='patches') {
+        nodes = nodes.filter(n=>['patch','review'].includes(n.kind));
+      } else if (gFilter==='invalid') {
+        nodes = nodes.filter(n=>n.anchor&&n.anchor.valid_file===false);
+      }
+      if (!q) return nodes.slice(0, gFilter==='all'?240:120);
+      return nodes.filter(n=>[n.id,n.kind,n.status,n.note,n.anchor?.target_file].join(' ').toLowerCase().includes(q)).slice(0,120);
+    }
+
+    function relatedTo(rootId) {
+      if (rootId==null) return gState.nodes.slice(-60);
+      const keep = new Set([String(rootId)]);
+      let changed=true;
+      while(changed){changed=false;for(const e of gState.edges){const f=String(e.from),t=String(e.to);if(keep.has(f)&&!keep.has(t)){keep.add(t);changed=true;}if(keep.has(t)&&!keep.has(f)){keep.add(f);changed=true;}}}
+      return gState.nodes.filter(n=>keep.has(String(n.id)));
+    }
+
+    function laneFor(kind) { return {task:0,plan:1,child:2,patch:3,review:4,failure:4,lesson:5,memory:5}[kind]??5; }
+
+    function renderGraph() {
+      const nodes = filteredNodes();
+      const ids = new Set(nodes.map(n=>String(n.id)));
+      const byLane = new Map();
+      for (const n of nodes) { const l=laneFor(n.kind); if(!byLane.has(l)) byLane.set(l,[]); byLane.get(l).push(n); }
+      const pos = new Map();
+      for (const [lane,ln] of byLane) ln.forEach((n,i)=>pos.set(String(n.id),{x:70+lane*250,y:60+i*112}));
+      const svg = document.getElementById('graph');
+      const edges = gState.edges.filter(e=>ids.has(String(e.from))&&ids.has(String(e.to))).map(e=>{
+        const f=pos.get(String(e.from)),t=pos.get(String(e.to));
+        if(!f||!t) return '';
+        const x1=f.x+210,y1=f.y+31,x2=t.x,y2=t.y+31,mid=(x1+x2)/2;
+        return `<path class="edge" d="M ${x1} ${y1} C ${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}"/><text class="edge-label" x="${mid-18}" y="${(y1+y2)/2-5}">${esc(e.label||'')}</text>`;
+      }).join('');
+      const nodesSvg = nodes.map(n=>{
+        const p=pos.get(String(n.id));
+        const inv=n.anchor&&n.anchor.valid_file===false?' invalid':'';
+        const sel=gSelected&&String(gSelected.id)===String(n.id)?' selected':'';
+        return `<g class="node ${esc(n.kind)}${inv}${sel}" data-id="${esc(n.id)}" transform="translate(${p.x},${p.y})"><rect width="210" height="72"></rect><text x="10" y="20">${esc(shorten(n.label,30))}</text><text x="10" y="40" class="meta">${esc(shorten(n.status||'unknown',32))}</text><text x="10" y="58" class="meta">${esc(shorten(n.anchor?.target_file||'',30))}</text></g>`;
+      }).join('');
+      svg.innerHTML = edges + nodesSvg;
+      svg.querySelectorAll('.node').forEach(el=>el.addEventListener('click',()=>selectNode(el.dataset.id)));
+    }
+
+    function renderCurrentCard() {
+      const id = gState.current_task_id||gState.latest_task_id;
+      const n = gState.nodes.find(n=>String(n.id)===String(id));
+      const card = document.getElementById('current-card');
+      if (!n) { card.innerHTML='<div class="meta" style="color:var(--muted);font-size:12px">No current task.</div>'; return; }
+      card.innerHTML=`<div class="title">${esc(n.label)}</div><div class="meta">${esc(n.status||'?')} / ${esc(n.kind)}</div>`;
+      card.onclick=()=>selectAndFocus(n.id);
+    }
+
+    function renderNodeList() {
+      const items = filteredNodes();
+      document.getElementById('node-list').innerHTML = items.map(n=>
+        `<div class="g-list-item" data-id="${esc(n.id)}"><div class="title">${esc(n.label)}</div><div class="meta">${esc(n.kind)} / ${esc(n.status||'?')}</div></div>`
+      ).join('');
+      document.querySelectorAll('#node-list .g-list-item').forEach(el=>el.addEventListener('click',()=>selectNode(el.dataset.id)));
+    }
+
+    function selectNode(id) {
+      gSelected = gState.nodes.find(n=>String(n.id)===String(id));
+      renderGraph();
+      renderDetail();
+    }
+    function selectAndFocus(id) { selectNode(id); setTimeout(()=>scrollTo(id),0); }
+    function scrollTo(id) {
+      const el = document.getElementById('graph').querySelector(`.node[data-id="${CSS.escape(String(id))}"]`);
+      if (!el) return;
+      const m = /translate\(([-0-9.]+),([-0-9.]+)\)/.exec(el.getAttribute('transform')||'');
+      if (!m) return;
+      const wrap = document.getElementById('graph-wrap');
+      wrap.scrollTo({left:Math.max(0,+m[1]-wrap.clientWidth/2+120),top:Math.max(0,+m[2]-wrap.clientHeight/2+80),behavior:'smooth'});
+    }
+    function focusBest() {
+      const inv = gState.nodes.find(n=>n.anchor&&n.anchor.valid_file===false);
+      const id = inv?.id||gState.current_task_id||gState.latest_task_id;
+      if (id!=null) selectAndFocus(id);
+    }
+
+    function renderDetail() {
+      const det = document.getElementById('detail-body');
+      if (!gSelected) { det.innerHTML='<span style="color:var(--muted);font-size:12px">Select a node.</span>'; return; }
+      const a=gSelected.anchor||{}, ac=a.valid_file===false?'bad':(a.target_file?'good':'');
+      det.innerHTML=`
+        <div class="g-chip">${esc(gSelected.kind)}</div>
+        <div class="g-chip">${esc(gSelected.status||'?')}</div>
+        <h3 style="margin:8px 0 4px;font-size:13px">${esc(gSelected.label)}</h3>
+        <div class="field-label">Anchor</div>
+        <div><span class="g-chip ${ac}">file: ${esc(a.target_file||'none')}</span><span class="g-chip">symbol: ${esc(a.target_symbol||'none')}</span><span class="g-chip">conf: ${esc(a.confidence||'none')}</span></div>
+        <div class="g-grid2" style="margin-top:8px">
+          <button id="btn-repair">Set GUI Anchor + Replan</button>
+          <button id="btn-replan">Replan Selected</button>
+        </div>
+        <div class="field-label">Note</div>
+        <pre id="detail-pre">${esc(gSelected.note||'')}</pre>
+      `;
+      document.getElementById('btn-repair').addEventListener('click',()=>{
+        const id=selectedTaskId(); if(id==null) return;
+        sendCmd(`pilot task ${id} Target file is hive_gui.py.`);
+        setTimeout(()=>sendCmd(`plan task ${id}`),1600);
+      });
+      document.getElementById('btn-replan').addEventListener('click',()=>{ const id=selectedTaskId(); if(id!=null) sendCmd(`plan task ${id}`); });
+    }
+
+    async function sendCmd(cmd) {
+      cmd = String(cmd||'').trim(); if(!cmd) return;
+      await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+      document.getElementById('g-command').value='';
+      setTimeout(loadGraph,1200);
+    }
+
+    function selectedNumericId() {
+      if (!gSelected) return null;
+      if (typeof gSelected.id==='number') return gSelected.id;
+      const p=Number(gSelected.id); return Number.isInteger(p)?p:null;
+    }
+    function selectedTaskId() {
+      if (!gSelected) return null;
+      if (gSelected.kind==='task'&&typeof gSelected.id==='number') return gSelected.id;
+      const m=gSelected.metadata; if(!m) return selectedNumericId();
+      if (Number.isInteger(m.task_id)) return m.task_id;
+      if (m.plan&&Number.isInteger(m.plan.task_id)) return m.plan.task_id;
+      return selectedNumericId();
+    }
+    function highestTaskId() {
+      const ids=gState.nodes.filter(n=>n.kind==='task'&&typeof n.id==='number').map(n=>n.id);
+      return ids.length?Math.max(...ids):null;
+    }
+
+    document.getElementById('create-task').addEventListener('click',()=>{
+      const t=document.getElementById('new-task').value.trim(); if(!t) return;
+      document.getElementById('new-task').value=''; sendCmd(t);
+    });
+    document.getElementById('create-plan').addEventListener('click',async()=>{
+      const t=document.getElementById('new-task').value.trim(); if(!t) return;
+      const before=highestTaskId(); document.getElementById('new-task').value='';
+      await sendCmd(t);
+      setTimeout(async()=>{ await loadGraph(); const nx=highestTaskId(); if(nx&&nx!==before) sendCmd(`plan task ${nx}`); },2200);
+    });
+    document.getElementById('g-send-command').addEventListener('click',()=>sendCmd(document.getElementById('g-command').value));
+    document.getElementById('g-command').addEventListener('keydown',e=>{ if(e.key==='Enter') sendCmd(e.target.value); });
+    document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>{
+      const id=selectedNumericId(); if(id==null) return; sendCmd(`${btn.dataset.action} ${id}`);
+    }));
+    document.getElementById('graph-search').addEventListener('input',()=>{ renderNodeList(); renderGraph(); });
+    document.querySelectorAll('#graph-filters button').forEach(btn=>btn.addEventListener('click',()=>{
+      gFilter=btn.dataset.filter;
+      document.querySelectorAll('#graph-filters button').forEach(b=>b.classList.toggle('active',b===btn));
+      renderNodeList(); renderGraph(); focusBest();
+    }));
+    document.getElementById('focus-current').addEventListener('click',()=>{ const id=gState.current_task_id||gState.latest_task_id; if(id!=null) selectAndFocus(id); });
+    document.getElementById('focus-latest').addEventListener('click',()=>{ if(gState.latest_task_id!=null) selectAndFocus(gState.latest_task_id); });
+
+    // Transcript polling (for graph overlay)
+    async function pollTranscript() {
+      try {
+        const d = await api(`/api/transcript?cursor=${transcriptCursor}`);
+        transcriptCursor = d.cursor;
+        if (d.text) { const t=document.getElementById('g-transcript'); t.textContent+=d.text; t.scrollTop=t.scrollHeight; }
+      } catch(_) {}
+      finally { setTimeout(pollTranscript,500); }
+    }
+    pollTranscript();
   </script>
 </body>
 </html>"""
