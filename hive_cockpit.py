@@ -13,6 +13,22 @@ from urllib.parse import parse_qs, urlparse
 ROOT = Path(__file__).resolve().parent
 HOST = "127.0.0.1"
 PORT = 8765
+PROJECT_DIR = None  # set by --project arg in main()
+
+CONVERSE_MANAGER = None
+CONVERSE_LOCK = threading.Lock()
+
+
+def get_converse_manager():
+    global CONVERSE_MANAGER
+    if CONVERSE_MANAGER is None:
+        with CONVERSE_LOCK:
+            if CONVERSE_MANAGER is None:
+                from conversation_manager import ConversationManager
+                CONVERSE_MANAGER = ConversationManager(
+                    project_dir=str(PROJECT_DIR or ROOT)
+                )
+    return CONVERSE_MANAGER
 
 
 def _read_json(path, fallback):
@@ -529,6 +545,52 @@ HTML = r"""<!doctype html>
     }
     #transcript { height: 260px; }
     .field-label { color: var(--muted); font-size: 12px; margin: 8px 0 4px; }
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .tab {
+      flex: 1;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .tab.active {
+      background: #172334;
+      border-color: #2c4054;
+      color: var(--text);
+    }
+    #entity-list { display: flex; flex-direction: column; gap: 4px; }
+    #entity-content {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #070d13;
+      border: 1px solid #223140;
+      border-radius: 7px;
+      padding: 10px;
+      max-height: 340px;
+      overflow: auto;
+      color: #d9e3ec;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+    }
+    #chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 480px;
+      overflow: auto;
+      margin-bottom: 10px;
+    }
+    .chat-msg { border-radius: 7px; padding: 8px 10px; font-size: 13px; line-height: 1.5; }
+    .chat-msg.pilot { background: #0f1e2d; border: 1px solid #2c4054; }
+    .chat-msg.hive { background: #0b1a10; border: 1px solid #2a5040; }
+    .chat-msg .speaker { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .chat-msg.thinking { opacity: 0.5; font-style: italic; }
     @media (max-width: 1100px) {
       #shell { grid-template-columns: 300px 1fr; }
       #right { display: none; }
@@ -605,23 +667,53 @@ HTML = r"""<!doctype html>
     </main>
 
     <aside id="right">
-      <section class="section" id="detail">
-        <h2>Selected</h2>
-        <div id="detail-body">Select a node to inspect its plan, patch, anchor, or task metadata.</div>
-      </section>
+      <div class="tab-bar">
+        <button class="tab active" data-tab="selected">Selected</button>
+        <button class="tab" data-tab="project">Project</button>
+        <button class="tab" data-tab="chat">Chat</button>
+      </div>
 
-      <section class="section">
-        <h2>Command</h2>
-        <div class="row">
-          <input id="command" placeholder="Raw Hive command" />
-          <button id="send-command">Send</button>
-        </div>
-      </section>
+      <div id="tab-selected">
+        <section class="section" id="detail">
+          <h2>Selected</h2>
+          <div id="detail-body">Select a node to inspect its plan, patch, anchor, or task metadata.</div>
+        </section>
 
-      <section class="section">
-        <h2>Transcript</h2>
-        <pre id="transcript"></pre>
-      </section>
+        <section class="section">
+          <h2>Command</h2>
+          <div class="row">
+            <input id="command" placeholder="Raw Hive command" />
+            <button id="send-command">Send</button>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Transcript</h2>
+          <pre id="transcript"></pre>
+        </section>
+      </div>
+
+      <div id="tab-project" style="display:none">
+        <section class="section">
+          <h2>Project Entities</h2>
+          <div id="entity-list"><div class="meta">Loading...</div></div>
+        </section>
+        <section class="section">
+          <h2>File</h2>
+          <pre id="entity-content">Select an entity to view its file.</pre>
+        </section>
+      </div>
+
+      <div id="tab-chat" style="display:none">
+        <section class="section">
+          <h2>Hive Chat</h2>
+          <div id="chat-messages"></div>
+          <div class="row">
+            <input id="chat-input" placeholder="Talk to Hive..." />
+            <button id="chat-send" class="primary">Send</button>
+          </div>
+        </section>
+      </div>
     </aside>
   </div>
 
@@ -1035,6 +1127,112 @@ HTML = r"""<!doctype html>
     refresh();
     pollTranscript();
     setInterval(refresh, 6000);
+
+    // --- Tab switching ---
+    const TABS = ['selected', 'project', 'chat'];
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        TABS.forEach(t => {
+          document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
+        });
+        if (tab === 'project') refreshEntities();
+      });
+    });
+
+    async function refreshEntities() {
+      try {
+        const data = await api('/api/entities');
+        renderEntities(data.entities || []);
+      } catch (err) {
+        document.getElementById('entity-list').textContent = 'Failed to load entities.';
+      }
+    }
+
+    function renderEntities(entities) {
+      const list = document.getElementById('entity-list');
+      if (!entities.length) {
+        list.innerHTML = '<div class="meta">No entities materialized yet. Say "create X" to Hive.</div>';
+        return;
+      }
+      const byType = {};
+      for (const e of entities) {
+        const t = e.entity_type || 'unknown';
+        (byType[t] = byType[t] || []).push(e);
+      }
+      list.innerHTML = Object.keys(byType).sort().map(type => `
+        <div style="margin-bottom:10px">
+          <div class="field-label">${escapeHtml(type.charAt(0).toUpperCase() + type.slice(1))}s</div>
+          ${byType[type].map(e => `
+            <div class="list-item" data-entity-name="${escapeHtml(e.name)}" data-entity-type="${escapeHtml(e.entity_type || '')}">
+              <div class="title">${escapeHtml(e.name)}</div>
+              <div class="meta">${escapeHtml(e.project || '')} · ${escapeHtml(e.file || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+      list.querySelectorAll('.list-item[data-entity-name]').forEach(el => {
+        el.addEventListener('click', async () => {
+          try {
+            const name = el.dataset.entityName;
+            const type = el.dataset.entityType;
+            const data = await api('/api/entity?name=' + encodeURIComponent(name) + '&type=' + encodeURIComponent(type));
+            document.getElementById('entity-content').textContent = data.content || '(empty)';
+          } catch (err) {
+            document.getElementById('entity-content').textContent = 'Failed to load entity file.';
+          }
+        });
+      });
+    }
+
+    setInterval(() => {
+      if (document.querySelector('.tab[data-tab="project"].active')) refreshEntities();
+    }, 5000);
+
+    // --- Chat ---
+    function appendChatMsg(speaker, text, cls) {
+      const box = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + speaker + (cls ? ' ' + cls : '');
+      div.innerHTML = `<div class="speaker">${escapeHtml(speaker.charAt(0).toUpperCase() + speaker.slice(1))}</div>${escapeHtml(text)}`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      return div;
+    }
+
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      document.getElementById('chat-send').disabled = true;
+      appendChatMsg('pilot', text);
+      const thinking = appendChatMsg('hive', 'Thinking...', 'thinking');
+      try {
+        const data = await api('/api/converse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        thinking.remove();
+        appendChatMsg('hive', data.response || '(no response)');
+        // refresh entity list in case something was materialized
+        refreshEntities();
+      } catch (err) {
+        thinking.remove();
+        appendChatMsg('hive', 'Error: ' + err.message);
+      } finally {
+        document.getElementById('chat-send').disabled = false;
+        input.focus();
+      }
+    }
+
+    document.getElementById('chat-send').addEventListener('click', sendChat);
+    document.getElementById('chat-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+    });
   </script>
 </body>
 </html>"""
@@ -1072,6 +1270,29 @@ class Handler(BaseHTTPRequestHandler):
             cursor = parse_qs(parsed.query).get("cursor", ["0"])[0]
             self._send_json(HIVE.transcript_since(cursor))
             return
+        if parsed.path == "/api/entities":
+            try:
+                index_path = ROOT / ".hive_index.json"
+                index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else {}
+                entities = sorted(index.values(), key=lambda e: (e.get("entity_type", ""), e.get("name", "")))
+            except Exception:
+                entities = []
+            self._send_json({"entities": entities})
+            return
+        if parsed.path == "/api/entity":
+            qs = parse_qs(parsed.query)
+            name = (qs.get("name") or [""])[0]
+            entity_type = (qs.get("type") or [""])[0]
+            try:
+                from HiveMaterializer import HiveMaterializer
+                content = HiveMaterializer(project_dir=str(ROOT)).read_entity(name, entity_type)
+            except Exception:
+                content = None
+            if content is None:
+                self._send_json({"error": "Entity not found"}, status=404)
+            else:
+                self._send_json({"name": name, "entity_type": entity_type, "content": content})
+            return
         self.send_error(404)
 
     def do_POST(self):
@@ -1086,6 +1307,19 @@ class Handler(BaseHTTPRequestHandler):
             HIVE.start()
             self._send_json({"ok": True})
             return
+        if parsed.path == "/api/converse":
+            payload = self._read_body()
+            message = str(payload.get("message") or "").strip()
+            if not message:
+                self._send_json({"ok": False, "error": "Empty message"}, status=400)
+                return
+            try:
+                manager = get_converse_manager()
+                response = manager.chat(message)
+                self._send_json({"ok": True, "response": response})
+            except Exception as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=500)
+            return
         self.send_error(404)
 
     def log_message(self, fmt, *args):
@@ -1093,9 +1327,18 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    global PROJECT_DIR
+    args = sys.argv[1:]
+    if "--project" in args:
+        idx = args.index("--project")
+        if idx + 1 < len(args):
+            PROJECT_DIR = Path(args[idx + 1]).resolve()
+
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     url = f"http://{HOST}:{PORT}/"
     print(f"Hive Cockpit running at {url}")
+    if PROJECT_DIR:
+        print(f"Project: {PROJECT_DIR}")
     webbrowser.open(url)
     try:
         server.serve_forever()

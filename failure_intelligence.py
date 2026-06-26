@@ -7,7 +7,9 @@ from coder_failures import (
     FAILURE_TAXONOMY,
     UNKNOWN_FAILURE_CODE,
     build_retry_instruction as legacy_build_retry_instruction,
+    build_retry_why,
     classify_failure as legacy_classify_failure,
+    dispatch_flag,
 )
 
 
@@ -102,6 +104,7 @@ class LessonPayload:
     context_requirements: Dict[str, Any] = field(default_factory=dict)
     do_not_apply_when: List[Dict[str, Any]] = field(default_factory=list)
     lesson_level: str = "exact"
+    why: Optional[str] = None
 
 
 @dataclass
@@ -850,6 +853,7 @@ def build_lesson_payload(
         context_requirements=build_context_requirements(evidence),
         do_not_apply_when=build_do_not_apply_when(evidence, classification),
         lesson_level="exact",
+        why=build_retry_why(evidence.raw_error_text or ""),
     )
 
 

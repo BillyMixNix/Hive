@@ -15,6 +15,7 @@ from conversation_prompt import SYSTEM_PROMPT, OLLAMA_TOOLS
 from HiveMemoryAgent import HiveMemoryAgent
 from HiveStateManager import HiveStateManager
 from HiveLessonMemory import LessonMemory
+from HiveMaterializer import HiveMaterializer
 from builder import BuilderAgent
 
 try:
@@ -36,7 +37,7 @@ def _dummy_vector():
 
 
 class ConversationManager:
-    def __init__(self, repo_root=".", model=None):
+    def __init__(self, repo_root=".", model=None, project_dir=None):
         self.model = model or DEFAULT_MODEL
         self.history = []  # user/assistant/tool turns only
 
@@ -45,6 +46,7 @@ class ConversationManager:
         self.state.load_snapshot()
         self.lesson_memory = LessonMemory()
         self.builder = BuilderAgent()
+        self.materializer = HiveMaterializer(project_dir=project_dir or repo_root)
 
         # System message built after lesson_memory is ready so trusted
         # lessons can be injected into the prompt at session start.
@@ -54,25 +56,44 @@ class ConversationManager:
         }
 
     def _build_system_prompt(self) -> str:
-        """Build the system prompt, injecting trusted lessons at the bottom."""
-        lessons = self._load_trusted_lessons()
-        if not lessons:
-            return SYSTEM_PROMPT
+        """Build the system prompt, injecting trusted lessons and known entities."""
+        lines = [SYSTEM_PROMPT]
 
-        lines = [SYSTEM_PROMPT, "", "--- LEARNED PATTERNS ---",
-                 "These patterns have been validated through experience. Apply them automatically:"]
-        for lesson in lessons:
-            family = lesson.get("failure_family") or lesson.get("lesson_family") or "general"
-            when = (lesson.get("failure_reason") or lesson.get("trigger_pattern") or "")[:120]
-            instruction = (lesson.get("retry_instruction") or "")[:200]
-            if instruction:
-                entry = f"- [{family}]"
-                if when:
-                    entry += f" When: {when}."
-                entry += f" Do: {instruction}"
-                lines.append(entry)
+        lessons = self._load_trusted_lessons()
+        if lessons:
+            lines += ["", "--- LEARNED PATTERNS ---",
+                      "These patterns have been validated through experience. Apply them automatically:"]
+            for lesson in lessons:
+                family = lesson.get("failure_family") or lesson.get("lesson_family") or "general"
+                when = (lesson.get("failure_reason") or lesson.get("trigger_pattern") or "")[:120]
+                instruction = (lesson.get("retry_instruction") or "")[:200]
+                if instruction:
+                    entry = f"- [{family}]"
+                    if when:
+                        entry += f" When: {when}."
+                    entry += f" Do: {instruction}"
+                    lines.append(entry)
+
+        entities = self._load_known_entities()
+        if entities:
+            lines += ["", "--- KNOWN PROJECT ENTITIES ---",
+                      "These entities have been materialized and exist as files in the project:"]
+            by_type = {}
+            for e in entities:
+                by_type.setdefault(e.get("entity_type", "unknown"), []).append(e)
+            for entity_type in sorted(by_type):
+                names = ", ".join(e["name"] for e in by_type[entity_type])
+                lines.append(f"- {entity_type.title()}s: {names}")
 
         return "\n".join(lines)
+
+    def _load_known_entities(self) -> list:
+        """Load the materialized entity index for injection into the system prompt."""
+        try:
+            index = self.materializer._load_index()
+            return list(index.values())
+        except Exception:
+            return []
 
     def _load_trusted_lessons(self) -> list:
         """Load trusted lessons relevant to conversational reasoning."""
@@ -274,6 +295,9 @@ class ConversationManager:
             "show_failures": self._tool_show_failures,
             "show_lessons": self._tool_show_lessons,
             "create_task": self._tool_create_task,
+            "materialize_entity": self._tool_materialize_entity,
+            "list_project": self._tool_list_project,
+            "read_entity": self._tool_read_entity,
         }
         fn = handlers.get(name)
         if fn is None:
@@ -575,3 +599,50 @@ class ConversationManager:
             "work_mode": task.get("work_mode"),
             "next_action": task.get("next_action"),
         }
+
+    def _tool_materialize_entity(self, name: str, entity_type: str, content: str,
+                                  target_file: str = None, project: str = None):
+        try:
+            result = self.materializer.materialize(
+                name=name,
+                entity_type=entity_type,
+                content=content,
+                target_file=target_file,
+                project=project,
+            )
+        except Exception as exc:
+            return {"error": str(exc)}
+
+        self.memory.store(
+            _dummy_vector(),
+            tag="entity",
+            note=f"{entity_type}: {name}" + (f" [{project}]" if project else ""),
+            status="materialized",
+            metadata={
+                "name": name,
+                "entity_type": entity_type,
+                "target_file": result["file"],
+                "project": project,
+                "action": result["action"],
+            },
+        )
+        return result
+
+    def _tool_list_project(self, entity_type: str = None, project: str = None):
+        try:
+            entities = self.materializer.list_entities(
+                entity_type=entity_type,
+                project=project,
+            )
+        except Exception as exc:
+            return {"error": str(exc)}
+        return {"count": len(entities), "entities": entities}
+
+    def _tool_read_entity(self, name: str, entity_type: str):
+        try:
+            content = self.materializer.read_entity(name, entity_type)
+        except Exception as exc:
+            return {"error": str(exc)}
+        if content is None:
+            return {"error": f"Entity '{name}' ({entity_type}) not found in project index."}
+        return {"name": name, "entity_type": entity_type, "content": content}

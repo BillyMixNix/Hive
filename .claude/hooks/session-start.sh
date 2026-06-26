@@ -15,3 +15,6 @@ fi
 
 # Load Hive lessons into session context
 python3 "$PROJECT/scripts/lesson_loader.py"
+
+# Load materialized project entities into session context
+python3 "$PROJECT/scripts/entity_loader.py"

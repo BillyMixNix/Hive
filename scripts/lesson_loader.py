@@ -44,9 +44,12 @@ def format_lessons(lessons):
         label = f"[{family}/{code}]" if code else f"[{family}]"
         rate = f"{successes}/{times}" if times else "?"
 
+        why = (l.get("why") or "").strip()
         lines.append(f"{label} ({rate} success)")
         if pattern:
             lines.append(f"  When:  {pattern}")
+        if why:
+            lines.append(f"  Why:   {why}")
         if instruction:
             lines.append(f"  Do:    {instruction}")
         lines.append("")
