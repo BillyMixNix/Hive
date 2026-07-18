@@ -1,8 +1,8 @@
 name: PR14 Debug
 
 on:
-  push:
-    branches: [ agent/consolidate-validation-gate ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   debug-tests:
