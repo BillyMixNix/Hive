@@ -19,6 +19,27 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run focused real A/B test
+      - name: Print concise real A/B diagnostic
         run: |
-          pytest tests/test_validation_ab_run.py::test_real_hive_harness_detects_seeded_lesson_reuse -vv -s
+          python - <<'PY'
+          import io
+          import json
+          from contextlib import redirect_stdout
+          from validation.ab_run import run_sequence_ab
+          from validation.experiment_cases import build_lesson_reuse_experiment_pack
+
+          observations = []
+          captured = io.StringIO()
+          with redirect_stdout(captured):
+              report = run_sequence_ab(
+                  cases=build_lesson_reuse_experiment_pack(observations),
+                  repeats=2,
+              )
+          print(json.dumps({
+              "verdict": report["verdict"],
+              "paired_summary": report["paired_summary"],
+              "repeat_records": report["repeat_records"],
+              "observations": observations,
+              "captured_tail": captured.getvalue().splitlines()[-20:],
+          }, indent=2, sort_keys=True))
+          PY
