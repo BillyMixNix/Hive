@@ -44,6 +44,16 @@ jobs:
         run: |
           mkdir -p validation/results
           sed -i 's#validation/fixtures/config_merge_target.py#config_merge_target.py#g' validation/run_hard_merge_ab.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('validation/run_hard_merge_ab.py')
+          text = path.read_text(encoding='utf-8')
+          needle = 'def main():\n'
+          replacement = 'def main():\n    import coder_validation\n    coder_validation.KNOWN_FILES.add(TARGET_FILE)\n'
+          if needle not in text:
+              raise SystemExit('main insertion point missing')
+          path.write_text(text.replace(needle, replacement, 1), encoding='utf-8')
+          PY
           set +e
           python -m validation.run_hard_merge_ab 2>&1 | tee validation/results/live_ab_hard_merge.log
           status=${PIPESTATUS[0]}
