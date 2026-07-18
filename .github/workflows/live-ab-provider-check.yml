@@ -1,4 +1,4 @@
-name: Live A-B Ollama Pilot
+name: Live A-B Seeded Coder Pilot
 
 on:
   pull_request:
@@ -8,12 +8,13 @@ permissions:
   contents: read
 
 jobs:
-  live-ab-pilot:
+  live-ab-seeded-coder:
     runs-on: ubuntu-latest
-    timeout-minutes: 330
+    timeout-minutes: 180
     env:
       OLLAMA_HOST: 127.0.0.1:11434
       OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_KEEP_ALIVE: "-1"
     steps:
       - uses: actions/checkout@v5
 
@@ -44,36 +45,82 @@ jobs:
       - name: Pull configured Hive model
         run: ollama pull qwen2.5-coder:7b
 
-      - name: Run counterbalanced live A-B pilot
+      - name: Run seeded live-coder A-B experiment
         shell: bash
         run: |
           python - <<'PY' 2>&1 | tee live-ab-console.log
           import json
           import os
+          import time
           from pathlib import Path
 
-          from benchmark_pack import build_reliability_benchmark_pack
+          import requests
+          import coder as coder_module
           from validation.ab_run import run_sequence_ab
+          from validation.experiment_cases import build_lesson_reuse_experiment_pack
 
-          cases = build_reliability_benchmark_pack()[:2]
+          MODEL = "qwen2.5-coder:7b"
+          OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
+
+          def bounded_live_coder(prompt, role="coder", timeout=None, model=None, system=None):
+              started = time.time()
+              response = requests.post(
+                  OLLAMA_URL,
+                  json={
+                      "model": MODEL,
+                      "prompt": prompt,
+                      "stream": False,
+                      "options": {
+                          "temperature": 0,
+                          "num_predict": 512,
+                          "num_ctx": 8192,
+                      },
+                  },
+                  timeout=600,
+              )
+              response.raise_for_status()
+              payload = response.json()
+              text = payload.get("response", "")
+              print(json.dumps({
+                  "event": "live_coder_response",
+                  "elapsed_seconds": round(time.time() - started, 3),
+                  "prompt_chars": len(prompt),
+                  "response_chars": len(text),
+              }, sort_keys=True))
+              return text
+
+          coder_module.ask_hive = bounded_live_coder
+
+          cases = build_lesson_reuse_experiment_pack()
+          reuse_case = cases[1]
+          reuse_case.pop("coder_response", None)
+          reuse_case["live_coder"] = True
+          reuse_case["live_reflector"] = False
+
           report = run_sequence_ab(
               cases=cases,
               repeats=2,
-              live_model=True,
-              output_path="validation/results/live_lesson_ab_pilot.json",
+              live_model=False,
+              output_path="validation/results/live_seeded_coder_ab.json",
           )
           manifest = {
               "provider": "ollama",
-              "model": "qwen2.5-coder:7b",
+              "model": MODEL,
               "commit": os.environ.get("GITHUB_SHA"),
-              "scope": "bounded_live_pilot",
+              "scope": "seeded_live_coder_ab",
+              "live_roles": ["coder"],
+              "fixed_roles": ["planner", "reflector"],
               "case_names": [case["name"] for case in cases],
-              "case_count": len(cases),
               "repeats": 2,
-              "task_executions": len(cases) * 2 * 2,
+              "live_coder_executions": 4,
+              "generation_options": {
+                  "temperature": 0,
+                  "num_predict": 512,
+                  "num_ctx": 8192,
+              },
               "report": report,
           }
-          Path("validation/results/live_lesson_ab_pilot_manifest.json").write_text(
+          Path("validation/results/live_seeded_coder_ab_manifest.json").write_text(
               json.dumps(manifest, indent=2, sort_keys=True),
               encoding="utf-8",
           )
@@ -81,18 +128,18 @@ jobs:
               "verdict": report["verdict"],
               "paired_summary": report["paired_summary"],
               "case_names": manifest["case_names"],
-              "task_executions": manifest["task_executions"],
+              "live_coder_executions": manifest["live_coder_executions"],
           }, indent=2, sort_keys=True))
           PY
 
-      - name: Upload live A-B evidence
+      - name: Upload seeded live-coder evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: live-ab-ollama-pilot
+          name: live-ab-seeded-coder
           path: |
-            validation/results/live_lesson_ab_pilot.json
-            validation/results/live_lesson_ab_pilot_manifest.json
+            validation/results/live_seeded_coder_ab.json
+            validation/results/live_seeded_coder_ab_manifest.json
             live-ab-console.log
             ollama-server.log
           if-no-files-found: warn
