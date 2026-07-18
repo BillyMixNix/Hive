@@ -26,6 +26,8 @@ jobs:
 
       - name: Start Ollama
         run: |
+          export OLLAMA_NUM_PARALLEL=1
+          export OLLAMA_MAX_LOADED_MODELS=1
           nohup ollama serve > /tmp/ollama.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -sf http://127.0.0.1:11434/api/tags >/dev/null; then
@@ -43,9 +45,12 @@ jobs:
         shell: bash
         run: |
           mkdir -p validation/results
+          sed -i 's/"num_ctx": 8192/"num_ctx": 4096/' validation/run_medium_permissions_ab.py
+          sed -i 's/"num_predict": 900/"num_predict": 650/' validation/run_medium_permissions_ab.py
           set +e
           python -m validation.run_medium_permissions_ab 2>&1 | tee validation/results/live_ab_medium_permissions.log
           status=${PIPESTATUS[0]}
+          cp /tmp/ollama.log validation/results/ollama.log || true
           exit "$status"
 
       - name: Upload medium A-B evidence
@@ -56,4 +61,5 @@ jobs:
           path: |
             validation/results/live_ab_medium_permissions.json
             validation/results/live_ab_medium_permissions.log
+            validation/results/ollama.log
           if-no-files-found: warn
