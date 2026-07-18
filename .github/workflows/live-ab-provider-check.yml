@@ -1,21 +1,98 @@
-name: Live A-B Provider Check
+name: Live A-B Ollama Pilot
 
 on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
-  provider-check:
+  live-ab-pilot:
     runs-on: ubuntu-latest
+    timeout-minutes: 330
     env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OLLAMA_HOST: 127.0.0.1:11434
+      OLLAMA_NUM_PARALLEL: "1"
     steps:
-      - name: Check live provider credential
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: python -m pip install -q requests anthropic z3-solver radon pylint pytest
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama
         shell: bash
         run: |
-          if [ -n "$ANTHROPIC_API_KEY" ]; then
-            echo "LIVE_PROVIDER_READY=true"
-          else
-            echo "LIVE_PROVIDER_READY=false"
-            exit 2
-          fi
+          nohup ollama serve > ollama-server.log 2>&1 &
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat ollama-server.log
+          exit 1
+
+      - name: Pull configured Hive model
+        run: ollama pull qwen2.5-coder:7b
+
+      - name: Run counterbalanced live A-B pilot
+        shell: bash
+        run: |
+          python - <<'PY' 2>&1 | tee live-ab-console.log
+          import json
+          import os
+          from pathlib import Path
+
+          from benchmark_pack import build_reliability_benchmark_pack
+          from validation.ab_run import run_sequence_ab
+
+          cases = build_reliability_benchmark_pack()[:2]
+          report = run_sequence_ab(
+              cases=cases,
+              repeats=2,
+              live_model=True,
+              output_path="validation/results/live_lesson_ab_pilot.json",
+          )
+          manifest = {
+              "provider": "ollama",
+              "model": "qwen2.5-coder:7b",
+              "commit": os.environ.get("GITHUB_SHA"),
+              "scope": "bounded_live_pilot",
+              "case_names": [case["name"] for case in cases],
+              "case_count": len(cases),
+              "repeats": 2,
+              "task_executions": len(cases) * 2 * 2,
+              "report": report,
+          }
+          Path("validation/results/live_lesson_ab_pilot_manifest.json").write_text(
+              json.dumps(manifest, indent=2, sort_keys=True),
+              encoding="utf-8",
+          )
+          print(json.dumps({
+              "verdict": report["verdict"],
+              "paired_summary": report["paired_summary"],
+              "case_names": manifest["case_names"],
+              "task_executions": manifest["task_executions"],
+          }, indent=2, sort_keys=True))
+          PY
+
+      - name: Upload live A-B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-ab-ollama-pilot
+          path: |
+            validation/results/live_lesson_ab_pilot.json
+            validation/results/live_lesson_ab_pilot_manifest.json
+            live-ab-console.log
+            ollama-server.log
+          if-no-files-found: warn
