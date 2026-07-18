@@ -48,6 +48,7 @@ By default, scoring runs `ReliabilityBenchmarkHarness.run_pack()` in a subproces
 - Deployment requires explicit `pilot_approved=True`.
 - Deployment is refused if the live target changed after evaluation.
 - The evaluator and benchmark are protected from candidate modification.
+- Failed patch verification preserves its structured check evidence instead of collapsing into an opaque executor error.
 - Every evaluation and deployment is recorded in an append-only JSONL archive.
 - Deployed candidates retain the pre-patch content required for rollback.
 
