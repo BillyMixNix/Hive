@@ -72,9 +72,17 @@ def test_real_hive_harness_detects_seeded_lesson_reuse():
         repeats=2,
     )
 
-    assert report["verdict"] == "lessons_help"
-    assert report["paired_summary"]["passed_cases"]["paired_delta_mean"] == 1.0
-    assert report["paired_summary"]["total_retries"]["paired_delta_mean"] < 0
+    assert report["verdict"] == "lessons_help_efficiency_only"
+    assert report["paired_summary"]["passed_cases"]["paired_delta_mean"] == 0.0
+    assert report["paired_summary"]["total_retries"]["paired_delta_mean"] == -1.0
+    assert report["paired_summary"]["true_regressions"]["paired_delta_mean"] == 0.0
+    assert all(
+        pair["with_lessons"]["retry_count"] == 0
+        and pair["without_lessons"]["retry_count"] == 1
+        for repeat in report["repeat_records"]
+        for pair in repeat["case_pairs"]
+        if pair["name"] == "reuse_missing_diff_headers"
+    )
     assert any(observations)
     assert any(seen is False for seen in observations)
 
