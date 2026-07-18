@@ -384,6 +384,17 @@ def normalize_failure_event(
 
     raw_error_text = _build_error_text(stage, error_text, sandbox_report, reflection)
 
+    patch_text = _first_nonempty(
+        patch_data.get("patch"),
+        patch_data.get("patch_text"),
+        patch_data.get("failed_patch_text"),
+    )
+    if (
+        str(patch_data.get("status") or "").lower() == "blocked"
+        and _first_nonempty(patch_data.get("failed_patch_text"))
+    ):
+        patch_text = patch_data.get("failed_patch_text")
+
     return FailureEvidence(
         stage=stage,
         source=source,
@@ -409,7 +420,7 @@ def normalize_failure_event(
         benchmark_case_id=benchmark_case_id,
         attempt_index=attempt_index if attempt_index is not None else patch_data.get("attempt_index"),
         raw_response=_first_nonempty(raw_response, patch_data.get("raw_response")),
-        patch_text=_first_nonempty(patch_data.get("patch"), patch_data.get("patch_text")),
+        patch_text=patch_text,
         task_metadata=task_metadata,
         patch_metadata=patch_data,
         sandbox_report=sandbox_report,
@@ -553,8 +564,9 @@ def _classify_targeting_evidence(text, details, evidence):
 def _classify_placement_evidence(text, details, evidence):
     """Classify patch placement and context failures. Returns FailureClassification or None."""
     budget_decision = str((evidence.context_budget or {}).get("budget_decision") or "").lower()
+    patch_text = str(evidence.patch_text or "")
 
-    if "patch has no anchor context or removal lines" in text:
+    if "patch has no anchor context or removal lines" in text or "@@ -1,0 +1,1 @@" in patch_text:
         return _match("missing_context_block", 0.97, "Patch omitted real context lines for placement.", "placement_missing_context_block")
     if (
         "anchor_found': false" in text
@@ -624,6 +636,17 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
     details = _coerce_dict(evidence.sandbox_report.get("details"))
     reflection_verdict = str(evidence.reflection_verdict or "").lower()
     reflection_reason = str(evidence.reflection_reason or "")
+    explicit_failure_code = str((evidence.patch_metadata or {}).get("failure_code") or "").strip()
+    if (
+        explicit_failure_code in FAILURE_TAXONOMY
+        and str((evidence.patch_metadata or {}).get("status") or "").lower() == "blocked"
+    ):
+        return _match(
+            explicit_failure_code,
+            0.9,
+            "Blocked patch result carried the retry loop failure code.",
+            "blocked_result_failure_code",
+        )
 
     for classifier in (
         _classify_planner_evidence,
@@ -638,6 +661,9 @@ def classify_failure_event(evidence: FailureEvidence) -> FailureClassification:
 
     if "reflector rejected patch" in text or reflection_verdict == "reject":
         return _match("reflector_reject", 0.9, reflection_reason or "Reflector rejected the patch.", "reflection_reject")
+
+    if explicit_failure_code in FAILURE_TAXONOMY:
+        return _match(explicit_failure_code, 0.72, "Patch result carried a prior failure code after evidence classifiers found no narrower match.", "explicit_failure_code_fallback")
 
     if evidence.stage == "retry_exhausted" or "retry exhausted" in text:
         return _match("sandbox_retry_exhausted", 0.78, "Retry budget was exhausted without reaching a valid patch.", "orchestration_retry_exhausted")
