@@ -17,12 +17,13 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies quietly
         run: python -m pip install -q -r requirements.txt
-      - name: Print concise real A/B diagnostic
+      - name: Write concise real A/B diagnostic
         run: |
           python - <<'PY'
           import io
           import json
           from contextlib import redirect_stdout
+          from pathlib import Path
           from validation.ab_run import run_sequence_ab
           from validation.experiment_cases import build_lesson_reuse_experiment_pack
 
@@ -33,11 +34,20 @@ jobs:
                   cases=build_lesson_reuse_experiment_pack(observations),
                   repeats=2,
               )
-          print(json.dumps({
+          payload = {
               "verdict": report["verdict"],
               "paired_summary": report["paired_summary"],
               "repeat_records": report["repeat_records"],
               "observations": observations,
               "captured_tail": captured.getvalue().splitlines()[-20:],
-          }, indent=2, sort_keys=True))
+          }
+          Path("ab-diagnostic.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True),
+              encoding="utf-8",
+          )
           PY
+      - name: Upload diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-diagnostic
+          path: ab-diagnostic.json
