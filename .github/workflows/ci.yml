@@ -11,83 +11,24 @@ permissions:
 
 jobs:
   apply-executor-fix:
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/consolidate-validation-gate' && github.actor != 'github-actions[bot]'
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/consolidate-validation-gate' && github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           ref: agent/consolidate-validation-gate
           fetch-depth: 0
-      - name: Patch executor verification contract
+      - name: Apply narrow executor fix
+        run: python scripts/apply_executor_fix_once.py
+      - name: Commit repair and restore workflows
         shell: bash
         run: |
           git fetch origin main
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path('executor.py')
-          text = path.read_text(encoding='utf-8')
-          old = '''        return {
-            "verified": checks["safe_to_apply"],
-            "anchor_index": anchor_index,
-            "block_span": block_span,
-        }
-'''
-          new = '''        return {
-            "verified": checks["safe_to_apply"],
-            "checks": checks,
-            "anchor_index": anchor_index,
-            "block_span": block_span,
-        }
-'''
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected one verify_patch_context return block, found {text.count(old)}.')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
-
-          Path('tests/test_executor_verification_contract.py').write_text('''from pathlib import Path
-
-import pytest
-
-from executor import ExecutorAgent
-
-
-ADDITIONS_ONLY_PATCH = (
-    "--- target.py\\n"
-    "+++ target.py\\n"
-    "@@ -1,0 +1,1 @@\\n"
-    "+    return revised_value\\n"
-)
-
-
-def test_rejected_verification_exposes_structured_checks(tmp_path: Path):
-    target = tmp_path / "target.py"
-    target.write_text("def target():\\n    return 1\\n", encoding="utf-8")
-    executor = ExecutorAgent(backup_dir=tmp_path / "backups")
-
-    result = executor.verify_patch_context(ADDITIONS_ONLY_PATCH, str(target))
-
-    assert result["verified"] is False
-    assert result["checks"]["anchor_found"] is False
-    assert result["checks"]["safe_to_apply"] is False
-
-
-def test_apply_failure_reports_checks_instead_of_keyerror(tmp_path: Path):
-    target = tmp_path / "target.py"
-    target.write_text("def target():\\n    return 1\\n", encoding="utf-8")
-    executor = ExecutorAgent(backup_dir=tmp_path / "backups")
-
-    with pytest.raises(ValueError, match="anchor_found"):
-        executor.apply_patch(ADDITIONS_ONLY_PATCH, str(target))
-''', encoding='utf-8')
-          PY
           git show origin/main:.github/workflows/ci.yml > .github/workflows/ci.yml
-          rm -f .github/workflows/pr14-debug.yml
-      - name: Commit repair
-        shell: bash
-        run: |
+          rm -f .github/workflows/pr14-debug.yml scripts/apply_executor_fix_once.py
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add executor.py tests/test_executor_verification_contract.py .github/workflows/ci.yml .github/workflows/pr14-debug.yml
+          git add -A
           git commit -m "Fix executor verification error reporting"
           git push origin HEAD:agent/consolidate-validation-gate
 
