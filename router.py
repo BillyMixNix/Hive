@@ -67,7 +67,7 @@ class Router:
         }
 
     def normalize_command(self, command):
-            return command.lower().strip()
+        return str(command or "").lower().strip()
 
     def validate_command_context(self, message):
         return "context" in message
