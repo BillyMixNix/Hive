@@ -1,0 +1,20 @@
+[
+  {
+    "id": "router-normalize-command-none",
+    "description": "A missing command must normalize to an empty string instead of raising AttributeError.",
+    "target_file": "router.py",
+    "callable": "Router.normalize_command",
+    "construct": {"mode": "new"},
+    "args": [null],
+    "expected": ""
+  },
+  {
+    "id": "router-normalize-command-trim-lower",
+    "description": "Command normalization must remain whitespace-trimming and case-insensitive.",
+    "target_file": "router.py",
+    "callable": "Router.normalize_command",
+    "construct": {"mode": "new"},
+    "args": ["  HeLp  "],
+    "expected": "help"
+  }
+]

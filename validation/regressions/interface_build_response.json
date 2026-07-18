@@ -1,0 +1,35 @@
+[
+  {
+    "id": "interface-build-response-default-context",
+    "description": "Omitted context must produce an empty response mapping.",
+    "target_file": "interface.py",
+    "callable": "Interface._build_response",
+    "construct": {"mode": "new"},
+    "args": ["help", "help"],
+    "expected": {
+      "intent": "help",
+      "context": {},
+      "raw_text": "help"
+    }
+  },
+  {
+    "id": "interface-build-response-detaches-context",
+    "description": "The response must not retain the caller-owned context mapping.",
+    "target_file": "interface.py",
+    "callable": "Interface._build_response",
+    "construct": {"mode": "new"},
+    "args": ["apply_patch", "apply patch 7", {"patch_id": 7}],
+    "expected": {
+      "intent": "apply_patch",
+      "context": {"patch_id": 7},
+      "raw_text": "apply patch 7"
+    },
+    "post_mutations": [
+      {
+        "path": ["context", "patch_id"],
+        "value": 99
+      }
+    ],
+    "preserve_inputs": true
+  }
+]
