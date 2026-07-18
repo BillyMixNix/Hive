@@ -17,6 +17,7 @@ from typing import Callable, Iterable
 
 from benchmark_harness import ReliabilityBenchmarkHarness
 from benchmark_pack import build_reliability_benchmark_pack
+from validation.experiment_cases import build_lesson_reuse_experiment_pack
 
 
 HarnessFactory = Callable[[], ReliabilityBenchmarkHarness]
@@ -198,10 +199,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run Hive's paired lesson-memory A/B experiment")
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--live", action="store_true", help="Use the configured live coder and reflector model")
+    parser.add_argument(
+        "--pack",
+        choices=("lesson-reuse", "reliability"),
+        default=None,
+        help="Use the deterministic lesson-reuse contract pack or the broader reliability pack",
+    )
     parser.add_argument("--output", default="validation/results/lesson_ab.json")
     args = parser.parse_args()
 
+    selected_pack = args.pack or ("reliability" if args.live else "lesson-reuse")
+    cases = (
+        build_lesson_reuse_experiment_pack()
+        if selected_pack == "lesson-reuse"
+        else build_reliability_benchmark_pack()
+    )
     report = run_sequence_ab(
+        cases=cases,
         repeats=args.repeats,
         live_model=args.live,
         output_path=args.output,
@@ -210,6 +224,8 @@ def main() -> None:
         "verdict": report["verdict"],
         "repeats": report["repeats"],
         "case_count": report["case_count"],
+        "live_model": report["live_model"],
+        "pack": selected_pack,
         "paired_summary": report["paired_summary"],
         "output": args.output,
     }, indent=2, sort_keys=True))
