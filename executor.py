@@ -291,6 +291,7 @@ class ExecutorAgent:
 
         return {
             "verified": checks["safe_to_apply"],
+            "checks": checks,
             "anchor_index": anchor_index,
             "block_span": block_span,
         }
