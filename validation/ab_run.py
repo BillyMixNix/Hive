@@ -68,16 +68,39 @@ def _paired_summary(repeats: list[dict]) -> dict:
     return summary
 
 
-def _verdict(summary: dict) -> str:
-    pass_delta = summary["passed_cases"]["paired_delta_mean"]
-    retry_delta = summary["total_retries"]["paired_delta_mean"]
-    regression_delta = summary["true_regressions"]["paired_delta_mean"]
+def _effect_exceeds_uncertainty(metric: dict, *, direction: str) -> bool:
+    delta = float(metric["paired_delta_mean"])
+    uncertainty = 2.0 * float(metric["paired_delta_standard_error"])
+    if direction == "positive":
+        return delta > uncertainty
+    if direction == "negative":
+        return delta < -uncertainty
+    raise ValueError(f"Unknown effect direction: {direction}")
 
-    if regression_delta > 0 or pass_delta < 0:
+
+def _verdict(summary: dict, repeats: int) -> str:
+    pass_metric = summary["passed_cases"]
+    retry_metric = summary["total_retries"]
+    regression_metric = summary["true_regressions"]
+
+    pass_delta = pass_metric["paired_delta_mean"]
+    retry_delta = retry_metric["paired_delta_mean"]
+    regression_delta = regression_metric["paired_delta_mean"]
+
+    if repeats < 2:
+        return "inconclusive_insufficient_repeats"
+    if _effect_exceeds_uncertainty(regression_metric, direction="positive"):
         return "lessons_hurt"
-    if pass_delta > 0 and retry_delta <= 0:
+    if _effect_exceeds_uncertainty(pass_metric, direction="negative"):
+        return "lessons_hurt"
+
+    pass_help = _effect_exceeds_uncertainty(pass_metric, direction="positive")
+    retry_help = _effect_exceeds_uncertainty(retry_metric, direction="negative")
+    no_regression_harm = regression_delta <= 0
+
+    if pass_help and retry_delta <= 0 and no_regression_harm:
         return "lessons_help"
-    if pass_delta == 0 and retry_delta < 0 and regression_delta <= 0:
+    if retry_help and pass_delta >= 0 and no_regression_harm:
         return "lessons_help_efficiency_only"
     if pass_delta == 0 and retry_delta == 0 and regression_delta == 0:
         return "no_measured_difference"
@@ -109,11 +132,19 @@ def run_sequence_ab(
 
     repeat_records = []
     for repeat_index in range(repeats):
-        on_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=True)
-        off_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=False)
+        if repeat_index % 2 == 0:
+            arm_order = ["with_lessons", "without_lessons"]
+            on_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=True)
+            off_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=False)
+        else:
+            arm_order = ["without_lessons", "with_lessons"]
+            off_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=False)
+            on_records = harness_factory().run_sequence(copy.deepcopy(prepared_cases), lessons_enabled=True)
+
         repeat_records.append(
             {
                 "repeat_index": repeat_index,
+                "arm_order": arm_order,
                 "case_order": [case.get("name") for case in prepared_cases],
                 "with_lessons": _arm_metrics(on_records),
                 "without_lessons": _arm_metrics(off_records),
@@ -145,12 +176,14 @@ def run_sequence_ab(
         "repeats": repeats,
         "case_count": len(prepared_cases),
         "live_model": bool(live_model),
+        "counterbalanced_arm_order": True,
+        "decision_rule": "paired mean effect must exceed two standard errors without added regressions",
         "paired_summary": paired,
-        "verdict": _verdict(paired),
+        "verdict": _verdict(paired, repeats),
         "repeat_records": repeat_records,
         "interpretation": (
-            "Positive passed-case deltas or lower retry counts without additional regressions "
-            "support the claim that Hive's lesson system improves the same worker over time."
+            "A lessons-on advantage is reported only when its paired effect exceeds two standard errors "
+            "and does not introduce additional regressions. Arm order alternates between repeats."
         ),
     }
 
