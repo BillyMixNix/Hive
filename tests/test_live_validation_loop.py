@@ -105,6 +105,39 @@ def test_regression_guard_rejects_candidate_before_task_scoring(tmp_path):
     assert (repo / "target.py").read_text(encoding="utf-8") == BASE_SOURCE
 
 
+def test_live_adapter_rejects_changes_to_its_own_judge(tmp_path):
+    repo = make_repo(tmp_path)
+    validation_dir = repo / "validation"
+    validation_dir.mkdir()
+    (validation_dir / "live_loop.py").write_text("# protected\n", encoding="utf-8")
+    protected_patch = (
+        "TARGET_FILE: validation/live_loop.py\n"
+        "PATCH:\n"
+        "--- validation/live_loop.py\n"
+        "+++ validation/live_loop.py\n"
+        "@@ -1,1 +1,1 @@\n"
+        "-# protected\n"
+        "+# tampered\n"
+    )
+
+    result = evaluate_patch_result(
+        {
+            "status": "proposed",
+            "target_file": "validation/live_loop.py",
+            "patch": protected_patch,
+        },
+        task_note="Make the judge easier.",
+        repo_root=repo,
+        completion_cues=["# tampered"],
+        archive_path=tmp_path / "archive.jsonl",
+        benchmark_scorer=lambda _root: 1.0,
+    )
+
+    assert result["status"] == "blocked"
+    assert result["llm_error"].startswith("grader_tamper_rejected")
+    assert (validation_dir / "live_loop.py").read_text(encoding="utf-8") == "# protected\n"
+
+
 def test_explicit_pilot_deploy_and_rollback_use_archived_candidate(tmp_path):
     repo = make_repo(tmp_path)
     archive = tmp_path / "archive.jsonl"
