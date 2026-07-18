@@ -94,9 +94,10 @@ class Interface:
         }
 
     def _build_response(self, intent, text, context=None):
+        context = dict(context or {})
         return {
             "intent": intent,
-            "context": dict(context or {}),
+            "context": context or {},
             "raw_text": text,
         }
 
