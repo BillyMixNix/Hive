@@ -43,6 +43,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p validation/results
+          sed -i 's#validation/fixtures/config_merge_target.py#config_merge_target.py#g' validation/run_hard_merge_ab.py
           set +e
           python -m validation.run_hard_merge_ab 2>&1 | tee validation/results/live_ab_hard_merge.log
           status=${PIPESTATUS[0]}
