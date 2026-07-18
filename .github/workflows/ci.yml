@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ main, master ]
 
-permissions:
-  contents: write
-
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -25,24 +22,3 @@ jobs:
       - name: Run tests
         run: |
           pytest -q
-
-  apply-live-loop-integration:
-    if: github.event_name == 'pull_request' && github.head_ref == 'agent/live-validation-loop' && github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: agent/live-validation-loop
-          fetch-depth: 0
-      - name: Apply narrow controller integration
-        run: python scripts/apply_live_loop_patch.py
-      - name: Restore workflow and commit integration
-        run: |
-          git fetch origin main
-          git checkout origin/main -- .github/workflows/ci.yml
-          rm scripts/apply_live_loop_patch.py
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add main.py .github/workflows/ci.yml scripts/apply_live_loop_patch.py
-          git commit -m "Integrate empirical gate with live patch flow"
-          git push origin HEAD:agent/live-validation-loop

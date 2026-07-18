@@ -16,6 +16,11 @@ from HiveMemoryAgent import HiveMemoryAgent
 from HiveLessonMemory import LessonMemory
 from HiveStateManager import HiveStateManager
 from failure_intelligence import interpret_failure
+from validation.live_loop import (
+    deploy_approved_patch,
+    evaluate_patch_result,
+    rollback_approved_patch,
+)
 from repo_map import RepoMap
 from work_ontology import FILE_LEVEL_WORK_MODES, build_work_profile, normalize_work_mode
 
@@ -2397,6 +2402,9 @@ def _handle_patch_review_route(route, payload, memory, state, lesson_memory,
         if error or meta is None:
             return error or f"Patch {patch_id} has no metadata."
         meta = dict(meta)
+        empirical = dict(meta.get("empirical_validation") or {})
+        if empirical and empirical.get("decision") != "candidate":
+            return f"Patch {patch_id} did not pass empirical validation and cannot be accepted."
         meta["pilot_verdict"] = "accept"
         meta["pilot_reason"]  = "Pilot confirmed patch intent alignment."
         meta["pilot_guidance"] = None
@@ -2660,7 +2668,12 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
                 return f"Patch {patch_id} failed verification: {verification['checks']}"
 
             backup = router.executor.backup_file(target_file)
-            router.executor.apply_patch(patch_text, target_file, patch_reason=patch_reason, file_text=file_text)
+            evaluation_id = meta.get("evaluation_id") or (meta.get("empirical_validation") or {}).get("evaluation_id")
+            deployment = None
+            if evaluation_id:
+                deployment = deploy_approved_patch(meta, repo_root=Path.cwd())
+            else:
+                router.executor.apply_patch(patch_text, target_file, patch_reason=patch_reason, file_text=file_text)
             memory.update_task_status(patch_id, "applied")
             updated_text = Path(target_file).read_text(encoding="utf-8")
             state.record_patch_apply(target_file, patch_id, updated_text)
@@ -2685,7 +2698,9 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
                 status="applied",
                 metadata={"apply_id": f"apply-{patch_id}", "patch_id": patch_id,
                           "task_id": meta.get("task_id"), "plan_id": meta.get("plan_id"),
-                          "target_file": target_file, "backup_path": backup},
+                          "target_file": target_file, "backup_path": backup,
+                          "evaluation_id": evaluation_id,
+                          "deployment_id": (deployment or {}).get("deployment_id")},
             )
             update_last_patch_snapshot(state, meta, patch_id=patch_id, patch_status="applied",
                                        validation_outcome="passed", rejection_reason=None)
@@ -2724,7 +2739,11 @@ def _handle_patch_apply_route(route, payload, memory, state, router,
         if not backup_path:
             return f"No backup found for patch {patch_id}."
         try:
-            router.executor.restore_backup(backup_path, target_file)
+            evaluation_id = meta.get("evaluation_id") or (meta.get("empirical_validation") or {}).get("evaluation_id")
+            if evaluation_id:
+                rollback_approved_patch(meta, repo_root=Path.cwd())
+            else:
+                router.executor.restore_backup(backup_path, target_file)
             memory.update_task_status(patch_id, "rolled_back")
             restored_text = Path(target_file).read_text(encoding="utf-8")
             state.record_patch_rollback(target_file, patch_id, restored_text)
@@ -2971,6 +2990,12 @@ def main():
                         )
 
                         result = router.coder.generate_patch_with_revisions(coder_task, effective_plan, reflector)
+                        result = evaluate_patch_result(
+                            result,
+                            task_note=ready_child.get("description") or task.get("note") or "",
+                            repo_root=Path.cwd(),
+                            completion_cues=ready_child.get("completion_cues") or [],
+                        )
 
                         _store_code_task_result(
                             result, task_id, task, ready_child, anchor, child_target_symbol,
