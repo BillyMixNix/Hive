@@ -1,0 +1,21 @@
+name: Live A-B Provider Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  provider-check:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - name: Check live provider credential
+        shell: bash
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "LIVE_PROVIDER_READY=true"
+          else
+            echo "LIVE_PROVIDER_READY=false"
+            exit 2
+          fi
