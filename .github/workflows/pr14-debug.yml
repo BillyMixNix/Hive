@@ -1,15 +1,15 @@
 name: Apply Executor Verification Fix
 
 on:
-  push:
-    branches: [ agent/consolidate-validation-gate ]
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: write
 
 jobs:
   apply-fix:
-    if: github.actor != 'github-actions[bot]'
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -25,11 +25,11 @@ jobs:
           path = Path('executor.py')
           text = path.read_text(encoding='utf-8')
           old = '''        return {
-              "verified": checks["safe_to_apply"],
-              "anchor_index": anchor_index,
-              "block_span": block_span,
-          }
-'''.replace('          ', '        ')
+            "verified": checks["safe_to_apply"],
+            "anchor_index": anchor_index,
+            "block_span": block_span,
+        }
+'''
           new = '''        return {
             "verified": checks["safe_to_apply"],
             "checks": checks,
@@ -37,14 +37,11 @@ jobs:
             "block_span": block_span,
         }
 '''
-          if old not in text:
-              raise SystemExit('Expected verify_patch_context return block not found exactly once.')
           if text.count(old) != 1:
-              raise SystemExit(f'Expected one return block, found {text.count(old)}.')
+              raise SystemExit(f'Expected one verify_patch_context return block, found {text.count(old)}.')
           path.write_text(text.replace(old, new, 1), encoding='utf-8')
 
-          test = Path('tests/test_executor_verification_contract.py')
-          test.write_text('''from pathlib import Path
+          Path('tests/test_executor_verification_contract.py').write_text('''from pathlib import Path
 
 import pytest
 
