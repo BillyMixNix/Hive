@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Callable, Iterable
 
 from validation.gate import (
+    DEFAULT_PROTECTED_PATHS,
     default_score_repo,
     evaluate,
     promote_candidate,
@@ -23,6 +24,13 @@ from validation.gate import (
 
 
 BenchmarkScorer = Callable[[Path], float]
+LIVE_PROTECTED_PATHS = frozenset(
+    set(DEFAULT_PROTECTED_PATHS)
+    | {
+        "validation/live_loop.py",
+        "validation/ab_run.py",
+    }
+)
 
 
 def normalize_completion_cues(cues: Iterable[object] | None) -> list[str]:
@@ -194,6 +202,7 @@ def evaluate_patch_result(
         n=n,
         k=k,
         minimum_effect=minimum_effect,
+        protected_paths=LIVE_PROTECTED_PATHS,
     )
     record["regression_baseline_score"] = regression_baseline
     compact = _compact_evaluation(record)
