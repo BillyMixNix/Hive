@@ -46,8 +46,16 @@ jobs:
           set +e
           python - <<'PY' 2>&1 | tee validation/results/live_ab_hard_merge.log
           import validation.run_hard_merge_ab as experiment
+          from coder import CoderAgent
+
           experiment.TARGET_FILE = "config_merge_target.py"
           experiment.CASE["target_file"] = experiment.TARGET_FILE
+
+          original_generate = CoderAgent.generate_patch_with_revisions
+          def one_shot(self, task, plan, reflector, max_revisions=2):
+              return original_generate(self, task, plan, reflector, max_revisions=0)
+          CoderAgent.generate_patch_with_revisions = one_shot
+
           experiment.main()
           PY
           status=${PIPESTATUS[0]}
