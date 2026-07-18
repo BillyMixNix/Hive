@@ -1,0 +1,59 @@
+name: Live A-B Medium Permissions
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  medium-live-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama
+        run: |
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:11434/api/tags >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/ollama.log
+          exit 1
+
+      - name: Pull configured Hive model
+        run: ollama pull qwen2.5-coder:7b
+
+      - name: Run medium behavioral A-B experiment
+        shell: bash
+        run: |
+          mkdir -p validation/results
+          set +e
+          python -m validation.run_medium_permissions_ab 2>&1 | tee validation/results/live_ab_medium_permissions.log
+          status=${PIPESTATUS[0]}
+          exit "$status"
+
+      - name: Upload medium A-B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-ab-medium-permissions
+          path: |
+            validation/results/live_ab_medium_permissions.json
+            validation/results/live_ab_medium_permissions.log
+          if-no-files-found: warn
