@@ -40,12 +40,20 @@ jobs:
         run: ollama pull qwen2.5-coder:7b
 
       - name: Run hard behavioral A-B experiment
-        run: python validation/run_hard_merge_ab.py
+        shell: bash
+        run: |
+          mkdir -p validation/results
+          set +e
+          python -m validation.run_hard_merge_ab 2>&1 | tee validation/results/live_ab_hard_merge.log
+          status=${PIPESTATUS[0]}
+          exit "$status"
 
       - name: Upload hard A-B evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: live-ab-hard-recursive-merge
-          path: validation/results/live_ab_hard_merge.json
+          path: |
+            validation/results/live_ab_hard_merge.json
+            validation/results/live_ab_hard_merge.log
           if-no-files-found: warn
