@@ -1,4 +1,12 @@
-from steward import build_steward_brief
+from datetime import datetime, timezone
+
+import pytest
+
+from orchestration import OrchestrationLedger
+from steward import StewardController, build_steward_brief
+
+
+NOW = datetime(2026, 7, 28, 23, 0, tzinfo=timezone.utc)
 
 
 def task(task_id, project_id, status, **extra):
@@ -138,3 +146,108 @@ def test_review_approval_removes_item_from_review_queue():
         ],
     }
     assert build_steward_brief(snapshot)["summary"]["review_count"] == 0
+
+
+def decision_ledger(tmp_path, task_payload):
+    ledger = OrchestrationLedger(
+        tmp_path / "events.jsonl",
+        now_fn=lambda: NOW,
+    )
+    ledger.append(
+        "project.registered",
+        task_payload["project_id"],
+        {"name": "Hive", "status": "running"},
+    )
+    ledger.append("task.created", task_payload["task_id"], task_payload)
+    return ledger
+
+
+def test_approve_review_closes_review_loop(tmp_path):
+    ledger = decision_ledger(tmp_path, task(
+        "review-me",
+        "hive",
+        "completed",
+        outcome={"tests": "passed"},
+    ))
+    controller = StewardController(ledger)
+    event = controller.act("approve", task_id="review-me")
+
+    assert event["event_type"] == "task.steward_decision"
+    reviewed = ledger.snapshot()["tasks"][0]
+    assert reviewed["review_status"] == "approved"
+    assert build_steward_brief(ledger.snapshot(), now=NOW)["attention"] == []
+
+
+def test_reject_review_returns_work_with_feedback(tmp_path):
+    ledger = decision_ledger(tmp_path, task(
+        "review-me",
+        "hive",
+        "review",
+        outcome={"tests": "failed"},
+    ))
+    StewardController(ledger).act(
+        "reject",
+        task_id="review-me",
+        note="The save migration is incomplete.",
+    )
+    rejected = ledger.snapshot()["tasks"][0]
+    assert rejected["status"] == "queued"
+    assert rejected["review_status"] == "changes_requested"
+    assert rejected["rejection_reason"] == "The save migration is incomplete."
+
+
+def test_defer_temporarily_removes_recommendation(tmp_path):
+    ledger = decision_ledger(tmp_path, task(
+        "later",
+        "hive",
+        "blocked",
+        blocked_reason="waiting for user",
+    ))
+    StewardController(ledger).act(
+        "defer",
+        task_id="later",
+        value=3600,
+    )
+    assert build_steward_brief(ledger.snapshot(), now=NOW)["attention"] == []
+
+
+def test_reprioritize_changes_leverage_order(tmp_path):
+    ledger = decision_ledger(tmp_path, task("first", "hive", "ready", priority=1))
+    ledger.append("task.created", "second", task(
+        "second", "hive", "ready", priority=2
+    ))
+    controller = StewardController(ledger)
+    controller.act("reprioritize", task_id="first", value=50)
+    brief = build_steward_brief(ledger.snapshot(), now=NOW)
+    assert brief["highest_leverage"]["task_id"] == "first"
+
+
+def test_supplied_context_is_merged_and_audited(tmp_path):
+    ledger = decision_ledger(tmp_path, task(
+        "blocked",
+        "hive",
+        "blocked",
+        context={"worker": "known"},
+    ))
+    StewardController(ledger).act(
+        "context",
+        task_id="blocked",
+        value="Use the permanent-inventory design law.",
+    )
+    updated = ledger.snapshot()["tasks"][0]
+    assert updated["context"] == {
+        "worker": "known",
+        "user_supplied": "Use the permanent-inventory design law.",
+    }
+    assert updated["context_supplied"] is True
+
+
+def test_invalid_steward_actions_fail_closed(tmp_path):
+    ledger = decision_ledger(tmp_path, task("one", "hive", "ready"))
+    controller = StewardController(ledger)
+    with pytest.raises(ValueError, match="Unsupported"):
+        controller.act("destroy", task_id="one")
+    with pytest.raises(ValueError, match="exactly one"):
+        controller.act("approve", task_id="one", project_id="hive")
+    with pytest.raises(ValueError, match="between -100 and 100"):
+        controller.act("reprioritize", task_id="one", value=1000)
