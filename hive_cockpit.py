@@ -341,6 +341,18 @@ def build_state_payload():
             },
             "error": str(exc),
         }
+    try:
+        from steward import build_steward_brief
+        steward = build_steward_brief(orchestration)
+    except Exception as exc:
+        steward = {
+            "realm": "steward",
+            "attention": [],
+            "primary_attention": None,
+            "highest_leverage": None,
+            "briefing": "Steward briefing unavailable.",
+            "error": str(exc),
+        }
 
     return {
         "nodes": nodes,
@@ -353,6 +365,7 @@ def build_state_payload():
         "generated_at": time.time(),
         "hive_status": HIVE.status(),
         "orchestration": orchestration,
+        "steward": steward,
     }
 
 
@@ -695,6 +708,11 @@ HTML = r"""<!doctype html>
       </section>
 
       <section class="section">
+        <h2>Steward's Brief</h2>
+        <div id="steward-brief"><div class="meta">Reading the kingdom...</div></div>
+      </section>
+
+      <section class="section">
         <h2>Project Portfolio</h2>
         <div id="portfolio"><div class="meta">Waiting for project observations...</div></div>
       </section>
@@ -809,6 +827,7 @@ HTML = r"""<!doctype html>
     const detail = document.getElementById('detail-body');
     const transcript = document.getElementById('transcript');
     const currentCard = document.getElementById('current-card');
+    const stewardBrief = document.getElementById('steward-brief');
     const portfolio = document.getElementById('portfolio');
     const commandQueue = document.getElementById('command-queue');
 
@@ -828,6 +847,7 @@ HTML = r"""<!doctype html>
       state = await api('/api/state');
       renderStats();
       renderCurrentCard();
+      renderStewardBrief();
       renderPortfolio();
       renderCommandQueue();
       renderList();
@@ -906,6 +926,40 @@ HTML = r"""<!doctype html>
           </article>
         `;
       }).join('');
+    }
+
+    function renderStewardBrief() {
+      const brief = state.steward || {};
+      const attention = brief.attention || [];
+      if (!attention.length) {
+        stewardBrief.innerHTML = `<div class="meta">${escapeHtml(
+          brief.briefing || 'No intervention required.'
+        )}</div>`;
+        return;
+      }
+      const primary = brief.primary_attention || attention[0];
+      const leverage = brief.highest_leverage;
+      stewardBrief.innerHTML = `
+        <article class="project-card ${primary.kind === 'blocker' ? 'blocked' : ''}">
+          <div class="project-head">
+            <span>${escapeHtml(primary.title)}</span>
+            <span>${escapeHtml(primary.kind)}</span>
+          </div>
+          <div class="project-meta">${escapeHtml(primary.message)}</div>
+          <div class="meta" style="margin-top:5px">${escapeHtml(primary.recommended_action)}</div>
+        </article>
+        ${leverage && leverage.task_id !== primary.task_id ? `
+          <div class="command-item">
+            <div>Highest leverage: ${escapeHtml(leverage.title)}</div>
+            <div class="meta">${escapeHtml(leverage.message)}</div>
+          </div>
+        ` : ''}
+        <div class="meta" style="margin-top:7px">
+          ${escapeHtml(brief.summary?.blocker_count || 0)} blockers ·
+          ${escapeHtml(brief.summary?.review_count || 0)} reviews ·
+          ${escapeHtml(brief.summary?.leverage_count || 0)} leverage moves
+        </div>
+      `;
     }
 
     function renderCommandQueue() {
@@ -1431,6 +1485,13 @@ class Handler(BaseHTTPRequestHandler):
             return
         if parsed.path == "/api/state":
             self._send_json(build_state_payload())
+            return
+        if parsed.path == "/api/steward":
+            payload = build_state_payload()
+            self._send_json({
+                "ok": True,
+                "steward": payload.get("steward") or {},
+            })
             return
         if parsed.path == "/api/transcript":
             cursor = parse_qs(parsed.query).get("cursor", ["0"])[0]
