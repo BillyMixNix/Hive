@@ -109,6 +109,15 @@ class HiveWorkerClient:
             },
         )
 
+    def report_event(
+        self,
+        event_type: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any]:
+        if not event_type.startswith("worker."):
+            raise ValueError("worker event type must start with worker.")
+        return self._event(event_type, payload)
+
     def claim(self) -> Assignment | None:
         result = self.transport(
             "/api/dispatch/claim",
