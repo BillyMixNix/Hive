@@ -112,3 +112,17 @@ def test_renew_updates_assignment_expiry_and_failure_reports_lease():
     assert failure_path == "/api/dispatch/fail"
     assert failure_payload["lease_id"] == "lease-1"
     assert failure_payload["retryable"] is False
+
+
+def test_report_event_is_limited_to_worker_namespace():
+    transport = FakeTransport()
+    client = HiveWorkerClient("marshal", transport=transport)
+    client.report_event("worker.fleet_status", {"status": "online"})
+    assert transport.calls[-1][1]["event_type"] == "worker.fleet_status"
+
+    try:
+        client.report_event("task.created", {})
+    except ValueError as exc:
+        assert "worker event type" in str(exc)
+    else:
+        raise AssertionError("non-worker event was accepted")
