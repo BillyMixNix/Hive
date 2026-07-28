@@ -1,0 +1,27 @@
+{
+  "max_workers": 3,
+  "restart_limit": 3,
+  "restart_backoff_seconds": 5,
+  "poll_seconds": 2,
+  "workers": [
+    {
+      "worker_id": "codex-hive",
+      "cwd": "/path/to/Hive",
+      "capabilities": ["python", "tests", "orchestration"],
+      "command": ["codex", "exec", "-"]
+    },
+    {
+      "worker_id": "codex-endless-fusion",
+      "cwd": "/path/to/Endless-Fusion",
+      "capabilities": ["game-development", "javascript", "tests"],
+      "command": ["codex", "exec", "-"]
+    },
+    {
+      "worker_id": "codex-fulcrum",
+      "cwd": "/path/to/Fulcrum",
+      "capabilities": ["android", "javascript", "tests"],
+      "command": ["codex", "exec", "-"],
+      "enabled": true
+    }
+  ]
+}
