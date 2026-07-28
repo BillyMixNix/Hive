@@ -319,6 +319,29 @@ def build_state_payload():
     task_ids = [entry.get("id") for entry in entries if _entry_kind(entry) == "task" and isinstance(entry.get("id"), int)]
     if task_ids:
         latest_task_id = max(task_ids)
+    try:
+        from orchestration import OrchestrationLedger
+        orchestration = OrchestrationLedger(
+            ROOT / ".hive" / "orchestration_events.jsonl"
+        ).snapshot()
+    except Exception as exc:
+        orchestration = {
+            "projects": [],
+            "workers": [],
+            "tasks": [],
+            "summary": {
+                "project_count": 0,
+                "active_projects": 0,
+                "blocked_projects": 0,
+                "stalled_projects": 0,
+                "active_workers": 0,
+                "ready_tasks": 0,
+                "assigned_tasks": 0,
+                "event_count": 0,
+            },
+            "error": str(exc),
+        }
+
     return {
         "nodes": nodes,
         "edges": edges,
@@ -329,6 +352,7 @@ def build_state_payload():
         "known_files_count": len(known_files),
         "generated_at": time.time(),
         "hive_status": HIVE.status(),
+        "orchestration": orchestration,
     }
 
 
@@ -454,6 +478,49 @@ HTML = r"""<!doctype html>
       color: var(--muted);
       font-size: 12px;
     }
+    #portfolio { display: flex; flex-direction: column; gap: 7px; }
+    #command-queue { display: flex; flex-direction: column; gap: 6px; }
+    .project-card {
+      border: 1px solid #294158;
+      background: #0b1420;
+      border-radius: 8px;
+      padding: 9px;
+    }
+    .project-card.blocked { border-color: var(--amber); }
+    .project-card.stalled { border-color: var(--red); }
+    .project-card .project-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .project-card .project-meta {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+    .progress-track {
+      height: 4px;
+      background: #172334;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 7px;
+    }
+    .progress-track span {
+      display: block;
+      height: 100%;
+      background: var(--blue);
+    }
+    .command-item {
+      border-left: 3px solid #53677d;
+      background: #0b121a;
+      padding: 7px 8px;
+      font-size: 12px;
+    }
+    .command-item.assigned { border-left-color: var(--green); }
+    .command-item.blocked { border-left-color: var(--amber); }
+    .command-item .meta { color: var(--muted); font-size: 11px; margin-top: 3px; }
     #graph-wrap {
       position: relative;
       min-height: 0;
@@ -628,6 +695,16 @@ HTML = r"""<!doctype html>
       </section>
 
       <section class="section">
+        <h2>Project Portfolio</h2>
+        <div id="portfolio"><div class="meta">Waiting for project observations...</div></div>
+      </section>
+
+      <section class="section">
+        <h2>Command Queue</h2>
+        <div id="command-queue"><div class="meta">No commands reported.</div></div>
+      </section>
+
+      <section class="section">
         <h2>Selected Actions</h2>
         <div class="grid2">
           <button data-action="show task">Show</button>
@@ -732,6 +809,8 @@ HTML = r"""<!doctype html>
     const detail = document.getElementById('detail-body');
     const transcript = document.getElementById('transcript');
     const currentCard = document.getElementById('current-card');
+    const portfolio = document.getElementById('portfolio');
+    const commandQueue = document.getElementById('command-queue');
 
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>"']/g, ch => ({
@@ -749,6 +828,8 @@ HTML = r"""<!doctype html>
       state = await api('/api/state');
       renderStats();
       renderCurrentCard();
+      renderPortfolio();
+      renderCommandQueue();
       renderList();
       renderGraph();
       if (selected) {
@@ -763,14 +844,99 @@ HTML = r"""<!doctype html>
     function renderStats() {
       const counts = {};
       for (const node of state.nodes) counts[node.kind] = (counts[node.kind] || 0) + 1;
+      const summary = state.orchestration?.summary || {};
       stats.innerHTML = [
         ['Hive', state.hive_status],
+        ['Projects', summary.active_projects || 0],
+        ['Workers', summary.active_workers || 0],
+        ['Ready', summary.ready_tasks || 0],
+        ['Assigned', summary.assigned_tasks || 0],
+        ['Blocked', summary.blocked_projects || 0],
+        ['Stalled', summary.stalled_projects || 0],
         ['Known files', state.known_files_count],
         ['Tasks', counts.task || 0],
-        ['Plans', counts.plan || 0],
-        ['Patches', counts.patch || 0],
         ['Issues', state.nodes.filter(n => n.anchor && n.anchor.valid_file === false).length],
       ].map(([k, v]) => `<span class="pill">${escapeHtml(k)}: ${escapeHtml(v)}</span>`).join('');
+    }
+
+    function formatDuration(seconds) {
+      if (seconds == null) return '?';
+      if (seconds < 60) return `${Math.ceil(seconds)}s`;
+      const minutes = Math.ceil(seconds / 60);
+      if (minutes < 60) return `${minutes}m`;
+      const hours = Math.ceil(minutes / 60);
+      if (hours < 48) return `${hours}h`;
+      return `${Math.ceil(hours / 24)}d`;
+    }
+
+    function renderPortfolio() {
+      const projects = state.orchestration?.projects || [];
+      if (!projects.length) {
+        portfolio.innerHTML = '<div class="meta">No projects have reported to Hive yet.</div>';
+        return;
+      }
+      portfolio.innerHTML = projects.map(project => {
+        const progress = project.progress || {};
+        const fraction = progress.fraction;
+        const eta = project.eta || {};
+        const etaText = eta.low_seconds == null
+          ? 'ETA awaiting evidence'
+          : `ETA ${formatDuration(eta.low_seconds)}–${formatDuration(eta.high_seconds)}`;
+        const flags = [
+          project.blocked ? 'blocked' : '',
+          project.stalled ? 'stalled' : '',
+        ].filter(Boolean);
+        const className = flags[0] || '';
+        const status = flags.length ? flags.join(' / ') : (project.status || 'unknown');
+        const progressText = progress.total
+          ? `${progress.completed}/${progress.total} tasks`
+          : 'progress unreported';
+        return `
+          <article class="project-card ${escapeHtml(className)}">
+            <div class="project-head">
+              <span>${escapeHtml(project.name || project.project_id)}</span>
+              <span>${escapeHtml(status)}</span>
+            </div>
+            <div class="project-meta">
+              ${escapeHtml(progressText)} · ${escapeHtml(etaText)} · ${escapeHtml(project.confidence || 'low')} confidence
+            </div>
+            ${fraction == null ? '' : `
+              <div class="progress-track"><span style="width:${Math.round(fraction * 100)}%"></span></div>
+            `}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderCommandQueue() {
+      const tasks = (state.orchestration?.tasks || [])
+        .filter(task => !['completed', 'cancelled'].includes(task.status))
+        .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+        .slice(0, 12);
+      if (!tasks.length) {
+        commandQueue.innerHTML = '<div class="meta">No commands reported.</div>';
+        return;
+      }
+      commandQueue.innerHTML = tasks.map(task => {
+        const worker = task.assigned_worker_id
+          ? ` → ${task.assigned_worker_id}`
+          : '';
+        const dependencies = (task.depends_on || []).length
+          ? ` · waits for ${(task.depends_on || []).join(', ')}`
+          : '';
+        const className = task.status === 'assigned' || task.status === 'running'
+          ? 'assigned'
+          : (task.status === 'blocked' ? 'blocked' : '');
+        return `
+          <div class="command-item ${escapeHtml(className)}">
+            <div>${escapeHtml(task.title || task.task_id)}</div>
+            <div class="meta">
+              ${escapeHtml(task.project_id || 'unassigned project')} ·
+              ${escapeHtml(task.status || 'unknown')}${escapeHtml(worker)}${escapeHtml(dependencies)}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function filteredNodes() {
@@ -1319,6 +1485,93 @@ class Handler(BaseHTTPRequestHandler):
                 self._send_json({"ok": True, "response": response})
             except Exception as exc:
                 self._send_json({"ok": False, "error": str(exc)}, status=500)
+            return
+        if parsed.path == "/api/orchestration/events":
+            payload = self._read_body()
+            event_type = str(payload.get("event_type") or "").strip()
+            subject_id = str(payload.get("subject_id") or "").strip()
+            allowed_prefixes = ("project.", "worker.", "task.")
+            if not event_type.startswith(allowed_prefixes):
+                self._send_json(
+                    {"ok": False, "error": "Unsupported orchestration event type"},
+                    status=400,
+                )
+                return
+            try:
+                from orchestration import OrchestrationLedger
+                event = OrchestrationLedger(
+                    ROOT / ".hive" / "orchestration_events.jsonl"
+                ).append(
+                    event_type,
+                    subject_id,
+                    payload.get("payload") or {},
+                    source=payload.get("source") or "cockpit_api",
+                    occurred_at=payload.get("occurred_at"),
+                    event_id=payload.get("event_id"),
+                )
+            except (TypeError, ValueError) as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=400)
+                return
+            self._send_json({"ok": True, "event": event}, status=201)
+            return
+        if parsed.path == "/api/dispatch/claim":
+            payload = self._read_body()
+            try:
+                from orchestration import Dispatcher, OrchestrationLedger
+                assignment = Dispatcher(
+                    OrchestrationLedger(
+                        ROOT / ".hive" / "orchestration_events.jsonl"
+                    )
+                ).claim(str(payload.get("worker_id") or "").strip())
+            except ValueError as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=400)
+                return
+            self._send_json({"ok": True, "assignment": assignment})
+            return
+        if parsed.path == "/api/dispatch/acknowledge":
+            payload = self._read_body()
+            if not isinstance(payload.get("accepted"), bool):
+                self._send_json(
+                    {"ok": False, "error": "accepted must be a boolean"},
+                    status=400,
+                )
+                return
+            try:
+                from orchestration import Dispatcher, OrchestrationLedger
+                event = Dispatcher(
+                    OrchestrationLedger(
+                        ROOT / ".hive" / "orchestration_events.jsonl"
+                    )
+                ).acknowledge(
+                    str(payload.get("worker_id") or "").strip(),
+                    str(payload.get("task_id") or "").strip(),
+                    str(payload.get("lease_id") or "").strip(),
+                    accepted=payload["accepted"],
+                    reason=payload.get("reason"),
+                )
+            except ValueError as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=409)
+                return
+            self._send_json({"ok": True, "event": event})
+            return
+        if parsed.path == "/api/dispatch/complete":
+            payload = self._read_body()
+            try:
+                from orchestration import Dispatcher, OrchestrationLedger
+                event = Dispatcher(
+                    OrchestrationLedger(
+                        ROOT / ".hive" / "orchestration_events.jsonl"
+                    )
+                ).complete(
+                    str(payload.get("worker_id") or "").strip(),
+                    str(payload.get("task_id") or "").strip(),
+                    str(payload.get("lease_id") or "").strip(),
+                    outcome=payload.get("outcome") or {},
+                )
+            except ValueError as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=409)
+                return
+            self._send_json({"ok": True, "event": event})
             return
         self.send_error(404)
 
