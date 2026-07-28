@@ -42,3 +42,28 @@ Hive may still retrieve lessons and include them in model prompts. They are hint
 Hive is not claiming autonomous model training or reliable self-improvement through prompting. Its measurable promise is narrower:
 
 > Once Hive can express a failure as a regression case, future accepted changes must not repeat it.
+
+## Orchestration realms
+
+Hive's production-management layer has three responsibilities:
+
+- **Chamberlain:** records projects, tasks, workers, leases, progress, and evidence.
+- **Steward:** ranks blockers, review work, and downstream leverage, then records user decisions.
+- **Marshal:** supervises a bounded fleet of persistent command-backed workers.
+
+Start the cockpit:
+
+```bash
+python hive_cockpit.py
+```
+
+Copy `fleet.example.json`, replace the three project paths, and start the
+three-worker fleet:
+
+```bash
+python fleet_manager.py --config fleet.json
+```
+
+The Marshal intentionally refuses more than three enabled workers. Each worker
+receives assignment text through stdin; only the explicit command array from
+the fleet configuration is executed, always without a shell.
