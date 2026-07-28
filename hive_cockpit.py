@@ -1573,6 +1573,51 @@ class Handler(BaseHTTPRequestHandler):
                 return
             self._send_json({"ok": True, "event": event})
             return
+        if parsed.path == "/api/dispatch/renew":
+            payload = self._read_body()
+            try:
+                from orchestration import Dispatcher, OrchestrationLedger
+                event = Dispatcher(
+                    OrchestrationLedger(
+                        ROOT / ".hive" / "orchestration_events.jsonl"
+                    )
+                ).renew(
+                    str(payload.get("worker_id") or "").strip(),
+                    str(payload.get("task_id") or "").strip(),
+                    str(payload.get("lease_id") or "").strip(),
+                )
+            except ValueError as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=409)
+                return
+            self._send_json({"ok": True, "event": event})
+            return
+        if parsed.path == "/api/dispatch/fail":
+            payload = self._read_body()
+            if not isinstance(payload.get("retryable", False), bool):
+                self._send_json(
+                    {"ok": False, "error": "retryable must be a boolean"},
+                    status=400,
+                )
+                return
+            try:
+                from orchestration import Dispatcher, OrchestrationLedger
+                event = Dispatcher(
+                    OrchestrationLedger(
+                        ROOT / ".hive" / "orchestration_events.jsonl"
+                    )
+                ).fail(
+                    str(payload.get("worker_id") or "").strip(),
+                    str(payload.get("task_id") or "").strip(),
+                    str(payload.get("lease_id") or "").strip(),
+                    error=str(payload.get("error") or "worker_failed"),
+                    outcome=payload.get("outcome") or {},
+                    retryable=payload.get("retryable", False),
+                )
+            except ValueError as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=409)
+                return
+            self._send_json({"ok": True, "event": event})
+            return
         self.send_error(404)
 
     def log_message(self, fmt, *args):
