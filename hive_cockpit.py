@@ -947,6 +947,13 @@ HTML = r"""<!doctype html>
           </div>
           <div class="project-meta">${escapeHtml(primary.message)}</div>
           <div class="meta" style="margin-top:5px">${escapeHtml(primary.recommended_action)}</div>
+          <div class="grid2 steward-actions" style="margin-top:8px">
+            <button data-steward-action="approve">Approve</button>
+            <button data-steward-action="defer">Defer 1 day</button>
+            <button data-steward-action="reprioritize">Set priority</button>
+            <button data-steward-action="context">Supply context</button>
+            <button data-steward-action="reject" class="danger">Reject</button>
+          </div>
         </article>
         ${leverage && leverage.task_id !== primary.task_id ? `
           <div class="command-item">
@@ -960,6 +967,48 @@ HTML = r"""<!doctype html>
           ${escapeHtml(brief.summary?.leverage_count || 0)} leverage moves
         </div>
       `;
+      stewardBrief.querySelectorAll('[data-steward-action]').forEach(button => {
+        button.addEventListener('click', () => takeStewardAction(
+          button.dataset.stewardAction,
+          primary
+        ));
+      });
+    }
+
+    async function takeStewardAction(action, item) {
+      const payload = {
+        action,
+        task_id: item.task_id || null,
+        project_id: item.task_id ? null : item.project_id,
+      };
+      if (action === 'defer') payload.value = 86400;
+      if (action === 'reprioritize') {
+        const value = window.prompt('Priority from -100 to 100:', '10');
+        if (value === null) return;
+        payload.value = Number(value);
+      }
+      if (action === 'context') {
+        const value = window.prompt('What context does Hive need?');
+        if (!value) return;
+        payload.value = value;
+      }
+      if (action === 'reject') {
+        const note = window.prompt('Why are you rejecting this recommendation?');
+        if (note === null) return;
+        payload.note = note;
+      }
+      stewardBrief.querySelectorAll('button').forEach(button => button.disabled = true);
+      try {
+        await api('/api/steward/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        await refresh();
+      } catch (err) {
+        window.alert('Steward action failed: ' + err.message);
+        await refresh();
+      }
     }
 
     function renderCommandQueue() {
@@ -1574,6 +1623,37 @@ class Handler(BaseHTTPRequestHandler):
                 self._send_json({"ok": False, "error": str(exc)}, status=400)
                 return
             self._send_json({"ok": True, "event": event}, status=201)
+            return
+        if parsed.path == "/api/steward/action":
+            payload = self._read_body()
+            try:
+                from orchestration import OrchestrationLedger
+                from steward import StewardController, build_steward_brief
+                ledger = OrchestrationLedger(
+                    ROOT / ".hive" / "orchestration_events.jsonl"
+                )
+                event = StewardController(ledger).act(
+                    str(payload.get("action") or ""),
+                    task_id=(
+                        str(payload.get("task_id")).strip()
+                        if payload.get("task_id") is not None else None
+                    ),
+                    project_id=(
+                        str(payload.get("project_id")).strip()
+                        if payload.get("project_id") is not None else None
+                    ),
+                    value=payload.get("value"),
+                    note=payload.get("note"),
+                )
+                brief = build_steward_brief(ledger.snapshot())
+            except (TypeError, ValueError) as exc:
+                self._send_json({"ok": False, "error": str(exc)}, status=400)
+                return
+            self._send_json({
+                "ok": True,
+                "event": event,
+                "steward": brief,
+            })
             return
         if parsed.path == "/api/dispatch/claim":
             payload = self._read_body()
