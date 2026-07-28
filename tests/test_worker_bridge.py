@@ -78,3 +78,37 @@ def test_registration_normalizes_capabilities():
     payload = transport.calls[0][1]["payload"]
     assert payload["capabilities"] == ["python", "tests"]
     assert payload["max_concurrency"] == 2
+
+
+def test_renew_updates_assignment_expiry_and_failure_reports_lease():
+    transport = FakeTransport()
+    original = transport.__call__
+
+    def with_renewal(path, payload):
+        if path == "/api/dispatch/renew":
+            transport.calls.append((path, payload))
+            return {
+                "ok": True,
+                "event": {
+                    "payload": {
+                        "lease_expires_at": "2026-07-29T00:00:00+00:00"
+                    }
+                },
+            }
+        return original(path, payload)
+
+    client = HiveWorkerClient("codex", transport=with_renewal)
+    assignment = client.claim()
+    client.renew(assignment)
+    client.fail(
+        assignment,
+        error="worker failed",
+        outcome={"exit_code": 1},
+        retryable=False,
+    )
+
+    assert assignment.lease_expires_at == "2026-07-29T00:00:00+00:00"
+    failure_path, failure_payload = transport.calls[-1]
+    assert failure_path == "/api/dispatch/fail"
+    assert failure_payload["lease_id"] == "lease-1"
+    assert failure_payload["retryable"] is False
