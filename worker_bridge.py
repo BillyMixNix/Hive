@@ -150,6 +150,41 @@ class HiveWorkerClient:
             },
         )
 
+    def renew(self, assignment: Assignment) -> dict[str, Any]:
+        result = self.transport(
+            "/api/dispatch/renew",
+            {
+                "worker_id": self.worker_id,
+                "task_id": assignment.task_id,
+                "lease_id": assignment.lease_id,
+            },
+        )
+        event_payload = ((result.get("event") or {}).get("payload") or {})
+        if event_payload.get("lease_expires_at"):
+            assignment.lease_expires_at = event_payload["lease_expires_at"]
+            assignment.packet["lease_expires_at"] = assignment.lease_expires_at
+        return result
+
+    def fail(
+        self,
+        assignment: Assignment,
+        *,
+        error: str,
+        outcome: dict[str, Any] | None = None,
+        retryable: bool = False,
+    ) -> dict[str, Any]:
+        return self.transport(
+            "/api/dispatch/fail",
+            {
+                "worker_id": self.worker_id,
+                "task_id": assignment.task_id,
+                "lease_id": assignment.lease_id,
+                "error": error,
+                "outcome": dict(outcome or {}),
+                "retryable": retryable,
+            },
+        )
+
     def _event(self, event_type: str, payload: dict[str, Any]) -> dict[str, Any]:
         return self.transport(
             "/api/orchestration/events",
