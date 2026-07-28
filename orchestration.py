@@ -280,6 +280,55 @@ class Dispatcher:
                 source=worker_id,
             )
 
+    def renew(
+        self,
+        worker_id: str,
+        task_id: str,
+        lease_id: str,
+    ) -> dict[str, Any]:
+        with self.ledger.lock:
+            task = self._leased_task(worker_id, task_id, lease_id)
+            now = self.ledger.now_fn()
+            expires = now + timedelta(seconds=self.lease_seconds)
+            return self.ledger.append(
+                "task.lease_renewed",
+                task["task_id"],
+                {
+                    "status": task.get("status") or "running",
+                    "lease_expires_at": _iso(expires),
+                    "lease_renewed_at": _iso(now),
+                },
+                source=worker_id,
+                occurred_at=now,
+            )
+
+    def fail(
+        self,
+        worker_id: str,
+        task_id: str,
+        lease_id: str,
+        *,
+        error: str,
+        outcome: dict[str, Any] | None = None,
+        retryable: bool = False,
+    ) -> dict[str, Any]:
+        with self.ledger.lock:
+            task = self._leased_task(worker_id, task_id, lease_id)
+            return self.ledger.append(
+                "task.failed",
+                task["task_id"],
+                {
+                    "status": "queued" if retryable else "blocked",
+                    "failed_at": _iso(self.ledger.now_fn()),
+                    "failure_error": str(error),
+                    "outcome": dict(outcome or {}),
+                    "assigned_worker_id": None,
+                    "lease_id": None,
+                    "lease_expires_at": None,
+                },
+                source=worker_id,
+            )
+
     def _leased_task(
         self,
         worker_id: str,
