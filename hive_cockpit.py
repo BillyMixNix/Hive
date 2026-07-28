@@ -713,6 +713,11 @@ HTML = r"""<!doctype html>
       </section>
 
       <section class="section">
+        <h2>Worker Fleet</h2>
+        <div id="worker-fleet"><div class="meta">Marshal not reporting.</div></div>
+      </section>
+
+      <section class="section">
         <h2>Project Portfolio</h2>
         <div id="portfolio"><div class="meta">Waiting for project observations...</div></div>
       </section>
@@ -828,6 +833,7 @@ HTML = r"""<!doctype html>
     const transcript = document.getElementById('transcript');
     const currentCard = document.getElementById('current-card');
     const stewardBrief = document.getElementById('steward-brief');
+    const workerFleet = document.getElementById('worker-fleet');
     const portfolio = document.getElementById('portfolio');
     const commandQueue = document.getElementById('command-queue');
 
@@ -848,6 +854,7 @@ HTML = r"""<!doctype html>
       renderStats();
       renderCurrentCard();
       renderStewardBrief();
+      renderWorkerFleet();
       renderPortfolio();
       renderCommandQueue();
       renderList();
@@ -973,6 +980,33 @@ HTML = r"""<!doctype html>
           primary
         ));
       });
+    }
+
+    function renderWorkerFleet() {
+      const marshal = (state.orchestration?.workers || [])
+        .find(worker => worker.worker_id === 'marshal');
+      const fleet = marshal?.fleet;
+      if (!fleet) {
+        workerFleet.innerHTML = '<div class="meta">Marshal not reporting.</div>';
+        return;
+      }
+      const workers = fleet.workers || [];
+      workerFleet.innerHTML = `
+        <div class="project-head">
+          <span>${escapeHtml(fleet.running || 0)}/${escapeHtml(fleet.limit || 3)} active</span>
+          <span>${escapeHtml(marshal.status || 'unknown')}</span>
+        </div>
+        ${workers.map(worker => `
+          <div class="command-item ${worker.running ? 'assigned' : 'blocked'}">
+            <div>${escapeHtml(worker.worker_id)}</div>
+            <div class="meta">
+              ${worker.running ? 'running' : 'stopped'} ·
+              ${escapeHtml((worker.capabilities || []).join(', ') || 'no capabilities')} ·
+              restarts ${escapeHtml(worker.restart_count || 0)}
+            </div>
+          </div>
+        `).join('')}
+      `;
     }
 
     async function takeStewardAction(action, item) {
