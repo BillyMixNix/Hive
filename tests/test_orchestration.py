@@ -258,3 +258,55 @@ def test_acknowledge_and_complete_require_matching_lease(tmp_path):
     task = ledger.snapshot()["tasks"][0]
     assert task["status"] == "completed"
     assert task["outcome"] == {"tests": "passed"}
+
+
+def test_renew_extends_lease_and_failure_releases_worker(tmp_path):
+    ledger = build_dispatch_ledger(tmp_path, [
+        event("project.registered", "hive", {"status": "running"}),
+        event("worker.heartbeat", "coder", {"status": "online"}),
+        event("task.created", "command", {
+            "project_id": "hive",
+            "status": "queued",
+        }),
+    ])
+    dispatcher = Dispatcher(ledger, lease_seconds=300)
+    assignment = dispatcher.claim("coder")
+    dispatcher.acknowledge(
+        "coder", "command", assignment["lease_id"], accepted=True
+    )
+    renewed = dispatcher.renew("coder", "command", assignment["lease_id"])
+    assert renewed["event_type"] == "task.lease_renewed"
+    assert renewed["payload"]["lease_expires_at"] == assignment["lease_expires_at"]
+
+    dispatcher.fail(
+        "coder",
+        "command",
+        assignment["lease_id"],
+        error="command exited with 2",
+        outcome={"exit_code": 2},
+    )
+    task = ledger.snapshot()["tasks"][0]
+    assert task["status"] == "blocked"
+    assert task["assigned_worker_id"] is None
+    assert task["failure_error"] == "command exited with 2"
+
+
+def test_retryable_failure_returns_task_to_queue(tmp_path):
+    ledger = build_dispatch_ledger(tmp_path, [
+        event("project.registered", "hive", {"status": "running"}),
+        event("worker.heartbeat", "coder", {"status": "online"}),
+        event("task.created", "command", {
+            "project_id": "hive",
+            "status": "queued",
+        }),
+    ])
+    dispatcher = Dispatcher(ledger)
+    assignment = dispatcher.claim("coder")
+    dispatcher.fail(
+        "coder",
+        "command",
+        assignment["lease_id"],
+        error="temporary failure",
+        retryable=True,
+    )
+    assert ledger.snapshot()["tasks"][0]["status"] == "queued"
