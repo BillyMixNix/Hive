@@ -6,13 +6,23 @@ explainable briefing from the orchestration snapshot already recorded by Hive.
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from typing import Any
+
+from orchestration import OrchestrationLedger
 
 
 ACTIVE_TASK_STATES = {"queued", "ready", "assigned", "running", "blocked", "review"}
+STEWARD_ACTIONS = {"approve", "defer", "reprioritize", "context", "reject"}
 
 
-def build_steward_brief(snapshot: dict[str, Any], *, limit: int = 8) -> dict[str, Any]:
+def build_steward_brief(
+    snapshot: dict[str, Any],
+    *,
+    limit: int = 8,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    now = now or datetime.now(timezone.utc)
     tasks = {
         task["task_id"]: task
         for task in snapshot.get("tasks", [])
@@ -34,6 +44,8 @@ def build_steward_brief(snapshot: dict[str, Any], *, limit: int = 8) -> dict[str
     recommendations: list[dict[str, Any]] = []
 
     for task_id, task in tasks.items():
+        if _is_deferred(task, now):
+            continue
         status = task.get("status")
         project = projects.get(task.get("project_id"), {})
         project_name = project.get("name") or task.get("project_id") or "Unassigned"
@@ -98,6 +110,8 @@ def build_steward_brief(snapshot: dict[str, Any], *, limit: int = 8) -> dict[str
             })
 
     for project_id, project in projects.items():
+        if _is_deferred(project, now):
+            continue
         if project.get("stalled"):
             recommendations.append({
                 "kind": "stalled",
@@ -115,9 +129,19 @@ def build_steward_brief(snapshot: dict[str, Any], *, limit: int = 8) -> dict[str
                     ],
                 },
             })
-        elif project.get("blocked") and not any(
+        elif (
+            project.get("blocked")
+            and (
+                project.get("status") == "blocked"
+                or any(
+                    task.get("status") == "blocked" and not _is_deferred(task, now)
+                    for task in project.get("tasks", [])
+                )
+            )
+            and not any(
             item.get("project_id") == project_id and item["kind"] == "blocker"
             for item in recommendations
+            )
         ):
             recommendations.append({
                 "kind": "blocker",
@@ -167,6 +191,134 @@ def build_steward_brief(snapshot: dict[str, Any], *, limit: int = 8) -> dict[str
     }
 
 
+class StewardController:
+    """Record a user judgment and let the next snapshot recompute the brief."""
+
+    def __init__(self, ledger: OrchestrationLedger):
+        self.ledger = ledger
+
+    def act(
+        self,
+        action: str,
+        *,
+        task_id: str | None = None,
+        project_id: str | None = None,
+        value: Any = None,
+        note: str | None = None,
+    ) -> dict[str, Any]:
+        action = str(action or "").strip().lower()
+        if action not in STEWARD_ACTIONS:
+            raise ValueError(f"Unsupported Steward action: {action}")
+        if bool(task_id) == bool(project_id):
+            raise ValueError("Provide exactly one task_id or project_id")
+
+        with self.ledger.lock:
+            snapshot = self.ledger.snapshot()
+            if task_id:
+                record = next(
+                    (task for task in snapshot["tasks"] if task["task_id"] == task_id),
+                    None,
+                )
+                subject_id = task_id
+                event_type = "task.steward_decision"
+            else:
+                record = next(
+                    (
+                        project for project in snapshot["projects"]
+                        if project["project_id"] == project_id
+                    ),
+                    None,
+                )
+                subject_id = project_id
+                event_type = "project.steward_decision"
+            if not record:
+                raise ValueError("Steward recommendation target was not found")
+
+            now = self.ledger.now_fn()
+            payload = {
+                "steward_action": action,
+                "steward_note": str(note or "").strip() or None,
+                "steward_decided_at": now.isoformat(),
+            }
+            if action == "approve":
+                payload.update(self._approve_payload(record, task=bool(task_id)))
+            elif action == "defer":
+                seconds = int(value if value is not None else 24 * 60 * 60)
+                if seconds < 60 or seconds > 30 * 24 * 60 * 60:
+                    raise ValueError("defer seconds must be between 60 and 2592000")
+                payload["deferred_until"] = (
+                    now + timedelta(seconds=seconds)
+                ).isoformat()
+            elif action == "reprioritize":
+                priority = int(value)
+                if priority < -100 or priority > 100:
+                    raise ValueError("priority must be between -100 and 100")
+                payload["priority"] = priority
+            elif action == "context":
+                supplied = str(value or note or "").strip()
+                if not supplied:
+                    raise ValueError("context cannot be empty")
+                context = dict(record.get("context") or {})
+                context["user_supplied"] = supplied
+                payload.update({
+                    "context": context,
+                    "context_supplied": True,
+                })
+            else:
+                payload.update(self._reject_payload(
+                    record,
+                    task=bool(task_id),
+                    note=note,
+                    now=now,
+                ))
+
+            return self.ledger.append(
+                event_type,
+                str(subject_id),
+                payload,
+                source="steward:user",
+                occurred_at=now,
+            )
+
+    @staticmethod
+    def _approve_payload(record: dict[str, Any], *, task: bool) -> dict[str, Any]:
+        if task and _is_review_ready(record):
+            return {
+                "status": "completed",
+                "review_status": "approved",
+                "approved_for_dispatch": False,
+                "deferred_until": None,
+            }
+        return {
+            "steward_status": "approved",
+            "approved_for_dispatch": bool(task),
+            "deferred_until": None,
+        }
+
+    @staticmethod
+    def _reject_payload(
+        record: dict[str, Any],
+        *,
+        task: bool,
+        note: str | None,
+        now: datetime,
+    ) -> dict[str, Any]:
+        payload = {
+            "steward_status": "rejected",
+            "rejection_reason": str(note or "").strip() or "Rejected by user",
+            "deferred_until": (now + timedelta(days=1)).isoformat(),
+        }
+        if task and _is_review_ready(record):
+            payload.update({
+                "status": "queued",
+                "review_status": "changes_requested",
+                "assigned_worker_id": None,
+                "lease_id": None,
+                "lease_expires_at": None,
+            })
+        return payload
+
+
 def _priority(task: dict[str, Any], project: dict[str, Any]) -> int:
     return (
         int(project.get("priority", 0) or 0) * 10
@@ -182,6 +334,19 @@ def _is_review_ready(task: dict[str, Any]) -> bool:
     if task.get("review_status") in {"approved", "accepted", "not_required"}:
         return False
     return bool(task.get("requires_review") or task.get("outcome"))
+
+
+def _is_deferred(record: dict[str, Any], now: datetime) -> bool:
+    value = record.get("deferred_until")
+    if not value:
+        return False
+    try:
+        deferred_until = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return False
+    if deferred_until.tzinfo is None:
+        deferred_until = deferred_until.replace(tzinfo=timezone.utc)
+    return deferred_until > now
 
 
 def _downstream_ids(
