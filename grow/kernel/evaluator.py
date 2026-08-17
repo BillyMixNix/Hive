@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import importlib.util
+import ast
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Callable
@@ -10,14 +11,77 @@ class EvaluationError(RuntimeError):
     pass
 
 
+_ALLOWED_AST_NODES = {
+    ast.Module,
+    ast.Expr,
+    ast.FunctionDef,
+    ast.arguments,
+    ast.arg,
+    ast.Return,
+    ast.Assign,
+    ast.If,
+    ast.Compare,
+    ast.Eq,
+    ast.Name,
+    ast.Load,
+    ast.Store,
+    ast.Constant,
+    ast.Subscript,
+    ast.JoinedStr,
+    ast.FormattedValue,
+    ast.BinOp,
+    ast.Add,
+    ast.List,
+    ast.Tuple,
+}
+
+
+def validate_workshop_source(source: str) -> dict[str, Any]:
+    """Reject executable workshop features that could escape candidate isolation."""
+    errors: list[str] = []
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        return {"passed": False, "errors": [f"syntax: {exc}"]}
+
+    functions = [node for node in tree.body if isinstance(node, ast.FunctionDef)]
+    non_doc_body = [
+        node for node in tree.body
+        if not (
+            isinstance(node, ast.Expr)
+            and isinstance(node.value, ast.Constant)
+            and isinstance(node.value.value, str)
+        )
+    ]
+    if len(functions) != 1 or functions[0].name != "build_repair_packet":
+        errors.append("workshop must define exactly one function named build_repair_packet")
+    if any(not isinstance(node, ast.FunctionDef) for node in non_doc_body):
+        errors.append("module may contain only a docstring and build_repair_packet")
+
+    if functions:
+        fn = functions[0]
+        positional = [arg.arg for arg in fn.args.args]
+        kwonly = [arg.arg for arg in fn.args.kwonlyargs]
+        if positional != ["case"] or kwonly != ["presentation_order"]:
+            errors.append("build_repair_packet signature must be (case, *, presentation_order=...)")
+        if fn.decorator_list:
+            errors.append("workshop decorators are forbidden")
+
+    for node in ast.walk(tree):
+        if type(node) not in _ALLOWED_AST_NODES:
+            errors.append(f"forbidden AST node: {type(node).__name__}")
+    return {"passed": not errors, "errors": sorted(set(errors))}
+
+
 def _load_builder(module_path: str | Path) -> Callable[..., str]:
     path = Path(module_path)
-    spec = importlib.util.spec_from_file_location("_grow0_candidate_repair_packet", path)
-    if spec is None or spec.loader is None:
-        raise EvaluationError(f"cannot load candidate workshop: {path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    builder = getattr(module, "build_repair_packet", None)
+    source = path.read_text(encoding="utf-8")
+    safety = validate_workshop_source(source)
+    if not safety["passed"]:
+        raise EvaluationError("unsafe candidate workshop: " + "; ".join(safety["errors"]))
+    namespace: dict[str, Any] = {"__builtins__": {}}
+    exec(compile(source, str(path), "exec"), namespace, namespace)
+    builder = namespace.get("build_repair_packet")
     if not callable(builder):
         raise EvaluationError("candidate workshop must define build_repair_packet(case, ...)")
     return builder
@@ -47,8 +111,18 @@ def evaluate_case(
     invoke_model: Callable[[str], str],
     presentation_order: str = "stored_first",
 ) -> dict[str, Any]:
-    builder = _load_builder(workshop_module)
-    prompt = builder(case, presentation_order=presentation_order)
+    try:
+        builder = _load_builder(workshop_module)
+        prompt = builder(case, presentation_order=presentation_order)
+    except EvaluationError as exc:
+        return {
+            "case_id": case["case_id"],
+            "passed": False,
+            "answer": None,
+            "error": str(exc),
+            "prompt_sha256": None,
+            "raw_output_sha256": None,
+        }
     raw = invoke_model(prompt)
     try:
         answer = parse_model_answer(raw)
@@ -65,8 +139,8 @@ def evaluate_case(
         "passed": passed,
         "answer": answer,
         "error": error,
-        "prompt_sha256": __import__("hashlib").sha256(prompt.encode("utf-8")).hexdigest(),
-        "raw_output_sha256": __import__("hashlib").sha256((raw or "").encode("utf-8")).hexdigest(),
+        "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+        "raw_output_sha256": hashlib.sha256((raw or "").encode("utf-8")).hexdigest(),
     }
 
 
@@ -88,8 +162,6 @@ def counterbalanced_probe(
         invoke_model=invoke_model,
         presentation_order="current_first",
     )
-    # A provenance-loss diagnosis is supported when order changes correctness or
-    # the selected value while the underlying semantic case is unchanged.
     first_value = (first.get("answer") or {}).get("selected_value")
     second_value = (second.get("answer") or {}).get("selected_value")
     supported = first["passed"] != second["passed"] or first_value != second_value

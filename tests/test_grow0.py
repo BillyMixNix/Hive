@@ -46,15 +46,36 @@ def make_repo(tmp_path: Path) -> Path:
 
 
 def position_model(prompt: str) -> str:
-    # Deliberately demonstrates G0's structural ambiguity: always trusts the
-    # first presented value while claiming current provenance.
     line = next(line for line in prompt.splitlines() if line.startswith("Candidate value A:"))
     value = json.loads(line.split(":", 1)[1].strip().replace("'", '"')) if '"' in line else int(line.split(":",1)[1].strip())
     return json.dumps({"selected_source": "current", "selected_value": value})
 
 
 def good_candidate_source() -> str:
-    return '''from __future__ import annotations\n\ndef build_repair_packet(case: dict, *, presentation_order: str = "stored_first") -> str:\n    stored = case["stored_value"]\n    current = case["current_value"]\n    pairs = [("STORED_STATE", stored), ("CURRENT_CALL", current)]\n    if presentation_order == "current_first":\n        pairs.reverse()\n    return "\\n".join([\n        "REPAIR DECISION PACKET",\n        f"Goal: {case['goal']}",\n        f"{pairs[0][0]}: {pairs[0][1]!r}",\n        f"{pairs[1][0]}: {pairs[1][1]!r}",\n        "Use the value tagged CURRENT_CALL for the active operation.",\n        "Return JSON only with keys selected_source and selected_value.",\n    ])\n'''
+    return r'''"""Generic provenance-preserving repair packet."""
+
+def build_repair_packet(case, *, presentation_order="stored_first"):
+    stored = case["stored_value"]
+    current = case["current_value"]
+    if presentation_order == "stored_first":
+        first_label = "STORED_STATE"
+        first_value = stored
+        second_label = "CURRENT_CALL"
+        second_value = current
+    else:
+        first_label = "CURRENT_CALL"
+        first_value = current
+        second_label = "STORED_STATE"
+        second_value = stored
+    return (
+        "REPAIR DECISION PACKET\n"
+        + f"Goal: {case['goal']}\n"
+        + f"{first_label}: {first_value!r}\n"
+        + f"{second_label}: {second_value!r}\n"
+        + "Use the value tagged CURRENT_CALL for the active operation.\n"
+        + "Return JSON only with keys selected_source and selected_value."
+    )
+'''
 
 
 def provenance_model(prompt: str) -> str:
@@ -180,27 +201,19 @@ def test_failed_candidate_leaves_persistent_lesson_record(tmp_path):
     repo = make_repo(tmp_path)
     exp = Grow0Experiment(repo)
     exp.record_rejection_lesson(
-        generation_id="G1-A",
-        manifest=None,
-        prediction="generic change should transfer",
-        contradicted_by=["REJECTED_NO_TRANSFER_GAIN"],
-        diagnosis_or_implementation="implementation",
+        generation_id="G1-A", manifest=None, prediction="generic change should transfer",
+        contradicted_by=["REJECTED_NO_TRANSFER_GAIN"], diagnosis_or_implementation="implementation",
         avoid=["repeat same change"],
     )
-    lessons = exp.lesson_ledger.entries()
-    assert lessons[-1]["record_type"] == "rejection_lesson"
+    assert exp.lesson_ledger.entries()[-1]["record_type"] == "rejection_lesson"
 
 
 def test_repeated_candidate_receives_previous_rejection_without_hidden_answers(tmp_path):
     repo = make_repo(tmp_path)
     exp = Grow0Experiment(repo)
     exp.record_rejection_lesson(
-        generation_id="G1-A",
-        manifest=None,
-        prediction="generic change should transfer",
-        contradicted_by=["no gain"],
-        diagnosis_or_implementation="implementation",
-        avoid=["repeat same change"],
+        generation_id="G1-A", manifest=None, prediction="generic change should transfer",
+        contradicted_by=["no gain"], diagnosis_or_implementation="implementation", avoid=["repeat same change"],
     )
     lessons = exp.lesson_ledger.sanitized_lessons(exp._sensitive_case_markers(exp._transfer))
     serialized = json.dumps(lessons)
@@ -289,3 +302,22 @@ def test_model_configuration_hash_changes_with_base_intelligence():
     a = ModelConfig("qwen2.5-coder:7b", "digest-a", 0.0, 42, 8192, 2048, 4)
     b = ModelConfig("qwen2.5-coder:14b", "digest-b", 0.0, 42, 8192, 2048, 4)
     assert a.config_hash != b.config_hash
+
+
+def test_candidate_cannot_execute_filesystem_reads(tmp_path):
+    repo = make_repo(tmp_path)
+    exp = Grow0Experiment(repo)
+    malicious = '''import pathlib
+
+def build_repair_packet(case, *, presentation_order="stored_first"):
+    secret = pathlib.Path("grow/kernel/hidden_transfer.json").read_text()
+    return secret
+'''
+    with CandidateWorkspace(repo, exp.mutable_paths) as ws:
+        ws.write_text(exp.workshop_path, malicious)
+        integrity = exp.evaluate_candidate_integrity(ws, exp.freeze_g0(baseline_ref="abc", prior_suite=baseline_suite())[1])
+        result = exp.evaluate_workshop_case(ws.root / exp.workshop_path, exp.trigger, position_model)
+    assert integrity["passed"] is False
+    assert any("forbidden AST node" in error for error in integrity["structure"]["errors"])
+    assert result["passed"] is False
+    assert "unsafe candidate workshop" in result["error"]

@@ -28,7 +28,7 @@ from grow.core import (
     utc_now,
     verify_ancestor_and_kernel,
 )
-from grow.kernel.evaluator import counterbalanced_probe, evaluate_case
+from grow.kernel.evaluator import counterbalanced_probe, evaluate_case, validate_workshop_source
 from grow.kernel.promotion import PromotionEvidence, decide_promotion
 
 
@@ -110,7 +110,6 @@ class Grow0Experiment:
         }
         index = 0
         while True:
-            # A, B, ... Z, AA, AB ... keeps candidate identity stable and auditable.
             n = index
             letters = ""
             while True:
@@ -193,8 +192,6 @@ class Grow0Experiment:
         if g0_result.get("passed"):
             raise ExperimentInvalid("cannot create failure packet from a passing trigger case")
         case = self.trigger
-        # Only run-visible evidence is included. Expected semantics are described
-        # without copying the evaluator implementation or hidden transfer values.
         smallest = {
             "semantic_sources": ["stored", "current"],
             "presentation": "two positional candidate values with provenance erased",
@@ -249,8 +246,6 @@ class Grow0Experiment:
             raise ExperimentInvalid("diagnosis is not supported; mutation is forbidden")
         workshop_text = (self.repo_root / self.workshop_path).read_text(encoding="utf-8")
         safe_packet = asdict(packet)
-        # Avoid giving the modifier the numeric oracle answer. It may know the
-        # observed values, but not an explicit expected literal/value pair.
         safe_packet["test_results"] = {"trigger_passed": False}
         safe_packet["oracle_results"] = {"public_verdict": "FAIL"}
         lessons = list(previous_rejections or [])
@@ -283,7 +278,6 @@ class Grow0Experiment:
         if any(marker in prompt for marker in transfer_markers):
             raise ExperimentInvalid("hidden transfer details leaked into modification prompt")
         evaluator_text = (self.repo_root / self.evaluator_path).read_text(encoding="utf-8")
-        # A meaningful implementation fragment must never be included verbatim.
         fragments = [line.strip() for line in evaluator_text.splitlines() if len(line.strip()) > 60]
         if any(fragment in prompt for fragment in fragments[:20]):
             raise ExperimentInvalid("oracle implementation leaked into modification prompt")
@@ -348,8 +342,6 @@ class Grow0Experiment:
 
     def anti_overfit_scan(self, workspace: CandidateWorkspace) -> dict[str, Any]:
         texts = {path: workspace.read_text(path) for path in workspace.changed_files()}
-        # Exact trigger/hidden literals and surface identifiers are forbidden in
-        # evolved architecture. Common generic words such as current/stored are allowed.
         markers = self._sensitive_case_markers(self.trigger) + self._sensitive_case_markers(self._transfer)
         return marker_scan(texts, markers)
 
@@ -358,10 +350,8 @@ class Grow0Experiment:
         for path in workspace.changed_files():
             target = workspace.root / path
             if target.suffix == ".py":
-                try:
-                    compile(target.read_text(encoding="utf-8"), str(target), "exec")
-                except SyntaxError as exc:
-                    errors.append(f"{path}: {exc}")
+                safety = validate_workshop_source(target.read_text(encoding="utf-8"))
+                errors.extend(f"{path}: {error}" for error in safety["errors"])
         return {"passed": not errors, "errors": errors}
 
     def evaluate_candidate_integrity(
@@ -429,7 +419,6 @@ class Grow0Experiment:
         result: dict[str, Any] = {"generation_id": "G1-DRY-REJECT", "disposition": None}
         with CandidateWorkspace(self.repo_root, self.mutable_paths) as workspace:
             try:
-                # Simulate a malicious/buggy modifier trying to touch the hidden bundle.
                 workspace.write_text(self.transfer_path, "{}")
                 result["disposition"] = "ERROR"
             except ForbiddenWriteError as exc:
@@ -456,7 +445,6 @@ class Grow0Experiment:
         invoke_g1: Callable[[str], str],
         prior_suite_g1: Callable[[Path], dict[str, Any]],
     ) -> dict[str, Any]:
-        # G0 trigger and hidden transfer are both measured before G1 exists.
         g0_trigger = self.evaluate_workshop_case(
             self.repo_root / self.workshop_path, self.trigger, invoke_g0
         )
@@ -565,8 +553,6 @@ class Grow0Experiment:
             else:
                 candidate_module = workspace.root / self.workshop_path
                 g1_trigger = self.evaluate_workshop_case(candidate_module, self.trigger, invoke_g1)
-                # For this first state-provenance challenge the discriminating probe
-                # itself is the counterfactual/mutation sensitivity check.
                 mutation_probe = counterbalanced_probe(
                     workshop_module=candidate_module,
                     case=self.trigger,

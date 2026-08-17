@@ -20,8 +20,12 @@
     "false_promotion": "covered by pure promotion-function truth conditions",
     "overfitting": "covered by trigger/transfer literal and identifier marker scan",
     "rollback": "covered by temporary workspace destruction and ancestor hash equality",
-    "attribution": "candidate changed-files hashes and causal modification manifest are recorded"
+    "attribution": "candidate changed-files hashes and causal modification manifest are recorded",
+    "candidate_code_execution": "resolved with AST allowlist plus empty builtins; imports, calls, attributes, and filesystem access are rejected before evaluation"
   },
   "open_finding": "A real lineage must not be claimed until the exact local Ollama model digest is pinned and the model is available. Ambient Claude routing is not acceptable for GROW-0.",
-  "severity": "BLOCKING_FOR_REAL_RUN_ONLY"
+  "severity": "BLOCKING_FOR_REAL_RUN_ONLY",
+  "resolved_findings": [
+    "Candidate Python originally executed with normal interpreter privileges and could theoretically read hidden files. The evaluator now permits only a narrow pure formatting AST and executes with empty builtins; a regression test verifies filesystem-reading code is rejected."
+  ]
 }
