@@ -70,6 +70,17 @@ def validate_workshop_source(source: str) -> dict[str, Any]:
     for node in ast.walk(tree):
         if type(node) not in _ALLOWED_AST_NODES:
             errors.append(f"forbidden AST node: {type(node).__name__}")
+        if isinstance(node, ast.Assign):
+            if any(not isinstance(target, ast.Name) for target in node.targets):
+                errors.append("assignment targets must be local names; candidate input mutation is forbidden")
+        if (
+            isinstance(node, ast.Subscript)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "case"
+            and isinstance(node.slice, ast.Constant)
+            and node.slice.value in {"expected_value", "expected_source"}
+        ):
+            errors.append(f"oracle field access forbidden: {node.slice.value}")
     return {"passed": not errors, "errors": sorted(set(errors))}
 
 
@@ -113,8 +124,13 @@ def evaluate_case(
 ) -> dict[str, Any]:
     try:
         builder = _load_builder(workshop_module)
-        prompt = builder(case, presentation_order=presentation_order)
-    except EvaluationError as exc:
+        public_case = {
+            "goal": case["goal"],
+            "stored_value": case["stored_value"],
+            "current_value": case["current_value"],
+        }
+        prompt = builder(public_case, presentation_order=presentation_order)
+    except (EvaluationError, KeyError, TypeError, ValueError) as exc:
         return {
             "case_id": case["case_id"],
             "passed": False,

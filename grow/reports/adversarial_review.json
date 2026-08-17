@@ -21,11 +21,13 @@
     "overfitting": "covered by trigger/transfer literal and identifier marker scan",
     "rollback": "covered by temporary workspace destruction and ancestor hash equality",
     "attribution": "candidate changed-files hashes and causal modification manifest are recorded",
-    "candidate_code_execution": "resolved with AST allowlist plus empty builtins; imports, calls, attributes, and filesystem access are rejected before evaluation"
+    "candidate_code_execution": "resolved with AST allowlist plus empty builtins; imports, calls, attributes, and filesystem access are rejected before evaluation",
+    "oracle_field_isolation": "resolved by passing candidate builder a public case projection with no expected_value/expected_source, plus explicit AST rejection of those keys"
   },
   "open_finding": "A real lineage must not be claimed until the exact local Ollama model digest is pinned and the model is available. Ambient Claude routing is not acceptable for GROW-0.",
   "severity": "BLOCKING_FOR_REAL_RUN_ONLY",
   "resolved_findings": [
-    "Candidate Python originally executed with normal interpreter privileges and could theoretically read hidden files. The evaluator now permits only a narrow pure formatting AST and executes with empty builtins; a regression test verifies filesystem-reading code is rejected."
+    "Candidate Python originally executed with normal interpreter privileges and could theoretically read hidden files. The evaluator now permits only a narrow pure formatting AST and executes with empty builtins; a regression test verifies filesystem-reading code is rejected.",
+    "Evaluator originally passed the full case object to mutable workshop code, allowing dynamic access to expected_value. It now passes only goal/stored/current evidence; expected fields remain evaluator-private, and AST checks reject direct oracle-key references and candidate input mutation."
   ]
 }
