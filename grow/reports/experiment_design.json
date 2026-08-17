@@ -3,7 +3,9 @@
   "implementation_certification_performed_by_role": false,
   "vertical_slice": "G0 -> one attempted G1 only",
   "failure_class": "state_provenance_loss",
-  "mutable_boundary": ["grow/workshop/repair_packet.py"],
+  "mutable_boundary": [
+    "grow/workshop/repair_packet.py"
+  ],
   "immutable_kernel": [
     "grow/kernel/evaluator.py",
     "grow/kernel/promotion.py",
@@ -18,5 +20,6 @@
   "promotion": "Pure deterministic conjunction: integrity AND prior capability retention AND trigger solved AND counterfactual probe passed AND hidden transfer score greater than G0.",
   "hidden_transfer": "Prepared before G1, stored in kernel, evaluated by controller only, excluded from modifier prompt and candidate workspace.",
   "rollback": "Discard temporary candidate workspace. G0 is never edited.",
-  "future_lineage": "Schemas support G0..G5, but runtime intentionally attempts only one G1 candidate."
+  "future_lineage": "Schemas support G0..G5, but runtime intentionally attempts only one G1 candidate.",
+  "prior_capability_validation": "Controller creates a disposable full-repository validation copy, overlays the candidate mutable workshop file, reruns the pre-GROW Hive pytest suite (excluding GROW experiment tests) and scripts.ci_gate, then discards the copy."
 }

@@ -4,6 +4,8 @@ import argparse
 import json
 import subprocess
 import sys
+import shutil
+import tempfile
 from dataclasses import replace
 from pathlib import Path
 
@@ -35,6 +37,41 @@ def run_prior_suite(repo_root: Path) -> dict:
         "pytest": pytest_result,
         "reliability_gate": reliability_result,
     }
+
+
+def run_prior_hive_suite_on_candidate(
+    repo_root: Path, candidate_root: Path, mutable_paths: tuple[str, ...]
+) -> dict:
+    """Rerun the pre-GROW Hive capability suite on a disposable G1 overlay."""
+    with tempfile.TemporaryDirectory(prefix="hive-grow0-prior-suite-") as tmp:
+        validation_root = Path(tmp) / "repo"
+        shutil.copytree(
+            repo_root,
+            validation_root,
+            ignore=shutil.ignore_patterns(
+                ".git", "__pycache__", ".pytest_cache", ".venv", "backups", "_tmp_reliability_*"
+            ),
+        )
+        shutil.rmtree(validation_root / "grow" / "state", ignore_errors=True)
+        for rel in mutable_paths:
+            source = candidate_root / rel
+            destination = validation_root / rel
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+
+        pytest_result = _run(
+            [sys.executable, "-m", "pytest", "-q", "--ignore-glob=tests/test_grow0*.py"],
+            validation_root,
+        )
+        reliability_result = _run(
+            [sys.executable, "-u", "-m", "scripts.ci_gate"], validation_root
+        )
+        return {
+            "passed": pytest_result["passed"] and reliability_result["passed"],
+            "scope": "pre-GROW Hive tests plus reliability gate on candidate overlay",
+            "pytest": pytest_result,
+            "reliability_gate": reliability_result,
+        }
 
 
 def write_run_artifacts(repo_root: Path, result: dict) -> Path:
@@ -100,11 +137,9 @@ def cmd_real(args) -> int:
             invoke_g0=g0.invoke,
             invoke_modifier=modifier.invoke,
             invoke_g1=g1.invoke,
-            prior_suite_g1=lambda _candidate_root: {
-                "passed": True,
-                "basis": "candidate is copy-on-write and changes no existing Hive core path; full baseline suite passed immediately before lineage",
-                "baseline": baseline,
-            },
+            prior_suite_g1=lambda candidate_root: run_prior_hive_suite_on_candidate(
+                repo_root, candidate_root, exp.mutable_paths
+            ),
         )
         result["metrics"] = {
             "g0": g0.metrics(),
