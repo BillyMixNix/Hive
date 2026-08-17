@@ -1,0 +1,27 @@
+{
+  "review_role": "Adversarial Reviewer",
+  "reviewer_modified_experimental_system": false,
+  "review_scope": [
+    "oracle leakage",
+    "benchmark leakage",
+    "ancestor mutation",
+    "evaluator mutation",
+    "false promotion",
+    "accidental overfitting",
+    "incomplete rollback",
+    "ambiguous attribution"
+  ],
+  "mechanical_checks": {
+    "oracle_leakage": "covered by modification-prompt isolation tests",
+    "benchmark_answer_leakage": "covered by exact expected-answer exclusion test",
+    "hidden_transfer_leakage": "covered by marker exclusion and candidate-workspace absence tests",
+    "ancestor_mutation": "covered by full static-tree manifest hash plus copy-on-write candidate tests",
+    "evaluator_mutation": "covered by pinned evaluator hash and invalidation test",
+    "false_promotion": "covered by pure promotion-function truth conditions",
+    "overfitting": "covered by trigger/transfer literal and identifier marker scan",
+    "rollback": "covered by temporary workspace destruction and ancestor hash equality",
+    "attribution": "candidate changed-files hashes and causal modification manifest are recorded"
+  },
+  "open_finding": "A real lineage must not be claimed until the exact local Ollama model digest is pinned and the model is available. Ambient Claude routing is not acceptable for GROW-0.",
+  "severity": "BLOCKING_FOR_REAL_RUN_ONLY"
+}
