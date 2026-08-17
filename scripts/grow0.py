@@ -6,7 +6,7 @@ import subprocess
 import sys
 import shutil
 import tempfile
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
 
 from grow.core import ExperimentInvalid, stable_json, utc_now
@@ -86,6 +86,8 @@ def write_run_artifacts(repo_root: Path, result: dict) -> Path:
         "modification_manifest.json": result.get("manifest"),
         "evaluation.json": {"g0": result.get("g0"), "g1": result.get("g1")},
         "promotion.json": result.get("promotion"),
+        "integrity_hashes.json": result.get("baseline_integrity"),
+        "metrics.json": result.get("metrics"),
     }
     for name, payload in mapping.items():
         if payload is None:
@@ -141,7 +143,25 @@ def cmd_real(args) -> int:
                 repo_root, candidate_root, exp.mutable_paths
             ),
         )
+        record = result.get("record") or {}
+        g1_result = result.get("g1") or {}
+        result["baseline_integrity"] = asdict(snapshot)
+        lineage_entries = exp.ledger.entries()
+        rejected_candidates = sum(
+            1 for entry in lineage_entries
+            if entry.get("record_type") == "generation" and entry.get("disposition") in {"REJECTED", "INVALID"}
+        )
         result["metrics"] = {
+            "generation": record.get("generation_id"),
+            "parent": record.get("parent_id"),
+            "trigger_failure_class": exp.trigger.get("failure_class"),
+            "task_success": bool((g1_result.get("trigger") or {}).get("passed")),
+            "transfer_success": bool((g1_result.get("transfer") or {}).get("passed")),
+            "prior_capability_retention": bool((g1_result.get("prior") or {}).get("passed")),
+            "candidate_changes": list(record.get("changed_files") or []),
+            "rejected_candidate_count": rejected_candidates,
+            "rollback_count": 0 if record.get("disposition") == "PROMOTED" else 1,
+            "false_completion_count": 0,
             "g0": g0.metrics(),
             "modifier": modifier.metrics(),
             "g1": g1.metrics(),

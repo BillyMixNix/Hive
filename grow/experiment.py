@@ -140,14 +140,14 @@ class Grow0Experiment:
         (target / "generation.json").write_text(
             json.dumps(asdict(record), indent=2, sort_keys=True), encoding="utf-8"
         )
-        if workspace is not None:
-            for rel in self.mutable_paths:
-                source = workspace.root / rel
-                if not source.is_file():
-                    continue
-                destination = target / "workshop" / rel
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(source, destination)
+        source_root = workspace.root if workspace is not None else self.repo_root
+        for rel in self.mutable_paths:
+            source = source_root / rel
+            if not source.is_file():
+                continue
+            destination = target / "workshop" / rel
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
         return target
 
     def freeze_g0(self, *, baseline_ref: str, prior_suite: dict[str, Any]) -> tuple[GenerationRecord, IntegritySnapshot]:
@@ -171,7 +171,11 @@ class Grow0Experiment:
                 model_configuration_hash=self.model_config.config_hash,
                 benchmark_bundle_id=self.config["benchmark_bundle_id"],
                 creation_timestamp=utc_now(),
-                validation_results={"baseline_ref": baseline_ref, "prior_suite": prior_suite},
+                validation_results={
+                    "baseline_ref": baseline_ref,
+                    "prior_suite": prior_suite,
+                    "integrity_snapshot": asdict(snapshot),
+                },
                 disposition="PROMOTED",
             )
             self.ledger.append({"record_type": "generation", **asdict(generation)})
