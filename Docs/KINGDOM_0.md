@@ -77,11 +77,11 @@ The current Arena is intentionally narrow. It does not yet expose unrestricted s
 
 The current recursive construction layer can decompose missing tools into predecessor targets, but it does not yet automatically implement arbitrary generated tools and load them back into Arena.
 
-That missing loop is explicit:
+The next engineering loop is explicit:
 
 `missing capability -> implementation candidate -> sandboxed test -> regression gate -> register adapter -> retry blocked branch`
 
-It is the next major engineering milestone because it turns recursive planning into recursive capability acquisition without granting unverified code immediate authority.
+That step turns recursive planning into recursive capability acquisition without granting unverified code immediate authority.
 
 ## Research claim still open
 
