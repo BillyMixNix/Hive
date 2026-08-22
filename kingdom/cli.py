@@ -7,7 +7,7 @@ from pathlib import Path
 from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, RepositorySearchTool, SimulationTool
 from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
-from .forge import CapabilityForge, HiveCapabilityAuthor
+from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .llm_provider import HiveLLMProvider
 from .worlds import WorldBranchingProvider
 
@@ -84,7 +84,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--forge-missing",
         action="store_true",
-        help="allow missing pure-function capabilities to be proposed, regression-gated, isolated, registered, and retried",
+        help="allow missing pure-function capabilities to be independently tested, regression-gated, isolated, registered, and retried",
     )
     parser.add_argument("--construction-depth", type=int, default=3, help="recursive levels below each blocker")
     parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
@@ -125,7 +125,15 @@ def main(argv=None) -> int:
                 SimulationTool(),
             ]
         )
-        forge = CapabilityForge(arena, HiveCapabilityAuthor()) if args.forge_missing else None
+        forge = (
+            CapabilityForge(
+                arena,
+                HiveCapabilityAuthor(),
+                oracle=HiveCapabilityOracle(),
+            )
+            if args.forge_missing
+            else None
+        )
         constructor = MindConstructor(
             engine,
             arena,
