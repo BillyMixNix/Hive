@@ -4,8 +4,11 @@ import argparse
 import json
 from pathlib import Path
 
+from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, RepositorySearchTool, SimulationTool
+from .construction import MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .llm_provider import HiveLLMProvider
+from .worlds import WorldBranchingProvider
 
 
 def _print_packet(run) -> None:
@@ -28,13 +31,37 @@ def _print_packet(run) -> None:
         print("\nCOMPREHENSION GATE")
         for probe in run.probes:
             print(f"[{probe.probe_id}] {probe.question}")
-    print(f"\nRun id: {run.run_id}")
+    run_id = getattr(run, "run_id", None)
+    if run_id:
+        print(f"\nRun id: {run_id}")
+
+
+def _print_construction(run) -> None:
+    _print_packet(run)
+    if run.arena_executions:
+        print("\nARENA")
+        for execution in run.arena_executions:
+            observation = execution.observation
+            print(
+                f"- [{observation.status}] {observation.tool}.{observation.operation}: "
+                f"{observation.claim}"
+            )
+    frontier = run.graph.frontier()
+    if frontier:
+        print("\nCONSTRUCTION FRONTIER")
+        for target in frontier:
+            print(f"- [{target.kind}/{target.status}] {target.statement}")
+    if run.missing_capabilities:
+        print("\nMISSING CAPABILITIES")
+        for target in run.missing_capabilities:
+            print(f"- {target.capability}: {target.reason or target.statement}")
+    print(f"\nBase Kingdom run id: {run.base_run.run_id}")
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="kingdom",
-        description="Kingdom-0: decompress an idea, explore branches, reintegrate structure, and test comprehension.",
+        description="Kingdom: decompress an idea, explore worlds, contact reality, and recursively construct blockers.",
     )
     parser.add_argument("seed", help="compressed idea or question to decompress")
     parser.add_argument("--context", default="", help="optional operator context")
@@ -43,7 +70,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--depth", type=int, default=1, help="maximum branch depth")
     parser.add_argument("--workers", type=int, default=4, help="parallel branch workers")
     parser.add_argument("--codec-items", type=int, default=10, help="maximum load-bearing insights")
-    parser.add_argument("--json", action="store_true", help="print complete run JSON")
+    parser.add_argument("--worlds", type=int, default=6, help="required incompatible world branches in construct mode")
+    parser.add_argument("--construct", action="store_true", help="enable worlds + Arena + recursive blocker promotion")
+    parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
+    parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
     parser.add_argument("--run-dir", default=".hive/kingdom/runs")
     parser.add_argument("--ledger", default=".hive/kingdom/ledger.jsonl")
     return parser
@@ -57,13 +87,34 @@ def main(argv=None) -> int:
         workers=args.workers,
         codec_items=args.codec_items,
     )
+    seed = Seed(text=args.seed, context=args.context, goal=args.goal)
+    provider = HiveLLMProvider()
+
+    if args.construct:
+        provider = WorldBranchingProvider(provider, world_count=args.worlds)
+
     engine = KingdomEngine(
-        HiveLLMProvider(),
+        provider,
         config=config,
         run_dir=Path(args.run_dir),
         ledger_path=Path(args.ledger),
     )
-    run = engine.run(Seed(text=args.seed, context=args.context, goal=args.goal))
+
+    if args.construct:
+        repo_root = Path(args.repo_root)
+        arena = ArenaRegistry(
+            [
+                RepositoryReadTool(repo_root),
+                RepositorySearchTool(repo_root),
+                SimulationTool(),
+            ]
+        )
+        constructor = MindConstructor(engine, arena, HiveArenaPlanner())
+        run = constructor.run(seed)
+        _print_construction(run)
+        return 0
+
+    run = engine.run(seed)
     if args.json:
         print(json.dumps(run.to_dict(), indent=2, sort_keys=True))
     else:
