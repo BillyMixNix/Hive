@@ -59,4 +59,12 @@ Construct mode adds forced incompatible worlds, Arena verification, missing-capa
 python -m kingdom "Build an artificial decompression intelligence" --construct --branches 12 --worlds 6
 ```
 
-See `Docs/KINGDOM_0.md` for the current architecture, honesty boundary, and open research claim.
+Restricted capability acquisition is an explicit opt-in. With `--forge-missing`, a missing pure-function capability may be proposed, policy-checked, tested through Hive's `RegressionGate`, executed again in an isolated timeout-bound runtime, registered into Arena only after passing, and then used to retry the exact blocked request:
+
+```bash
+python -m kingdom "Build an artificial decompression intelligence" --construct --forge-missing --branches 12 --worlds 6
+```
+
+The forge is deliberately not a general Python sandbox: generated tools cannot import modules or gain file, network, process, package, or privileged host authority.
+
+See `Docs/KINGDOM_0.md` for the current architecture, authority boundary, and open research claim.
