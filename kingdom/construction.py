@@ -15,6 +15,7 @@ from .core import (
     Seed,
     StructureMap,
 )
+from .forge import CapabilityForge, ForgeAttempt
 
 
 @dataclass(frozen=True)
@@ -220,18 +221,19 @@ class ConstructionGraph:
         max_depth: int = 3,
         max_targets: int = 40,
     ) -> tuple[BuildTarget, ...]:
-        queue = list(roots)
+        # max_depth is relative to each promoted blocker, not absolute graph depth.
+        queue: list[tuple[BuildTarget, int]] = [(target, 0) for target in roots]
         created: list[BuildTarget] = []
         while queue and len(self.targets) < max_targets:
-            target = queue.pop(0)
-            if target.depth >= max_depth or target.status in {"verified", "rejected", "executable"}:
+            target, relative_depth = queue.pop(0)
+            if relative_depth >= max_depth or target.status in {"verified", "rejected", "executable"}:
                 continue
             drafts = decomposer.decompose(target, available_capabilities)
             children = self.expand(target, drafts)
             created.extend(children)
             for child in children:
                 if child.status in {"open", "blocked"} and len(self.targets) < max_targets:
-                    queue.append(child)
+                    queue.append((child, relative_depth + 1))
         return tuple(created)
 
     def frontier(self) -> tuple[BuildTarget, ...]:
@@ -268,6 +270,7 @@ class ConstructionRun:
     structure: StructureMap
     packet: CognitivePacket
     probes: tuple[ComprehensionProbe, ...]
+    forge_attempts: tuple[ForgeAttempt, ...] = ()
 
     @property
     def missing_capabilities(self) -> tuple[BuildTarget, ...]:
@@ -279,13 +282,7 @@ class ConstructionRun:
 
 
 class MindConstructor:
-    """Kingdom + Arena + recursive blocker promotion.
-
-    Kingdom explores conceptual territory. Arena asks reality. Missing Arena
-    capabilities are promoted into construction targets; when a target
-    decomposer is supplied, those blockers are recursively reduced toward
-    executable predecessor operations.
-    """
+    """Kingdom + Arena + recursive blocker promotion and safe capability acquisition."""
 
     def __init__(
         self,
@@ -294,6 +291,7 @@ class MindConstructor:
         planner: ArenaPlanner,
         *,
         target_decomposer: TargetDecomposer | None = None,
+        capability_forge: CapabilityForge | None = None,
         construction_depth: int = 3,
         target_budget: int = 40,
     ):
@@ -301,6 +299,7 @@ class MindConstructor:
         self.arena = arena
         self.planner = planner
         self.target_decomposer = target_decomposer
+        self.capability_forge = capability_forge
         self.construction_depth = construction_depth
         self.target_budget = target_budget
 
@@ -331,10 +330,14 @@ class MindConstructor:
                 )
             )
 
-        executions = self.arena.execute_many(tuple(requests))
+        normalized_requests = tuple(request.normalized() for request in requests)
+        request_by_id = {request.request_id: request for request in normalized_requests}
+        initial_executions = self.arena.execute_many(normalized_requests)
         by_branch: dict[str, list[ArenaExecution]] = {}
         promoted: list[BuildTarget] = []
-        for execution in executions:
+        promoted_by_request: dict[str, BuildTarget] = {}
+
+        for execution in initial_executions:
             branch_id = execution.observation.branch_id
             by_branch.setdefault(branch_id, []).append(execution)
             parent = branch_targets.get(branch_id, root)
@@ -342,6 +345,7 @@ class MindConstructor:
                 target = graph.promote_missing(execution, parent_id=parent.target_id)
                 if target is not None:
                     promoted.append(target)
+                    promoted_by_request[execution.observation.request_id] = target
             elif execution.observation.status == "verified":
                 graph.add(
                     execution.observation.claim,
@@ -351,9 +355,44 @@ class MindConstructor:
                     reason=execution.observation.source,
                 )
 
-        if promoted and self.target_decomposer is not None:
+        forge_attempts: list[ForgeAttempt] = []
+        retry_executions: list[ArenaExecution] = []
+        if self.capability_forge is not None:
+            for execution in initial_executions:
+                if execution.missing is None:
+                    continue
+                request_id = execution.observation.request_id
+                target = promoted_by_request.get(request_id)
+                request = request_by_id.get(request_id)
+                if target is None or request is None:
+                    continue
+                attempt = self.capability_forge.attempt(target, request)
+                forge_attempts.append(attempt)
+                if attempt.status != "accepted" or not attempt.registered:
+                    continue
+
+                retry = self.arena.execute(request)
+                retry_executions.append(retry)
+                by_branch.setdefault(retry.observation.branch_id, []).append(retry)
+                if retry.observation.status == "verified":
+                    graph.set_status(target.target_id, "verified")
+                    parent = branch_targets.get(retry.observation.branch_id, root)
+                    graph.add(
+                        retry.observation.claim,
+                        kind="experiment",
+                        parent_id=parent.target_id,
+                        status="verified",
+                        reason=retry.observation.source,
+                    )
+
+        unresolved = [
+            graph.targets[target.target_id]
+            for target in promoted
+            if graph.targets[target.target_id].status == "blocked"
+        ]
+        if unresolved and self.target_decomposer is not None:
             graph.recursively_expand(
-                promoted,
+                unresolved,
                 self.target_decomposer,
                 available_capabilities=self.arena.tool_names,
                 max_depth=self.construction_depth,
@@ -381,12 +420,14 @@ class MindConstructor:
         structure = self.engine.provider.integrate(seed, base_run.branches, verified_tuple)
         packet = self.engine.provider.encode(seed, structure, self.engine.config)
         probes = tuple(self.engine.provider.make_probes(seed, structure, packet))
+        all_executions = tuple(initial_executions) + tuple(retry_executions)
         return ConstructionRun(
             base_run=base_run,
             verified_results=verified_tuple,
-            arena_executions=executions,
+            arena_executions=all_executions,
             graph=graph,
             structure=structure,
             packet=packet,
             probes=probes,
+            forge_attempts=tuple(forge_attempts),
         )
