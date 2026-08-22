@@ -9,7 +9,14 @@ from .arena import (
     SimulationTool,
     ToolRequest,
 )
-from .construction import BuildTarget, ConstructionGraph, ConstructionRun, MindConstructor
+from .construction import (
+    BuildTarget,
+    ConstructionGraph,
+    ConstructionRun,
+    HiveTargetDecomposer,
+    MindConstructor,
+    TargetDraft,
+)
 from .core import (
     BranchResult,
     BranchSpec,
@@ -45,6 +52,7 @@ __all__ = [
     "HashChainLedger",
     "HiveArenaPlanner",
     "HiveLLMProvider",
+    "HiveTargetDecomposer",
     "KingdomConfig",
     "KingdomEngine",
     "KingdomRun",
@@ -56,6 +64,7 @@ __all__ = [
     "Seed",
     "SimulationTool",
     "StructureMap",
+    "TargetDraft",
     "ToolRequest",
     "WorldBranchingProvider",
     "WorldSpec",
