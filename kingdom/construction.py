@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from dataclasses import dataclass, field, replace
-from typing import Mapping, Sequence
+from typing import Any, Callable, Protocol, Sequence
 
 from .arena import ArenaExecution, ArenaPlanner, ArenaRegistry, ToolRequest
 from .core import (
@@ -32,6 +33,85 @@ class BuildTarget:
             raise ValueError(f"unsupported target kind: {self.kind}")
         if self.status not in {"open", "blocked", "executable", "verified", "rejected"}:
             raise ValueError(f"unsupported target status: {self.status}")
+
+
+@dataclass(frozen=True)
+class TargetDraft:
+    statement: str
+    kind: str = "tool"
+    status: str = "open"
+    capability: str = ""
+    reason: str = ""
+
+
+class TargetDecomposer(Protocol):
+    def decompose(
+        self,
+        target: BuildTarget,
+        available_capabilities: Sequence[str],
+    ) -> Sequence[TargetDraft]: ...
+
+
+class HiveTargetDecomposer:
+    """Recursively reduce a blocked target toward executable predecessors."""
+
+    def __init__(self, ask: Callable[..., str] | None = None, *, max_children: int = 5):
+        if ask is None:
+            from hive_llm import ask_hive
+
+            ask = ask_hive
+        self.ask = ask
+        self.max_children = max_children
+
+    @staticmethod
+    def _parse(text: str) -> dict[str, Any]:
+        cleaned = text.strip()
+        start = cleaned.find("{")
+        end = cleaned.rfind("}")
+        if start >= 0 and end > start:
+            cleaned = cleaned[start : end + 1]
+        return json.loads(cleaned)
+
+    def decompose(
+        self,
+        target: BuildTarget,
+        available_capabilities: Sequence[str],
+    ) -> Sequence[TargetDraft]:
+        prompt = (
+            "KINGDOM / RECURSIVE CONSTRUCTION\n\n"
+            f"Blocked target: {target.statement}\nReason: {target.reason}\n"
+            f"Currently available capabilities: {list(available_capabilities)}\n\n"
+            "Decompose this blocker into the smallest useful predecessor targets. Prefer targets that can be "
+            "executed with available capabilities. If a required predecessor capability is itself missing, make it "
+            "a capability target so it can be decomposed again. Do not merely restate the parent. "
+            f"Return at most {self.max_children} children as JSON {{'targets': [...]}}. "
+            "Each target has statement, kind (tool|capability|experiment), status "
+            "(open|blocked|executable), capability, reason. JSON only."
+        )
+        payload = self._parse(self.ask(prompt, role="planner"))
+        drafts: list[TargetDraft] = []
+        for item in payload.get("targets", [])[: self.max_children]:
+            if not isinstance(item, dict):
+                continue
+            kind = str(item.get("kind") or "tool")
+            if kind not in {"tool", "capability", "experiment"}:
+                kind = "tool"
+            status = str(item.get("status") or "open")
+            if status not in {"open", "blocked", "executable"}:
+                status = "open"
+            statement = str(item.get("statement") or "").strip()
+            if not statement:
+                continue
+            drafts.append(
+                TargetDraft(
+                    statement=statement,
+                    kind=kind,
+                    status=status,
+                    capability=str(item.get("capability") or ""),
+                    reason=str(item.get("reason") or ""),
+                )
+            )
+        return tuple(drafts)
 
 
 @dataclass
@@ -109,6 +189,51 @@ class ConstructionGraph:
             reason=missing.purpose,
         )
 
+    def expand(
+        self,
+        target: BuildTarget,
+        drafts: Sequence[TargetDraft],
+    ) -> tuple[BuildTarget, ...]:
+        children: list[BuildTarget] = []
+        normalized_parent = target.statement.strip().lower()
+        for draft in drafts:
+            if draft.statement.strip().lower() == normalized_parent:
+                continue
+            children.append(
+                self.add(
+                    draft.statement,
+                    kind=draft.kind,
+                    parent_id=target.target_id,
+                    status=draft.status,
+                    capability=draft.capability,
+                    reason=draft.reason,
+                )
+            )
+        return tuple(children)
+
+    def recursively_expand(
+        self,
+        roots: Sequence[BuildTarget],
+        decomposer: TargetDecomposer,
+        *,
+        available_capabilities: Sequence[str],
+        max_depth: int = 3,
+        max_targets: int = 40,
+    ) -> tuple[BuildTarget, ...]:
+        queue = list(roots)
+        created: list[BuildTarget] = []
+        while queue and len(self.targets) < max_targets:
+            target = queue.pop(0)
+            if target.depth >= max_depth or target.status in {"verified", "rejected", "executable"}:
+                continue
+            drafts = decomposer.decompose(target, available_capabilities)
+            children = self.expand(target, drafts)
+            created.extend(children)
+            for child in children:
+                if child.status in {"open", "blocked"} and len(self.targets) < max_targets:
+                    queue.append(child)
+        return tuple(created)
+
     def frontier(self) -> tuple[BuildTarget, ...]:
         """Return unresolved leaf targets: the next things that must become executable."""
         values = []
@@ -156,9 +281,10 @@ class ConstructionRun:
 class MindConstructor:
     """Kingdom + Arena + recursive blocker promotion.
 
-    This is intentionally one loop above KingdomEngine. Kingdom explores the
-    conceptual territory. Arena asks reality. Missing Arena capabilities are
-    promoted into new construction targets instead of being terminal errors.
+    Kingdom explores conceptual territory. Arena asks reality. Missing Arena
+    capabilities are promoted into construction targets; when a target
+    decomposer is supplied, those blockers are recursively reduced toward
+    executable predecessor operations.
     """
 
     def __init__(
@@ -166,10 +292,17 @@ class MindConstructor:
         engine: KingdomEngine,
         arena: ArenaRegistry,
         planner: ArenaPlanner,
+        *,
+        target_decomposer: TargetDecomposer | None = None,
+        construction_depth: int = 3,
+        target_budget: int = 40,
     ):
         self.engine = engine
         self.arena = arena
         self.planner = planner
+        self.target_decomposer = target_decomposer
+        self.construction_depth = construction_depth
+        self.target_budget = target_budget
 
     def run(self, seed: Seed) -> ConstructionRun:
         base_run = self.engine.run(seed)
@@ -200,12 +333,15 @@ class MindConstructor:
 
         executions = self.arena.execute_many(tuple(requests))
         by_branch: dict[str, list[ArenaExecution]] = {}
+        promoted: list[BuildTarget] = []
         for execution in executions:
             branch_id = execution.observation.branch_id
             by_branch.setdefault(branch_id, []).append(execution)
             parent = branch_targets.get(branch_id, root)
             if execution.missing is not None:
-                graph.promote_missing(execution, parent_id=parent.target_id)
+                target = graph.promote_missing(execution, parent_id=parent.target_id)
+                if target is not None:
+                    promoted.append(target)
             elif execution.observation.status == "verified":
                 graph.add(
                     execution.observation.claim,
@@ -214,6 +350,15 @@ class MindConstructor:
                     status="verified",
                     reason=execution.observation.source,
                 )
+
+        if promoted and self.target_decomposer is not None:
+            graph.recursively_expand(
+                promoted,
+                self.target_decomposer,
+                available_capabilities=self.arena.tool_names,
+                max_depth=self.construction_depth,
+                max_targets=self.target_budget,
+            )
 
         verified_results: list[BranchResult] = []
         for result in base_run.results:
