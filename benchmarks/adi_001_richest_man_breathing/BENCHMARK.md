@@ -6,9 +6,11 @@ Can a recursively decomposing, reality/continuity-checking cognitive architectur
 
 This benchmark is a long-horizon semantic test, not a claim that prose quality alone proves cognitive amplification.
 
-## Canonical seed
+## Canonical seed and neutral contract
 
-`SEED.md` is the frozen human story specification. Runs hash its exact contents and must refuse continuation if the seed changes. The anchors below are an inspectable decomposition of that seed; they are not permission to replace it.
+`SEED.md` is the frozen human story specification. `CONTRACT.md` contains only the story obligations shared by both writers. The experimental protocol in this file is deliberately **not** supplied as writer context, because exposing the treatment strategy to the control condition would contaminate the A/B comparison.
+
+Runs hash the exact seed and neutral contract and must refuse continuation if either changes.
 
 ## Human intent anchors
 
@@ -56,13 +58,13 @@ The experiment tracks at minimum:
 
 ### Baseline
 
-A strong model receives the canonical seed, previous prose/memory support allowed by the chosen baseline protocol, and a matched generation-call budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
+A strong model receives the canonical seed, the neutral story contract, previous prose/memory support allowed by the chosen baseline protocol, and a matched generation-call budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
 
 The executable pilot gives the baseline seven model calls per generated chapter: an initial sequential draft, five ordinary revision passes, and one final polish. Its shared post-chapter state extraction is evaluation/memory bookkeeping and is counted separately from generation, exactly as on the Kingdom side.
 
 ### Kingdom / ADI
 
-The same canonical seed is captured as immutable intent. The system decomposes narrative obligations, uses specialized subagents/workers for independent planning and challenge, maintains dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
+The same canonical seed and neutral story contract are used. The system decomposes narrative obligations, uses specialized subagents/workers for independent planning and challenge, maintains dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
 
 For the executable pilot, Kingdom receives the same seven generation calls per chapter:
 
@@ -101,12 +103,12 @@ Critical prediction:
 
 ## Executable pilot
 
-Run both conditions through the same explicit model:
+Run both conditions through the same explicit model and the same neutral contract:
 
 ```bash
 python -m kingdom.webnovel_benchmark \
   --seed-file benchmarks/adi_001_richest_man_breathing/SEED.md \
-  --benchmark-file benchmarks/adi_001_richest_man_breathing/BENCHMARK.md \
+  --benchmark-file benchmarks/adi_001_richest_man_breathing/CONTRACT.md \
   --output-dir .hive/benchmarks/adi_001/pilot-10 \
   --chapters 10 \
   --checkpoint 5 \
@@ -123,7 +125,7 @@ The run directory contains:
 - checkpoint JSON with per-condition diagnostics and Kingdom-minus-baseline delta
 - a result summary stating the longitudinal prediction and the human-evaluation boundary
 
-The harness can continue an existing output directory only when its frozen seed, benchmark contract, and model still match the manifest.
+The harness can continue an existing output directory only when its frozen seed, neutral contract, and model still match the manifest.
 
 ## Pass/fail honesty boundary
 
