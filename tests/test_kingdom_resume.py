@@ -1,5 +1,10 @@
 from kingdom.arena import ArenaRegistry, RepositoryReadTool, ToolRequest
-from kingdom.construction import ConstructionGraph, ConstructionRun
+from kingdom.construction import (
+    ConstructionGraph,
+    ConstructionRun,
+    TargetDecomposition,
+    TargetDraft,
+)
 from kingdom.core import (
     BranchResult,
     BranchSpec,
@@ -59,6 +64,22 @@ class ResumePlanner:
                 {"path": "fact.txt"},
                 purpose=target.statement,
                 branch_id=target.origin_branch_id,
+            ),
+        )
+
+
+class IntentRepairDecomposer:
+    def decompose(self, target, available_capabilities):
+        assert target.origin_branch_id == "intent-path"
+        return TargetDecomposition(
+            mode="all",
+            targets=(
+                TargetDraft(
+                    "Re-run the repaired end-to-end path against the repository fixture",
+                    kind="experiment",
+                    status="executable",
+                    reason="prove the critical path now composes",
+                ),
             ),
         )
 
@@ -164,3 +185,49 @@ def test_resume_demotes_ephemeral_capability_that_is_not_in_new_arena(tmp_path):
 
     assert resumed.graph.targets[capability.target_id].status == "blocked"
     assert resumed.missing_capabilities[0].capability == "ephemeral_tool"
+
+
+def test_resume_decomposes_and_executes_blocked_intent_path_repair(tmp_path):
+    (tmp_path / "fact.txt").write_text("ground truth", encoding="utf-8")
+    base, result = _base_run()
+    graph = ConstructionGraph()
+    root = graph.add(base.seed.text, kind="goal", status="blocked")
+    repair = graph.add(
+        "Critical path repair: complete the user-facing journey",
+        kind="experiment",
+        parent_id=root.target_id,
+        status="blocked",
+        reason="the terminal walk exposed a broken handoff",
+        origin_branch_id="intent-path",
+    )
+    prior = ConstructionRun(
+        base_run=base,
+        verified_results=(result,),
+        arena_executions=(),
+        graph=graph,
+        structure=base.structure,
+        packet=base.packet,
+        probes=(),
+    )
+    engine = KingdomEngine(
+        ResumeProvider(),
+        config=KingdomConfig(max_branches=1, max_depth=0),
+        run_dir=tmp_path / "runs",
+        ledger_path=tmp_path / "ledger.jsonl",
+    )
+
+    resumed = ConstructionResumer(
+        engine,
+        ArenaRegistry([RepositoryReadTool(tmp_path)]),
+        target_decomposer=IntentRepairDecomposer(),
+        target_planner=ResumePlanner(),
+        construction_depth=2,
+        construction_rounds=1,
+    ).advance(prior)
+
+    assert resumed.graph.targets[repair.target_id].status == "verified"
+    children = resumed.graph.children[repair.target_id]
+    assert len(children) == 1
+    assert resumed.graph.targets[children[0]].status == "verified"
+    assert resumed.graph.targets[children[0]].origin_branch_id == "intent-path"
+    assert len(resumed.arena_executions) == 1
