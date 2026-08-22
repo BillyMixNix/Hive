@@ -31,6 +31,16 @@ from .core import (
     Seed,
     StructureMap,
 )
+from .forge import (
+    CandidateValidation,
+    CapabilityCandidate,
+    CapabilityCase,
+    CapabilityForge,
+    ForgeAttempt,
+    GeneratedCapabilityTool,
+    HiveCapabilityAuthor,
+    SafeCapabilityValidator,
+)
 from .llm_provider import HiveLLMProvider
 from .navigation import CognitiveNavigator, NavNode
 from .worlds import WorldBranchingProvider, WorldSpec, default_worlds
@@ -42,6 +52,10 @@ __all__ = [
     "BranchResult",
     "BranchSpec",
     "BuildTarget",
+    "CandidateValidation",
+    "CapabilityCandidate",
+    "CapabilityCase",
+    "CapabilityForge",
     "CognitiveNavigator",
     "CognitivePacket",
     "ComprehensionAssessment",
@@ -49,8 +63,11 @@ __all__ = [
     "ConstructionGraph",
     "ConstructionRun",
     "Evidence",
+    "ForgeAttempt",
+    "GeneratedCapabilityTool",
     "HashChainLedger",
     "HiveArenaPlanner",
+    "HiveCapabilityAuthor",
     "HiveLLMProvider",
     "HiveTargetDecomposer",
     "KingdomConfig",
@@ -61,6 +78,7 @@ __all__ = [
     "NavNode",
     "RepositoryReadTool",
     "RepositorySearchTool",
+    "SafeCapabilityValidator",
     "Seed",
     "SimulationTool",
     "StructureMap",
