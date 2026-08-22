@@ -36,6 +36,14 @@ class StaticAuthor:
         return self.candidate
 
 
+class StaticOracle:
+    def __init__(self, cases):
+        self._cases = tuple(cases)
+
+    def cases(self, target, request, candidate):
+        return self._cases
+
+
 class ForgeProvider:
     def decompose(self, seed, config):
         return [
@@ -112,6 +120,24 @@ def candidate(expected=3, source=VALID_SOURCE):
     )
 
 
+def request(x=8):
+    return ToolRequest(
+        "missing_sensor",
+        "measure",
+        {"x": x},
+        purpose="test forged capability",
+        branch_id="b",
+    ).normalized()
+
+
+def target():
+    return type(
+        "Target",
+        (),
+        {"target_id": "t", "statement": "build missing sensor"},
+    )()
+
+
 def test_policy_rejects_imports_before_regression_execution():
     unsafe = candidate(
         source="import os\n\ndef execute(payload):\n    return {\"value\": 3}\n"
@@ -133,24 +159,25 @@ def test_wrong_candidate_is_rejected_by_regression_gate():
     assert validation.regression_report["failed_case_ids"]
 
 
+def test_independent_oracle_can_veto_author_examples():
+    arena = ArenaRegistry()
+    oracle = StaticOracle((CapabilityCase({"x": 3}, {"value": 99}),))
+    forge = CapabilityForge(arena, StaticAuthor(candidate()), oracle=oracle)
+
+    attempt = forge.attempt(target(), request())
+
+    assert attempt.status == "rejected"
+    assert attempt.validation is not None
+    assert attempt.validation.regression_passed is False
+    assert "missing_sensor" not in arena.tool_names
+
+
 def test_valid_candidate_passes_gate_registers_and_executes():
     arena = ArenaRegistry()
     forge = CapabilityForge(arena, StaticAuthor(candidate()))
-    request = ToolRequest(
-        "missing_sensor",
-        "measure",
-        {"x": 8},
-        purpose="test forged capability",
-        branch_id="b",
-    ).normalized()
-    target = type(
-        "Target",
-        (),
-        {"target_id": "t", "statement": "build missing sensor"},
-    )()
 
-    attempt = forge.attempt(target, request)
-    execution = arena.execute(request)
+    attempt = forge.attempt(target(), request())
+    execution = arena.execute(request())
 
     assert attempt.status == "accepted"
     assert attempt.registered is True
