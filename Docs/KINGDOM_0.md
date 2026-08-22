@@ -75,7 +75,13 @@ Kingdom still does not treat model-generated prose as external evidence. Only ac
 
 The current Arena is intentionally narrow. It does not yet expose unrestricted shell execution or unrestricted network access. Those should arrive as separately sandboxed, provenance-preserving adapters rather than as implicit powers of the model.
 
-The current recursive construction layer can decompose missing tools into predecessor targets, but it does not yet automatically implement arbitrary generated tools and load them back into Arena. That build-test-register loop is the next major engineering step.
+The current recursive construction layer can decompose missing tools into predecessor targets, but it does not yet automatically implement arbitrary generated tools and load them back into Arena.
+
+That missing loop is explicit:
+
+`missing capability -> implementation candidate -> sandboxed test -> regression gate -> register adapter -> retry blocked branch`
+
+It is the next major engineering milestone because it turns recursive planning into recursive capability acquisition without granting unverified code immediate authority.
 
 ## Research claim still open
 
