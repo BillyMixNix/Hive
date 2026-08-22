@@ -6,9 +6,11 @@ Can a recursively decomposing, reality/continuity-checking cognitive architectur
 
 This benchmark is a long-horizon semantic test, not a claim that prose quality alone proves cognitive amplification.
 
-## Human intent anchors
+## Canonical seed
 
-The canonical human seed is the operator's full story specification supplied for this experiment. These are the load-bearing invariants extracted from it; they are not permission to replace the original seed.
+`SEED.md` is the frozen human story specification. Runs hash its exact contents and must refuse continuation if the seed changes. The anchors below are an inspectable decomposition of that seed; they are not permission to replace it.
+
+## Human intent anchors
 
 1. Ren Fujitsu begins as a broke, twenty-six-year-old delivery driver whose concerns are painfully ordinary.
 2. The foundational rule is exact and legible: inhale longer than exhale => +$1; exhale longer than inhale => -$1; equal => $0.
@@ -54,17 +56,31 @@ The experiment tracks at minimum:
 
 ### Baseline
 
-A strong model receives the canonical seed, previous prose/memory support allowed by the chosen baseline protocol, and an approximately matched generation budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
+A strong model receives the canonical seed, previous prose/memory support allowed by the chosen baseline protocol, and a matched generation-call budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
+
+The executable pilot gives the baseline seven model calls per generated chapter: an initial sequential draft, five ordinary revision passes, and one final polish. Its shared post-chapter state extraction is evaluation/memory bookkeeping and is counted separately from generation, exactly as on the Kingdom side.
 
 ### Kingdom / ADI
 
-The same canonical seed is captured as immutable intent. The system recursively decomposes narrative obligations, uses specialized subagents/workers for independent planning and challenge when the execution environment supports them, maintains dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and periodically runs the Critical Intent Path against the original seed.
+The same canonical seed is captured as immutable intent. The system decomposes narrative obligations, uses specialized subagents/workers for independent planning and challenge, maintains dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
 
-For mega-prompted runs, specialized subagents are mandatory for at least continuity, progression/economics, character/theme, adversarial contradiction search, and synthesis. Their outputs are proposals, not authority; final acceptance remains gated by explicit evidence/state checks and intent alignment.
+For the executable pilot, Kingdom receives the same seven generation calls per chapter:
+
+1. continuity specialist
+2. progression/economics specialist
+3. character/theme specialist
+4. adversarial contradiction specialist
+5. synthesis specialist
+6. prose synthesis
+7. Critical-Path prose revision
+
+The first four specialist calls are independent proposals and do not see one another's work. Synthesis resolves them against the immutable seed and persistent state. Proposal is not authority.
+
+The harness passes an explicit `model=` override to Hive for every generation and evaluator call, preventing role routing from silently using stronger models for one side.
 
 ## Evaluation
 
-Measure at checkpoints such as chapters 10, 25, 50, 100, 250, 500, and 1000.
+Measure at checkpoints such as chapters 10, 25, 50, 100, 250, 500, and 1000. The pilot defaults to 5 and 10 so harness failures are discovered before large generation spend.
 
 Primary measures:
 
@@ -77,9 +93,37 @@ Primary measures:
 - original-intent retention
 - blind-reader preference for coherence, payoff, engagement, and perceived intentionality
 
+The executable harness also emits an automatic model-based checkpoint score and an automatically blinded pairwise comparison. Those are diagnostics, not independent evidence: the decisive version of the experiment still requires blind human readers or an independently validated evaluator.
+
 Critical prediction:
 
 > If externally extensible cognition is useful, Kingdom's relative advantage should increase as narrative horizon and dependency density increase, rather than merely producing better Chapter 2 prose.
+
+## Executable pilot
+
+Run both conditions through the same explicit model:
+
+```bash
+python -m kingdom.webnovel_benchmark \
+  --seed-file benchmarks/adi_001_richest_man_breathing/SEED.md \
+  --benchmark-file benchmarks/adi_001_richest_man_breathing/BENCHMARK.md \
+  --output-dir .hive/benchmarks/adi_001/pilot-10 \
+  --chapters 10 \
+  --checkpoint 5 \
+  --checkpoint 10 \
+  --model qwen2.5-coder:7b
+```
+
+The run directory contains:
+
+- a manifest with seed/contract hashes, explicit model, and budgets
+- separate baseline and Kingdom chapter streams
+- persistent extracted narrative state for both streams
+- an auditable model-call ledger containing prompt/response hashes and character counts
+- checkpoint JSON with per-condition diagnostics and Kingdom-minus-baseline delta
+- a result summary stating the longitudinal prediction and the human-evaluation boundary
+
+The harness can continue an existing output directory only when its frozen seed, benchmark contract, and model still match the manifest.
 
 ## Pass/fail honesty boundary
 
