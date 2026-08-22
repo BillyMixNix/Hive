@@ -43,12 +43,20 @@ Hive is not claiming autonomous model training or reliable self-improvement thro
 
 > Once Hive can express a failure as a regression case, future accepted changes must not repeat it.
 
-## Kingdom-0: cognitive decompression
+## Kingdom / Mind Constructor experiment
 
-Hive now has an experimental `kingdom` layer for expanding a compressed human idea into divergent branches, reintegrating their shared structure and disagreements, encoding that structure into a bounded cognitive packet, and generating transfer questions that test whether the operator actually understood it.
+The `kingdom` package is an experimental layer for turning a compressed human intent into divergent investigations, reality-contact requests, structural reintegration, and recursively decomposed construction blockers.
+
+Standard cognitive-topology mode:
 
 ```bash
 python -m kingdom "Can cognition be externally extensible?" --branches 12 --workers 4
 ```
 
-See `Docs/KINGDOM_0.md` for the architecture, experiment boundary, and cognitive-amplification metric.
+Construct mode adds forced incompatible worlds, Arena verification, missing-capability promotion, and bounded recursive construction:
+
+```bash
+python -m kingdom "Build an artificial decompression intelligence" --construct --branches 12 --worlds 6
+```
+
+See `Docs/KINGDOM_0.md` for the current architecture, honesty boundary, and open research claim.
