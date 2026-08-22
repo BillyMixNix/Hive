@@ -10,6 +10,12 @@ from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .diversity import NoveltyFilteringProvider, diversity_report
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
+from .intent_path import (
+    HiveIntentPathJudge,
+    HiveIntentPathPlanner,
+    IntentPathGate,
+    IntentPathRecorder,
+)
 from .llm_provider import HiveLLMProvider
 from .persistence import ConstructionRecorder
 from .resume import ConstructionResumer
@@ -42,7 +48,7 @@ def _print_packet(run) -> None:
         print(f"\nRun id: {run_id}")
 
 
-def _print_construction(run, record=None) -> None:
+def _print_construction(run, record=None, intent_report=None, intent_record=None) -> None:
     _print_packet(run)
     diversity = diversity_report(run.base_run.branches)
     print("\nBRANCH DIVERSITY")
@@ -69,6 +75,21 @@ def _print_construction(run, record=None) -> None:
                 f"- [{attempt.status}] {attempt.capability}.{attempt.operation}{suffix}: "
                 f"{attempt.detail}"
             )
+    if intent_report is not None:
+        print("\nCRITICAL INTENT PATH")
+        print(f"- [{intent_report.status}] {intent_report.reason}")
+        for result in intent_report.steps:
+            observation = result.execution.observation
+            print(
+                f"- step {result.step.step_id} [{result.status}] {result.step.description}: "
+                f"{observation.claim}"
+            )
+        print(
+            f"- semantic verdict [{intent_report.semantic_verdict}]: "
+            f"{intent_report.semantic_reason}"
+        )
+        if intent_report.reopened_target_ids:
+            print(f"- reopened construction targets: {len(intent_report.reopened_target_ids)}")
     frontier = run.graph.frontier()
     if frontier:
         print("\nCONSTRUCTION FRONTIER")
@@ -82,12 +103,15 @@ def _print_construction(run, record=None) -> None:
     if record is not None:
         print(f"Construction record: {record.path}")
         print(f"Construction SHA256: {record.sha256}")
+    if intent_record is not None:
+        print(f"Intent path record: {intent_record.path}")
+        print(f"Intent path SHA256: {intent_record.sha256}")
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="kingdom",
-        description="Kingdom: decompress intent, explore worlds, contact reality, and recursively construct blockers.",
+        description="Kingdom: decompress intent, explore worlds, contact reality, construct blockers, then walk the original intent end-to-end.",
     )
     parser.add_argument("seed", nargs="?", help="compressed idea, goal, or question to decompress")
     parser.add_argument("--resume-run-id", default="", help="continue the latest ledger-verified construction checkpoint for this Kingdom run id")
@@ -104,6 +128,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="allow missing pure-function capabilities to be independently tested, regression-gated, isolated, registered, and retried",
     )
+    parser.add_argument(
+        "--skip-intent-path",
+        action="store_true",
+        help="debug escape hatch: skip the terminal critical-path walk of the original intent",
+    )
     parser.add_argument("--construction-depth", type=int, default=3, help="recursive levels below each blocker")
     parser.add_argument("--construction-rounds", type=int, default=3, help="maximum execute/decompose frontier cycles")
     parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
@@ -111,6 +140,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
     parser.add_argument("--run-dir", default=".hive/kingdom/runs")
     parser.add_argument("--construction-run-dir", default=".hive/kingdom/construction_runs")
+    parser.add_argument("--intent-path-run-dir", default=".hive/kingdom/intent_paths")
     parser.add_argument("--ledger", default=".hive/kingdom/ledger.jsonl")
     return parser
 
@@ -124,6 +154,22 @@ def _arena(repo_root: Path) -> ArenaRegistry:
             PytestTool(repo_root),
         ]
     )
+
+
+def _walk_original_intent(run, arena, engine, args):
+    if args.skip_intent_path:
+        return None, None
+    gate = IntentPathGate(
+        HiveIntentPathPlanner(),
+        HiveIntentPathJudge(),
+    )
+    report = gate.walk_and_reopen(run, arena)
+    intent_recorder = IntentPathRecorder(
+        Path(args.intent_path_run_dir),
+        ledger=engine.ledger,
+    )
+    record = intent_recorder.persist(run.base_run.run_id, report)
+    return report, record
 
 
 def main(argv=None) -> int:
@@ -178,8 +224,9 @@ def main(argv=None) -> int:
             construction_rounds=args.construction_rounds,
         )
         run = resumer.advance(prior)
+        intent_report, intent_record = _walk_original_intent(run, arena, engine, args)
         record = recorder.persist(run)
-        _print_construction(run, record)
+        _print_construction(run, record, intent_report, intent_record)
         return 0
 
     seed = Seed(text=args.seed or "", context=args.context, goal=args.goal)
@@ -206,8 +253,9 @@ def main(argv=None) -> int:
             construction_rounds=args.construction_rounds,
         )
         run = constructor.run(seed)
+        intent_report, intent_record = _walk_original_intent(run, arena, engine, args)
         record = recorder.persist(run)
-        _print_construction(run, record)
+        _print_construction(run, record, intent_report, intent_record)
         return 0
 
     run = engine.run(seed)
