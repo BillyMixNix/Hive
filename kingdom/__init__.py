@@ -33,6 +33,14 @@ from .core import (
     Seed,
     StructureMap,
 )
+from .diversity import (
+    BranchSimilarity,
+    DiversityReport,
+    NoveltyFilteringProvider,
+    branch_similarity,
+    diversity_report,
+    filter_novel_branches,
+)
 from .forge import (
     CandidateValidation,
     CapabilityCandidate,
@@ -56,6 +64,7 @@ __all__ = [
     "ArenaObservation",
     "ArenaRegistry",
     "BranchResult",
+    "BranchSimilarity",
     "BranchSpec",
     "BuildTarget",
     "CandidateValidation",
@@ -71,6 +80,7 @@ __all__ = [
     "ConstructionRecord",
     "ConstructionRecorder",
     "ConstructionRun",
+    "DiversityReport",
     "Evidence",
     "ForgeAttempt",
     "GeneratedCapabilityTool",
@@ -87,6 +97,7 @@ __all__ = [
     "MindConstructor",
     "MissingCapability",
     "NavNode",
+    "NoveltyFilteringProvider",
     "PytestTool",
     "RepositoryReadTool",
     "RepositorySearchTool",
@@ -100,5 +111,8 @@ __all__ = [
     "ToolRequest",
     "WorldBranchingProvider",
     "WorldSpec",
+    "branch_similarity",
     "default_worlds",
+    "diversity_report",
+    "filter_novel_branches",
 ]
