@@ -15,6 +15,7 @@ from .construction import (
     ConstructionRun,
     HiveTargetDecomposer,
     MindConstructor,
+    TargetDecomposition,
     TargetDraft,
 )
 from .core import (
@@ -88,6 +89,7 @@ __all__ = [
     "Seed",
     "SimulationTool",
     "StructureMap",
+    "TargetDecomposition",
     "TargetDraft",
     "TargetExecutionPlanner",
     "ToolRequest",
