@@ -1,71 +1,146 @@
-# Kingdom-0 / Mind Constructor
+# Kingdom / Mind Constructor
 
-Kingdom is an experimental layer above Hive's regression-first contract.
+Kingdom is an experimental construction layer above Hive's regression-first contract.
 
-Its mission is not merely to generate more reasoning. It is to turn a compressed human intent into a recursively navigable construction process:
+Its mission is not merely to generate more reasoning. It is to turn compressed human intent into recursively navigable, reality-tested construction:
 
-`idea -> decompression -> incompatible worlds -> exploration -> reality contact -> structural reintegration -> executable frontier -> acquire capability -> recurse`
+`intent -> decompression -> incompatible worlds -> novel branches -> reality contact -> structural reintegration -> dependency graph -> executable frontier -> acquire capability -> retry -> checkpoint -> resume`
 
-## What exists on this branch
+## Mission boundary
 
-### Cognitive topology
+Comprehension is part of the interface, not the whole mission. The stronger engineering question is whether a human can point at a high-level goal and have the system expose, explore, test, build, and recursively reduce the missing territory between the idea and executable reality while preserving enough structure for meaningful human direction.
 
-`KingdomEngine` provides bounded branch expansion, deduplication, parallel exploration, structural reintegration, a cognitive packet, comprehension probes, and a tamper-evident run ledger.
+The current branch does **not** claim generalized autonomous construction or generalized cognitive amplification. It builds a falsifiable software apparatus for those questions.
+
+## Cognitive topology
+
+`KingdomEngine` provides bounded branch expansion, exact deduplication, parallel exploration, structural reintegration, a cognitive packet, comprehension probes, and a tamper-evident run ledger.
 
 ### Incompatible worlds
 
-`WorldBranchingProvider` injects explicit premise-level interventions before ordinary model-generated branches. The default basis includes premise-true, premise-false, minimum-viable, capability-max, adversarial, and outside-frame worlds.
+`WorldBranchingProvider` injects premise-level interventions before ordinary model-generated branches. The default basis includes:
 
-This is meant to prevent fake diversity where many workers merely paraphrase the same assumptions.
+- premise true
+- premise false
+- minimum viable
+- capability-max
+- adversarial
+- outside-frame
 
-### Arena
+Forced worlds are deliberate interventions, not votes.
 
-`ArenaRegistry` gives branches an explicit reality-contact layer. Current concrete adapters include repository read, repository search, and pre-registered deterministic simulations.
+### Branch diversity
 
-Arena distinguishes three evidence states:
+`NoveltyFilteringProvider` removes near-duplicate generated branches with a deterministic lexical gate while never removing explicit world branches. `diversity_report()` distinguishes raw branch count from an effective branch count and reports residual correlated pairs.
 
-- verified: the tool actually returned an observation
-- failed: the operation ran but failed
-- unavailable: the requested capability does not exist
+This is intentionally only a conservative lexical proxy. It prevents obvious correlated clones from masquerading as scale; it does not claim to solve semantic diversity.
 
-An unavailable capability is not silently substituted and is not a terminal error.
+## Arena: reality gets a veto
 
-### Recursive construction
+`ArenaRegistry` gives branches an explicit reality-contact layer. Current host-owned adapters include:
 
-`MindConstructor` promotes unavailable Arena capabilities into `BuildTarget` nodes attached to the branch that required them.
+- repository read
+- repository search
+- pre-registered deterministic simulation
+- constrained pytest execution
 
-When a `TargetDecomposer` is supplied, blocked targets are decomposed again into predecessor tools, capabilities, or experiments until the configured construction depth/target budget is reached or an executable frontier appears.
+The pytest adapter accepts only validated test node IDs under configured test roots. It does not expose shell strings or arbitrary pytest flags.
 
-Construction depth is measured relative to each promoted blocker rather than from the original seed.
+Arena distinguishes:
 
-This implements the working hypothesis:
+- `verified`: the requested operation produced a successful observation
+- `failed`: the operation executed but contradicted the attempted claim or failed its check
+- `unavailable`: the required capability is absent
 
-> a blocker can itself become another decompression target rather than ending the inquiry.
+Model prose is never automatically upgraded to external evidence. Only actual Arena observations receive observation status.
 
-### Capability Forge
+## Recursive construction
 
-Construct mode can optionally enable `CapabilityForge` with `--forge-missing`.
+`MindConstructor` promotes unavailable Arena capabilities into `BuildTarget` nodes attached to the exact originating branch/world that needed them.
 
-The forge handles only a deliberately narrow capability class: one deterministic Python function `execute(payload)` with no imports, attributes, classes, decorators, file/network/process access, or arbitrary function calls. A model proposal does not receive authority merely because it exists.
+`HiveTargetDecomposer` can recursively reduce a blocker into predecessor tools, capabilities, or experiments. Construction depth is measured relative to each promoted blocker, and total targets are budgeted.
 
-A candidate must pass this sequence:
+### Dependency closure
+
+A decomposition now declares an explicit resolution mode:
+
+- `all`: every child is jointly required
+- `any`: any one verified child is sufficient
+
+Parent status propagates only when that declared rule is satisfied. A convenient successful subtask therefore cannot silently mark a larger blocker solved.
+
+## Executable construction frontier
+
+`HiveTargetExecutionPlanner` translates executable leaf targets back into concrete Arena requests. `MindConstructor` can cycle through bounded construction rounds:
+
+`frontier leaf -> Arena -> observation/missing capability -> forge or decompose -> dependency closure -> next frontier`
+
+Arena observations produced during construction retain their originating branch ID and are fed back into structural reintegration rather than becoming orphaned build logs.
+
+## Capability Forge
+
+`CapabilityForge` is an explicit opt-in via `--forge-missing`.
+
+It handles only a deliberately narrow generated capability class: one deterministic Python function `execute(payload)` with no imports, attributes, classes, decorators, file/network/process access, or arbitrary function calls.
+
+A coding role proposes the implementation. A separate acceptance oracle derives independent executable cases from the intended contract. The implementation author therefore does not get to define the only exam that grants its own authority.
+
+A candidate must survive:
 
 1. restricted AST policy
-2. JSON-serializable executable cases
-3. Hive `RegressionGate` against those cases in a timeout-bound subprocess
-4. a second isolated runtime execution of every case
-5. Arena registration only after both validation layers pass
-6. immediate retry of the exact request that originally failed
+2. author development cases
+3. independent acceptance-oracle cases
+4. Hive `RegressionGate` over the merged case set in a timeout-bound subprocess
+5. a second isolated runtime execution of every case
+6. Arena registration only after those validation layers pass
+7. immediate retry of the exact request that originally failed
 
-If the retry returns a verified observation, the blocked capability target becomes verified and that evidence is fed into structural reintegration. If forging is impossible or validation fails, the blocker remains in the construction graph and may be recursively decomposed instead.
+If the oracle cannot define objective expected outputs, the forge fails closed instead of converting ambiguous semantics into code authority.
 
-The forge is intentionally opt-in. It is a capability-acquisition experiment, not a general Python sandbox or unrestricted self-modification mechanism.
+Generated capabilities are ephemeral. They are **not** automatically trusted or restored after process restart. A resumed run that needs a previously forged tool must actually have that tool available again or the capability becomes blocked.
 
-### Zoomable reintegration
+This is defense in depth for a tiny generated-code class, not a claim of a general secure Python sandbox.
 
-`CognitiveNavigator` retains stable references from structural claims back to the branch evidence that exposed them. The human-facing packet can remain compact without forcing provenance to disappear.
+## Structural reintegration and navigation
 
-## Live construct mode
+Reintegration extracts invariants, disagreements, hinge assumptions, causal links, anomalies, unknowns, and branch provenance rather than majority-voting branch answers.
+
+`CognitiveNavigator` retains stable references from structural claims back to the branches/evidence that exposed them. Compression does not require deleting inspectability.
+
+## Tamper-evident construction checkpoints
+
+The base Kingdom run and the post-Arena construction state are both durable.
+
+`ConstructionRecorder` writes hash-addressed construction checkpoint files containing:
+
+- the original Kingdom run
+- verified branch results
+- Arena executions
+- construction targets and dependency modes
+- structural reintegration
+- cognitive packet/probes
+- forge decisions
+
+Each artifact's SHA-256 is anchored into Hive's existing hash-chained ledger. Later edits to the artifact fail verification. Successive checkpoints never overwrite earlier construction history.
+
+## Resumable construction
+
+`ConstructionResumer` loads the latest ledger-verified checkpoint for a run ID and continues unresolved frontier work without replaying the original conceptual search.
+
+On resume it:
+
+1. verifies the ledger and checkpoint hash
+2. reconstructs the branch/evidence/construction graph
+3. reconciles current Arena capabilities
+4. demotes direct verified capability targets whose adapters no longer exist
+5. continues decomposition/frontier execution
+6. appends only new observations to branch evidence
+7. reintegrates the updated structure
+8. writes another immutable checkpoint
+
+This gives long construction problems continuity without pretending ephemeral execution authority survives a restart.
+
+## Run a fresh construction
 
 ```bash
 python -m kingdom "Build an artificial decompression intelligence" \
@@ -75,40 +150,39 @@ python -m kingdom "Build an artificial decompression intelligence" \
   --worlds 6 \
   --depth 1 \
   --construction-depth 3 \
+  --construction-rounds 3 \
   --target-budget 40
 ```
 
-Construct mode can now perform:
+## Resume a prior construction
 
-1. forced incompatible worlds plus model-generated branches
-2. branch exploration
-3. Arena planning
-4. execution of available Arena tools
-5. missing-capability promotion
-6. optional restricted capability forging and regression validation
-7. registration and retry when a forged capability survives validation
-8. bounded recursive decomposition of blockers that remain unresolved
-9. reintegration with Arena and forge observations included as evidence
-10. construction-frontier reporting
+Use the base Kingdom run id printed by construct mode:
 
-`--construction-depth` bounds levels below each unresolved blocker; `--target-budget` bounds total construction targets.
+```bash
+python -m kingdom \
+  --resume-run-id kingdom-YYYYMMDD-HHMMSS-XXXXXXXX \
+  --forge-missing \
+  --construction-rounds 3
+```
 
-## Honesty and authority boundary
+The latest checkpoint is resolved through the verified ledger rather than by trusting an arbitrary JSON file path.
 
-Kingdom does not treat model-generated prose as external evidence. Only actual Arena observations are upgraded to observation evidence.
+## Authority boundary
 
-The current Arena is intentionally narrow. It does not expose unrestricted shell execution or unrestricted network access. Generated capabilities are restricted pure functions and execute in isolated timeout-bound Python processes after validation.
+Kingdom still does not expose unrestricted shell execution or unrestricted network access. Multi-file generated implementations, package installation, network clients, privileged APIs, and persistent host mutation remain outside generated-tool authority.
 
-This is defense in depth for a tiny generated-code class, not a claim of a complete security sandbox. Multi-file implementations, package installation, shell commands, network clients, privileged APIs, and persistent host mutation remain outside generated-tool authority and should arrive as separately designed host-owned adapters with their own validation contracts.
+The next broader construction frontier should preserve the same rule:
 
-The next engineering frontier is broader but still gated capability construction:
+`proposal != authority`
 
-`missing capability -> implementation plan -> isolated candidate workspace -> task-specific oracle/tests -> Hive regression/reliability gates -> explicit adapter registration -> retry original branch`
-
-That would let Kingdom construct more substantial tools without collapsing the distinction between proposing code and earning authority.
+A future multi-file workshop needs a host-owned isolated candidate workspace, task-specific independent oracles, explicit test execution, Hive regression/reliability gates, and an explicit promotion step before anything can affect the real repository or gain new privileges.
 
 ## Research claim still open
 
-The branch demonstrates that the architecture is implementable and can be regression-gated. It does **not** yet prove generalized cognitive amplification or generalized autonomous construction.
+What has been established so far is software feasibility: the loop can be represented, bounded, regression-gated, reality-connected, recursively decomposed, checkpointed, and resumed.
 
-The stronger test remains whether this coupled human-machine process can solve or construct across problem spaces that exceed the operator's unaided search bandwidth while preserving enough structure for meaningful human direction.
+Still open:
+
+> Can this coupled human-machine process reliably solve or construct across problem spaces that exceed the operator's unaided search bandwidth while preserving enough structure for the operator to understand, challenge, and redirect the process?
+
+That is the crown test.
