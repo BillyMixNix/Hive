@@ -45,7 +45,7 @@ Hive is not claiming autonomous model training or reliable self-improvement thro
 
 ## Kingdom / Mind Constructor experiment
 
-The `kingdom` package is an experimental layer for turning a compressed human intent into divergent investigations, reality-contact requests, structural reintegration, and recursively decomposed construction blockers.
+The `kingdom` package is an experimental layer for turning compressed human intent into divergent investigations, reality contact, recursively decomposed construction, and a final end-to-end walk of the original request.
 
 Standard cognitive-topology mode:
 
@@ -53,13 +53,17 @@ Standard cognitive-topology mode:
 python -m kingdom "Can cognition be externally extensible?" --branches 12 --workers 4
 ```
 
-Construct mode adds forced incompatible worlds, Arena verification, missing-capability promotion, and bounded recursive construction:
+Construct mode adds forced incompatible worlds, branch novelty filtering, Arena verification, missing-capability promotion, dependency closure, executable construction rounds, durable checkpoints, and a terminal **Critical Intent Path**:
 
 ```bash
 python -m kingdom "Build an artificial decompression intelligence" --construct --branches 12 --worlds 6
 ```
 
-Restricted capability acquisition is an explicit opt-in. With `--forge-missing`, a missing pure-function capability may be proposed, policy-checked, tested through Hive's `RegressionGate`, executed again in an isolated timeout-bound runtime, registered into Arena only after passing, and then used to retry the exact blocked request:
+Near the end, Kingdom preserves the original request as an intent capsule, gives a fresh verifier the original intent plus the public finished state, and walks the real user/artifact path through the assembled result. Failed or unavailable steps cannot be semantically waved through: they reopen the construction graph at the exact broken path step. If all technical steps pass but the result has drifted from what the operator meant, a semantic repair target is opened under the original goal. Only a passing walk marks the root goal verified.
+
+Each intent walk is written as its own SHA-256-addressed artifact and anchored in Hive's hash-chained ledger. The construction checkpoint is persisted after the walk, so reopened critical-path failures survive into resume mode. `--skip-intent-path` exists only as an explicit debugging escape hatch.
+
+Restricted capability acquisition is an explicit opt-in. With `--forge-missing`, a missing pure-function capability may be proposed, independently acceptance-tested, policy-checked, tested through Hive's `RegressionGate`, executed again in an isolated timeout-bound runtime, registered into Arena only after passing, and then used to retry the exact blocked request:
 
 ```bash
 python -m kingdom "Build an artificial decompression intelligence" --construct --forge-missing --branches 12 --worlds 6
@@ -67,4 +71,4 @@ python -m kingdom "Build an artificial decompression intelligence" --construct -
 
 The forge is deliberately not a general Python sandbox: generated tools cannot import modules or gain file, network, process, package, or privileged host authority.
 
-See `Docs/KINGDOM_0.md` for the current architecture, authority boundary, and open research claim.
+See `Docs/KINGDOM_0.md` for the full architecture, authority boundary, critical intent-path contract, and open research claim.
