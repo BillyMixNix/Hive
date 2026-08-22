@@ -9,6 +9,7 @@ from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .llm_provider import HiveLLMProvider
+from .persistence import ConstructionRecorder
 from .target_execution import HiveTargetExecutionPlanner
 from .worlds import WorldBranchingProvider
 
@@ -38,7 +39,7 @@ def _print_packet(run) -> None:
         print(f"\nRun id: {run_id}")
 
 
-def _print_construction(run) -> None:
+def _print_construction(run, record=None) -> None:
     _print_packet(run)
     if run.arena_executions:
         print("\nARENA")
@@ -66,6 +67,9 @@ def _print_construction(run) -> None:
         for target in run.missing_capabilities:
             print(f"- {target.capability}: {target.reason or target.statement}")
     print(f"\nBase Kingdom run id: {run.base_run.run_id}")
+    if record is not None:
+        print(f"Construction record: {record.path}")
+        print(f"Construction SHA256: {record.sha256}")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -93,6 +97,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
     parser.add_argument("--run-dir", default=".hive/kingdom/runs")
+    parser.add_argument("--construction-run-dir", default=".hive/kingdom/construction_runs")
     parser.add_argument("--ledger", default=".hive/kingdom/ledger.jsonl")
     return parser
 
@@ -148,7 +153,12 @@ def main(argv=None) -> int:
             construction_rounds=args.construction_rounds,
         )
         run = constructor.run(seed)
-        _print_construction(run)
+        recorder = ConstructionRecorder(
+            Path(args.construction_run_dir),
+            ledger=engine.ledger,
+        )
+        record = recorder.persist(run)
+        _print_construction(run, record)
         return 0
 
     run = engine.run(seed)
