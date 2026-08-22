@@ -4,7 +4,7 @@ Kingdom is an experimental construction layer above Hive's regression-first cont
 
 Its mission is not merely to generate more reasoning. It is to turn compressed human intent into recursively navigable, reality-tested construction:
 
-`intent -> decompression -> incompatible worlds -> novel branches -> reality contact -> structural reintegration -> dependency graph -> executable frontier -> acquire capability -> retry -> checkpoint -> resume`
+`intent -> decompression -> incompatible worlds -> novel branches -> reality contact -> structural reintegration -> dependency graph -> executable frontier -> acquire capability -> retry -> critical intent path -> reopen or accept -> checkpoint -> resume`
 
 ## Mission boundary
 
@@ -101,6 +101,68 @@ Generated capabilities are ephemeral. They are **not** automatically trusted or 
 
 This is defense in depth for a tiny generated-code class, not a claim of a general secure Python sandbox.
 
+## Critical Intent Path: walk the original request through the finished result
+
+Component truth is not enough. A system can have green unit tests, green regressions, verified Arena observations, and closed dependencies while still assembling the wrong end-to-end experience.
+
+Kingdom therefore has a terminal `IntentPathGate`, inspired by a venue critical-path walk: preserve the original request, then near the end physically/logically follow the path the real user or artifact would take through the assembled result.
+
+### Intent Capsule
+
+Before judging the finished result, Kingdom reconstructs an immutable `IntentCapsule` from the original `Seed`:
+
+- original request
+- original context
+- original goal
+- SHA-256 fingerprint of those values
+
+This is the reference point. The terminal verifier is not asked whether Kingdom's internal reasoning was impressive; it is asked whether the finished path still satisfies what the operator originally meant.
+
+### Fresh path planner
+
+`HiveIntentPathPlanner` receives:
+
+- the original Intent Capsule
+- a public finished-state summary
+- currently available Arena tools
+
+It does **not** receive branch-by-branch reasoning traces. It creates an ordered set of end-to-end checks and states a success criterion for each one. If a critical step cannot be verified with existing tools, it must request the missing verification capability rather than silently omit the step.
+
+### Reality walk
+
+Each critical-path step is executed through Arena. A failed or unavailable Arena step cannot be upgraded to a pass by the semantic judge.
+
+The gate distinguishes:
+
+- `passed`: every required path observation is verified, no actionable construction frontier remains, and the independent semantic judge recognizes the observed result as satisfying the original intent
+- `failed`: an end-to-end step fails or observed behavior contradicts the original intent
+- `incomplete`: a required observation/capability is missing or unresolved construction work remains
+
+### Reopen instead of rationalize
+
+A failed walk does not produce a note saying "known issue" and then declare completion.
+
+The construction graph is reopened:
+
+- the root goal becomes `blocked`
+- the exact broken user-facing path step becomes a new repair target
+- a missing path-verification capability becomes a child capability blocker
+- if all technical steps pass but the independent semantic judge detects intent drift, a semantic repair target is created under the original goal
+
+Only a passing critical intent path marks the root goal `verified`.
+
+This adds two truth levels above dependency closure:
+
+`critical-path truth`: do the assembled pieces work together end-to-end?
+
+`intent truth`: is that end-to-end behavior actually what the human asked for?
+
+### Tamper-evident intent walks
+
+Every walk is persisted as its own immutable JSON artifact by `IntentPathRecorder`. Its SHA-256 is anchored in the same Hive hash-chain ledger with the intent fingerprint, status, step count, and number of reopened targets.
+
+Construct and resume modes run this gate by default. `--skip-intent-path` exists only as an explicit debugging escape hatch.
+
 ## Structural reintegration and navigation
 
 Reintegration extracts invariants, disagreements, hinge assumptions, causal links, anomalies, unknowns, and branch provenance rather than majority-voting branch answers.
@@ -123,6 +185,8 @@ The base Kingdom run and the post-Arena construction state are both durable.
 
 Each artifact's SHA-256 is anchored into Hive's existing hash-chained ledger. Later edits to the artifact fail verification. Successive checkpoints never overwrite earlier construction history.
 
+The construction checkpoint is written after the terminal intent walk, so any critical-path failure that reopens the graph is part of the durable state.
+
 ## Resumable construction
 
 `ConstructionResumer` loads the latest ledger-verified checkpoint for a run ID and continues unresolved frontier work without replaying the original conceptual search.
@@ -136,7 +200,8 @@ On resume it:
 5. continues decomposition/frontier execution
 6. appends only new observations to branch evidence
 7. reintegrates the updated structure
-8. writes another immutable checkpoint
+8. walks the original intent through the updated candidate again
+9. writes another immutable intent-path artifact and construction checkpoint
 
 This gives long construction problems continuity without pretending ephemeral execution authority survives a restart.
 
@@ -154,6 +219,8 @@ python -m kingdom "Build an artificial decompression intelligence" \
   --target-budget 40
 ```
 
+The critical intent path runs automatically near the end.
+
 ## Resume a prior construction
 
 Use the base Kingdom run id printed by construct mode:
@@ -165,7 +232,7 @@ python -m kingdom \
   --construction-rounds 3
 ```
 
-The latest checkpoint is resolved through the verified ledger rather than by trusting an arbitrary JSON file path.
+The latest checkpoint is resolved through the verified ledger rather than by trusting an arbitrary JSON file path, then the original intent is walked again against the updated state.
 
 ## Authority boundary
 
@@ -179,7 +246,7 @@ A future multi-file workshop needs a host-owned isolated candidate workspace, ta
 
 ## Research claim still open
 
-What has been established so far is software feasibility: the loop can be represented, bounded, regression-gated, reality-connected, recursively decomposed, checkpointed, and resumed.
+What has been established so far is software feasibility: the loop can be represented, bounded, regression-gated, reality-connected, recursively decomposed, checkpointed, resumed, and now checked end-to-end against the original intent.
 
 Still open:
 
