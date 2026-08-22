@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, RepositorySearchTool, SimulationTool
+from .arena_tools import PytestTool
 from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
@@ -94,7 +95,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--construction-depth", type=int, default=3, help="recursive levels below each blocker")
     parser.add_argument("--construction-rounds", type=int, default=3, help="maximum execute/decompose frontier cycles")
     parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
-    parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
+    parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search/test Arena tools")
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
     parser.add_argument("--run-dir", default=".hive/kingdom/runs")
     parser.add_argument("--construction-run-dir", default=".hive/kingdom/construction_runs")
@@ -130,6 +131,7 @@ def main(argv=None) -> int:
                 RepositoryReadTool(repo_root),
                 RepositorySearchTool(repo_root),
                 SimulationTool(),
+                PytestTool(repo_root),
             ]
         )
         forge = (
