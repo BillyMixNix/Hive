@@ -45,6 +45,7 @@ from .forge import (
 )
 from .llm_provider import HiveLLMProvider
 from .navigation import CognitiveNavigator, NavNode
+from .target_execution import HiveTargetExecutionPlanner, TargetExecutionPlanner
 from .worlds import WorldBranchingProvider, WorldSpec, default_worlds
 
 __all__ = [
@@ -74,6 +75,7 @@ __all__ = [
     "HiveCapabilityOracle",
     "HiveLLMProvider",
     "HiveTargetDecomposer",
+    "HiveTargetExecutionPlanner",
     "KingdomConfig",
     "KingdomEngine",
     "KingdomRun",
@@ -87,6 +89,7 @@ __all__ = [
     "SimulationTool",
     "StructureMap",
     "TargetDraft",
+    "TargetExecutionPlanner",
     "ToolRequest",
     "WorldBranchingProvider",
     "WorldSpec",
