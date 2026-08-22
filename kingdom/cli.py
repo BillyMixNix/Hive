@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, RepositorySearchTool, SimulationTool
-from .construction import MindConstructor
+from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .llm_provider import HiveLLMProvider
 from .worlds import WorldBranchingProvider
@@ -72,6 +72,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--codec-items", type=int, default=10, help="maximum load-bearing insights")
     parser.add_argument("--worlds", type=int, default=6, help="required incompatible world branches in construct mode")
     parser.add_argument("--construct", action="store_true", help="enable worlds + Arena + recursive blocker promotion")
+    parser.add_argument("--construction-depth", type=int, default=3, help="maximum recursive blocker depth")
+    parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
     parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
     parser.add_argument("--run-dir", default=".hive/kingdom/runs")
@@ -109,7 +111,14 @@ def main(argv=None) -> int:
                 SimulationTool(),
             ]
         )
-        constructor = MindConstructor(engine, arena, HiveArenaPlanner())
+        constructor = MindConstructor(
+            engine,
+            arena,
+            HiveArenaPlanner(),
+            target_decomposer=HiveTargetDecomposer(),
+            construction_depth=args.construction_depth,
+            target_budget=args.target_budget,
+        )
         run = constructor.run(seed)
         _print_construction(run)
         return 0
