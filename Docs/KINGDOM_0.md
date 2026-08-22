@@ -67,6 +67,8 @@ Construct mode currently performs:
 7. reintegration with Arena observations included as evidence
 8. construction-frontier reporting
 
+`--construction-depth` currently bounds recursive construction graph depth; `--target-budget` bounds total construction targets.
+
 ## Honesty boundary
 
 Kingdom still does not treat model-generated prose as external evidence. Only actual Arena observations are upgraded to observation evidence.
