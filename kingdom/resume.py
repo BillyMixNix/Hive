@@ -62,7 +62,8 @@ class ConstructionResumer:
         unresolved = [
             target
             for target in graph.targets.values()
-            if target.kind == "capability" and target.status == "blocked"
+            if target.status == "blocked"
+            and target.kind in {"capability", "experiment", "tool"}
         ]
         if unresolved and self.target_decomposer is not None:
             graph.recursively_expand(
