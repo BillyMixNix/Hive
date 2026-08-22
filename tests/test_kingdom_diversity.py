@@ -5,11 +5,11 @@ from kingdom.diversity import diversity_report, filter_novel_branches
 def test_near_duplicate_generated_branches_are_filtered():
     branches = (
         BranchSpec("a", "skeptic", "What evidence would falsify the claim?", "assume measurements are required"),
-        BranchSpec("b", "critic", "What evidence could falsify this claim?", "assume measurements are required"),
+        BranchSpec("b", "critic", "What evidence would falsify the claim now?", "assume measurements are required"),
         BranchSpec("c", "implementation", "What can we build immediately?", "assume current hardware only"),
     )
 
-    filtered = filter_novel_branches(branches, question_threshold=0.6, assumption_threshold=0.9)
+    filtered = filter_novel_branches(branches)
 
     assert [branch.branch_id for branch in filtered] == ["a", "c"]
 
@@ -28,7 +28,7 @@ def test_forced_worlds_are_never_removed_by_lexical_filter():
 def test_diversity_report_separates_raw_from_effective_branch_count():
     branches = (
         BranchSpec("a", "skeptic", "What evidence would falsify the claim?", "assume measurements are required"),
-        BranchSpec("b", "critic", "What evidence could falsify this claim?", "assume measurements are required"),
+        BranchSpec("b", "critic", "What evidence would falsify the claim now?", "assume measurements are required"),
         BranchSpec("world", "world:premise_false", "What if the claim is wrong?", "assume the claim is false"),
     )
 
