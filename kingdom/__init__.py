@@ -9,6 +9,7 @@ from .arena import (
     SimulationTool,
     ToolRequest,
 )
+from .arena_tools import PytestTool
 from .construction import (
     BuildTarget,
     ConstructionGraph,
@@ -86,6 +87,7 @@ __all__ = [
     "MindConstructor",
     "MissingCapability",
     "NavNode",
+    "PytestTool",
     "RepositoryReadTool",
     "RepositorySearchTool",
     "SafeCapabilityValidator",
