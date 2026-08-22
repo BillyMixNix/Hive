@@ -46,6 +46,7 @@ from .forge import (
 )
 from .llm_provider import HiveLLMProvider
 from .navigation import CognitiveNavigator, NavNode
+from .persistence import ConstructionRecord, ConstructionRecorder
 from .target_execution import HiveTargetExecutionPlanner, TargetExecutionPlanner
 from .worlds import WorldBranchingProvider, WorldSpec, default_worlds
 
@@ -66,6 +67,8 @@ __all__ = [
     "ComprehensionAssessment",
     "ComprehensionProbe",
     "ConstructionGraph",
+    "ConstructionRecord",
+    "ConstructionRecorder",
     "ConstructionRun",
     "Evidence",
     "ForgeAttempt",
