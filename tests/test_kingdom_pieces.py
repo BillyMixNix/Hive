@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from kingdom.arena import ArenaRegistry, RepositoryReadTool, ToolRequest
-from kingdom.construction import MindConstructor
+from kingdom.construction import MindConstructor, TargetDraft
 from kingdom.core import (
     BranchResult,
     BranchSpec,
@@ -90,6 +90,20 @@ class Planner:
         return ()
 
 
+class Decomposer:
+    def decompose(self, target, available_capabilities):
+        if target.capability == "missing_sensor":
+            return (
+                TargetDraft(
+                    "Define a deterministic proxy measurement using an available repository fixture",
+                    kind="experiment",
+                    status="executable",
+                    reason="nearest testable predecessor",
+                ),
+            )
+        return ()
+
+
 def test_world_wrapper_forces_incompatible_premises_before_generated_branches():
     wrapped = WorldBranchingProvider(TinyProvider(), world_count=2)
     branches = wrapped.decompose(Seed("build the impossible"), KingdomConfig(max_branches=3))
@@ -144,6 +158,31 @@ def test_mind_constructor_reintegrates_verified_evidence_and_promotes_blockers(t
     assert blocker.status == "blocked"
     path = run.graph.path_to(blocker.target_id)
     assert [item.kind for item in path] == ["goal", "branch", "capability"]
+
+
+def test_mind_constructor_recursively_reduces_blocker_to_executable_frontier(tmp_path):
+    (tmp_path / "fact.txt").write_text("ground truth", encoding="utf-8")
+    engine = KingdomEngine(
+        TinyProvider(),
+        config=KingdomConfig(max_branches=1, max_depth=0),
+        run_dir=tmp_path / "runs",
+        ledger_path=tmp_path / "ledger.jsonl",
+    )
+    constructor = MindConstructor(
+        engine,
+        ArenaRegistry([RepositoryReadTool(tmp_path)]),
+        Planner(),
+        target_decomposer=Decomposer(),
+        construction_depth=4,
+    )
+
+    run = constructor.run(Seed("construct the target"))
+    executable = [target for target in run.graph.frontier() if target.status == "executable"]
+
+    assert len(executable) == 1
+    path = run.graph.path_to(executable[0].target_id)
+    assert [item.kind for item in path] == ["goal", "branch", "capability", "experiment"]
+    assert "proxy measurement" in executable[0].statement
 
 
 def test_navigator_expands_structural_claim_back_to_branch_provenance(tmp_path):
