@@ -4,7 +4,7 @@ Kingdom is an experimental layer above Hive's regression-first contract.
 
 Its mission is not merely to generate more reasoning. It is to turn a compressed human intent into a recursively navigable construction process:
 
-`idea -> decompression -> incompatible worlds -> exploration -> reality contact -> structural reintegration -> executable frontier -> recurse`
+`idea -> decompression -> incompatible worlds -> exploration -> reality contact -> structural reintegration -> executable frontier -> acquire capability -> recurse`
 
 ## What exists on this branch
 
@@ -36,9 +36,30 @@ An unavailable capability is not silently substituted and is not a terminal erro
 
 When a `TargetDecomposer` is supplied, blocked targets are decomposed again into predecessor tools, capabilities, or experiments until the configured construction depth/target budget is reached or an executable frontier appears.
 
-This is the first software implementation of the working hypothesis:
+Construction depth is measured relative to each promoted blocker rather than from the original seed.
+
+This implements the working hypothesis:
 
 > a blocker can itself become another decompression target rather than ending the inquiry.
+
+### Capability Forge
+
+Construct mode can optionally enable `CapabilityForge` with `--forge-missing`.
+
+The forge handles only a deliberately narrow capability class: one deterministic Python function `execute(payload)` with no imports, attributes, classes, decorators, file/network/process access, or arbitrary function calls. A model proposal does not receive authority merely because it exists.
+
+A candidate must pass this sequence:
+
+1. restricted AST policy
+2. JSON-serializable executable cases
+3. Hive `RegressionGate` against those cases in a timeout-bound subprocess
+4. a second isolated runtime execution of every case
+5. Arena registration only after both validation layers pass
+6. immediate retry of the exact request that originally failed
+
+If the retry returns a verified observation, the blocked capability target becomes verified and that evidence is fed into structural reintegration. If forging is impossible or validation fails, the blocker remains in the construction graph and may be recursively decomposed instead.
+
+The forge is intentionally opt-in. It is a capability-acquisition experiment, not a general Python sandbox or unrestricted self-modification mechanism.
 
 ### Zoomable reintegration
 
@@ -49,6 +70,7 @@ This is the first software implementation of the working hypothesis:
 ```bash
 python -m kingdom "Build an artificial decompression intelligence" \
   --construct \
+  --forge-missing \
   --branches 12 \
   --worlds 6 \
   --depth 1 \
@@ -56,35 +78,37 @@ python -m kingdom "Build an artificial decompression intelligence" \
   --target-budget 40
 ```
 
-Construct mode currently performs:
+Construct mode can now perform:
 
 1. forced incompatible worlds plus model-generated branches
 2. branch exploration
 3. Arena planning
 4. execution of available Arena tools
 5. missing-capability promotion
-6. bounded recursive blocker decomposition
-7. reintegration with Arena observations included as evidence
-8. construction-frontier reporting
+6. optional restricted capability forging and regression validation
+7. registration and retry when a forged capability survives validation
+8. bounded recursive decomposition of blockers that remain unresolved
+9. reintegration with Arena and forge observations included as evidence
+10. construction-frontier reporting
 
-`--construction-depth` currently bounds recursive construction graph depth; `--target-budget` bounds total construction targets.
+`--construction-depth` bounds levels below each unresolved blocker; `--target-budget` bounds total construction targets.
 
-## Honesty boundary
+## Honesty and authority boundary
 
-Kingdom still does not treat model-generated prose as external evidence. Only actual Arena observations are upgraded to observation evidence.
+Kingdom does not treat model-generated prose as external evidence. Only actual Arena observations are upgraded to observation evidence.
 
-The current Arena is intentionally narrow. It does not yet expose unrestricted shell execution or unrestricted network access. Those should arrive as separately sandboxed, provenance-preserving adapters rather than as implicit powers of the model.
+The current Arena is intentionally narrow. It does not expose unrestricted shell execution or unrestricted network access. Generated capabilities are restricted pure functions and execute in isolated timeout-bound Python processes after validation.
 
-The current recursive construction layer can decompose missing tools into predecessor targets, but it does not yet automatically implement arbitrary generated tools and load them back into Arena.
+This is defense in depth for a tiny generated-code class, not a claim of a complete security sandbox. Multi-file implementations, package installation, shell commands, network clients, privileged APIs, and persistent host mutation remain outside generated-tool authority and should arrive as separately designed host-owned adapters with their own validation contracts.
 
-The next engineering loop is explicit:
+The next engineering frontier is broader but still gated capability construction:
 
-`missing capability -> implementation candidate -> sandboxed test -> regression gate -> register adapter -> retry blocked branch`
+`missing capability -> implementation plan -> isolated candidate workspace -> task-specific oracle/tests -> Hive regression/reliability gates -> explicit adapter registration -> retry original branch`
 
-That step turns recursive planning into recursive capability acquisition without granting unverified code immediate authority.
+That would let Kingdom construct more substantial tools without collapsing the distinction between proposing code and earning authority.
 
 ## Research claim still open
 
-The branch demonstrates that the architecture is implementable and can be regression-gated. It does **not** yet prove generalized cognitive amplification.
+The branch demonstrates that the architecture is implementable and can be regression-gated. It does **not** yet prove generalized cognitive amplification or generalized autonomous construction.
 
 The stronger test remains whether this coupled human-machine process can solve or construct across problem spaces that exceed the operator's unaided search bandwidth while preserving enough structure for meaningful human direction.
