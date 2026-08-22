@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from kingdom.arena import ArenaRegistry, RepositoryReadTool, ToolRequest
-from kingdom.construction import MindConstructor, TargetDraft
+from kingdom.construction import MindConstructor, TargetDecomposition, TargetDraft
 from kingdom.core import (
     BranchResult,
     BranchSpec,
@@ -93,15 +93,18 @@ class Planner:
 class Decomposer:
     def decompose(self, target, available_capabilities):
         if target.capability == "missing_sensor":
-            return (
-                TargetDraft(
-                    "Define a deterministic proxy measurement using an available repository fixture",
-                    kind="experiment",
-                    status="executable",
-                    reason="nearest testable predecessor",
+            return TargetDecomposition(
+                "all",
+                (
+                    TargetDraft(
+                        "Define a deterministic proxy measurement using an available repository fixture",
+                        kind="experiment",
+                        status="executable",
+                        reason="nearest testable predecessor",
+                    ),
                 ),
             )
-        return ()
+        return TargetDecomposition("all", ())
 
 
 class FrontierPlanner:
@@ -197,9 +200,10 @@ def test_mind_constructor_recursively_reduces_blocker_to_executable_frontier(tmp
     assert [item.kind for item in path] == ["goal", "branch", "capability", "experiment"]
     assert "proxy measurement" in executable[0].statement
     assert executable[0].origin_branch_id == "base"
+    assert len(run.missing_capabilities) == 1
 
 
-def test_executable_frontier_returns_to_arena_and_reintegration(tmp_path):
+def test_executable_frontier_returns_to_arena_reintegrates_and_closes_dependency(tmp_path):
     (tmp_path / "fact.txt").write_text("ground truth", encoding="utf-8")
     engine = KingdomEngine(
         TinyProvider(),
@@ -223,8 +227,15 @@ def test_executable_frontier_returns_to_arena_and_reintegration(tmp_path):
         for target in run.graph.targets.values()
         if "proxy measurement" in target.statement
     )
+    capability = next(
+        target
+        for target in run.graph.targets.values()
+        if target.capability == "missing_sensor"
+    )
 
     assert proxy.status == "verified"
+    assert capability.status == "verified"
+    assert run.missing_capabilities == ()
     assert proxy.origin_branch_id == "base"
     assert "verified observations=2" in run.structure.hinge_assumptions
     assert sum(
