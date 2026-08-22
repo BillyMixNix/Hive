@@ -104,6 +104,19 @@ class Decomposer:
         return ()
 
 
+class FrontierPlanner:
+    def plan(self, seed, target, available_tools):
+        return (
+            ToolRequest(
+                tool="repo_read",
+                operation="read",
+                payload={"path": "fact.txt"},
+                purpose=target.statement,
+                branch_id=target.origin_branch_id,
+            ),
+        )
+
+
 def test_world_wrapper_forces_incompatible_premises_before_generated_branches():
     wrapped = WorldBranchingProvider(TinyProvider(), world_count=2)
     branches = wrapped.decompose(Seed("build the impossible"), KingdomConfig(max_branches=3))
@@ -183,6 +196,41 @@ def test_mind_constructor_recursively_reduces_blocker_to_executable_frontier(tmp
     path = run.graph.path_to(executable[0].target_id)
     assert [item.kind for item in path] == ["goal", "branch", "capability", "experiment"]
     assert "proxy measurement" in executable[0].statement
+    assert executable[0].origin_branch_id == "base"
+
+
+def test_executable_frontier_returns_to_arena_and_reintegration(tmp_path):
+    (tmp_path / "fact.txt").write_text("ground truth", encoding="utf-8")
+    engine = KingdomEngine(
+        TinyProvider(),
+        config=KingdomConfig(max_branches=1, max_depth=0),
+        run_dir=tmp_path / "runs",
+        ledger_path=tmp_path / "ledger.jsonl",
+    )
+    constructor = MindConstructor(
+        engine,
+        ArenaRegistry([RepositoryReadTool(tmp_path)]),
+        Planner(),
+        target_decomposer=Decomposer(),
+        target_planner=FrontierPlanner(),
+        construction_depth=4,
+        construction_rounds=2,
+    )
+
+    run = constructor.run(Seed("construct the target"))
+    proxy = next(
+        target
+        for target in run.graph.targets.values()
+        if "proxy measurement" in target.statement
+    )
+
+    assert proxy.status == "verified"
+    assert proxy.origin_branch_id == "base"
+    assert "verified observations=2" in run.structure.hinge_assumptions
+    assert sum(
+        execution.observation.source.startswith("repo:")
+        for execution in run.arena_executions
+    ) == 2
 
 
 def test_navigator_expands_structural_claim_back_to_branch_provenance(tmp_path):
