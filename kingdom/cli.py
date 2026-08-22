@@ -12,6 +12,7 @@ from .diversity import NoveltyFilteringProvider, diversity_report
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .llm_provider import HiveLLMProvider
 from .persistence import ConstructionRecorder
+from .resume import ConstructionResumer
 from .target_execution import HiveTargetExecutionPlanner
 from .worlds import WorldBranchingProvider
 
@@ -88,7 +89,8 @@ def build_parser() -> argparse.ArgumentParser:
         prog="kingdom",
         description="Kingdom: decompress intent, explore worlds, contact reality, and recursively construct blockers.",
     )
-    parser.add_argument("seed", help="compressed idea, goal, or question to decompress")
+    parser.add_argument("seed", nargs="?", help="compressed idea, goal, or question to decompress")
+    parser.add_argument("--resume-run-id", default="", help="continue the latest ledger-verified construction checkpoint for this Kingdom run id")
     parser.add_argument("--context", default="", help="optional operator context")
     parser.add_argument("--goal", default="convert intent into verified executable progress")
     parser.add_argument("--branches", type=int, default=12, help="maximum total branches")
@@ -113,18 +115,31 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _arena(repo_root: Path) -> ArenaRegistry:
+    return ArenaRegistry(
+        [
+            RepositoryReadTool(repo_root),
+            RepositorySearchTool(repo_root),
+            SimulationTool(),
+            PytestTool(repo_root),
+        ]
+    )
+
+
 def main(argv=None) -> int:
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    if not args.seed and not args.resume_run_id:
+        parser.error("provide a seed or --resume-run-id")
+
     config = KingdomConfig(
         max_branches=args.branches,
         max_depth=args.depth,
         workers=args.workers,
         codec_items=args.codec_items,
     )
-    seed = Seed(text=args.seed, context=args.context, goal=args.goal)
     provider = HiveLLMProvider()
-
-    if args.construct:
+    if args.construct or args.resume_run_id:
         provider = NoveltyFilteringProvider(
             WorldBranchingProvider(provider, world_count=args.worlds)
         )
@@ -135,17 +150,41 @@ def main(argv=None) -> int:
         run_dir=Path(args.run_dir),
         ledger_path=Path(args.ledger),
     )
+    recorder = ConstructionRecorder(
+        Path(args.construction_run_dir),
+        ledger=engine.ledger,
+    )
 
-    if args.construct:
-        repo_root = Path(args.repo_root)
-        arena = ArenaRegistry(
-            [
-                RepositoryReadTool(repo_root),
-                RepositorySearchTool(repo_root),
-                SimulationTool(),
-                PytestTool(repo_root),
-            ]
+    if args.resume_run_id:
+        arena = _arena(Path(args.repo_root))
+        forge = (
+            CapabilityForge(
+                arena,
+                HiveCapabilityAuthor(),
+                oracle=HiveCapabilityOracle(),
+            )
+            if args.forge_missing
+            else None
         )
+        prior = recorder.load_verified(args.resume_run_id)
+        resumer = ConstructionResumer(
+            engine,
+            arena,
+            target_decomposer=HiveTargetDecomposer(),
+            target_planner=HiveTargetExecutionPlanner(),
+            capability_forge=forge,
+            construction_depth=args.construction_depth,
+            target_budget=args.target_budget,
+            construction_rounds=args.construction_rounds,
+        )
+        run = resumer.advance(prior)
+        record = recorder.persist(run)
+        _print_construction(run, record)
+        return 0
+
+    seed = Seed(text=args.seed or "", context=args.context, goal=args.goal)
+    if args.construct:
+        arena = _arena(Path(args.repo_root))
         forge = (
             CapabilityForge(
                 arena,
@@ -167,10 +206,6 @@ def main(argv=None) -> int:
             construction_rounds=args.construction_rounds,
         )
         run = constructor.run(seed)
-        recorder = ConstructionRecorder(
-            Path(args.construction_run_dir),
-            ledger=engine.ledger,
-        )
         record = recorder.persist(run)
         _print_construction(run, record)
         return 0
