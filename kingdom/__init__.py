@@ -36,9 +36,11 @@ from .forge import (
     CapabilityCandidate,
     CapabilityCase,
     CapabilityForge,
+    CapabilityOracle,
     ForgeAttempt,
     GeneratedCapabilityTool,
     HiveCapabilityAuthor,
+    HiveCapabilityOracle,
     SafeCapabilityValidator,
 )
 from .llm_provider import HiveLLMProvider
@@ -56,6 +58,7 @@ __all__ = [
     "CapabilityCandidate",
     "CapabilityCase",
     "CapabilityForge",
+    "CapabilityOracle",
     "CognitiveNavigator",
     "CognitivePacket",
     "ComprehensionAssessment",
@@ -68,6 +71,7 @@ __all__ = [
     "HashChainLedger",
     "HiveArenaPlanner",
     "HiveCapabilityAuthor",
+    "HiveCapabilityOracle",
     "HiveLLMProvider",
     "HiveTargetDecomposer",
     "KingdomConfig",
