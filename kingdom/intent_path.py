@@ -335,7 +335,11 @@ class IntentPathGate:
             status, reason = self._step_status(execution)
             results.append(IntentStepResult(step, execution, status, reason))
 
-        semantic_verdict, semantic_reason = self.judge(capsule, summary, tuple(results))
+        semantic_verdict, semantic_reason = self.judge.judge(
+            capsule,
+            summary,
+            tuple(results),
+        )
         actionable_frontier = tuple(summary["construction"]["actionable_frontier"])
 
         if not results:
