@@ -8,6 +8,7 @@ from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, Reposito
 from .arena_tools import PytestTool
 from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
+from .diversity import NoveltyFilteringProvider, diversity_report
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .llm_provider import HiveLLMProvider
 from .persistence import ConstructionRecorder
@@ -42,6 +43,15 @@ def _print_packet(run) -> None:
 
 def _print_construction(run, record=None) -> None:
     _print_packet(run)
+    diversity = diversity_report(run.base_run.branches)
+    print("\nBRANCH DIVERSITY")
+    print(
+        f"- effective {diversity.effective_branch_count}/{diversity.branch_count} "
+        f"({diversity.efficiency:.0%}); lenses={diversity.unique_lenses}; "
+        f"assumption shifts={diversity.unique_assumption_shifts}"
+    )
+    if diversity.correlated_pairs:
+        print(f"- correlated pairs still present: {len(diversity.correlated_pairs)}")
     if run.arena_executions:
         print("\nARENA")
         for execution in run.arena_executions:
@@ -115,7 +125,9 @@ def main(argv=None) -> int:
     provider = HiveLLMProvider()
 
     if args.construct:
-        provider = WorldBranchingProvider(provider, world_count=args.worlds)
+        provider = NoveltyFilteringProvider(
+            WorldBranchingProvider(provider, world_count=args.worlds)
+        )
 
     engine = KingdomEngine(
         provider,
