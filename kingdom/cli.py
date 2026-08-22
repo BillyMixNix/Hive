@@ -13,8 +13,10 @@ from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .intent_path import (
     HiveIntentPathJudge,
     HiveIntentPathPlanner,
+    IntentCapsule,
     IntentPathGate,
     IntentPathRecorder,
+    IntentWalkReport,
 )
 from .llm_provider import HiveLLMProvider
 from .persistence import ConstructionRecorder
@@ -156,6 +158,38 @@ def _arena(repo_root: Path) -> ArenaRegistry:
     )
 
 
+def _fail_closed_intent_report(run, exc: Exception) -> IntentWalkReport:
+    capsule = IntentCapsule.capture(run.base_run.seed)
+    reason = f"Intent-path verifier failed closed: {type(exc).__name__}: {exc}"
+    roots = [
+        target
+        for target in run.graph.targets.values()
+        if target.kind == "goal" and target.parent_id is None
+    ]
+    reopened = []
+    if roots:
+        root = sorted(roots, key=lambda target: target.target_id)[0]
+        run.graph.set_status(root.target_id, "blocked")
+        target = run.graph.add(
+            "Repair critical intent-path verification infrastructure",
+            kind="experiment",
+            parent_id=root.target_id,
+            status="blocked",
+            reason=reason,
+            origin_branch_id="intent-path",
+        )
+        reopened.append(target.target_id)
+    return IntentWalkReport(
+        capsule=capsule,
+        status="incomplete",
+        reason=reason,
+        steps=(),
+        semantic_verdict="incomplete",
+        semantic_reason=reason,
+        reopened_target_ids=tuple(reopened),
+    )
+
+
 def _walk_original_intent(run, arena, engine, args):
     if args.skip_intent_path:
         return None, None
@@ -163,7 +197,10 @@ def _walk_original_intent(run, arena, engine, args):
         HiveIntentPathPlanner(),
         HiveIntentPathJudge(),
     )
-    report = gate.walk_and_reopen(run, arena)
+    try:
+        report = gate.walk_and_reopen(run, arena)
+    except Exception as exc:
+        report = _fail_closed_intent_report(run, exc)
     intent_recorder = IntentPathRecorder(
         Path(args.intent_path_run_dir),
         ledger=engine.ledger,
