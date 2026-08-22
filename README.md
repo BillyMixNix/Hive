@@ -42,3 +42,13 @@ Hive may still retrieve lessons and include them in model prompts. They are hint
 Hive is not claiming autonomous model training or reliable self-improvement through prompting. Its measurable promise is narrower:
 
 > Once Hive can express a failure as a regression case, future accepted changes must not repeat it.
+
+## Kingdom-0: cognitive decompression
+
+Hive now has an experimental `kingdom` layer for expanding a compressed human idea into divergent branches, reintegrating their shared structure and disagreements, encoding that structure into a bounded cognitive packet, and generating transfer questions that test whether the operator actually understood it.
+
+```bash
+python -m kingdom "Can cognition be externally extensible?" --branches 12 --workers 4
+```
+
+See `Docs/KINGDOM_0.md` for the architecture, experiment boundary, and cognitive-amplification metric.
