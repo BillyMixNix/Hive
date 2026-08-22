@@ -9,6 +9,7 @@ from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
 from .forge import CapabilityForge, HiveCapabilityAuthor, HiveCapabilityOracle
 from .llm_provider import HiveLLMProvider
+from .target_execution import HiveTargetExecutionPlanner
 from .worlds import WorldBranchingProvider
 
 
@@ -87,6 +88,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="allow missing pure-function capabilities to be independently tested, regression-gated, isolated, registered, and retried",
     )
     parser.add_argument("--construction-depth", type=int, default=3, help="recursive levels below each blocker")
+    parser.add_argument("--construction-rounds", type=int, default=3, help="maximum execute/decompose frontier cycles")
     parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
     parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
@@ -139,9 +141,11 @@ def main(argv=None) -> int:
             arena,
             HiveArenaPlanner(),
             target_decomposer=HiveTargetDecomposer(),
+            target_planner=HiveTargetExecutionPlanner(),
             capability_forge=forge,
             construction_depth=args.construction_depth,
             target_budget=args.target_budget,
+            construction_rounds=args.construction_rounds,
         )
         run = constructor.run(seed)
         _print_construction(run)
