@@ -140,7 +140,7 @@ def target():
 
 def test_policy_rejects_imports_before_regression_execution():
     unsafe = candidate(
-        source="import os\n\ndef execute(payload):\n    return {\"value\": 3}\n"
+        source="def execute(payload):\n    import os\n    return {\"value\": 3}\n"
     )
 
     validation = SafeCapabilityValidator().validate(unsafe)
