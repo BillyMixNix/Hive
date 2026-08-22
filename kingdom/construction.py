@@ -47,12 +47,28 @@ class TargetDraft:
     reason: str = ""
 
 
+@dataclass(frozen=True)
+class TargetDecomposition:
+    """A complete child set plus how those children resolve their parent.
+
+    mode='all': every child is required.
+    mode='any': any one verified child is sufficient.
+    """
+
+    mode: str
+    targets: tuple[TargetDraft, ...]
+
+    def __post_init__(self) -> None:
+        if self.mode not in {"all", "any"}:
+            raise ValueError("decomposition mode must be 'all' or 'any'")
+
+
 class TargetDecomposer(Protocol):
     def decompose(
         self,
         target: BuildTarget,
         available_capabilities: Sequence[str],
-    ) -> Sequence[TargetDraft]: ...
+    ) -> TargetDecomposition | Sequence[TargetDraft]: ...
 
 
 class HiveTargetDecomposer:
@@ -79,16 +95,19 @@ class HiveTargetDecomposer:
         self,
         target: BuildTarget,
         available_capabilities: Sequence[str],
-    ) -> Sequence[TargetDraft]:
+    ) -> TargetDecomposition:
         prompt = (
             "KINGDOM / RECURSIVE CONSTRUCTION\n\n"
             f"Blocked target: {target.statement}\nReason: {target.reason}\n"
             f"Currently available capabilities: {list(available_capabilities)}\n\n"
-            "Decompose this blocker into the smallest useful predecessor targets. Prefer targets that can be "
-            "executed with available capabilities. If a required predecessor capability is itself missing, make it "
-            "a capability target so it can be decomposed again. Do not merely restate the parent. "
-            f"Return at most {self.max_children} children as JSON {{'targets': [...]}}. "
-            "Each target has statement, kind (tool|capability|experiment), status "
+            "Decompose this blocker into the smallest COMPLETE set of useful predecessor targets. Prefer targets "
+            "that can be executed with available capabilities. If a required predecessor capability is itself "
+            "missing, make it a capability target so it can be decomposed again. Do not merely restate the parent. "
+            "State whether ALL returned children are jointly required to resolve the parent, or whether ANY one child "
+            "is a sufficient alternative. Only call the decomposition complete if the stated mode and children really "
+            "define a resolution condition for the parent. "
+            f"Return at most {self.max_children} children as JSON with keys 'resolution_mode' ('all'|'any') and "
+            "'targets'. Each target has statement, kind (tool|capability|experiment), status "
             "(open|blocked|executable), capability, reason. JSON only."
         )
         payload = self._parse(self.ask(prompt, role="planner"))
@@ -114,7 +133,10 @@ class HiveTargetDecomposer:
                     reason=str(item.get("reason") or ""),
                 )
             )
-        return tuple(drafts)
+        mode = str(payload.get("resolution_mode") or "all").lower()
+        if mode not in {"all", "any"}:
+            mode = "all"
+        return TargetDecomposition(mode=mode, targets=tuple(drafts))
 
 
 @dataclass
@@ -123,6 +145,7 @@ class ConstructionGraph:
 
     targets: dict[str, BuildTarget] = field(default_factory=dict)
     children: dict[str, list[str]] = field(default_factory=dict)
+    resolution_modes: dict[str, str] = field(default_factory=dict)
 
     @staticmethod
     def _stable_id(kind: str, statement: str, parent_id: str | None) -> str:
@@ -174,6 +197,47 @@ class ConstructionGraph:
         self.targets[target_id] = updated
         return updated
 
+    def set_resolution_mode(self, target_id: str, mode: str) -> None:
+        if target_id not in self.targets:
+            raise KeyError(f"unknown target {target_id}")
+        if mode not in {"all", "any"}:
+            raise ValueError("resolution mode must be 'all' or 'any'")
+        self.resolution_modes[target_id] = mode
+
+    def resolve_dependencies(self) -> tuple[BuildTarget, ...]:
+        """Propagate verified/rejected status only where a complete rule exists."""
+
+        changed: list[BuildTarget] = []
+        progress = True
+        while progress:
+            progress = False
+            ordered = sorted(self.resolution_modes, key=lambda item: self.targets[item].depth, reverse=True)
+            for target_id in ordered:
+                target = self.targets[target_id]
+                if target.status in {"verified", "rejected"}:
+                    continue
+                child_ids = self.children.get(target_id, ())
+                if not child_ids:
+                    continue
+                statuses = [self.targets[child_id].status for child_id in child_ids]
+                mode = self.resolution_modes[target_id]
+                next_status: str | None = None
+                if mode == "all":
+                    if all(status == "verified" for status in statuses):
+                        next_status = "verified"
+                    elif any(status == "rejected" for status in statuses):
+                        next_status = "rejected"
+                else:  # any
+                    if any(status == "verified" for status in statuses):
+                        next_status = "verified"
+                    elif all(status == "rejected" for status in statuses):
+                        next_status = "rejected"
+                if next_status is not None and next_status != target.status:
+                    updated = self.set_status(target_id, next_status)
+                    changed.append(updated)
+                    progress = True
+        return tuple(changed)
+
     def promote_missing(
         self,
         execution: ArenaExecution,
@@ -200,6 +264,8 @@ class ConstructionGraph:
         self,
         target: BuildTarget,
         drafts: Sequence[TargetDraft],
+        *,
+        resolution_mode: str | None = None,
     ) -> tuple[BuildTarget, ...]:
         children: list[BuildTarget] = []
         normalized_parent = target.statement.strip().lower()
@@ -216,7 +282,17 @@ class ConstructionGraph:
                     reason=draft.reason,
                 )
             )
+        if children and resolution_mode is not None:
+            self.set_resolution_mode(target.target_id, resolution_mode)
         return tuple(children)
+
+    @staticmethod
+    def _normalize_decomposition(
+        value: TargetDecomposition | Sequence[TargetDraft],
+    ) -> tuple[Sequence[TargetDraft], str | None]:
+        if isinstance(value, TargetDecomposition):
+            return value.targets, value.mode
+        return value, None
 
     def recursively_expand(
         self,
@@ -233,12 +309,14 @@ class ConstructionGraph:
             target, relative_depth = queue.pop(0)
             if relative_depth >= max_depth or target.status in {"verified", "rejected", "executable"}:
                 continue
-            drafts = decomposer.decompose(target, available_capabilities)
-            children = self.expand(target, drafts)
+            decomposition = decomposer.decompose(target, available_capabilities)
+            drafts, mode = self._normalize_decomposition(decomposition)
+            children = self.expand(target, drafts, resolution_mode=mode)
             created.extend(children)
             for child in children:
                 if child.status in {"open", "blocked"} and len(self.targets) < max_targets:
                     queue.append((child, relative_depth + 1))
+        self.resolve_dependencies()
         return tuple(created)
 
     def frontier(self) -> tuple[BuildTarget, ...]:
@@ -493,8 +571,12 @@ class MindConstructor:
                         max_targets=self.target_budget,
                     )
                     round_progress = round_progress or bool(created)
+                resolved = graph.resolve_dependencies()
+                round_progress = round_progress or bool(resolved)
                 if not round_progress and not unresolved_new:
                     break
+
+        graph.resolve_dependencies()
 
         verified_results: list[BranchResult] = []
         for result in base_run.results:
