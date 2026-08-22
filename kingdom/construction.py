@@ -16,6 +16,7 @@ from .core import (
     StructureMap,
 )
 from .forge import CapabilityForge, ForgeAttempt
+from .target_execution import TargetExecutionPlanner
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,7 @@ class BuildTarget:
     depth: int = 0
     capability: str = ""
     reason: str = ""
+    origin_branch_id: str = ""
 
     def __post_init__(self) -> None:
         if self.kind not in {"goal", "branch", "capability", "experiment", "tool"}:
@@ -136,6 +138,7 @@ class ConstructionGraph:
         status: str = "open",
         capability: str = "",
         reason: str = "",
+        origin_branch_id: str = "",
     ) -> BuildTarget:
         statement = statement.strip()
         if not statement:
@@ -146,6 +149,8 @@ class ConstructionGraph:
         existing = self.targets.get(target_id)
         if existing is not None:
             return existing
+        if parent_id is not None and not origin_branch_id:
+            origin_branch_id = self.targets[parent_id].origin_branch_id
         depth = 0 if parent_id is None else self.targets[parent_id].depth + 1
         target = BuildTarget(
             target_id=target_id,
@@ -156,6 +161,7 @@ class ConstructionGraph:
             depth=depth,
             capability=capability,
             reason=reason,
+            origin_branch_id=origin_branch_id,
         )
         self.targets[target_id] = target
         if parent_id is not None:
@@ -221,7 +227,6 @@ class ConstructionGraph:
         max_depth: int = 3,
         max_targets: int = 40,
     ) -> tuple[BuildTarget, ...]:
-        # max_depth is relative to each promoted blocker, not absolute graph depth.
         queue: list[tuple[BuildTarget, int]] = [(target, 0) for target in roots]
         created: list[BuildTarget] = []
         while queue and len(self.targets) < max_targets:
@@ -282,7 +287,7 @@ class ConstructionRun:
 
 
 class MindConstructor:
-    """Kingdom + Arena + recursive blocker promotion and safe capability acquisition."""
+    """Kingdom + Arena + recursive construction + gated capability acquisition."""
 
     def __init__(
         self,
@@ -291,17 +296,21 @@ class MindConstructor:
         planner: ArenaPlanner,
         *,
         target_decomposer: TargetDecomposer | None = None,
+        target_planner: TargetExecutionPlanner | None = None,
         capability_forge: CapabilityForge | None = None,
         construction_depth: int = 3,
         target_budget: int = 40,
+        construction_rounds: int = 3,
     ):
         self.engine = engine
         self.arena = arena
         self.planner = planner
         self.target_decomposer = target_decomposer
+        self.target_planner = target_planner
         self.capability_forge = capability_forge
         self.construction_depth = construction_depth
         self.target_budget = target_budget
+        self.construction_rounds = max(0, construction_rounds)
 
     def run(self, seed: Seed) -> ConstructionRun:
         base_run = self.engine.run(seed)
@@ -319,6 +328,7 @@ class MindConstructor:
                 parent_id=root.target_id,
                 status="open",
                 reason=branch.assumption_shift,
+                origin_branch_id=result.branch_id,
             )
             branch_targets[result.branch_id] = branch_target
             requests.extend(
@@ -399,6 +409,93 @@ class MindConstructor:
                 max_targets=self.target_budget,
             )
 
+        frontier_executions: list[ArenaExecution] = []
+        attempted_frontier: set[str] = set()
+        if self.target_planner is not None:
+            for _ in range(self.construction_rounds):
+                executable = [
+                    target
+                    for target in graph.frontier()
+                    if target.status == "executable"
+                    and target.kind not in {"goal", "branch"}
+                    and target.target_id not in attempted_frontier
+                ]
+                if not executable:
+                    break
+                round_progress = False
+                new_blockers: list[BuildTarget] = []
+
+                for target in executable:
+                    attempted_frontier.add(target.target_id)
+                    planned = tuple(
+                        request.normalized()
+                        for request in self.target_planner.plan(
+                            seed,
+                            target,
+                            self.arena.tool_names,
+                        )
+                    )
+                    if not planned:
+                        continue
+                    final_statuses: list[str] = []
+
+                    for request in planned:
+                        execution = self.arena.execute(request)
+                        frontier_executions.append(execution)
+                        by_branch.setdefault(execution.observation.branch_id, []).append(execution)
+                        final_execution = execution
+
+                        if execution.missing is not None:
+                            missing_target = graph.promote_missing(
+                                execution,
+                                parent_id=target.target_id,
+                            )
+                            if missing_target is not None:
+                                new_blockers.append(missing_target)
+                                if self.capability_forge is not None:
+                                    attempt = self.capability_forge.attempt(missing_target, request)
+                                    forge_attempts.append(attempt)
+                                    if attempt.status == "accepted" and attempt.registered:
+                                        retry = self.arena.execute(request)
+                                        frontier_executions.append(retry)
+                                        by_branch.setdefault(
+                                            retry.observation.branch_id, []
+                                        ).append(retry)
+                                        final_execution = retry
+                                        if retry.observation.status == "verified":
+                                            graph.set_status(missing_target.target_id, "verified")
+
+                        if final_execution.observation.status == "verified":
+                            graph.add(
+                                final_execution.observation.claim,
+                                kind="experiment",
+                                parent_id=target.target_id,
+                                status="verified",
+                                reason=final_execution.observation.source,
+                            )
+                        final_statuses.append(final_execution.observation.status)
+
+                    if final_statuses and all(status == "verified" for status in final_statuses):
+                        graph.set_status(target.target_id, "verified")
+                        round_progress = True
+
+                unresolved_new = [
+                    graph.targets[target.target_id]
+                    for target in new_blockers
+                    if graph.targets[target.target_id].status == "blocked"
+                ]
+                if unresolved_new and self.target_decomposer is not None:
+                    created = graph.recursively_expand(
+                        unresolved_new,
+                        self.target_decomposer,
+                        available_capabilities=self.arena.tool_names,
+                        max_depth=self.construction_depth,
+                        max_targets=self.target_budget,
+                    )
+                    round_progress = round_progress or bool(created)
+                if not round_progress and not unresolved_new:
+                    break
+
         verified_results: list[BranchResult] = []
         for result in base_run.results:
             extra = tuple(
@@ -420,7 +517,11 @@ class MindConstructor:
         structure = self.engine.provider.integrate(seed, base_run.branches, verified_tuple)
         packet = self.engine.provider.encode(seed, structure, self.engine.config)
         probes = tuple(self.engine.provider.make_probes(seed, structure, packet))
-        all_executions = tuple(initial_executions) + tuple(retry_executions)
+        all_executions = (
+            tuple(initial_executions)
+            + tuple(retry_executions)
+            + tuple(frontier_executions)
+        )
         return ConstructionRun(
             base_run=base_run,
             verified_results=verified_tuple,
