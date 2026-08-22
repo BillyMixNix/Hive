@@ -53,6 +53,20 @@ from .forge import (
     HiveCapabilityOracle,
     SafeCapabilityValidator,
 )
+from .intent_path import (
+    HiveIntentPathJudge,
+    HiveIntentPathPlanner,
+    IntentCapsule,
+    IntentPathGate,
+    IntentPathJudge,
+    IntentPathPlanner,
+    IntentPathRecord,
+    IntentPathRecorder,
+    IntentStep,
+    IntentStepResult,
+    IntentWalkReport,
+    public_artifact_summary,
+)
 from .llm_provider import HiveLLMProvider
 from .navigation import CognitiveNavigator, NavNode
 from .persistence import ConstructionRecord, ConstructionRecorder
@@ -90,9 +104,20 @@ __all__ = [
     "HiveArenaPlanner",
     "HiveCapabilityAuthor",
     "HiveCapabilityOracle",
+    "HiveIntentPathJudge",
+    "HiveIntentPathPlanner",
     "HiveLLMProvider",
     "HiveTargetDecomposer",
     "HiveTargetExecutionPlanner",
+    "IntentCapsule",
+    "IntentPathGate",
+    "IntentPathJudge",
+    "IntentPathPlanner",
+    "IntentPathRecord",
+    "IntentPathRecorder",
+    "IntentStep",
+    "IntentStepResult",
+    "IntentWalkReport",
     "KingdomConfig",
     "KingdomEngine",
     "KingdomRun",
@@ -117,4 +142,5 @@ __all__ = [
     "default_worlds",
     "diversity_report",
     "filter_novel_branches",
+    "public_artifact_summary",
 ]
