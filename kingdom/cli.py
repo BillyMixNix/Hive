@@ -7,6 +7,7 @@ from pathlib import Path
 from .arena import ArenaRegistry, HiveArenaPlanner, RepositoryReadTool, RepositorySearchTool, SimulationTool
 from .construction import HiveTargetDecomposer, MindConstructor
 from .core import KingdomConfig, KingdomEngine, Seed
+from .forge import CapabilityForge, HiveCapabilityAuthor
 from .llm_provider import HiveLLMProvider
 from .worlds import WorldBranchingProvider
 
@@ -46,6 +47,14 @@ def _print_construction(run) -> None:
                 f"- [{observation.status}] {observation.tool}.{observation.operation}: "
                 f"{observation.claim}"
             )
+    if run.forge_attempts:
+        print("\nCAPABILITY FORGE")
+        for attempt in run.forge_attempts:
+            suffix = " registered" if attempt.registered else ""
+            print(
+                f"- [{attempt.status}] {attempt.capability}.{attempt.operation}{suffix}: "
+                f"{attempt.detail}"
+            )
     frontier = run.graph.frontier()
     if frontier:
         print("\nCONSTRUCTION FRONTIER")
@@ -61,18 +70,23 @@ def _print_construction(run) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="kingdom",
-        description="Kingdom: decompress an idea, explore worlds, contact reality, and recursively construct blockers.",
+        description="Kingdom: decompress intent, explore worlds, contact reality, and recursively construct blockers.",
     )
-    parser.add_argument("seed", help="compressed idea or question to decompress")
+    parser.add_argument("seed", help="compressed idea, goal, or question to decompress")
     parser.add_argument("--context", default="", help="optional operator context")
-    parser.add_argument("--goal", default="increase operator understanding")
+    parser.add_argument("--goal", default="convert intent into verified executable progress")
     parser.add_argument("--branches", type=int, default=12, help="maximum total branches")
     parser.add_argument("--depth", type=int, default=1, help="maximum branch depth")
     parser.add_argument("--workers", type=int, default=4, help="parallel branch workers")
     parser.add_argument("--codec-items", type=int, default=10, help="maximum load-bearing insights")
     parser.add_argument("--worlds", type=int, default=6, help="required incompatible world branches in construct mode")
     parser.add_argument("--construct", action="store_true", help="enable worlds + Arena + recursive blocker promotion")
-    parser.add_argument("--construction-depth", type=int, default=3, help="maximum recursive blocker depth")
+    parser.add_argument(
+        "--forge-missing",
+        action="store_true",
+        help="allow missing pure-function capabilities to be proposed, regression-gated, isolated, registered, and retried",
+    )
+    parser.add_argument("--construction-depth", type=int, default=3, help="recursive levels below each blocker")
     parser.add_argument("--target-budget", type=int, default=40, help="maximum construction targets")
     parser.add_argument("--repo-root", default=".", help="repository root exposed to read/search Arena tools")
     parser.add_argument("--json", action="store_true", help="print complete base run JSON (standard mode only)")
@@ -111,11 +125,13 @@ def main(argv=None) -> int:
                 SimulationTool(),
             ]
         )
+        forge = CapabilityForge(arena, HiveCapabilityAuthor()) if args.forge_missing else None
         constructor = MindConstructor(
             engine,
             arena,
             HiveArenaPlanner(),
             target_decomposer=HiveTargetDecomposer(),
+            capability_forge=forge,
             construction_depth=args.construction_depth,
             target_budget=args.target_budget,
         )
