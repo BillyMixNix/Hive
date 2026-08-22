@@ -1,73 +1,82 @@
-# Kingdom-0: Cognitive Decompression Vertical Slice
+# Kingdom-0 / Mind Constructor
 
-Kingdom-0 is an experimental human-centered reasoning layer for Hive.
+Kingdom is an experimental layer above Hive's regression-first contract.
 
-Its claim is deliberately narrower than "more agents are smarter":
+Its mission is not merely to generate more reasoning. It is to turn a compressed human intent into a recursively navigable construction process:
 
-> A system can expand one compressed human idea into many divergent investigations, preserve the evidence and disagreements discovered there, reintegrate the structure into a bounded cognitive packet, and then test whether the operator actually reconstructed that structure.
+`idea -> decompression -> incompatible worlds -> exploration -> reality contact -> structural reintegration -> executable frontier -> recurse`
 
-## Loop
+## What exists on this branch
 
-1. **Seed** — accept an incomplete idea, question, or intuition.
-2. **Decompress** — create divergent branches with different lenses and assumption shifts.
-3. **Explore** — run branches independently and allow promising branches to spawn bounded children.
-4. **Preserve evidence** — findings distinguish support, contradiction, observation, and uncertainty.
-5. **Reintegrate structure** — extract invariants, disagreements, hinge assumptions, causal links, anomalies, and unknowns rather than majority-voting branch answers.
-6. **Encode** — create a bounded cognitive packet optimized for reconstructable understanding.
-7. **Probe** — generate transfer/counterfactual questions rather than recall questions.
-8. **Re-expand** — comprehension failures identify concepts that should be decompressed again.
+### Cognitive topology
 
-All runs are persisted under `.hive/kingdom/runs/` and a hash-chained append-only ledger records run and comprehension-assessment events.
+`KingdomEngine` provides bounded branch expansion, deduplication, parallel exploration, structural reintegration, a cognitive packet, comprehension probes, and a tamper-evident run ledger.
 
-## Run it
+### Incompatible worlds
 
-Kingdom-0 uses Hive's existing `ask_hive()` model router, so the same local Ollama / configured Anthropic behavior applies.
+`WorldBranchingProvider` injects explicit premise-level interventions before ordinary model-generated branches. The default basis includes premise-true, premise-false, minimum-viable, capability-max, adversarial, and outside-frame worlds.
+
+This is meant to prevent fake diversity where many workers merely paraphrase the same assumptions.
+
+### Arena
+
+`ArenaRegistry` gives branches an explicit reality-contact layer. Current concrete adapters include repository read, repository search, and pre-registered deterministic simulations.
+
+Arena distinguishes three evidence states:
+
+- verified: the tool actually returned an observation
+- failed: the operation ran but failed
+- unavailable: the requested capability does not exist
+
+An unavailable capability is not silently substituted and is not a terminal error.
+
+### Recursive construction
+
+`MindConstructor` promotes unavailable Arena capabilities into `BuildTarget` nodes attached to the branch that required them.
+
+When a `TargetDecomposer` is supplied, blocked targets are decomposed again into predecessor tools, capabilities, or experiments until the configured construction depth/target budget is reached or an executable frontier appears.
+
+This is the first software implementation of the working hypothesis:
+
+> a blocker can itself become another decompression target rather than ending the inquiry.
+
+### Zoomable reintegration
+
+`CognitiveNavigator` retains stable references from structural claims back to the branch evidence that exposed them. The human-facing packet can remain compact without forcing provenance to disappear.
+
+## Live construct mode
 
 ```bash
-python -m kingdom "Can cognition be externally extensible?" \
+python -m kingdom "Build an artificial decompression intelligence" \
+  --construct \
   --branches 12 \
+  --worlds 6 \
   --depth 1 \
-  --workers 4
+  --construction-depth 3 \
+  --target-budget 40
 ```
 
-The command prints a cognitive packet and 3-5 comprehension probes. Use `--json` to inspect the complete branch tree, evidence, structural map, provenance, packet, and probes.
+Construct mode currently performs:
 
-## Why a provider boundary exists
+1. forced incompatible worlds plus model-generated branches
+2. branch exploration
+3. Arena planning
+4. execution of available Arena tools
+5. missing-capability promotion
+6. bounded recursive blocker decomposition
+7. reintegration with Arena observations included as evidence
+8. construction-frontier reporting
 
-The orchestration core depends on a `KingdomProvider` protocol rather than a specific model. The current `HiveLLMProvider` is only one implementation. This keeps the experimental object stable while models, tool runtimes, or branch workers change.
+## Honesty boundary
 
-It also makes the core deterministic-testable: tests use a fake provider and do not spend model credits.
+Kingdom still does not treat model-generated prose as external evidence. Only actual Arena observations are upgraded to observation evidence.
 
-## Cognitive amplification metric
+The current Arena is intentionally narrow. It does not yet expose unrestricted shell execution or unrestricted network access. Those should arrive as separately sandboxed, provenance-preserving adapters rather than as implicit powers of the model.
 
-`kingdom.benchmark` includes a minimal transfer metric. A trial records:
+The current recursive construction layer can decompose missing tools into predecessor targets, but it does not yet automatically implement arbitrary generated tools and load them back into Arena. That build-test-register loop is the next major engineering step.
 
-- transfer questions answered correctly,
-- total transfer questions,
-- human attention consumed (in whatever unit the experiment fixes in advance).
+## Research claim still open
 
-For an assisted condition compared with a baseline:
+The branch demonstrates that the architecture is implementable and can be regression-gated. It does **not** yet prove generalized cognitive amplification.
 
-```text
-accuracy_gain = assisted_accuracy - baseline_accuracy
-gain_per_assisted_attention = accuracy_gain / assisted_attention
-```
-
-This prevents a raw branch dump from looking superior merely because the operator read dramatically more material.
-
-A real experiment should compare at least:
-
-- human alone,
-- human + ordinary answer,
-- human + flat multi-branch summary,
-- human + Kingdom structural codec,
-
-while holding the human-facing attention budget as constant as possible.
-
-## Current boundary
-
-Kingdom-0 does **not** claim that an LLM-generated evidence string is reality. The live provider explicitly instructs branches not to invent sources or tests; when no external oracle is available, evidence should remain uncertain.
-
-The next serious milestone is an Arena adapter that gives selected branches executable/web/repository/simulation tools and records machine-verifiable evidence into the same provenance graph.
-
-The research target is not "more generated text." It is measurable transfer of useful structure across a human attention bottleneck.
+The stronger test remains whether this coupled human-machine process can solve or construct across problem spaces that exceed the operator's unaided search bandwidth while preserving enough structure for meaningful human direction.
