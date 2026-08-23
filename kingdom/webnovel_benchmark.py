@@ -11,8 +11,22 @@ from pathlib import Path
 from typing import Any, Callable, Mapping, Protocol, Sequence
 
 
-DEFAULT_GENERATION_CALLS = 7
+DEFAULT_GENERATION_CALLS = 3
 DEFAULT_CHECKPOINTS = (5, 10)
+DEFAULT_OLLAMA_NUM_CTX = 32_768
+DEFAULT_OLLAMA_NUM_PREDICT = 2_048
+DEFAULT_REQUEST_TIMEOUT_SECONDS = 900
+GENERATION_PROTOCOL_ID = "adi-001-3call-v1"
+BASELINE_GENERATION_PIPELINE = (
+    "conventional chapter plan",
+    "sequential prose draft",
+    "final conventional revision",
+)
+KINGDOM_GENERATION_PIPELINE = (
+    "structured dependency plan",
+    "prose synthesis",
+    "critical-path prose revision",
+)
 STATE_FIELDS = (
     "facts",
     "character_states",
@@ -64,6 +78,7 @@ class AskFunction(Protocol):
         timeout: int | None = None,
         model: str | None = None,
         system: str | None = None,
+        options: Mapping[str, Any] | None = None,
     ) -> str: ...
 
 
@@ -74,6 +89,9 @@ class ModelCallRecord:
     purpose: str
     role: str
     model: str
+    request_timeout_seconds: int
+    ollama_num_ctx: int
+    ollama_num_predict: int
     prompt_sha256: str
     response_sha256: str
     prompt_chars: int
@@ -95,10 +113,16 @@ class BudgetedModel:
         *,
         model: str,
         generation_calls_per_chapter: int = DEFAULT_GENERATION_CALLS,
+        ollama_num_ctx: int = DEFAULT_OLLAMA_NUM_CTX,
+        ollama_num_predict: int = DEFAULT_OLLAMA_NUM_PREDICT,
+        request_timeout_seconds: int = DEFAULT_REQUEST_TIMEOUT_SECONDS,
     ):
         self.ask_fn = ask
         self.model = model
         self.generation_calls_per_chapter = generation_calls_per_chapter
+        self.ollama_num_ctx = ollama_num_ctx
+        self.ollama_num_predict = ollama_num_predict
+        self.request_timeout_seconds = request_timeout_seconds
         self.records: list[ModelCallRecord] = []
         self._generation_counts: dict[tuple[str, int], int] = {}
 
@@ -123,7 +147,16 @@ class BudgetedModel:
             self._generation_counts[key] = used + 1
 
         started = time.monotonic()
-        response = self.ask_fn(prompt, role=role, model=self.model)
+        response = self.ask_fn(
+            prompt,
+            role=role,
+            timeout=self.request_timeout_seconds,
+            model=self.model,
+            options={
+                "num_ctx": self.ollama_num_ctx,
+                "num_predict": self.ollama_num_predict,
+            },
+        )
         elapsed = time.monotonic() - started
         self.records.append(
             ModelCallRecord(
@@ -132,6 +165,9 @@ class BudgetedModel:
                 purpose=purpose,
                 role=role,
                 model=self.model,
+                request_timeout_seconds=self.request_timeout_seconds,
+                ollama_num_ctx=self.ollama_num_ctx,
+                ollama_num_predict=self.ollama_num_predict,
                 prompt_sha256=_sha256_text(prompt),
                 response_sha256=_sha256_text(response),
                 prompt_chars=len(prompt),
@@ -227,7 +263,7 @@ class BenchmarkConfig:
 
 
 class BaselineWriter:
-    """Conventional sequential writer: draft, iterative rewrites, final polish."""
+    """Stage-matched conventional writer: ordinary plan, prose draft, holistic revision."""
 
     def __init__(self, model: BudgetedModel, seed: str, contract: str, config: BenchmarkConfig):
         self.model = model
@@ -242,77 +278,52 @@ class BaselineWriter:
             f"CONVENTIONAL ROLLING MEMORY:\n{prior_state.rolling_summary or '(none yet)'}\n\n"
             f"RECENT PROSE TAIL:\n{prior_tail or '(Chapter One is contained in the canonical seed.)'}\n\n"
         )
+        plan = self.model.ask(
+            _clip(
+                common
+                + f"Create a concise conventional novelist's plan for Chapter {chapter}. Continue naturally from the "
+                  "existing novel using ordinary long-form reasoning. Cover the intended scene progression, character "
+                  "work, continuity needs, and ending momentum. Return only a practical chapter plan, not prose.",
+                self.config.context_char_limit,
+            ),
+            condition="baseline",
+            chapter=chapter,
+            purpose="conventional chapter plan",
+            role="default",
+        )
         draft = self.model.ask(
             _clip(
                 common
-                + f"Write Chapter {chapter}. Continue naturally from the existing novel. "
-                  "Use ordinary long-form novelist reasoning; do not create explicit specialist-agent reports, "
-                  "dependency graphs, or Kingdom-style decompositions. Return chapter prose only.",
+                + f"CONVENTIONAL CHAPTER PLAN:\n{plan}\n\n"
+                  f"Write Chapter {chapter} as finished serial-novel prose. Follow the plan where it remains consistent "
+                  "with the supplied seed and memory. Return the complete chapter only.",
                 self.config.context_char_limit,
             ),
             condition="baseline",
             chapter=chapter,
-            purpose="initial sequential draft",
+            purpose="sequential prose draft",
             role="default",
         )
-        current = draft
-        for pass_no in range(1, 6):
-            current = self.model.ask(
-                _clip(
-                    common
-                    + f"CURRENT CHAPTER {chapter} DRAFT:\n{current}\n\n"
-                      f"Revision pass {pass_no}/5. Improve this chapter as a strong conventional serial novelist. "
-                      "Fix obvious continuity, pacing, characterization, and prose problems visible from the supplied "
-                      "seed/memory. Do not introduce explicit multi-agent decomposition or a persistent dependency graph. "
-                      "Return the complete revised chapter only.",
-                    self.config.context_char_limit,
-                ),
-                condition="baseline",
-                chapter=chapter,
-                purpose=f"sequential revision {pass_no}",
-                role="default",
-            )
         final = self.model.ask(
             _clip(
                 common
-                + f"CURRENT CHAPTER {chapter}:\n{current}\n\n"
-                  "Final conventional polish. Preserve all story events while improving readability and serial-novel "
-                  "momentum. Return only the complete final chapter.",
+                + f"CONVENTIONAL CHAPTER PLAN:\n{plan}\n\n"
+                  f"CURRENT CHAPTER {chapter} DRAFT:\n{draft}\n\n"
+                  "Perform one holistic conventional-novelist revision. Fix visible continuity, causality, pacing, "
+                  "characterization, prose, and plan-to-draft problems using the supplied seed and memory. Preserve "
+                  "earned story events and improve serial momentum. Return only the complete final chapter.",
                 self.config.context_char_limit,
             ),
             condition="baseline",
             chapter=chapter,
-            purpose="final sequential polish",
+            purpose="final conventional revision",
             role="default",
         )
         return final
 
 
 class KingdomWriter:
-    """Matched-budget decomposed writer with mandatory independent specialist calls."""
-
-    SPECIALISTS = (
-        (
-            "continuity",
-            "Audit continuity: facts, chronology, who-knows-what, promises, unresolved threads, and prerequisites. "
-            "Propose only the load-bearing constraints Chapter {chapter} must respect.",
-        ),
-        (
-            "progression_economics",
-            "Audit Money-Breathing math, finances, cultivation progression, assets, exchanges, and economic causality. "
-            "Identify what Chapter {chapter} can legitimately advance and what would be premature.",
-        ),
-        (
-            "character_theme",
-            "Audit Ren's current psychology, poverty-scale instincts, relationships, comedy-to-serious tone, and the "
-            "story's value-versus-price philosophy. Define the human/theme work Chapter {chapter} should perform.",
-        ),
-        (
-            "adversarial",
-            "Act as an adversarial contradiction hunter. Try to break the proposed continuation before it is written: "
-            "find likely lore leaks, unearned escalation, forgotten setup, generic-system drift, and future payoff damage.",
-        ),
-    )
+    """Stage-matched decomposed writer: dependency plan, prose draft, Critical-Path revision."""
 
     def __init__(self, model: BudgetedModel, seed: str, contract: str, config: BenchmarkConfig):
         self.model = model
@@ -328,46 +339,32 @@ class KingdomWriter:
             f"PERSISTENT NARRATIVE STATE:\n{public_state}\n\n"
             f"RECENT PROSE TAIL:\n{prior_tail or '(Chapter One is contained in the canonical seed.)'}\n\n"
         )
-        reports: dict[str, str] = {}
-        for name, instruction in self.SPECIALISTS:
-            reports[name] = self.model.ask(
-                _clip(
-                    common
-                    + "You are one independent Kingdom subagent. You do not see other subagents' work. "
-                    + instruction.format(chapter=chapter)
-                    + " Be concise, specific, and proposal-only; do not write the chapter.",
-                    self.config.context_char_limit,
-                ),
-                condition="kingdom",
-                chapter=chapter,
-                purpose=f"subagent:{name}",
-                role="planner" if name != "adversarial" else "reflector",
-            )
-
-        synthesis = self.model.ask(
+        plan = self.model.ask(
             _clip(
                 common
-                + "INDEPENDENT SUBAGENT REPORTS:\n"
-                + json.dumps(reports, indent=2, ensure_ascii=False)
-                + f"\n\nSynthesize a Chapter {chapter} construction plan. Do not vote or summarize reports. "
-                  "Resolve conflicts against the immutable seed and persistent state. Produce JSON with: "
-                  "chapter_goal, required_beats, forbidden_moves, setup_payoff_links, state_changes_if_earned, "
-                  "intent_path_checks. This plan is a proposal, not authority.",
+                + f"Create a structured dependency plan for Chapter {chapter}. Decompress the chapter through these "
+                  "lenses: continuity and chronology; who-knows-what; unresolved obligations and mysteries; "
+                  "Money-Breathing math, finances, cultivation, assets, exchanges, and economic causality; Ren's "
+                  "psychology and relationships; value-versus-price theme and tone trajectory; setup/payoff links; and "
+                  "an adversarial search for lore leaks, unearned escalation, generic-system drift, or future damage. "
+                  "Resolve conflicts against the immutable seed and persistent state. Return JSON with chapter_goal, "
+                  "required_beats, forbidden_moves, setup_payoff_links, state_changes_if_earned, and intent_path_checks. "
+                  "The plan is a proposal, not authority; do not write the chapter.",
                 self.config.context_char_limit,
             ),
             condition="kingdom",
             chapter=chapter,
-            purpose="subagent:synthesis",
+            purpose="structured dependency plan",
             role="strategic",
         )
 
         draft = self.model.ask(
             _clip(
                 common
-                + f"SYNTHESIZED CHAPTER PLAN:\n{synthesis}\n\n"
+                + f"STRUCTURED DEPENDENCY PLAN:\n{plan}\n\n"
                   f"Write Chapter {chapter} as finished webnovel prose. Earn progression; do not merely announce it. "
-                  "Preserve Ren's voice and the comedy-to-serious trajectory. Do not expose planning notes. "
-                  "Return chapter prose only.",
+                  "Preserve Ren's voice and the comedy-to-serious trajectory. Treat the plan as subordinate to the "
+                  "immutable seed and state. Return chapter prose only, with no planning notes.",
                 self.config.context_char_limit,
             ),
             condition="kingdom",
@@ -379,12 +376,13 @@ class KingdomWriter:
         final = self.model.ask(
             _clip(
                 common
-                + f"SYNTHESIZED PLAN:\n{synthesis}\n\n"
+                + f"STRUCTURED DEPENDENCY PLAN:\n{plan}\n\n"
                   f"DRAFT CHAPTER {chapter}:\n{draft}\n\n"
-                  "Perform the Critical-Path revision. Walk the immutable intent and plan through the actual prose. "
-                  "Repair any contradiction, premature reveal, unearned escalation, missing prerequisite, or thematic "
-                  "drift you can establish from the supplied state. A lower-level contradiction cannot be waived by "
-                  "good prose. Return only the complete corrected chapter.",
+                  "Perform the terminal Critical-Path revision. Walk the immutable intent and dependency plan through "
+                  "the actual prose. Repair every established contradiction, premature reveal, unearned escalation, "
+                  "missing prerequisite, forgotten setup/payoff link, or thematic drift. A lower-level contradiction "
+                  "cannot be waived by good prose. Return only the complete corrected chapter, with no plan, report, "
+                  "explanation, or revision note.",
                 self.config.context_char_limit,
             ),
             condition="kingdom",
@@ -589,21 +587,44 @@ class WebNovelBenchmarkRunner:
     def _persist_manifest(self) -> None:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         manifest = {
-            "schema_version": 1,
+            "schema_version": 2,
             "benchmark_id": self.config.benchmark_id,
             "title": self.config.title,
+            "generation_protocol": GENERATION_PROTOCOL_ID,
+            "baseline_generation_pipeline": list(BASELINE_GENERATION_PIPELINE),
+            "kingdom_generation_pipeline": list(KINGDOM_GENERATION_PIPELINE),
             "seed_sha256": self.seed_hash,
             "contract_sha256": self.contract_hash,
             "model": self.model.model,
             "chapters": self.config.chapters,
             "checkpoints": list(self.config.checkpoints),
             "generation_calls_per_chapter_per_condition": self.config.generation_calls_per_chapter,
+            "context_char_limit": self.config.context_char_limit,
+            "ollama_num_ctx": self.model.ollama_num_ctx,
+            "ollama_num_predict": self.model.ollama_num_predict,
+            "request_timeout_seconds": self.model.request_timeout_seconds,
             "automatic_evaluation_is_not_human_blind_evidence": True,
         }
         path = self.output_dir / "manifest.json"
         if path.exists():
             existing = json.loads(path.read_text(encoding="utf-8"))
-            for key in ("seed_sha256", "contract_sha256", "model"):
+            for key in (
+                "schema_version",
+                "benchmark_id",
+                "generation_protocol",
+                "baseline_generation_pipeline",
+                "kingdom_generation_pipeline",
+                "seed_sha256",
+                "contract_sha256",
+                "model",
+                "chapters",
+                "checkpoints",
+                "generation_calls_per_chapter_per_condition",
+                "context_char_limit",
+                "ollama_num_ctx",
+                "ollama_num_predict",
+                "request_timeout_seconds",
+            ):
                 if existing.get(key) != manifest.get(key):
                     raise RuntimeError(f"refusing resume: manifest {key} changed")
         path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -642,6 +663,11 @@ class WebNovelBenchmarkRunner:
     def run(self) -> None:
         if self.config.chapters < 2:
             raise ValueError("chapters must include at least Chapter 2")
+        if self.config.generation_calls_per_chapter != DEFAULT_GENERATION_CALLS:
+            raise ValueError(
+                f"{GENERATION_PROTOCOL_ID} requires exactly {DEFAULT_GENERATION_CALLS} "
+                "generation calls per chapter and condition"
+            )
         self._persist_manifest()
         states = {
             "baseline": self._load_state("baseline"),
@@ -702,8 +728,12 @@ class WebNovelBenchmarkRunner:
             f"# {self.config.benchmark_id} Result",
             "",
             f"Model: `{self.model.model}`",
+            f"Generation protocol: `{GENERATION_PROTOCOL_ID}`",
             f"Seed SHA-256: `{self.seed_hash}`",
             f"Matched generation calls/chapter/condition: {self.config.generation_calls_per_chapter}",
+            f"Ollama context window: {self.model.ollama_num_ctx} tokens",
+            f"Maximum output/call: {self.model.ollama_num_predict} tokens",
+            f"Request timeout: {self.model.request_timeout_seconds} seconds for every call",
             "",
             "Automatic model scoring is diagnostic only. A theory claim requires longitudinal behavior and blind human evaluation.",
             "",
@@ -734,7 +764,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--chapters", type=int, default=10)
     parser.add_argument("--checkpoint", action="append", type=int, dest="checkpoints")
-    parser.add_argument("--generation-calls", type=int, default=DEFAULT_GENERATION_CALLS)
+    parser.add_argument(
+        "--generation-calls",
+        type=int,
+        choices=(DEFAULT_GENERATION_CALLS,),
+        default=DEFAULT_GENERATION_CALLS,
+        help="Fixed by the ADI-001 three-call protocol",
+    )
     parser.add_argument("--context-chars", type=int, default=120_000)
     parser.add_argument("--model", default=None, help="Explicit same model for both conditions; defaults to Hive DEFAULT_MODEL")
     return parser

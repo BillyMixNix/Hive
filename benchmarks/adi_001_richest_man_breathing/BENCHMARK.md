@@ -60,25 +60,25 @@ The experiment tracks at minimum:
 
 A strong model receives the canonical seed, the neutral story contract, previous prose/memory support allowed by the chosen baseline protocol, and a matched generation-call budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
 
-The executable pilot gives the baseline seven model calls per generated chapter: an initial sequential draft, five ordinary revision passes, and one final polish. Its shared post-chapter state extraction is evaluation/memory bookkeeping and is counted separately from generation, exactly as on the Kingdom side.
+The executable pilot gives the baseline three model calls per generated chapter: an ordinary chapter plan, a prose draft, and one holistic conventional revision. Its shared post-chapter state extraction is evaluation/memory bookkeeping and is counted separately from generation, exactly as on the Kingdom side.
 
 ### Kingdom / ADI
 
-The same canonical seed and neutral story contract are used. The system decomposes narrative obligations, uses specialized subagents/workers for independent planning and challenge, maintains dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
+The same canonical seed and neutral story contract are used. The system decompresses narrative obligations into dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
 
-For the executable pilot, Kingdom receives the same seven generation calls per chapter:
+For the executable pilot, Kingdom receives the same three generation calls per chapter:
 
-1. continuity specialist
-2. progression/economics specialist
-3. character/theme specialist
-4. adversarial contradiction specialist
-5. synthesis specialist
-6. prose synthesis
-7. Critical-Path prose revision
+1. structured dependency plan
+2. prose synthesis
+3. Critical-Path prose revision
 
-The first four specialist calls are independent proposals and do not see one another's work. Synthesis resolves them against the immutable seed and persistent state. Proposal is not authority.
+The first call decompresses continuity, knowledge, obligations, progression/economics, character/theme, setup/payoff, and adversarial failure search into one structured proposal. The second writes prose from that proposal. The third walks the immutable intent and dependency plan through the completed draft. Proposal is not authority.
 
-The harness passes an explicit `model=` override to Hive for every generation and evaluator call, preventing role routing from silently using stronger models for one side.
+The harness passes the same explicit `model=` override, 32,768-token Ollama context, 2,048-token maximum output, and 900-second request timeout to every baseline, Kingdom, extraction, and evaluator call. Role labels therefore cannot silently route one side to a stronger model or different runtime budget.
+
+The compressed protocol is stage-matched to avoid a prose-pass confound. Both conditions receive exactly one planning call, one prose-draft call, and one revision call. The treatment difference is ordinary planning plus ordinary revision versus dependency-aware planning plus Critical-Path revision.
+
+This three-call pilot does **not** test the independent-agent proposal diversity of the earlier seven-call design. The continuity, progression/economics, character/theme, and adversarial lenses are compressed into one structured planning call. Claims from this pilot must therefore be limited to structured decompression plus terminal verification under a matched stage budget.
 
 ## Evaluation
 
@@ -125,7 +125,11 @@ The run directory contains:
 - checkpoint JSON with per-condition diagnostics and Kingdom-minus-baseline delta
 - a result summary stating the longitudinal prediction and the human-evaluation boundary
 
-The harness can continue an existing output directory only when its frozen seed, neutral contract, and model still match the manifest.
+A clean 10-chapter run has 78 accepted ledger records: 54 generation calls (9 generated chapters × 2 conditions × 3), 18 shared state extractions, 4 automatic checkpoint scores, and 2 blinded pairwise comparisons.
+
+The harness refuses a changed protocol on resume: seed, neutral contract, model, chapter/checkpoint configuration, three-call pipelines, context clipping, and Ollama runtime limits must all match the manifest.
+
+For evidentiary runs, use a fresh output directory and run uninterrupted. The current harness's historical ledger/checkpoint resume path is not yet transactional; an interrupted run should be archived and restarted rather than resumed.
 
 ## Pass/fail honesty boundary
 

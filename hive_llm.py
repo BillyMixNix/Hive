@@ -113,7 +113,7 @@ def _ask_claude(prompt, system=None, model=None, timeout=120):
     return text
 
 
-def ask_hive(prompt, role="default", timeout=None, model=None, system=None):
+def ask_hive(prompt, role="default", timeout=None, model=None, system=None, options=None):
     """
     Role-aware LLM interface for all Hive agents.
 
@@ -134,10 +134,15 @@ def ask_hive(prompt, role="default", timeout=None, model=None, system=None):
         return _ask_claude(prompt, system=system, model=claude_model, timeout=resolved_timeout)
 
     resolved_model = model or ROLE_MODEL.get(role, DEFAULT_MODEL)
-    return ask_model(prompt, model=resolved_model, timeout=resolved_timeout)
+    return ask_model(
+        prompt,
+        model=resolved_model,
+        timeout=resolved_timeout,
+        options=options,
+    )
 
 
-def ask_model(prompt, model=None, timeout=120):
+def ask_model(prompt, model=None, timeout=120, options=None):
     model = model or DEFAULT_MODEL
 
     print(f"[LLM] Sending request to {model}")
@@ -154,13 +159,16 @@ def ask_model(prompt, model=None, timeout=120):
         start = time.time()
 
         try:
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "stream": False,
+            }
+            if options:
+                payload["options"] = dict(options)
             response = requests.post(
                 OLLAMA_URL,
-                json={
-                    "model": model,
-                    "prompt": prompt,
-                    "stream": False,
-                },
+                json=payload,
                 timeout=timeout,
             )
 

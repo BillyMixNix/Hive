@@ -10,6 +10,7 @@ from kingdom.webnovel_benchmark import (
     StoryState,
     WebNovelBenchmarkRunner,
     _extract_json,
+    build_parser,
 )
 
 
@@ -17,8 +18,25 @@ class FakeAsk:
     def __init__(self):
         self.calls = []
 
-    def __call__(self, prompt, *, role="default", timeout=None, model=None, system=None):
-        self.calls.append((prompt, role, model))
+    def __call__(
+        self,
+        prompt,
+        *,
+        role="default",
+        timeout=None,
+        model=None,
+        system=None,
+        options=None,
+    ):
+        self.calls.append(
+            {
+                "prompt": prompt,
+                "role": role,
+                "timeout": timeout,
+                "model": model,
+                "options": options,
+            }
+        )
         if "Extract the post-chapter narrative state as JSON" in prompt:
             return json.dumps(
                 {
@@ -53,10 +71,12 @@ class FakeAsk:
             )
         if "Blindly compare A and B" in prompt:
             return json.dumps({"preferred": "tie", "confidence": 0.5, "rationale": "fixture"})
-        if "Synthesize a Chapter" in prompt:
+        if "Create a concise conventional novelist's plan" in prompt:
+            return "BASELINE_PLAN_MARKER"
+        if "Create a structured dependency plan" in prompt:
             return json.dumps(
                 {
-                    "chapter_goal": "test safely",
+                    "chapter_goal": "KINGDOM_PLAN_MARKER",
                     "required_beats": ["experiment"],
                     "forbidden_moves": ["premature hidden world"],
                     "setup_payoff_links": [],
@@ -64,6 +84,14 @@ class FakeAsk:
                     "intent_path_checks": ["still Ren"],
                 }
             )
+        if "CONVENTIONAL CHAPTER PLAN" in prompt and "CURRENT CHAPTER" not in prompt:
+            return "# BASELINE_DRAFT_MARKER\n\nRen tested one more thing."
+        if "STRUCTURED DEPENDENCY PLAN" in prompt and "DRAFT CHAPTER" not in prompt:
+            return "# KINGDOM_DRAFT_MARKER\n\nRen tested one more thing."
+        if "CONVENTIONAL CHAPTER PLAN" in prompt and "CURRENT CHAPTER" in prompt:
+            return "# BASELINE_FINAL_MARKER\n\nRen recorded the result."
+        if "STRUCTURED DEPENDENCY PLAN" in prompt and "DRAFT CHAPTER" in prompt:
+            return "# KINGDOM_FINAL_MARKER\n\nRen recorded the result."
         return "# Chapter\n\nRen tested one more thing and wrote it down."
 
 
@@ -79,10 +107,40 @@ def test_budget_rejects_extra_generation_call():
         model.ask("b", condition="baseline", chapter=2, purpose="two")
 
 
-def test_runner_uses_exact_matched_generation_budget_and_mandatory_subagents(tmp_path):
+def test_budgeted_model_forces_identical_full_context_runtime_settings():
     fake = FakeAsk()
-    model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=7)
-    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=7)
+    model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=1)
+
+    model.ask("baseline", condition="baseline", chapter=2, purpose="draft")
+    model.ask(
+        "kingdom",
+        condition="kingdom",
+        chapter=2,
+        purpose="structured dependency plan",
+        role="planner",
+    )
+    model.ask(
+        "evaluation",
+        condition="shared",
+        chapter=2,
+        purpose="automatic checkpoint score",
+        budget_class="evaluation",
+        role="reflector",
+    )
+
+    assert {call["model"] for call in fake.calls} == {"same-model"}
+    assert {call["timeout"] for call in fake.calls} == {900}
+    assert {call["options"]["num_ctx"] for call in fake.calls} == {32768}
+    assert {call["options"]["num_predict"] for call in fake.calls} == {2048}
+    assert {record.request_timeout_seconds for record in model.records} == {900}
+    assert {record.ollama_num_ctx for record in model.records} == {32768}
+    assert {record.ollama_num_predict for record in model.records} == {2048}
+
+
+def test_runner_uses_exact_matched_budget_and_stage_matched_pipelines(tmp_path):
+    fake = FakeAsk()
+    model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=3)
+    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=3)
     runner = WebNovelBenchmarkRunner(
         seed="canonical seed",
         contract="benchmark contract",
@@ -93,8 +151,8 @@ def test_runner_uses_exact_matched_generation_budget_and_mandatory_subagents(tmp
 
     runner.run()
 
-    assert model.generation_count("baseline", 2) == 7
-    assert model.generation_count("kingdom", 2) == 7
+    assert model.generation_count("baseline", 2) == 3
+    assert model.generation_count("kingdom", 2) == 3
     baseline_generation = [
         record for record in model.records
         if record.condition == "baseline" and record.budget_class == "generation"
@@ -103,26 +161,70 @@ def test_runner_uses_exact_matched_generation_budget_and_mandatory_subagents(tmp
         record for record in model.records
         if record.condition == "kingdom" and record.budget_class == "generation"
     ]
-    assert len(baseline_generation) == len(kingdom_generation) == 7
-    assert not any(record.purpose.startswith("subagent:") for record in baseline_generation)
-    assert {
-        "subagent:continuity",
-        "subagent:progression_economics",
-        "subagent:character_theme",
-        "subagent:adversarial",
-        "subagent:synthesis",
-    }.issubset({record.purpose for record in kingdom_generation})
+    assert len(baseline_generation) == len(kingdom_generation) == 3
+    assert [record.purpose for record in baseline_generation] == [
+        "conventional chapter plan",
+        "sequential prose draft",
+        "final conventional revision",
+    ]
+    assert [record.purpose for record in kingdom_generation] == [
+        "structured dependency plan",
+        "prose synthesis",
+        "critical-path prose revision",
+    ]
+
+    baseline_prompts = [
+        call["prompt"] for call in fake.calls
+        if "CONVENTIONAL ROLLING MEMORY" in call["prompt"]
+        and "Extract the post-chapter narrative state" not in call["prompt"]
+    ]
+    kingdom_prompts = [
+        call["prompt"] for call in fake.calls
+        if "PERSISTENT NARRATIVE STATE" in call["prompt"]
+    ]
+    assert len(baseline_prompts) == len(kingdom_prompts) == 3
+    assert "BASELINE_PLAN_MARKER" in baseline_prompts[1]
+    assert "BASELINE_PLAN_MARKER" in baseline_prompts[2]
+    assert "BASELINE_DRAFT_MARKER" in baseline_prompts[2]
+    assert "KINGDOM_PLAN_MARKER" in kingdom_prompts[1]
+    assert "KINGDOM_PLAN_MARKER" in kingdom_prompts[2]
+    assert "KINGDOM_DRAFT_MARKER" in kingdom_prompts[2]
+    assert not any(
+        "Kingdom" in prompt or "Critical-Path" in prompt or "dependency plan" in prompt
+        for prompt in baseline_prompts
+    )
     assert (tmp_path / "run" / "baseline" / "chapters" / "chapter_0002.md").is_file()
     assert (tmp_path / "run" / "kingdom" / "chapters" / "chapter_0002.md").is_file()
+    assert "BASELINE_FINAL_MARKER" in (
+        tmp_path / "run" / "baseline" / "chapters" / "chapter_0002.md"
+    ).read_text()
+    assert "KINGDOM_FINAL_MARKER" in (
+        tmp_path / "run" / "kingdom" / "chapters" / "chapter_0002.md"
+    ).read_text()
     manifest = json.loads((tmp_path / "run" / "manifest.json").read_text())
     assert manifest["model"] == "same-model"
-    assert manifest["generation_calls_per_chapter_per_condition"] == 7
+    assert manifest["schema_version"] == 2
+    assert manifest["generation_protocol"] == "adi-001-3call-v1"
+    assert manifest["generation_calls_per_chapter_per_condition"] == 3
+    assert manifest["baseline_generation_pipeline"] == [
+        "conventional chapter plan",
+        "sequential prose draft",
+        "final conventional revision",
+    ]
+    assert manifest["kingdom_generation_pipeline"] == [
+        "structured dependency plan",
+        "prose synthesis",
+        "critical-path prose revision",
+    ]
+    assert manifest["ollama_num_ctx"] == 32768
+    assert manifest["ollama_num_predict"] == 2048
+    assert manifest["request_timeout_seconds"] == 900
 
 
 def test_checkpoint_artifact_records_delta_and_blind_comparison(tmp_path):
     fake = FakeAsk()
-    model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=7)
-    config = BenchmarkConfig(chapters=2, checkpoints=(2,), generation_calls_per_chapter=7)
+    model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=3)
+    config = BenchmarkConfig(chapters=2, checkpoints=(2,), generation_calls_per_chapter=3)
     runner = WebNovelBenchmarkRunner(
         seed="canonical seed",
         contract="benchmark contract",
@@ -146,8 +248,8 @@ def test_checkpoint_artifact_records_delta_and_blind_comparison(tmp_path):
 
 def test_resume_refuses_changed_seed(tmp_path):
     fake = FakeAsk()
-    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=7)
-    first_model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=7)
+    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=3)
+    first_model = BudgetedModel(fake, model="same-model", generation_calls_per_chapter=3)
     first = WebNovelBenchmarkRunner(
         seed="seed one",
         contract="contract",
@@ -157,7 +259,7 @@ def test_resume_refuses_changed_seed(tmp_path):
     )
     first.run()
 
-    second_model = BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=7)
+    second_model = BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=3)
     changed = WebNovelBenchmarkRunner(
         seed="seed two",
         contract="contract",
@@ -167,3 +269,95 @@ def test_resume_refuses_changed_seed(tmp_path):
     )
     with pytest.raises(RuntimeError, match="seed_sha256 changed"):
         changed.run()
+
+
+def test_runner_rejects_non_protocol_generation_budget(tmp_path):
+    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=7)
+    runner = WebNovelBenchmarkRunner(
+        seed="seed",
+        contract="contract",
+        output_dir=tmp_path / "run",
+        model=BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=7),
+        config=config,
+    )
+
+    with pytest.raises(ValueError, match="requires exactly 3 generation calls"):
+        runner.run()
+
+
+def test_parser_locks_generation_budget_to_three():
+    parser = build_parser()
+    argv = [
+        "--seed-file", "seed.md",
+        "--benchmark-file", "contract.md",
+        "--output-dir", "run",
+        "--generation-calls", "7",
+    ]
+
+    with pytest.raises(SystemExit):
+        parser.parse_args(argv)
+
+
+def test_resume_refuses_changed_generation_protocol_manifest(tmp_path):
+    config = BenchmarkConfig(chapters=2, checkpoints=(), generation_calls_per_chapter=3)
+    first = WebNovelBenchmarkRunner(
+        seed="seed",
+        contract="contract",
+        output_dir=tmp_path / "run",
+        model=BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=3),
+        config=config,
+    )
+    first.run()
+
+    manifest_path = tmp_path / "run" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["generation_protocol"] = "different-protocol"
+    manifest_path.write_text(json.dumps(manifest))
+
+    second = WebNovelBenchmarkRunner(
+        seed="seed",
+        contract="contract",
+        output_dir=tmp_path / "run",
+        model=BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=3),
+        config=config,
+    )
+    with pytest.raises(RuntimeError, match="generation_protocol changed"):
+        second.run()
+
+
+def test_clean_ten_chapter_run_has_exact_78_call_ledger(tmp_path):
+    model = BudgetedModel(FakeAsk(), model="same-model", generation_calls_per_chapter=3)
+    runner = WebNovelBenchmarkRunner(
+        seed="seed",
+        contract="contract",
+        output_dir=tmp_path / "run",
+        model=model,
+        config=BenchmarkConfig(
+            chapters=10,
+            checkpoints=(5, 10),
+            generation_calls_per_chapter=3,
+        ),
+    )
+
+    runner.run()
+
+    generation = [record for record in model.records if record.budget_class == "generation"]
+    evaluation = [record for record in model.records if record.budget_class == "evaluation"]
+    assert len(generation) == 54
+    assert len([record for record in generation if record.condition == "baseline"]) == 27
+    assert len([record for record in generation if record.condition == "kingdom"]) == 27
+    assert len(evaluation) == 24
+    assert len([
+        record for record in evaluation
+        if record.purpose == "shared post-chapter state extraction"
+    ]) == 18
+    assert len([
+        record for record in evaluation
+        if record.purpose == "automatic checkpoint score"
+    ]) == 4
+    assert len([
+        record for record in evaluation
+        if record.purpose == "blind automatic pairwise comparison"
+    ]) == 2
+    assert len(model.records) == 78
+    assert len((tmp_path / "run" / "calls.jsonl").read_text().splitlines()) == 78
