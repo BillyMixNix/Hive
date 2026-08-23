@@ -4,6 +4,7 @@ import pytest
 
 from kingdom.guarded_webnovel_benchmark import (
     GuardedStateExtractor,
+    GuardedWebNovelBenchmarkRunner,
     TemporalStoryState,
 )
 from kingdom.webnovel_benchmark import BenchmarkConfig, BudgetedModel
@@ -104,3 +105,30 @@ def test_temporal_story_state_round_trips_typed_events_into_prompt_view():
 
     assert rendered["events"][0]["event_id"] == "ask-father-thomas"
     assert rendered["events"][0]["status"] == "planned"
+
+
+def test_guarded_manifest_rejects_legacy_resume(tmp_path):
+    model = BudgetedModel(
+        GuardAsk({}),
+        model="same-model",
+        generation_calls_per_chapter=7,
+    )
+    runner = GuardedWebNovelBenchmarkRunner(
+        seed="seed",
+        contract="contract",
+        output_dir=tmp_path / "run",
+        model=model,
+        config=BenchmarkConfig(chapters=2, checkpoints=()),
+    )
+
+    runner._persist_manifest()
+    manifest_path = tmp_path / "run" / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest["temporal_state_schema"] == 1
+    assert manifest["temporal_evidence_required"] is True
+
+    del manifest["temporal_state_schema"]
+    manifest_path.write_text(json.dumps(manifest))
+
+    with pytest.raises(RuntimeError, match="use a fresh output directory"):
+        runner._persist_manifest()
