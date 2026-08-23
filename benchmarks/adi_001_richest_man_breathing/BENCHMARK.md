@@ -8,9 +8,9 @@ This benchmark is a long-horizon semantic test, not a claim that prose quality a
 
 ## Canonical seed and neutral contract
 
-`SEED.md` is the frozen human story specification. `CONTRACT.md` contains only the story obligations shared by both writers. The experimental protocol in this file is deliberately **not** supplied as writer context, because exposing the treatment strategy to the control condition would contaminate the A/B comparison.
+`SEED.md` is the frozen human story specification. `CONTRACT.md` contains only the story obligations shared by both writers. `STORY_MAP.json` is a frozen, hash-checked authority map that separates timeless rules, published Chapter-One canon, and locked future blueprint. It also supplies the exact Chapter-One starting state and continuation tail. The experimental protocol in this file is deliberately **not** supplied as writer context, because exposing the treatment strategy to the control condition would contaminate the A/B comparison.
 
-Runs hash the exact seed and neutral contract and must refuse continuation if either changes.
+Runs hash the UTF-8 text projection of the seed and contract (with platform newlines decoded consistently), plus the exact Story Map text, initial state, deterministic projections, model tag, and installed model digest. They must refuse continuation if any identity changes.
 
 ## Human intent anchors
 
@@ -58,13 +58,13 @@ The experiment tracks at minimum:
 
 ### Baseline
 
-A strong model receives the canonical seed, the neutral story contract, previous prose/memory support allowed by the chosen baseline protocol, and a matched generation-call budget. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
+A strong model receives the same static authority packet, source facts, eligible frontier, locked authorial direction, and previous prose as the Kingdom condition, under a matched generation-call budget. Its dynamic memory is rendered as conventional flat rolling notes, without claim IDs, statuses, dependency edges, or provenance metadata. It writes sequentially without Kingdom's recursive construction graph, explicit incompatible-world exploration, dependency closure, or terminal intent walk.
 
 The executable pilot gives the baseline three model calls per generated chapter: an ordinary chapter plan, a prose draft, and one holistic conventional revision. Its shared post-chapter state extraction is evaluation/memory bookkeeping and is counted separately from generation, exactly as on the Kingdom side.
 
 ### Kingdom / ADI
 
-The same canonical seed and neutral story contract are used. The system decompresses narrative obligations into dependency/provenance state, generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original seed.
+The same byte-identical static authority packet is used. The same accepted source facts are rendered for Kingdom as a typed claim ledger with statuses, dependency edges, and provenance; that structural representation is part of the treatment under test. The system generates chapters against that state, performs continuity/semantic checks, and runs a Critical-Path revision against the original intent.
 
 For the executable pilot, Kingdom receives the same three generation calls per chapter:
 
@@ -75,6 +75,8 @@ For the executable pilot, Kingdom receives the same three generation calls per c
 The first call decompresses continuity, knowledge, obligations, progression/economics, character/theme, setup/payoff, and adversarial failure search into one structured proposal. The second writes prose from that proposal. The third walks the immutable intent and dependency plan through the completed draft. Proposal is not authority.
 
 The harness passes the same explicit `model=` override, 32,768-token Ollama context, 2,048-token maximum output, and 900-second request timeout to every baseline, Kingdom, extraction, and evaluator call. Role labels therefore cannot silently route one side to a stronger model or different runtime budget.
+
+The harness also fixes temperature and sampling seed, disables hidden HTTP retries, records Ollama completion/token metadata, and invalidates truncated calls. One ledger row therefore corresponds to one physical model request.
 
 The compressed protocol is stage-matched to avoid a prose-pass confound. Both conditions receive exactly one planning call, one prose-draft call, and one revision call. The treatment difference is ordinary planning plus ordinary revision versus dependency-aware planning plus Critical-Path revision.
 
@@ -103,33 +105,39 @@ Critical prediction:
 
 ## Executable pilot
 
-Run both conditions through the same explicit model and the same neutral contract:
+First run the Chapter-Two smoke through both conditions with the same explicit model and authority boundary:
 
 ```bash
 python -m kingdom.webnovel_benchmark \
   --seed-file benchmarks/adi_001_richest_man_breathing/SEED.md \
   --benchmark-file benchmarks/adi_001_richest_man_breathing/CONTRACT.md \
-  --output-dir .hive/benchmarks/adi_001/pilot-10 \
-  --chapters 10 \
-  --checkpoint 5 \
-  --checkpoint 10 \
+  --story-map-file benchmarks/adi_001_richest_man_breathing/STORY_MAP.json \
+  --output-dir .hive/benchmarks/adi_001/smoke-story-map-v1 \
+  --chapters 2 \
+  --checkpoint 2 \
   --model qwen2.5-coder:7b
 ```
 
+`STORY_MAP.json` currently freezes the Chapter-Two frontier deliberately. A ten-chapter launch must wait until Chapters 3–10 receive the same reviewed frontier/prerequisite treatment; the runner fails closed when a requested chapter has no frozen frontier.
+
 The run directory contains:
 
-- a manifest with seed/contract hashes, explicit model, and budgets
+- a manifest with seed/contract hashes, explicit model tag/digest, and budgets
+- the Story Map, initial-state, Chapter-One, prompt-projection, and guard identities
 - separate baseline and Kingdom chapter streams
-- persistent extracted narrative state for both streams
+- persistent canonical claim ledgers whose ordinary state views are derived only from accepted evidence
+- atomic, hash-linked chapter artifacts containing prose, proposed deltas, accepted state, gate result, and call hashes
 - an auditable model-call ledger containing prompt/response hashes and character counts
 - checkpoint JSON with per-condition diagnostics and Kingdom-minus-baseline delta
 - a result summary stating the longitudinal prediction and the human-evaluation boundary
 
-A clean 10-chapter run has 78 accepted ledger records: 54 generation calls (9 generated chapters × 2 conditions × 3), 18 shared state extractions, 4 automatic checkpoint scores, and 2 blinded pairwise comparisons.
+After the remaining frontiers are frozen, a clean 10-chapter run will still have 78 accepted ledger records: 54 generation calls (9 generated chapters × 2 conditions × 3), 18 shared state extractions, 4 automatic checkpoint scores, and 2 blinded pairwise comparisons.
 
 The harness refuses a changed protocol on resume: seed, neutral contract, model, chapter/checkpoint configuration, three-call pipelines, context clipping, and Ollama runtime limits must all match the manifest.
 
-For evidentiary runs, use a fresh output directory and run uninterrupted. The current harness's historical ledger/checkpoint resume path is not yet transactional; an interrupted run should be archived and restarted rather than resumed.
+For evidentiary runs, use a fresh output directory. A chapter becomes authoritative only when its prose, state delta, deterministic gate result, and ancestry are committed together as one atomic artifact. Rejected prose and rejected extractor proposals are preserved outside canonical history. The runner reconciles completed history against the exact call ledger and refuses asymmetric, incomplete-checkpoint, or corrupt histories rather than silently resuming them.
+
+The shared extractor never receives the undifferentiated future seed. It sees only immutable rule anchors, prior accepted canon, and the current final chapter. Its JSON is a proposal: deterministic code requires exact current-chapter evidence, legal transitions, satisfied dependencies, grounded numbers, and absence of locked future material before promotion. This validation consumes no model calls and is identical for both conditions.
 
 ## Pass/fail honesty boundary
 

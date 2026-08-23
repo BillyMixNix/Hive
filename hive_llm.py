@@ -113,7 +113,16 @@ def _ask_claude(prompt, system=None, model=None, timeout=120):
     return text
 
 
-def ask_hive(prompt, role="default", timeout=None, model=None, system=None, options=None):
+def ask_hive(
+    prompt,
+    role="default",
+    timeout=None,
+    model=None,
+    system=None,
+    options=None,
+    max_retries=None,
+    metadata=None,
+):
     """
     Role-aware LLM interface for all Hive agents.
 
@@ -139,21 +148,33 @@ def ask_hive(prompt, role="default", timeout=None, model=None, system=None, opti
         model=resolved_model,
         timeout=resolved_timeout,
         options=options,
+        max_retries=max_retries,
+        metadata=metadata,
     )
 
 
-def ask_model(prompt, model=None, timeout=120, options=None):
+def ask_model(
+    prompt,
+    model=None,
+    timeout=120,
+    options=None,
+    max_retries=None,
+    metadata=None,
+):
     model = model or DEFAULT_MODEL
+    attempts = _MAX_RETRIES if max_retries is None else int(max_retries)
+    if attempts < 1:
+        raise ValueError("max_retries must be at least 1")
 
     print(f"[LLM] Sending request to {model}")
     print(f"[LLM] Prompt length: {len(prompt)} chars")
 
     last_error = None
 
-    for attempt in range(_MAX_RETRIES):
+    for attempt in range(attempts):
         if attempt > 0:
             wait = _RETRY_BASE_WAIT * (2 ** (attempt - 1))
-            print(f"[LLM] Retry {attempt}/{_MAX_RETRIES - 1} after {wait}s wait...")
+            print(f"[LLM] Retry {attempt}/{attempts - 1} after {wait}s wait...")
             time.sleep(wait)
 
         start = time.time()
@@ -181,15 +202,33 @@ def ask_model(prompt, model=None, timeout=120, options=None):
             if "response" not in data:
                 raise ValueError(f"Ollama response missing 'response': {data}")
 
+            if metadata is not None:
+                metadata.clear()
+                metadata.update(
+                    {
+                        "physical_attempts": attempt + 1,
+                        "done": bool(data.get("done", False)),
+                        "done_reason": str(data.get("done_reason") or ""),
+                        "prompt_eval_count": int(data.get("prompt_eval_count") or 0),
+                        "eval_count": int(data.get("eval_count") or 0),
+                        "total_duration_ns": int(data.get("total_duration") or 0),
+                    }
+                )
+
             print(f"[LLM] Model output length: {len(data['response'])} chars")
             return data["response"]
 
         except requests.exceptions.Timeout as e:
             last_error = TimeoutError(f"Ollama request timed out after {timeout} seconds.")
-            print(f"[LLM] Timeout on attempt {attempt + 1}/{_MAX_RETRIES}")
+            print(f"[LLM] Timeout on attempt {attempt + 1}/{attempts}")
 
         except requests.exceptions.RequestException as e:
             last_error = RuntimeError(f"Ollama request failed: {e}")
-            print(f"[LLM] Request error on attempt {attempt + 1}/{_MAX_RETRIES}: {e}")
+            print(f"[LLM] Request error on attempt {attempt + 1}/{attempts}: {e}")
 
-    raise last_error or RuntimeError(f"ask_model failed after {_MAX_RETRIES} attempts.")
+    if metadata is not None:
+        metadata.clear()
+        metadata["physical_attempts"] = attempts
+        metadata["done"] = False
+        metadata["done_reason"] = "transport_error"
+    raise last_error or RuntimeError(f"ask_model failed after {attempts} attempts.")

@@ -1,0 +1,410 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "ADI-001",
+  "seed_sha256": "8f4c29fb7bfc7a12c4549f017f1c41231b23fa326f5550eb68112d9770214c95",
+  "contract_sha256": "1d2fd762408a7c31b3fe0bbd85cc3336daa812ec4b21a6cbea138f5c145b5b00",
+  "published_through_chapter": 1,
+  "partitions": [
+    {
+      "source_id": "seed:timeless-premise-rules",
+      "role": "timeless",
+      "line_start": 1,
+      "line_end": 74,
+      "sha256": "79d65e390a7fef01bf980260ea44f2e956225a95a4c367aae2b6a00a2990dc98"
+    },
+    {
+      "source_id": "seed:locked-primary-blueprint",
+      "role": "future",
+      "line_start": 75,
+      "line_end": 1030,
+      "sha256": "b9d92940a89b1ebdda839c784390d59486ce6fba636029387396114b95e21442"
+    },
+    {
+      "source_id": "seed:published-chapter-one",
+      "role": "published",
+      "line_start": 1031,
+      "line_end": 1352,
+      "sha256": "724e02aa80b0051a55b832a469385da8063e453e3417b43c1b4ca5e072fe86a6"
+    },
+    {
+      "source_id": "seed:locked-marketplace-blueprint",
+      "role": "future",
+      "line_start": 1353,
+      "line_end": 1734,
+      "sha256": "7592734e82d1220b05aaa966ae9dd97949eaca6057d578e3fbc92ea6ba3d5132"
+    }
+  ],
+  "chapter_one": {
+    "source_id": "seed:published-chapter-one",
+    "prose_line_start": 1031,
+    "prose_line_end": 1349,
+    "sha256": "37114fa5fcda11ecfbe964f7b0de6d5b91d7a8eaa0f98dc156b61c2c2bfff592",
+    "tail_line_start": 1343,
+    "tail_line_end": 1349,
+    "tail_sha256": "1bb3aaa0f9f244bedf6ca2a051c51c5e63e1a76be3448cf73c44c48fc7170305",
+    "narrator_foreshadowing": [
+      "The closing titles describe Ren's distant future from the narrator's perspective only.",
+      "Ren does not know those titles, their mechanics, the hidden side of the setting, his ancestry, or any later progression.",
+      "The only current action in the closing sentence is that Ren nearly passes out in the Walmart parking lot while trying to breathe faster."
+    ]
+  },
+  "immutable_rules": [
+    {
+      "rule_id": "money-breathing-direction",
+      "text": "Each completed cycle pays exactly +$1 when inhale is longer, -$1 when exhale is longer, and $0 when durations are equal. Ren has personally tested only the +$1 direction."
+    },
+    {
+      "rule_id": "chapter-one-money-boundary",
+      "text": "Ren opens with $43.17. Chapter One explicitly shows eight $1 deposits, so $51.17 is only a minimum supported ending balance; the exact ending balance is unknown."
+    },
+    {
+      "rule_id": "projection-not-earnings",
+      "text": "$600 per hour, $14,400 per day, and $5,256,000 per year are projections at ten cycles per minute, not money already earned."
+    },
+    {
+      "rule_id": "no-current-progression",
+      "text": "Money-Breathing Art is acquired, but no progression milestone, passive effect, physical enhancement, secret-setting knowledge, ancestry, special territory, or higher per-cycle rate is currently unlocked."
+    },
+    {
+      "rule_id": "ordinary-start",
+      "text": "Ren remains a broke delivery driver in a failing Hyundai with low gas, debt, bills, and no established apartment, house, business, sect, or supernatural ally."
+    },
+    {
+      "rule_id": "legality-is-author-truth-not-ren-knowledge",
+      "text": "The seed establishes that the money is legally recognized, but Ren has not verified taxes, documentation, bank treatment, or the source of the Exchange."
+    }
+  ],
+  "initial_claims": [
+    {
+      "claim_id": "ch1.fact.broke-age",
+      "category": "facts",
+      "statement": "Ren Fujitsu is a broke twenty-six-year-old delivery driver.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:timeless-premise-rules",
+      "evidence": "Twenty-six-year-old Ren Fujitsu is broke."
+    },
+    {
+      "claim_id": "ch1.fact.opening-balance",
+      "category": "facts",
+      "statement": "Ren begins Chapter One with forty-three dollars and seventeen cents.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "Ren Fujitsu had forty-three dollars and seventeen cents."
+    },
+    {
+      "claim_id": "ch1.fact.red-pill",
+      "category": "facts",
+      "statement": "Ren selected the red pill; he did not select the blue pill.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "He tapped the red pill."
+    },
+    {
+      "claim_id": "ch1.fact.art-acquired",
+      "category": "facts",
+      "statement": "Ren's phone confirmed that MONEY-BREATHING ART was acquired.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.red-pill"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "MONEY-BREATHING ART ACQUIRED."
+    },
+    {
+      "claim_id": "ch1.fact.first-deposit",
+      "category": "facts",
+      "statement": "A four-second inhale and three-second exhale produced a real one-dollar bank deposit.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.art-acquired"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "Deposit received: $1.00"
+    },
+    {
+      "claim_id": "ch1.fact.delivery-closed",
+      "category": "facts",
+      "statement": "Ren declined the poor Taco Bell request and closed the delivery app.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "He closed the app."
+    },
+    {
+      "claim_id": "ch1.fact.near-faint",
+      "category": "facts",
+      "statement": "Ren nearly passed out in a Walmart parking lot while trying to make twelve dollars per minute.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "nearly passed out in a Walmart parking lot trying to make twelve dollars a minute."
+    },
+    {
+      "claim_id": "ch1.character.experimental",
+      "category": "character_states",
+      "statement": "Ren is skeptical, quick to calculate tradeoffs, curious, and reckless when optimizing.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "“What if I breathe faster?”"
+    },
+    {
+      "claim_id": "ch1.character.serious-projection",
+      "category": "character_states",
+      "statement": "Ren's excitement turns to stunned seriousness when he calculates hypothetical annual income.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "His excitement disappeared.\n\nHe recalculated."
+    },
+    {
+      "claim_id": "ch1.knowledge.displayed-rule",
+      "category": "knowledge",
+      "statement": "Ren read that a longer inhale earns one dollar and a longer exhale loses one dollar.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:timeless-premise-rules",
+      "evidence": "Gain $1 every time you breathe in longer than you breathe out. Lose $1 if you breathe out longer than you breathe in."
+    },
+    {
+      "claim_id": "ch1.knowledge.exchange-name",
+      "category": "knowledge",
+      "statement": "Ren knows only the displayed names THE EXCHANGE and MONEY-BREATHING ART, not their origin or meaning.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.art-acquired"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "THANK YOU FOR PARTICIPATING IN THE EXCHANGE."
+    },
+    {
+      "claim_id": "ch1.finance.first-verified-balance",
+      "category": "financial_state",
+      "statement": "The first verified post-deposit available balance is $44.17.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "AVAILABLE BALANCE: $44.17"
+    },
+    {
+      "claim_id": "ch1.finance.daily-projection",
+      "category": "financial_state",
+      "statement": "$14,400 per day is Ren's projection, not earned money.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "Fourteen thousand four hundred dollars.\n\nPer day."
+    },
+    {
+      "claim_id": "ch1.cultivation.acquired-only",
+      "category": "cultivation_state",
+      "statement": "MONEY-BREATHING ART is acquired; no progression milestone, passive effect, or physical enhancement is unlocked.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.art-acquired"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "MONEY-BREATHING ART ACQUIRED."
+    },
+    {
+      "claim_id": "ch1.asset.hyundai",
+      "category": "assets",
+      "statement": "Ren has a Hyundai with weak air conditioning, low gas, and an unresolved passenger-side wheel rattle.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "The strange rattling noise beneath the passenger-side wheel that he had decided, through rigorous scientific methodology, would cease to exist so long as he never asked a mechanic about it."
+    },
+    {
+      "claim_id": "ch1.obligation.ordinary-bills",
+      "category": "obligations",
+      "statement": "Gas, taxes, food, phone bill, credit-card debt, insurance, and car repair remain ordinary pressures.",
+      "status": "planned",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "Gas.\n\nTaxes.\n\nFood.\n\nPhone bill.\n\nCredit card.\n\nInsurance."
+    },
+    {
+      "claim_id": "ch1.mystery.exchange",
+      "category": "mysteries",
+      "statement": "The source and nature of THE EXCHANGE remain unknown.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.art-acquired"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "THANK YOU FOR PARTICIPATING IN THE EXCHANGE."
+    },
+    {
+      "claim_id": "ch1.mystery.untested-rules",
+      "category": "mysteries",
+      "statement": "Loss cycles, equal breathing, sleep, legal provenance, taxes, and a safe maximum rate remain untested by Ren.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.first-deposit"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "“What if I breathe faster?”"
+    },
+    {
+      "claim_id": "ch1.theme.life-for-money",
+      "category": "themes",
+      "statement": "The story begins with the exchange of finite life and labor for money.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "a man who had spent years trading pieces of his finite lifespan for money"
+    },
+    {
+      "claim_id": "ch1.tone.grounded-comedy",
+      "category": "tone",
+      "statement": "The current tone is grounded modern comedy and economic wish fulfillment with poverty detail and profanity.",
+      "status": "current",
+      "depends_on": [],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "He had just acquired poverty spyware."
+    },
+    {
+      "claim_id": "ch1.summary.discovery",
+      "category": "chapter_summaries",
+      "statement": "Ren selects a bizarre Reddit breathing ability, verifies real one-dollar deposits, calculates hypothetical life-changing income, rejects a bad delivery request, and nearly faints trying to optimize.",
+      "status": "current",
+      "depends_on": [
+        "ch1.fact.near-faint"
+      ],
+      "source_id": "seed:published-chapter-one",
+      "evidence": "nearly passed out in a Walmart parking lot trying to make twelve dollars a minute."
+    }
+  ],
+  "future_intent": [
+    "Progression must be earned through tested breathing, ordinary financial relief, productive circulation, assets, and increasingly abstract exchange.",
+    "The hidden side of the setting, Ren's ancestry, later organizations, later techniques, and reality-spanning mechanics are distant locked material.",
+    "Ren ultimately grows by enabling other people and systems to prosper rather than merely hoarding or conquering.",
+    "Comedy and economic wish fulfillment should deepen gradually into modern wuxia and philosophy without skipping the mundane beginning.",
+    "The final correction about value and chosen meaning must be earned across the complete story."
+  ],
+  "chapter_frontiers": {
+    "2": [
+      "Continue directly from Ren nearly passing out in the Walmart parking lot; reconcile his physical condition and immediate surroundings.",
+      "Remain in the mundane opening stage; ordinary pressures, Ren's established character, and the comedy-to-serious tone remain binding.",
+      "Any new result, knowledge, asset, or ability change must be earned and shown in the chapter rather than inferred from the long-horizon direction.",
+      "Do not reveal why the ability exists or any hidden-world answer. No scene sequence, experiment list, or ending beat is preselected by this frontier."
+    ]
+  },
+  "locked_terms_by_chapter": {
+    "2": [
+      "Mortal Breath",
+      "TEN THOUSAND PROFITABLE CYCLES",
+      "FIRST LAYER",
+      "Perfect Respiration",
+      "Fujitsu Clan",
+      "Dao of Exchange",
+      "Fujitsu Exchange Services",
+      "Liang Zhou",
+      "Hidden Economic Bureau",
+      "International Bureau of Anomalous Exchange",
+      "Fortune Qi",
+      "Circulation of Wealth",
+      "Compound Meridian",
+      "Golden Lung",
+      "Treasury Domain",
+      "THE GRAND EXCHANGE",
+      "Sovereign Capital",
+      "Heavenly Exchange",
+      "BlackRock Pavilion",
+      "Federal Reserve Monastery",
+      "Silicon Valley Immortal Alliance",
+      "Red Ledger Society",
+      "Attention Sect",
+      "Quiet Mountain",
+      "Conceptual Saturation",
+      "Golden Respiration",
+      "Ten Thousand Exchanges Scripture",
+      "THE WORLD BREATHES WITH ME",
+      "MULTIVERSAL MARKETPLACE",
+      "Exchange Authority",
+      "Universal Listing",
+      "Universal Search",
+      "Escrow of Heaven",
+      "Cross-Reality Delivery",
+      "Primordial Exchange Lord",
+      "largest economic sect in human history",
+      "World Exchange Domain",
+      "Sovereign of the Ten Thousand Markets",
+      "negotiate directly with Heaven",
+      "Some things are worth losing"
+    ]
+  },
+  "forbidden_patterns_by_chapter": {
+    "2": [
+      {
+        "rule_id": "daily-rate-is-not-hourly",
+        "pattern": "(?:14[,]?400|fourteen thousand four hundred).{0,80}(?:per|an?|each) hour|(?:per|an?|each) hour.{0,80}(?:14[,]?400|fourteen thousand four hundred)",
+        "message": "$14,400 is the projected daily rate, not an hourly rate"
+      },
+      {
+        "rule_id": "no-unearned-home",
+        "pattern": "\\b(?:his|Ren['’]s)\\s+(?:house|apartment|garage)\\b",
+        "message": "Ren has not acquired a house, apartment, or garage"
+      },
+      {
+        "rule_id": "mother-is-later-arc",
+        "pattern": "\\b(?:his|Ren['’]s)\\s+mother\\b",
+        "message": "the Chapter-2 frontier does not introduce Ren's mother"
+      },
+      {
+        "rule_id": "no-invented-exposition-channel",
+        "pattern": "Exchange Chronicles|(?:expert|video|channel).{0,80}Money-Breathing",
+        "message": "an invented source cannot reveal the locked progression system"
+      },
+      {
+        "rule_id": "no-hidden-world-language",
+        "pattern": "\\b(?:cultivation|cultivator|meridian|sect|domain|realm|qi)\\b",
+        "message": "hidden-world and cultivation vocabulary is not revealed in Chapter 2"
+      },
+      {
+        "rule_id": "no-unearned-sleep-profit",
+        "pattern": "(?:earn|profit|deposit|money).{0,80}(?:while|during) (?:he )?(?:sleeps?|sleeping)|(?:sleeps?|sleeping).{0,80}(?:earn|profit|deposit|money)",
+        "message": "sleep profitability has not been tested"
+      },
+      {
+        "rule_id": "no-unearned-rate-increase",
+        "pattern": "(?:more than|above|increased? to) \\$?1.{0,40}(?:per|each) breath|\\+\\$2",
+        "message": "the current rule remains exactly one dollar per profitable cycle"
+      }
+    ]
+  },
+  "opening_requirements_by_chapter": {
+    "2": {
+      "within_chars": 1800,
+      "required_any_groups": [
+        [
+          "Walmart",
+          "parking lot",
+          "Hyundai"
+        ],
+        [
+          "faint",
+          "dizzy",
+          "lightheaded",
+          "breath"
+        ]
+      ]
+    }
+  }
+}
