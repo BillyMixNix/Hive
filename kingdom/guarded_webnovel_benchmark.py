@@ -140,6 +140,24 @@ class GuardedWebNovelBenchmarkRunner(WebNovelBenchmarkRunner):
         )
         self.extractor = GuardedStateExtractor(model, seed, contract, config)
 
+    def _persist_manifest(self) -> None:
+        path = self.output_dir / "manifest.json"
+        if path.exists():
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            if existing.get("temporal_state_schema") != 1:
+                raise RuntimeError(
+                    "refusing guarded resume: manifest lacks temporal_state_schema=1; "
+                    "use a fresh output directory"
+                )
+        super()._persist_manifest()
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        manifest["temporal_state_schema"] = 1
+        manifest["temporal_evidence_required"] = True
+        path.write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
     def _load_state(self, condition: str) -> TemporalStoryState:
         path = self._state_path(condition)
         if not path.exists():
