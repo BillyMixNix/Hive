@@ -8,6 +8,7 @@ def _mock_ask_model(
     options=None,
     max_retries=None,
     metadata=None,
+    response_format=None,
 ):
     # Return a simple JSON reflection for any prompt to keep tests deterministic.
     if metadata is not None:
@@ -18,6 +19,7 @@ def _mock_ask_model(
                 "done_reason": "stop",
                 "prompt_eval_count": 1,
                 "eval_count": 1,
+                "response_format": response_format,
             }
         )
     return '{"reflection": "Auto-reflection OK", "confidence": 0.9, "next_step": "none", "verdict": "accept"}'
@@ -34,6 +36,7 @@ def _ask_hive(
     options=None,
     max_retries=None,
     metadata=None,
+    response_format=None,
 ):
     return _mock_ask_model(
         prompt,
@@ -42,6 +45,7 @@ def _ask_hive(
         options=options,
         max_retries=max_retries,
         metadata=metadata,
+        response_format=response_format,
     )
 
 hive_llm.ask_hive = _ask_hive

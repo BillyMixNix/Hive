@@ -122,6 +122,7 @@ def ask_hive(
     options=None,
     max_retries=None,
     metadata=None,
+    response_format=None,
 ):
     """
     Role-aware LLM interface for all Hive agents.
@@ -150,6 +151,7 @@ def ask_hive(
         options=options,
         max_retries=max_retries,
         metadata=metadata,
+        response_format=response_format,
     )
 
 
@@ -160,6 +162,7 @@ def ask_model(
     options=None,
     max_retries=None,
     metadata=None,
+    response_format=None,
 ):
     model = model or DEFAULT_MODEL
     attempts = _MAX_RETRIES if max_retries is None else int(max_retries)
@@ -187,6 +190,8 @@ def ask_model(
             }
             if options:
                 payload["options"] = dict(options)
+            if response_format is not None:
+                payload["format"] = response_format
             response = requests.post(
                 OLLAMA_URL,
                 json=payload,
@@ -224,6 +229,7 @@ def ask_model(
                             if data.get("total_duration") is None
                             else int(data["total_duration"])
                         ),
+                        "response_format": response_format,
                     }
                 )
 
