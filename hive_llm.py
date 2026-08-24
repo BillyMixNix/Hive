@@ -208,10 +208,22 @@ def ask_model(
                     {
                         "physical_attempts": attempt + 1,
                         "done": bool(data.get("done", False)),
-                        "done_reason": str(data.get("done_reason") or ""),
-                        "prompt_eval_count": int(data.get("prompt_eval_count") or 0),
-                        "eval_count": int(data.get("eval_count") or 0),
-                        "total_duration_ns": int(data.get("total_duration") or 0),
+                        "done_reason": data.get("done_reason"),
+                        "prompt_eval_count": (
+                            None
+                            if data.get("prompt_eval_count") is None
+                            else int(data["prompt_eval_count"])
+                        ),
+                        "eval_count": (
+                            None
+                            if data.get("eval_count") is None
+                            else int(data["eval_count"])
+                        ),
+                        "total_duration_ns": (
+                            None
+                            if data.get("total_duration") is None
+                            else int(data["total_duration"])
+                        ),
                     }
                 )
 

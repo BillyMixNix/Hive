@@ -105,37 +105,35 @@ Critical prediction:
 
 ## Executable pilot
 
-First run the Chapter-Two smoke through both conditions with the same explicit model and authority boundary:
-
-```bash
-python -m kingdom.webnovel_benchmark \
-  --seed-file benchmarks/adi_001_richest_man_breathing/SEED.md \
-  --benchmark-file benchmarks/adi_001_richest_man_breathing/CONTRACT.md \
-  --story-map-file benchmarks/adi_001_richest_man_breathing/STORY_MAP.json \
-  --output-dir .hive/benchmarks/adi_001/smoke-story-map-v1 \
-  --chapters 2 \
-  --checkpoint 2 \
-  --model qwen2.5-coder:7b
-```
+Protocol v1 is sealed evidence at commit
+`32e44a66acab25320ac5aa7e508e55018128043a`; do not resume or rerun it. The only
+authoritative live instructions are the separately versioned pre-registration and exact
+command in [`PROTOCOL_V2.md`](PROTOCOL_V2.md). Protocol v2 uses the dedicated
+`kingdom.webnovel_benchmark_v2` entry point, a fresh-only evidence store, three matched
+generation calls per condition, no pairwise prose preference, and immediate stop on the
+first rejected branch.
 
 `STORY_MAP.json` currently freezes the Chapter-Two frontier deliberately. A ten-chapter launch must wait until Chapters 3–10 receive the same reviewed frontier/prerequisite treatment; the runner fails closed when a requested chapter has no frozen frontier.
 
-The run directory contains:
+The Protocol-v2 run directory contains:
 
 - a manifest with seed/contract hashes, explicit model tag/digest, and budgets
 - the Story Map, initial-state, Chapter-One, prompt-projection, and guard identities
-- separate baseline and Kingdom chapter streams
+- separate baseline and Kingdom branch artifacts
 - persistent canonical claim ledgers whose ordinary state views are derived only from accepted evidence
 - atomic, hash-linked chapter artifacts containing prose, proposed deltas, accepted state, gate result, and call hashes
-- an auditable model-call ledger containing prompt/response hashes and character counts
-- checkpoint JSON with per-condition diagnostics and Kingdom-minus-baseline delta
-- a result summary stating the longitudinal prediction and the human-evaluation boundary
+- one immutable artifact plus start/finish journal entries for every physical model call
+- condition-blind causal metrics and trajectory files only after both branches are admitted
+- a result/status summary that never declares a Chapter-2 winner
 
-After the remaining frontiers are frozen, a clean 10-chapter run will still have 78 accepted ledger records: 54 generation calls (9 generated chapters × 2 conditions × 3), 18 shared state extractions, 4 automatic checkpoint scores, and 2 blinded pairwise comparisons.
+After the remaining frontiers are frozen and a passing smoke qualifies the exact runner,
+a clean 10-chapter Protocol-v2 run has 90 physical calls: 54 generation calls, 18 shared
+state proposals, and 18 condition-blind per-chapter metric judgments. It has no pairwise
+preference call.
 
-The harness refuses a changed protocol on resume: seed, neutral contract, model, chapter/checkpoint configuration, three-call pipelines, context clipping, and Ollama runtime limits must all match the manifest.
-
-For evidentiary runs, use a fresh output directory. A chapter becomes authoritative only when its prose, state delta, deterministic gate result, and ancestry are committed together as one atomic artifact. Rejected prose and rejected extractor proposals are preserved outside canonical history. The runner reconciles completed history against the exact call ledger and refuses asymmetric, incomplete-checkpoint, or corrupt histories rather than silently resuming them.
+Protocol v2 has no resume mode. It binds its code, prompts, inputs, model digest, runtime,
+and the sealed-v1 evidence to hashes before creating a fresh run directory. Rejected prose
+and rejected state proposals remain outside canonical history and end that run.
 
 The shared extractor never receives the undifferentiated future seed. It sees only immutable rule anchors, prior accepted canon, and the current final chapter. Its JSON is a proposal: deterministic code requires exact current-chapter evidence, legal transitions, satisfied dependencies, grounded numbers, and absence of locked future material before promotion. This validation consumes no model calls and is identical for both conditions.
 
