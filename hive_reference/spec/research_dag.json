@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "dag_id": "hive-research-dag-v0.1",
+  "nodes": [
+    {
+      "id": "R0",
+      "name": "Deterministic event, authority, and bitemporal state",
+      "prerequisites": [],
+      "cheapest_falsification": "Plan/prediction promotion, same-time conflict, and late-evidence replay tests.",
+      "success_criteria": "All authority/replay invariants pass deterministically with stable hashes.",
+      "expected_cost": "local deterministic; seconds; zero model calls",
+      "uncertainty_reduction": "Establishes whether Hive has a coherent truth/state substrate.",
+      "status": "IMPLEMENTED"
+    },
+    {
+      "id": "R1",
+      "name": "Scoped reconstructable compression",
+      "prerequisites": ["R0"],
+      "cheapest_falsification": "Round-trip and task-distinction collision tests on frozen canonical histories.",
+      "success_criteria": "All in-scope required state, authority, chronology, proof, and provenance distinctions reproduce.",
+      "expected_cost": "local deterministic; seconds; zero model calls",
+      "uncertainty_reduction": "Separates real structural preservation from byte reduction.",
+      "status": "EXPERIMENTALLY_SUPPORTED"
+    },
+    {
+      "id": "R2",
+      "name": "Solver capability gate and usable decompression",
+      "prerequisites": ["R1"],
+      "cheapest_falsification": "Raw capability gate followed by a small matched Raw/Retrieval/Compressed run.",
+      "success_criteria": "Raw passes capability gate and Compressed is noninferior under frozen authority/correctness constraints.",
+      "expected_cost": "20-60 model calls after deterministic preflight",
+      "uncertainty_reduction": "Separates representation usability from codec preservation and solver weakness.",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "R3",
+      "name": "Compression frontier and minimum sufficient state",
+      "prerequisites": ["R1", "R2"],
+      "cheapest_falsification": "Semantic component removals with essential/control twins and exact small-set ablation.",
+      "success_criteria": "A reproducible Pareto frontier identifies where reconstruction and reasoning degrade.",
+      "expected_cost": "deterministic first; bounded solver calls only after gate",
+      "uncertainty_reduction": "Identifies preserved distinctions that actually cause task success.",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "R4",
+      "name": "Distractor, reasoning-distance, and authority stress",
+      "prerequisites": ["R2"],
+      "cheapest_falsification": "2x2 support-depth/distractor-load worlds with plans, contradictions, and validity windows.",
+      "success_criteria": "Condition-specific degradation slopes are estimable and authority safety remains intact.",
+      "expected_cost": "small deterministic generators; capability-gated inference panel",
+      "uncertainty_reduction": "Tests the proposed scaling advantage instead of easy ceiling cases.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "R5",
+      "name": "Automatically learned representation",
+      "prerequisites": ["R0", "R1", "R3"],
+      "cheapest_falsification": "Bounded rule-grammar induction on training worlds with one locked generator-heldout split.",
+      "success_criteria": "Query-blind candidate is admissible, reduces effective cost, and preserves locked task distinctions versus strong baselines.",
+      "expected_cost": "local enumerative/beam search; deterministic solver; no frontier model required",
+      "uncertainty_reduction": "Tests the critical transition from engineered codec to representation discovery.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "R6",
+      "name": "Abstraction and transfer",
+      "prerequisites": ["R5"],
+      "cheapest_falsification": "Symbol permutation, unseen compositions, counterexamples, and hidden generator family.",
+      "success_criteria": "Candidate preserves bidirectional distinctions and improves a locked transfer frontier beyond interpolation baselines.",
+      "expected_cost": "deterministic worlds and solver first; small solver panel later",
+      "uncertainty_reduction": "Distinguishes reusable abstraction from summarization or memorization.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "R7",
+      "name": "Representation self-evaluation and fault localization",
+      "prerequisites": ["R2", "R3"],
+      "cheapest_falsification": "Controlled observation, representation, decoder, solver, and evaluator fault injections.",
+      "success_criteria": "Implicated layer/component precision and recall beat strong baselines without oracle labels at test time.",
+      "expected_cost": "mostly deterministic; bounded candidate evaluations",
+      "uncertainty_reduction": "Determines whether Hive can identify representation-caused errors.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "R8",
+      "name": "Versioned representation repair",
+      "prerequisites": ["R6", "R7"],
+      "cheapest_falsification": "One induced failure, immutable candidate, locked old/new/counterexample suite, exact rollback.",
+      "success_criteria": "Repair improves implicated failures with no hard regression and complete cost/provenance accounting.",
+      "expected_cost": "small candidate set; deterministic regression gate",
+      "uncertainty_reduction": "Tests whether failure feedback can safely improve representations.",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "R9",
+      "name": "Meta-representation improves future proposal or selection",
+      "prerequisites": ["R7", "R8"],
+      "cheapest_falsification": "Usable profile versus shuffled/no-profile control on new representation episodes.",
+      "success_criteria": "Lower selection regret or fewer candidates to an equivalent heldout frontier at matched total cost.",
+      "expected_cost": "multiple small independent episodes",
+      "uncertainty_reduction": "Tests whether Hive knows anything useful about how its representations fail.",
+      "status": "SPECULATIVE"
+    },
+    {
+      "id": "R10",
+      "name": "Recursive representation improvement",
+      "prerequisites": ["R6", "R8", "R9"],
+      "cheapest_falsification": "Frozen proposer versus meta-updated versus shuffled-meta on nested future heldout episodes.",
+      "success_criteria": "Replicated heldout frontier/search-efficiency gain at matched compute/human input that disappears when genuine meta-state is ablated.",
+      "expected_cost": "high; multiple preregistered domains/episodes; run only after R9",
+      "uncertainty_reduction": "Directly tests the strongest Hive thesis.",
+      "status": "SPECULATIVE"
+    }
+  ]
+}

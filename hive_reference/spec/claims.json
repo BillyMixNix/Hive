@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "evidence_levels": ["PROVEN", "SUPPORTED", "PLAUSIBLE", "SPECULATIVE", "FALSIFIED"],
+  "claims": [
+    {
+      "claim_id": "HIVE-C001",
+      "statement": "The frozen compact typed ledger preserves the designated canonical state and reference distinctions on the frozen 20-case decompression pack.",
+      "scope": "Exact frozen case pack, codec, decoder, replay oracle, and revision only.",
+      "evidence_level": "PROVEN",
+      "supporting_experiments": ["EXP-DECOMP-CODEC-PREFLIGHT"],
+      "contradicting_evidence": [],
+      "dependencies": [],
+      "falsification_condition": "A frozen case decodes to a different designated state, applied/rejected reference set, authority status, or oracle answer.",
+      "current_status": "established_deterministic_invariant"
+    },
+    {
+      "claim_id": "HIVE-C002",
+      "statement": "The frozen compact typed ledger substantially reduces visible supplied-state bytes relative to the frozen Raw representation.",
+      "scope": "Frozen decompression pack; visible packet/state bytes, excluding lifecycle dependencies.",
+      "evidence_level": "PROVEN",
+      "supporting_experiments": ["EXP-DECOMP-CODEC-PREFLIGHT", "EXP-DECOMP-QWEN-V2.1"],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C001"],
+      "falsification_condition": "Recomputed frozen packet totals do not show the recorded byte reduction.",
+      "current_status": "established_scoped_size_property"
+    },
+    {
+      "claim_id": "HIVE-C003",
+      "statement": "Qwen2.5-Coder 7B did not demonstrate sufficient solver capability on the frozen decompression benchmark to isolate a representation advantage.",
+      "scope": "Model digest dae161e2..., frozen Protocol v2.1, local runtime, 20 primary cases.",
+      "evidence_level": "SUPPORTED",
+      "supporting_experiments": ["EXP-DECOMP-QWEN-V2.1"],
+      "contradicting_evidence": [],
+      "dependencies": [],
+      "falsification_condition": "A valid replication under the same frozen model digest and protocol passes the preregistered Raw capability gate without post-hoc tuning.",
+      "current_status": "valid_negative_capability_result"
+    },
+    {
+      "claim_id": "HIVE-C004",
+      "statement": "A more capable Codex solver stack could recover all frozen benchmark answers from the engineered compressed representation.",
+      "scope": "Operator-reported history-isolated exploratory run on the same frozen prompts; no tracked sealed artifact in this branch.",
+      "evidence_level": "SUPPORTED",
+      "supporting_experiments": ["EXP-DECOMP-CODEX-EXPLORATORY"],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C001"],
+      "falsification_condition": "Independent sealed replications with capable preregistered solvers fail specifically from representation loss.",
+      "current_status": "exploratory_support_only"
+    },
+    {
+      "claim_id": "HIVE-C005",
+      "statement": "Compressed representations outperform Raw or ordinary Retrieval on reasoning correctness.",
+      "scope": "Broad representation claim across capable solvers and held-out worlds.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": ["Qwen run was capability-gated; Codex run had a three-condition ceiling."],
+      "dependencies": ["HIVE-C001", "HIVE-C004", "HIVE-C018"],
+      "falsification_condition": "Across preregistered capable-solver frontier tests, Compressed is consistently dominated by strong Raw or Retrieval baselines at matched total cost.",
+      "current_status": "untested"
+    },
+    {
+      "claim_id": "HIVE-C006",
+      "statement": "Evidence-bound deterministic authority policies can prevent plans and proposed future effects from becoming current canonical state.",
+      "scope": "Frozen StoryGuard and deterministic replay policies under their explicit schemas.",
+      "evidence_level": "PROVEN",
+      "supporting_experiments": ["EXP-STORY-GUARD-TESTS", "EXP-REF-MODEL-TESTS"],
+      "contradicting_evidence": [],
+      "dependencies": [],
+      "falsification_condition": "A schema-valid planned/predicted/proposed effect enters canonical state without an admitted completion or licensed inference.",
+      "current_status": "scoped_implementation_invariant"
+    },
+    {
+      "claim_id": "HIVE-C007",
+      "statement": "Task-reconstructable compression is a useful organizing objective for a memory and representation research system.",
+      "scope": "Architecture-level claim; not a complete theory of intelligence.",
+      "evidence_level": "PLAUSIBLE",
+      "supporting_experiments": ["EXP-DECOMP-CODEC-PREFLIGHT", "EXP-DECOMP-CODEX-EXPLORATORY"],
+      "contradicting_evidence": ["The objective is task-, solver-, and cost-relative and does not solve semantic grounding."],
+      "dependencies": ["HIVE-C001", "HIVE-C004", "HIVE-C018"],
+      "falsification_condition": "Well-powered held-out studies show no useful rate-distortion frontier beyond strong serialization, retrieval, and learned-memory baselines.",
+      "current_status": "coherent_but_incomplete"
+    },
+    {
+      "claim_id": "HIVE-C008",
+      "statement": "Ablation can empirically identify representation components that are necessary for a specified task/solver/budget tuple.",
+      "scope": "Conditional component necessity; not a universal minimum representation.",
+      "evidence_level": "SUPPORTED",
+      "supporting_experiments": ["EXP-DECOMP-CODEX-EXPLORATORY", "EXP-REF-MODEL-TESTS"],
+      "contradicting_evidence": ["Singleton ablation misses interactions and alternative sufficient sets."],
+      "dependencies": ["HIVE-C001"],
+      "falsification_condition": "Counterfactual twin and grouped-ablation tests show the purported essential components are not causally necessary for task performance.",
+      "current_status": "supported_with_scope_limits"
+    },
+    {
+      "claim_id": "HIVE-C009",
+      "statement": "Hive can form bidirectional abstractions that reconstruct task-relevant distinctions on unseen cases.",
+      "scope": "Automatically proposed concepts, locked unseen worlds and task families.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C007", "HIVE-C011"],
+      "falsification_condition": "Learned concepts collapse counterexamples or fail to reproduce necessary distinctions on held-out generators despite adequate solver capability.",
+      "current_status": "not_implemented"
+    },
+    {
+      "claim_id": "HIVE-C010",
+      "statement": "Hive representations transfer structurally or causally beyond their training generator and vocabulary.",
+      "scope": "Locked generator-, structure-, vocabulary-, and domain-heldout splits.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C009", "HIVE-C018"],
+      "falsification_condition": "Gains disappear under symbol permutation, unseen generators, new causal compositions, or counterexamples.",
+      "current_status": "not_tested"
+    },
+    {
+      "claim_id": "HIVE-C011",
+      "statement": "Hive can discover useful representations rather than rely on a handcrafted codec and ontology.",
+      "scope": "Query-blind candidate discovery using training worlds only, evaluated once on locked heldout tasks.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": ["The current codec, state keys, authority labels, causal preconditions, and gold tasks are human-engineered."],
+      "dependencies": ["HIVE-C001", "HIVE-C008", "HIVE-C017"],
+      "falsification_condition": "Automatically proposed representations fail to Pareto-dominate strong engineered, retrieval, summary, and minified-state baselines on untouched worlds after full cost accounting.",
+      "current_status": "critical_missing_transition"
+    },
+    {
+      "claim_id": "HIVE-C012",
+      "statement": "Hive can diagnose whether a failure was caused by observation parsing, representation loss, decompression, solver capability, or evaluation.",
+      "scope": "Controlled layer-specific fault interventions.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C018"],
+      "falsification_condition": "Fault localization is no better than strong baselines or systematically repairs the wrong layer under controlled interventions.",
+      "current_status": "not_tested"
+    },
+    {
+      "claim_id": "HIVE-C013",
+      "statement": "Versioned representation repair can improve implicated failures without regressing locked prior tasks.",
+      "scope": "Immutable candidates, frozen old/new tests, explicit promotion and rollback.",
+      "evidence_level": "PLAUSIBLE",
+      "supporting_experiments": ["EXP-REF-WHOLE-SYSTEM-DEMO"],
+      "contradicting_evidence": ["Current executable repair is a deterministic missing-component heuristic, not learned diagnosis."],
+      "dependencies": ["HIVE-C008", "HIVE-C012"],
+      "falsification_condition": "Repair candidates cannot improve induced representation faults without regressions, hidden evidence access, or evaluator changes.",
+      "current_status": "mechanism_modeled_capability_unproven"
+    },
+    {
+      "claim_id": "HIVE-C014",
+      "statement": "Meta-representations of solver/representation/task failure patterns improve later representation selection or proposal.",
+      "scope": "Future unseen selection/proposal episodes at matched information and compute.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C012", "HIVE-C013"],
+      "falsification_condition": "Usable meta-profiles do not outperform shuffled/no-meta controls on future heldout episodes.",
+      "current_status": "not_tested"
+    },
+    {
+      "claim_id": "HIVE-C015",
+      "statement": "Improved representations can improve the machinery that discovers still better representations.",
+      "scope": "Recursive representation improvement on meta-heldout task families with fixed evaluators and matched total resources.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": [],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C010", "HIVE-C011", "HIVE-C014"],
+      "falsification_condition": "Across preregistered diverse meta-heldout studies, the improved proposer does not beat a fixed nonrecursive proposer/search after full compute and human-input accounting.",
+      "current_status": "strongest_unestablished_claim"
+    },
+    {
+      "claim_id": "HIVE-C016",
+      "statement": "Kingdom is a useful application proving ground for Hive authority, continuity, and intent mechanisms.",
+      "scope": "Narrative-domain application role; Kingdom does not define Hive.",
+      "evidence_level": "PLAUSIBLE",
+      "supporting_experiments": ["EXP-STORY-GUARD-TESTS"],
+      "contradicting_evidence": ["Longitudinal Kingdom advantage has not yet been demonstrated."],
+      "dependencies": ["HIVE-C006"],
+      "falsification_condition": "Kingdom-specific mechanisms fail to maintain authority/continuity under valid longitudinal experiments or cannot map cleanly to generic interfaces.",
+      "current_status": "domain_adapter_not_core"
+    },
+    {
+      "claim_id": "HIVE-C017",
+      "statement": "Hive representations achieve effective compression after schema, ontology, codec, lookup, preprocessing, model, compute, and human-engineering costs are counted.",
+      "scope": "Cold-start and amortized lifecycle cost under a declared workload.",
+      "evidence_level": "SPECULATIVE",
+      "supporting_experiments": ["Visible packet reduction only"],
+      "contradicting_evidence": ["Full lifecycle and human-semantic costs have not been measured."],
+      "dependencies": ["HIVE-C002"],
+      "falsification_condition": "The representation is dominated by Raw/minified/retrieval baselines once unique static and preprocessing costs are included.",
+      "current_status": "measurement_framework_added_result_unknown"
+    },
+    {
+      "claim_id": "HIVE-C018",
+      "statement": "Representation results depend materially on solver capability and solver/representation interaction.",
+      "scope": "Frozen decompression benchmark and future solver-panel replications.",
+      "evidence_level": "SUPPORTED",
+      "supporting_experiments": ["EXP-DECOMP-QWEN-V2.1", "EXP-DECOMP-CODEX-EXPLORATORY"],
+      "contradicting_evidence": ["The two solver stacks were not one preregistered replicated panel."],
+      "dependencies": [],
+      "falsification_condition": "Replicated solver panels show representation rankings and capability gates invariant to solver capability under matched protocols.",
+      "current_status": "supported_requires_replication"
+    },
+    {
+      "claim_id": "HIVE-C019",
+      "statement": "The reference model deterministically enforces its documented authority, replay, provenance, versioning, and rollback invariants.",
+      "scope": "Exact reference-model implementation and deterministic test fixtures.",
+      "evidence_level": "PROVEN",
+      "supporting_experiments": ["EXP-REF-MODEL-TESTS"],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C006"],
+      "falsification_condition": "A deterministic test or counterexample violates a documented invariant at the referenced commit.",
+      "current_status": "proven_for_fixed_reference_revision_and_deterministic_fixtures"
+    },
+    {
+      "claim_id": "HIVE-C020",
+      "statement": "The reference pipeline can execute experience-to-repair end to end on one deterministic fixture.",
+      "scope": "One synthetic demonstration; proves plumbing only.",
+      "evidence_level": "PROVEN",
+      "supporting_experiments": ["EXP-REF-WHOLE-SYSTEM-DEMO"],
+      "contradicting_evidence": [],
+      "dependencies": ["HIVE-C019"],
+      "falsification_condition": "The frozen demo cannot reproduce its artifact hashes and expected failure/repair sequence.",
+      "current_status": "proven_for_one_deterministic_fixture_plumbing_only"
+    },
+    {
+      "claim_id": "HIVE-C021",
+      "statement": "The current Hive system automatically discovers domain semantics from raw observations.",
+      "scope": "Observation-to-event/entity/authority/causal ontology discovery.",
+      "evidence_level": "FALSIFIED",
+      "supporting_experiments": [],
+      "contradicting_evidence": ["Repository and benchmark archaeology show event types, keys, authority, prerequisites, queries, and codec structure are supplied by code and humans."],
+      "dependencies": [],
+      "falsification_condition": "This status may change only after a frozen learner constructs these semantics from raw observations and transfers to heldout generators without labels.",
+      "current_status": "false_for_current_implementation"
+    }
+  ]
+}
