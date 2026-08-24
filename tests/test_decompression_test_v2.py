@@ -59,6 +59,7 @@ def test_batch_wrapper_accepts_only_literal_values_and_expected_length():
         '["\\u0041","B","C"]',
         '["A","B"]',
         '["A","B","C","D"]',
+        '["A","B","C","D","A"]',
         '{"answers":["A","B","C"]}',
         '["A","B","C"] trailing',
     ]
@@ -67,13 +68,31 @@ def test_batch_wrapper_accepts_only_literal_values_and_expected_length():
             v2.parse_batch(value, 3)
 
 
-def test_one_schema_and_parser_apply_to_every_condition():
+def test_three_case_schema_and_parser_reject_every_wrong_cardinality():
     assert "condition" not in inspect.signature(v2.parse_batch).parameters
-    assert v2.OUTPUT_SCHEMA["items"]["enum"] == list(v2.LABELS)
-    assert v2.OUTPUT_SCHEMA["minItems"] == 3
-    assert v2.OUTPUT_SCHEMA["maxItems"] == 5
+    assert "condition" not in inspect.signature(v2.output_schema).parameters
+    schema = v2.output_schema(3)
+    assert schema["items"]["enum"] == list(v2.LABELS)
+    assert schema["minItems"] == schema["maxItems"] == 3
+    for count in (2, 4, 5):
+        raw = json.dumps(["A"] * count, separators=(",", ":"))
+        with pytest.raises(v2.ConstrainedInterfaceFailure):
+            v2.parse_batch(raw, 3)
     for _condition in (*v2.CONDITIONS, "compressed_ablation"):
         assert v2.parse_batch('["A","B","C"]', 3) == ("A", "B", "C")
+
+
+def test_exact_cardinality_schema_supports_only_frozen_batch_sizes():
+    for count in (3, 4, 5):
+        schema = v2.output_schema(count)
+        assert schema["minItems"] == schema["maxItems"] == count
+        assert schema["items"] == {
+            "type": "string",
+            "enum": list(v2.LABELS),
+        }
+    for invalid in (2, 6, True, 3.0):
+        with pytest.raises(ValueError):
+            v2.output_schema(invalid)
 
 
 def test_hive_transport_sends_native_ollama_format(monkeypatch):
@@ -119,11 +138,11 @@ def test_hive_transport_sends_native_ollama_format(monkeypatch):
         },
         max_retries=1,
         metadata=metadata,
-        response_format=v2.OUTPUT_SCHEMA,
+        response_format=v2.output_schema(3),
     )
     assert result == '["A","B","C"]'
-    assert observed["payload"]["format"] == v2.OUTPUT_SCHEMA
-    assert metadata["response_format"] == v2.OUTPUT_SCHEMA
+    assert observed["payload"]["format"] == v2.output_schema(3)
+    assert metadata["response_format"] == v2.output_schema(3)
 
 
 def test_primary_correctness_is_independent_of_secondary_metadata(pack):
@@ -191,6 +210,10 @@ def test_v2_changes_only_prompt_output_contract_not_frozen_inputs(pack):
     assert '"reasoning_code"' not in v2.SOLVER_PROMPT_PREFIX
     for code in v1.REASONING_CODES:
         assert code in v2.SOLVER_PROMPT_PREFIX
+    assert (
+        v2._sha256_text(v2.SOLVER_PROMPT_PREFIX)
+        == "fcc8159eb6901aa3d8f1a95531ef007efb4d7a877b76ad01a949609cb88cf058"
+    )
 
 
 class PerfectAsk:
@@ -208,6 +231,9 @@ class PerfectAsk:
     def __call__(self, prompt, **kwargs):
         self.calls.append((prompt, kwargs))
         metadata = kwargs["metadata"]
+        payload = json.loads(v2._input_part(prompt))
+        expected_schema = v2.output_schema(len(payload["cases"]))
+        assert kwargs["response_format"] == expected_schema
         metadata.update(
             {
                 "physical_attempts": 1,
@@ -216,10 +242,9 @@ class PerfectAsk:
                 "prompt_eval_count": max(1, len(prompt) // 4),
                 "eval_count": 8,
                 "total_duration_ns": 1,
-                "response_format": v2.OUTPUT_SCHEMA,
+                "response_format": expected_schema,
             }
         )
-        payload = json.loads(v2._input_part(prompt))
         condition = payload["condition_representation"]
         if condition == self.invalid_condition:
             return "```json\n[]\n```"
@@ -250,6 +275,17 @@ def _runner(tmp_path, pack, ask):
             "total_bytes": v2.FROZEN_V1_TOTAL_BYTES,
             "inventory_sha256": v2.FROZEN_V1_INVENTORY_SHA256,
         },
+        v2_seal={
+            "source_commit": v2.FROZEN_V2_COMMIT,
+            "result": "INVALID / INCONCLUSIVE_INVALID_SMOKE",
+            "file_count": v2.FROZEN_V2_FILE_COUNT,
+            "total_bytes": v2.FROZEN_V2_TOTAL_BYTES,
+            "inventory_sha256": v2.FROZEN_V2_INVENTORY_SHA256,
+            "result_file_sha256": v2.FROZEN_V2_RESULT_SHA256,
+            "solver_prompt_template_sha256": v2._sha256_text(
+                v2.SOLVER_PROMPT_PREFIX
+            ),
+        },
         ask_fn=ask,
     )
 
@@ -265,6 +301,20 @@ def test_minimal_full_fake_run_preserves_20_calls_and_grades_70_values(tmp_path,
     assert result["condition_summaries"]["compressed"]["exact_correct"] == 20
     assert result["ablation"]["essential_detected"] == 5
     assert result["ablation"]["control_passes"] == 5
+    observed_by_batch = {}
+    for prompt, kwargs in ask.calls:
+        payload = json.loads(v2._input_part(prompt))
+        count = len(payload["cases"])
+        schema = kwargs["response_format"]
+        assert schema == v2.output_schema(count)
+        if payload["condition_representation"] != "compressed_ablation":
+            key = tuple(item["case_id"] for item in payload["cases"])
+            observed_by_batch.setdefault(key, []).append(schema)
+    assert len(observed_by_batch) == 6
+    assert all(
+        len(schemas) == 3 and all(schema == schemas[0] for schema in schemas)
+        for schemas in observed_by_batch.values()
+    )
 
 
 def test_constrained_failure_is_invalid_and_does_not_claim_grader_agreement(tmp_path, pack):
@@ -289,3 +339,13 @@ def test_local_sealed_v1_inventory_is_still_exact():
     seal = v2.verify_v1_artifacts(run)
     assert seal["source_commit"] == v2.FROZEN_V1_COMMIT
     assert seal["inventory_sha256"] == v2.FROZEN_V1_INVENTORY_SHA256
+
+
+def test_local_sealed_v2_inventory_is_still_exact():
+    run = ROOT / ".hive" / "benchmarks" / "decompression_test" / "smoke-v2-001"
+    if not run.exists():
+        pytest.skip("sealed local v2 evidence is not present")
+    seal = v2.verify_v2_artifacts(run)
+    assert seal["source_commit"] == v2.FROZEN_V2_COMMIT
+    assert seal["result"] == "INVALID / INCONCLUSIVE_INVALID_SMOKE"
+    assert seal["inventory_sha256"] == v2.FROZEN_V2_INVENTORY_SHA256

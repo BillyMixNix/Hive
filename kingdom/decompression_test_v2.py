@@ -1,8 +1,9 @@
-"""Minimal Protocol v2 for the sealed Hive Decompression Test smoke.
+"""Protocol v2.1 cardinality repair for the Hive Decompression Test smoke.
 
 The v1 worlds, questions, representations, retrieval, codec, batches, runtime,
-and scoring thresholds remain frozen.  V2 changes only the shared model-output
-contract: each case contributes one constrained enum label.
+scoring thresholds, and v2 solver interface remain frozen.  V2.1 changes only
+the constrained array cardinality: each call's minimum and maximum item count
+equal that frozen batch's case count.
 """
 
 from __future__ import annotations
@@ -25,7 +26,8 @@ from kingdom.protocol_v2_audit import ProtocolV2AuditStore
 from kingdom.webnovel_benchmark import _ollama_model_digest
 
 
-PROTOCOL_ID = "hive-decompression-smoke-v2"
+PROTOCOL_ID = "hive-decompression-smoke-v2.1-cardinality"
+PROTOCOL_VERSION = "2.1"
 SCHEMA_VERSION = 2
 FROZEN_V1_COMMIT = "f0023177cd8036750c21aaaa957cc073ab3699f3"
 FROZEN_CASE_PACK_SHA256 = (
@@ -39,6 +41,15 @@ FROZEN_V1_INVENTORY_SHA256 = (
 )
 FROZEN_V1_FILE_COUNT = 47
 FROZEN_V1_TOTAL_BYTES = 2_351_156
+FROZEN_V2_COMMIT = "fa8ef0b86aca781604c842d7017a5a3d415ca541"
+FROZEN_V2_RESULT_SHA256 = (
+    "24e21e9ac0a60489c083ef63492d921a1368338e90962f6e825e2e9dc01cbf98"
+)
+FROZEN_V2_INVENTORY_SHA256 = (
+    "92ae30cb6a7cb5b010a221ed34da3a89a5bc0be2de61df525426be73812dc4bc"
+)
+FROZEN_V2_FILE_COUNT = 47
+FROZEN_V2_TOTAL_BYTES = 2_311_158
 
 MODEL = v1.MODEL
 MODEL_DIGEST = v1.MODEL_DIGEST
@@ -51,15 +62,10 @@ CONDITIONS = v1.CONDITIONS
 TOTAL_CALLS = v1.TOTAL_CALLS
 LABELS = ("A", "B", "C", "D", "INSUFFICIENT")
 JSON_WS = "[ \\t\\r\\n]*"
-OUTPUT_SCHEMA = {
-    "type": "array",
-    "items": {"type": "string", "enum": list(LABELS)},
-    "minItems": 3,
-    "maxItems": 5,
-}
 NEW_SOURCE_FILES = (
     "kingdom/decompression_test_v2.py",
     "benchmarks/decompression_test/PROTOCOL_V2.md",
+    "benchmarks/decompression_test/PROTOCOL_V2_1.md",
     "tests/test_decompression_test_v2.py",
 )
 
@@ -70,6 +76,23 @@ class ConstrainedInterfaceFailure(RuntimeError):
 
 class GraderDisagreement(RuntimeError):
     pass
+
+
+def output_schema(expected_count: int) -> dict[str, Any]:
+    """Return the one condition-blind enum schema for a frozen batch size."""
+
+    if type(expected_count) is not int or expected_count not in {3, 4, 5}:
+        raise ValueError("expected_count must be one frozen batch size: 3, 4, or 5")
+    return {
+        "type": "array",
+        "items": {"type": "string", "enum": list(LABELS)},
+        "minItems": expected_count,
+        "maxItems": expected_count,
+    }
+
+
+def _output_schemas() -> dict[str, dict[str, Any]]:
+    return {str(count): output_schema(count) for count in (3, 4, 5)}
 
 
 @dataclass(frozen=True)
@@ -213,6 +236,45 @@ def verify_v1_artifacts(run_dir: Path) -> dict[str, Any]:
         "file_count": len(rows),
         "total_bytes": total,
         "inventory_sha256": digest,
+    }
+
+
+def verify_v2_artifacts(run_dir: Path) -> dict[str, Any]:
+    """Verify the sealed, invalid v2 smoke before allowing the repair run."""
+
+    if not run_dir.is_dir():
+        raise RuntimeError("sealed smoke-v2 evidence is missing")
+    rows = [
+        {
+            "path": path.relative_to(run_dir).as_posix(),
+            "bytes": path.stat().st_size,
+            "sha256": _sha256_bytes(path.read_bytes()),
+        }
+        for path in sorted(item for item in run_dir.rglob("*") if item.is_file())
+    ]
+    total = sum(row["bytes"] for row in rows)
+    digest = _sha256_text(_canonical_json(rows))
+    result_path = run_dir / "RESULT.json"
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    precheck = json.loads((run_dir / "PRECHECK.json").read_text(encoding="utf-8"))
+    if (
+        len(rows) != FROZEN_V2_FILE_COUNT
+        or total != FROZEN_V2_TOTAL_BYTES
+        or digest != FROZEN_V2_INVENTORY_SHA256
+        or _sha256_bytes(result_path.read_bytes()) != FROZEN_V2_RESULT_SHA256
+        or result.get("source_revision") != FROZEN_V2_COMMIT
+        or result.get("validity") != "INVALID"
+        or result.get("hypothesis_result") != "INCONCLUSIVE_INVALID_SMOKE"
+    ):
+        raise RuntimeError("sealed smoke-v2 artifacts, hashes, or result changed")
+    return {
+        "source_commit": FROZEN_V2_COMMIT,
+        "result": "INVALID / INCONCLUSIVE_INVALID_SMOKE",
+        "file_count": len(rows),
+        "total_bytes": total,
+        "inventory_sha256": digest,
+        "result_file_sha256": FROZEN_V2_RESULT_SHA256,
+        "solver_prompt_template_sha256": precheck["solver_prompt_template_sha256"],
     }
 
 
@@ -366,12 +428,31 @@ def rejected_score(case: v1.BenchmarkCase, condition: str) -> LabelScore:
 
 
 class DecompressionV2Runner(v1.DecompressionSmokeRunner):
-    def __init__(self, *, v1_seal: Mapping[str, Any], ask_fn=None, **kwargs: Any) -> None:
-        constrained_ask = ask_fn or functools.partial(
-            ask_hive, response_format=copy.deepcopy(OUTPUT_SCHEMA)
-        )
+    def __init__(
+        self,
+        *,
+        v1_seal: Mapping[str, Any],
+        v2_seal: Mapping[str, Any],
+        ask_fn=None,
+        **kwargs: Any,
+    ) -> None:
+        transport_ask = ask_fn or ask_hive
+
+        @functools.wraps(transport_ask)
+        def constrained_ask(prompt: str, **call_kwargs: Any) -> str:
+            payload = json.loads(_input_part(prompt))
+            cases = payload.get("cases")
+            if not isinstance(cases, list):
+                raise RuntimeError("frozen solver input has no cases array")
+            return transport_ask(
+                prompt,
+                response_format=output_schema(len(cases)),
+                **call_kwargs,
+            )
+
         super().__init__(ask_fn=constrained_ask, **kwargs)
         self.v1_seal = copy.deepcopy(dict(v1_seal))
+        self.v2_seal = copy.deepcopy(dict(v2_seal))
         self.scores: list[LabelScore] = []
         self.ablation_scores: list[LabelScore] = []
 
@@ -417,27 +498,38 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
                     "blinded_aliases": [alias for alias, _, _ in blinded],
                 }
             )
+        if _sha256_text(SOLVER_PROMPT_PREFIX) != self.v2_seal.get(
+            "solver_prompt_template_sha256"
+        ):
+            raise RuntimeError("v2.1 changed the sealed v2 solver prompt")
+        schemas = _output_schemas()
         return {
             **base,
             "schema_version": SCHEMA_VERSION,
             "protocol_id": PROTOCOL_ID,
+            "protocol_version": PROTOCOL_VERSION,
             "solver_prompt_template_sha256": _sha256_text(SOLVER_PROMPT_PREFIX),
             "batch_prompts": prompts,
             "ablation_prompts": ablation,
-            "output_schema": copy.deepcopy(OUTPUT_SCHEMA),
-            "output_schema_sha256": _sha256_text(_canonical_json(OUTPUT_SCHEMA)),
+            "output_schema_rule": "minItems == maxItems == expected_count",
+            "output_schemas_by_expected_count": schemas,
+            "output_schemas_sha256": _sha256_text(_canonical_json(schemas)),
             "sealed_v1": self.v1_seal,
+            "sealed_v2": self.v2_seal,
         }
 
     def _manifest(self, preflight: Mapping[str, Any]) -> dict[str, Any]:
         assert self.audit is not None
+        schemas = _output_schemas()
         return _sealed(
             {
                 "schema_version": SCHEMA_VERSION,
                 "protocol_id": PROTOCOL_ID,
+                "protocol_version": PROTOCOL_VERSION,
                 "source_revision": self.source_revision,
                 "source_file_sha256": dict(sorted(self.source_file_sha256.items())),
                 "sealed_v1": self.v1_seal,
+                "sealed_v2": self.v2_seal,
                 "model": MODEL,
                 "model_digest": self.model_digest,
                 "runtime": {
@@ -450,13 +542,17 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
                     "max_retries": 1,
                 },
                 "calls": {"raw": 6, "retrieval": 6, "compressed": 6, "ablation": 2, "total": 20},
-                "output_schema": copy.deepcopy(OUTPUT_SCHEMA),
+                "output_schema_rule": "minItems == maxItems == expected_count",
+                "output_schemas_by_expected_count": schemas,
+                "output_schemas_sha256": _sha256_text(_canonical_json(schemas)),
                 "batch_plan": copy.deepcopy(self.case_pack_payload["batches"]),
                 "ablation_plan": copy.deepcopy(self.case_pack_payload["ablation"]),
                 "preflight_sha256": _sha256_text(_canonical_json(preflight)),
                 "audit_config": self.audit.frozen_config,
                 "model_judge_calls": 0,
-                "only_material_change": "primary solver output interface",
+                "only_material_change_from_v2": (
+                    "per-call constrained array cardinality equals frozen batch size"
+                ),
             }
         )
 
@@ -547,11 +643,14 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
                 raise RuntimeError("v2 call evidence is incomplete or changed")
             artifact = json.loads(path.read_text(encoding="utf-8"))
             metadata = artifact["transport"]["metadata"]
+            prompt = artifact["request"]["prompt"]
+            prompt_payload = json.loads(_input_part(prompt))
+            expected_schema = output_schema(len(prompt_payload["cases"]))
             if (
                 metadata.get("physical_attempts") != 1
                 or metadata.get("done") is not True
                 or metadata.get("done_reason") != "stop"
-                or metadata.get("response_format") != OUTPUT_SCHEMA
+                or metadata.get("response_format") != expected_schema
             ):
                 raise RuntimeError("v2 constrained runtime metadata mismatch")
             hashes[record.call_id] = record.artifact_file_sha256
@@ -563,8 +662,9 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
             "decision_count": 20,
             "call_file_sha256": hashes,
             "events_jsonl_sha256": _sha256_bytes(self.audit.events_path.read_bytes()),
-            "output_schema_sha256": preflight["output_schema_sha256"],
+            "output_schemas_sha256": preflight["output_schemas_sha256"],
             "sealed_v1_inventory_sha256": self.v1_seal["inventory_sha256"],
+            "sealed_v2_inventory_sha256": self.v2_seal["inventory_sha256"],
         }
 
     def _outcome(self, usage: Mapping[str, Any], preflight: Mapping[str, Any], evidence: Mapping[str, Any]) -> dict[str, Any]:
@@ -688,7 +788,7 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
     @staticmethod
     def _markdown(result: Mapping[str, Any]) -> str:
         lines = [
-            "# Hive Decompression Test — Protocol v2",
+            "# Hive Decompression Test — Protocol v2.1 Cardinality Repair",
             "",
             f"- Validity: **{result['validity']}**",
             f"- Hypothesis: **{result['hypothesis_result']}**",
@@ -771,7 +871,7 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
                 ollama_num_predict=NUM_PREDICT,
                 ollama_temperature=TEMPERATURE,
                 ollama_seed=SEED,
-                transport_name="ollama-constrained-enum-v2",
+                transport_name="ollama-constrained-enum-v2.1-exact-cardinality",
             )
             _write_exclusive(self.output_dir / "manifest.json", _pretty_json(self._manifest(preflight)))
             for batch in self.case_pack_payload["batches"]:
@@ -819,19 +919,24 @@ class DecompressionV2Runner(v1.DecompressionSmokeRunner):
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the one-shot Decompression Test Protocol-v2 smoke")
-    parser.add_argument("--acknowledge-frozen-smoke-v2", action="store_true")
+    parser = argparse.ArgumentParser(
+        description="Run the one-shot Decompression Test Protocol-v2.1 cardinality repair"
+    )
+    parser.add_argument("--acknowledge-frozen-smoke-v2-1", action="store_true")
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if not args.acknowledge_frozen_smoke_v2:
-        raise SystemExit("refusing live run without --acknowledge-frozen-smoke-v2")
+    if not args.acknowledge_frozen_smoke_v2_1:
+        raise SystemExit("refusing live run without --acknowledge-frozen-smoke-v2-1")
     repo_root = Path(__file__).resolve().parents[1]
     revision, sources = _git_revision_and_sources(repo_root)
     v1_seal = verify_v1_artifacts(
         repo_root / ".hive" / "benchmarks" / "decompression_test" / "smoke-v1-001"
+    )
+    v2_seal = verify_v2_artifacts(
+        repo_root / ".hive" / "benchmarks" / "decompression_test" / "smoke-v2-001"
     )
     payload, cases = v1.load_case_pack(
         repo_root / "benchmarks" / "decompression_test" / "CASE_PACK.json"
@@ -841,13 +946,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise RuntimeError("installed Ollama model digest differs from frozen digest")
     DecompressionV2Runner(
         repo_root=repo_root,
-        output_dir=repo_root / ".hive" / "benchmarks" / "decompression_test" / "smoke-v2-001",
+        output_dir=repo_root
+        / ".hive"
+        / "benchmarks"
+        / "decompression_test"
+        / "smoke-v2-1-001",
         case_pack_payload=payload,
         cases=cases,
         source_revision=revision,
         source_file_sha256=sources,
         model_digest=digest,
         v1_seal=v1_seal,
+        v2_seal=v2_seal,
     ).run()
     return 0
 
