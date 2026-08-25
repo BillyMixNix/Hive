@@ -118,11 +118,16 @@ def shortest_separator(
     max_depth: int = 4,
     projection_includes_cursor: bool = False,
 ) -> tuple[Cause, ...] | None:
-    """Find the shortest identical cause sequence that separates equal projections.
+    """Find the shortest identical cause sequence that breaks projection equivalence.
 
-    This is an adversarial search helper. It only accepts a starting pair if the chosen
-    representation already calls the pair equal. A separator is returned when the two
-    *full authoritative* successor snapshots diverge after the same cause sequence.
+    The starting pair must be equal under the selected representation. A separator is
+    the shortest identical future cause sequence after which that *same representation*
+    no longer calls the successors equal. This is the useful transition-equivalence
+    witness: hidden authority has flowed into represented future state.
+
+    Comparing full states here would be wrong for this search because the intentionally
+    hidden field already makes the starting full states different; even a NOP would then
+    look like a separator without demonstrating causal leakage into the representation.
     """
 
     left_projection = canonical_snapshot(left, include_input_cursor=projection_includes_cursor)
@@ -135,6 +140,12 @@ def shortest_separator(
         for sequence in product(alphabet, repeat=depth):
             l2 = apply_causes(left, sequence)
             r2 = apply_causes(right, sequence)
-            if canonical_snapshot(l2) != canonical_snapshot(r2):
+            l2_projection = canonical_snapshot(
+                l2, include_input_cursor=projection_includes_cursor
+            )
+            r2_projection = canonical_snapshot(
+                r2, include_input_cursor=projection_includes_cursor
+            )
+            if l2_projection != r2_projection:
                 return tuple(sequence)
     return None
