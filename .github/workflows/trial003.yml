@@ -26,10 +26,14 @@ jobs:
             tests/test_trial003_transition_harness.py \
             tests/test_trial003_c4_baseline.py \
             2>&1 | tee trial003.log
-      - name: Upload Trial 003 log
+      - name: Capture structured c4 probe evidence
+        run: python experiments/trial003/c4_probe.py --output trial003_probe.json
+      - name: Upload Trial 003 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: trial003-log
-          path: trial003.log
+          name: trial003-evidence
+          path: |
+            trial003.log
+            trial003_probe.json
           if-no-files-found: warn
