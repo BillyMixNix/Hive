@@ -65,20 +65,71 @@ The passing set includes:
 - recursive canonical memory ordering;
 - fresh restore continuation equality at every suffix step.
 
-The test count is 10 because several of the tiny-machine properties are grouped into the six transition-harness tests and four c4 baseline/probe tests.
+## Frozen RuneRay v0.7 intake and T4
+
+The exact archive was later committed to the branch at:
+
+`experiments/trial003/runeray_engine_v0_7.zip`
+
+Observed archive SHA-256:
+
+`0d7ff472a1a18a788cb12406865daf5e2c273a3cf7dbf9a7acfa83e9d075e1f0`
+
+The archive extracted successfully in GitHub Actions.
+
+Frozen RuneRay baseline:
+
+- `npm test`: PASS
+- `npm run build`: PASS
+
+The T4 adversary then reproduced four frozen-target failures:
+
+1. entity insertion history selects update order despite equal canonical snapshots;
+2. unadapted arbitrary custom-system state is hidden authority;
+3. restore retains entities absent from the restored snapshot;
+4. entity update behavior is not rebound by fresh restore.
+
+Positive controls passed for built-in fresh restore and an explicitly adapted custom system.
+
+No frozen RuneRay source was modified by these probes.
+
+## Dedicated gate run 14 — actual c4 cross-domain adversary
+
+Workflow run: `32821851924`
+
+Result: **PASS, scoped cross-domain transfer evidence.**
+
+The frozen c4 subject remained pinned at commit:
+
+`2feb8c0a142b2e513be69442c24af82dbaf41a25`
+
+The adversary preregistered five causal-state predictions derived from the same Hive transition-equivalence doctrine used on RuneRay. All **5/5** reproduced:
+
+1. **compiler symbol-table history separator** — identical remaining suffix, `int x;` vs `int y;` consumed history; left executed successfully, right failed `undefined variable`;
+2. **compiler line-history observation separator** — identical invalid remaining suffix produced diagnostic line `1` vs line `4` solely from consumed newline history;
+3. **raw host pointer representation is noncanonical** — fresh `c4 -s hello.c` runs had equal opcode projection but different raw trace/operand representation;
+4. **VM OPEN depends on host fd table** — same c4 program and same file returned fd `3` normally and fd `4` when inherited fd 3 was occupied;
+5. **VM READ depends on host file cursor phase** — same c4 program, same file bytes, same logical fd 3 returned `65` (`A`) at cursor 0 and `66` (`B`) at cursor 1.
+
+Allocator stress, not counted as an additional hard preregistered contract, ran the same malloc program four times in fresh processes and observed **4 distinct pointer values**.
+
+Positive control `hello.c` remained successful.
+
+The machine-readable cross-domain evidence was written to `c4_adversarial.json` and uploaded with the Trial 003 artifact.
 
 ## Current evidence boundary
 
 ### PROVEN
 
-For the committed Trial 003 harness and frozen c4 subject, the dedicated physical CI run reproduced the deliberately constructed hidden-state collision, corrected a flawed separator definition, and then passed the scoped T0/T1 gate including frozen c4 direct and two-level self-host execution.
+For these frozen subjects and contracts, the Hive transition-equivalence method produced executable hidden-state/environment predictions in both RuneRay and c4, and the c4 cross-domain adversary reproduced all five preregistered predictions.
 
 ### SUPPORTED
 
-The transition-equivalence formulation is operational enough to generate a shortest identical-cause separator on a controlled machine, and c4 immediately exposes the predicted host-address portability hazard at its diagnostic representation boundary.
+Hive's causal-state / authority / transition-equivalence method transfers across at least two materially different stateful software domains: a game/simulation engine and an independently authored compiler/VM.
 
-### NOT YET TESTED
+### NOT PROVEN
 
-No result has yet been earned for RuneRay v0.7 integration, c4 VM checkpoint/restore, compiler/parser checkpoint/restore, or self-host checkpoint continuation.
-
-The exact `runeray_engine_v0_7.zip` supplied in the chat exists as the frozen intended subject but is not byte-addressable from the GitHub Actions workspace used by this PR. The run therefore remains **IN PROGRESS**, not a Trial 003 overall PASS.
+- no matched conventional baseline has yet established Hive superiority;
+- no complete portable c4 checkpoint/restore implementation has been built;
+- no serialized mid-self-host checkpoint continuation has been demonstrated;
+- no claim of arbitrary-domain or non-software generality is earned.
