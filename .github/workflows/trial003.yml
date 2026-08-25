@@ -60,6 +60,12 @@ jobs:
           set -o pipefail
           npm test 2>&1 | tee "$GITHUB_WORKSPACE/runeray_v07_test.log"
           npm run build 2>&1 | tee "$GITHUB_WORKSPACE/runeray_v07_build.log"
+      - name: Execute RuneRay v0.7 transition-equivalence adversary
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d')"
+          node experiments/trial003/runeray_adversarial.mjs "$root" runeray_v07_adversarial.json | tee runeray_v07_adversarial.log
       - name: Capture RuneRay authority-facing source slices
         shell: bash
         run: |
@@ -90,5 +96,7 @@ jobs:
             runeray_v07_package.json.txt
             runeray_v07_test.log
             runeray_v07_build.log
+            runeray_v07_adversarial.json
+            runeray_v07_adversarial.log
             runeray_v07_authority_sources.txt
           if-no-files-found: warn
