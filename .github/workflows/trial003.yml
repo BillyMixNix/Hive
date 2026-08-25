@@ -11,7 +11,7 @@ on:
 jobs:
   trial003:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -28,6 +28,25 @@ jobs:
             2>&1 | tee trial003.log
       - name: Capture structured c4 probe evidence
         run: python experiments/trial003/c4_probe.py --output trial003_probe.json
+      - name: Intake frozen RuneRay v0.7 archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='experiments/trial003/runeray_engine_v0_7.zip'
+          test -f "$target"
+          sha256sum "$target" | tee runeray_v07_sha256.txt
+          rm -rf /tmp/runeray_v07
+          mkdir -p /tmp/runeray_v07
+          unzip -q "$target" -d /tmp/runeray_v07
+          {
+            echo '# RuneRay v0.7 extracted tree'
+            find /tmp/runeray_v07 -type f -printf '%P\n' | LC_ALL=C sort
+          } | tee runeray_v07_tree.txt
+          {
+            echo '# package roots'
+            find /tmp/runeray_v07 -type f -name package.json -not -path '*/node_modules/*' -printf '%h\n' | LC_ALL=C sort -u
+          } | tee runeray_v07_package_roots.txt
+          test "$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d' | wc -l)" -ge 1
       - name: Upload Trial 003 evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -36,4 +55,7 @@ jobs:
           path: |
             trial003.log
             trial003_probe.json
+            runeray_v07_sha256.txt
+            runeray_v07_tree.txt
+            runeray_v07_package_roots.txt
           if-no-files-found: warn
