@@ -31,6 +31,8 @@ jobs:
             2>&1 | tee trial003.log
       - name: Capture structured c4 probe evidence
         run: python experiments/trial003/c4_probe.py --output trial003_probe.json
+      - name: Execute frozen c4 cross-domain transition adversary
+        run: python experiments/trial003/c4_adversarial.py c4_adversarial.json | tee c4_adversarial.log
       - name: Intake frozen RuneRay v0.7 archive
         shell: bash
         run: |
@@ -90,6 +92,8 @@ jobs:
           path: |
             trial003.log
             trial003_probe.json
+            c4_adversarial.json
+            c4_adversarial.log
             runeray_v07_sha256.txt
             runeray_v07_tree.txt
             runeray_v07_package_roots.txt
