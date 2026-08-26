@@ -42,13 +42,31 @@ app.insert(0, new)
 tree.write(manifest, encoding='utf-8', xml_declaration=True)
 
 # Exiting the compatibility screen should close this appliance rather than
-# relaunching the launcher and immediately reopening the game.
+# relaunching the launcher and immediately reopening the game. Locate the
+# method by signature and balanced braces instead of depending on the order
+# of neighboring methods in a specific Winlator revision.
 p = java / 'XServerDisplayActivity.java'
 t = p.read_text()
-start = t.find('    private void exit() {')
-end = t.find('\n    public SharedPreferences getPreferences()', start)
-if start < 0 or end < 0:
+signature = '    private void exit() {'
+start = t.find(signature)
+if start < 0:
     raise SystemExit('Expected XServerDisplayActivity exit method not found')
+brace_start = t.find('{', start)
+depth = 0
+end = None
+for i in range(brace_start, len(t)):
+    ch = t[i]
+    if ch == '{':
+        depth += 1
+    elif ch == '}':
+        depth -= 1
+        if depth == 0:
+            end = i + 1
+            break
+if end is None:
+    raise SystemExit('Could not parse XServerDisplayActivity exit method')
+if end < len(t) and t[end] == '\n':
+    end += 1
 replacement = '''    private void exit() {\n        winHandler.stop();\n        if (environment != null) environment.stopEnvironmentComponents();\n        ForegroundService.stopSession(this);\n        finishAndRemoveTask();\n    }\n'''
 p.write_text(t[:start] + replacement + t[end:])
 
