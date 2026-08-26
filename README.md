@@ -43,6 +43,26 @@ Hive is not claiming autonomous model training or reliable self-improvement thro
 
 > Once Hive can express a failure as a regression case, future accepted changes must not repeat it.
 
+## Explicit OpenAI solver configuration
+
+OpenAI is an opt-in provider; merely setting `OPENAI_API_KEY` does not change Hive's
+legacy Ollama/Anthropic routing. Freeze the experimental variables before a matched
+run:
+
+```powershell
+$env:HIVE_PROVIDER = "openai"
+$env:HIVE_OPENAI_MODEL = "gpt-5.6-luna"
+$env:HIVE_REASONING_EFFORT = "medium"
+$env:HIVE_MAX_OUTPUT_TOKENS = "4096"
+$env:HIVE_MAX_ATTEMPTS = "1"
+```
+
+The Responses API adapter disables SDK retries, tools, response storage, truncation,
+and provider fallback. It records the configuration hash, returned model/response ID,
+token accounting, latency, and physical-attempt count in the caller's `metadata`
+mapping. Failed or incomplete responses are recorded and raised; they are never
+returned as successful solver output.
+
 ## Kingdom / Mind Constructor experiment
 
 The `kingdom` package is an experimental layer for turning compressed human intent into divergent investigations, reality contact, recursively decomposed construction, and a final end-to-end walk of the original request.

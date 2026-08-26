@@ -37,6 +37,7 @@ def _ask_hive(
     max_retries=None,
     metadata=None,
     response_format=None,
+    solver_config=None,
 ):
     return _mock_ask_model(
         prompt,
