@@ -1,0 +1,106 @@
+name: Miniverse Android APK Build
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-miniverse-apk:
+    if: github.head_ref == 'miniverse-apk-build' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout build branch
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Clone pinned Winlator 11.2 source
+        run: |
+          git clone https://github.com/brunodev85/winlator-app.git winlator-app
+          cd winlator-app
+          git checkout 4f55d117fff1542944e5b91f433470445160ce08
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Download Miniverse from Ponywolf
+        run: node tools/miniverse-apk/download_miniverse.mjs
+
+      - name: Verify original executable matches user copy
+        run: |
+          python3 - <<'PY'
+          import hashlib, zipfile
+          p='winlator-app/app/src/main/assets/miniverse.zip'
+          expected='33db8f68748b721c28915dbde5e9abef1927ef3f0c56520dc88ae9e7767e1e2e'
+          with zipfile.ZipFile(p) as z:
+              names=[n for n in z.namelist() if n.replace('\\','/').lower().endswith('/miniverse.exe') or n.lower()=='miniverse.exe']
+              if not names: raise SystemExit('Miniverse.exe not found in official download')
+              actual=hashlib.sha256(z.read(names[0])).hexdigest()
+          print('Miniverse.exe SHA-256:', actual)
+          if actual != expected:
+              raise SystemExit('Downloaded executable differs from the user-supplied original; refusing to build')
+          PY
+
+      - name: Install rootfs packaging tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zstd unzip
+
+      - name: Preload original game into Wine rootfs
+        run: bash tools/miniverse-apk/prepare_rootfs.sh
+
+      - name: Patch one-tap Android shell
+        run: python3 tools/miniverse-apk/patch_app.py
+
+      - name: Install Android SDK components
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-35" \
+            "build-tools;35.0.0" \
+            "cmake;3.22.1" \
+            "ndk;24.0.8215888"
+
+      - name: Build installable debug-signed APK
+        run: |
+          cd winlator-app
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      - name: Stage APK and verification data
+        run: |
+          mkdir -p miniverse-out
+          APK=$(find winlator-app/app/build/outputs/apk/debug -type f -name '*.apk' | head -n 1)
+          test -n "$APK"
+          cp "$APK" miniverse-out/Miniverse-Minigolf-1to1.apk
+          cp winlator-app/LICENSE miniverse-out/WINLATOR-LGPL-LICENSE.txt
+          cp tools/miniverse-apk/MiniverseActivity.java miniverse-out/LAUNCHER-SOURCE.java
+          cp tools/miniverse-apk/patch_app.py miniverse-out/BUILD-PATCH.py
+          sha256sum miniverse-out/Miniverse-Minigolf-1to1.apk > miniverse-out/SHA256SUMS.txt
+          ls -lh miniverse-out
+
+      - name: Upload Miniverse APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Miniverse-1to1-Android
+          path: miniverse-out/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
