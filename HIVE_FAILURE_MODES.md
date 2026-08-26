@@ -17,6 +17,7 @@ This document is a threat model for claims, not merely code. A mechanism that ‚Ä
 | Mutable state diverges from event replay | P0 | Recompute snapshot/hash from ledger | Fail closed; canonical state is replay-only |
 | Record time confused with effective time | P0 | Backdated late evidence and as-known-then query | Require bitemporal cutoffs |
 | Same-time conflict resolved by input order or ID | P0 | Permute event order and IDs | Produce explicit disputed/unknown state |
+| Compatible same-value claims lose projected co-provenance | P2 | Assert identical simultaneous claims and inspect the state cell plus ledger | Retain both ledger claims; add multi-source state provenance before claiming complete projected lineage |
 | Superseded fact erased | P1 | Query before/after validity boundary | Preserve historical interval and source |
 | False, unknown, disputed, and historical collapse | P0 | Collision/round-trip tests | Use orthogonal basis/truth/temporal axes |
 | Cyclic inference self-authorizes | P0 | A depends on B and B on A | Reject cycle; require named acyclic rule lineage |
@@ -39,6 +40,8 @@ This document is a threat model for claims, not merely code. A mechanism that ‚Ä
 | Random-byte deletion masquerades as frontier | P1 | Inspect removal manifest | Ablate semantic components only |
 | Oracle relevance labels choose the packet | P0 | Audit compressor inputs | Candidates must be query/heldout blind |
 | Singleton ablation called ‚Äúminimum‚Äù | P1 | Check evaluated subsets/interactions | Label exact vs one-minimal approximation |
+| Fail-closed manifest relevance called causal necessity | P1 | Compare contract-essential results with counterfactual twins and valid replacement candidates | Label contract-relative sufficiency; do not claim a causal minimum |
+| Candidate deletes a source component and recomputes its own manifest commitment | P0 | Decompress under the independently sealed original ledger/manifest/codec/schema root | Reject the packet as outside the trusted representation root; never bootstrap trust from the candidate under test |
 | Redundancy removed at the cost of robustness/transfer | P1 | Stress and heldout tests | Keep quality dimensions on Pareto frontier |
 | Full-history reconstruction hides selective failure | P1 | Measure unnecessary atoms/bytes | Require task-conditioned selection metrics |
 

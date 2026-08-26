@@ -6,7 +6,7 @@ import itertools
 import json
 from dataclasses import asdict, dataclass, replace
 from enum import Enum
-from typing import Any, Iterable, Mapping, Protocol, Sequence
+from typing import Any, ClassVar, Iterable, Mapping, Protocol, Sequence
 
 from hive_reference.model import (
     DecisionStatus,
@@ -16,6 +16,7 @@ from hive_reference.model import (
     EvidenceRef,
     FactKey,
     RequirementOp,
+    TruthStatus,
     canonical_json,
     sha256_text,
 )
@@ -76,6 +77,37 @@ class SolveStatus(str, Enum):
     UNSUPPORTED = "unsupported"
 
 
+def _require_exact_rep_enum(
+    value: Any,
+    enum_type: type[Enum],
+    field_name: str,
+) -> None:
+    if type(value) is not enum_type:
+        raise RepresentationInvariantError(
+            f"{field_name} must be an exact {enum_type.__name__} member"
+        )
+
+
+def _is_normalized_sha256(value: Any) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and value == value.lower()
+        and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _require_configuration_hash(component: Any, field_name: str) -> str:
+    """Return an explicit normalized configuration digest or fail closed."""
+
+    digest = getattr(component, "configuration_hash", None)
+    if not _is_normalized_sha256(digest):
+        raise RepresentationInvariantError(
+            f"{field_name} requires a normalized immutable configuration hash"
+        )
+    return digest
+
+
 @dataclass(frozen=True)
 class OriginManifest:
     origin: OriginKind
@@ -83,6 +115,9 @@ class OriginManifest:
     training_ids: tuple[str, ...] = ()
     human_semantic_dependencies: tuple[str, ...] = ()
     oracle_assisted: bool = False
+
+    def __post_init__(self) -> None:
+        _require_exact_rep_enum(self.origin, OriginKind, "origin kind")
 
 
 @dataclass(frozen=True)
@@ -155,7 +190,15 @@ class CostBreakdown:
     human_authored_domain_bytes: int = 0
 
     def __post_init__(self) -> None:
-        if any(value < 0 for value in asdict(self).values()):
+        self.validate_integrity()
+
+    def validate_integrity(self) -> None:
+        values = tuple(asdict(self).values())
+        if any(type(value) is not int for value in values):
+            raise RepresentationInvariantError(
+                "representation costs must be exact nonnegative integers"
+            )
+        if any(value < 0 for value in values):
             raise RepresentationInvariantError("representation costs cannot be negative")
 
     @property
@@ -190,6 +233,20 @@ class RepresentationComponent:
     available_from_record: int
 
     def __post_init__(self) -> None:
+        _require_exact_rep_enum(
+            self.component_kind, ComponentKind, "component kind"
+        )
+        _require_exact_rep_enum(
+            self.compression_kind, CompressionKind, "compression kind"
+        )
+        if type(self.origin) is not OriginManifest:
+            raise RepresentationInvariantError(
+                "component origin must be an exact OriginManifest"
+            )
+        for task_kind in self.applicable_task_kinds:
+            _require_exact_rep_enum(
+                task_kind, TaskKind, "component applicable task kind"
+            )
         if not self.component_id or not self.source_event_ids or not self.evidence:
             raise RepresentationInvariantError("components require ID, source events, and evidence")
         if not 0.0 <= self.confidence <= 1.0:
@@ -218,7 +275,99 @@ class RepresentationComponent:
 
 
 @dataclass(frozen=True)
+class SourceComponentManifestEntry:
+    """Immutable identity and producer metadata for one full-source component."""
+
+    component_id: str
+    content_hash: str
+    component_kind: ComponentKind
+    available_from_record: int
+    effective_time: int | None
+    recorded_at: int | None
+    keys: tuple[FactKey, ...]
+    produced_keys: tuple[FactKey, ...]
+    source_event_ids: tuple[str, ...]
+    applicable_task_kinds: tuple[TaskKind, ...]
+
+    def __post_init__(self) -> None:
+        _require_exact_rep_enum(
+            self.component_kind, ComponentKind, "manifest component kind"
+        )
+        for task_kind in self.applicable_task_kinds:
+            _require_exact_rep_enum(
+                task_kind, TaskKind, "manifest applicable task kind"
+            )
+        if not self.component_id:
+            raise RepresentationInvariantError("manifest components require an ID")
+        if (
+            len(self.content_hash) != 64
+            or any(character not in "0123456789abcdef" for character in self.content_hash)
+        ):
+            raise RepresentationInvariantError("manifest component hashes must be SHA-256 hex")
+        if self.available_from_record < 0:
+            raise RepresentationInvariantError("manifest availability must be nonnegative")
+        if self.effective_time is not None and self.effective_time < 0:
+            raise RepresentationInvariantError("manifest effective time must be nonnegative")
+        if self.recorded_at is not None and self.recorded_at < 0:
+            raise RepresentationInvariantError("manifest record time must be nonnegative")
+        if tuple(sorted(set(self.keys))) != self.keys:
+            raise RepresentationInvariantError("manifest keys must be sorted and unique")
+        if tuple(sorted(set(self.produced_keys))) != self.produced_keys:
+            raise RepresentationInvariantError(
+                "manifest produced keys must be sorted and unique"
+            )
+        if len(self.source_event_ids) != len(set(self.source_event_ids)):
+            raise RepresentationInvariantError("manifest source event IDs must be unique")
+        if len(self.applicable_task_kinds) != len(set(self.applicable_task_kinds)):
+            raise RepresentationInvariantError("manifest task kinds must be unique")
+        if self.component_kind is not ComponentKind.TRANSITION and self.produced_keys:
+            raise RepresentationInvariantError(
+                "only admitted transition components may be state producers"
+            )
+        if self.component_kind in {
+            ComponentKind.TRANSITION,
+            ComponentKind.CONSTRAINT,
+        } and (
+            self.effective_time is None
+            or self.recorded_at is None
+            or self.available_from_record != self.recorded_at
+        ):
+            raise RepresentationInvariantError(
+                "executable manifest entries require matching event record availability"
+            )
+
+    def to_mapping(self) -> dict[str, Any]:
+        return {
+            "available_from_record": self.available_from_record,
+            "component_id": self.component_id,
+            "component_kind": self.component_kind.value,
+            "content_hash": self.content_hash,
+            "effective_time": self.effective_time,
+            "recorded_at": self.recorded_at,
+            "keys": [
+                {"predicate": key.predicate, "subject": key.subject}
+                for key in self.keys
+            ],
+            "produced_keys": [
+                {"predicate": key.predicate, "subject": key.subject}
+                for key in self.produced_keys
+            ],
+            "source_event_ids": list(self.source_event_ids),
+            "applicable_task_kinds": [
+                kind.value for kind in self.applicable_task_kinds
+            ],
+        }
+
+
+@dataclass(frozen=True)
 class RepresentationVersion:
+    """A representation sealed to one complete canonical-source manifest.
+
+    Directly constructed roots, compressors, and interchange protocols must
+    explicitly supply ``source_component_manifest_hash``.  Registered
+    descendants must retain that commitment unchanged.
+    """
+
     representation_id: str
     family_id: str
     version: int
@@ -232,8 +381,24 @@ class RepresentationVersion:
     origin: OriginManifest
     validation_status: ValidationStatus
     cost: CostBreakdown
+    source_component_manifest_hash: str
+    source_component_manifest: tuple[SourceComponentManifestEntry, ...] = ()
 
     def __post_init__(self) -> None:
+        if type(self.origin) is not OriginManifest:
+            raise RepresentationInvariantError(
+                "representation origin must be an exact OriginManifest"
+            )
+        _require_exact_rep_enum(
+            self.validation_status,
+            ValidationStatus,
+            "representation validation status",
+        )
+        if type(self.cost) is not CostBreakdown:
+            raise RepresentationInvariantError(
+                "representation cost must be an exact CostBreakdown"
+            )
+        self.cost.validate_integrity()
         if not self.representation_id or not self.family_id or self.version < 1:
             raise RepresentationInvariantError("representations require IDs and positive version")
         component_ids = [component.component_id for component in self.components]
@@ -246,7 +411,170 @@ class RepresentationVersion:
                 raise RepresentationInvariantError(
                     f"component {component.component_id} has missing dependencies {sorted(missing)}"
                 )
+        if self.components and not self.source_component_manifest:
+            raise RepresentationInvariantError(
+                "nonempty representations require an explicit trusted "
+                "full-source component manifest"
+            )
+        manifest_ids = [item.component_id for item in self.source_component_manifest]
+        if len(manifest_ids) != len(set(manifest_ids)):
+            raise RepresentationInvariantError("source component manifest IDs must be unique")
+        if (
+            tuple(
+                sorted(
+                    self.source_component_manifest,
+                    key=lambda item: item.component_id,
+                )
+            )
+            != self.source_component_manifest
+        ):
+            raise RepresentationInvariantError("source component manifest must be ID-sorted")
+        computed_manifest_hash = self.compute_source_component_manifest_hash(
+            self.source_component_manifest
+        )
+        if not _is_normalized_sha256(self.source_component_manifest_hash):
+            raise RepresentationInvariantError(
+                "source component manifest requires an explicit normalized "
+                "SHA-256 commitment"
+            )
+        if self.source_component_manifest_hash != computed_manifest_hash:
+            raise RepresentationInvariantError(
+                "source component manifest does not match its sealed commitment"
+            )
+        outside_manifest = set(component_ids) - set(manifest_ids)
+        if outside_manifest:
+            raise RepresentationInvariantError(
+                "representation components are absent from the full-source manifest: "
+                f"{sorted(outside_manifest)}"
+            )
+        manifest_by_id = {
+            item.component_id: item for item in self.source_component_manifest
+        }
+        mismatched_components = tuple(
+            component.component_id
+            for component in self.components
+            if self._manifest_entry(component)
+            != manifest_by_id[component.component_id]
+        )
+        if mismatched_components:
+            raise RepresentationInvariantError(
+                "representation components do not match their trusted manifest entries: "
+                f"{sorted(mismatched_components)}"
+            )
+        self.validate_cost_integrity()
         self._validate_dependency_dag()
+
+    @staticmethod
+    def _manifest_entry(
+        component: RepresentationComponent,
+    ) -> SourceComponentManifestEntry:
+        effective_time: int | None = None
+        recorded_at: int | None = None
+        produced_keys: tuple[FactKey, ...] = ()
+        if component.component_kind in {
+            ComponentKind.TRANSITION,
+            ComponentKind.CONSTRAINT,
+        }:
+            payload = component.payload()
+            try:
+                effective_time = int(payload["effective_time"])
+                recorded_at = int(payload["recorded_at"])
+                if component.component_kind is ComponentKind.TRANSITION:
+                    produced_keys = tuple(
+                        sorted(
+                            {
+                                FactKey(
+                                    str(effect["key"]["subject"]),
+                                    str(effect["key"]["predicate"]),
+                                )
+                                for effect in payload["effects"]
+                            }
+                        )
+                    )
+            except (KeyError, TypeError, ValueError) as exc:
+                raise RepresentationInvariantError(
+                    f"executable component {component.component_id} has malformed payload"
+                ) from exc
+        return SourceComponentManifestEntry(
+            component_id=component.component_id,
+            content_hash=component.content_hash,
+            component_kind=component.component_kind,
+            available_from_record=component.available_from_record,
+            effective_time=effective_time,
+            recorded_at=recorded_at,
+            keys=tuple(sorted(set(component.keys))),
+            produced_keys=produced_keys,
+            source_event_ids=tuple(component.source_event_ids),
+            applicable_task_kinds=tuple(component.applicable_task_kinds),
+        )
+
+    @classmethod
+    def build_source_component_manifest(
+        cls,
+        components: Sequence[RepresentationComponent],
+    ) -> tuple[SourceComponentManifestEntry, ...]:
+        return tuple(
+            sorted(
+                (cls._manifest_entry(component) for component in components),
+                key=lambda item: item.component_id,
+            )
+        )
+
+    @staticmethod
+    def compute_source_component_manifest_hash(
+        source_component_manifest: Sequence[SourceComponentManifestEntry],
+    ) -> str:
+        return sha256_text(
+            canonical_json(
+                [item.to_mapping() for item in source_component_manifest]
+            )
+        )
+
+    @classmethod
+    def compute_packet_bytes(
+        cls,
+        components: Sequence[RepresentationComponent],
+        source_component_manifest: Sequence[SourceComponentManifestEntry],
+        source_component_manifest_hash: str,
+    ) -> int:
+        """Byte size of the canonical supplied representation envelope."""
+
+        if not _is_normalized_sha256(source_component_manifest_hash):
+            raise RepresentationInvariantError(
+                "packet envelope requires an explicit normalized manifest commitment"
+            )
+        return len(
+            canonical_json(
+                {
+                    "components": [asdict(item) for item in components],
+                    "source_component_manifest": [
+                        item.to_mapping() for item in source_component_manifest
+                    ],
+                    "source_component_manifest_hash": source_component_manifest_hash,
+                }
+            ).encode("utf-8")
+        )
+
+    @property
+    def computed_packet_bytes(self) -> int:
+        return self.compute_packet_bytes(
+            self.components,
+            self.source_component_manifest,
+            self.source_component_manifest_hash,
+        )
+
+    def validate_cost_integrity(self) -> None:
+        """Revalidate immutable cost records at every governance boundary."""
+
+        if type(self.cost) is not CostBreakdown:
+            raise RepresentationInvariantError(
+                "representation cost must be an exact CostBreakdown"
+            )
+        self.cost.validate_integrity()
+        if self.cost.packet_bytes != self.computed_packet_bytes:
+            raise RepresentationInvariantError(
+                "reported packet_bytes must equal canonical computed_packet_bytes"
+            )
 
     def _validate_dependency_dag(self) -> None:
         by_id = {item.component_id: item for item in self.components}
@@ -283,6 +611,10 @@ class RepresentationVersion:
             "preservation_scope": list(self.preservation_scope),
             "representation_id": self.representation_id,
             "schema_id": self.schema_id,
+            "source_component_manifest": [
+                item.to_mapping() for item in self.source_component_manifest
+            ],
+            "source_component_manifest_hash": self.source_component_manifest_hash,
             "source_ledger_hash": self.source_ledger_hash,
             "validation_status": self.validation_status.value,
             "version": self.version,
@@ -290,8 +622,18 @@ class RepresentationVersion:
 
     def subset(self, component_ids: Iterable[str], *, representation_id: str | None = None) -> "RepresentationVersion":
         chosen = frozenset(component_ids)
+        unknown = chosen - {item.component_id for item in self.components}
+        if unknown:
+            raise RepresentationInvariantError(
+                "subset requested unknown component IDs: "
+                f"{sorted(unknown)}"
+            )
         components = tuple(item for item in self.components if item.component_id in chosen)
-        component_bytes = len(canonical_json([asdict(item) for item in components]).encode("utf-8"))
+        component_bytes = self.compute_packet_bytes(
+            components,
+            self.source_component_manifest,
+            self.source_component_manifest_hash,
+        )
         return replace(
             self,
             representation_id=representation_id or f"{self.representation_id}:subset:{sha256_text(canonical_json(sorted(chosen)))[:10]}",
@@ -310,6 +652,7 @@ class TaskQuery:
     parameters_json: str = "{}"
 
     def __post_init__(self) -> None:
+        _require_exact_rep_enum(self.kind, TaskKind, "task query kind")
         if not self.query_id or self.valid_at < 0 or self.known_at < 0:
             raise RepresentationInvariantError("queries require ID and nonnegative cutoffs")
         try:
@@ -331,9 +674,97 @@ class DecompressedView:
     completeness: SolveStatus
     supporting_bytes_read: int
 
+    def __post_init__(self) -> None:
+        _require_exact_rep_enum(
+            self.completeness, SolveStatus, "decompressed view completeness"
+        )
+
     @property
     def selected_component_ids(self) -> tuple[str, ...]:
         return tuple(component.component_id for component in self.selected_components)
+
+
+@dataclass(frozen=True, order=True, slots=True)
+class RepresentationRootCommitment:
+    """Externally trusted identity of one canonical representation root.
+
+    This value is deliberately separate from ``RepresentationVersion``.  A
+    packet can recompute a perfectly self-consistent manifest after deleting
+    source components, so a manifest hash carried only inside that packet is
+    an integrity check, not a trust anchor.  The experiment/bootstrap protocol
+    must create and preserve this commitment from an independently accepted
+    root before any candidate packet is evaluated.
+    """
+
+    source_ledger_hash: str
+    source_component_manifest_hash: str
+    family_id: str
+    codec_id: str
+    schema_id: str
+
+    def __post_init__(self) -> None:
+        for field_name in (
+            "source_ledger_hash",
+            "family_id",
+            "codec_id",
+            "schema_id",
+        ):
+            value = getattr(self, field_name)
+            if type(value) is not str or not value.strip():
+                raise RepresentationInvariantError(
+                    f"trusted representation root requires nonempty {field_name}"
+                )
+        if not _is_normalized_sha256(self.source_component_manifest_hash):
+            raise RepresentationInvariantError(
+                "trusted representation root requires a normalized manifest hash"
+            )
+
+    @classmethod
+    def from_trusted_representation(
+        cls,
+        representation: RepresentationVersion,
+    ) -> "RepresentationRootCommitment":
+        """Seal an already authenticated bootstrap root.
+
+        Calling this method is a trust decision.  It must not be used to bless
+        an untrusted candidate merely because that candidate is internally
+        self-consistent.
+        """
+
+        # Reconstructing the frozen value reruns all representation invariants,
+        # including manifest and packet-size integrity, in case a caller
+        # retained and mutated an object alias.
+        replace(representation)
+        return cls(
+            source_ledger_hash=representation.source_ledger_hash,
+            source_component_manifest_hash=(
+                representation.source_component_manifest_hash
+            ),
+            family_id=representation.family_id,
+            codec_id=representation.codec_id,
+            schema_id=representation.schema_id,
+        )
+
+    def to_mapping(self) -> dict[str, str]:
+        return {
+            "codec_id": self.codec_id,
+            "family_id": self.family_id,
+            "schema_id": self.schema_id,
+            "source_component_manifest_hash": (
+                self.source_component_manifest_hash
+            ),
+            "source_ledger_hash": self.source_ledger_hash,
+        }
+
+    def matches(self, representation: RepresentationVersion) -> bool:
+        return (
+            representation.source_ledger_hash == self.source_ledger_hash
+            and representation.source_component_manifest_hash
+            == self.source_component_manifest_hash
+            and representation.family_id == self.family_id
+            and representation.codec_id == self.codec_id
+            and representation.schema_id == self.schema_id
+        )
 
 
 @dataclass(frozen=True)
@@ -345,8 +776,26 @@ class SolverOutcome:
     evidence_observation_ids: tuple[str, ...]
     failure_reason: str | None = None
 
+    def __post_init__(self) -> None:
+        _require_exact_rep_enum(self.status, SolveStatus, "solver outcome status")
 
-class Solver(Protocol):
+
+class ConfigurationFingerprinted(Protocol):
+    """Replaceable collaborators must expose a stable configuration digest."""
+
+    @property
+    def configuration_hash(self) -> str: ...
+
+
+class Decompressor(ConfigurationFingerprinted, Protocol):
+    def decompress(
+        self,
+        representation: RepresentationVersion,
+        query: TaskQuery,
+    ) -> DecompressedView: ...
+
+
+class Solver(ConfigurationFingerprinted, Protocol):
     solver_id: str
 
     def solve(self, view: DecompressedView, query: TaskQuery) -> SolverOutcome: ...
@@ -467,7 +916,16 @@ class ReferenceCompressor:
                 "effects": [
                     {
                         "claim_id": effect.claim_id,
+                        "epistemically_admissible": (
+                            ledger.policy.claim_has_epistemic_authority(
+                                claims[effect.claim_id]
+                            )
+                        ),
                         "expected_previous": effect.expected_previous,
+                        "expected_previous_specified": (
+                            effect.expected_previous_specified
+                        ),
+                        "increment_by": effect.increment_by,
                         "key": self._key_mapping(effect.key),
                         "op": effect.op.value,
                         "value": effect.value,
@@ -479,6 +937,7 @@ class ReferenceCompressor:
                         "supersedes_claim_ids": list(
                             claims[effect.claim_id].supersedes_claim_ids
                         ),
+                        "truth": claims[effect.claim_id].truth.value,
                     }
                     for effect in event.effects
                 ],
@@ -490,12 +949,13 @@ class ReferenceCompressor:
                     self._key_mapping(key)
                     for key in sorted(
                         {requirement.key for requirement in event.requirements}
-                        | {
-                            effect.key
-                            for effect in event.effects
-                            if effect.op in {EffectOp.DELETE, EffectOp.INCREMENT}
-                            or effect.expected_previous is not None
-                        }
+                        # Every effect reads the prior cell, including a plain
+                        # SET: replay must see an earlier producer to decide
+                        # whether changing its value is a licensed
+                        # supersession.  Omitting plain SET keys can make a
+                        # selectively reconstructed overwrite look like the
+                        # first write and incorrectly admit its dependants.
+                        | {effect.key for effect in event.effects}
                     )
                 ],
                 "recorded_at": event.recorded_at,
@@ -561,10 +1021,33 @@ class ReferenceCompressor:
                     available_from_record=event.recorded_at,
                 )
             )
+        injected_executable = tuple(
+            component.component_id
+            for component in extra_components
+            if component.component_kind
+            in {ComponentKind.TRANSITION, ComponentKind.CONSTRAINT}
+        )
+        if injected_executable:
+            raise RepresentationInvariantError(
+                "extra components cannot inject executable transitions or constraints: "
+                f"{sorted(injected_executable)}"
+            )
         self._validate_extra_component_lineage(ledger, extra_components)
         components.extend(extra_components)
         ordered = tuple(sorted(components, key=lambda item: item.component_id))
-        packet_bytes = len(canonical_json([asdict(item) for item in ordered]).encode("utf-8"))
+        source_component_manifest = (
+            RepresentationVersion.build_source_component_manifest(ordered)
+        )
+        source_component_manifest_hash = (
+            RepresentationVersion.compute_source_component_manifest_hash(
+                source_component_manifest
+            )
+        )
+        packet_bytes = RepresentationVersion.compute_packet_bytes(
+            ordered,
+            source_component_manifest,
+            source_component_manifest_hash,
+        )
         return RepresentationVersion(
             representation_id=representation_id,
             family_id="hive-reference-structural",
@@ -583,7 +1066,9 @@ class ReferenceCompressor:
                 "causal_parents",
                 "claim_dependencies",
                 "claim_validity_and_supersession",
+                "epistemic_unknown_vs_absence",
                 "source_lineage",
+                "full_source_component_manifest",
             ),
             known_failure_modes=(
                 "does_not_discover_event_semantics",
@@ -603,46 +1088,157 @@ class ReferenceCompressor:
                 preprocessing_steps=len(ledger.events),
                 human_authored_domain_bytes=human_authored_domain_bytes,
             ),
+            source_component_manifest=source_component_manifest,
+            source_component_manifest_hash=source_component_manifest_hash,
         )
 
 
+@dataclass(frozen=True, slots=True)
 class SelectiveDecompressor:
-    """Closed decompressor: it can read packet components and nothing else."""
+    """Closed decompressor bound to externally authenticated source roots."""
+
+    decompressor_id: ClassVar[str] = "hive-selective-decompressor-v1"
+    trusted_roots: tuple[RepresentationRootCommitment, ...]
+
+    def __post_init__(self) -> None:
+        if type(self.trusted_roots) is not tuple or not self.trusted_roots:
+            raise RepresentationInvariantError(
+                "selective decompressor requires at least one external trusted root"
+            )
+        if any(type(root) is not RepresentationRootCommitment for root in self.trusted_roots):
+            raise RepresentationInvariantError(
+                "selective decompressor roots must be exact immutable commitments"
+            )
+        if len(self.trusted_roots) != len(set(self.trusted_roots)):
+            raise RepresentationInvariantError(
+                "selective decompressor trusted roots must be unique"
+            )
+        if tuple(sorted(self.trusted_roots)) != self.trusted_roots:
+            raise RepresentationInvariantError(
+                "selective decompressor trusted roots must be sorted"
+            )
+
+    @property
+    def configuration_hash(self) -> str:
+        return sha256_text(
+            canonical_json(
+                {
+                    "component": self.decompressor_id,
+                    "configuration_version": 2,
+                    "trusted_roots": [
+                        root.to_mapping() for root in self.trusted_roots
+                    ],
+                }
+            )
+        )
 
     def decompress(self, representation: RepresentationVersion, query: TaskQuery) -> DecompressedView:
-        by_id = {
+        try:
+            # Re-run the representation's structural invariants at this trust
+            # boundary; a frozen dataclass alone is not an authenticity proof.
+            replace(representation)
+        except (RepresentationInvariantError, TypeError, ValueError):
+            return DecompressedView(
+                query_id=query.query_id,
+                selected_components=(),
+                missing_dependencies=("invalid_representation_envelope",),
+                completeness=SolveStatus.INCOMPLETE,
+                supporting_bytes_read=0,
+            )
+        if not any(root.matches(representation) for root in self.trusted_roots):
+            return DecompressedView(
+                query_id=query.query_id,
+                selected_components=(),
+                missing_dependencies=("untrusted_representation_root",),
+                completeness=SolveStatus.INCOMPLETE,
+                supporting_bytes_read=0,
+            )
+        manifest_by_id = {
+            item.component_id: item
+            for item in representation.source_component_manifest
+        }
+        visible_components = {
             item.component_id: item
             for item in representation.components
             if item.available_from_record <= query.known_at
         }
-        event_id = str(query.parameters().get("event_id", ""))
-        selected = {
-            item.component_id
-            for item in by_id.values()
-            if query.kind in item.applicable_task_kinds
+        # A changed or newly injected executable component must never reach
+        # replay merely because its envelope still resembles a transition.
+        untrusted_executable_ids = {
+            component_id
+            for component_id, component in visible_components.items()
+            if component.component_kind
+            in {ComponentKind.TRANSITION, ComponentKind.CONSTRAINT}
             and (
-                bool(set(item.keys) & set(query.keys))
-                or event_id in item.source_event_ids
-                or (
-                    item.component_kind is ComponentKind.CAUSAL_RULE
-                    and bool(set(item.keys) & set(query.keys))
-                )
+                component_id not in manifest_by_id
+                or manifest_by_id[component_id].content_hash
+                != component.content_hash
+                or manifest_by_id[component_id].component_kind
+                is not component.component_kind
             )
         }
+        by_id = {
+            component_id: component
+            for component_id, component in visible_components.items()
+            if component_id not in untrusted_executable_ids
+        }
+        event_id = str(query.parameters().get("event_id", ""))
+        query_keys = set(query.keys)
+
+        def relevant(expected: SourceComponentManifestEntry) -> bool:
+            if query.kind not in expected.applicable_task_kinds:
+                return False
+            event_match = event_id in expected.source_event_ids
+            if not (bool(set(expected.keys) & query_keys) or event_match):
+                return False
+            return not (
+                expected.effective_time is not None
+                and expected.effective_time > query.valid_at
+                and not event_match
+            )
+
+        selected = {
+            component_id
+            for component_id in by_id
+            if component_id in manifest_by_id
+            and relevant(manifest_by_id[component_id])
+        }
         missing: set[str] = set()
-        producers_by_key: dict[FactKey, set[str]] = {}
-        for component in by_id.values():
-            if component.component_kind not in {
-                ComponentKind.TRANSITION,
-                ComponentKind.CONSTRAINT,
-            }:
-                continue
-            for effect in component.payload().get("effects", ()):
-                key = FactKey(
-                    str(effect["key"]["subject"]),
-                    str(effect["key"]["predicate"]),
+        expected_producers_by_key: dict[
+            FactKey, list[SourceComponentManifestEntry]
+        ] = {}
+        for entry in representation.source_component_manifest:
+            # Rejected constraint events normally produce no canonical value,
+            # but an admissible DISPUTED/UNKNOWN claim can produce an explicit
+            # unknown overlay.  Conservatively index constraint keys here;
+            # replay uses the sealed per-effect authority/truth metadata to
+            # decide whether a selected constraint actually establishes it.
+            indexed_keys = (
+                entry.produced_keys
+                if entry.component_kind is ComponentKind.TRANSITION
+                else (
+                    entry.keys
+                    if entry.component_kind is ComponentKind.CONSTRAINT
+                    else ()
                 )
-                producers_by_key.setdefault(key, set()).add(component.component_id)
+            )
+            for key in indexed_keys:
+                expected_producers_by_key.setdefault(key, []).append(entry)
+
+        # Seed relevance from the immutable full-source index as well as the
+        # surviving subset.  This exposes deletion of any canonical component
+        # that should be available for the task, including a later writer when
+        # only an older same-key value remains in the packet.
+        for expected in representation.source_component_manifest:
+            if expected.available_from_record > query.known_at:
+                continue
+            if not relevant(expected):
+                continue
+            if expected.component_id not in by_id:
+                missing.add(expected.component_id)
+            elif expected.component_id not in selected:
+                selected.add(expected.component_id)
+
         pending = list(selected)
         while pending:
             current = pending.pop()
@@ -660,10 +1256,23 @@ class SelectiveDecompressor:
                 ComponentKind.TRANSITION,
                 ComponentKind.CONSTRAINT,
             }:
+                component_time = int(component.payload()["effective_time"])
                 for item in component.payload().get("input_keys", ()):
                     key = FactKey(str(item["subject"]), str(item["predicate"]))
-                    for producer_id in sorted(producers_by_key.get(key, ())):
-                        if producer_id not in selected:
+                    for producer in expected_producers_by_key.get(key, ()):
+                        # Same-time peers are required together, but a source
+                        # record not yet known at the query cutoff is neither
+                        # selectable nor missing.
+                        if (
+                            producer.available_from_record > query.known_at
+                            or producer.effective_time is None
+                            or producer.effective_time > component_time
+                        ):
+                            continue
+                        producer_id = producer.component_id
+                        if producer_id not in by_id:
+                            missing.add(producer_id)
+                        elif producer_id not in selected:
                             selected.add(producer_id)
                             pending.append(producer_id)
         components = tuple(sorted((by_id[item] for item in selected if item in by_id), key=lambda item: item.component_id))
@@ -673,7 +1282,11 @@ class SelectiveDecompressor:
         # not merely the compact payload strings.  Provenance, dependencies,
         # validity metadata, and the schema-bearing component envelope are
         # part of the supplied state cost.
-        supporting_bytes = len(canonical_json([asdict(item) for item in components]).encode("utf-8"))
+        supporting_bytes = RepresentationVersion.compute_packet_bytes(
+            components,
+            representation.source_component_manifest,
+            representation.source_component_manifest_hash,
+        )
         return DecompressedView(
             query_id=query.query_id,
             selected_components=components,
@@ -683,8 +1296,21 @@ class SelectiveDecompressor:
         )
 
 
+@dataclass(frozen=True, slots=True)
 class DeterministicReferenceSolver:
-    solver_id = "hive-deterministic-reference-solver-v1"
+    solver_id: ClassVar[str] = "hive-deterministic-reference-solver-v1"
+
+    @property
+    def configuration_hash(self) -> str:
+        return sha256_text(
+            canonical_json(
+                {
+                    "component": self.solver_id,
+                    "configuration_version": 1,
+                    "state": "stateless",
+                }
+            )
+        )
 
     @staticmethod
     def _key(payload: Mapping[str, str]) -> FactKey:
@@ -706,36 +1332,23 @@ class DeterministicReferenceSolver:
         return sorted(events, key=lambda item: (int(item["effective_time"]), int(item["recorded_at"]), str(item["event_id"])))
 
     @staticmethod
-    def _event_reaches(
-        events_by_id: Mapping[str, Mapping[str, Any]],
-        start: str,
-        target: str,
+    def _requirement_met(
+        state: Mapping[FactKey, Any],
+        item: Mapping[str, Any],
+        ambiguous_keys: Iterable[FactKey] = (),
     ) -> bool:
-        pending = [start]
-        seen: set[str] = set()
-        while pending:
-            current = pending.pop()
-            if current == target:
-                return True
-            if current in seen:
-                continue
-            seen.add(current)
-            event = events_by_id.get(current)
-            if event is not None:
-                pending.extend(str(item) for item in event.get("hard_dependencies", ()))
-                pending.extend(str(item) for item in event.get("causal_parents", ()))
-        return False
-
-    @staticmethod
-    def _requirement_met(state: Mapping[FactKey, Any], item: Mapping[str, Any]) -> bool:
         key = FactKey(str(item["key"]["subject"]), str(item["key"]["predicate"]))
+        if key in ambiguous_keys:
+            return False
         op = RequirementOp(str(item["op"]))
         if op is RequirementOp.EXISTS:
             return key in state
         if op is RequirementOp.ABSENT:
             return key not in state
         if op is RequirementOp.EQ:
-            return state.get(key) == item.get("value")
+            return key in state and canonical_json(state[key]) == canonical_json(
+                item.get("value")
+            )
         if op is RequirementOp.GTE:
             value = state.get(key)
             expected = item.get("value")
@@ -743,9 +1356,122 @@ class DeterministicReferenceSolver:
                 isinstance(value, (int, float))
                 and not isinstance(value, bool)
                 and isinstance(expected, (int, float))
+                and not isinstance(expected, bool)
                 and value >= expected
             )
         return False
+
+    @staticmethod
+    def _effects_incompatible(
+        left: Mapping[str, Any],
+        right: Mapping[str, Any],
+    ) -> bool:
+        """Mirror canonical simultaneous-effect conflict semantics."""
+
+        left_op = EffectOp(str(left["op"]))
+        right_op = EffectOp(str(right["op"]))
+        if left_op is right_op:
+            if left_op is EffectOp.SET:
+                return (
+                    canonical_json(left.get("value"))
+                    != canonical_json(right.get("value"))
+                    or int(left["valid_from"]) != int(right["valid_from"])
+                    or left.get("valid_to") != right.get("valid_to")
+                )
+            return left_op is not EffectOp.DELETE
+        return True
+
+    def _evaluate_event_effects(
+        self,
+        event: Mapping[str, Any],
+        cells: Mapping[FactKey, Mapping[str, Any]],
+        *,
+        validate: bool,
+    ) -> tuple[dict[FactKey, dict[str, Any]], bool]:
+        """Apply one atomic packet event, optionally checking replay guards."""
+
+        trial = {key: dict(cell) for key, cell in cells.items()}
+        for effect in event["effects"]:
+            key = self._key(effect["key"])
+            existing = trial.get(key)
+            current = None if existing is None else existing["value"]
+            expected = effect.get("expected_previous")
+            expected_specified = effect.get("expected_previous_specified")
+            if type(expected_specified) is not bool:
+                return trial, True
+            expected_matches = (
+                expected_specified
+                and existing is not None
+                and canonical_json(current) == canonical_json(expected)
+            )
+            supersedes_existing = (
+                existing is not None
+                and str(existing["source_claim_id"])
+                in {
+                    str(item)
+                    for item in effect.get("supersedes_claim_ids", ())
+                }
+            )
+            op = EffectOp(str(effect["op"]))
+            if op is EffectOp.SET:
+                if validate and expected_specified and not expected_matches:
+                    return trial, True
+                changes_existing_state = (
+                    existing is not None
+                    and (
+                        canonical_json(current)
+                        != canonical_json(effect.get("value"))
+                        or existing.get("valid_to") != effect.get("valid_to")
+                    )
+                )
+                if (
+                    validate
+                    and changes_existing_state
+                    and not expected_matches
+                    and not supersedes_existing
+                ):
+                    return trial, True
+                trial[key] = {
+                    "source_claim_id": str(effect["claim_id"]),
+                    "valid_to": effect.get("valid_to"),
+                    "value": effect.get("value"),
+                }
+            elif op is EffectOp.DELETE:
+                if validate and expected_specified and not expected_matches:
+                    return trial, True
+                if (
+                    validate
+                    and existing is not None
+                    and not expected_matches
+                    and not supersedes_existing
+                ):
+                    return trial, True
+                trial.pop(key, None)
+            elif op is EffectOp.INCREMENT:
+                increment_by = effect.get("increment_by")
+                result = effect.get("value")
+                if (
+                    not isinstance(expected, (int, float))
+                    or isinstance(expected, bool)
+                    or not isinstance(increment_by, (int, float))
+                    or isinstance(increment_by, bool)
+                    or not isinstance(result, (int, float))
+                    or isinstance(result, bool)
+                    or canonical_json(expected + increment_by)
+                    != canonical_json(result)
+                ):
+                    return trial, True
+                if validate and (
+                    existing is None
+                    or canonical_json(current) != canonical_json(expected)
+                ):
+                    return trial, True
+                trial[key] = {
+                    "source_claim_id": str(effect["claim_id"]),
+                    "valid_to": effect.get("valid_to"),
+                    "value": result,
+                }
+        return trial, False
 
     def _state_at(
         self,
@@ -754,55 +1480,13 @@ class DeterministicReferenceSolver:
         *,
         known_at: int,
         exclude_event_id: str | None = None,
-    ) -> tuple[dict[FactKey, Any], set[str]]:
+    ) -> tuple[dict[FactKey, Any], set[str], set[FactKey]]:
         events = [
             event
             for event in self._events(view, known_at=known_at)
             if int(event["effective_time"]) <= at_time
             and event["event_id"] != exclude_event_id
         ]
-        events_by_id = {str(event["event_id"]): event for event in events}
-
-        # Match EventLedger's refusal to resolve mutually unordered,
-        # equal-effective-time authoritative writes by record order or ID.
-        conflict_events: set[str] = set()
-        writes_by_time_key: dict[
-            tuple[int, FactKey], list[tuple[Mapping[str, Any], Mapping[str, Any]]]
-        ] = {}
-        for event in events:
-            if event["decision"] != DecisionStatus.ADMIT.value:
-                continue
-            for effect in event["effects"]:
-                if effect["op"] == EffectOp.SET.value:
-                    key = self._key(effect["key"])
-                    writes_by_time_key.setdefault(
-                        (int(event["effective_time"]), key), []
-                    ).append((event, effect))
-        for writes in writes_by_time_key.values():
-            if len({canonical_json(effect.get("value")) for _, effect in writes}) <= 1:
-                continue
-            unordered = any(
-                not self._event_reaches(
-                    events_by_id, str(left["event_id"]), str(right["event_id"])
-                )
-                and not self._event_reaches(
-                    events_by_id, str(right["event_id"]), str(left["event_id"])
-                )
-                and str(left_effect["claim_id"])
-                not in {
-                    str(item)
-                    for item in right_effect.get("supersedes_claim_ids", ())
-                }
-                and str(right_effect["claim_id"])
-                not in {
-                    str(item)
-                    for item in left_effect.get("supersedes_claim_ids", ())
-                }
-                for index, (left, left_effect) in enumerate(writes)
-                for right, right_effect in writes[index + 1 :]
-            )
-            if unordered:
-                conflict_events.update(str(event["event_id"]) for event, _ in writes)
 
         # The cell envelope is internal to deterministic replay.  Only values
         # are returned to a solver, but claim lineage and validity are retained
@@ -810,115 +1494,435 @@ class DeterministicReferenceSolver:
         cells: dict[FactKey, dict[str, Any]] = {}
         applied: set[str] = set()
         applied_claims: set[str] = set()
-        current_time = -1
-        for event in events:
-            event_time = int(event["effective_time"])
-            if event_time != current_time:
-                current_time = event_time
-                for key, cell in tuple(cells.items()):
-                    valid_to = cell.get("valid_to")
-                    if valid_to is not None and int(valid_to) <= current_time:
-                        del cells[key]
+        contradictions: list[dict[str, Any]] = []
+        ambiguous: set[FactKey] = set()
+        claims_by_id = {
+            str(effect["claim_id"]): effect
+            for event in events
+            for effect in event["effects"]
+        }
+        claim_event_ids = {
+            str(effect["claim_id"]): str(event["event_id"])
+            for event in events
+            for effect in event["effects"]
+        }
 
-            event_id = str(event["event_id"])
-            if event_id in conflict_events:
-                for effect in event["effects"]:
-                    cells.pop(self._key(effect["key"]), None)
-                continue
-            if event["decision"] != DecisionStatus.ADMIT.value:
-                continue
-            if any(dependency not in applied for dependency in event.get("hard_dependencies", [])):
-                continue
-            if any(
-                str(dependency) not in applied_claims
-                for effect in event["effects"]
-                for dependency in effect.get("depends_on_claim_ids", ())
+        def active_conflict_claim_ids(
+            contradiction: Mapping[str, Any],
+            valid_at: int,
+        ) -> frozenset[str]:
+            return frozenset(
+                claim_id
+                for claim_id in contradiction["claim_ids"]
+                if claim_id in claims_by_id
+                and int(claims_by_id[claim_id]["valid_from"]) <= valid_at
+                and (
+                    claims_by_id[claim_id].get("valid_to") is None
+                    or valid_at < int(claims_by_id[claim_id]["valid_to"])
+                )
+            )
+
+        def refresh_ambiguity(valid_at: int) -> set[FactKey]:
+            active_keys: set[FactKey] = set()
+            for contradiction in contradictions:
+                if contradiction["resolution"] != "unresolved":
+                    continue
+                if active_conflict_claim_ids(contradiction, valid_at):
+                    active_keys.add(contradiction["key"])
+                else:
+                    contradiction["resolution"] = "expired"
+            return active_keys
+
+        cursor = 0
+        while cursor < len(events):
+            current_time = int(events[cursor]["effective_time"])
+            group_end = cursor
+            while (
+                group_end < len(events)
+                and int(events[group_end]["effective_time"]) == current_time
             ):
-                continue
-            values = {key: cell["value"] for key, cell in cells.items()}
-            if not all(self._requirement_met(values, item) for item in event["requirements"]):
-                continue
+                group_end += 1
+            group = events[cursor:group_end]
+            cursor = group_end
 
-            trial = {key: dict(cell) for key, cell in cells.items()}
-            rejection = False
-            for effect in event["effects"]:
-                key = self._key(effect["key"])
-                existing = trial.get(key)
-                current = None if existing is None else existing["value"]
-                expected = effect.get("expected_previous")
-                op = EffectOp(str(effect["op"]))
-                if op is EffectOp.SET:
-                    if expected is not None and (
-                        existing is None or current != expected
+            for key, cell in tuple(cells.items()):
+                valid_to = cell.get("valid_to")
+                if valid_to is not None and int(valid_to) <= current_time:
+                    del cells[key]
+            ambiguous = refresh_ambiguity(current_time)
+
+            group_ids = {str(event["event_id"]) for event in group}
+            predecessors: dict[str, set[str]] = {}
+            for event in group:
+                event_id = str(event["event_id"])
+                prior_ids = {
+                    str(item)
+                    for item in (
+                        *event.get("hard_dependencies", ()),
+                        *event.get("causal_parents", ()),
+                    )
+                }
+                for effect in event["effects"]:
+                    for claim_id in (
+                        *effect.get("depends_on_claim_ids", ()),
+                        *effect.get("supersedes_claim_ids", ()),
                     ):
-                        rejection = True
-                        break
-                    if existing is not None and current != effect.get("value"):
-                        licensed = (
-                            expected == current
-                            or str(existing["source_claim_id"])
-                            in {
-                                str(item)
-                                for item in effect.get("supersedes_claim_ids", ())
-                            }
+                        source_event_id = claim_event_ids.get(str(claim_id))
+                        if source_event_id is not None:
+                            prior_ids.add(source_event_id)
+                predecessors[event_id] = prior_ids & group_ids
+
+            pending = {str(event["event_id"]): event for event in group}
+            while pending:
+                pending_ids = set(pending)
+                stage = sorted(
+                    (
+                        event
+                        for event_id, event in pending.items()
+                        if not (predecessors[event_id] & pending_ids)
+                    ),
+                    key=lambda item: (
+                        int(item["recorded_at"]),
+                        str(item["event_id"]),
+                    ),
+                )
+                if not stage:
+                    raise RepresentationInvariantError(
+                        "same-time event ordering cycle in representation"
+                    )
+
+                stage_ids = {str(item["event_id"]) for item in stage}
+                stage_start_cells = {
+                    key: dict(cell) for key, cell in cells.items()
+                }
+                stage_start_ambiguous = frozenset(ambiguous)
+                stage_start_values = {
+                    key: cell["value"]
+                    for key, cell in stage_start_cells.items()
+                }
+                uncertainty_candidates: list[
+                    tuple[FactKey, str, int, Any]
+                ] = []
+                for uncertain_event in stage:
+                    if any(
+                        str(dependency) not in applied
+                        for dependency in (
+                            *uncertain_event.get("hard_dependencies", ()),
+                            *uncertain_event.get("causal_parents", ()),
                         )
-                        if not licensed:
-                            rejection = True
+                    ):
+                        continue
+                    if not all(
+                        self._requirement_met(
+                            stage_start_values,
+                            item,
+                            stage_start_ambiguous,
+                        )
+                        for item in uncertain_event["requirements"]
+                    ):
+                        continue
+                    for effect in uncertain_event["effects"]:
+                        try:
+                            truth = TruthStatus(str(effect["truth"]))
+                        except (KeyError, ValueError) as exc:
+                            raise RepresentationInvariantError(
+                                "compressed effect has invalid epistemic truth metadata"
+                            ) from exc
+                        epistemically_admissible = effect.get(
+                            "epistemically_admissible"
+                        )
+                        if type(epistemically_admissible) is not bool:
+                            raise RepresentationInvariantError(
+                                "compressed effect has invalid epistemic authority metadata"
+                            )
+                        if (
+                            truth
+                            not in {TruthStatus.DISPUTED, TruthStatus.UNKNOWN}
+                            or not epistemically_admissible
+                        ):
+                            continue
+                        if any(
+                            str(dependency) not in applied_claims
+                            for dependency in effect.get(
+                                "depends_on_claim_ids", ()
+                            )
+                        ):
+                            continue
+                        valid_from = int(effect["valid_from"])
+                        valid_to = effect.get("valid_to")
+                        if not (
+                            valid_from <= current_time
+                            and (
+                                valid_to is None
+                                or current_time < int(valid_to)
+                            )
+                        ):
+                            continue
+                        key = self._key(effect["key"])
+                        if (
+                            key in stage_start_cells
+                            and key not in stage_start_ambiguous
+                        ):
+                            continue
+                        claim_id = str(effect["claim_id"])
+                        uncertainty_candidates.append(
+                            (key, claim_id, valid_from, valid_to)
+                        )
+
+                for key, claim_id, valid_from, valid_to in uncertainty_candidates:
+                    if any(
+                        contradiction["resolution"] == "unresolved"
+                        and contradiction["claim_ids"] == (claim_id,)
+                        for contradiction in contradictions
+                    ):
+                        continue
+                    contradictions.append(
+                        {
+                            "claim_ids": (claim_id,),
+                            "key": key,
+                            "overlap_from": valid_from,
+                            "overlap_to": valid_to,
+                            "resolution": "unresolved",
+                        }
+                    )
+                    ambiguous.add(key)
+
+                eligible: list[Mapping[str, Any]] = []
+                resolving_keys_by_event: dict[str, frozenset[FactKey]] = {}
+                for event in stage:
+                    if event["decision"] != DecisionStatus.ADMIT.value:
+                        continue
+                    if any(
+                        str(dependency) not in applied
+                        for dependency in event.get("hard_dependencies", ())
+                    ):
+                        continue
+                    if any(
+                        str(dependency) not in applied
+                        for dependency in event.get("causal_parents", ())
+                    ):
+                        continue
+                    if any(
+                        str(dependency) not in applied_claims
+                        for effect in event["effects"]
+                        for dependency in effect.get("depends_on_claim_ids", ())
+                    ):
+                        continue
+                    values = {key: cell["value"] for key, cell in cells.items()}
+                    if not all(
+                        self._requirement_met(values, item, ambiguous)
+                        for item in event["requirements"]
+                    ):
+                        continue
+                    resolving_keys: set[FactKey] = set()
+                    ambiguity_rejection = False
+                    for effect in event["effects"]:
+                        key = self._key(effect["key"])
+                        active_conflicting_ids: set[str] = set()
+                        for contradiction in contradictions:
+                            if (
+                                contradiction["key"] == key
+                                and contradiction["resolution"] == "unresolved"
+                            ):
+                                active_conflicting_ids.update(
+                                    active_conflict_claim_ids(
+                                        contradiction,
+                                        current_time,
+                                    )
+                                )
+                        if not active_conflicting_ids:
+                            continue
+                        explicitly_superseded = active_conflicting_ids <= {
+                            str(item)
+                            for item in effect.get("supersedes_claim_ids", ())
+                        }
+                        same_stage_epistemic = all(
+                            TruthStatus(str(claims_by_id[claim_id]["truth"]))
+                            in {TruthStatus.DISPUTED, TruthStatus.UNKNOWN}
+                            and claim_event_ids.get(claim_id) in stage_ids
+                            for claim_id in active_conflicting_ids
+                        )
+                        if not explicitly_superseded and not same_stage_epistemic:
+                            ambiguity_rejection = True
                             break
-                    trial[key] = {
-                        "source_claim_id": str(effect["claim_id"]),
-                        "valid_to": effect.get("valid_to"),
-                        "value": effect.get("value"),
-                    }
-                elif op is EffectOp.DELETE:
-                    if expected is not None and (
-                        existing is None or current != expected
-                    ):
-                        rejection = True
-                        break
-                    trial.pop(key, None)
-                elif op is EffectOp.INCREMENT:
-                    before = 0 if existing is None else current
-                    amount = effect.get("value")
-                    if (
-                        not isinstance(before, (int, float))
-                        or isinstance(before, bool)
-                        or not isinstance(amount, (int, float))
-                        or isinstance(amount, bool)
-                    ):
-                        rejection = True
-                        break
-                    trial[key] = {
-                        "source_claim_id": str(effect["claim_id"]),
-                        "valid_to": effect.get("valid_to"),
-                        "value": before + amount,
-                    }
-            if rejection:
-                continue
-            cells = trial
-            applied.add(event_id)
-            applied_claims.update(str(effect["claim_id"]) for effect in event["effects"])
+                        resolving_keys.add(key)
+                    if ambiguity_rejection:
+                        continue
+                    evaluation_cells = dict(cells)
+                    for key in resolving_keys:
+                        evaluation_cells.pop(key, None)
+                    _, rejected = self._evaluate_event_effects(
+                        event,
+                        evaluation_cells,
+                        validate=True,
+                    )
+                    if rejected:
+                        continue
+                    eligible.append(event)
+                    resolving_keys_by_event[str(event["event_id"])] = frozenset(
+                        resolving_keys
+                    )
+
+                effects_by_key: dict[
+                    FactKey,
+                    list[tuple[Mapping[str, Any], Mapping[str, Any]]],
+                ] = {}
+                for event in eligible:
+                    for effect in event["effects"]:
+                        effects_by_key.setdefault(
+                            self._key(effect["key"]), []
+                        ).append((event, effect))
+
+                conflict_events: set[str] = set()
+                conflict_claims: dict[FactKey, set[str]] = {}
+                for key, writes in effects_by_key.items():
+                    for index, (left_event, left_effect) in enumerate(writes):
+                        for right_event, right_effect in writes[index + 1 :]:
+                            left_id = str(left_event["event_id"])
+                            right_id = str(right_event["event_id"])
+                            if left_id == right_id:
+                                continue
+                            if not self._effects_incompatible(
+                                left_effect,
+                                right_effect,
+                            ):
+                                continue
+                            conflict_events.update((left_id, right_id))
+                            conflict_claims.setdefault(key, set()).update(
+                                (
+                                    str(left_effect["claim_id"]),
+                                    str(right_effect["claim_id"]),
+                                )
+                            )
+
+                for key, claim_id_set in conflict_claims.items():
+                    claim_ids = tuple(sorted(claim_id_set))
+                    finite_ends = [
+                        claims_by_id[claim_id].get("valid_to")
+                        for claim_id in claim_ids
+                        if claims_by_id[claim_id].get("valid_to") is not None
+                    ]
+                    contradictions.append(
+                        {
+                            "claim_ids": claim_ids,
+                            "key": key,
+                            "overlap_from": current_time,
+                            "overlap_to": min(finite_ends) if finite_ends else None,
+                            "resolution": "unresolved",
+                        }
+                    )
+                    ambiguous.add(key)
+
+                for event in eligible:
+                    event_id = str(event["event_id"])
+                    if event_id in conflict_events:
+                        continue
+                    application_cells = dict(cells)
+                    for key in resolving_keys_by_event[event_id]:
+                        application_cells.pop(key, None)
+                    cells, rejected = self._evaluate_event_effects(
+                        event,
+                        application_cells,
+                        validate=False,
+                    )
+                    if rejected:  # pragma: no cover - eligibility proved it.
+                        continue
+                    applied.add(event_id)
+                    applied_claims.update(
+                        str(effect["claim_id"])
+                        for effect in event["effects"]
+                    )
+                    for effect in event["effects"]:
+                        key = self._key(effect["key"])
+                        superseded = {
+                            str(item)
+                            for item in effect.get("supersedes_claim_ids", ())
+                        }
+                        for contradiction in contradictions:
+                            active_conflicting_ids = active_conflict_claim_ids(
+                                contradiction,
+                                current_time,
+                            )
+                            if (
+                                contradiction["key"] == key
+                                and contradiction["resolution"] == "unresolved"
+                                and active_conflicting_ids
+                                and (
+                                    active_conflicting_ids <= superseded
+                                    or (
+                                        len(contradiction["claim_ids"]) == 1
+                                        and all(
+                                            TruthStatus(
+                                                str(
+                                                    claims_by_id[claim_id][
+                                                        "truth"
+                                                    ]
+                                                )
+                                            )
+                                            in {
+                                                TruthStatus.DISPUTED,
+                                                TruthStatus.UNKNOWN,
+                                            }
+                                            and claim_event_ids.get(claim_id)
+                                            in stage_ids
+                                            for claim_id in active_conflicting_ids
+                                        )
+                                    )
+                                )
+                            ):
+                                contradiction["resolution"] = (
+                                    "superseded"
+                                    if active_conflicting_ids <= superseded
+                                    else "authority"
+                                )
+                                contradiction["resolved_by_claim_id"] = str(
+                                    effect["claim_id"]
+                                )
+                    ambiguous = refresh_ambiguity(current_time)
+
+                for event in stage:
+                    pending.pop(str(event["event_id"]))
 
         for key, cell in tuple(cells.items()):
             valid_to = cell.get("valid_to")
             if valid_to is not None and int(valid_to) <= at_time:
                 del cells[key]
-        return {key: cell["value"] for key, cell in cells.items()}, applied
+        ambiguous = refresh_ambiguity(at_time)
+        return (
+            {
+                key: cell["value"]
+                for key, cell in cells.items()
+                if key not in ambiguous
+            },
+            applied,
+            ambiguous,
+        )
 
     @staticmethod
-    def _effective_owner(state: Mapping[FactKey, Any], item: str) -> Any:
+    def _effective_owner(
+        state: Mapping[FactKey, Any],
+        item: str,
+        ambiguous_keys: Iterable[FactKey] = (),
+    ) -> tuple[Any, bool]:
+        ambiguous = frozenset(ambiguous_keys)
         seen: set[str] = set()
         current = item
         while current not in seen:
             seen.add(current)
-            owner = state.get(FactKey(current, "owner"))
+            owner_key = FactKey(current, "owner")
+            if owner_key in ambiguous:
+                return None, True
+            owner = state.get(owner_key)
             if owner is not None:
-                return owner
-            parent = state.get(FactKey(current, "inside"))
+                return owner, False
+            inside_key = FactKey(current, "inside")
+            if inside_key in ambiguous:
+                return None, True
+            parent = state.get(inside_key)
             if parent is None:
-                return None
+                return None, False
             current = str(parent)
-        return None
+        return None, False
 
     def solve(self, view: DecompressedView, query: TaskQuery) -> SolverOutcome:
         evidence = tuple(
@@ -934,7 +1938,11 @@ class DeterministicReferenceSolver:
                 "missing representation dependency or no relevant component",
             )
         parameters = query.parameters()
-        state, _ = self._state_at(view, query.valid_at, known_at=query.known_at)
+        state, _, ambiguous = self._state_at(
+            view,
+            query.valid_at,
+            known_at=query.known_at,
+        )
         if query.kind is TaskKind.VALUE_AT:
             if parameters.get("derive") == "owner_through_containment":
                 required_rule = str(parameters.get("rule_id", "containment_owner_v1"))
@@ -961,17 +1969,56 @@ class DeterministicReferenceSolver:
                         evidence,
                         "required executable causal operator is absent or unsupported",
                     )
-                answer = self._effective_owner(state, str(parameters["item"]))
+                answer, derived_ambiguous = self._effective_owner(
+                    state,
+                    str(parameters["item"]),
+                    ambiguous,
+                )
+                if derived_ambiguous:
+                    return SolverOutcome(
+                        query.query_id,
+                        SolveStatus.INCOMPLETE,
+                        None,
+                        view.selected_component_ids,
+                        evidence,
+                        "ambiguous_state",
+                    )
             elif query.keys:
+                if query.keys[0] in ambiguous:
+                    return SolverOutcome(
+                        query.query_id,
+                        SolveStatus.INCOMPLETE,
+                        None,
+                        view.selected_component_ids,
+                        evidence,
+                        "ambiguous_state",
+                    )
                 answer = state.get(query.keys[0])
             else:
                 answer = None
         elif query.kind is TaskKind.CHANGES:
             start = int(parameters["from_time"])
             finish = int(parameters["to_time"])
-            before, _ = self._state_at(view, start, known_at=query.known_at)
-            after, _ = self._state_at(view, finish, known_at=query.known_at)
+            before, _, before_ambiguous = self._state_at(
+                view,
+                start,
+                known_at=query.known_at,
+            )
+            after, _, after_ambiguous = self._state_at(
+                view,
+                finish,
+                known_at=query.known_at,
+            )
             key = query.keys[0]
+            if key in before_ambiguous or key in after_ambiguous:
+                return SolverOutcome(
+                    query.query_id,
+                    SolveStatus.INCOMPLETE,
+                    None,
+                    view.selected_component_ids,
+                    evidence,
+                    "ambiguous_state",
+                )
             answer = {"before": before.get(key), "after": after.get(key)}
         elif query.kind is TaskKind.CAN_APPLY:
             target_id = str(parameters["event_id"])
@@ -992,13 +2039,29 @@ class DeterministicReferenceSolver:
                     evidence,
                     "target event is absent from the reconstruction",
                 )
-            pre_state, _ = self._state_at(
+            pre_state, _, ambiguous = self._state_at(
                 view,
                 query.valid_at,
                 known_at=query.known_at,
                 exclude_event_id=target_id,
             )
-            answer = all(self._requirement_met(pre_state, item) for item in target["requirements"])
+            required_keys = {
+                self._key(item["key"])
+                for item in target["requirements"]
+            }
+            if required_keys & ambiguous:
+                return SolverOutcome(
+                    query.query_id,
+                    SolveStatus.INCOMPLETE,
+                    None,
+                    view.selected_component_ids,
+                    evidence,
+                    "ambiguous_state",
+                )
+            answer = all(
+                self._requirement_met(pre_state, item, ambiguous)
+                for item in target["requirements"]
+            )
         elif query.kind is TaskKind.REJECT_PROMOTION:
             target_id = str(parameters["event_id"])
             target = next(
@@ -1052,10 +2115,52 @@ class EvaluationSummary:
     outcomes: tuple[SolverOutcome, ...]
 
 
+@dataclass(frozen=True, slots=True)
 class RepresentationEvaluator:
-    def __init__(self, decompressor: SelectiveDecompressor, solver: Solver) -> None:
-        self.decompressor = decompressor
-        self.solver = solver
+    """Frozen evaluator whose replaceable collaborators identify their configuration."""
+
+    decompressor: Decompressor
+    solver: Solver
+    evaluator_id: ClassVar[str] = "hive-representation-evaluator-v1"
+
+    def __post_init__(self) -> None:
+        _require_configuration_hash(self.decompressor, "decompressor")
+        _require_configuration_hash(self.solver, "solver")
+        if not isinstance(self.solver.solver_id, str) or not self.solver.solver_id.strip():
+            raise RepresentationInvariantError("solver requires a nonempty solver_id")
+
+    @property
+    def configuration_hash(self) -> str:
+        """Recompute the full collaborator fingerprint so later mutation is visible."""
+
+        return sha256_text(
+            canonical_json(
+                {
+                    "decompressor": {
+                        "configuration_hash": _require_configuration_hash(
+                            self.decompressor,
+                            "decompressor",
+                        ),
+                        "type": (
+                            f"{type(self.decompressor).__module__}."
+                            f"{type(self.decompressor).__qualname__}"
+                        ),
+                    },
+                    "evaluator": self.evaluator_id,
+                    "solver": {
+                        "configuration_hash": _require_configuration_hash(
+                            self.solver,
+                            "solver",
+                        ),
+                        "solver_id": self.solver.solver_id,
+                        "type": (
+                            f"{type(self.solver).__module__}."
+                            f"{type(self.solver).__qualname__}"
+                        ),
+                    },
+                }
+            )
+        )
 
     def evaluate(
         self,
@@ -1084,6 +2189,8 @@ class SufficiencyReport:
     representation_id: str
     status: str
     algorithm: str
+    necessity_scope: str
+    causal_necessity_demonstrated: bool
     evaluated_subsets: int
     minimum_component_count: int | None
     minimal_component_sets: tuple[tuple[str, ...], ...]
@@ -1092,6 +2199,15 @@ class SufficiencyReport:
 
 
 class RepresentationAblator:
+    """Find subsets that pass the frozen fail-closed representation contract.
+
+    This is exact over enumerated component subsets, not a causal-necessity
+    oracle.  A sealed full-source manifest conservatively treats removal of a
+    potentially relevant source component as information loss unless another
+    representation object carries an independently validated replacement
+    certificate.  Reports expose that scope explicitly.
+    """
+
     def __init__(self, evaluator: RepresentationEvaluator, *, exact_limit: int = 12) -> None:
         self.evaluator = evaluator
         self.exact_limit = exact_limit
@@ -1104,14 +2220,16 @@ class RepresentationAblator:
         baseline = self.evaluator.evaluate(representation, tasks)
         if not baseline.all_passed:
             return SufficiencyReport(
-                representation.representation_id,
-                "invalid_baseline",
-                "none",
-                1,
-                None,
-                (),
-                (),
-                (),
+                representation_id=representation.representation_id,
+                status="invalid_baseline",
+                algorithm="none",
+                necessity_scope="none",
+                causal_necessity_demonstrated=False,
+                evaluated_subsets=1,
+                minimum_component_count=None,
+                minimal_component_sets=(),
+                singleton_essential=(),
+                singleton_redundant=(),
             )
         component_ids = tuple(item.component_id for item in representation.components)
         evaluated = 1
@@ -1143,14 +2261,16 @@ class RepresentationAblator:
                 if minimal:
                     break
             return SufficiencyReport(
-                representation.representation_id,
-                "complete",
-                "exact_subset_minimum",
-                evaluated,
-                minimum_count,
-                tuple(minimal),
-                tuple(sorted(essential)),
-                tuple(sorted(redundant)),
+                representation_id=representation.representation_id,
+                status="complete",
+                algorithm="exact_contract_subset_minimum",
+                necessity_scope="fail_closed_representation_contract",
+                causal_necessity_demonstrated=False,
+                evaluated_subsets=evaluated,
+                minimum_component_count=minimum_count,
+                minimal_component_sets=tuple(minimal),
+                singleton_essential=tuple(sorted(essential)),
+                singleton_redundant=tuple(sorted(redundant)),
             )
 
         working = list(component_ids)
@@ -1168,14 +2288,16 @@ class RepresentationAblator:
                     working.remove(component_id)
                     changed = True
         return SufficiencyReport(
-            representation.representation_id,
-            "complete",
-            "one_minimal_approximation",
-            evaluated,
-            len(working),
-            (tuple(working),),
-            tuple(sorted(essential)),
-            tuple(sorted(redundant)),
+            representation_id=representation.representation_id,
+            status="complete",
+            algorithm="one_contract_minimal_approximation",
+            necessity_scope="fail_closed_representation_contract",
+            causal_necessity_demonstrated=False,
+            evaluated_subsets=evaluated,
+            minimum_component_count=len(working),
+            minimal_component_sets=(tuple(working),),
+            singleton_essential=tuple(sorted(essential)),
+            singleton_redundant=tuple(sorted(redundant)),
         )
 
 

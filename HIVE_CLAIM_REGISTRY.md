@@ -12,6 +12,8 @@ The authoritative machine-readable registry is [`hive_reference/spec/claims.json
 
 Invalid experiments cannot upgrade a claim. Supporting and contradicting evidence coexist. A claim cannot inherit a dependency's evidence level automatically.
 
+The executable `EvidenceRegistry` is presently a read-only, syntactic view of this file. It has no trusted artifact verifier or authenticated update authority and therefore fails closed rather than authorizing `PROVEN` or `SUPPORTED` upgrades from caller-constructed evidence records.
+
 ## Current registry
 
 | ID | Level | Scoped claim | Current reading |
@@ -19,11 +21,11 @@ Invalid experiments cannot upgrade a claim. Supporting and contradicting evidenc
 | HIVE-C001 | PROVEN | Frozen codec preserves designated state/reference distinctions on the frozen pack | Deterministic artifact property |
 | HIVE-C002 | PROVEN | Frozen codec reduces visible supplied-state bytes | Packet-size property, not full lifecycle compression |
 | HIVE-C003 | SUPPORTED | Local Qwen pairing lacked solver capability to isolate a representation advantage | Valid negative capability result |
-| HIVE-C004 | SUPPORTED | Exploratory Codex stack could use the compressed packet on all frozen cases | Supporting evidence; unsealed here, ceiling, no superiority |
+| HIVE-C004 | PLAUSIBLE | Exploratory Codex stack reportedly used the compressed packet on all frozen cases | Operator-reported and unsealed here; ceiling, no superiority, no replication |
 | HIVE-C005 | SPECULATIVE | Compressed reasoning is superior to Raw/Retrieval | Not demonstrated |
 | HIVE-C006 | PROVEN | Deterministic authority guards can block plan-to-current promotion | Scoped implementation invariant |
 | HIVE-C007 | PLAUSIBLE | Task-reconstructable compression is a useful research objective | Coherent, not a theory of intelligence |
-| HIVE-C008 | SUPPORTED | Ablation can identify task-conditional necessary components | Conditional; interactions and alternative minima matter |
+| HIVE-C008 | SUPPORTED | Frozen ablation identifies components whose removal breaks a declared task/solver/contract predicate | Contract-relative removal effect; causal necessity remains unproven |
 | HIVE-C009 | SPECULATIVE | Hive forms bidirectional abstractions | Not implemented |
 | HIVE-C010 | SPECULATIVE | Hive representations transfer beyond generators/domains | Not tested |
 | HIVE-C011 | SPECULATIVE | Hive discovers useful representations | Critical missing transition |
@@ -33,8 +35,8 @@ Invalid experiments cannot upgrade a claim. Supporting and contradicting evidenc
 | HIVE-C015 | SPECULATIVE | Better representations improve future representation discovery | Strongest unestablished claim |
 | HIVE-C016 | PLAUSIBLE | Kingdom is a useful domain proving ground | Domain adapter, not Hive's definition |
 | HIVE-C017 | SPECULATIVE | Hive achieves effective compression after hidden costs | Not measured |
-| HIVE-C018 | SUPPORTED | Solver capability materially interacts with representation | Supported but needs a preregistered solver panel |
-| HIVE-C019 | PROVEN | The reference model enforces documented deterministic invariants | Fixed implementation and deterministic fixtures only; no empirical generalization |
+| HIVE-C018 | PLAUSIBLE | Solver capability materially interacts with representation | Cross-solver contrast relies on the unsealed exploratory run; preregistered replication is required |
+| HIVE-C019 | SUPPORTED | The reference model passes its tracked deterministic invariant tests | Fixed tracked tests only; not an exhaustive proof of every documented invariant |
 | HIVE-C020 | PROVEN | One deterministic whole-system pipeline executes end to end | One synthetic fixture; proves plumbing only |
 | HIVE-C021 | FALSIFIED | Current Hive automatically discovers domain semantics from raw observations | False of the current implementation |
 

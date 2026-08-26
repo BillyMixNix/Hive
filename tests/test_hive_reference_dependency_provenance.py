@@ -25,6 +25,7 @@ from hive_reference.representation import (
     DeterministicReferenceSolver,
     ReferenceCompressor,
     RepresentationInvariantError,
+    RepresentationRootCommitment,
     SelectiveDecompressor,
     SolveStatus,
     TaskKind,
@@ -150,7 +151,8 @@ def test_decompression_follows_dynamic_requirement_support_without_explicit_edge
     )
     query = TaskQuery("q_y", TaskKind.VALUE_AT, (y,), 2, 20)
 
-    view = SelectiveDecompressor().decompress(representation, query)
+    root = RepresentationRootCommitment.from_trusted_representation(representation)
+    view = SelectiveDecompressor((root,)).decompress(representation, query)
     outcome = DeterministicReferenceSolver().solve(view, query)
 
     assert view.completeness is SolveStatus.COMPLETE

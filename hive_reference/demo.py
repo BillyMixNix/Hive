@@ -30,10 +30,12 @@ from hive_reference.representation import (
     ReferenceCompressor,
     RepresentationAblator,
     RepresentationEvaluator,
+    RepresentationRootCommitment,
     SelectiveDecompressor,
     TaskExpectation,
     TaskKind,
     TaskQuery,
+    ValidationStatus,
     make_causal_rule_component,
 )
 from hive_reference.research import (
@@ -375,7 +377,8 @@ def run_demo(*, claims_path: str | Path | None = None) -> dict[str, Any]:
         human_authored_domain_bytes=384,
     )
     tasks = build_demo_tasks(ledger.head_record_seq)
-    decompressor = SelectiveDecompressor()
+    trusted_root = RepresentationRootCommitment.from_trusted_representation(full)
+    decompressor = SelectiveDecompressor((trusted_root,))
     solver = DeterministicReferenceSolver()
     evaluator = RepresentationEvaluator(decompressor, solver)
     full_evaluation = evaluator.evaluate(full, tasks)
@@ -385,6 +388,10 @@ def run_demo(*, claims_path: str | Path | None = None) -> dict[str, Any]:
     lossy_ids = tuple(item.component_id for item in full.components if item.component_id != omitted_id)
     lossy = full.subset(lossy_ids, representation_id="demo-representation-lossy-v1")
     lossy_evaluation = evaluator.evaluate(lossy, tasks)
+    lossy = replace(
+        lossy,
+        validation_status=ValidationStatus.DETERMINISTICALLY_VALIDATED,
+    )
 
     proposer = DeterministicMissingDependencyProposer()
     repaired, proposal = proposer.propose(
@@ -395,20 +402,24 @@ def run_demo(*, claims_path: str | Path | None = None) -> dict[str, Any]:
     )
     protected_tasks = tasks[2:]
     new_tasks = tasks[:2]
-    gate = RepresentationRepairGate(evaluator)
-    migration = gate.evaluate(
-        lossy,
-        repaired,
-        protected_tasks=protected_tasks,
-        new_tasks=new_tasks,
-        protocol_hash=sha256_text("hive-reference-demo-protocol-v1"),
+    protocol_hash = sha256_text("hive-reference-demo-protocol-v1")
+    gate = RepresentationRepairGate(
+        evaluator,
+        candidate_cost_ceiling=repaired.cost,
     )
 
-    registry = RepresentationRegistry()
+    registry = RepresentationRegistry(
+        gate=gate,
+        protected_tasks=protected_tasks,
+        new_tasks=new_tasks,
+        protocol_hash=protocol_hash,
+    )
     registry.register(lossy)
     bootstrap = registry.bootstrap(lossy.representation_id)
     registry.register(repaired)
-    activation = registry.activate(repaired.representation_id, migration)
+    migration, activation = registry.evaluate_and_activate(repaired.representation_id)
+    if activation is None:
+        raise RuntimeError(f"deterministic demo repair was rejected: {migration.reason}")
     repaired_hash = registry.active.content_hash if registry.active else None
     rollback = registry.rollback(lossy.representation_id, reason="demo_rollback_verification")
     rollback_hash_matches = registry.active is not None and registry.active.content_hash == lossy.content_hash
@@ -492,5 +503,8 @@ def write_demo_result(output_path: str | Path, *, claims_path: str | Path | None
     result = run_demo(claims_path=claims_path)
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    # Research artifacts are append-only evidence.  Exclusive creation makes
+    # an accidental rerun fail closed instead of overwriting the first result.
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2) + "\n")
     return result

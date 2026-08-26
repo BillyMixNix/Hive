@@ -37,9 +37,9 @@
       "name": "Compression frontier and minimum sufficient state",
       "prerequisites": ["R1", "R2"],
       "cheapest_falsification": "Semantic component removals with essential/control twins and exact small-set ablation.",
-      "success_criteria": "A reproducible Pareto frontier identifies where reconstruction and reasoning degrade.",
+      "success_criteria": "A reproducible Pareto frontier identifies where reconstruction and reasoning degrade; any causal-minimum claim additionally survives counterfactual twins and validated replacement candidates.",
       "expected_cost": "deterministic first; bounded solver calls only after gate",
-      "uncertainty_reduction": "Identifies preserved distinctions that actually cause task success.",
+      "uncertainty_reduction": "Separates contract-essential removal effects from the stronger, still-untested claim of causal-semantic necessity.",
       "status": "PARTIAL"
     },
     {
@@ -87,7 +87,7 @@
       "name": "Versioned representation repair",
       "prerequisites": ["R6", "R7"],
       "cheapest_falsification": "One induced failure, immutable candidate, locked old/new/counterexample suite, exact rollback.",
-      "success_criteria": "Repair improves implicated failures with no hard regression and complete cost/provenance accounting.",
+      "success_criteria": "A deterministically or more strongly validated compatible repair improves implicated failures under registry-frozen collaborator fingerprints, canonical packet accounting, and a preregistered cost ceiling, with no hard regression and exact rollback.",
       "expected_cost": "small candidate set; deterministic regression gate",
       "uncertainty_reduction": "Tests whether failure feedback can safely improve representations.",
       "status": "PROPOSED"
@@ -107,7 +107,7 @@
       "name": "Recursive representation improvement",
       "prerequisites": ["R6", "R8", "R9"],
       "cheapest_falsification": "Frozen proposer versus meta-updated versus shuffled-meta on nested future heldout episodes.",
-      "success_criteria": "Replicated heldout frontier/search-efficiency gain at matched compute/human input that disappears when genuine meta-state is ablated.",
+      "success_criteria": "Replicated heldout frontier/search-efficiency gain with exact declared-resource and human-input matching that disappears under shuffled/no-meta ablation.",
       "expected_cost": "high; multiple preregistered domains/episodes; run only after R9",
       "uncertainty_reduction": "Directly tests the strongest Hive thesis.",
       "status": "SPECULATIVE"

@@ -84,10 +84,19 @@ class FrozenDecompressionAdapter:
 
 @dataclass(frozen=True)
 class CapabilityGate:
+    """Descriptive reading of an externally prevalidated result artifact.
+
+    This adapter does not authenticate a protocol, solver, or result artifact,
+    so it deliberately cannot authorize representation-level interpretation.
+    """
+
     solver_id: str
     raw_correct: int
     raw_total: int
     required_accuracy: float
+    reported_validity: str
+    threshold_met: bool
+    authoritative: bool
     passed: bool
     representation_interpretation_allowed: bool
 
@@ -98,20 +107,37 @@ def capability_gate_from_result(
     solver_id: str,
     required_accuracy: float = 0.8,
 ) -> CapabilityGate:
+    """Summarize a presumed-prevalidated result without granting authority.
+
+    ``result`` is a caller-supplied mapping.  The helper can report what that
+    mapping says and whether its Raw counts meet a threshold, but only a
+    separate trusted artifact/protocol verifier could turn that observation
+    into an authoritative capability decision.
+    """
+
     if not 0.0 <= required_accuracy <= 1.0:
         raise ValueError("required accuracy must be in [0, 1]")
     raw = result["condition_summaries"]["raw"]
     correct = int(raw["exact_correct"])
     total = int(raw["total"])
-    valid = result.get("validity") == "VALID"
-    passed = valid and total > 0 and correct / total >= required_accuracy
+    if total < 0 or correct < 0 or correct > total:
+        raise ValueError("raw capability counts must satisfy 0 <= correct <= total")
+    reported_validity = str(result.get("validity", ""))
+    threshold_met = (
+        reported_validity == "VALID"
+        and total > 0
+        and correct / total >= required_accuracy
+    )
     return CapabilityGate(
         solver_id=solver_id,
         raw_correct=correct,
         raw_total=total,
         required_accuracy=required_accuracy,
-        passed=passed,
-        representation_interpretation_allowed=passed,
+        reported_validity=reported_validity,
+        threshold_met=threshold_met,
+        authoritative=False,
+        passed=False,
+        representation_interpretation_allowed=False,
     )
 
 

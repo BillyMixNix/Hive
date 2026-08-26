@@ -2,11 +2,15 @@ from __future__ import annotations
 
 from dataclasses import asdict, replace
 
+import pytest
+
 from hive_reference.demo import build_demo_ledger, build_demo_tasks
 from hive_reference.model import FactKey, canonical_json
 from hive_reference.representation import (
     DeterministicReferenceSolver,
     ReferenceCompressor,
+    RepresentationInvariantError,
+    RepresentationRootCommitment,
     SelectiveDecompressor,
     SolveStatus,
     make_causal_rule_component,
@@ -35,7 +39,8 @@ def test_selective_decompression_obeys_knowledge_cutoff_and_counts_full_componen
     _, representation = _representation()
     query = build_demo_tasks(99)[0].query
     early_query = replace(query, known_at=10)
-    decompressor = SelectiveDecompressor()
+    root = RepresentationRootCommitment.from_trusted_representation(representation)
+    decompressor = SelectiveDecompressor((root,))
 
     early = decompressor.decompress(representation, early_query)
     assert all(item.available_from_record <= 10 for item in early.selected_components)
@@ -45,13 +50,39 @@ def test_selective_decompression_obeys_knowledge_cutoff_and_counts_full_componen
 
     complete = decompressor.decompress(representation, replace(query, known_at=11))
     expected_bytes = len(
-        canonical_json([asdict(item) for item in complete.selected_components]).encode("utf-8")
+        canonical_json(
+            {
+                "components": [asdict(item) for item in complete.selected_components],
+                "source_component_manifest": [
+                    item.to_mapping()
+                    for item in representation.source_component_manifest
+                ],
+                "source_component_manifest_hash": (
+                    representation.source_component_manifest_hash
+                ),
+            }
+        ).encode("utf-8")
     )
     assert complete.completeness is SolveStatus.COMPLETE
     assert complete.supporting_bytes_read == expected_bytes
 
 
-def test_causal_rule_requires_supported_machine_operator_not_a_trusted_rule_id() -> None:
+def test_decompressor_configuration_is_bound_to_external_trusted_root() -> None:
+    _, representation = _representation()
+    root = RepresentationRootCommitment.from_trusted_representation(representation)
+    changed_root = replace(root, schema_id=f"{root.schema_id}-other")
+
+    assert SelectiveDecompressor((root,)).configuration_hash != (
+        SelectiveDecompressor((changed_root,)).configuration_hash
+    )
+    with pytest.raises(
+        RepresentationInvariantError,
+        match="at least one external trusted root",
+    ):
+        SelectiveDecompressor(())
+
+
+def test_tampered_causal_rule_cannot_escape_its_trusted_manifest() -> None:
     _, representation = _representation()
     rule = next(
         item
@@ -61,18 +92,12 @@ def test_causal_rule_requires_supported_machine_operator_not_a_trusted_rule_id()
     payload = dict(rule.payload())
     payload["operator"] = "nonsense_operator"
     tampered_rule = replace(rule, payload_json=canonical_json(payload))
-    tampered = replace(
-        representation,
-        representation_id="representation-contract-bad-rule",
-        components=tuple(
-            tampered_rule if item.component_id == rule.component_id else item
-            for item in representation.components
-        ),
-    )
-    query = build_demo_tasks(99)[0].query
-    view = SelectiveDecompressor().decompress(tampered, query)
-    outcome = DeterministicReferenceSolver().solve(view, query)
-
-    assert outcome.status is SolveStatus.INCOMPLETE
-    assert outcome.answer is None
-    assert "operator" in (outcome.failure_reason or "")
+    with pytest.raises(RepresentationInvariantError, match="trusted manifest entries"):
+        replace(
+            representation,
+            representation_id="representation-contract-bad-rule",
+            components=tuple(
+                tampered_rule if item.component_id == rule.component_id else item
+                for item in representation.components
+            ),
+        )

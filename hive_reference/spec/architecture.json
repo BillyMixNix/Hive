@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "architecture_id": "hive-reference-architecture-v0.1",
+  "status": "PARTIAL",
   "status_values": ["IMPLEMENTED", "PARTIAL", "PROPOSED", "EXPERIMENTALLY_SUPPORTED", "SPECULATIVE"],
   "nodes": [
     {"id": "observation", "label": "Observation Store", "status": "IMPLEMENTED", "responsibility": "Immutable content-addressed incoming evidence"},
@@ -13,15 +14,15 @@
     {"id": "task", "label": "Task Query", "status": "IMPLEMENTED", "responsibility": "Frozen query, temporal cutoffs, answer schema, and resource budget"},
     {"id": "selection", "label": "Selective Component Planner", "status": "IMPLEMENTED", "responsibility": "Choose query-relevant components and dependency closure"},
     {"id": "decompression", "label": "Decompression", "status": "IMPLEMENTED", "responsibility": "Reconstruct lineage-bearing task state and explicit unknowns"},
-    {"id": "solver", "label": "Replaceable Solver", "status": "IMPLEMENTED", "responsibility": "Deterministic or model-backed task solver with capability descriptor"},
-    {"id": "evaluation", "label": "Frozen Evaluator", "status": "PARTIAL", "responsibility": "Exact-answer evaluation is executable; independent reconstruction, provenance, capability, and cost evaluation remain separate partial mechanisms"},
-    {"id": "ablation", "label": "Minimum-Sufficiency Ablator", "status": "IMPLEMENTED", "responsibility": "Exact small-set or labeled approximate component ablation"},
+    {"id": "solver", "label": "Replaceable Solver", "status": "PARTIAL", "responsibility": "Deterministic solver execution exists; model-result parsing is descriptive and still requires a trusted protocol/artifact verifier"},
+    {"id": "evaluation", "label": "Frozen Evaluator", "status": "PARTIAL", "responsibility": "Exact-answer evaluation and immutable collaborator fingerprints are executable; independent reconstruction, provenance, capability, non-packet cost, and validation-attestation verification remain partial"},
+    {"id": "ablation", "label": "Minimum-Sufficiency Ablator", "status": "IMPLEMENTED", "responsibility": "Exact small-set or labeled approximate ablation relative to a frozen fail-closed representation contract; causal-semantic necessity remains proposed"},
     {"id": "failure", "label": "Failure Analysis", "status": "PARTIAL", "responsibility": "Record and cluster failures conditional on solver/task/representation"},
     {"id": "profile", "label": "Meta-Representation Profile", "status": "PROPOSED", "responsibility": "Knowledge about representation strengths, failures, and costs"},
-    {"id": "repair", "label": "Representation Repair Gate", "status": "IMPLEMENTED", "responsibility": "Evaluate immutable candidate, promote explicitly, preserve rollback"},
+    {"id": "repair", "label": "Representation Repair Gate", "status": "IMPLEMENTED", "responsibility": "Captured version-content and evaluator fingerprints, task manifests, protocol, compatibility, validation, canonical packet bytes, and cost ceiling govern candidate-only activation with rollback; bootstrap roots require external sealing"},
     {"id": "learning", "label": "Representation Candidate Proposer", "status": "PROPOSED", "responsibility": "Query-blind candidate discovery under a frozen grammar and budget"},
     {"id": "proposal_policy", "label": "Proposal-Policy Meta-Learning", "status": "SPECULATIVE", "responsibility": "Use prior representation experience to improve future candidate search"},
-    {"id": "evidence_registry", "label": "Claim and Evidence Registry", "status": "IMPLEMENTED", "responsibility": "Scoped claims, support, contradictions, dependencies, falsifiers"},
+    {"id": "evidence_registry", "label": "Claim and Evidence Registry", "status": "PARTIAL", "responsibility": "Read-only scoped claims and syntactic evidence eligibility; no trusted artifact verifier or authenticated update authority"},
     {"id": "experiment_registry", "label": "Experiment Registry", "status": "IMPLEMENTED", "responsibility": "A-J protocols, artifacts, validity, and research dependencies"}
   ],
   "edges": [
@@ -35,7 +36,7 @@
     {"from": "task", "to": "selection", "status": "IMPLEMENTED", "claim": "Task keys/kinds determine component relevance"},
     {"from": "compression", "to": "selection", "status": "IMPLEMENTED", "claim": "Selector can inspect declared component scope and dependencies"},
     {"from": "selection", "to": "decompression", "status": "IMPLEMENTED", "claim": "Dependency closure reconstructs a task view or explicit incompleteness"},
-    {"from": "decompression", "to": "solver", "status": "EXPERIMENTALLY_SUPPORTED", "claim": "Exploratory capable-solver result supports frozen packet usability; local Qwen did not pass capability gate"},
+    {"from": "decompression", "to": "solver", "status": "PARTIAL", "claim": "An unsealed exploratory capable-solver report makes frozen packet usability plausible; local Qwen did not meet the reported Raw threshold"},
     {"from": "solver", "to": "evaluation", "status": "PARTIAL", "claim": "The reference evaluator checks deterministic exact answers; benchmark-specific evaluators handle model runs"},
     {"from": "decompression", "to": "evaluation", "status": "PARTIAL", "claim": "Lineage and supplied bytes are recorded, but a general independent reconstruction/provenance grader is not yet implemented"},
     {"from": "evaluation", "to": "ablation", "status": "IMPLEMENTED", "claim": "Frozen pass predicates support component ablation"},
@@ -48,7 +49,7 @@
     {"from": "learning", "to": "compression", "status": "PROPOSED", "claim": "A bounded proposer can emit candidates without heldout access"},
     {"from": "evaluation", "to": "proposal_policy", "status": "SPECULATIVE", "claim": "Metaheldout outcomes may improve proposal machinery"},
     {"from": "proposal_policy", "to": "learning", "status": "SPECULATIVE", "claim": "An improved policy may search future representation spaces better"},
-    {"from": "evaluation", "to": "evidence_registry", "status": "IMPLEMENTED", "claim": "Valid scoped outcomes update evidence without erasing contradictions"},
+    {"from": "evaluation", "to": "evidence_registry", "status": "PARTIAL", "claim": "Evidence syntax is checked, but no trusted artifact verifier or authenticated append-only update path can authorize PROVEN or SUPPORTED upgrades"},
     {"from": "experiment_registry", "to": "evaluation", "status": "IMPLEMENTED", "claim": "Frozen protocols and success/failure criteria govern evaluation"}
   ],
   "feedback_loops": [

@@ -71,6 +71,8 @@ Outcome-derived error classes must be labeled as such. Selecting a planned optio
 
 If Raw is below the frozen gate, report the run as solver-incapable for representation inference. Do not choose a new solver after seeing condition results inside the same protocol.
 
+The reference adapter's `capability_gate_from_result` is deliberately descriptive: it parses a result already presumed prevalidated and reports whether the stated counts meet the threshold, but it is not a protocol or artifact verifier and never authorizes representation interpretation. Until a trusted verifier is connected, this architecture boundary remains `PARTIAL`.
+
 ## Direct representation cost
 
 - packet bytes;
@@ -82,6 +84,10 @@ If Raw is below the frozen gate, report the run as solver-incapable for represen
 - latency and compute where available.
 
 These answer: “How much did this trial show the solver?” They do not answer: “How much machinery did the representation require?”
+
+In the reference implementation, every cost field is an exact nonnegative integer; booleans, floats, infinities, and NaN are invalid. `packet_bytes` is mechanically recomputed from the canonical component and full-source-manifest envelope whenever a representation is created or crosses the registry/gate boundary. The remaining schema, ontology, lookup, preprocessing, model, latency, and human-contribution fields are externally supplied measurements or attestations, not independently verified measurements; empirical use must bind them to sealed artifacts and protocols.
+
+Registry hashes are drift commitments, not authenticity proofs. Before bootstrap, an external protocol must seal the root representation, source manifest, task and protocol manifests, policy configuration, collaborator configuration digests, and externally measured costs/validation. The registry then rejects any later content change under a registered version ID, including through a retained object alias, at every path that can expose, evaluate, activate, bootstrap, or restore that version.
 
 ## Effective compression cost
 
@@ -145,12 +151,14 @@ Hive-3 requires the domain-specific human-authored fraction to decline without h
 
 Sufficiency is conditional on the measurement tuple. Report algorithm and guarantees:
 
-- `EXACT_SUBSET_MINIMUM`: exhaustive subsets within a small component limit;
-- `ONE_MINIMAL_APPROXIMATION`: greedy/ddmin result where no tested single removal preserves the pass predicate;
+- `EXACT_CONTRACT_SUBSET_MINIMUM`: exhaustive subsets within a small component limit that still pass the frozen fail-closed representation contract;
+- `ONE_CONTRACT_MINIMAL_APPROXIMATION`: greedy/ddmin result where no tested single removal preserves that contract-relative pass predicate;
 - `SINGLETON_ESSENTIALITY`: leave-one-out diagnostic only;
 - `CONDITIONAL_REDUNDANCY`: component removable only in the presence of named substitutes.
 
 The pass predicate includes answer, reconstruction, causal, temporal, authority, provenance, and illegal-promotion constraints. A baseline representation that already fails cannot yield a valid minimum.
+
+The current reference ablator is deliberately conservative: a component named by the sealed full-source manifest remains missing unless the candidate carries an independently validated replacement. Its “essential” result therefore means *required by this representation contract*, not *causally necessary for the underlying task*. Demonstrating causal-semantic minimum sufficient state requires counterfactual twins, valid replacement certificates or independently reconstructed alternatives, and held-out task reassessment. `SufficiencyReport.causal_necessity_demonstrated` is consequently `false` in the current model.
 
 Track:
 
@@ -226,6 +234,10 @@ For recursive representation improvement:
 
 No recursive claim is admissible if benchmarks, evaluator, candidate language, compute budget, or success criteria changed between arms.
 
+The executable recursive-evidence check requires exact equality for `packet_bytes`, `schema_bytes`, `ontology_bytes`, `code_config_bytes`, `lookup_bytes`, `preprocessing_steps`, `preprocessing_model_calls`, `solver_model_calls`, `input_tokens`, `output_tokens`, `latency_ms`, and `human_authored_domain_bytes`. A caller-set `compute_matched` flag cannot override a difference in any of these fields. It also requires distinct nonempty proposer and split manifests, replicated metaheldout episodes, a strict after-versus-before success gain, and a shuffled-meta or no-meta ablation that removes the gain.
+
+Repair promotion uses a separately frozen cost ceiling over the same fields. The default ceiling is the active parent cost; any allowed increase must be preregistered when the registry's gate is configured, and an over-ceiling candidate fails closed before task evaluation.
+
 ## Pareto comparison
 
 Quality dimensions maximize:
@@ -249,7 +261,9 @@ Missing required dimensions make candidates incomparable. Arbitrary scalar weigh
 
 - A deterministic replay/hash property may be **PROVEN** at a fixed revision.
 - A valid empirical benchmark may be **SUPPORTED** within its scope.
-- One exploratory ceiling result is supporting evidence, not general proof.
+- One unsealed exploratory ceiling result can make a scoped claim plausible; it does not establish `SUPPORTED` evidence.
 - A capability-gated run does not compare representations.
 - A smaller packet without hidden-cost accounting supports visible size reduction only.
-- A deterministic whole-system demo proves executable plumbing and invariants only.
+- A deterministic whole-system demo demonstrates its tested plumbing and behaviors only; it is not an exhaustive invariant proof.
+
+The reference `EvidenceRegistry` is a read-only claim view with syntactic eligibility checks. Because it has no trusted protocol/artifact verifier or authenticated append-only update authority, it fails closed for `PROVEN` and `SUPPORTED` upgrades even when a caller labels an evidence record `VALID`.

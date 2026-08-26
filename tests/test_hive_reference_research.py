@@ -23,12 +23,13 @@ from hive_reference.representation import (
     RepresentationComponent,
     RepresentationEvaluator,
     RepresentationInvariantError,
+    RepresentationRootCommitment,
     SelectiveDecompressor,
     TaskKind,
     ValidationStatus,
     make_causal_rule_component,
 )
-from hive_reference.model import EvidenceRef, FactKey, canonical_json
+from hive_reference.model import EvidenceRef, FactKey, canonical_json, sha256_text
 from hive_reference.research import (
     DeterministicMissingDependencyProposer,
     EvidenceLevel,
@@ -128,7 +129,13 @@ def test_evidence_registry_retains_scopes_and_invalid_evidence_cannot_upgrade() 
     assert registry.get("HIVE-C015").evidence_level is EvidenceLevel.SPECULATIVE
     assert registry.get("HIVE-C021").evidence_level is EvidenceLevel.FALSIFIED
 
-    invalid = ExperimentEvidence("bad", "hash", "INVALID", "favorable", ("artifact",))
+    invalid = ExperimentEvidence(
+        "bad",
+        sha256_text("protocol"),
+        "INVALID",
+        "favorable",
+        ("0" * 64,),
+    )
     with pytest.raises(ResearchInvariantError, match="invalid experiments"):
         registry.validate_upgrade(invalid, EvidenceLevel.SUPPORTED)
 
@@ -139,6 +146,10 @@ def test_repair_is_new_version_gated_and_rollback_preserves_both_versions() -> N
     lossy = full.subset(
         (item.component_id for item in full.components if item.component_id != missing_id),
         representation_id="lossy-v1",
+    )
+    lossy = replace(
+        lossy,
+        validation_status=ValidationStatus.DETERMINISTICALLY_VALIDATED,
     )
     proposer = DeterministicMissingDependencyProposer()
     candidate, proposal = proposer.propose(
@@ -153,21 +164,24 @@ def test_repair_is_new_version_gated_and_rollback_preserves_both_versions() -> N
     assert proposal.oracle_assisted
 
     tasks = build_demo_tasks(ledger.head_record_seq)
-    evaluator = RepresentationEvaluator(SelectiveDecompressor(), DeterministicReferenceSolver())
-    decision = RepresentationRepairGate(evaluator).evaluate(
-        lossy,
-        candidate,
+    root = RepresentationRootCommitment.from_trusted_representation(full)
+    evaluator = RepresentationEvaluator(
+        SelectiveDecompressor((root,)), DeterministicReferenceSolver()
+    )
+    protocol_hash = sha256_text("fixed")
+    gate = RepresentationRepairGate(evaluator, candidate_cost_ceiling=candidate.cost)
+    registry = RepresentationRegistry(
+        gate=gate,
         protected_tasks=tasks[2:],
         new_tasks=tasks[:2],
-        protocol_hash="fixed",
+        protocol_hash=protocol_hash,
     )
-    assert decision.status == "promote"
-
-    registry = RepresentationRegistry()
     registry.register(lossy)
     registry.bootstrap(lossy.representation_id)
     registry.register(candidate)
-    registry.activate(candidate.representation_id, decision)
+    decision, activation = registry.evaluate_and_activate(candidate.representation_id)
+    assert decision.status == "promote"
+    assert activation is not None
     candidate_hash = registry.active.content_hash
     registry.rollback(lossy.representation_id, reason="test")
     assert registry.active.content_hash == lossy.content_hash
@@ -177,13 +191,22 @@ def test_repair_is_new_version_gated_and_rollback_preserves_both_versions() -> N
 def test_repair_gate_rejects_no_improvement_and_protected_regression() -> None:
     ledger, full = _full_representation()
     tasks = build_demo_tasks(ledger.head_record_seq)
-    evaluator = RepresentationEvaluator(SelectiveDecompressor(), DeterministicReferenceSolver())
+    root = RepresentationRootCommitment.from_trusted_representation(full)
+    evaluator = RepresentationEvaluator(
+        SelectiveDecompressor((root,)), DeterministicReferenceSolver()
+    )
     decision = RepresentationRepairGate(evaluator).evaluate(
         full,
-        replace(full, representation_id="same-v2", version=2, parent_id=full.representation_id),
+        replace(
+            full,
+            representation_id="same-v2",
+            version=2,
+            parent_id=full.representation_id,
+            validation_status=ValidationStatus.DETERMINISTICALLY_VALIDATED,
+        ),
         protected_tasks=tasks[2:],
         new_tasks=tasks[:2],
-        protocol_hash="fixed",
+        protocol_hash=sha256_text("fixed"),
     )
     assert decision.status == "reject"
     assert decision.reason == "no_positive_new_task_improvement"
@@ -200,7 +223,7 @@ def test_recursive_evidence_requires_stable_protocol_controls_and_matched_resour
         "train",
         "select",
         "heldout",
-        "shuffled_meta",
+        "frozen",
         cost,
         cost,
         False,
@@ -209,6 +232,12 @@ def test_recursive_evidence_requires_stable_protocol_controls_and_matched_resour
         True,
         True,
         True,
+        metaheldout_episode_count=4,
+        metaheldout_replication_count=2,
+        proposer_before_success_count=1,
+        proposer_after_success_count=3,
+        meta_ablation_success_count=1,
+        meta_ablation_control="shuffled_meta",
     )
     assert safe.admissible_recursive_evidence
     assert not replace(safe, benchmark_changed=True).admissible_recursive_evidence

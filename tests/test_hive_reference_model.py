@@ -4,7 +4,12 @@ from dataclasses import replace
 
 import pytest
 
-from hive_reference.demo import build_demo_ledger, build_demo_tasks, run_demo
+from hive_reference.demo import (
+    build_demo_ledger,
+    build_demo_tasks,
+    run_demo,
+    write_demo_result,
+)
 from hive_reference.model import (
     Authority,
     CanonicalEvent,
@@ -28,6 +33,7 @@ from hive_reference.representation import (
     ReferenceCompressor,
     RepresentationAblator,
     RepresentationEvaluator,
+    RepresentationRootCommitment,
     SelectiveDecompressor,
     SolveStatus,
     make_causal_rule_component,
@@ -331,7 +337,10 @@ def test_counterfactual_propagates_dependency_without_mutating_canonical_history
 def test_compression_decompression_and_ablation_are_closed_and_provenance_bearing() -> None:
     ledger, representation = _demo_representation()
     tasks = build_demo_tasks(ledger.head_record_seq)
-    evaluator = RepresentationEvaluator(SelectiveDecompressor(), DeterministicReferenceSolver())
+    root = RepresentationRootCommitment.from_trusted_representation(representation)
+    evaluator = RepresentationEvaluator(
+        SelectiveDecompressor((root,)), DeterministicReferenceSolver()
+    )
     result = evaluator.evaluate(representation, tasks)
     assert result.all_passed
     assert all(outcome.evidence_observation_ids for outcome in result.outcomes)
@@ -346,10 +355,14 @@ def test_compression_decompression_and_ablation_are_closed_and_provenance_bearin
     assert all(item.status is SolveStatus.INCOMPLETE for item in missing_rule_result.outcomes)
 
     report = RepresentationAblator(evaluator, exact_limit=12).minimize(representation, tasks)
-    assert report.algorithm == "exact_subset_minimum"
+    assert report.algorithm == "exact_contract_subset_minimum"
+    assert report.necessity_scope == "fail_closed_representation_contract"
+    assert report.causal_necessity_demonstrated is False
     assert "component:event:e_inside" in report.singleton_essential
     assert "component:event:e_color" in report.singleton_redundant
-    assert report.minimum_component_count == 6
+    # The full-source manifest now prevents a superficially passing subset
+    # from hiding an ablated canonical producer.
+    assert report.minimum_component_count == 7
 
 
 def test_demo_is_byte_deterministic_and_scoped() -> None:
@@ -362,3 +375,14 @@ def test_demo_is_byte_deterministic_and_scoped() -> None:
     assert first["repair"]["migration"]["status"] == "promote"
     assert first["repair"]["rollback_hash_matches"] is True
     assert first["repair"]["representation_learning_demonstrated"] is False
+
+
+def test_demo_result_artifact_cannot_be_overwritten(tmp_path) -> None:
+    output = tmp_path / "RESULT.json"
+    write_demo_result(output)
+    sealed = output.read_bytes()
+
+    with pytest.raises(FileExistsError):
+        write_demo_result(output)
+
+    assert output.read_bytes() == sealed

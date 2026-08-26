@@ -36,7 +36,7 @@ authority stress      transfer               |
 | R0 | Is canonical truth/state coherent? | Plan, conflict, late-evidence, rollback tests | Implemented in reference core |
 | R1 | Does a representation preserve scoped distinctions? | Round-trip/collision properties | Engineered codec supported |
 | R2 | Can a capable solver use it? | Raw gate then small matched comparison | Partial; Qwen gated, Codex exploratory |
-| R3 | Where is the compression frontier? | Semantic removal + exact small-set ablation | Partial |
+| R3 | Where is the compression frontier? | Semantic removal + exact small-set ablation | Partial; current exact result is contract-relative, not causal-semantic necessity |
 | R4 | Does compression alter degradation under load/depth/authority stress? | 2x2 support/distractor and authority suite | Proposed |
 | R5 | Can Hive discover a representation? | Frozen rule-grammar learner on locked worlds | Proposed; critical transition |
 | R6 | Is the learned object an abstraction that transfers? | Hidden generators, compositions, symbols, counterexamples | Proposed |
@@ -67,7 +67,7 @@ authority stress      transfer               |
 **Failure:** Compressed loses required correctness due to absent/unusable structure.
 
 **Cost:** small model panel after deterministic preflight.
-**Current evidence:** Qwen run cannot adjudicate; exploratory Codex run supports scoped usability but hit a ceiling.
+**Current evidence:** Qwen run cannot adjudicate; the unsealed exploratory Codex report makes scoped usability plausible but hit a ceiling.
 
 ### Experiment C — Compression Frontier
 
@@ -100,7 +100,7 @@ Separate memorization, same-generator interpolation, structural transfer, causal
 
 ### Experiment I — Representation Repair
 
-Inject independently controlled observation, representation, decoder, and solver faults. Require correct layer/component localization, immutable candidate, protected regression/transfer suite, explicit promotion, and exact rollback.
+Inject independently controlled observation, representation, decoder, and solver faults. Require correct layer/component localization, immutable candidate, normalized behavior-configuration digests for the evaluator/solver/decompressor, a registry-frozen protocol/protected-and-new task manifest, deterministic-or-stronger candidate validation, mechanically recomputed packet bytes, a preregistered cost ceiling, explicit promotion, and exact rollback. The activation call receives only the candidate ID; collaborator fingerprints, cost integrity, every evaluation summary, and the full decision content are revalidated before the active pointer moves. Non-packet costs and validation labels remain externally attested inputs until an artifact-backed verifier exists.
 
 ### Experiment J — Meta-Learning
 
@@ -111,7 +111,7 @@ Across new representation-discovery episodes compare:
 - shuffled-profile control;
 - no-meta control.
 
-Match candidate count, compute, calls, human input, and evaluator access. Measure heldout frontier quality and resources to first admissible candidate. This is the first experiment that can support recursive representation improvement.
+Match candidate count, every declared `CostBreakdown` field, calls, human input, and evaluator access. Require distinct proposer/split manifests, replicated metaheldout episodes, an actual after-versus-before gain, and a shuffled/no-meta ablation. A self-asserted compute-match flag is not sufficient. Measure heldout frontier quality and resources to first admissible candidate. This is the first experiment that can support recursive representation improvement.
 
 ## World-complexity curriculum
 

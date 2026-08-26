@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from enum import Enum
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -26,7 +26,18 @@ def _json_ready(value: Any) -> Any:
         return _json_ready(asdict(value))
     if isinstance(value, Mapping):
         return {str(key): _json_ready(item) for key, item in value.items()}
-    if isinstance(value, (list, tuple, set, frozenset)):
+    if isinstance(value, (set, frozenset)):
+        converted = [_json_ready(item) for item in value]
+        return sorted(
+            converted,
+            key=lambda item: json.dumps(
+                item,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+        )
+    if isinstance(value, (list, tuple)):
         return [_json_ready(item) for item in value]
     return value
 
@@ -82,8 +93,6 @@ class TemporalStatus(str, Enum):
     HISTORICAL = "historical"
     SUPERSEDED = "superseded"
     FUTURE = "future"
-    DISPUTED = "disputed"
-    FALSE = "false"
     UNKNOWN = "unknown"
 
 
@@ -107,6 +116,15 @@ class EdgeKind(str, Enum):
     SUPERSEDES = "supersedes"
     CONTAINS = "contains"
     TEMPORAL_BEFORE = "temporal_before"
+
+
+def _require_exact_enum(value: Any, enum_type: type[Enum], field_name: str) -> None:
+    """Reject strings and foreign enum values at typed authority boundaries."""
+
+    if type(value) is not enum_type:
+        raise ModelInvariantError(
+            f"{field_name} must be an exact {enum_type.__name__} member"
+        )
 
 
 @dataclass(frozen=True, order=True)
@@ -204,6 +222,9 @@ class Requirement:
     op: RequirementOp
     value: JSONScalar = None
 
+    def __post_init__(self) -> None:
+        _require_exact_enum(self.op, RequirementOp, "requirement op")
+
 
 @dataclass(frozen=True)
 class ClaimRevision:
@@ -223,6 +244,9 @@ class ClaimRevision:
     confidence: float = 1.0
 
     def __post_init__(self) -> None:
+        _require_exact_enum(self.basis, EvidenceBasis, "claim basis")
+        _require_exact_enum(self.truth, TruthStatus, "claim truth")
+        _require_exact_enum(self.authority, Authority, "claim authority")
         if not self.claim_id:
             raise ModelInvariantError("claim_id is required")
         if self.valid_from < 0 or self.recorded_at < 0:
@@ -248,6 +272,41 @@ class StateEffect:
     op: EffectOp
     value: JSONScalar = None
     expected_previous: JSONScalar = None
+    increment_by: JSONScalar = None
+    expected_previous_specified: bool = False
+
+    def __post_init__(self) -> None:
+        _require_exact_enum(self.op, EffectOp, "state effect op")
+        if type(self.expected_previous_specified) is not bool:
+            raise ModelInvariantError(
+                "expected_previous_specified must be an exact boolean"
+            )
+        # Preserve the original convenient API for non-null guards while
+        # making a null-valued guard explicit and distinguishable from no
+        # guard.  Callers express the latter with
+        # ``expected_previous=None, expected_previous_specified=True``.
+        if self.expected_previous is not None and not self.expected_previous_specified:
+            object.__setattr__(self, "expected_previous_specified", True)
+        if self.op is EffectOp.DELETE and self.value is not None:
+            raise ModelInvariantError("DELETE effects must have a null value")
+        if self.op is EffectOp.INCREMENT:
+            operands = (self.expected_previous, self.increment_by, self.value)
+            if any(
+                not isinstance(item, (int, float)) or isinstance(item, bool)
+                for item in operands
+            ):
+                raise ModelInvariantError(
+                    "INCREMENT effects require numeric expected_previous, "
+                    "increment_by, and result value"
+                )
+            if canonical_json(self.expected_previous + self.increment_by) != canonical_json(
+                self.value
+            ):
+                raise ModelInvariantError(
+                    "INCREMENT result must equal expected_previous plus increment_by"
+                )
+        elif self.increment_by is not None:
+            raise ModelInvariantError("increment_by is only valid for INCREMENT effects")
 
 
 @dataclass(frozen=True)
@@ -272,14 +331,30 @@ class CanonicalEvent:
             raise ModelInvariantError("event times must be nonnegative")
         if not self.evidence:
             raise ModelInvariantError("events require evidence")
+        for edge in self.edges:
+            if not isinstance(edge, tuple) or len(edge) != 2:
+                raise ModelInvariantError("event edges must be (EdgeKind, target_id) pairs")
+            _require_exact_enum(edge[0], EdgeKind, "event edge kind")
         claim_ids = {claim.claim_id for claim in self.claims}
         if len(claim_ids) != len(self.claims):
             raise ModelInvariantError("claim IDs within an event must be unique")
+        effect_keys = {effect.key for effect in self.effects}
+        if len(effect_keys) != len(self.effects):
+            raise ModelInvariantError("state effect keys within an event must be unique")
         if any(effect.claim_id not in claim_ids for effect in self.effects):
             raise ModelInvariantError("every state effect must cite a claim in the event")
         if any(claim.recorded_at != self.recorded_at for claim in self.claims):
             raise ModelInvariantError("event and claim record sequences must match")
         claims_by_id = {claim.claim_id: claim for claim in self.claims}
+        if any(
+            effect.key != claims_by_id[effect.claim_id].key
+            or canonical_json(effect.value)
+            != canonical_json(claims_by_id[effect.claim_id].value)
+            for effect in self.effects
+        ):
+            raise ModelInvariantError(
+                "every state effect key and value must match its cited claim"
+            )
         if any(
             claims_by_id[effect.claim_id].valid_from != self.effective_time
             for effect in self.effects
@@ -300,6 +375,10 @@ class PromotionDecision:
     policy_id: str
     reason: str
     evidence_sha256: str
+    event_content_hash: str
+
+    def __post_init__(self) -> None:
+        _require_exact_enum(self.status, DecisionStatus, "promotion decision status")
 
 
 @dataclass(frozen=True)
@@ -310,6 +389,7 @@ class Contradiction:
     overlap_from: int
     resolution: str
     resolved_by_claim_id: str | None = None
+    overlap_to: int | None = None
 
 
 @dataclass(frozen=True)
@@ -331,6 +411,7 @@ class StateTransition:
     effective_time: int
     source_event_id: str
     source_claim_id: str
+    replaced_claim_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -352,12 +433,16 @@ class StateSnapshot:
     noncanonical: bool = False
 
     def value(self, key: FactKey, default: Any = None) -> Any:
+        if key in self.ambiguous_keys:
+            return default
         for cell in self.cells:
             if cell.key == key:
                 return cell.value
         return default
 
     def cell(self, key: FactKey) -> StateCell | None:
+        if key in self.ambiguous_keys:
+            return None
         return next((cell for cell in self.cells if cell.key == key), None)
 
     @property
@@ -385,6 +470,7 @@ class StateSnapshot:
                     "contradiction_id": item.contradiction_id,
                     "key": item.key.text,
                     "overlap_from": item.overlap_from,
+                    "overlap_to": item.overlap_to,
                     "resolution": item.resolution,
                     "resolved_by_claim_id": item.resolved_by_claim_id,
                 }
@@ -399,6 +485,7 @@ class StateSnapshot:
                     "key": item.key.text,
                     "source_claim_id": item.source_claim_id,
                     "source_event_id": item.source_event_id,
+                    "replaced_claim_id": item.replaced_claim_id,
                 }
                 for item in self.history
             ],
@@ -408,16 +495,47 @@ class StateSnapshot:
         }
 
 
+@dataclass(frozen=True, init=False, slots=True)
 class AuthorityPolicy:
     """Deterministic admission policy; confidence alone never grants authority."""
 
+    registered_inference_rules: frozenset[str]
+
     def __init__(self, registered_inference_rules: Iterable[str] = ()) -> None:
-        self.registered_inference_rules = frozenset(registered_inference_rules)
+        object.__setattr__(
+            self,
+            "registered_inference_rules",
+            frozenset(registered_inference_rules),
+        )
+
+    @property
+    def policy_id(self) -> str:
         rule_hash = sha256_text(canonical_json(sorted(self.registered_inference_rules)))[:12]
-        self.policy_id = f"hive-authority-v1:{rule_hash}"
+        return f"hive-authority-v1:{rule_hash}"
+
+    def claim_has_epistemic_authority(self, claim: ClaimRevision) -> bool:
+        """Whether a non-accepted claim may establish explicit uncertainty.
+
+        This intentionally ignores ``truth`` while preserving the same
+        evidence-basis and authority boundary used for world-state promotion.
+        Runtime event/claim dependencies and preconditions are checked by
+        replay before the uncertainty overlay is materialized.
+        """
+
+        if claim.basis is EvidenceBasis.OBSERVED:
+            return claim.authority is Authority.CANONICAL
+        if claim.basis is EvidenceBasis.INFERRED:
+            return (
+                claim.authority is Authority.DERIVED
+                and bool(claim.derivation_rule_id)
+                and claim.derivation_rule_id in self.registered_inference_rules
+                and bool(claim.depends_on_claim_ids)
+            )
+        return False
 
     def decide(self, event: CanonicalEvent) -> PromotionDecision:
         evidence_hash = sha256_text(canonical_json([asdict(item) for item in event.evidence]))
+        event_content_hash = event.content_hash
         if not event.effects:
             return PromotionDecision(
                 event.event_id,
@@ -425,6 +543,7 @@ class AuthorityPolicy:
                 self.policy_id,
                 "no_world_effects",
                 evidence_hash,
+                event_content_hash,
             )
         claims = {claim.claim_id: claim for claim in event.claims}
         effect_claims = [claims[effect.claim_id] for effect in event.effects]
@@ -466,6 +585,7 @@ class AuthorityPolicy:
             self.policy_id,
             reason,
             evidence_hash,
+            event_content_hash,
         )
 
 
@@ -490,7 +610,7 @@ class EventLedger:
 
     @property
     def decisions(self) -> tuple[PromotionDecision, ...]:
-        return tuple(self._decisions[event.event_id] for event in self.events)
+        return tuple(self._decision_for(event) for event in self.events)
 
     @property
     def head_record_seq(self) -> int:
@@ -516,13 +636,33 @@ class EventLedger:
             raise ModelInvariantError(f"duplicate observation ID {observation.observation_id}")
         self._observations[observation.observation_id] = observation
 
-    def _validate_evidence(self, evidence: Iterable[EvidenceRef]) -> None:
+    def _validate_evidence(
+        self,
+        evidence: Iterable[EvidenceRef],
+        *,
+        recorded_at: int,
+    ) -> None:
         for ref in evidence:
             observed = self._observations.get(ref.observation_id)
             if observed is None:
                 raise ModelInvariantError(f"unknown evidence observation {ref.observation_id}")
             if ref.source_id != observed.source_id or ref.source_sha256 != observed.source_sha256:
                 raise ModelInvariantError("evidence source identity or hash does not match")
+            if observed.recorded_at > recorded_at:
+                raise ModelInvariantError(
+                    "evidence cannot be recorded after the record that cites it"
+                )
+
+    def _decision_for(self, event: CanonicalEvent) -> PromotionDecision:
+        decision = self._decisions.get(event.event_id)
+        if decision is None:
+            raise ModelInvariantError(f"event {event.event_id} has no promotion decision")
+        expected = self.policy.decide(event)
+        if decision != expected:
+            raise ModelInvariantError(
+                "promotion decision does not match the recomputed authority decision"
+            )
+        return decision
 
     def _has_dependency_path(self, start: str, target: str) -> bool:
         pending = [start]
@@ -545,14 +685,19 @@ class EventLedger:
             raise ModelInvariantError(f"duplicate event ID {event.event_id}")
         if event.recorded_at in self._record_sequences:
             raise ModelInvariantError("event record sequences must be unique")
-        self._validate_evidence(event.evidence)
+        self._validate_evidence(event.evidence, recorded_at=event.recorded_at)
         for claim in event.claims:
-            self._validate_evidence(claim.evidence)
+            self._validate_evidence(claim.evidence, recorded_at=claim.recorded_at)
             if claim.claim_id in self._claims:
                 raise ModelInvariantError(f"duplicate claim ID {claim.claim_id}")
             for dependency in claim.depends_on_claim_ids:
-                if dependency not in self._claims:
+                target = self._claims.get(dependency)
+                if target is None:
                     raise ModelInvariantError(f"unknown claim dependency {dependency}")
+                if target.recorded_at > claim.recorded_at:
+                    raise ModelInvariantError(
+                        "claims cannot depend on claims recorded in the future"
+                    )
             for superseded_id in claim.supersedes_claim_ids:
                 target = self._claims.get(superseded_id)
                 if target is None:
@@ -566,11 +711,22 @@ class EventLedger:
             target = self._events.get(dependency)
             if target is None:
                 raise ModelInvariantError(f"unknown event dependency {dependency}")
+            if target.recorded_at > event.recorded_at:
+                raise ModelInvariantError(
+                    "events cannot depend on events recorded in the future"
+                )
             if target.effective_time > event.effective_time:
                 raise ModelInvariantError("events cannot causally depend on future-effective events")
             if self._has_dependency_path(dependency, event.event_id):
                 raise ModelInvariantError("event dependency cycle")
         decision = self.policy.decide(event)
+        if (
+            decision.event_id != event.event_id
+            or decision.event_content_hash != event.content_hash
+        ):
+            raise ModelInvariantError(
+                "promotion decision does not match the full event content"
+            )
         self._events[event.event_id] = event
         self._decisions[event.event_id] = decision
         self._record_sequences.add(event.recorded_at)
@@ -583,23 +739,209 @@ class EventLedger:
         return self._has_dependency_path(start, target)
 
     @staticmethod
-    def _requirement_met(cells: Mapping[FactKey, StateCell], requirement: Requirement) -> bool:
+    def _requirement_met(
+        cells: Mapping[FactKey, StateCell],
+        requirement: Requirement,
+        ambiguous_keys: Iterable[FactKey] = (),
+    ) -> bool:
+        # Ambiguity is an explicit unknown-state overlay, never absence.
+        if requirement.key in ambiguous_keys:
+            return False
         cell = cells.get(requirement.key)
         if requirement.op is RequirementOp.EXISTS:
             return cell is not None
         if requirement.op is RequirementOp.ABSENT:
             return cell is None
         if requirement.op is RequirementOp.EQ:
-            return cell is not None and cell.value == requirement.value
+            return (
+                cell is not None
+                and canonical_json(cell.value) == canonical_json(requirement.value)
+            )
         if requirement.op is RequirementOp.GTE:
             return (
                 cell is not None
                 and isinstance(cell.value, (int, float))
                 and not isinstance(cell.value, bool)
                 and isinstance(requirement.value, (int, float))
+                and not isinstance(requirement.value, bool)
                 and cell.value >= requirement.value
             )
         raise ModelInvariantError(f"unknown requirement operator {requirement.op}")
+
+    @staticmethod
+    def _effects_incompatible(
+        left: StateEffect,
+        right: StateEffect,
+        left_claim: ClaimRevision,
+        right_claim: ClaimRevision,
+    ) -> bool:
+        """Whether unordered, simultaneous effects have an order-dependent result."""
+
+        if left.op is right.op:
+            if left.op is EffectOp.SET:
+                return (
+                    canonical_json(left.value) != canonical_json(right.value)
+                    or left_claim.valid_from != right_claim.valid_from
+                    or left_claim.valid_to != right_claim.valid_to
+                )
+            # Deletions are idempotent.  Increments are still competing
+            # assertions of transition authority unless explicitly ordered.
+            return left.op is not EffectOp.DELETE
+        return True
+
+    @staticmethod
+    def _evaluate_event_effects(
+        event: CanonicalEvent,
+        cells: Mapping[FactKey, StateCell],
+        *,
+        validate: bool,
+    ) -> tuple[dict[FactKey, StateCell], list[StateTransition], str | None]:
+        """Apply one atomic event to a trial state, optionally checking guards."""
+
+        claims = {claim.claim_id: claim for claim in event.claims}
+        trial = dict(cells)
+        trial_history: list[StateTransition] = []
+        for effect in event.effects:
+            claim = claims[effect.claim_id]
+            existing = trial.get(effect.key)
+            expected_matches = (
+                effect.expected_previous_specified
+                and existing is not None
+                and canonical_json(existing.value)
+                == canonical_json(effect.expected_previous)
+            )
+            supersedes_existing = (
+                existing is not None
+                and existing.source_claim_id in claim.supersedes_claim_ids
+            )
+            if effect.op is EffectOp.SET:
+                if (
+                    validate
+                    and effect.expected_previous_specified
+                    and not expected_matches
+                ):
+                    return trial, trial_history, "expected_previous_mismatch"
+                changes_existing_state = (
+                    existing is not None
+                    and (
+                        canonical_json(existing.value) != canonical_json(effect.value)
+                        or existing.valid_to != claim.valid_to
+                    )
+                )
+                if (
+                    validate
+                    and changes_existing_state
+                    and not expected_matches
+                    and not supersedes_existing
+                ):
+                    return trial, trial_history, "unlicensed_supersession"
+                before = None if existing is None else existing.value
+                trial[effect.key] = StateCell(
+                    key=effect.key,
+                    value=effect.value,
+                    source_claim_id=claim.claim_id,
+                    source_event_id=event.event_id,
+                    valid_from=claim.valid_from,
+                    valid_to=claim.valid_to,
+                    recorded_at=claim.recorded_at,
+                )
+                trial_history.append(
+                    StateTransition(
+                        key=effect.key,
+                        before=before,
+                        after=effect.value,
+                        effective_time=event.effective_time,
+                        source_event_id=event.event_id,
+                        source_claim_id=claim.claim_id,
+                        replaced_claim_id=(
+                            None if existing is None else existing.source_claim_id
+                        ),
+                    )
+                )
+            elif effect.op is EffectOp.DELETE:
+                if (
+                    validate
+                    and effect.expected_previous_specified
+                    and not expected_matches
+                ):
+                    return trial, trial_history, "expected_previous_mismatch"
+                if (
+                    validate
+                    and existing is not None
+                    and not expected_matches
+                    and not supersedes_existing
+                ):
+                    return trial, trial_history, "unlicensed_deletion"
+                before = None if existing is None else existing.value
+                trial.pop(effect.key, None)
+                trial_history.append(
+                    StateTransition(
+                        effect.key,
+                        before,
+                        None,
+                        event.effective_time,
+                        event.event_id,
+                        claim.claim_id,
+                        None if existing is None else existing.source_claim_id,
+                    )
+                )
+            elif effect.op is EffectOp.INCREMENT:
+                if validate and (
+                    existing is None
+                    or canonical_json(existing.value)
+                    != canonical_json(effect.expected_previous)
+                ):
+                    return trial, trial_history, "expected_previous_mismatch"
+                before = effect.expected_previous if existing is None else existing.value
+                after = effect.value
+                trial[effect.key] = StateCell(
+                    effect.key,
+                    after,
+                    claim.claim_id,
+                    event.event_id,
+                    claim.valid_from,
+                    claim.valid_to,
+                    claim.recorded_at,
+                )
+                trial_history.append(
+                    StateTransition(
+                        effect.key,
+                        before,
+                        after,
+                        event.effective_time,
+                        event.event_id,
+                        claim.claim_id,
+                        None if existing is None else existing.source_claim_id,
+                    )
+                )
+            else:  # pragma: no cover - Enum construction prevents this.
+                return trial, trial_history, "unknown_effect"
+        return trial, trial_history, None
+
+    @staticmethod
+    def _claim_valid_at(claim: ClaimRevision, valid_at: int) -> bool:
+        return claim.valid_from <= valid_at and (
+            claim.valid_to is None or valid_at < claim.valid_to
+        )
+
+    @classmethod
+    def _active_conflict_claim_ids(
+        cls,
+        contradiction: Contradiction,
+        claims_by_id: Mapping[str, ClaimRevision],
+        valid_at: int,
+    ) -> frozenset[str]:
+        return frozenset(
+            claim_id
+            for claim_id in contradiction.claim_ids
+            if claim_id in claims_by_id
+            and cls._claim_valid_at(claims_by_id[claim_id], valid_at)
+        )
+
+    @staticmethod
+    def _overlap_to(claims: Iterable[ClaimRevision]) -> int | None:
+        finite_ends = [claim.valid_to for claim in claims if claim.valid_to is not None]
+        return min(finite_ends) if finite_ends else None
 
     def replay(
         self,
@@ -632,188 +974,412 @@ class EventLedger:
         applied: set[str] = set()
         applied_claims: set[str] = set()
 
-        # Equal-time, mutually unordered authoritative writes are a dispute.  A
-        # lexical ID or input ordering may never decide which value is true.
-        conflict_events: set[str] = set()
         claims_by_id = {
             claim.claim_id: claim for event in visible for claim in event.claims
         }
-        by_time_key: dict[tuple[int, FactKey], list[tuple[CanonicalEvent, StateEffect]]] = {}
-        for event in visible:
-            if self._decisions[event.event_id].status is not DecisionStatus.ADMIT:
-                continue
-            for effect in event.effects:
-                if effect.op is EffectOp.SET:
-                    by_time_key.setdefault((event.effective_time, effect.key), []).append((event, effect))
-        for (effective_time, key), writes in by_time_key.items():
-            values = {canonical_json(effect.value) for _, effect in writes}
-            if len(values) <= 1:
-                continue
-            unordered = [
-                (left, right)
-                for index, (left, left_effect) in enumerate(writes)
-                for right, right_effect in writes[index + 1 :]
-                if not self._event_reaches(left.event_id, right.event_id)
-                and not self._event_reaches(right.event_id, left.event_id)
-                and left_effect.claim_id
-                not in claims_by_id[right_effect.claim_id].supersedes_claim_ids
-                and right_effect.claim_id
-                not in claims_by_id[left_effect.claim_id].supersedes_claim_ids
-            ]
-            if not unordered:
-                continue
-            claim_ids = tuple(sorted(effect.claim_id for _, effect in writes))
-            contradiction_id = "conflict_" + sha256_text(
-                canonical_json([key.text, effective_time, list(claim_ids)])
-            )[:16]
-            contradictions.append(
-                Contradiction(
-                    contradiction_id=contradiction_id,
-                    key=key,
-                    claim_ids=claim_ids,
-                    overlap_from=effective_time,
-                    resolution="unresolved",
+        claim_event_ids = {
+            claim.claim_id: event.event_id
+            for event in visible
+            for claim in event.claims
+        }
+
+        def refresh_ambiguity(at_time: int) -> set[FactKey]:
+            active_keys: set[FactKey] = set()
+            for index, contradiction in enumerate(contradictions):
+                if contradiction.resolution != "unresolved":
+                    continue
+                active_ids = self._active_conflict_claim_ids(
+                    contradiction, claims_by_id, at_time
                 )
-            )
-            ambiguous.add(key)
-            conflict_events.update(event.event_id for event, _ in writes)
+                if active_ids:
+                    active_keys.add(contradiction.key)
+                else:
+                    contradictions[index] = replace(
+                        contradiction, resolution="expired"
+                    )
+            return active_keys
 
-        current_time = -1
-        for event in visible:
-            if event.effective_time != current_time:
-                current_time = event.effective_time
-                for key, cell in tuple(cells.items()):
-                    if cell.valid_to is not None and cell.valid_to <= current_time:
-                        del cells[key]
-
-            policy_decision = self._decisions[event.event_id]
-            if event.event_id in conflict_events:
-                for effect in event.effects:
-                    cells.pop(effect.key, None)
-                    ambiguous.add(effect.key)
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, "unresolved_contradiction")
-                continue
-            if policy_decision.status is not DecisionStatus.ADMIT:
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, policy_decision.reason)
-                continue
-            if any(dep in excluded or dep not in applied for dep in event.hard_dependencies):
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, "missing_hard_dependency")
-                continue
-            event_claims = {claim.claim_id: claim for claim in event.claims}
-            effect_claims = [event_claims[effect.claim_id] for effect in event.effects]
-            if any(
-                dependency not in applied_claims
-                for claim in effect_claims
-                for dependency in claim.depends_on_claim_ids
+        # Events at one effective time are evaluated in explicit causal layers.
+        # Peers in a layer see the same starting state, so record order cannot
+        # make a false precondition poison a valid peer or choose between
+        # incompatible authoritative effects.
+        cursor = 0
+        while cursor < len(visible):
+            current_time = visible[cursor].effective_time
+            group_end = cursor
+            while (
+                group_end < len(visible)
+                and visible[group_end].effective_time == current_time
             ):
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, "missing_claim_dependency")
-                continue
-            if not all(self._requirement_met(cells, item) for item in event.requirements):
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, "precondition_failed")
-                continue
+                group_end += 1
+            group = visible[cursor:group_end]
+            cursor = group_end
 
-            claims = {claim.claim_id: claim for claim in event.claims}
-            trial = dict(cells)
-            trial_history: list[StateTransition] = []
-            rejection: str | None = None
-            for effect in event.effects:
-                claim = claims[effect.claim_id]
-                existing = trial.get(effect.key)
-                if effect.op is EffectOp.SET:
-                    if effect.expected_previous is not None and (
-                        existing is None or existing.value != effect.expected_previous
+            for key, cell in tuple(cells.items()):
+                if cell.valid_to is not None and cell.valid_to <= current_time:
+                    del cells[key]
+            ambiguous = refresh_ambiguity(current_time)
+
+            group_ids = {event.event_id for event in group}
+            predecessors: dict[str, set[str]] = {}
+            for event in group:
+                event_claims = {claim.claim_id: claim for claim in event.claims}
+                effect_claims = [event_claims[effect.claim_id] for effect in event.effects]
+                prior_ids = set(event.hard_dependencies) | set(event.causal_parents)
+                for claim in effect_claims:
+                    for claim_id in (
+                        *claim.depends_on_claim_ids,
+                        *claim.supersedes_claim_ids,
                     ):
-                        rejection = "expected_previous_mismatch"
-                        break
-                    if existing is not None and existing.value != effect.value:
-                        licensed = (
-                            effect.expected_previous == existing.value
-                            or existing.source_claim_id in claim.supersedes_claim_ids
+                        source_event_id = claim_event_ids.get(claim_id)
+                        if source_event_id is not None:
+                            prior_ids.add(source_event_id)
+                predecessors[event.event_id] = prior_ids & group_ids
+
+            pending = {event.event_id: event for event in group}
+            while pending:
+                pending_ids = set(pending)
+                stage = sorted(
+                    (
+                        event
+                        for event in pending.values()
+                        if not (predecessors[event.event_id] & pending_ids)
+                    ),
+                    key=lambda item: (item.recorded_at, item.event_id),
+                )
+                if not stage:  # Defensive: append-time record ordering makes this unreachable.
+                    raise ModelInvariantError("same-time event ordering cycle")
+
+                # A well-authorized observation or licensed inference whose
+                # truth is explicitly DISPUTED/UNKNOWN establishes epistemic
+                # unknown, not world-state absence.  Materialize that overlay
+                # before peer requirements are evaluated so ABSENT cannot turn
+                # uncertainty into a positive fact.  Plans, proposals,
+                # predictions, untrusted observations, and dependency- or
+                # precondition-failed assertions do not receive this power.
+                stage_start_cells = dict(cells)
+                stage_start_ambiguous = frozenset(ambiguous)
+                uncertainty_candidates: list[
+                    tuple[StateEffect, ClaimRevision]
+                ] = []
+                for uncertain_event in stage:
+                    if any(
+                        dep in excluded or dep not in applied
+                        for dep in (
+                            *uncertain_event.hard_dependencies,
+                            *uncertain_event.causal_parents,
                         )
-                        if not licensed:
-                            rejection = "unlicensed_supersession"
-                            break
-                    before = None if existing is None else existing.value
-                    trial[effect.key] = StateCell(
-                        key=effect.key,
-                        value=effect.value,
-                        source_claim_id=claim.claim_id,
-                        source_event_id=event.event_id,
-                        valid_from=claim.valid_from,
-                        valid_to=claim.valid_to,
-                        recorded_at=claim.recorded_at,
-                    )
-                    trial_history.append(
-                        StateTransition(
+                    ):
+                        continue
+                    if not all(
+                        self._requirement_met(
+                            stage_start_cells,
+                            item,
+                            stage_start_ambiguous,
+                        )
+                        for item in uncertain_event.requirements
+                    ):
+                        continue
+                    uncertain_claims = {
+                        claim.claim_id: claim for claim in uncertain_event.claims
+                    }
+                    for effect in uncertain_event.effects:
+                        claim = uncertain_claims[effect.claim_id]
+                        if claim.truth not in {
+                            TruthStatus.DISPUTED,
+                            TruthStatus.UNKNOWN,
+                        }:
+                            continue
+                        if not self.policy.claim_has_epistemic_authority(claim):
+                            continue
+                        if any(
+                            dependency not in applied_claims
+                            for dependency in claim.depends_on_claim_ids
+                        ):
+                            continue
+                        if not self._claim_valid_at(claim, current_time):
+                            continue
+                        # An already established accepted cell resolves a later
+                        # uncertain assertion by authority.  The ordinary
+                        # contradiction pass below still records that dispute.
+                        if (
+                            effect.key in stage_start_cells
+                            and effect.key not in stage_start_ambiguous
+                        ):
+                            continue
+                        uncertainty_candidates.append((effect, claim))
+
+                # Materialize the complete candidate set only after every
+                # uncertain peer was assessed against the immutable pre-stage
+                # view.  Peer iteration/record order therefore cannot make one
+                # uncertainty invalidate another's ABSENT precondition.
+                for effect, claim in uncertainty_candidates:
+                    if any(
+                        contradiction.resolution == "unresolved"
+                        and contradiction.claim_ids == (claim.claim_id,)
+                        for contradiction in contradictions
+                    ):
+                        continue
+                    contradictions.append(
+                        Contradiction(
+                            contradiction_id="epistemic_"
+                            + sha256_text(
+                                canonical_json(
+                                    [effect.key.text, claim.claim_id]
+                                )
+                            )[:16],
                             key=effect.key,
-                            before=before,
-                            after=effect.value,
-                            effective_time=event.effective_time,
-                            source_event_id=event.event_id,
-                            source_claim_id=claim.claim_id,
+                            claim_ids=(claim.claim_id,),
+                            overlap_from=claim.valid_from,
+                            resolution="unresolved",
+                            overlap_to=claim.valid_to,
                         )
                     )
-                elif effect.op is EffectOp.DELETE:
-                    if effect.expected_previous is not None and (
-                        existing is None or existing.value != effect.expected_previous
+                    ambiguous.add(effect.key)
+
+                eligible: list[CanonicalEvent] = []
+                resolving_keys_by_event: dict[str, frozenset[FactKey]] = {}
+                for event in stage:
+                    policy_decision = self._decision_for(event)
+                    if policy_decision.status is not DecisionStatus.ADMIT:
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, policy_decision.reason
+                        )
+                        continue
+                    if any(
+                        dep in excluded or dep not in applied
+                        for dep in event.hard_dependencies
                     ):
-                        rejection = "expected_previous_mismatch"
-                        break
-                    before = None if existing is None else existing.value
-                    trial.pop(effect.key, None)
-                    trial_history.append(
-                        StateTransition(
-                            effect.key,
-                            before,
-                            None,
-                            event.effective_time,
-                            event.event_id,
-                            claim.claim_id,
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "missing_hard_dependency"
+                        )
+                        continue
+                    # ``causal_parents`` are executable event dependencies:
+                    # the asserted cause must itself have been admitted and
+                    # applied.  Informational graph links belong in ``edges``
+                    # and do not gate replay merely by being present there.
+                    if any(
+                        dep in excluded or dep not in applied
+                        for dep in event.causal_parents
+                    ):
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "missing_causal_parent"
+                        )
+                        continue
+                    event_claims = {claim.claim_id: claim for claim in event.claims}
+                    effect_claims = [
+                        event_claims[effect.claim_id] for effect in event.effects
+                    ]
+                    if any(
+                        dependency not in applied_claims
+                        for claim in effect_claims
+                        for dependency in claim.depends_on_claim_ids
+                    ):
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "missing_claim_dependency"
+                        )
+                        continue
+                    if not all(
+                        self._requirement_met(cells, item, ambiguous)
+                        for item in event.requirements
+                    ):
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "precondition_failed"
+                        )
+                        continue
+                    resolving_keys: set[FactKey] = set()
+                    ambiguity_rejection = False
+                    for effect in event.effects:
+                        active_conflicting_ids = frozenset().union(
+                            *(
+                                self._active_conflict_claim_ids(
+                                    contradiction, claims_by_id, current_time
+                                )
+                                for contradiction in contradictions
+                                if contradiction.key == effect.key
+                                and contradiction.resolution == "unresolved"
+                            )
+                        )
+                        if not active_conflicting_ids:
+                            continue
+                        claim = event_claims[effect.claim_id]
+                        explicitly_superseded = active_conflicting_ids <= frozenset(
+                            claim.supersedes_claim_ids
+                        )
+                        same_stage_epistemic = all(
+                            claims_by_id[claim_id].truth
+                            in {TruthStatus.DISPUTED, TruthStatus.UNKNOWN}
+                            and claim_event_ids.get(claim_id)
+                            in {item.event_id for item in stage}
+                            for claim_id in active_conflicting_ids
+                        )
+                        if not explicitly_superseded and not same_stage_epistemic:
+                            ambiguity_rejection = True
+                            break
+                        resolving_keys.add(effect.key)
+                    if ambiguity_rejection:
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "unresolved_contradiction"
+                        )
+                        continue
+                    evaluation_cells = dict(cells)
+                    for key in resolving_keys:
+                        evaluation_cells.pop(key, None)
+                    _, _, rejection = self._evaluate_event_effects(
+                        event, evaluation_cells, validate=True
+                    )
+                    if rejection is not None:
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, rejection
+                        )
+                        continue
+                    eligible.append(event)
+                    resolving_keys_by_event[event.event_id] = frozenset(
+                        resolving_keys
+                    )
+
+                effects_by_key: dict[
+                    FactKey, list[tuple[CanonicalEvent, StateEffect]]
+                ] = {}
+                for event in eligible:
+                    for effect in event.effects:
+                        effects_by_key.setdefault(effect.key, []).append(
+                            (event, effect)
+                        )
+
+                conflict_events: set[str] = set()
+                conflict_claims: dict[FactKey, set[str]] = {}
+                for key, writes in effects_by_key.items():
+                    for index, (left_event, left_effect) in enumerate(writes):
+                        for right_event, right_effect in writes[index + 1 :]:
+                            if left_event.event_id == right_event.event_id:
+                                continue
+                            left_claim = claims_by_id[left_effect.claim_id]
+                            right_claim = claims_by_id[right_effect.claim_id]
+                            if not self._effects_incompatible(
+                                left_effect,
+                                right_effect,
+                                left_claim,
+                                right_claim,
+                            ):
+                                continue
+                            conflict_events.update(
+                                (left_event.event_id, right_event.event_id)
+                            )
+                            conflict_claims.setdefault(key, set()).update(
+                                (left_effect.claim_id, right_effect.claim_id)
+                            )
+
+                for key, ids in sorted(
+                    conflict_claims.items(), key=lambda item: item[0]
+                ):
+                    claim_ids = tuple(sorted(ids))
+                    contradiction_id = "conflict_" + sha256_text(
+                        canonical_json([key.text, current_time, list(claim_ids)])
+                    )[:16]
+                    contradictions.append(
+                        Contradiction(
+                            contradiction_id=contradiction_id,
+                            key=key,
+                            claim_ids=claim_ids,
+                            overlap_from=current_time,
+                            resolution="unresolved",
+                            overlap_to=self._overlap_to(
+                                claims_by_id[claim_id] for claim_id in claim_ids
+                            ),
                         )
                     )
-                elif effect.op is EffectOp.INCREMENT:
-                    before = 0 if existing is None else existing.value
-                    if not isinstance(before, (int, float)) or isinstance(before, bool):
-                        rejection = "increment_non_numeric"
-                        break
-                    if not isinstance(effect.value, (int, float)) or isinstance(effect.value, bool):
-                        rejection = "increment_non_numeric"
-                        break
-                    after = before + effect.value
-                    trial[effect.key] = StateCell(
-                        effect.key,
-                        after,
-                        claim.claim_id,
-                        event.event_id,
-                        claim.valid_from,
-                        claim.valid_to,
-                        claim.recorded_at,
-                    )
-                    trial_history.append(
-                        StateTransition(
-                            effect.key,
-                            before,
-                            after,
-                            event.effective_time,
-                            event.event_id,
-                            claim.claim_id,
+                    ambiguous.add(key)
+
+                for event in eligible:
+                    if event.event_id in conflict_events:
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, "unresolved_contradiction"
                         )
+                        continue
+                    application_cells = dict(cells)
+                    for key in resolving_keys_by_event[event.event_id]:
+                        application_cells.pop(key, None)
+                    cells, event_history, rejection = self._evaluate_event_effects(
+                        event, application_cells, validate=False
                     )
-                else:  # pragma: no cover - Enum construction prevents this.
-                    rejection = "unknown_effect"
-                    break
-            if rejection:
-                decisions[event.event_id] = ReplayDecision(event.event_id, False, rejection)
-                continue
-            cells = trial
-            history.extend(trial_history)
-            applied.add(event.event_id)
-            applied_claims.update(effect.claim_id for effect in event.effects)
-            decisions[event.event_id] = ReplayDecision(event.event_id, True, "admitted")
+                    if rejection is not None:  # pragma: no cover - eligibility proved it.
+                        decisions[event.event_id] = ReplayDecision(
+                            event.event_id, False, rejection
+                        )
+                        continue
+                    history.extend(event_history)
+                    applied.add(event.event_id)
+                    applied_claims.update(effect.claim_id for effect in event.effects)
+                    decisions[event.event_id] = ReplayDecision(
+                        event.event_id, True, "admitted"
+                    )
+
+                    event_claims = {
+                        claim.claim_id: claim for claim in event.claims
+                    }
+                    for effect in event.effects:
+                        claim = event_claims[effect.claim_id]
+                        superseded = frozenset(claim.supersedes_claim_ids)
+                        for index, contradiction in enumerate(contradictions):
+                            active_conflicting_ids = self._active_conflict_claim_ids(
+                                contradiction, claims_by_id, current_time
+                            )
+                            if (
+                                contradiction.key == claim.key
+                                and contradiction.resolution == "unresolved"
+                                and active_conflicting_ids
+                                and (
+                                    active_conflicting_ids <= superseded
+                                    or (
+                                        len(contradiction.claim_ids) == 1
+                                        and all(
+                                            claims_by_id[claim_id].truth
+                                            in {
+                                                TruthStatus.DISPUTED,
+                                                TruthStatus.UNKNOWN,
+                                            }
+                                            and claim_event_ids.get(claim_id)
+                                            in {item.event_id for item in stage}
+                                            for claim_id in active_conflicting_ids
+                                        )
+                                    )
+                                )
+                            ):
+                                resolved_by_supersession = (
+                                    active_conflicting_ids <= superseded
+                                )
+                                resolved_claim_ids = (
+                                    contradiction.claim_ids
+                                    if resolved_by_supersession
+                                    else tuple(
+                                        sorted(
+                                            (
+                                                *contradiction.claim_ids,
+                                                claim.claim_id,
+                                            )
+                                        )
+                                    )
+                                )
+                                contradictions[index] = replace(
+                                    contradiction,
+                                    resolution=(
+                                        "superseded"
+                                        if resolved_by_supersession
+                                        else "authority"
+                                    ),
+                                    resolved_by_claim_id=claim.claim_id,
+                                    claim_ids=resolved_claim_ids,
+                                )
+                    ambiguous = refresh_ambiguity(current_time)
+
+                for event in stage:
+                    pending.pop(event.event_id)
 
         for key, cell in tuple(cells.items()):
             if cell.valid_to is not None and cell.valid_to <= valid_at:
                 del cells[key]
+        ambiguous = refresh_ambiguity(valid_at)
 
         # Explicit disputed/false assertions remain visible beside the accepted
         # fact.  Sequentially superseded claims, plans, and failed actions are
@@ -821,10 +1387,13 @@ class EventLedger:
         all_claims = [claim for event in visible for claim in event.claims]
         superseded_ids = {
             superseded
-            for claim in all_claims
+            for claim_id in applied_claims
+            for claim in (claims_by_id[claim_id],)
             for superseded in claim.supersedes_claim_ids
         }
         for claim in all_claims:
+            if not self._claim_valid_at(claim, valid_at):
+                continue
             active = cells.get(claim.key)
             if active is None or active.source_claim_id == claim.claim_id:
                 continue
@@ -837,10 +1406,19 @@ class EventLedger:
                 EvidenceBasis.UNKNOWN,
             }:
                 continue
-            if claim.truth not in {TruthStatus.DISPUTED, TruthStatus.FALSE}:
+            if claim.truth not in {
+                TruthStatus.DISPUTED,
+                TruthStatus.FALSE,
+                TruthStatus.UNKNOWN,
+            }:
                 continue
             claim_ids = tuple(sorted((active.source_claim_id, claim.claim_id)))
             if any(item.key == claim.key and item.claim_ids == claim_ids for item in contradictions):
+                continue
+            active_claim = claims_by_id[active.source_claim_id]
+            overlap_from = max(active.valid_from, claim.valid_from)
+            overlap_to = self._overlap_to((active_claim, claim))
+            if overlap_to is not None and overlap_from >= overlap_to:
                 continue
             contradictions.append(
                 Contradiction(
@@ -849,18 +1427,36 @@ class EventLedger:
                     )[:16],
                     key=claim.key,
                     claim_ids=claim_ids,
-                    overlap_from=max(active.valid_from, claim.valid_from),
+                    overlap_from=overlap_from,
                     resolution="authority",
                     resolved_by_claim_id=active.source_claim_id,
+                    overlap_to=overlap_to,
                 )
             )
 
         return StateSnapshot(
             valid_at=valid_at,
             known_at=known,
-            cells=tuple(sorted(cells.values(), key=lambda item: item.key)),
+            cells=tuple(
+                sorted(
+                    (cell for key, cell in cells.items() if key not in ambiguous),
+                    key=lambda item: item.key,
+                )
+            ),
             history=tuple(history),
-            contradictions=tuple(sorted(contradictions, key=lambda item: item.contradiction_id)),
+            contradictions=tuple(
+                sorted(
+                    (
+                        item
+                        for item in contradictions
+                        if not (
+                            len(item.claim_ids) == 1
+                            and item.resolution == "expired"
+                        )
+                    ),
+                    key=lambda item: item.contradiction_id,
+                )
+            ),
             ambiguous_keys=tuple(sorted(ambiguous)),
             decisions=tuple(decisions[event.event_id] for event in visible),
             noncanonical=noncanonical or bool(excluded),
@@ -889,23 +1485,33 @@ class EventLedger:
         known = self.head_record_seq if known_at is None else known_at
         if claim.recorded_at > known or claim.valid_from > valid_at:
             return TemporalStatus.FUTURE
-        if claim.truth is TruthStatus.FALSE:
-            return TemporalStatus.FALSE
-        if claim.truth is TruthStatus.DISPUTED:
-            return TemporalStatus.DISPUTED
         snapshot = self.replay(valid_at=valid_at, known_at=known)
-        if any(claim_id in conflict.claim_ids and conflict.resolution == "unresolved" for conflict in snapshot.contradictions):
-            return TemporalStatus.DISPUTED
-        cell = snapshot.cell(claim.key)
-        if cell is not None and cell.source_claim_id == claim_id:
-            return TemporalStatus.CURRENT
-        visible_claims = [
-            item
-            for item in self._claims.values()
-            if item.recorded_at <= known and item.valid_from <= valid_at
-        ]
-        if any(claim_id in item.supersedes_claim_ids for item in visible_claims):
+        applied_event_ids = {
+            item.event_id for item in snapshot.decisions if item.admitted
+        }
+        effective_superseders = (
+            event_claims[effect.claim_id]
+            for event in self._events.values()
+            if event.event_id in applied_event_ids
+            for event_claims in (
+                {item.claim_id: item for item in event.claims},
+            )
+            for effect in event.effects
+        )
+        if any(
+            claim_id in superseder.supersedes_claim_ids
+            for superseder in effective_superseders
+        ):
+            return TemporalStatus.SUPERSEDED
+        # A successful guarded state transition deterministically replaces the
+        # active source claim even when the author did not repeat that lineage
+        # in ``supersedes_claim_ids``.  Replay records that derived lineage so
+        # the old and new claims cannot both appear CURRENT.
+        if any(
+            transition.replaced_claim_id == claim_id
+            for transition in snapshot.history
+        ):
             return TemporalStatus.SUPERSEDED
         if claim.valid_to is not None and claim.valid_to <= valid_at:
             return TemporalStatus.HISTORICAL
-        return TemporalStatus.HISTORICAL
+        return TemporalStatus.CURRENT

@@ -1,6 +1,6 @@
 # Hive Reference Architecture
 
-Status: executable research specification, version 0.1
+Status: PARTIAL executable research specification, version 0.1
 Scope: a falsifiable model of Hive's proposed mechanism; not a claim of AGI, understanding, or recursive self-improvement.
 
 ## What Hive is
@@ -47,12 +47,14 @@ A candidate is preferable only when it passes hard correctness and authority con
 
 ## Non-negotiable invariants
 
-1. Observations, canonical events, claim revisions, representation versions, experiment definitions, and evidence records are immutable and content-addressed.
+1. Canonical records are immutable. Ledger, event, representation, migration, and activation content is hash-bound at its stated boundary. `Observation.source_sha256` addresses the source identity plus payload; the ledger digest, not that field alone, binds observation ID, record time, and provenance. External experiment/evidence records require protocol-sealed artifact hashes rather than being assumed individually authenticated.
 2. Effective time and record time remain separate. Historical truth and what was known at the time are different queries.
 3. Epistemic basis, truth status, and temporal status are separate dimensions. One overloaded `status` field is forbidden.
 4. A plan, proposal, or prediction may establish that an intention exists; it may not materialize its proposed world effects. Only an admitted completion observation or licensed inference can do that.
-5. Contradictions are explicit conflict objects. Unresolved conflicts produce disputed or unknown state, never silent last-write truth.
+5. Contradictions are explicit conflict objects. An active, authority-admissible `DISPUTED` or `UNKNOWN` claim creates explicit unknown state even when no accepted value competes with it; it is never collapsed into absence. Plans, proposals, failed conditional assertions, and untrusted claims do not gain that authority. Unresolved conflicts produce disputed or unknown state, never silent last-write truth.
 6. State is a deterministic projection of the ledger and authority policy, not an independently mutable memory blob.
+
+   Trust boundary: the built-in `AuthorityPolicy` freezes its inference-rule configuration and derives its identity from that frozen configuration. A caller-injected policy implementation remains trusted external code; results produced under such a policy do not prove the built-in authority invariants unless that implementation and configuration are independently sealed and identified.
 7. Counterfactuals are ephemeral replay specifications. They never rewrite canonical history.
 8. Every reconstructed atom identifies its representation components and ultimate evidence/event lineage.
 9. A preservation or discard declaration is a hypothesis until verified against deterministic replay or frozen tasks.
@@ -73,6 +75,8 @@ A candidate is preferable only when it passes hard correctness and authority con
 
 `CanonicalEvent` contains effective time, record time, entities, relations/action, preconditions, state effects, causal/dependency IDs, claim revisions, observation/evidence IDs, and provenance. Canonicalization proposes structure; authority admission decides whether its world effects apply.
 
+`hard_dependencies` and `causal_parents` are executable replay dependencies: a rejected or unapplied parent gates the child. Typed `edges` are informational graph links unless their target is also declared in one of those executable dependency fields.
+
 ### Claim revision
 
 Each claim revision contains:
@@ -89,11 +93,11 @@ Each claim revision contains:
 
 ### Promotion decision and contradiction
 
-`PromotionDecision` records `ADMIT`, `REJECT`, or `DISPUTE`, the exact policy rule, evidence, and reason. `ConflictSet` records incompatible claims, its resolution status, and any explicit resolution decision. Nothing is silently overwritten.
+`PromotionDecision` records `ADMIT`, `REJECT`, or `DISPUTE`, the exact policy rule, evidence, and reason. `Contradiction` records incompatible claims, its resolution status, and any explicit resolution decision. Incompatible values are never silently overwritten.
 
 ### State view
 
-`StateView(valid_time, known_at)` contains accepted facts, disputed facts, unknowns, conflicts, transitions, and source references. It is reproducible from the ledger. Historical state, rollback views, and counterfactual views use the same projector.
+`StateView(valid_time, known_at)` contains accepted facts, disputed facts, unknowns, conflicts, transitions, and source references. It is reproducible from the ledger. Historical state, rollback views, and counterfactual views use the same projector. The current scalar `StateCell` projects one source for compatible simultaneous claims with the same value and validity; all claims remain in the ledger, but multi-source co-provenance in the projected cell is a known missing feature.
 
 ### Representation version
 
@@ -119,7 +123,7 @@ Every component records what it replaces, preserves, discards, depends on, cites
 
 ### Task, selection, and reconstruction
 
-`TaskSpec` declares query family, valid time, known-at time, answer schema, and budget. A condition-blind selector chooses components. The decompressor follows dependencies and emits a `Reconstruction` containing lineage-bearing atoms, omitted components, costs, and any unsupported reconstruction attempt.
+`TaskSpec` declares query family, valid time, known-at time, answer schema, and budget. A condition-blind selector chooses components. The decompressor follows dependencies and emits a `Reconstruction` containing lineage-bearing atoms, omitted components, costs, and any unsupported reconstruction attempt. Before selection, the executable decompressor requires an independently configured immutable `RepresentationRootCommitment` binding the source ledger, full-source manifest, family, codec, and schema. A self-consistent hash carried only inside a candidate packet is not a trust anchor: the experiment/bootstrap protocol must authenticate and seal the original root, and packets outside that root fail closed.
 
 The reference implementation reconstructs only task-relevant components. It does not regenerate the full source history unless the task requires it.
 
@@ -162,7 +166,11 @@ independent reconstruction/provenance grader remains partial.
 
 ### Profile, repair, and version registry
 
-`RepresentationProfile` summarizes failure distributions conditional on representation family, solver, task family, and load. A `RepairProposal` cites a failure cluster and original evidence. The repair gate evaluates parent and candidate on locked old and new tasks. A `MigrationDecision` promotes only an admissible, non-regressing candidate; the registry preserves an active pointer and rollback target.
+`RepresentationProfile` summarizes failure distributions conditional on representation family, solver, task family, and load. A `RepairProposal` cites a failure cluster and original evidence. At construction, the registry freezes one exact repair gate/evaluator, protected and new task manifests, a normalized protocol hash, and the preregistered candidate cost ceiling. Each replaceable solver and decompressor must expose a normalized configuration digest covering every behavior-relevant setting; the evaluator derives its digest from those collaborator digests, and the registry revalidates it before activation. Collaborators without this contract fail closed. The built-in deterministic solver is stateless and frozen; the frozen decompressor's only state is its sorted immutable set of externally sealed representation-root commitments, which is included in its configuration digest. Its activation operation accepts only a registered candidate ID, evaluates the exact active parent and candidate, validates every returned summary against the task count and outcomes, and mutates the active pointer inline only for that synchronous result. Caller-supplied `MigrationDecision` records never authorize activation. Parent/child version, family, schema, codec, source ledger, full-source component manifest, promotable validation status, and content hashes must match. Migration IDs bind the complete decision content; activation IDs also bind the append-only activation sequence, so rollback and reevaluation remain distinct events.
+
+Cost and validation trust is deliberately split. `packet_bytes` is recomputed from the canonical components plus full-source-manifest envelope, and every `CostBreakdown` field must be an exact nonnegative integer at construction and at registry/gate use. Schema, ontology, lookup, preprocessing, human-contribution, and validation-status attestations are not independently measured by this reference gate; they remain trusted external inputs whose provenance must be sealed by a real experiment protocol.
+
+Registration captures each representation's complete content hash and revalidates it before bootstrap, lookup, active access, evaluation, or rollback. This detects mutation through a retained Python object alias and prevents an old ID from restoring changed content. A hash commitment is not source authentication: the initial/bootstrap representation, its full-source manifest, externally supplied validation and cost attestations, evaluator task/protocol manifests, solver/decompressor configuration digests, and any injected authority policy are trusted sealed roots. The reference code detects later drift from those commitments; an experiment must authenticate the roots before constructing the registry.
 
 ### Meta-representation and recursive cycle
 
@@ -174,7 +182,7 @@ A meta-representation describes observed behavior of representations, such as:
 - difficult for a particular solver;
 - poorly evidenced in one domain.
 
-Using that profile to choose or propose future representations is a testable mechanism. It is not recursive improvement until a modified proposal policy outperforms a frozen policy on future unseen representation-discovery episodes under matched resources.
+Using that profile to choose or propose future representations is a testable mechanism. It is not recursive improvement until a distinct modified proposal policy outperforms a frozen policy on replicated future unseen representation-discovery episodes, fails a shuffled/no-meta ablation, and has exact equality on every declared `CostBreakdown` resource field. Self-reported resource-match booleans are not evidence of matching.
 
 ## End-to-end dataflow
 
@@ -216,7 +224,7 @@ The proposed ladder is not a monotonic staircase. Minimum size can conflict with
 |---|---|---|
 | 1. Structured state | event ledger and state projector | Implemented in domain fragments; generic reference implemented here |
 | 2. Reconstructable compression | representation and deterministic decoder | Supported for the frozen engineered codec |
-| 3. Minimum sufficient representation | sufficiency/ablation report | Partial; singleton/limited combinations only |
+| 3. Minimum sufficient representation | sufficiency/ablation report | Partial; exact/approximate minima are relative to the conservative fail-closed representation contract, not yet causal-semantic minima |
 | 4. Abstraction formation | concept proposal and bidirectional test | Proposed |
 | 5. Abstraction transfer | locked unseen transfer harness | Proposed/partial scaffolding |
 | 6. Learned compression | query-blind candidate proposer | Proposed; deterministic heuristic demo is not learning evidence |
@@ -232,7 +240,7 @@ Solvers are replaceable and separately described by model, digest/version, promp
 The local Qwen result and exploratory Codex result are therefore complementary:
 
 - Qwen shows that a weak solver/benchmark pairing can make all representations uninterpretable;
-- Codex supports the scoped claim that the engineered compressed packet retained usable distinctions for a more capable solver;
+- the unsealed, operator-reported Codex result makes it plausible that the engineered compressed packet retained usable distinctions for that solver stack;
 - neither shows Compressed superiority or learned representation discovery.
 
 ## Learning loop

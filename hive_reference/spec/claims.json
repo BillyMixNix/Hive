@@ -39,12 +39,12 @@
       "claim_id": "HIVE-C004",
       "statement": "A more capable Codex solver stack could recover all frozen benchmark answers from the engineered compressed representation.",
       "scope": "Operator-reported history-isolated exploratory run on the same frozen prompts; no tracked sealed artifact in this branch.",
-      "evidence_level": "SUPPORTED",
+      "evidence_level": "PLAUSIBLE",
       "supporting_experiments": ["EXP-DECOMP-CODEX-EXPLORATORY"],
       "contradicting_evidence": [],
       "dependencies": ["HIVE-C001"],
       "falsification_condition": "Independent sealed replications with capable preregistered solvers fail specifically from representation loss.",
-      "current_status": "exploratory_support_only"
+      "current_status": "unsealed_exploratory_evidence_only"
     },
     {
       "claim_id": "HIVE-C005",
@@ -81,14 +81,14 @@
     },
     {
       "claim_id": "HIVE-C008",
-      "statement": "Ablation can empirically identify representation components that are necessary for a specified task/solver/budget tuple.",
-      "scope": "Conditional component necessity; not a universal minimum representation.",
+      "statement": "Frozen ablation can identify representation components whose removal breaks a specified task, solver, and fail-closed representation-contract predicate.",
+      "scope": "Contract-relative removal effects; not causal-semantic necessity or a universal minimum representation.",
       "evidence_level": "SUPPORTED",
       "supporting_experiments": ["EXP-DECOMP-CODEX-EXPLORATORY", "EXP-REF-MODEL-TESTS"],
-      "contradicting_evidence": ["Singleton ablation misses interactions and alternative sufficient sets."],
+      "contradicting_evidence": ["Singleton ablation misses interactions and alternative sufficient sets; the reference manifest treats potentially relevant removals as missing unless a validated replacement exists."],
       "dependencies": ["HIVE-C001"],
-      "falsification_condition": "Counterfactual twin and grouped-ablation tests show the purported essential components are not causally necessary for task performance.",
-      "current_status": "supported_with_scope_limits"
+      "falsification_condition": "A recorded removal does not change the frozen pass predicate, or the ablation apparatus labels that removal as essential despite observing an admissible passing subset.",
+      "current_status": "supported_contract_relative_not_causal_necessity"
     },
     {
       "claim_id": "HIVE-C009",
@@ -193,23 +193,23 @@
       "claim_id": "HIVE-C018",
       "statement": "Representation results depend materially on solver capability and solver/representation interaction.",
       "scope": "Frozen decompression benchmark and future solver-panel replications.",
-      "evidence_level": "SUPPORTED",
+      "evidence_level": "PLAUSIBLE",
       "supporting_experiments": ["EXP-DECOMP-QWEN-V2.1", "EXP-DECOMP-CODEX-EXPLORATORY"],
       "contradicting_evidence": ["The two solver stacks were not one preregistered replicated panel."],
       "dependencies": [],
       "falsification_condition": "Replicated solver panels show representation rankings and capability gates invariant to solver capability under matched protocols.",
-      "current_status": "supported_requires_replication"
+      "current_status": "plausible_requires_preregistered_replication"
     },
     {
       "claim_id": "HIVE-C019",
-      "statement": "The reference model deterministically enforces its documented authority, replay, provenance, versioning, and rollback invariants.",
-      "scope": "Exact reference-model implementation and deterministic test fixtures.",
-      "evidence_level": "PROVEN",
+      "statement": "The reference model passes its tracked deterministic authority, replay, provenance, versioning, and rollback tests at the referenced revision.",
+      "scope": "Exact tracked reference-model tests at the referenced revision; not an exhaustive proof of every documented invariant.",
+      "evidence_level": "SUPPORTED",
       "supporting_experiments": ["EXP-REF-MODEL-TESTS"],
-      "contradicting_evidence": [],
+      "contradicting_evidence": ["A finite adversarial suite cannot establish that every caller path or documented invariant is exhaustively enforced."],
       "dependencies": ["HIVE-C006"],
       "falsification_condition": "A deterministic test or counterexample violates a documented invariant at the referenced commit.",
-      "current_status": "proven_for_fixed_reference_revision_and_deterministic_fixtures"
+      "current_status": "supported_by_tracked_tests_not_exhaustive"
     },
     {
       "claim_id": "HIVE-C020",
