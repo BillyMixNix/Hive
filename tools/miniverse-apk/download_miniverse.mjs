@@ -3,14 +3,14 @@ import fs from 'fs';
 import path from 'path';
 
 const OUT = path.resolve('winlator-app/app/src/main/assets/miniverse.zip');
-const URL = 'https://ponywolf.itch.io/miniverse/purchase';
+const PURCHASE_URL = 'https://ponywolf.itch.io/miniverse/purchase';
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ acceptDownloads: true });
 const page = await context.newPage();
 try {
   console.log('Opening official Ponywolf Miniverse download page...');
-  await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  await page.goto(PURCHASE_URL, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForSelector('a.direct_download_btn', { timeout: 60000 });
   const direct = page.locator('a.direct_download_btn').first();
   await Promise.all([page.waitForLoadState('domcontentloaded').catch(() => {}), direct.click()]);
