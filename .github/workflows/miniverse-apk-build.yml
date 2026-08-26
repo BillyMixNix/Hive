@@ -1,8 +1,8 @@
 name: Miniverse Android APK Build
 
 on:
-  pull_request:
-    branches: [main]
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -10,13 +10,14 @@ permissions:
 
 jobs:
   build-miniverse-apk:
-    if: github.head_ref == 'miniverse-apk-build' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
-      - name: Checkout build branch
+      - name: Checkout isolated build branch
         uses: actions/checkout@v4
+        with:
+          ref: miniverse-apk-build
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -55,7 +56,7 @@ jobs:
               actual=hashlib.sha256(z.read(names[0])).hexdigest()
           print('Miniverse.exe SHA-256:', actual)
           if actual != expected:
-              raise SystemExit('Downloaded executable differs from the user-supplied original; refusing to build')
+              raise SystemExit('Downloaded executable differs from user-supplied original; refusing to build')
           PY
 
       - name: Install rootfs packaging tools
