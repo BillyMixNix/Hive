@@ -25,18 +25,22 @@ try {
     console.error((await page.content()).slice(0, 30000));
     throw new Error('Could not find Miniverse download button');
   }
+
   const href = await link.getAttribute('href');
-  if (href) {
+  if (href && /^https?:/i.test(new URL(href, page.url()).protocol)) {
     const absolute = new URL(href, page.url()).toString();
+    console.log('Fetching HTTP download URL...');
     const response = await context.request.get(absolute, { timeout: 180000 });
     if (!response.ok()) throw new Error(`Download HTTP ${response.status()}`);
     fs.writeFileSync(OUT, await response.body());
   } else {
+    console.log(`Clicking browser download control (${href || 'no href'})...`);
     const dlPromise = page.waitForEvent('download', { timeout: 180000 });
     await link.click();
     const dl = await dlPromise;
     await dl.saveAs(OUT);
   }
+
   const size = fs.statSync(OUT).size;
   console.log(`Saved ${OUT} (${size} bytes)`);
   if (size < 50_000_000) throw new Error(`Downloaded file is unexpectedly small (${size} bytes)`);
