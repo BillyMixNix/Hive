@@ -60,6 +60,7 @@ def _response(*, status="completed", output_text="A", usage=True):
     return SimpleNamespace(
         id="resp_test",
         model="gpt-5.6-luna-2026-08-01",
+        service_tier="default",
         status=status,
         output_text=output_text,
         usage=token_usage,
@@ -126,6 +127,8 @@ def test_openai_success_uses_frozen_request_and_captures_metadata(
             "tools": [],
             "store": False,
             "truncation": "disabled",
+            "service_tier": "default",
+            "prompt_cache_options": {"mode": "explicit"},
         }
     ]
     assert metadata["provider"] == "openai"
@@ -136,6 +139,7 @@ def test_openai_success_uses_frozen_request_and_captures_metadata(
     assert metadata["response_status"] == "completed"
     assert metadata["requested_model"] == "gpt-5.6-luna"
     assert metadata["returned_model"] == "gpt-5.6-luna-2026-08-01"
+    assert metadata["returned_service_tier"] == "default"
     assert metadata["response_id"] == "resp_test"
     assert metadata["input_tokens"] == 31
     assert metadata["cached_input_tokens"] == 11
@@ -466,6 +470,65 @@ def test_openai_rejects_foreign_request_settings_before_call(
             **unsupported,
         )
     assert observed["client_calls"] == []
+    assert observed["requests"] == []
+    assert metadata["physical_attempts"] == 0
+    assert metadata["adapter_status"] == "configuration_error"
+
+
+def test_openai_strict_text_format_is_forwarded_and_hashed(adapter, monkeypatch):
+    observed = _install_fake_sdk(monkeypatch, adapter)
+    text_format = {
+        "type": "json_schema",
+        "name": "hive_labels_3",
+        "schema": {
+            "type": "array",
+            "items": {"type": "string", "enum": ["A", "B"]},
+            "minItems": 3,
+            "maxItems": 3,
+        },
+        "strict": True,
+    }
+    metadata = {}
+
+    assert adapter.ask_hive(
+        "prompt",
+        solver_config=adapter.FrozenSolverConfig(),
+        metadata=metadata,
+        openai_text_format=text_format,
+    ) == "A"
+
+    assert observed["requests"][0]["text"] == {"format": text_format}
+    assert metadata["openai_text_format"] == text_format
+    assert metadata["openai_text_format_sha256"] == adapter.hashlib.sha256(
+        adapter.json.dumps(
+            text_format,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+@pytest.mark.parametrize(
+    "bad_format",
+    [
+        {"type": "json_schema", "name": "x", "schema": {}, "strict": False},
+        {"type": "json_schema", "name": "bad name", "schema": {}, "strict": True},
+        {"type": "json_schema", "name": "x", "schema": {}},
+    ],
+)
+def test_invalid_openai_text_format_fails_before_call(
+    adapter, monkeypatch, bad_format
+):
+    observed = _install_fake_sdk(monkeypatch, adapter)
+    metadata = {}
+    with pytest.raises(ValueError):
+        adapter._ask_openai(
+            "prompt",
+            config=adapter.FrozenSolverConfig(),
+            metadata=metadata,
+            openai_text_format=bad_format,
+        )
     assert observed["requests"] == []
     assert metadata["physical_attempts"] == 0
     assert metadata["adapter_status"] == "configuration_error"

@@ -1,3 +1,4 @@
+import copy
 from dataclasses import asdict, dataclass
 import hashlib
 import json
@@ -86,6 +87,8 @@ class FrozenSolverConfig:
     store: bool = False
     truncation: str = "disabled"
     reasoning_context: str = "current_turn"
+    service_tier: str = "default"
+    prompt_cache_mode: str = "explicit"
 
     def __post_init__(self):
         if self.provider != "openai":
@@ -125,6 +128,12 @@ class FrozenSolverConfig:
         if self.reasoning_context != "current_turn":
             raise ValueError(
                 "the frozen OpenAI adapter requires reasoning_context='current_turn'"
+            )
+        if self.service_tier != "default":
+            raise ValueError("the frozen OpenAI adapter requires service_tier='default'")
+        if self.prompt_cache_mode != "explicit":
+            raise ValueError(
+                "the frozen OpenAI adapter requires prompt_cache_mode='explicit'"
             )
 
     def to_mapping(self):
@@ -304,6 +313,40 @@ def _metadata_value(value):
     return str(value)
 
 
+def _validated_openai_text_format(value):
+    """Return a defensive copy of one strict Responses JSON-schema format."""
+    if value is None:
+        return None
+    if not isinstance(value, dict) or set(value) != {
+        "type",
+        "name",
+        "schema",
+        "strict",
+    }:
+        raise ValueError(
+            "openai_text_format must have exactly type, name, schema, and strict"
+        )
+    if value["type"] != "json_schema" or value["strict"] is not True:
+        raise ValueError("openai_text_format must be a strict json_schema")
+    name = value["name"]
+    if (
+        not isinstance(name, str)
+        or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", name)
+    ):
+        raise ValueError("openai_text_format name is invalid")
+    if not isinstance(value["schema"], dict):
+        raise ValueError("openai_text_format schema must be an object")
+    try:
+        encoded = json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError("openai_text_format must be JSON serializable") from exc
+    if len(encoded.encode("utf-8")) > 16_384:
+        raise ValueError("openai_text_format exceeds 16,384 UTF-8 bytes")
+    return copy.deepcopy(value)
+
+
 def _ask_openai(
     prompt,
     *,
@@ -312,6 +355,7 @@ def _ask_openai(
     metadata=None,
     options=None,
     response_format=None,
+    openai_text_format=None,
 ):
     """Make one fail-closed Responses API call with no retries or fallback."""
     if not isinstance(config, FrozenSolverConfig):
@@ -325,6 +369,7 @@ def _ask_openai(
                 "configuration_hash": config.configuration_hash,
                 "requested_model": config.model,
                 "returned_model": None,
+                "returned_service_tier": None,
                 "response_id": None,
                 "response_status": None,
                 "physical_attempts": 0,
@@ -339,6 +384,15 @@ def _ask_openai(
                 "adapter_status": "not_started",
             }
         )
+
+    try:
+        text_format = _validated_openai_text_format(openai_text_format)
+    except ValueError as exc:
+        if metadata is not None:
+            metadata["adapter_status"] = "configuration_error"
+            metadata["error_type"] = type(exc).__name__
+            metadata["error_message"] = str(exc)
+        raise
 
     if options:
         if metadata is not None:
@@ -392,7 +446,21 @@ def _ask_openai(
         "tools": [],
         "store": config.store,
         "truncation": config.truncation,
+        "service_tier": config.service_tier,
+        "prompt_cache_options": {"mode": config.prompt_cache_mode},
     }
+    if text_format is not None:
+        request["text"] = {"format": text_format}
+        if metadata is not None:
+            metadata["openai_text_format"] = copy.deepcopy(text_format)
+            metadata["openai_text_format_sha256"] = hashlib.sha256(
+                json.dumps(
+                    text_format,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest()
     if system is not None:
         request["instructions"] = system
 
@@ -460,6 +528,7 @@ def _ask_openai(
 
     response_id = _field(response, "id")
     returned_model = _field(response, "model")
+    returned_service_tier = _field(response, "service_tier")
     incomplete_details = _field(response, "incomplete_details")
     response_error = _field(response, "error")
 
@@ -468,6 +537,7 @@ def _ask_openai(
             {
                 "returned_model": returned_model,
                 "response_id": response_id,
+                "returned_service_tier": returned_service_tier,
                 "response_status": status,
                 "latency_seconds": elapsed,
                 "input_tokens": input_tokens,
@@ -492,6 +562,8 @@ def _ask_openai(
         rejection_reason = "response ID is missing"
     elif not isinstance(returned_model, str) or not returned_model:
         rejection_reason = "returned model ID is missing"
+    elif returned_service_tier != config.service_tier:
+        rejection_reason = "returned service tier differs from the frozen request"
     elif input_tokens is None or output_tokens is None or total_tokens is None:
         rejection_reason = "core usage accounting is missing"
     elif cached_tokens is None or cache_write_tokens is None or reasoning_tokens is None:
@@ -589,6 +661,7 @@ def ask_hive(
     metadata=None,
     response_format=None,
     solver_config=None,
+    openai_text_format=None,
 ):
     """
     Role-aware LLM interface for all Hive agents.
@@ -628,6 +701,7 @@ def ask_hive(
             system=system,
             config=solver_config,
             metadata=metadata,
+            openai_text_format=openai_text_format,
         )
 
     if declared_provider == "openai":
@@ -658,7 +732,11 @@ def ask_hive(
             metadata=metadata,
             options=options,
             response_format=response_format,
+            openai_text_format=openai_text_format,
         )
+
+    if openai_text_format is not None:
+        raise ValueError("openai_text_format requires the OpenAI provider")
 
     if declared_provider == "anthropic":
         if options is not None or max_retries is not None or response_format is not None:
