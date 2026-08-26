@@ -1,0 +1,426 @@
+{
+  "ablation": {
+    "algorithm": "exact_contract_subset_minimum",
+    "causal_necessity_demonstrated": false,
+    "evaluated_subsets": 512,
+    "minimal_component_sets": [
+      [
+        "component:event:e_bea_sale_attempt",
+        "component:event:e_disputed_claim",
+        "component:event:e_inside",
+        "component:event:e_owner_ari",
+        "component:event:e_plan_transfer",
+        "component:event:e_transfer_cato",
+        "component:rule:containment_owner_v1"
+      ]
+    ],
+    "minimum_component_count": 7,
+    "necessity_scope": "fail_closed_representation_contract",
+    "representation_id": "demo-representation-full-v1",
+    "singleton_essential": [
+      "component:event:e_bea_sale_attempt",
+      "component:event:e_disputed_claim",
+      "component:event:e_inside",
+      "component:event:e_owner_ari",
+      "component:event:e_plan_transfer",
+      "component:event:e_transfer_cato",
+      "component:rule:containment_owner_v1"
+    ],
+    "singleton_redundant": [
+      "component:event:e_color",
+      "component:event:e_observed_intent"
+    ],
+    "status": "complete"
+  },
+  "architecture_id": "hive-reference-architecture-v0.1",
+  "canonicalization": {
+    "event_count": 8,
+    "learned": false,
+    "mode": "handcrafted_exact_schema",
+    "observation_count": 8
+  },
+  "claims": {
+    "HIVE-C001": {
+      "evidence_level": "PROVEN",
+      "scope": "Exact frozen case pack, codec, decoder, replay oracle, and revision only."
+    },
+    "HIVE-C011": {
+      "evidence_level": "SPECULATIVE",
+      "scope": "Query-blind candidate discovery using training worlds only, evaluated once on locked heldout tasks."
+    },
+    "HIVE-C013": {
+      "evidence_level": "PLAUSIBLE",
+      "scope": "Immutable candidates, frozen old/new tests, explicit promotion and rollback."
+    },
+    "HIVE-C015": {
+      "evidence_level": "SPECULATIVE",
+      "scope": "Recursive representation improvement on meta-heldout task families with fixed evaluators and matched total resources."
+    },
+    "HIVE-C021": {
+      "evidence_level": "FALSIFIED",
+      "scope": "Observation-to-event/entity/authority/causal ontology discovery."
+    }
+  },
+  "counterfactual": {
+    "canonical_ledger_unchanged": true,
+    "noncanonical": true,
+    "owner_without_transfer": "Ari"
+  },
+  "evaluation": {
+    "compression_loss_detected": true,
+    "full": {
+      "all_passed": true,
+      "outcomes": [
+        {
+          "answer": "Ari",
+          "evidence_observation_ids": [
+            "o_inside",
+            "o_owner",
+            "o_plan"
+          ],
+          "failure_reason": null,
+          "query_id": "q_gem_owner_t2",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_inside",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:rule:containment_owner_v1"
+          ]
+        },
+        {
+          "answer": "Cato",
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_inside",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_gem_owner_t4",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_inside",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato",
+            "component:rule:containment_owner_v1"
+          ]
+        },
+        {
+          "answer": false,
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_bea_can_sell",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        },
+        {
+          "answer": true,
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_plan_rejected",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        },
+        {
+          "answer": {
+            "after": "Cato",
+            "before": "Ari"
+          },
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_owner_change",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        }
+      ],
+      "passed": 5,
+      "representation_id": "demo-representation-full-v1",
+      "total": 5
+    },
+    "lossy": {
+      "all_passed": false,
+      "outcomes": [
+        {
+          "answer": null,
+          "evidence_observation_ids": [
+            "o_inside",
+            "o_owner",
+            "o_plan"
+          ],
+          "failure_reason": "missing representation dependency or no relevant component",
+          "query_id": "q_gem_owner_t2",
+          "status": "incomplete",
+          "used_component_ids": [
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:rule:containment_owner_v1"
+          ]
+        },
+        {
+          "answer": null,
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_inside",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": "missing representation dependency or no relevant component",
+          "query_id": "q_gem_owner_t4",
+          "status": "incomplete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato",
+            "component:rule:containment_owner_v1"
+          ]
+        },
+        {
+          "answer": false,
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_bea_can_sell",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        },
+        {
+          "answer": true,
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_plan_rejected",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        },
+        {
+          "answer": {
+            "after": "Cato",
+            "before": "Ari"
+          },
+          "evidence_observation_ids": [
+            "o_claim",
+            "o_owner",
+            "o_plan",
+            "o_sale",
+            "o_transfer"
+          ],
+          "failure_reason": null,
+          "query_id": "q_owner_change",
+          "status": "complete",
+          "used_component_ids": [
+            "component:event:e_bea_sale_attempt",
+            "component:event:e_disputed_claim",
+            "component:event:e_owner_ari",
+            "component:event:e_plan_transfer",
+            "component:event:e_transfer_cato"
+          ]
+        }
+      ],
+      "passed": 3,
+      "representation_id": "demo-representation-lossy-v1",
+      "total": 5
+    }
+  },
+  "ledger": {
+    "digest": "d0203d71f58d89c7907225b16c569b067e78f12693c3d88a3d653abd5000f984",
+    "plan_decision": {
+      "event_content_hash": "432e3117db66c3bc886ab1058b53635f363d3dc5adaea8d7e8563214e4b4439e",
+      "event_id": "e_plan_transfer",
+      "evidence_sha256": "50fcc4dfaebe8bbf4f791c3fb75367a45e1bc7ae4c2c2ad4dd4640874f9ed345",
+      "policy_id": "hive-authority-v1:4f53cda18c2b",
+      "reason": "non_promotable_basis",
+      "status": "reject"
+    }
+  },
+  "model_calls": 0,
+  "payload_sha256": "06a749c0a04de2c07a363b4493f2a1268e7e762221b45d72e46c5d50e6297070",
+  "repair": {
+    "activation": {
+      "action": "activate",
+      "activation_id": "activation_0685bb5e81369b983ff4993945db23149d21f81b36c539dff675b110d024a504",
+      "activation_sequence": 1,
+      "decision_content_hash": "3b4b29e9b8fa276042bba675cee405fb22b32c27029d515d3e3e191e23f5fb2b",
+      "decision_id": "migration_3b4b29e9b8fa276042bba675cee405fb22b32c27029d515d3e3e191e23f5fb2b",
+      "new_active_id": "demo-representation-repaired-v2",
+      "previous_active_id": "demo-representation-lossy-v1"
+    },
+    "bootstrap": {
+      "action": "activate",
+      "activation_id": "activation_31d1f62406b92cc237c65e45e55ec6a7c49305a4c86714a0d5c4ca154be89126",
+      "activation_sequence": 0,
+      "decision_content_hash": "0db3ba1fb494358b8fcb193a12194fb5cf22a560d939ddc756640f9b68fb4ffb",
+      "decision_id": "bootstrap",
+      "new_active_id": "demo-representation-lossy-v1",
+      "previous_active_id": null
+    },
+    "candidate_hash": "f20903c420eb675e914490e0fdff350ad3c009d86a6e820b4d62f8965ef6f035",
+    "migration": {
+      "candidate_outcome_hash": "baf1f6e955ba9020aebc994aeb9975d11f1a477c531d0f4dd23f6409c33cdf28",
+      "candidate_representation_hash": "f20903c420eb675e914490e0fdff350ad3c009d86a6e820b4d62f8965ef6f035",
+      "candidate_representation_id": "demo-representation-repaired-v2",
+      "cost_ceiling_hash": "c629a37c52084af7bd0f84a579417fcf4c1bd3a0437a8fe702383f7f5ca1aebc",
+      "decision_id": "migration_3b4b29e9b8fa276042bba675cee405fb22b32c27029d515d3e3e191e23f5fb2b",
+      "evaluator_hash": "0e4f176ed1d22e7055ab9f1049456e4e6b9d99aad74ec994e4039e2ea6648d45",
+      "gate_id": "hive-representation-repair-gate-v2",
+      "new_task_manifest_hash": "ea16460ec4fbd8fd7cd306eecd3749cdc5e1fbf13528f7109c4237e05e5333be",
+      "parent_outcome_hash": "5aa1985f5df3c66f1e9d7b22d8678950fd116db4d708548c92c283248721b48d",
+      "parent_representation_hash": "cecfa838d55da03be577f3d62788775dc9758c47092927ca505909725c1022bd",
+      "parent_representation_id": "demo-representation-lossy-v1",
+      "protected_task_manifest_hash": "901dc99e4a5ac9746ae7010b1660e16cc4440141f2fad3df6d068ef53b1173ee",
+      "protocol_hash": "ba7a316287905cef84e4fa11f546787f23a0f20448b2d4f38bec98b03a892794",
+      "reason": "protected_noninferiority_and_new_task_improvement",
+      "rollback_verified": true,
+      "status": "promote"
+    },
+    "proposal": {
+      "candidate_representation_id": "demo-representation-repaired-v2",
+      "diagnosis_confidence": 1.0,
+      "implicated_component_ids": [
+        "component:event:e_inside"
+      ],
+      "localizer_id": "oracle_induced_demo_failure",
+      "oracle_assisted": true,
+      "parent_representation_id": "demo-representation-lossy-v1",
+      "proposal_id": "repair_b2eab86b8d792137",
+      "retrieved_source_event_ids": [
+        "e_inside"
+      ]
+    },
+    "repaired_active_hash": "f20903c420eb675e914490e0fdff350ad3c009d86a6e820b4d62f8965ef6f035",
+    "representation_learning_demonstrated": false,
+    "rollback": {
+      "action": "rollback",
+      "activation_id": "rollback_5b74a33f9d07c4f203471eee2ae9ab6e97da3a2fa58cab79744555608dd12c94",
+      "activation_sequence": 2,
+      "decision_content_hash": "2dc64dfab3ee60511b303a35619963b040c13b5d3c24ebe160d30d555fbde90a",
+      "decision_id": "demo_rollback_verification",
+      "new_active_id": "demo-representation-lossy-v1",
+      "previous_active_id": "demo-representation-repaired-v2"
+    },
+    "rollback_hash_matches": true,
+    "status": "deterministic_oracle_assisted_repair_plumbing"
+  },
+  "representation": {
+    "codec_id": "hive-reference-structural-v1",
+    "component_count": 9,
+    "content_hash": "bef5095c56514794315c8ca4d652ec4aba6855b52bb28b0dd0e8dfe6333b67a4",
+    "cost": {
+      "code_config_bytes": 256,
+      "human_authored_domain_bytes": 384,
+      "input_tokens": 0,
+      "latency_ms": 0,
+      "lookup_bytes": 0,
+      "ontology_bytes": 128,
+      "output_tokens": 0,
+      "packet_bytes": 19801,
+      "preprocessing_model_calls": 0,
+      "preprocessing_steps": 8,
+      "schema_bytes": 512,
+      "solver_model_calls": 0
+    },
+    "learned": false,
+    "origin": {
+      "discovery_automatic": false,
+      "human_semantic_dependencies": [
+        "hive-reference-event-component-v1",
+        "hive-reference-structural-v1"
+      ],
+      "oracle_assisted": false,
+      "origin": "handcrafted",
+      "training_ids": []
+    }
+  },
+  "scope_boundary": "This proves deterministic pipeline and governance behavior on one fixture; it does not prove learned abstraction, transfer, self-diagnosis, or recursion.",
+  "state": {
+    "t2_digest": "0bf087fed9cdb1d3c49411384c8fde44486a0e7fb2317554e3720e21876a81d0",
+    "t2_owner": "Ari",
+    "t4_contradictions": [
+      {
+        "claim_ids": [
+          "c_disputed_bea",
+          "c_owner_cato"
+        ],
+        "contradiction_id": "conflict_c80ed3f14c59685c",
+        "key": {
+          "predicate": "owner",
+          "subject": "chest"
+        },
+        "overlap_from": 3,
+        "overlap_to": null,
+        "resolution": "authority",
+        "resolved_by_claim_id": "c_owner_cato"
+      }
+    ],
+    "t4_digest": "df92529552fe62f16d72dd99a842c2bbaf4e64530791de541e89e2d5cec626b6",
+    "t4_intent": "Bea",
+    "t4_owner": "Cato"
+  }
+}
