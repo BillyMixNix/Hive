@@ -142,6 +142,8 @@ class RepoMap:
 
             if any(part in DEFAULT_SKIP_DIRS for part in relative_parts[:-1]):
                 continue
+            if any(part.startswith("_tmp_") for part in relative_parts[:-1]):
+                continue
 
             yield path
 

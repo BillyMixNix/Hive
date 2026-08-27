@@ -245,8 +245,8 @@ def _find_block_by_anchor_span(blocks, anchor_span):
 
     for block in blocks:
         if (
-            block.get("lineno") == anchor_span.get("lineno")
-            and block.get("end_lineno") == anchor_span.get("end_lineno")
+            abs(block.get("lineno") - anchor_span.get("lineno")) <= 1
+            and abs(block.get("end_lineno") - anchor_span.get("end_lineno")) <= 1
         ):
             return block
 
@@ -256,7 +256,7 @@ def _find_block_by_anchor_span(blocks, anchor_span):
 def _validate_block_against_anchor_span(selected_block, anchor_span, anchored_symbol, target_file):
     if selected_block is None or not anchor_span:
         # Fuzzy fallback mechanism
-        if abs(selected_block.get("lineno") - anchor_span.get("lineno")) <= 1 and abs(selected_block.get("end_lineno") - anchor_span.get("end_lineno")) <= 1:
+        if selected_block is not None and abs(selected_block.get("lineno") - anchor_span.get("lineno")) <= 1 and abs(selected_block.get("end_lineno") - anchor_span.get("end_lineno")) <= 1:
             return selected_block
         else:
             raise ValueError(
@@ -268,7 +268,7 @@ def _validate_block_against_anchor_span(selected_block, anchor_span, anchored_sy
             f"Anchor mismatch in {target_file}: expected symbol {anchored_symbol}, got {selected_block.get('name')}."
         )
 
-    if selected_block.get("lineno") != anchor_span.get("lineno") or selected_block.get("end_lineno") != anchor_span.get("end_lineno"):
+    if abs(selected_block.get("lineno") - anchor_span.get("lineno")) > 1 or abs(selected_block.get("end_lineno") - anchor_span.get("end_lineno")) > 1:
         raise ValueError(
             f"Anchor mismatch in {target_file}: expected lines {anchor_span.get('lineno')}-{anchor_span.get('end_lineno')}, "
             f"got {selected_block.get('lineno')}-{selected_block.get('end_lineno')}."
