@@ -18,7 +18,7 @@ from typing import Any
 
 from transformers import AutoTokenizer
 
-from compressor_live_ab import EXPECTED_COMMAND, _fetch_failed_ci_log
+from compressor_live_ab import _fetch_failed_ci_log
 from compressor_scale_ab import (
     MODEL_CONTEXT,
     TOKENIZER_MODEL,
@@ -32,9 +32,19 @@ from compressor_scale_ab import (
 from hive_compressor.coding_agent import adapt_coding_session
 
 
-RESULT_PATH = Path("results/compressor_inwindow_ab.json")
-TARGETS = (8_000, 16_000, 24_000, 30_000)
+DEFAULT_TARGETS = (8_000, 16_000, 24_000, 30_000)
 MAX_SAFE_PROMPT = 31_500
+
+
+def _targets() -> tuple[int, ...]:
+    one = os.getenv("HIVE_AB_TARGET", "").strip()
+    if one:
+        return (int(one),)
+    return DEFAULT_TARGETS
+
+
+def _result_path() -> Path:
+    return Path(os.getenv("HIVE_AB_RESULT_PATH", "results/compressor_inwindow_ab.json"))
 
 
 def _failure_excerpt(log: str) -> str:
@@ -117,7 +127,7 @@ def _build_near_target(
             high = mid - 1
 
     if best_events is None:
-        empty_events, empty_tokens = build_with(0)
+        _, empty_tokens = build_with(0)
         raise RuntimeError(
             f"base prompt is already {empty_tokens} tokens, above target {target_tokens}"
         )
@@ -135,16 +145,18 @@ def _classify(raw_pass: bool, hive_pass: bool) -> str:
 
 
 def main() -> int:
-    RESULT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    result_path = _result_path()
+    result_path.parent.mkdir(parents=True, exist_ok=True)
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_MODEL)
     tokenizer.model_max_length = 1_000_000_000
     failed_log, failed_source = _fetch_failed_ci_log()
     corpus, corpus_paths = _eligible_repo_corpus()
+    targets = _targets()
 
     runs: list[dict[str, Any]] = []
     hive_regression = False
 
-    for target in TARGETS:
+    for target in targets:
         events, measured_raw = _build_near_target(target, tokenizer, failed_log, corpus)
         raw_history = _history_json(events)
         adapted = adapt_coding_session(events)
@@ -197,7 +209,7 @@ def main() -> int:
         ),
         "failed_log_source": failed_source,
         "eligible_repo_files": len(corpus_paths),
-        "targets": list(TARGETS),
+        "targets": list(targets),
         "runs": runs,
         "both_pass_points": len(comparable),
         "all_points_directly_comparable": len(runs) == len(comparable),
@@ -206,7 +218,7 @@ def main() -> int:
             "inside the same 32,768-token model context; one coding task only"
         ),
     }
-    RESULT_PATH.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    result_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result, indent=2))
     return 1 if hive_regression else 0
 
