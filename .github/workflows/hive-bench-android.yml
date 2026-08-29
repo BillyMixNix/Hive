@@ -37,15 +37,17 @@ jobs:
           python -m pip install requests transformers tokenizers
           python validation/export_phone_benchmark.py --output /tmp/hive_bench_cases.json
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Install Android native toolchain
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager \
+          SDKMANAGER="${ANDROID_SDK_ROOT:-$ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" \
             'platforms;android-36' \
             'build-tools;36.0.0' \
             'ndk;29.0.13113456' \
@@ -59,7 +61,6 @@ jobs:
       - name: Apply Hive Bench overlay
         run: |
           APP=external/llama.cpp/examples/llama.android/app/src/main
-          LIBCPP=external/llama.cpp/examples/llama.android/lib/src/main/cpp/ai_chat.cpp
           cp android/hive-bench/overlay/MainActivity.kt "$APP/java/com/example/llama/MainActivity.kt"
           cp android/hive-bench/overlay/activity_main.xml "$APP/res/layout/activity_main.xml"
           cp android/hive-bench/overlay/strings.xml "$APP/res/values/strings.xml"
