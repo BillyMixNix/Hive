@@ -1,0 +1,37 @@
+name: Compressor MVP
+
+on:
+  pull_request:
+    paths:
+      - 'hive_compressor/**'
+      - 'tests/test_compressor_mvp.py'
+      - 'tests/test_source_preserving_adapter.py'
+      - 'tests/test_coding_agent_adapter.py'
+      - 'Docs/COMPRESSOR_*.md'
+      - '.github/workflows/compressor-ci.yml'
+  push:
+    branches:
+      - 'product/compressor-mvp'
+    paths:
+      - 'hive_compressor/**'
+      - 'tests/test_compressor_mvp.py'
+      - 'tests/test_source_preserving_adapter.py'
+      - 'tests/test_coding_agent_adapter.py'
+      - '.github/workflows/compressor-ci.yml'
+
+jobs:
+  compressor-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Run compressor tests
+        run: >-
+          python -m pytest -q
+          tests/test_compressor_mvp.py
+          tests/test_source_preserving_adapter.py
+          tests/test_coding_agent_adapter.py
