@@ -1,0 +1,99 @@
+name: Hive Bench Android
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'product/hive-bench-android'
+    paths:
+      - 'android/hive-bench/**'
+      - 'validation/export_phone_benchmark.py'
+      - 'validation/compressor_inwindow_ab.py'
+      - 'validation/compressor_scale_ab.py'
+      - 'validation/compressor_live_ab.py'
+      - 'hive_compressor/**'
+      - '.github/workflows/hive-bench-android.yml'
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      actions: read
+    env:
+      LLAMA_CPP_SHA: c841aeeb8bb2fe417038dadfa9b007cf1a9ef950
+      GITHUB_TOKEN: ${{ github.token }}
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/validation
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Build frozen phone benchmark bundle
+        run: |
+          python -m pip install requests transformers tokenizers
+          python validation/export_phone_benchmark.py --output /tmp/hive_bench_cases.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android native toolchain
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager \
+            'platforms;android-36' \
+            'build-tools;36.0.0' \
+            'ndk;29.0.13113456' \
+            'cmake;3.31.6'
+
+      - name: Fetch pinned llama.cpp Android binding
+        run: |
+          git clone --filter=blob:none https://github.com/ggml-org/llama.cpp.git external/llama.cpp
+          git -C external/llama.cpp checkout "$LLAMA_CPP_SHA"
+
+      - name: Apply Hive Bench overlay
+        run: |
+          APP=external/llama.cpp/examples/llama.android/app/src/main
+          LIBCPP=external/llama.cpp/examples/llama.android/lib/src/main/cpp/ai_chat.cpp
+          cp android/hive-bench/overlay/MainActivity.kt "$APP/java/com/example/llama/MainActivity.kt"
+          cp android/hive-bench/overlay/activity_main.xml "$APP/res/layout/activity_main.xml"
+          cp android/hive-bench/overlay/strings.xml "$APP/res/values/strings.xml"
+          mkdir -p "$APP/assets"
+          cp /tmp/hive_bench_cases.json "$APP/assets/hive_bench_cases.json"
+
+          # The upstream sample defaults to 8k and four CPU threads. Hive Bench
+          # deliberately needs the same 32k window as our validation harness.
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('external/llama.cpp/examples/llama.android/lib/src/main/cpp/ai_chat.cpp')
+          text = path.read_text()
+          text = text.replace('constexpr int   N_THREADS_MAX           = 4;', 'constexpr int   N_THREADS_MAX           = 6;')
+          text = text.replace('constexpr int   DEFAULT_CONTEXT_SIZE    = 8192;', 'constexpr int   DEFAULT_CONTEXT_SIZE    = 32768;')
+          path.write_text(text)
+          assert 'DEFAULT_CONTEXT_SIZE    = 32768' in text
+          assert 'N_THREADS_MAX           = 6' in text
+          PY
+
+      - name: Assemble arm64 debug APK
+        working-directory: external/llama.cpp/examples/llama.android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp external/llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk dist/HiveBench-v0.1-arm64.apk
+          sha256sum dist/HiveBench-v0.1-arm64.apk | tee dist/HiveBench-v0.1-arm64.apk.sha256
+
+      - name: Upload Hive Bench APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HiveBench-v0.1-arm64
+          path: dist/*
+          if-no-files-found: error
