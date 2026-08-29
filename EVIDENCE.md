@@ -80,9 +80,7 @@ The commercial metric is not token compression by itself. The intended metric is
 
 A real deployment must charge state extraction, normalization, validation, updates, storage, corrections, retries, escalations, and model calls.
 
-Under the current illustrative base assumptions in the internal lifecycle model, Hive is approximately **15.4% worse on net economics**, with break-even at roughly **1,089 reuse queries**. Those numbers are planning-model outputs, not production observations.
-
-The next commercial proof is therefore to run real coding-agent workflows in shadow mode, freeze the accounting rules and quality margin in advance, and identify where Hive wins, where it must escalate, and where Raw should remain the default.
+Full-lifecycle production economics are **not yet proven**. The next commercial proof is to run real coding-agent workflows in shadow mode, freeze the accounting rules and quality margin in advance, and identify where Hive wins, where it must escalate, and where Raw should remain the default.
 
 ## Sealed artifact identifiers
 
