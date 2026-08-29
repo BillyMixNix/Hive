@@ -1,12 +1,13 @@
 """Scale stress test for the Hive coding-agent compressor.
 
 Runs the same dependency-repair task at nominal 50k, 100k, and 500k raw
-history sizes. The raw history is grown with large historical tool outputs made
-from real repository text (excluding files that leak the answer). Human wording
-is never compressed; only machine event state is compacted.
+history sizes. Raw history is grown with historical tool outputs made from real
+repository text, excluding files that leak the answer. Human wording is never
+compressed; only machine event state is compacted.
 
-This is a capacity/scaling experiment, not a claim that every 500k-token coding
-session has the same structure.
+Important: this test does not silently truncate Raw and call that a fair A/B.
+If the complete Raw prompt exceeds the model's configured context window, Raw
+is recorded as over-capacity. Hive is then run only if its complete prompt fits.
 """
 
 from __future__ import annotations
@@ -134,21 +135,21 @@ def _eligible_repo_corpus() -> tuple[str, list[str]]:
     excluded_dirs = {".git", ".venv", "venv", "node_modules", "results", "__pycache__"}
     pieces: list[str] = []
     paths: list[str] = []
+    explicit_excludes = {
+        ".github/workflows/compressor-ci.yml",
+        ".github/workflows/compressor-live-ab.yml",
+        ".github/workflows/compressor-scale-ab.yml",
+        "validation/compressor_live_ab.py",
+        "validation/compressor_live_ab_ollama.py",
+        "validation/compressor_scale_ab.py",
+    }
 
     for path in sorted(root.rglob("*")):
         if not path.is_file() or path.suffix.lower() not in allowed:
             continue
         rel = path.relative_to(root)
-        if any(part in excluded_dirs for part in rel.parts):
-            continue
-        if str(rel).replace("\\", "/") in {
-            ".github/workflows/compressor-ci.yml",
-            ".github/workflows/compressor-live-ab.yml",
-            ".github/workflows/compressor-scale-ab.yml",
-            "validation/compressor_live_ab.py",
-            "validation/compressor_live_ab_ollama.py",
-            "validation/compressor_scale_ab.py",
-        }:
+        rel_text = str(rel).replace("\\", "/")
+        if any(part in excluded_dirs for part in rel.parts) or rel_text in explicit_excludes:
             continue
         try:
             text = path.read_text(encoding="utf-8")
@@ -156,8 +157,8 @@ def _eligible_repo_corpus() -> tuple[str, list[str]]:
             continue
         if not text.strip() or any(marker in text for marker in LEAK_MARKERS):
             continue
-        paths.append(str(rel).replace("\\", "/"))
-        pieces.append(f"\n--- FILE {paths[-1]} ---\n{text}\n")
+        paths.append(rel_text)
+        pieces.append(f"\n--- FILE {rel_text} ---\n{text}\n")
 
     if not pieces:
         raise RuntimeError("no eligible repository corpus found")
@@ -195,13 +196,10 @@ def _build_target_events(
     skeleton = _history_json(base + [final_event])
     base_tokens = _tok(tokenizer, _prompt("RAW", skeleton))
     needed = max(0, target_tokens - base_tokens)
-
     corpus_tokens = tokenizer.encode(corpus, add_special_tokens=False)
     if not corpus_tokens:
         raise RuntimeError("repository corpus tokenized to zero tokens")
 
-    # Use up to ten historical tool-output chunks. They are raw evidence in the
-    # full history but become tiny source-linked machine-state records for Hive.
     chunk_count = 10
     per_chunk = max(1, (needed + chunk_count - 1) // chunk_count)
     filler_events: list[dict[str, Any]] = []
@@ -215,17 +213,14 @@ def _build_target_events(
             remaining = take - len(gathered)
             end = min(len(corpus_tokens), cursor + remaining)
             gathered.extend(corpus_tokens[cursor:end])
-            cursor = end
-            if cursor >= len(corpus_tokens):
-                cursor = 0
-        output = tokenizer.decode(gathered, skip_special_tokens=False)
+            cursor = 0 if end >= len(corpus_tokens) else end
         filler_events.append({
             "id": f"historical-repo-read-{idx + 1}",
             "kind": "tool_result",
             "effective_t": 100 + idx,
             "tool": "repository_reader",
             "ok": True,
-            "output": output,
+            "output": tokenizer.decode(gathered, skip_special_tokens=False),
             "state_effects": {
                 "op": "historical_repository_read",
                 "chunk": idx + 1,
@@ -248,11 +243,7 @@ def _call_ollama(prompt: str) -> dict[str, Any]:
                 "Return only the requested JSON.\n\n" + prompt
             ),
             "stream": False,
-            "options": {
-                "temperature": 0,
-                "num_predict": 96,
-                "num_ctx": MODEL_CONTEXT,
-            },
+            "options": {"temperature": 0, "num_predict": 96, "num_ctx": MODEL_CONTEXT},
         },
         timeout=900,
     )
@@ -269,6 +260,7 @@ def _call_ollama(prompt: str) -> dict[str, Any]:
         passed = False
         parse_error = f"{type(exc).__name__}: {exc}"
     return {
+        "status": "RAN",
         "text": text,
         "parsed_command": command,
         "passed": passed,
@@ -289,36 +281,50 @@ def main() -> int:
 
     for target in TARGETS:
         events, full_raw_tokens = _build_target_events(target, tokenizer, failed_log, corpus)
-        raw_history = _history_json(events)
         adapted = adapt_coding_session(events)
         hive_history = json.dumps(
             adapted["model_context"], ensure_ascii=False, sort_keys=True, separators=(",", ":")
         )
-        raw_prompt = _prompt("RAW", raw_history)
         hive_prompt = _prompt("HIVE", hive_history)
         hive_full_tokens = _tok(tokenizer, hive_prompt)
 
-        # We intentionally submit the oversized raw prompt too. Ollama evaluates
-        # only what fits in num_ctx, letting us observe truncation at the model
-        # boundary instead of pretending the entire raw history was available.
-        raw_call = _call_ollama(raw_prompt)
-        hive_call = _call_ollama(hive_prompt)
-        any_hive_failure = any_hive_failure or not hive_call["passed"]
+        raw_fits = full_raw_tokens <= MODEL_CONTEXT
+        hive_fits = hive_full_tokens <= MODEL_CONTEXT
+
+        if raw_fits:
+            raw_result: dict[str, Any] = _call_ollama(_prompt("RAW", _history_json(events)))
+        else:
+            raw_result = {
+                "status": "OVER_CONTEXT_NOT_RUN",
+                "passed": None,
+                "reason": "complete Raw prompt exceeds configured model context; silent truncation rejected",
+            }
+
+        if hive_fits:
+            hive_result = _call_ollama(hive_prompt)
+            any_hive_failure = any_hive_failure or not bool(hive_result["passed"])
+        else:
+            hive_result = {
+                "status": "OVER_CONTEXT_NOT_RUN",
+                "passed": None,
+                "reason": "complete Hive prompt exceeds configured model context",
+            }
+            any_hive_failure = True
 
         runs.append({
             "target_raw_tokens": target,
             "measured_full_raw_prompt_tokens": full_raw_tokens,
             "measured_full_hive_prompt_tokens": hive_full_tokens,
+            "full_context_tokens_saved": max(0, full_raw_tokens - hive_full_tokens),
             "full_context_token_reduction_percent": round(
                 (1 - hive_full_tokens / full_raw_tokens) * 100.0, 2
             ) if full_raw_tokens else 0.0,
             "model_context_limit_tokens": MODEL_CONTEXT,
-            "raw_full_history_fits_model": full_raw_tokens <= MODEL_CONTEXT,
-            "hive_full_history_fits_model": hive_full_tokens <= MODEL_CONTEXT,
-            "raw": raw_call,
-            "hive": hive_call,
-            "raw_was_truncated_for_model": full_raw_tokens > raw_call["prompt_eval_count"],
-            "hive_was_truncated_for_model": hive_full_tokens > hive_call["prompt_eval_count"] + 32,
+            "raw_full_history_fits_model": raw_fits,
+            "hive_full_history_fits_model": hive_fits,
+            "capacity_extension_observed": (not raw_fits) and hive_fits,
+            "raw": raw_result,
+            "hive": hive_result,
         })
 
     result = {
@@ -326,6 +332,7 @@ def main() -> int:
         "model": MODEL,
         "tokenizer": TOKENIZER_MODEL,
         "model_context_limit_tokens": MODEL_CONTEXT,
+        "method": "fail-closed capacity comparison; oversized Raw prompts are not silently truncated",
         "history_design": (
             "real failed CI evidence + actual repository text as historical tool-output filler; "
             "answer-leaking files excluded; newest human wording preserved verbatim"
