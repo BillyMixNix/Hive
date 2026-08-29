@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 from .auth import auth_required, configured_hashes, validate_api_key
+from .coding_agent import adapt_coding_session
 from .compressor import CompressionError, compress_records
 from .metering import UsageMeter
 
@@ -24,7 +25,7 @@ def _json_bytes(value: Any) -> bytes:
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "HiveCompressor/0.1"
+    server_version = "HiveCompressor/0.2"
 
     def log_message(self, fmt: str, *args: Any) -> None:
         print(f"{self.address_string()} - {fmt % args}")
@@ -46,13 +47,38 @@ class Handler(BaseHTTPRequestHandler):
             self._send(401, {"error": "unauthorized"})
         return ok, identity
 
+    def _read_json_body(self) -> dict[str, Any] | None:
+        try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            self._send(400, {"error": "invalid_content_length"})
+            return None
+
+        if content_length <= 0:
+            self._send(400, {"error": "empty_body"})
+            return None
+        if content_length > MAX_BODY_BYTES:
+            self._send(413, {"error": "request_too_large", "max_bytes": MAX_BODY_BYTES})
+            return None
+
+        try:
+            payload = json.loads(self.rfile.read(content_length))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            self._send(400, {"error": "invalid_json"})
+            return None
+
+        if not isinstance(payload, dict):
+            self._send(400, {"error": "body_must_be_object"})
+            return None
+        return payload
+
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/v1/health":
             ready = (not auth_required()) or bool(configured_hashes())
             self._send(200 if ready else 503, {
                 "status": "ok" if ready else "not_ready",
                 "service": "hive-compressor",
-                "version": "0.1.0",
+                "version": "0.2.0",
                 "auth_required": auth_required(),
             })
             return
@@ -67,7 +93,7 @@ class Handler(BaseHTTPRequestHandler):
         self._send(404, {"error": "not_found"})
 
     def do_POST(self) -> None:  # noqa: N802
-        if self.path != "/v1/compress":
+        if self.path not in {"/v1/compress", "/v1/adapt/coding"}:
             self._send(404, {"error": "not_found"})
             return
 
@@ -75,48 +101,46 @@ class Handler(BaseHTTPRequestHandler):
         if not ok or not key_hash:
             return
 
-        try:
-            content_length = int(self.headers.get("Content-Length", "0"))
-        except ValueError:
-            self._send(400, {"error": "invalid_content_length"})
-            return
-
-        if content_length <= 0:
-            self._send(400, {"error": "empty_body"})
-            return
-        if content_length > MAX_BODY_BYTES:
-            self._send(413, {"error": "request_too_large", "max_bytes": MAX_BODY_BYTES})
-            return
-
-        try:
-            payload = json.loads(self.rfile.read(content_length))
-        except (json.JSONDecodeError, UnicodeDecodeError):
-            self._send(400, {"error": "invalid_json"})
-            return
-
-        if not isinstance(payload, dict):
-            self._send(400, {"error": "body_must_be_object"})
-            return
-
-        records = payload.get("records")
-        mode = payload.get("mode", "c1")
-        if not isinstance(records, list):
-            self._send(400, {"error": "records_must_be_array"})
+        payload = self._read_json_body()
+        if payload is None:
             return
 
         request_id = uuid.uuid4().hex
         start = time.perf_counter()
+
         try:
-            result = compress_records(records, mode=mode)
+            if self.path == "/v1/compress":
+                records = payload.get("records")
+                mode = payload.get("mode", "c1")
+                if not isinstance(records, list):
+                    self._send(400, {"error": "records_must_be_array"})
+                    return
+                response = compress_records(records, mode=mode)
+                metered_result = response
+            else:
+                events = payload.get("events")
+                mode = payload.get("mode", "c1")
+                min_confidence = payload.get("min_confidence", 0.90)
+                if not isinstance(events, list):
+                    self._send(400, {"error": "events_must_be_array"})
+                    return
+                response = adapt_coding_session(
+                    events,
+                    mode=mode,
+                    min_confidence=min_confidence,
+                )
+                metered_result = response["compression"]
         except CompressionError as exc:
             self._send(422, {"error": "compression_contract_failed", "detail": str(exc)})
             return
-        latency_ms = (time.perf_counter() - start) * 1000.0
 
-        METER.record(request_id, key_hash, result, latency_ms)
-        result["request_id"] = request_id
-        result["stats"]["latency_ms"] = round(latency_ms, 3)
-        self._send(200, result)
+        latency_ms = (time.perf_counter() - start) * 1000.0
+        METER.record(request_id, key_hash, metered_result, latency_ms)
+
+        response["request_id"] = request_id
+        response.setdefault("stats", {})
+        response["stats"]["latency_ms"] = round(latency_ms, 3)
+        self._send(200, response)
 
 
 def run() -> None:
