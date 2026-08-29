@@ -14,8 +14,12 @@ on:
 
 jobs:
   inwindow-ab:
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [8000, 16000, 24000, 30000]
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     permissions:
       contents: read
       actions: read
@@ -25,6 +29,8 @@ jobs:
       HIVE_AB_MODEL: qwen2.5-coder:3b
       HIVE_AB_TOKENIZER: Qwen/Qwen2.5-Coder-3B-Instruct
       HIVE_AB_NUM_CTX: '32768'
+      HIVE_AB_TARGET: ${{ matrix.target }}
+      HIVE_AB_RESULT_PATH: results/compressor_inwindow_${{ matrix.target }}.json
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -48,6 +54,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: compressor-inwindow-ab-result
-          path: results/compressor_inwindow_ab.json
+          name: compressor-inwindow-ab-${{ matrix.target }}
+          path: results/compressor_inwindow_${{ matrix.target }}.json
           if-no-files-found: warn
