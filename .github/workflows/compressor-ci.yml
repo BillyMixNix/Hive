@@ -27,8 +27,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-      - name: Install test dependency
-        run: python -m pip install pytest
+      - name: Install test dependencies
+        run: python -m pip install pytest requests
       - name: Run compressor tests
         run: >-
           python -m pytest -q
