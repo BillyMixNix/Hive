@@ -37,6 +37,17 @@ TARGETS = (8_000, 16_000, 24_000, 30_000)
 MAX_SAFE_PROMPT = 31_500
 
 
+def _failure_excerpt(log: str) -> str:
+    """Keep the real failure neighborhood without dragging the whole CI install log in."""
+    marker = "ModuleNotFoundError: No module named 'requests'"
+    idx = log.find(marker)
+    if idx < 0:
+        return log[-4_000:]
+    start = max(0, idx - 1_800)
+    end = min(len(log), idx + 800)
+    return log[start:end]
+
+
 def _final_event() -> dict[str, Any]:
     return {
         "id": "human-current",
@@ -74,11 +85,15 @@ def _build_near_target(
     corpus: str,
 ) -> tuple[list[dict[str, Any]], int]:
     """Build the largest prompt not exceeding the requested token target."""
-    base = _base_events(failed_log)
+    base = _base_events(_failure_excerpt(failed_log))
     final = _final_event()
-    corpus_tokens = tokenizer.encode(corpus, add_special_tokens=False)
+    corpus_tokens = tokenizer.encode(corpus[:400_000], add_special_tokens=False)
     if not corpus_tokens:
         raise RuntimeError("repository corpus tokenized to zero tokens")
+
+    if len(corpus_tokens) < target_tokens:
+        repeats = (target_tokens // len(corpus_tokens)) + 2
+        corpus_tokens = (corpus_tokens * repeats)[: target_tokens * 2]
 
     def build_with(count: int) -> tuple[list[dict[str, Any]], int]:
         filler_text = tokenizer.decode(corpus_tokens[:count], skip_special_tokens=False)
@@ -91,12 +106,6 @@ def _build_near_target(
     best_events: list[dict[str, Any]] | None = None
     best_tokens = 0
 
-    # If the repository corpus is shorter than needed, repeat it before binary search.
-    if high < target_tokens:
-        repeats = (target_tokens // len(corpus_tokens)) + 2
-        corpus_tokens = (corpus_tokens * repeats)[: target_tokens * 2]
-        high = min(len(corpus_tokens), target_tokens)
-
     while low <= high:
         mid = (low + high) // 2
         events, measured = build_with(mid)
@@ -108,7 +117,10 @@ def _build_near_target(
             high = mid - 1
 
     if best_events is None:
-        raise RuntimeError(f"could not build prompt under {target_tokens} tokens")
+        empty_events, empty_tokens = build_with(0)
+        raise RuntimeError(
+            f"base prompt is already {empty_tokens} tokens, above target {target_tokens}"
+        )
     return best_events, best_tokens
 
 
@@ -125,6 +137,7 @@ def _classify(raw_pass: bool, hive_pass: bool) -> str:
 def main() -> int:
     RESULT_PATH.parent.mkdir(parents=True, exist_ok=True)
     tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_MODEL)
+    tokenizer.model_max_length = 1_000_000_000
     failed_log, failed_source = _fetch_failed_ci_log()
     corpus, corpus_paths = _eligible_repo_corpus()
 
@@ -179,8 +192,8 @@ def main() -> int:
         "model_context_limit_tokens": MODEL_CONTEXT,
         "task": "repair missing requests dependency while preserving focused test scope",
         "history_design": (
-            "real failed CI evidence + actual Hive repository text as historical tool output; "
-            "answer-leaking files excluded; newest human wording preserved verbatim"
+            "relevant excerpt from the real failed CI evidence + actual Hive repository text as "
+            "historical tool output; answer-leaking files excluded; newest human wording preserved verbatim"
         ),
         "failed_log_source": failed_source,
         "eligible_repo_files": len(corpus_paths),
