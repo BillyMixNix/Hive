@@ -67,17 +67,30 @@ jobs:
           mkdir -p "$APP/assets"
           cp /tmp/hive_bench_cases.json "$APP/assets/hive_bench_cases.json"
 
-          # The upstream sample defaults to 8k and four CPU threads. Hive Bench
-          # deliberately needs the same 32k window as our validation harness.
           python - <<'PY'
           from pathlib import Path
-          path = Path('external/llama.cpp/examples/llama.android/lib/src/main/cpp/ai_chat.cpp')
-          text = path.read_text()
+
+          cpp = Path('external/llama.cpp/examples/llama.android/lib/src/main/cpp/ai_chat.cpp')
+          text = cpp.read_text()
           text = text.replace('constexpr int   N_THREADS_MAX           = 4;', 'constexpr int   N_THREADS_MAX           = 6;')
           text = text.replace('constexpr int   DEFAULT_CONTEXT_SIZE    = 8192;', 'constexpr int   DEFAULT_CONTEXT_SIZE    = 32768;')
-          path.write_text(text)
+          cpp.write_text(text)
           assert 'DEFAULT_CONTEXT_SIZE    = 32768' in text
           assert 'N_THREADS_MAX           = 6' in text
+
+          lib_gradle = Path('external/llama.cpp/examples/llama.android/lib/build.gradle.kts')
+          text = lib_gradle.read_text().replace(
+              'abiFilters += listOf("arm64-v8a", "x86_64")',
+              'abiFilters += listOf("arm64-v8a")',
+          )
+          lib_gradle.write_text(text)
+
+          app_gradle = Path('external/llama.cpp/examples/llama.android/app/build.gradle.kts')
+          text = app_gradle.read_text()
+          text = text.replace('applicationId = "com.example.llama.aichat"', 'applicationId = "com.hive.bench"')
+          text = text.replace('versionName = "1.0"', 'versionName = "0.1"')
+          text = text.replace('debug {\n            isMinifyEnabled = true\n            isShrinkResources = true', 'debug {\n            isMinifyEnabled = false\n            isShrinkResources = false')
+          app_gradle.write_text(text)
           PY
 
       - name: Assemble arm64 debug APK
