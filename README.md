@@ -1,44 +1,126 @@
 # Hive
 
-Hive is a **regression-first coding agent**.
+**Verified semantic state for persistent AI workflows.**
 
-The project no longer treats prompt advice as proof that a model has learned. A remembered lesson may help generate a patch, but executable evidence decides whether the system improved.
+Hive is a research prototype for compiling growing workflow history into smaller, task-relevant semantic state without silently discarding distinctions that can change the answer.
 
-## The operating loop
+The first commercial wedge is **AI coding agents**: long-running agents that repeatedly revisit repositories, prior tool calls, implementation decisions, failures, and changing project state.
 
-1. A model proposes a patch.
-2. Hive applies it in an isolated workspace.
-3. Syntax and structural safety checks run.
-4. Every recorded regression relevant to the changed file runs.
-5. A patch that repeats any known failure is rejected.
-6. Newly discovered failures are recorded as executable regression cases.
+## The problem
 
-The model does not need to become permanently smarter. The surrounding system becomes progressively less able to repeat mistakes.
+Persistent AI workflows accumulate history. Later model calls either:
 
-## Executable regression memory
+- keep rereading more and more context,
+- truncate or summarize it,
+- retrieve fragments from it,
+- or rely on provider-specific memory.
 
-Regression cases live in `validation/regressions/*.json`. They describe a target file, a callable, inputs, and either an expected return value or expected exception. Cases can also mutate the returned object afterward to detect accidental aliasing with caller-owned inputs.
+Those approaches can reduce cost, but they can also blur distinctions such as:
 
-Run the complete memory gate with:
+- current vs. historical,
+- observed vs. planned,
+- authoritative vs. disputed,
+- active vs. superseded,
+- prerequisite vs. consequence.
 
-```bash
-python -m regression_gate
+Hive's thesis is that those distinctions should be represented explicitly and tested by downstream task correctness.
+
+## Product direction
+
+The planned V1 is a provider-neutral SDK that sits beside an existing model-backed workflow:
+
+```text
+workflow history
+      |
+      v
+versioned semantic state
+      |
+      v
+compact task context + omissions
+      |
+      v
+capability / sufficiency gate
+      |
+      +---- insufficient ----> fuller context / stronger model
+      |
+      v
+existing model or API
+      |
+      v
+outcome + token / latency / cost telemetry
 ```
 
-Run only cases for one file with:
+The intended deployment mode starts in **shadow mode**. Hive does not need production authority to be evaluated: Raw and Hive-backed calls can be compared on frozen tasks before anything serves live traffic.
 
-```bash
-python -m regression_gate --file router.py
-```
+## Current evidence
 
-The standard test suite runs the complete recorded regression memory, so a pull request cannot silently reintroduce a known behavior failure.
+On a sealed synthetic benchmark, the engineered C1 semantic-state representation reduced:
 
-## What lessons are for
+- **supplied-state bytes by 81.1%**,
+- **input tokens by 58.0%**, and
+- **generation cost by 54–57%**,
 
-Hive may still retrieve lessons and include them in model prompts. They are hints, not authority. A lesson is useful only when the resulting patch passes executable checks.
+while producing the same aggregate observed correct counts as Raw within each tested model arm:
+
+| Solver | Raw | C1 |
+|---|---:|---:|
+| Luna | 156 / 160 | 156 / 160 |
+| Sol | 160 / 160 | 160 / 160 |
+
+This is **not** a production-savings claim and **not** a proof of statistical equivalence. The benchmark is synthetic, the representation is engineered rather than autonomously learned, and the reported cost reduction covers model generation rather than the entire state-construction lifecycle.
+
+See [EVIDENCE.md](EVIDENCE.md) for the benchmark summary, caveats, negative evidence, and artifact identifiers.
+
+## Why the state contract matters
+
+The current representation explicitly tracks several classes of answer-changing state:
+
+- **Temporal state** — effective time, current vs. historical, validity windows, supersession.
+- **Epistemic authority** — observed, inferred, planned, disputed, false, and unknown.
+- **Causal structure** — prerequisites, effects, dependencies, provenance, and rollback.
+
+A separate ablation study removed the `kind`, `authority`, and `status` bundle and performance fell from **160 / 160 to 26 / 160**, with large increases in illegal promotions and authority errors. That result is narrow to the benchmark, but it is evidence that the semantic distinctions were doing real work rather than acting as cosmetic compression labels.
+
+## What Hive does when compact state is not enough
+
+Hive's product direction is deliberately fail-closed:
+
+1. confirm the solver is capable of the task,
+2. compile only task-relevant state,
+3. preserve provenance and record omissions,
+4. run sufficiency / capability checks,
+5. escalate to fuller context or a stronger model when the compact representation is not trustworthy,
+6. measure correctness and full lifecycle cost.
+
+The goal is not "compress everything." The goal is to learn **where compact semantic state is safe and economically useful, and where Raw context should remain in control**.
+
+## Design-partner target
+
+Hive is looking for teams operating persistent **AI coding-agent workflows** where:
+
+- history grows across many interactions,
+- later calls reuse earlier facts and decisions,
+- chronology or authority can change the correct action,
+- current context spend is measurable,
+- task outcomes can be scored,
+- and Raw-vs-Hive shadow testing is permitted.
+
+The first engagement is intended to be a shadow evaluation with frozen success criteria and a before/after cost model that charges every Hive lifecycle cost.
+
+There are currently **no production customers, no revenue, and no claimed production savings**.
+
+## Research lineage
+
+Hive has gone through several narrower research phases, including structural patch safety, lesson-memory experiments, and executable regression memory. Those systems are not being erased from the project history; they are part of the experimental lineage that narrowed the current commercial thesis.
+
+See [RESEARCH_HISTORY.md](RESEARCH_HISTORY.md), [FINDINGS.md](FINDINGS.md), and [HIVE_RELIABILITY_REPORT.md](HIVE_RELIABILITY_REPORT.md).
 
 ## Current boundary
 
-Hive is not claiming autonomous model training or reliable self-improvement through prompting. Its measurable promise is narrower:
+Hive is a **research prototype and benchmark apparatus**, not a finished production SDK.
 
-> Once Hive can express a failure as a regression case, future accepted changes must not repeat it.
+The next proof is straightforward to state and difficult to earn:
+
+> Can Hive automatically construct and maintain trustworthy semantic state from real coding-agent histories cheaply enough that total dollars per correct task improve after extraction, validation, updates, storage, retries, corrections, and escalations are all charged?
+
+That is the work the project is now organized around.
