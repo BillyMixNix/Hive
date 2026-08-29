@@ -20,7 +20,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ github.token }}
       PYTHONPATH: ${{ github.workspace }}
-      HIVE_AB_MODEL: qwen2.5-coder:1.5b
+      HIVE_AB_MODEL: qwen2.5-coder:3b
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
