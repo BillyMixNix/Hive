@@ -1,0 +1,53 @@
+name: Compressor In-Window A-B
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'product/compressor-mvp'
+    paths:
+      - 'validation/compressor_inwindow_ab.py'
+      - '.github/workflows/compressor-inwindow-ab.yml'
+      - 'validation/compressor_scale_ab.py'
+      - 'validation/compressor_live_ab.py'
+      - 'hive_compressor/**'
+
+jobs:
+  inwindow-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/validation
+      HIVE_AB_MODEL: qwen2.5-coder:3b
+      HIVE_AB_TOKENIZER: Qwen/Qwen2.5-Coder-3B-Instruct
+      HIVE_AB_NUM_CTX: '32768'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install benchmark dependencies
+        run: python -m pip install requests transformers tokenizers
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+      - name: Start Ollama and pull coder model
+        run: |
+          ollama serve >/tmp/ollama.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 1
+          done
+          ollama pull "$HIVE_AB_MODEL"
+      - name: Run fair in-window A-B
+        run: python validation/compressor_inwindow_ab.py
+      - name: Upload in-window result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compressor-inwindow-ab-result
+          path: results/compressor_inwindow_ab.json
+          if-no-files-found: warn
