@@ -1,9 +1,8 @@
 """Fair in-window Raw-vs-Hive scaling benchmark.
 
-Runs the same coding repair task at 8k, 16k, 24k, and 30k raw prompt sizes.
-Both Raw and Hive must fit inside the same 32,768-token model context, so every
-point is a direct quality + measured-token comparison rather than a capacity-only
-comparison.
+Runs the same coding repair task at selected raw prompt sizes that must fit
+inside the same 32,768-token model context. Each point is therefore a direct
+quality + measured-token comparison rather than a capacity-only comparison.
 
 History growth uses real Hive repository text as historical tool output while
 excluding files that leak the expected answer. Human wording remains verbatim.
@@ -16,14 +15,16 @@ import os
 from pathlib import Path
 from typing import Any
 
+import requests
 from transformers import AutoTokenizer
 
-from compressor_live_ab import _fetch_failed_ci_log
+from compressor_live_ab import EXPECTED_COMMAND, _fetch_failed_ci_log, _parse_json_object
 from compressor_scale_ab import (
+    MODEL,
     MODEL_CONTEXT,
+    OLLAMA_URL,
     TOKENIZER_MODEL,
     _base_events,
-    _call_ollama,
     _eligible_repo_corpus,
     _history_json,
     _prompt,
@@ -34,6 +35,7 @@ from hive_compressor.coding_agent import adapt_coding_session
 
 DEFAULT_TARGETS = (8_000, 16_000, 24_000, 30_000)
 MAX_SAFE_PROMPT = 31_500
+REQUEST_TIMEOUT = int(os.getenv("HIVE_AB_REQUEST_TIMEOUT", "3000"))
 
 
 def _targets() -> tuple[int, ...]:
@@ -134,6 +136,51 @@ def _build_near_target(
     return best_events, best_tokens
 
 
+def _call_ollama(prompt: str) -> dict[str, Any]:
+    """Run the local model with a long enough timeout for CPU prompt evaluation."""
+    response = requests.post(
+        OLLAMA_URL,
+        json={
+            "model": MODEL,
+            "prompt": (
+                "Solve the requested coding task from the supplied context. "
+                "Return only the requested JSON.\n\n" + prompt
+            ),
+            "stream": False,
+            "options": {
+                "temperature": 0,
+                "num_predict": 64,
+                "num_ctx": MODEL_CONTEXT,
+                "num_batch": 1024,
+            },
+        },
+        timeout=REQUEST_TIMEOUT,
+    )
+    response.raise_for_status()
+    data = response.json()
+    text = str(data.get("response") or "")
+    try:
+        parsed = _parse_json_object(text)
+        command = str(parsed.get("replacement_command") or "").strip()
+        passed = command == EXPECTED_COMMAND
+        parse_error = None
+    except Exception as exc:
+        command = ""
+        passed = False
+        parse_error = f"{type(exc).__name__}: {exc}"
+    return {
+        "status": "RAN",
+        "text": text,
+        "parsed_command": command,
+        "passed": passed,
+        "parse_error": parse_error,
+        "prompt_eval_count": int(data.get("prompt_eval_count") or 0),
+        "eval_count": int(data.get("eval_count") or 0),
+        "prompt_eval_duration_ns": int(data.get("prompt_eval_duration") or 0),
+        "total_duration_ns": int(data.get("total_duration") or 0),
+    }
+
+
 def _classify(raw_pass: bool, hive_pass: bool) -> str:
     if raw_pass and hive_pass:
         return "BOTH_PASS"
@@ -202,6 +249,7 @@ def main() -> int:
         "model": os.getenv("HIVE_AB_MODEL", "qwen2.5-coder:3b"),
         "tokenizer": TOKENIZER_MODEL,
         "model_context_limit_tokens": MODEL_CONTEXT,
+        "request_timeout_seconds": REQUEST_TIMEOUT,
         "task": "repair missing requests dependency while preserving focused test scope",
         "history_design": (
             "relevant excerpt from the real failed CI evidence + actual Hive repository text as "
