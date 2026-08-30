@@ -60,37 +60,46 @@ class RepoMap:
             if path.name in DEFAULT_SKIP_FILES:
                 continue
 
-            self.known_files.add(path.name)
+            file_name = self._relative_file_name(path)
+            self.known_files.add(file_name)
 
             try:
                 text = path.read_text(encoding="utf-8")
             except Exception:
                 continue
-            file_texts[path.name] = text
+            file_texts[file_name] = text
 
-            symbol_records = self._extract_symbol_records(path.name, text)
-            file_symbol_records[path.name] = symbol_records
+            symbol_records = self._extract_symbol_records(file_name, text)
+            file_symbol_records[file_name] = symbol_records
             symbols = [record["symbol"] for record in symbol_records]
-            self.file_symbols[path.name] = symbols
+            self.file_symbols[file_name] = symbols
 
             for record in symbol_records:
                 symbol = record["symbol"]
                 symbol_id = record["symbol_id"]
-                self.symbol_to_file.setdefault(symbol, path.name)
+                self.symbol_to_file.setdefault(symbol, file_name)
                 self.symbol_spans[symbol_id] = record
                 self.symbol_to_span.setdefault(symbol, record)
 
-        # Build module -> file mapping to resolve imports
+        # Build module -> file mapping to resolve imports. Preserve full
+        # package identity, while keeping a basename alias only when unambiguous.
         module_to_file = {}
+        basename_candidates = {}
         for filename in self.known_files:
-            module_to_file[Path(filename).stem] = filename
+            module_name = Path(filename).with_suffix("").as_posix().replace("/", ".")
+            module_to_file[module_name] = filename
+            basename_candidates.setdefault(Path(filename).stem, []).append(filename)
+        for stem, candidates in basename_candidates.items():
+            if len(candidates) == 1:
+                module_to_file.setdefault(stem, candidates[0])
 
         # Second pass: build import graph and symbol reference graph
         for path in self._iter_project_python_files():
             if path.name in DEFAULT_SKIP_FILES:
                 continue
 
-            text = file_texts.get(path.name)
+            file_name = self._relative_file_name(path)
+            text = file_texts.get(file_name)
             if text is None:
                 continue
 
@@ -99,13 +108,13 @@ class RepoMap:
 
             for module_name in imported_modules:
                 target_file = module_to_file.get(module_name)
-                if target_file and target_file != path.name:
+                if target_file and target_file != file_name:
                     imported_files.add(target_file)
 
-            self.file_imports[path.name] = sorted(imported_files)
+            self.file_imports[file_name] = sorted(imported_files)
 
             for imported_file in imported_files:
-                self.file_imported_by.setdefault(imported_file, []).append(path.name)
+                self.file_imported_by.setdefault(imported_file, []).append(file_name)
 
             symbol_refs = self._extract_symbol_references(text)
             for owner_symbol, refs in symbol_refs.items():
@@ -132,6 +141,12 @@ class RepoMap:
             )
 
         return self.to_dict()
+
+    def _relative_file_name(self, path):
+        try:
+            return path.relative_to(self.root).as_posix()
+        except ValueError:
+            return path.as_posix()
 
     def _iter_project_python_files(self):
         for path in sorted(self.root.rglob("*.py")):
@@ -266,12 +281,16 @@ class RepoMap:
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    module_name = alias.name.split(".")[0]
-                    imports.add(module_name)
+                    imports.add(alias.name)
+                    imports.add(alias.name.split(".")[0])
 
             elif isinstance(node, ast.ImportFrom):
                 if node.module:
+                    imports.add(node.module)
                     imports.add(node.module.split(".")[0])
+                    for alias in node.names:
+                        if alias.name != "*":
+                            imports.add(f"{node.module}.{alias.name}")
 
         return sorted(list(imports))
 
@@ -314,6 +333,13 @@ class RepoMap:
 
         if symbol_or_file in self.known_files:
             return symbol_or_file
+
+        basename_matches = [
+            file_name for file_name in self.known_files
+            if Path(file_name).name == symbol_or_file
+        ]
+        if len(basename_matches) == 1:
+            return basename_matches[0]
 
         return self.symbol_to_file.get(symbol_or_file)
 
