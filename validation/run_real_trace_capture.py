@@ -10,9 +10,17 @@ from __future__ import annotations
 import builtins
 import json
 import os
+import sys
 import traceback
 from pathlib import Path
 
+
+# When invoked as `python validation/run_real_trace_capture.py`, Python puts the
+# validation directory at sys.path[0]. Add the repository root explicitly so the
+# actual interactive entrypoint (`main.py`) and its sibling modules are imported.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 RUNTIME_FILES = (
     "hive_lessons.jsonl",
