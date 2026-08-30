@@ -100,7 +100,7 @@ python -I -B evidence/semantic_state_cross_model_2026-08/verify.py
 ```
 
 The published bundle manifest has SHA-256
-`534FDC262A1F8437CF37E9D3F111A1E4F4ACCFD26424F5900D48ADA3C28D70B2`.
+`D9AFC3B58ECC042E8A6A99B7C221CBAEFF566ED39789698395ACB98F096900DE`.
 The preceding INVALID transport-failure attempt is preserved as a hash-bound
 public subset. Its one omitted failure envelope contained an absolute workstation
 path and no semantic model output; `PRIVACY_OMISSION.json` records its exact byte

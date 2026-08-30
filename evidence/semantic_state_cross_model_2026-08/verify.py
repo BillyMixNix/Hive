@@ -415,16 +415,24 @@ def verify_text_format(text_format: Any, expected_count: int, label: str) -> Non
             f"{label}: allowed labels changed")
 
 
-def expected_secondary(label: str, truth: Any) -> tuple[Any, str, Any, int]:
+def expected_secondary(label: str, correct_slot: str) -> tuple[Any, str, Any, int]:
+    option_slots = ALLOWED_LABELS[:4]
+    require(correct_slot in option_slots, f"unknown frozen correct slot: {correct_slot}")
     if label == "INSUFFICIENT":
         return None, "not_assessable_insufficient", None, 0
+    require(label in option_slots, f"unknown selected label: {label}")
+    if label == correct_slot:
+        truth = "current"
+    else:
+        wrong_slots = [slot for slot in option_slots if slot != correct_slot]
+        wrong_classes = ("historical", "planned", "hallucinated")
+        truth = dict(zip(wrong_slots, wrong_classes, strict=True))[label]
     statuses = {
         "current": "current",
         "historical": "historical_state_selected",
         "planned": "planned_state_selected",
         "hallucinated": "unsupported_state_selected",
     }
-    require(truth in statuses, f"unknown frozen truth class: {truth}")
     return truth, statuses[truth], truth != "current", int(truth != "current")
 
 
@@ -441,9 +449,7 @@ def verify_score(score: Any, *, case_id: str, condition: str,
     require(score.get("grader_status") == "ran" and score.get("grader_agreement") is True,
             f"{label}: primary grader did not agree")
     require(score.get("secondary_status") == "ran", f"{label}: secondary grader failed")
-    truth, status, chronology_error, promotions = expected_secondary(
-        selected, score.get("truth_class")
-    )
+    truth, status, chronology_error, promotions = expected_secondary(selected, expected)
     require(score.get("truth_class") == truth, f"{label}: truth class mismatch")
     require(score.get("chronology_authority_status") == status,
             f"{label}: chronology/authority status mismatch")
