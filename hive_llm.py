@@ -4,15 +4,16 @@ import time
 
 from hive_trace import record_model_call
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_URL = os.getenv("HIVE_OLLAMA_URL", "http://localhost:11434/api/generate")
 
 
 class CreditsExhaustedError(RuntimeError):
     """Raised when the Anthropic API refuses a request due to insufficient credits."""
     pass
 
-# Default model used by Hive
-DEFAULT_MODEL = "qwen2.5-coder:7b"
+# Default model used by Hive. Environment override preserves the historical
+# default while letting validation runners choose a smaller local model.
+DEFAULT_MODEL = os.getenv("HIVE_DEFAULT_MODEL", "qwen2.5-coder:7b")
 CLAUDE_MODEL = "claude-opus-4-7"
 
 # Retry configuration
