@@ -1,0 +1,15 @@
+{
+  "candidate": "endless-fusion-mobile",
+  "entrypoint": "EndlessFusion.html",
+  "viewport": {"width": 412, "height": 915},
+  "steps": [
+    {"action": "assert_no_page_errors", "name": "boot has no runtime errors"},
+    {"action": "assert_text", "text": "ACTIVE PACK", "exact": false, "name": "pack renders"},
+    {"action": "assert_text", "text": "START BATTLE", "exact": true, "name": "battle control renders"},
+    {"action": "screenshot", "name": "mobile-boot"},
+    {"action": "click_text", "text": "Iron Longsword", "exact": true},
+    {"action": "click_text", "text": "Phoenix Heart", "exact": true},
+    {"action": "assert_text", "text": "FUSE", "exact": false, "name": "fusion becomes available"},
+    {"action": "screenshot", "name": "fusion-ready"}
+  ]
+}
