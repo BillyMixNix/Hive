@@ -22,6 +22,7 @@ RUNTIME_FILES = (
     "code_lessons.jsonl",
     "math_lessons.jsonl",
     "hive_memory.db",
+    "hive_memory.json",
     "success_memory.jsonl",
 )
 
