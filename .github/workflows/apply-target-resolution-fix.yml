@@ -1,0 +1,114 @@
+name: Apply Target Resolution Fix
+
+on:
+  push:
+    branches:
+      - 'product/compressor-mvp'
+    paths:
+      - '.github/workflows/apply-target-resolution-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Apply path and anchor fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'expected source block not found in {path}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # 1) RepoMap must preserve repository-relative paths instead of flattening
+          # nested files to their basenames.
+          replace_once(
+              'repo_map.py',
+              '''            self.known_files.add(path.name)\n\n            try:\n                text = path.read_text(encoding="utf-8")\n            except Exception:\n                continue\n            file_texts[path.name] = text\n\n            symbol_records = self._extract_symbol_records(path.name, text)\n            file_symbol_records[path.name] = symbol_records\n            symbols = [record["symbol"] for record in symbol_records]\n            self.file_symbols[path.name] = symbols\n\n            for record in symbol_records:\n                symbol = record["symbol"]\n                symbol_id = record["symbol_id"]\n                self.symbol_to_file.setdefault(symbol, path.name)\n''',
+              '''            file_name = self._relative_file_name(path)\n            self.known_files.add(file_name)\n\n            try:\n                text = path.read_text(encoding="utf-8")\n            except Exception:\n                continue\n            file_texts[file_name] = text\n\n            symbol_records = self._extract_symbol_records(file_name, text)\n            file_symbol_records[file_name] = symbol_records\n            symbols = [record["symbol"] for record in symbol_records]\n            self.file_symbols[file_name] = symbols\n\n            for record in symbol_records:\n                symbol = record["symbol"]\n                symbol_id = record["symbol_id"]\n                self.symbol_to_file.setdefault(symbol, file_name)\n''',
+          )
+
+          replace_once(
+              'repo_map.py',
+              '''        # Build module -> file mapping to resolve imports\n        module_to_file = {}\n        for filename in self.known_files:\n            module_to_file[Path(filename).stem] = filename\n''',
+              '''        # Build module -> file mapping to resolve imports. Preserve full\n        # package identity, while keeping a basename alias only when unambiguous.\n        module_to_file = {}\n        basename_candidates = {}\n        for filename in self.known_files:\n            module_name = Path(filename).with_suffix("").as_posix().replace("/", ".")\n            module_to_file[module_name] = filename\n            basename_candidates.setdefault(Path(filename).stem, []).append(filename)\n        for stem, candidates in basename_candidates.items():\n            if len(candidates) == 1:\n                module_to_file.setdefault(stem, candidates[0])\n''',
+          )
+
+          replace_once(
+              'repo_map.py',
+              '''        # Second pass: build import graph and symbol reference graph\n        for path in self._iter_project_python_files():\n            if path.name in DEFAULT_SKIP_FILES:\n                continue\n\n            text = file_texts.get(path.name)\n            if text is None:\n                continue\n\n            imported_modules = self._extract_import_names(text)\n            imported_files = set()\n\n            for module_name in imported_modules:\n                target_file = module_to_file.get(module_name)\n                if target_file and target_file != path.name:\n                    imported_files.add(target_file)\n\n            self.file_imports[path.name] = sorted(imported_files)\n\n            for imported_file in imported_files:\n                self.file_imported_by.setdefault(imported_file, []).append(path.name)\n''',
+              '''        # Second pass: build import graph and symbol reference graph\n        for path in self._iter_project_python_files():\n            if path.name in DEFAULT_SKIP_FILES:\n                continue\n\n            file_name = self._relative_file_name(path)\n            text = file_texts.get(file_name)\n            if text is None:\n                continue\n\n            imported_modules = self._extract_import_names(text)\n            imported_files = set()\n\n            for module_name in imported_modules:\n                target_file = module_to_file.get(module_name)\n                if target_file and target_file != file_name:\n                    imported_files.add(target_file)\n\n            self.file_imports[file_name] = sorted(imported_files)\n\n            for imported_file in imported_files:\n                self.file_imported_by.setdefault(imported_file, []).append(file_name)\n''',
+          )
+
+          replace_once(
+              'repo_map.py',
+              '''    def _iter_project_python_files(self):\n''',
+              '''    def _relative_file_name(self, path):\n        try:\n            return path.relative_to(self.root).as_posix()\n        except ValueError:\n            return path.as_posix()\n\n    def _iter_project_python_files(self):\n''',
+          )
+
+          replace_once(
+              'repo_map.py',
+              '''            if isinstance(node, ast.Import):\n                for alias in node.names:\n                    module_name = alias.name.split(".")[0]\n                    imports.add(module_name)\n\n            elif isinstance(node, ast.ImportFrom):\n                if node.module:\n                    imports.add(node.module.split(".")[0])\n''',
+              '''            if isinstance(node, ast.Import):\n                for alias in node.names:\n                    imports.add(alias.name)\n                    imports.add(alias.name.split(".")[0])\n\n            elif isinstance(node, ast.ImportFrom):\n                if node.module:\n                    imports.add(node.module)\n                    imports.add(node.module.split(".")[0])\n                    for alias in node.names:\n                        if alias.name != "*":\n                            imports.add(f"{node.module}.{alias.name}")\n''',
+          )
+
+          replace_once(
+              'repo_map.py',
+              '''        if symbol_or_file in self.known_files:\n            return symbol_or_file\n\n        return self.symbol_to_file.get(symbol_or_file)\n''',
+              '''        if symbol_or_file in self.known_files:\n            return symbol_or_file\n\n        basename_matches = [\n            file_name for file_name in self.known_files\n            if Path(file_name).name == symbol_or_file\n        ]\n        if len(basename_matches) == 1:\n            return basename_matches[0]\n\n        return self.symbol_to_file.get(symbol_or_file)\n''',
+          )
+
+          # 2) An explicit parent file anchor is authoritative. The planner may
+          # narrow to an already-established parent symbol, but it may not invent
+          # a global symbol and redirect the task to another file.
+          replace_once(
+              'planner.py',
+              '''        plan_symbol = None\n        if work_mode not in FILE_LEVEL_TASK_KINDS:\n            plan_symbol = (\n                self._extract_explicit_symbol_from_text(plan.get("goal"))\n                or self._extract_explicit_symbol_from_text(plan.get("next_action"))\n            )\n\n        effective_symbol = parent_anchor.get("target_symbol") or plan_symbol\n        symbol_resolvers = {\n            work_mode not in FILE_LEVEL_TASK_KINDS: lambda: self._extract_explicit_symbol_from_text(plan.get("goal")) or self._extract_explicit_symbol_from_text(plan.get("next_action")),\n            True: lambda: None\n        }\n        resolved_file = symbol_resolvers[True]()\n        if resolved_file:\n            effective_file = resolved_file\n\n\n        effective_file = parent_anchor.get("target_file")\n        if effective_symbol:\n            resolved_file = self._resolve_symbol_to_file(effective_symbol)\n            if resolved_file:\n                effective_file = resolved_file\n''',
+              '''        parent_file = parent_anchor.get("target_file")\n        parent_symbol = parent_anchor.get("target_symbol")\n\n        # Never let a fuzzy/global plan symbol override an explicit file anchor.\n        # If the pilot named a file but not a symbol, preserve file-level scope.\n        plan_symbol = None\n        if not parent_file and not parent_symbol and work_mode not in FILE_LEVEL_TASK_KINDS:\n            plan_symbol = (\n                self._extract_explicit_symbol_from_text(plan.get("goal"))\n                or self._extract_explicit_symbol_from_text(plan.get("next_action"))\n            )\n\n        effective_symbol = parent_symbol or plan_symbol\n        effective_file = parent_file\n        if effective_symbol and not effective_file:\n            resolved_file = self._resolve_symbol_to_file(effective_symbol)\n            if resolved_file:\n                effective_file = resolved_file\n''',
+          )
+
+          replace_once(
+              'planner.py',
+              '''            if anchored_symbol:\n                child_anchor["target_symbol"] = anchored_symbol\n                child_anchor["anchor_level"] = "symbol"\n\n            if anchored_file:\n                child_anchor["target_file"] = anchored_file\n\n            child_anchor["scope"] = child_anchor.get("scope") or scope\n''',
+              '''            if anchored_symbol:\n                child_anchor["target_symbol"] = anchored_symbol\n                child_anchor["anchor_level"] = "symbol"\n\n            if anchored_file:\n                child_anchor["target_file"] = anchored_file\n\n            # A file-level parent anchor means the model was not authorized to\n            # promote a guessed child symbol, especially one owned by another file.\n            if anchored_file and not anchored_symbol:\n                child["target_symbol"] = None\n                child_metadata["target_symbol"] = None\n                child_anchor["target_symbol"] = None\n                child_anchor["anchor_level"] = "file"\n                for field in ("target_symbol_id", "lineno", "end_lineno", "col_offset", "end_col_offset"):\n                    child.pop(field, None)\n                    child_metadata.pop(field, None)\n                    child_anchor.pop(field, None)\n\n            child_anchor["scope"] = child_anchor.get("scope") or scope\n''',
+          )
+
+          # 3) The coder already has file-level prompt/context machinery. Permit it
+          # whenever the canonical anchor itself is explicitly file-level, even if
+          # the work ontology says modify/repair rather than create/configure.
+          replace_once(
+              'coder.py',
+              '''    def _allows_file_level_work(self, task, plan=None):\n        if self._is_symbol_locked_task(task, plan):\n            return False\n        return self._get_work_mode(task, plan) in FILE_LEVEL_WORK_MODES\n''',
+              '''    def _allows_file_level_work(self, task, plan=None):\n        if self._is_symbol_locked_task(task, plan):\n            return False\n\n        metadata = (task or {}).get("metadata") or {}\n        anchor = dict(metadata.get("anchor") or {})\n        if (\n            anchor.get("target_file")\n            and not anchor.get("target_symbol")\n            and anchor.get("anchor_level") == "file"\n        ):\n            return True\n\n        return self._get_work_mode(task, plan) in FILE_LEVEL_WORK_MODES\n''',
+          )
+
+          Path('tests/test_target_resolution_regression.py').write_text(r'''from pathlib import Path\n\nfrom HiveStateManager import HiveStateManager\nfrom coder import CoderAgent\nfrom planner import PlannerAgent\nfrom repo_map import RepoMap\n\n\ndef _write(path, text):\n    path.parent.mkdir(parents=True, exist_ok=True)\n    path.write_text(text, encoding="utf-8")\n\n\ndef _state(tmp_path):\n    _write(tmp_path / "hive_compressor" / "keygen.py", "def main():\\n    return 'key'\\n")\n    _write(tmp_path / "hive_compressor" / "server.py", "class Handler:\\n    pass\\n")\n    _write(tmp_path / "play.py", "class TerminalPlayer:\\n    def handle(self):\\n        return None\\n")\n    _write(tmp_path / "builder.py", "def build_pilot_context():\\n    return []\\n")\n    _write(tmp_path / "tests" / "test_pilot_intent_loop.py", "def test_merge_pilot_context_keeps_recent_history():\\n    pass\\n")\n\n    state = HiveStateManager(\n        snapshot_path=tmp_path / "state.json",\n        repo_root=tmp_path,\n    )\n    state.set_repo_map(RepoMap(root=tmp_path).build())\n    return state\n\n\ndef test_repo_map_preserves_nested_relative_paths(tmp_path):\n    state = _state(tmp_path)\n    known = set(state.get_known_files())\n    assert "hive_compressor/keygen.py" in known\n    assert "hive_compressor/server.py" in known\n    assert "tests/test_pilot_intent_loop.py" in known\n    assert "keygen.py" not in known\n    assert state.get_symbols_for_file("hive_compressor/keygen.py") == ["main"]\n\n\ndef test_planner_does_not_redirect_explicit_file_to_global_symbol(tmp_path):\n    state = _state(tmp_path)\n    planner = PlannerAgent(state_manager=state)\n    task = {\n        "id": 1,\n        "note": "In hive_compressor/keygen.py, make the API key prefix configurable while preserving the default.",\n        "metadata": {\n            "target_file": "hive_compressor/keygen.py",\n            "target_symbol": None,\n            "work_mode": "repair",\n            "anchor": {\n                "target_file": "hive_compressor/keygen.py",\n                "target_symbol": None,\n                "scope": "single_file",\n                "anchor_level": "file",\n                "anchor_source": "user_input",\n            },\n        },\n    }\n    plan = {\n        "goal": "Configure the key prefix and keep handle behavior unchanged.",\n        "next_action": "Update handle if needed.",\n        "task_type": "bugfix",\n        "work_mode": "repair",\n    }\n    anchor = planner._build_anchor_from_plan(task, plan)\n    assert anchor["target_file"] == "hive_compressor/keygen.py"\n    assert anchor["target_symbol"] is None\n\n\ndef test_file_parent_anchor_clears_hallucinated_child_symbol(tmp_path):\n    state = _state(tmp_path)\n    planner = PlannerAgent(state_manager=state)\n    child = {\n        "task_id": "task-1-1",\n        "title": "Update keygen",\n        "description": "Update keygen",\n        "target_file": "play.py",\n        "target_symbol": "handle",\n        "metadata": {\n            "target_file": "play.py",\n            "target_symbol": "handle",\n            "anchor": {\n                "target_file": "play.py",\n                "target_symbol": "handle",\n                "anchor_level": "symbol",\n                "anchor_source": "planner_normalized",\n                "target_symbol_id": "play.py::TerminalPlayer.handle",\n                "lineno": 2,\n                "end_lineno": 3,\n            },\n        },\n    }\n    planner._apply_anchor_to_child_tasks(\n        [child],\n        {\n            "target_file": "hive_compressor/keygen.py",\n            "target_symbol": None,\n            "scope": "single_file",\n            "anchor_level": "file",\n            "anchor_source": "user_input",\n        },\n    )\n    assert child["target_file"] == "hive_compressor/keygen.py"\n    assert child["target_symbol"] is None\n    assert child["metadata"]["anchor"]["target_symbol"] is None\n    assert "target_symbol_id" not in child\n    assert "target_symbol_id" not in child["metadata"]\n\n\ndef test_coder_accepts_canonical_file_level_modify_anchor():\n    coder = CoderAgent()\n    task = {\n        "work_mode": "modify",\n        "metadata": {\n            "anchor": {\n                "target_file": "hive_compressor/server.py",\n                "target_symbol": None,\n                "anchor_level": "file",\n                "anchor_source": "user_input",\n            }\n        },\n    }\n    assert coder._allows_file_level_work(task, {}) is True\n''', encoding='utf-8')
+          PY
+
+      - name: Run focused regression tests
+        run: |
+          python -m pip install pytest requests anthropic radon z3-solver pylint
+          pytest -q tests/test_target_resolution_regression.py tests/test_repo_map.py tests/test_planner_completion_cues.py
+
+      - name: Commit fix to product branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add repo_map.py planner.py coder.py tests/test_target_resolution_regression.py
+          git commit -m "Preserve explicit coding target paths and file anchors"
+          git push origin HEAD:product/compressor-mvp

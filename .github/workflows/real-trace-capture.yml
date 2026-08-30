@@ -1,0 +1,98 @@
+name: Real Hive Coding Trace Capture
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'product/compressor-mvp'
+    paths:
+      - 'hive_trace.py'
+      - 'hive_llm.py'
+      - 'planner.py'
+      - 'coder.py'
+      - 'repo_map.py'
+      - 'anchor_utils.py'
+      - 'HiveStateManager.py'
+      - 'validation/run_real_trace_capture.py'
+      - '.github/workflows/real-trace-capture.yml'
+
+jobs:
+  capture:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: builder-history-constant
+            task: >-
+              In builder.py, replace the hard-coded recent pilot guidance history cap of 6
+              with a named module constant. Preserve current behavior and keep the change
+              local to builder.py.
+          - id: interface-code-status-alias
+            task: >-
+              In interface.py, add show code status as an exact alias for code_status.
+              Preserve every existing command and parser behavior.
+          - id: compressor-version-constant
+            task: >-
+              In hive_compressor/server.py, define one module-level compressor version
+              constant and use it for both server_version and the /v1/health version field
+              without changing the reported values.
+          - id: keygen-prefix-env
+            task: >-
+              In hive_compressor/keygen.py, make the API key prefix configurable with
+              HIVE_KEY_PREFIX while preserving hive_ as the default. Keep raw key generation
+              otherwise unchanged.
+          - id: confidence-env
+            task: >-
+              In hive_compressor/coding_agent.py, make DEFAULT_MIN_CONFIDENCE configurable
+              with HIVE_MIN_CONFIDENCE while preserving 0.90 as the default. Keep the
+              existing fail-closed confidence behavior.
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    env:
+      HIVE_DEFAULT_MODEL: qwen2.5-coder:3b
+      HIVE_TRACE_DIR: real_traces
+      HIVE_TRACE_SUMMARY_DIR: real_trace_summaries
+      HIVE_TRACE_RUN_ID: ${{ matrix.id }}
+      HIVE_REAL_TASK: ${{ matrix.task }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install Hive runtime dependencies
+        run: >-
+          python -m pip install
+          requests anthropic pytest pylint radon z3-solver
+
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama and pull trace model
+        run: |
+          ollama serve >/tmp/ollama.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 1
+          done
+          ollama pull "$HIVE_DEFAULT_MODEL"
+
+      - name: Run real Hive plan and code session
+        run: |
+          set -o pipefail
+          python validation/run_real_trace_capture.py 2>&1 | tee "real-trace-${{ matrix.id }}.log"
+
+      - name: Upload real trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-hive-trace-${{ matrix.id }}
+          path: |
+            real_traces/${{ matrix.id }}.jsonl
+            real_trace_summaries/${{ matrix.id }}.json
+            real-trace-${{ matrix.id }}.log
+          if-no-files-found: warn

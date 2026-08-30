@@ -949,25 +949,21 @@ class PlannerAgent:
             task_type=plan.get("task_type"),
             description=" ".join(str(plan.get(key) or "") for key in ("goal", "next_action")),
         )
+        parent_file = parent_anchor.get("target_file")
+        parent_symbol = parent_anchor.get("target_symbol")
+
+        # An explicit parent file anchor is authoritative. Never let a fuzzy
+        # plan symbol redirect the task to a different file.
         plan_symbol = None
-        if work_mode not in FILE_LEVEL_TASK_KINDS:
+        if not parent_file and not parent_symbol and work_mode not in FILE_LEVEL_TASK_KINDS:
             plan_symbol = (
                 self._extract_explicit_symbol_from_text(plan.get("goal"))
                 or self._extract_explicit_symbol_from_text(plan.get("next_action"))
             )
 
-        effective_symbol = parent_anchor.get("target_symbol") or plan_symbol
-        symbol_resolvers = {
-            work_mode not in FILE_LEVEL_TASK_KINDS: lambda: self._extract_explicit_symbol_from_text(plan.get("goal")) or self._extract_explicit_symbol_from_text(plan.get("next_action")),
-            True: lambda: None
-        }
-        resolved_file = symbol_resolvers[True]()
-        if resolved_file:
-            effective_file = resolved_file
-
-
-        effective_file = parent_anchor.get("target_file")
-        if effective_symbol:
+        effective_symbol = parent_symbol or plan_symbol
+        effective_file = parent_file
+        if effective_symbol and not effective_file:
             resolved_file = self._resolve_symbol_to_file(effective_symbol)
             if resolved_file:
                 effective_file = resolved_file
@@ -1001,6 +997,18 @@ class PlannerAgent:
 
             if anchored_file:
                 child_anchor["target_file"] = anchored_file
+
+            # A file-level parent anchor does not authorize the planner to
+            # promote a guessed child symbol, especially one owned elsewhere.
+            if anchored_file and not anchored_symbol:
+                child["target_symbol"] = None
+                child_metadata["target_symbol"] = None
+                child_anchor["target_symbol"] = None
+                child_anchor["anchor_level"] = "file"
+                for field in ("target_symbol_id", "lineno", "end_lineno", "col_offset", "end_col_offset"):
+                    child.pop(field, None)
+                    child_metadata.pop(field, None)
+                    child_anchor.pop(field, None)
 
             child_anchor["scope"] = child_anchor.get("scope") or scope
             child_anchor["anchor_source"] = child_anchor.get("anchor_source") or anchor.get("anchor_source") or "plan_anchor"
