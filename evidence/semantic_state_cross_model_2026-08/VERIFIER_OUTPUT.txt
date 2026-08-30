@@ -1,0 +1,265 @@
+{
+  "verification": "PASS",
+  "bundle_id": "semantic_state_cross_model_2026-08",
+  "offline": true,
+  "model_calls": 0,
+  "privacy_secret_scan": {
+    "status": "PASS",
+    "findings": 0,
+    "allowlisted_synthetic_test_fixtures": 2
+  },
+  "published_summary": {
+    "schema_version": 1,
+    "bundle_id": "semantic_state_cross_model_2026-08",
+    "validity": "VALID",
+    "result_code": "VALID_FACTORIAL_COMPLETE",
+    "canonical_artifacts": {
+      "RESULT.json": "83996a1d9da93ff0e36e7ade87d13fc070e0db9a4f5bb14016a575b5c5506eb0",
+      "EVIDENCE_INDEX.json": "24c1de4106c013bed070d7004ebe0a5a15cb04430831e54a5e1efaa8a6b3718f"
+    },
+    "design": {
+      "fixed_worlds": 20,
+      "stochastic_replications": 8,
+      "conditions": 4,
+      "generation_batches_per_condition_replication": 6,
+      "physical_generation_calls": 192,
+      "unique_response_ids": 192,
+      "retries": 0,
+      "repairs": 0,
+      "fallbacks": 0,
+      "tools": 0,
+      "cross_call_reasoning": false
+    },
+    "conditions": {
+      "LUNA_RAW": {
+        "correct": 156,
+        "total": 160,
+        "replication_scores": [
+          20,
+          19,
+          19,
+          20,
+          20,
+          20,
+          19,
+          19
+        ],
+        "admissible": 160,
+        "chronology_errors": 4,
+        "authority_errors": 0,
+        "chronology_authority_errors": 4,
+        "illegal_state_promotions": 4,
+        "insufficient_responses": 0,
+        "parser_failures": 0,
+        "grader_failures": 0,
+        "secondary_failures": 0,
+        "incomplete_responses": 0,
+        "transport_failures": 0,
+        "state_bytes_per_20_world_replication": 171606,
+        "input_tokens": 665816,
+        "output_tokens": 3226,
+        "reasoning_tokens": 2122,
+        "total_tokens": 669042,
+        "latency_seconds": 94.7435235000521,
+        "estimated_generation_cost_usd": 0.1370344,
+        "physical_generation_calls": 48
+      },
+      "LUNA_C1": {
+        "correct": 156,
+        "total": 160,
+        "replication_scores": [
+          20,
+          20,
+          20,
+          18,
+          19,
+          20,
+          20,
+          19
+        ],
+        "admissible": 160,
+        "chronology_errors": 1,
+        "authority_errors": 3,
+        "chronology_authority_errors": 4,
+        "illegal_state_promotions": 4,
+        "insufficient_responses": 0,
+        "parser_failures": 0,
+        "grader_failures": 0,
+        "secondary_failures": 0,
+        "incomplete_responses": 0,
+        "transport_failures": 0,
+        "state_bytes_per_20_world_replication": 32482,
+        "input_tokens": 279432,
+        "output_tokens": 5862,
+        "reasoning_tokens": 4738,
+        "total_tokens": 285294,
+        "latency_seconds": 105.27827619998425,
+        "estimated_generation_cost_usd": 0.0629208,
+        "physical_generation_calls": 48
+      },
+      "SOL_RAW": {
+        "correct": 160,
+        "total": 160,
+        "replication_scores": [
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20
+        ],
+        "admissible": 160,
+        "chronology_errors": 0,
+        "authority_errors": 0,
+        "chronology_authority_errors": 0,
+        "illegal_state_promotions": 0,
+        "insufficient_responses": 0,
+        "parser_failures": 0,
+        "grader_failures": 0,
+        "secondary_failures": 0,
+        "incomplete_responses": 0,
+        "transport_failures": 0,
+        "state_bytes_per_20_world_replication": 171606,
+        "input_tokens": 665816,
+        "output_tokens": 1040,
+        "reasoning_tokens": 0,
+        "total_tokens": 666856,
+        "latency_seconds": 90.52512429998751,
+        "estimated_generation_cost_usd": 2.684064,
+        "physical_generation_calls": 48
+      },
+      "SOL_C1": {
+        "correct": 160,
+        "total": 160,
+        "replication_scores": [
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20,
+          20
+        ],
+        "admissible": 160,
+        "chronology_errors": 0,
+        "authority_errors": 0,
+        "chronology_authority_errors": 0,
+        "illegal_state_promotions": 0,
+        "insufficient_responses": 0,
+        "parser_failures": 0,
+        "grader_failures": 0,
+        "secondary_failures": 0,
+        "incomplete_responses": 0,
+        "transport_failures": 0,
+        "state_bytes_per_20_world_replication": 32482,
+        "input_tokens": 279432,
+        "output_tokens": 1505,
+        "reasoning_tokens": 449,
+        "total_tokens": 280937,
+        "latency_seconds": 89.63829590000387,
+        "estimated_generation_cost_usd": 1.147828,
+        "physical_generation_calls": 48
+      }
+    },
+    "usage_total": {
+      "call_artifacts": 192,
+      "physical_generation_calls": 192,
+      "input_tokens": 1890496,
+      "output_tokens": 11633,
+      "reasoning_tokens": 7309,
+      "total_tokens": 1902129,
+      "latency_seconds": 380.18521990002773,
+      "estimated_generation_cost_usd": 4.0318472
+    },
+    "confirmatory_statistics": {
+      "LUNA_C1_MINUS_LUNA_RAW": {
+        "differences": [
+          0,
+          1,
+          1,
+          -2,
+          -1,
+          0,
+          1,
+          0
+        ],
+        "aggregate_difference_answers": 0,
+        "p_value": 1.0,
+        "holm_adjusted_p_value": 1.0,
+        "decision": "NOT_SUPPORTED"
+      },
+      "SOL_C1_MINUS_SOL_RAW": {
+        "differences": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "aggregate_difference_answers": 0,
+        "p_value": 1.0,
+        "holm_adjusted_p_value": 1.0,
+        "decision": "NOT_SUPPORTED"
+      },
+      "REPRESENTATION_BY_MODEL_INTERACTION": {
+        "differences": [
+          0,
+          1,
+          1,
+          -2,
+          -1,
+          0,
+          1,
+          0
+        ],
+        "aggregate_difference_answers": 0,
+        "p_value": 1.0,
+        "holm_adjusted_p_value": 1.0,
+        "decision": "NOT_SUPPORTED"
+      }
+    },
+    "within_model_efficiency": {
+      "state_bytes_reduction_percent": 81.07175739775998,
+      "input_tokens_reduction_percent": {
+        "LUNA": 58.03164838333714,
+        "SOL": 58.03164838333714
+      },
+      "generation_cost_reduction_percent": {
+        "LUNA": 54.08393804767271,
+        "SOL": 57.23544595061816
+      }
+    },
+    "invalid_first_attempt": {
+      "validity": "INVALID",
+      "result_code": "INVALID_APPARATUS",
+      "failure_class": "transport_failure",
+      "failed_global_sequence": 22,
+      "physical_generation_calls": 22,
+      "completed_response_ids": 21,
+      "completed_outputs_reused_by_valid_restart": false,
+      "public_indexed_payload_files": 51,
+      "original_indexed_payload_files": 52,
+      "privacy_withheld_artifact": {
+        "path": "sol_raw/calls/call_000006.json",
+        "bytes": 66632,
+        "sha256": "1ae785570658d0ccfbdde4a7d6f2b0bdaf74a4607e671c4a3336562b68a7a8f9",
+        "contains_semantic_model_output": false
+      }
+    },
+    "strongest_licensed_claim": "On this sealed synthetic benchmark, the engineered C1 representation used materially less supplied context and had lower estimated generation cost under the frozen token-pricing assumptions while preserving the same aggregate observed correct count as Raw within each tested solver arm.",
+    "claim_boundary": "Within this frozen benchmark, contemporaneous within-model Raw/C1 contrasts isolate the representation condition; no claim extends to other worlds, models, learned compression, or long-horizon workflows.",
+    "non_claims": [
+      "No production-savings claim.",
+      "No formal or statistical equivalence claim.",
+      "No learned-compression claim.",
+      "No general model-substitution claim.",
+      "No extension beyond the frozen worlds, representations, models, and settings."
+    ]
+  }
+}
