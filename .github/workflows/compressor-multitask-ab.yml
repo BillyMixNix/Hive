@@ -1,0 +1,67 @@
+name: Compressor Multi-Task A-B
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'product/compressor-mvp'
+    paths:
+      - 'validation/compressor_multitask_ab.py'
+      - '.github/workflows/compressor-multitask-ab.yml'
+      - 'hive_compressor/**'
+
+jobs:
+  multitask-ab:
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - dependency-repair
+          - protected-path
+          - superseded-plan
+          - focused-test-scope
+          - resolved-old-failure
+          - current-timeout
+          - authority-source
+          - low-confidence-source
+          - moved-file
+          - regression-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    env:
+      PYTHONPATH: ${{ github.workspace }}:${{ github.workspace }}/validation
+      HIVE_AB_MODEL: qwen2.5-coder:3b
+      HIVE_AB_TOKENIZER: Qwen/Qwen2.5-Coder-3B-Instruct
+      HIVE_AB_NUM_CTX: '32768'
+      HIVE_MULTI_TARGET: '5000'
+      HIVE_AB_REQUEST_TIMEOUT: '1200'
+      HIVE_MULTI_CASE: ${{ matrix.case }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Install benchmark dependencies
+        run: python -m pip install requests transformers tokenizers
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+      - name: Start Ollama and pull coder model
+        run: |
+          ollama serve >/tmp/ollama.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 1
+          done
+          ollama pull "$HIVE_AB_MODEL"
+      - name: Run paired case
+        run: python validation/compressor_multitask_ab.py
+      - name: Upload case result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compressor-multitask-${{ matrix.case }}
+          path: results/compressor_multitask_${{ matrix.case }}.json
+          if-no-files-found: warn
