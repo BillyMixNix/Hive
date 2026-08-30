@@ -8,7 +8,7 @@ On a **sealed synthetic benchmark**, Hive's engineered C1 semantic-state represe
 
 ### Four-arm result
 
-| Condition | Correct | State bytes / 20-world representation | Input tokens | Generation cost |
+| Condition | Correct | State bytes / 20-world representation | Input tokens | Estimated generation cost |
 |---|---:|---:|---:|---:|
 | Luna · Raw | 156 / 160 | 171,606 | 665,816 | $0.1370 |
 | Luna · C1 | 156 / 160 | 32,482 | 279,432 | $0.0629 |
@@ -19,7 +19,7 @@ Relative to Raw, C1 therefore showed:
 
 - **81.1% less supplied-state bytes**,
 - **58.0% fewer input tokens**,
-- **54–57% lower generation cost**,
+- **54–57% lower estimated generation cost under the frozen token-pricing assumptions**,
 - and the **same aggregate observed correct count within each tested solver arm**.
 
 The preregistered representation comparisons returned `p = 1.0`: no difference was detected. That is **not** proof of formal or statistical equivalence.
@@ -70,7 +70,7 @@ Do not read the benchmark as evidence that:
 - general causality has been solved,
 - or full-lifecycle economics are already positive.
 
-The benchmark measures a frozen synthetic task and model-serving cost. The successful C1 grammar is currently **engineered**, not autonomously learned.
+The benchmark measures a frozen synthetic task and estimates model-generation cost from recorded tokens under a frozen pricing schedule. The successful C1 grammar is currently **engineered**, not autonomously learned.
 
 ## Full-lifecycle economics remain open
 
@@ -89,7 +89,22 @@ The current sealed evidence package records these canonical artifact digests:
 - `RESULT SHA-256`: `83996A1D9DA93FF0E36E7ADE87D13FC070E0DB9A4F5BB14016A575B5C5506EB0`
 - `INDEX SHA-256`: `24C1DE4106C013BED070D7004EBE0A5A15CB04430831E54A5E1EFAA8A6B3718F`
 
-Not every raw artifact from that sealed package is currently mirrored into this public GitHub repository. Until that mirror is complete, these hashes identify the sealed package but should not be interpreted as a fully self-contained public reproduction bundle.
+The complete sealed valid run is published in the
+[public evidence bundle](evidence/semantic_state_cross_model_2026-08/), including
+the protocol/config, frozen source snapshot, schedule, exact requests and
+projected state payloads, raw responses, grading, usage/cost records, statistics,
+and a fail-closed offline verifier. From the repository root, run:
+
+```console
+python -I -B evidence/semantic_state_cross_model_2026-08/verify.py
+```
+
+The published bundle manifest has SHA-256
+`D9AFC3B58ECC042E8A6A99B7C221CBAEFF566ED39789698395ACB98F096900DE`.
+The preceding INVALID transport-failure attempt is preserved as a hash-bound
+public subset. Its one omitted failure envelope contained an absolute workstation
+path and no semantic model output; `PRIVACY_OMISSION.json` records its exact byte
+length and SHA-256. The original sealed artifact remains unchanged.
 
 ## Historical evidence in this repository
 

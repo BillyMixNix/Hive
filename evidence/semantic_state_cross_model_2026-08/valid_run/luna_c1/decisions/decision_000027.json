@@ -1,0 +1,78 @@
+{
+  "batch_id": 3,
+  "call_id": "call_000027",
+  "condition": "LUNA_C1",
+  "condition_position": 3,
+  "global_sequence": 107,
+  "grader_agreement": true,
+  "grader_status": "ran",
+  "labels": [
+    "D",
+    "D",
+    "A"
+  ],
+  "parser_status": "passed",
+  "payload_sha256": "a730ecc633be2a02d9cc453028b3a1148378a7dc8fd867fd80fe861e82097e95",
+  "physical_attempts": 1,
+  "protocol_id": "hive-luna-sol-raw-c1-factorial-v1.1",
+  "repair_attempted": false,
+  "replication": 5,
+  "response_id": "resp_0834d8e3acc90982016a92290d3f7487d090ee4fb6318970d1",
+  "retry_attempted": false,
+  "schema_version": 1,
+  "scores": [
+    {
+      "admissible": true,
+      "answer_correct": true,
+      "case_id": "DT-TA-SL",
+      "chronology_authority_error": false,
+      "chronology_authority_status": "current",
+      "condition": "LUNA_C1",
+      "expected_label": "D",
+      "failure_reasons": [],
+      "grader_agreement": true,
+      "grader_status": "ran",
+      "illegal_state_promotions": 0,
+      "secondary_status": "ran",
+      "selected_label": "D",
+      "truth_class": "current"
+    },
+    {
+      "admissible": true,
+      "answer_correct": false,
+      "case_id": "DT-TR-DL",
+      "chronology_authority_error": true,
+      "chronology_authority_status": "unsupported_state_selected",
+      "condition": "LUNA_C1",
+      "expected_label": "A",
+      "failure_reasons": [
+        "answer_incorrect",
+        "chronology_or_authority_error",
+        "illegal_state_promotion"
+      ],
+      "grader_agreement": true,
+      "grader_status": "ran",
+      "illegal_state_promotions": 1,
+      "secondary_status": "ran",
+      "selected_label": "D",
+      "truth_class": "hallucinated"
+    },
+    {
+      "admissible": true,
+      "answer_correct": true,
+      "case_id": "DT-IK-DH",
+      "chronology_authority_error": false,
+      "chronology_authority_status": "current",
+      "condition": "LUNA_C1",
+      "expected_label": "A",
+      "failure_reasons": [],
+      "grader_agreement": true,
+      "grader_status": "ran",
+      "illegal_state_promotions": 0,
+      "secondary_status": "ran",
+      "selected_label": "A",
+      "truth_class": "current"
+    }
+  ],
+  "status": "graded"
+}
