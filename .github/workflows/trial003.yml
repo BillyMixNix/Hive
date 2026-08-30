@@ -1,0 +1,106 @@
+name: Trial 003 c4 Causal-State Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'experiments/trial003/**'
+      - 'tests/test_trial003_*.py'
+      - '.github/workflows/trial003.yml'
+
+jobs:
+  trial003:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check pytest requests
+      - name: Run frozen external baseline and transition harness
+        run: |
+          set -o pipefail
+          pytest -q \
+            tests/test_trial003_transition_harness.py \
+            tests/test_trial003_c4_baseline.py \
+            2>&1 | tee trial003.log
+      - name: Capture structured c4 probe evidence
+        run: python experiments/trial003/c4_probe.py --output trial003_probe.json
+      - name: Execute frozen c4 cross-domain transition adversary
+        run: python experiments/trial003/c4_adversarial.py c4_adversarial.json | tee c4_adversarial.log
+      - name: Intake frozen RuneRay v0.7 archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='experiments/trial003/runeray_engine_v0_7.zip'
+          test -f "$target"
+          sha256sum "$target" | tee runeray_v07_sha256.txt
+          rm -rf /tmp/runeray_v07
+          mkdir -p /tmp/runeray_v07
+          unzip -q "$target" -d /tmp/runeray_v07
+          {
+            echo '# RuneRay v0.7 extracted tree'
+            find /tmp/runeray_v07 -type f -printf '%P\n' | LC_ALL=C sort
+          } | tee runeray_v07_tree.txt
+          {
+            echo '# package roots'
+            find /tmp/runeray_v07 -type f -name package.json -not -path '*/node_modules/*' -printf '%h\n' | LC_ALL=C sort -u
+          } | tee runeray_v07_package_roots.txt
+          test "$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d' | wc -l)" -eq 1
+      - name: Run frozen RuneRay v0.7 baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d')"
+          cat "$root/package.json" | tee runeray_v07_package.json.txt
+          cd "$root"
+          set -o pipefail
+          npm test 2>&1 | tee "$GITHUB_WORKSPACE/runeray_v07_test.log"
+          npm run build 2>&1 | tee "$GITHUB_WORKSPACE/runeray_v07_build.log"
+      - name: Execute RuneRay v0.7 transition-equivalence adversary
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d')"
+          node experiments/trial003/runeray_adversarial.mjs "$root" runeray_v07_adversarial.json | tee runeray_v07_adversarial.log
+      - name: Capture RuneRay authority-facing source slices
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$(tail -n +2 runeray_v07_package_roots.txt | sed '/^$/d')"
+          for f in \
+            src/core/RuneRayEngine.js \
+            src/core/SaveSystem.js \
+            src/core/CanonicalData.js \
+            src/core/EntitySystem.js \
+            src/core/FirstPersonController.js \
+            src/core/MaterialRegistry.js \
+            src/core/Inventory.js; do
+            echo "===== $f ====="
+            sed -n '1,320p' "$root/$f"
+          done | tee runeray_v07_authority_sources.txt
+      - name: Upload Trial 003 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trial003-evidence
+          path: |
+            trial003.log
+            trial003_probe.json
+            c4_adversarial.json
+            c4_adversarial.log
+            runeray_v07_sha256.txt
+            runeray_v07_tree.txt
+            runeray_v07_package_roots.txt
+            runeray_v07_package.json.txt
+            runeray_v07_test.log
+            runeray_v07_build.log
+            runeray_v07_adversarial.json
+            runeray_v07_adversarial.log
+            runeray_v07_authority_sources.txt
+          if-no-files-found: warn
