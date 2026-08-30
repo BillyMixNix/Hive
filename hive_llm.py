@@ -2,6 +2,8 @@ import os
 import requests
 import time
 
+from hive_trace import record_model_call
+
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 
@@ -59,7 +61,7 @@ ROLE_TIMEOUT = {
 }
 
 
-def _ask_claude(prompt, system=None, model=None, timeout=120):
+def _ask_claude(prompt, system=None, model=None, timeout=120, role="default"):
     """
     Call Claude API for roles that benefit from stronger reasoning.
 
@@ -97,6 +99,21 @@ def _ask_claude(prompt, system=None, model=None, timeout=120):
     try:
         response = client.messages.create(**kwargs)
     except Exception as exc:
+        elapsed = time.time() - start
+        record_model_call(
+            provider="anthropic",
+            model=resolved_model,
+            role=role,
+            prompt=prompt,
+            system=system,
+            response=None,
+            success=False,
+            started_at=start,
+            elapsed_seconds=elapsed,
+            timeout_seconds=timeout,
+            error=exc,
+            attempt=1,
+        )
         exc_text = str(exc).lower()
         if "credit balance" in exc_text or "too low" in exc_text:
             raise CreditsExhaustedError(
@@ -108,6 +125,25 @@ def _ask_claude(prompt, system=None, model=None, timeout=120):
     text = next(
         (block.text for block in response.content if hasattr(block, "text")),
         "",
+    )
+    usage_obj = getattr(response, "usage", None)
+    usage = {
+        "input_tokens": int(getattr(usage_obj, "input_tokens", 0) or 0),
+        "output_tokens": int(getattr(usage_obj, "output_tokens", 0) or 0),
+    }
+    record_model_call(
+        provider="anthropic",
+        model=resolved_model,
+        role=role,
+        prompt=prompt,
+        system=system,
+        response=text,
+        success=True,
+        started_at=start,
+        elapsed_seconds=elapsed,
+        timeout_seconds=timeout,
+        usage=usage,
+        attempt=1,
     )
     print(f"[LLM] Claude response received in {elapsed:.2f}s, {len(text)} chars")
     return text
@@ -131,13 +167,19 @@ def ask_hive(prompt, role="default", timeout=None, model=None, system=None):
     # An explicit model= override skips this path so callers can force Ollama.
     if model is None and role in CLAUDE_ROLES and os.environ.get("ANTHROPIC_API_KEY"):
         claude_model = CLAUDE_ROLE_MODEL.get(role, CLAUDE_MODEL)
-        return _ask_claude(prompt, system=system, model=claude_model, timeout=resolved_timeout)
+        return _ask_claude(
+            prompt,
+            system=system,
+            model=claude_model,
+            timeout=resolved_timeout,
+            role=role,
+        )
 
     resolved_model = model or ROLE_MODEL.get(role, DEFAULT_MODEL)
-    return ask_model(prompt, model=resolved_model, timeout=resolved_timeout)
+    return ask_model(prompt, model=resolved_model, timeout=resolved_timeout, role=role)
 
 
-def ask_model(prompt, model=None, timeout=120):
+def ask_model(prompt, model=None, timeout=120, role="default"):
     model = model or DEFAULT_MODEL
 
     print(f"[LLM] Sending request to {model}")
@@ -173,15 +215,63 @@ def ask_model(prompt, model=None, timeout=120):
             if "response" not in data:
                 raise ValueError(f"Ollama response missing 'response': {data}")
 
-            print(f"[LLM] Model output length: {len(data['response'])} chars")
-            return data["response"]
+            text = data["response"]
+            record_model_call(
+                provider="ollama",
+                model=model,
+                role=role,
+                prompt=prompt,
+                system=None,
+                response=text,
+                success=True,
+                started_at=start,
+                elapsed_seconds=elapsed,
+                timeout_seconds=timeout,
+                usage={
+                    "prompt_eval_count": int(data.get("prompt_eval_count") or 0),
+                    "eval_count": int(data.get("eval_count") or 0),
+                },
+                attempt=attempt + 1,
+            )
+            print(f"[LLM] Model output length: {len(text)} chars")
+            return text
 
         except requests.exceptions.Timeout as e:
+            elapsed = time.time() - start
             last_error = TimeoutError(f"Ollama request timed out after {timeout} seconds.")
+            record_model_call(
+                provider="ollama",
+                model=model,
+                role=role,
+                prompt=prompt,
+                system=None,
+                response=None,
+                success=False,
+                started_at=start,
+                elapsed_seconds=elapsed,
+                timeout_seconds=timeout,
+                error=last_error,
+                attempt=attempt + 1,
+            )
             print(f"[LLM] Timeout on attempt {attempt + 1}/{_MAX_RETRIES}")
 
         except requests.exceptions.RequestException as e:
+            elapsed = time.time() - start
             last_error = RuntimeError(f"Ollama request failed: {e}")
+            record_model_call(
+                provider="ollama",
+                model=model,
+                role=role,
+                prompt=prompt,
+                system=None,
+                response=None,
+                success=False,
+                started_at=start,
+                elapsed_seconds=elapsed,
+                timeout_seconds=timeout,
+                error=last_error,
+                attempt=attempt + 1,
+            )
             print(f"[LLM] Request error on attempt {attempt + 1}/{_MAX_RETRIES}: {e}")
 
     raise last_error or RuntimeError(f"ask_model failed after {_MAX_RETRIES} attempts.")
