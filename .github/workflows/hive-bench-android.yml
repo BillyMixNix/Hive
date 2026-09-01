@@ -1,10 +1,10 @@
-name: Hive Bench Android
+name: Hive Mobile Android
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - 'product/hive-bench-android'
+      - 'product/hive-mobile'
     paths:
       - 'android/hive-bench/**'
       - 'validation/export_phone_benchmark.py'
@@ -58,7 +58,7 @@ jobs:
           git clone --filter=blob:none https://github.com/ggml-org/llama.cpp.git external/llama.cpp
           git -C external/llama.cpp checkout "$LLAMA_CPP_SHA"
 
-      - name: Apply Hive Bench overlay
+      - name: Apply Hive Mobile overlay
         run: |
           APP=external/llama.cpp/examples/llama.android/app/src/main
           cp android/hive-bench/overlay/MainActivity.kt "$APP/java/com/example/llama/MainActivity.kt"
@@ -87,8 +87,8 @@ jobs:
 
           app_gradle = Path('external/llama.cpp/examples/llama.android/app/build.gradle.kts')
           text = app_gradle.read_text()
-          text = text.replace('applicationId = "com.example.llama.aichat"', 'applicationId = "com.hive.bench"')
-          text = text.replace('versionName = "1.0"', 'versionName = "0.1"')
+          text = text.replace('applicationId = "com.example.llama.aichat"', 'applicationId = "com.hive.mobile"')
+          text = text.replace('versionName = "1.0"', 'versionName = "0.2"')
           text = text.replace('debug {\n            isMinifyEnabled = true\n            isShrinkResources = true', 'debug {\n            isMinifyEnabled = false\n            isShrinkResources = false')
           app_gradle.write_text(text)
           PY
@@ -102,12 +102,12 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p dist
-          cp external/llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk dist/HiveBench-v0.1-arm64.apk
-          sha256sum dist/HiveBench-v0.1-arm64.apk | tee dist/HiveBench-v0.1-arm64.apk.sha256
+          cp external/llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk dist/HiveMobile-v0.2-arm64.apk
+          sha256sum dist/HiveMobile-v0.2-arm64.apk | tee dist/HiveMobile-v0.2-arm64.apk.sha256
 
-      - name: Upload Hive Bench APK
+      - name: Upload Hive Mobile APK
         uses: actions/upload-artifact@v4
         with:
-          name: HiveBench-v0.1-arm64
+          name: HiveMobile-v0.2-arm64
           path: dist/*
           if-no-files-found: error
