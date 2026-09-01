@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var modelPageBtn: Button
     private lateinit var navChatBtn: Button
     private lateinit var navWorkBtn: Button
+    private lateinit var navMemoryBtn: Button
     private lateinit var navDiagBtn: Button
 
     private lateinit var chatPanel: LinearLayout
@@ -61,6 +62,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatInput: EditText
     private lateinit var sendChatBtn: Button
     private lateinit var clearChatBtn: Button
+
+    private lateinit var memoryPanel: LinearLayout
+    private lateinit var memoryStateEdit: EditText
+    private lateinit var memorySourcesTv: TextView
+    private lateinit var saveMemoryBtn: Button
+    private lateinit var rebuildMemoryBtn: Button
+    private lateinit var clearMemoryBtn: Button
 
     private lateinit var workPanel: LinearLayout
     private lateinit var projectStatusTv: TextView
@@ -72,6 +80,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var workOutputTv: TextView
     private lateinit var applyChangeBtn: Button
     private lateinit var rejectChangeBtn: Button
+    private lateinit var undoChangeBtn: Button
     private lateinit var clearWorkspaceBtn: Button
 
     private lateinit var diagPanel: LinearLayout
@@ -96,6 +105,8 @@ class MainActivity : AppCompatActivity() {
     private val prefs by lazy { getSharedPreferences("hive_mobile", MODE_PRIVATE) }
     private val workspaceDir by lazy { File(filesDir, "workspace") }
     private val auditFile by lazy { File(filesDir, "hive_work_audit.jsonl") }
+    private val undoDir by lazy { File(filesDir, "workspace_undo") }
+    private val lastUndoFile by lazy { File(filesDir, "workspace_last_undo.json") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +116,7 @@ class MainActivity : AppCompatActivity() {
         bundle = loadBundle()
         restorePersistentState()
         renderChat()
+        renderMemory()
         renderProjectStatus()
         showPanel("chat")
 
@@ -117,9 +129,29 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.Default) {
             engine = AiChat.getInferenceEngine(applicationContext)
             engineReady = true
-            withContext(Dispatchers.Main) {
-                selectModelBtn.isEnabled = true
-                statusTv.text = "Ready. Load Qwen2.5-Coder 3B Q4_K_M to start."
+            val remembered = prefs.getString("last_model_path", null)?.let(::File)
+            if (remembered?.isFile == true && remembered.length() in 1..MAX_MODEL_BYTES) {
+                try {
+                    engine.loadModel(remembered.absolutePath)
+                    modelFile = remembered
+                    withContext(Dispatchers.Main) {
+                        selectModelBtn.isEnabled = true
+                        modelTv.text = "${remembered.name} • ${formatBytes(remembered.length())}"
+                        statusTv.text = "Local model restored automatically."
+                        setModelActionsEnabled(true)
+                    }
+                } catch (t: Throwable) {
+                    prefs.edit().remove("last_model_path").apply()
+                    withContext(Dispatchers.Main) {
+                        selectModelBtn.isEnabled = true
+                        statusTv.text = "Saved model could not be restored: ${t.message}"
+                    }
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    selectModelBtn.isEnabled = true
+                    statusTv.text = "Ready. Load Qwen2.5-Coder 3B Q4_K_M to start."
+                }
             }
         }
 
@@ -135,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         modelPageBtn = findViewById(R.id.model_page)
         navChatBtn = findViewById(R.id.nav_chat)
         navWorkBtn = findViewById(R.id.nav_work)
+        navMemoryBtn = findViewById(R.id.nav_memory)
         navDiagBtn = findViewById(R.id.nav_diag)
 
         chatPanel = findViewById(R.id.chat_panel)
@@ -143,6 +176,13 @@ class MainActivity : AppCompatActivity() {
         chatInput = findViewById(R.id.chat_input)
         sendChatBtn = findViewById(R.id.send_chat)
         clearChatBtn = findViewById(R.id.clear_chat)
+
+        memoryPanel = findViewById(R.id.memory_panel)
+        memoryStateEdit = findViewById(R.id.memory_state_edit)
+        memorySourcesTv = findViewById(R.id.memory_sources)
+        saveMemoryBtn = findViewById(R.id.save_memory)
+        rebuildMemoryBtn = findViewById(R.id.rebuild_memory)
+        clearMemoryBtn = findViewById(R.id.clear_memory)
 
         workPanel = findViewById(R.id.work_panel)
         projectStatusTv = findViewById(R.id.project_status)
@@ -154,6 +194,7 @@ class MainActivity : AppCompatActivity() {
         workOutputTv = findViewById(R.id.work_output)
         applyChangeBtn = findViewById(R.id.apply_change)
         rejectChangeBtn = findViewById(R.id.reject_change)
+        undoChangeBtn = findViewById(R.id.undo_change)
         clearWorkspaceBtn = findViewById(R.id.clear_workspace)
 
         diagPanel = findViewById(R.id.diag_panel)
@@ -176,6 +217,7 @@ class MainActivity : AppCompatActivity() {
 
         navChatBtn.setOnClickListener { showPanel("chat") }
         navWorkBtn.setOnClickListener { showPanel("work") }
+        navMemoryBtn.setOnClickListener { showPanel("memory"); renderMemory() }
         navDiagBtn.setOnClickListener { showPanel("diag") }
 
         sendChatBtn.setOnClickListener { sendChat() }
@@ -186,6 +228,9 @@ class MainActivity : AppCompatActivity() {
             renderChat()
             statusTv.text = "Chat source history and derived Hive state cleared."
         }
+        saveMemoryBtn.setOnClickListener { saveEditedMemory() }
+        rebuildMemoryBtn.setOnClickListener { rebuildMemoryFromSource() }
+        clearMemoryBtn.setOnClickListener { clearDerivedMemory() }
 
         importZipBtn.setOnClickListener { zipPicker.launch(arrayOf("application/zip", "application/octet-stream")) }
         exportZipBtn.setOnClickListener {
@@ -195,6 +240,7 @@ class MainActivity : AppCompatActivity() {
         proposeChangeBtn.setOnClickListener { proposeWorkspaceChange() }
         applyChangeBtn.setOnClickListener { applyWorkspaceProposal() }
         rejectChangeBtn.setOnClickListener { rejectWorkspaceProposal() }
+        undoChangeBtn.setOnClickListener { undoLastWorkspaceChange() }
         clearWorkspaceBtn.setOnClickListener { clearWorkspace() }
 
         throughputBtn.setOnClickListener { runThroughput() }
@@ -212,6 +258,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPanel(panel: String) {
         chatPanel.visibility = if (panel == "chat") View.VISIBLE else View.GONE
+        memoryPanel.visibility = if (panel == "memory") View.VISIBLE else View.GONE
         workPanel.visibility = if (panel == "work") View.VISIBLE else View.GONE
         diagPanel.visibility = if (panel == "diag") View.VISIBLE else View.GONE
     }
@@ -255,6 +302,7 @@ class MainActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) { statusTv.text = "Loading ${destination.name}…" }
                 engine.loadModel(destination.absolutePath)
                 modelFile = destination
+                prefs.edit().putString("last_model_path", destination.absolutePath).apply()
                 withContext(Dispatchers.Main) {
                     modelTv.text = "${destination.name} • ${formatBytes(destination.length())}"
                     setBusy(false, "Model ready. Chat, work, or run diagnostics.")
@@ -349,6 +397,58 @@ Respond to the newest USER message. Do not claim access to anything not present 
         val sourceCount = chatMessages.size
         val stateSize = hiveStateCapsule.length
         hiveStateTv.text = "Hive state: $stateSize chars derived • exact source messages: $sourceCount"
+        renderMemory()
+    }
+
+    private fun renderMemory() {
+        if (!::memoryStateEdit.isInitialized) return
+        memoryStateEdit.setText(hiveStateCapsule)
+        memorySourcesTv.text = if (chatMessages.isEmpty()) {
+            "No exact source messages yet. Derived memory never replaces source text."
+        } else {
+            chatMessages.takeLast(40).joinToString("\n\n") { message ->
+                val who = if (message.role == "user") "USER" else "HIVE"
+                "${message.id} • $who\n${message.text.take(240)}"
+            }
+        }
+    }
+
+    private fun saveEditedMemory() {
+        val candidate = memoryStateEdit.text.toString().trim().ifBlank { "{}" }
+        try {
+            val parsed = JSONObject(candidate)
+            hiveStateCapsule = parsed.toString(2)
+            saveChatState()
+            renderMemory()
+            statusTv.text = "Derived Hive state updated. Exact source messages unchanged."
+        } catch (t: Throwable) {
+            statusTv.text = "Memory not saved: state must be a JSON object."
+        }
+    }
+
+    private fun rebuildMemoryFromSource() {
+        if (modelFile == null || chatMessages.isEmpty() || runJob?.isActive == true) return
+        setBusy(true, "Rebuilding derived state from exact source messages…")
+        runJob = lifecycleScope.launch(Dispatchers.Default) {
+            try {
+                hiveStateCapsule = "{}"
+                refreshHiveStateCapsule()
+                saveChatState()
+                withContext(Dispatchers.Main) {
+                    renderMemory()
+                    setBusy(false, "Derived state rebuilt from source.")
+                }
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) { setBusy(false, "Memory rebuild stopped: ${t.message}") }
+            }
+        }
+    }
+
+    private fun clearDerivedMemory() {
+        hiveStateCapsule = "{}"
+        saveChatState()
+        renderMemory()
+        statusTv.text = "Derived Hive state cleared. Exact source messages preserved."
     }
 
     private fun nextMessageId(): String = "m${chatMessages.size + 1}"
@@ -377,6 +477,8 @@ Respond to the newest USER message. Do not claim access to anything not present 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 workspaceDir.deleteRecursively()
+                undoDir.deleteRecursively()
+                lastUndoFile.delete()
                 workspaceDir.mkdirs()
                 var entries = 0
                 var totalBytes = 0L
@@ -535,6 +637,7 @@ Return exactly one JSON object with target_file, reason, replacement.
         try {
             val target = safeWorkspaceFile(proposal.targetFile)
             val oldText = target.readText(Charsets.UTF_8)
+            createUndoCheckpoint(proposal, oldText)
             target.writeText(proposal.replacement, Charsets.UTF_8)
             appendAudit("applied", proposal, oldText)
             pendingProposal = null
@@ -555,6 +658,53 @@ Return exactly one JSON object with target_file, reason, replacement.
         setModelActionsEnabled(modelFile != null)
     }
 
+    private fun createUndoCheckpoint(proposal: WorkspaceProposal, oldText: String) {
+        undoDir.mkdirs()
+        val backup = File(undoDir, "${System.currentTimeMillis()}.bak")
+        backup.writeText(oldText, Charsets.UTF_8)
+        val meta = JSONObject().apply {
+            put("target_file", proposal.targetFile)
+            put("backup_path", backup.absolutePath)
+            put("expected_current_sha256", sha256(proposal.replacement))
+            put("created_at", System.currentTimeMillis())
+        }
+        lastUndoFile.writeText(meta.toString(), Charsets.UTF_8)
+        undoChangeBtn.isEnabled = true
+    }
+
+    private fun undoLastWorkspaceChange() {
+        if (!lastUndoFile.isFile) {
+            statusTv.text = "Nothing to undo"
+            return
+        }
+        try {
+            val meta = JSONObject(lastUndoFile.readText(Charsets.UTF_8))
+            val targetFile = meta.getString("target_file")
+            val target = safeWorkspaceFile(targetFile)
+            val backup = File(meta.getString("backup_path"))
+            if (!target.isFile || !backup.isFile) error("Undo checkpoint is incomplete")
+            val current = target.readText(Charsets.UTF_8)
+            val expected = meta.getString("expected_current_sha256")
+            if (sha256(current) != expected) error("File changed after the checkpoint; refusing unsafe undo")
+            val restored = backup.readText(Charsets.UTF_8)
+            target.writeText(restored, Charsets.UTF_8)
+            auditFile.appendText(JSONObject().apply {
+                put("timestamp", System.currentTimeMillis())
+                put("disposition", "undone")
+                put("project", projectName)
+                put("target_file", targetFile)
+                put("restored_sha256", sha256(restored))
+            }.toString() + "\n", Charsets.UTF_8)
+            backup.delete()
+            lastUndoFile.delete()
+            undoChangeBtn.isEnabled = false
+            workOutputTv.text = "UNDONE\n$targetFile restored to its pre-apply contents."
+            statusTv.text = "Last applied workspace change undone"
+        } catch (t: Throwable) {
+            statusTv.text = "Undo refused: ${t.message}"
+        }
+    }
+
     private fun appendAudit(disposition: String, proposal: WorkspaceProposal, oldText: String?) {
         val record = JSONObject().apply {
             put("timestamp", System.currentTimeMillis())
@@ -572,6 +722,8 @@ Return exactly one JSON object with target_file, reason, replacement.
     private fun clearWorkspace() {
         if (runJob?.isActive == true) return
         workspaceDir.deleteRecursively()
+        undoDir.deleteRecursively()
+        lastUndoFile.delete()
         projectName = ""
         workPlan = ""
         pendingProposal = null
@@ -592,6 +744,7 @@ Return exactly one JSON object with target_file, reason, replacement.
             "${projectName.ifBlank { "Workspace" }} • ${files.size} files • ${formatBytes(bytes)} • isolated app storage"
         }
         exportZipBtn.isEnabled = files.isNotEmpty()
+        undoChangeBtn.isEnabled = files.isNotEmpty() && lastUndoFile.isFile
     }
 
     private fun exportWorkspaceZip(uri: Uri) {

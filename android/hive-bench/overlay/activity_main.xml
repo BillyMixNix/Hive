@@ -180,16 +180,35 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/nav_diag"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/hive_button_outline"
-            android:text="Diagnostics  •  Raw vs Hive  •  Throughput"
-            android:textAllCaps="false"
-            android:textColor="#8FB8CD"
-            android:textSize="13sp" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/nav_memory"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/hive_button_outline"
+                android:text="Memory  •  state + sources"
+                android:textAllCaps="false"
+                android:textColor="#65E2D9"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/nav_diag"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/hive_button_outline"
+                android:text="Diagnostics"
+                android:textAllCaps="false"
+                android:textColor="#8DCCFF"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <!-- CHAT -->
         <LinearLayout
@@ -248,7 +267,7 @@
                 android:background="@drawable/hive_input"
                 android:gravity="top|start"
                 android:hint="Message Hive…"
-                android:hintTextColor="#577083"
+                android:textColorHint="#577083"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="6"
                 android:minLines="2"
@@ -282,6 +301,110 @@
                     android:textAllCaps="false"
                     android:textColor="#A6B9C8" />
             </LinearLayout>
+        </LinearLayout>
+
+        <!-- MEMORY -->
+        <LinearLayout
+            android:id="@+id/memory_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/hive_card"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Memory"
+                android:textColor="#F5FAFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Derived state is editable. Exact source messages remain separate and authoritative."
+                android:textColor="#87A1B4"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/memory_state_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/hive_input"
+                android:fontFamily="monospace"
+                android:gravity="top|start"
+                android:hint="{}"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:maxLines="14"
+                android:minLines="7"
+                android:padding="14dp"
+                android:textColor="#DFF8F5"
+                android:textColorHint="#577083"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/save_memory"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/hive_button_teal"
+                    android:text="Save state"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/rebuild_memory"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/hive_button_outline"
+                    android:text="Rebuild from source"
+                    android:textAllCaps="false"
+                    android:textColor="#8DCCFF" />
+
+                <Button
+                    android:id="@+id/clear_memory"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/hive_button_outline"
+                    android:text="Clear derived"
+                    android:textAllCaps="false"
+                    android:textColor="#FFB1B8" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="SOURCE EVIDENCE"
+                android:textColor="#5D8CA8"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/memory_sources"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/hive_input"
+                android:minHeight="150dp"
+                android:padding="14dp"
+                android:textColor="#B7C9D6"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <!-- WORK -->
@@ -360,7 +483,7 @@
                 android:background="@drawable/hive_input"
                 android:gravity="top|start"
                 android:hint="Describe the work in normal English…"
-                android:hintTextColor="#577083"
+                android:textColorHint="#577083"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="7"
                 android:minLines="3"
@@ -442,10 +565,21 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/clear_workspace"
+                android:id="@+id/undo_change"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/hive_button_outline"
+                android:enabled="false"
+                android:text="Undo last applied change"
+                android:textAllCaps="false"
+                android:textColor="#F4C878" />
+
+            <Button
+                android:id="@+id/clear_workspace"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/hive_button_outline"
                 android:text="Clear workspace"
                 android:textAllCaps="false"
