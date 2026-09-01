@@ -1,0 +1,100 @@
+name: Apply Hive Mobile v0.4 Shell
+
+on:
+  push:
+    branches:
+      - product/hive-mobile
+    paths:
+      - '.github/workflows/apply-hive-mobile-v4-shell.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply real dashboard navigation shell
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def once(text, old, new, label):
+              if old not in text:
+                  raise SystemExit(f'missing expected block: {label}')
+              return text.replace(old, new, 1)
+
+          xml_path = Path('android/hive-bench/overlay/activity_main.xml')
+          xml = xml_path.read_text()
+          screen_specs = [
+              ('chat_panel', '<ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never">\n            <LinearLayout android:id="@+id/chat_panel"', '<ScrollView android:id="@+id/chat_panel" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never" android:visibility="gone">\n            <LinearLayout'),
+              ('work_panel', '<ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never">\n            <LinearLayout android:id="@+id/work_panel"', '<ScrollView android:id="@+id/work_panel" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never" android:visibility="gone">\n            <LinearLayout'),
+              ('memory_panel', '<ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never">\n            <LinearLayout android:id="@+id/memory_panel"', '<ScrollView android:id="@+id/memory_panel" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never" android:visibility="gone">\n            <LinearLayout'),
+              ('diag_panel', '<ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never">\n            <LinearLayout android:id="@+id/diag_panel"', '<ScrollView android:id="@+id/diag_panel" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:overScrollMode="never" android:visibility="gone">\n            <LinearLayout'),
+          ]
+          for label, old, new in screen_specs:
+              xml = once(xml, old, new, label)
+          # Inner screen content is always visible; the owning ScrollView controls navigation.
+          xml = xml.replace(' android:visibility="gone">\n                <TextView', '>\n                <TextView')
+          xml_path.write_text(xml)
+
+          kt_path = Path('android/hive-bench/overlay/MainActivity.kt')
+          kt = kt_path.read_text()
+
+          kt = once(kt,
+          '''    private lateinit var selectModelBtn: Button\n    private lateinit var modelPageBtn: Button\n    private lateinit var navChatBtn: Button\n    private lateinit var navWorkBtn: Button\n    private lateinit var navMemoryBtn: Button\n    private lateinit var navDiagBtn: Button\n\n    private lateinit var chatPanel: LinearLayout\n''',
+          '''    private lateinit var selectModelBtn: Button\n    private lateinit var modelPageBtn: Button\n    private lateinit var homePanel: View\n    private lateinit var homeChatCard: View\n    private lateinit var homeWorkCard: View\n    private lateinit var homeMemoryCard: View\n    private lateinit var homeProjectTv: TextView\n    private lateinit var homeRecentTv: TextView\n    private lateinit var navHomeBtn: TextView\n    private lateinit var navChatBtn: TextView\n    private lateinit var navWorkBtn: TextView\n    private lateinit var navMemoryBtn: TextView\n    private lateinit var navDiagBtn: View\n\n    private lateinit var chatPanel: View\n''', 'top nav fields')
+
+          kt = kt.replace('    private lateinit var memoryPanel: LinearLayout\n', '    private lateinit var memoryPanel: View\n', 1)
+          kt = kt.replace('    private lateinit var workPanel: LinearLayout\n', '    private lateinit var workPanel: View\n', 1)
+          kt = kt.replace('    private lateinit var diagPanel: LinearLayout\n', '    private lateinit var diagPanel: View\n', 1)
+
+          kt = once(kt,
+          '''        renderChat()\n        renderMemory()\n        renderProjectStatus()\n        showPanel("chat")\n''',
+          '''        renderChat()\n        renderMemory()\n        renderProjectStatus()\n        renderHome()\n        showPanel("home")\n''', 'initial screen')
+
+          kt = once(kt,
+          '''        selectModelBtn = findViewById(R.id.select_model)\n        modelPageBtn = findViewById(R.id.model_page)\n        navChatBtn = findViewById(R.id.nav_chat)\n''',
+          '''        selectModelBtn = findViewById(R.id.select_model)\n        modelPageBtn = findViewById(R.id.model_page)\n        homePanel = findViewById(R.id.home_panel)\n        homeChatCard = findViewById(R.id.home_chat_card)\n        homeWorkCard = findViewById(R.id.home_work_card)\n        homeMemoryCard = findViewById(R.id.home_memory_card)\n        homeProjectTv = findViewById(R.id.home_project_status)\n        homeRecentTv = findViewById(R.id.home_recent_activity)\n        navHomeBtn = findViewById(R.id.nav_home)\n        navChatBtn = findViewById(R.id.nav_chat)\n''', 'bind home')
+
+          kt = once(kt,
+          '''        navChatBtn.setOnClickListener { showPanel("chat") }\n        navWorkBtn.setOnClickListener { showPanel("work") }\n        navMemoryBtn.setOnClickListener { showPanel("memory"); renderMemory() }\n        navDiagBtn.setOnClickListener { showPanel("diag") }\n''',
+          '''        navHomeBtn.setOnClickListener { showPanel("home") }\n        navChatBtn.setOnClickListener { showPanel("chat") }\n        navWorkBtn.setOnClickListener { showPanel("work") }\n        navMemoryBtn.setOnClickListener { showPanel("memory"); renderMemory() }\n        navDiagBtn.setOnClickListener { showPanel("diag") }\n        homeChatCard.setOnClickListener { showPanel("chat") }\n        homeWorkCard.setOnClickListener { showPanel("work") }\n        homeMemoryCard.setOnClickListener { showPanel("memory"); renderMemory() }\n''', 'wire navigation')
+
+          kt = once(kt,
+          '''    private fun showPanel(panel: String) {\n        chatPanel.visibility = if (panel == "chat") View.VISIBLE else View.GONE\n        memoryPanel.visibility = if (panel == "memory") View.VISIBLE else View.GONE\n        workPanel.visibility = if (panel == "work") View.VISIBLE else View.GONE\n        diagPanel.visibility = if (panel == "diag") View.VISIBLE else View.GONE\n    }\n''',
+          '''    private fun showPanel(panel: String) {\n        homePanel.visibility = if (panel == "home") View.VISIBLE else View.GONE\n        chatPanel.visibility = if (panel == "chat") View.VISIBLE else View.GONE\n        memoryPanel.visibility = if (panel == "memory") View.VISIBLE else View.GONE\n        workPanel.visibility = if (panel == "work") View.VISIBLE else View.GONE\n        diagPanel.visibility = if (panel == "diag") View.VISIBLE else View.GONE\n        if (panel == "home") renderHome()\n\n        val active = android.graphics.Color.parseColor("#2BE3D6")\n        val inactive = android.graphics.Color.parseColor("#8296A6")\n        navHomeBtn.setTextColor(if (panel == "home") active else inactive)\n        navChatBtn.setTextColor(if (panel == "chat") active else inactive)\n        navWorkBtn.setTextColor(if (panel == "work") active else inactive)\n        navMemoryBtn.setTextColor(if (panel == "memory") active else inactive)\n    }\n\n    private fun renderHome() {\n        val files = workspaceFiles()\n        val task = prefs.getString("work_task", "").orEmpty().trim()\n        homeProjectTv.text = if (files.isEmpty()) {\n            "No project loaded\\nOpen Work to import a project"\n        } else {\n            buildString {\n                append(projectName.ifBlank { "Workspace" })\n                append(" • ${files.size} files")\n                if (task.isNotBlank()) append("\\n$task")\n            }\n        }\n\n        val recentChat = chatMessages.takeLast(3).asReversed()\n        homeRecentTv.text = if (recentChat.isEmpty()) {\n            "No activity yet"\n        } else {\n            recentChat.joinToString("\\n\\n") { message ->\n                val who = if (message.role == "user") "You" else "Hive"\n                "$who: ${message.text.take(110)}"\n            }\n        }\n    }\n''', 'show panel')
+
+          # Make the app chrome match the mockup instead of the default sample colors.
+          kt = once(kt,
+          '''        setContentView(R.layout.activity_main)\n\n        bindViews()\n''',
+          '''        setContentView(R.layout.activity_main)\n        window.statusBarColor = android.graphics.Color.parseColor("#050A11")\n        window.navigationBarColor = android.graphics.Color.parseColor("#050A11")\n\n        bindViews()\n''', 'system chrome')
+
+          kt_path.write_text(kt)
+          PY
+      - name: Validate dashboard IDs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          xml = Path('android/hive-bench/overlay/activity_main.xml').read_text()
+          kt = Path('android/hive-bench/overlay/MainActivity.kt').read_text()
+          required = ['home_panel','home_chat_card','home_work_card','home_memory_card','nav_home','nav_chat','nav_work','nav_memory','nav_diag']
+          for item in required:
+              assert f'@+id/{item}' in xml, item
+          assert 'showPanel("home")' in kt
+          assert 'private fun renderHome()' in kt
+          print('dashboard shell validated')
+          PY
+      - name: Commit dashboard shell
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add android/hive-bench/overlay/activity_main.xml android/hive-bench/overlay/MainActivity.kt
+          git commit -m "Build real Hive Mobile dashboard navigation" || exit 0
+          git push origin HEAD:product/hive-mobile
