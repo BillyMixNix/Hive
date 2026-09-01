@@ -64,7 +64,8 @@ jobs:
           cp android/hive-bench/overlay/MainActivity.kt "$APP/java/com/example/llama/MainActivity.kt"
           cp android/hive-bench/overlay/activity_main.xml "$APP/res/layout/activity_main.xml"
           cp android/hive-bench/overlay/strings.xml "$APP/res/values/strings.xml"
-          mkdir -p "$APP/assets"
+          mkdir -p "$APP/res/drawable" "$APP/assets"
+          cp android/hive-bench/overlay/drawable/*.xml "$APP/res/drawable/"
           cp /tmp/hive_bench_cases.json "$APP/assets/hive_bench_cases.json"
 
           python - <<'PY'
@@ -88,7 +89,7 @@ jobs:
           app_gradle = Path('external/llama.cpp/examples/llama.android/app/build.gradle.kts')
           text = app_gradle.read_text()
           text = text.replace('applicationId = "com.example.llama.aichat"', 'applicationId = "com.hive.mobile"')
-          text = text.replace('versionName = "1.0"', 'versionName = "0.2"')
+          text = text.replace('versionName = "1.0"', 'versionName = "0.3"')
           text = text.replace('debug {\n            isMinifyEnabled = true\n            isShrinkResources = true', 'debug {\n            isMinifyEnabled = false\n            isShrinkResources = false')
           app_gradle.write_text(text)
           PY
@@ -102,12 +103,12 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p dist
-          cp external/llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk dist/HiveMobile-v0.2-arm64.apk
-          sha256sum dist/HiveMobile-v0.2-arm64.apk | tee dist/HiveMobile-v0.2-arm64.apk.sha256
+          cp external/llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk dist/HiveMobile-v0.3-arm64.apk
+          sha256sum dist/HiveMobile-v0.3-arm64.apk | tee dist/HiveMobile-v0.3-arm64.apk.sha256
 
       - name: Upload Hive Mobile APK
         uses: actions/upload-artifact@v4
         with:
-          name: HiveMobile-v0.2-arm64
+          name: HiveMobile-v0.3-arm64
           path: dist/*
           if-no-files-found: error
