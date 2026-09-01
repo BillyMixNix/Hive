@@ -1,0 +1,63 @@
+name: Hive Mobile Product Pass
+
+on:
+  push:
+    branches:
+      - 'product/hive-mobile'
+    paths:
+      - 'android/hive-bench/apply_product_pass.py'
+      - '.github/workflows/hive-mobile-product-pass.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Apply product pass
+        run: python android/hive-bench/apply_product_pass.py
+
+      - name: Validate source shape
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          main = Path('android/hive-bench/overlay/MainActivity.kt').read_text()
+          layout = Path('android/hive-bench/overlay/activity_main.xml').read_text()
+          required_main = [
+              'navMemoryBtn', 'renderMemory()', 'saveEditedMemory()',
+              'rebuildMemoryFromSource()', 'undoLastWorkspaceChange()',
+              'last_model_path', 'createUndoCheckpoint',
+          ]
+          required_layout = [
+              '@+id/nav_memory', '@+id/memory_panel', '@+id/memory_state_edit',
+              '@+id/memory_sources', '@+id/undo_change',
+          ]
+          for token in required_main:
+              assert token in main, token
+          for token in required_layout:
+              assert token in layout, token
+          assert 'android:hintTextColor' not in layout
+          print('source-shape validation passed')
+          PY
+
+      - name: Commit product pass
+        run: |
+          if git diff --quiet -- android/hive-bench/overlay/MainActivity.kt android/hive-bench/overlay/activity_main.xml; then
+            echo 'No changes to commit'
+            exit 0
+          fi
+          git config user.name 'Hive Mobile Builder'
+          git config user.email 'actions@users.noreply.github.com'
+          git add android/hive-bench/overlay/MainActivity.kt android/hive-bench/overlay/activity_main.xml
+          git commit -m 'Add persistent model restore memory controls and safe undo'
+          git push origin HEAD:product/hive-mobile
