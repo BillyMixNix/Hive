@@ -118,6 +118,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val appRoot = findViewById<View>(R.id.app_root)
+        appRoot.setOnApplyWindowInsetsListener { view, insets ->
+            view.setPadding(
+                view.paddingLeft,
+                view.paddingTop,
+                view.paddingRight,
+                insets.systemWindowInsetBottom,
+            )
+            insets
+        }
+        appRoot.requestApplyInsets()
+
         window.statusBarColor = android.graphics.Color.parseColor("#050A11")
         window.navigationBarColor = android.graphics.Color.parseColor("#050A11")
 
