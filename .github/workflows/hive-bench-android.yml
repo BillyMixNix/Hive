@@ -66,6 +66,7 @@ jobs:
           cp android/hive-bench/overlay/strings.xml "$APP/res/values/strings.xml"
           mkdir -p "$APP/res/drawable" "$APP/assets"
           cp android/hive-bench/overlay/drawable/*.xml "$APP/res/drawable/"
+          sed -i 's/android:hintTextColor/android:textColorHint/g' "$APP/res/layout/activity_main.xml"
           cp /tmp/hive_bench_cases.json "$APP/assets/hive_bench_cases.json"
 
           python - <<'PY'
