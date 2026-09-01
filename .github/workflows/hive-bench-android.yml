@@ -80,6 +80,23 @@ jobs:
           assert 'DEFAULT_CONTEXT_SIZE    = 32768' in text
           assert 'N_THREADS_MAX           = 6' in text
 
+          # The upstream sample wrapper only permits setSystemPrompt() once,
+          # immediately after loading. Hive deliberately resets the system prompt
+          # between Chat, state extraction, Work, and isolated benchmark runs.
+          # The native processSystemPrompt() already clears chat state + KV memory,
+          # so permit that safe reset whenever the engine is ModelReady.
+          engine_impl = Path('external/llama.cpp/examples/llama.android/lib/src/main/java/com/arm/aichat/internal/InferenceEngineImpl.kt')
+          text = engine_impl.read_text()
+          guard = '            check(_readyForSystemPrompt) { "System prompt must be set ** RIGHT AFTER ** model loaded!" }\n'
+          assert guard in text, 'Pinned llama.cpp system-prompt guard changed unexpectedly'
+          text = text.replace(
+              guard,
+              '            // Hive Mobile permits safe prompt/context reset while ModelReady.\n',
+              1,
+          )
+          engine_impl.write_text(text)
+          assert 'System prompt must be set ** RIGHT AFTER ** model loaded!' not in text
+
           lib_gradle = Path('external/llama.cpp/examples/llama.android/lib/build.gradle.kts')
           text = lib_gradle.read_text().replace(
               'abiFilters += listOf("arm64-v8a", "x86_64")',
