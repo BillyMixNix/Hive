@@ -1,0 +1,41 @@
+name: Apply Hive Mobile Insets Fix
+
+on:
+  push:
+    branches:
+      - 'product/hive-mobile'
+    paths:
+      - 'validation/fix_hive_mobile_system_insets.py'
+      - '.github/workflows/apply-hive-mobile-insets.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: product/hive-mobile
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Apply Android 16 inset and card fixes
+        run: python validation/fix_hive_mobile_system_insets.py
+      - name: Validate XML/Kotlin source
+        run: |
+          grep -q 'android:id="@+id/app_root"' android/hive-bench/overlay/activity_main.xml
+          grep -q 'android:id="@+id/bottom_nav"' android/hive-bench/overlay/activity_main.xml
+          grep -q 'systemWindowInsetBottom' android/hive-bench/overlay/MainActivity.kt
+      - name: Commit fix
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add android/hive-bench/overlay/activity_main.xml android/hive-bench/overlay/MainActivity.kt
+          git commit -m 'Fix Hive Mobile Android 16 navigation insets'
+          git push origin HEAD:product/hive-mobile
