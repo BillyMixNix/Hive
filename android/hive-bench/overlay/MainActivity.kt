@@ -51,26 +51,33 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var selectModelBtn: Button
     private lateinit var modelPageBtn: Button
-    private lateinit var navChatBtn: Button
-    private lateinit var navWorkBtn: Button
-    private lateinit var navMemoryBtn: Button
-    private lateinit var navDiagBtn: Button
+    private lateinit var homePanel: View
+    private lateinit var homeChatCard: View
+    private lateinit var homeWorkCard: View
+    private lateinit var homeMemoryCard: View
+    private lateinit var homeProjectTv: TextView
+    private lateinit var homeRecentTv: TextView
+    private lateinit var navHomeBtn: TextView
+    private lateinit var navChatBtn: TextView
+    private lateinit var navWorkBtn: TextView
+    private lateinit var navMemoryBtn: TextView
+    private lateinit var navDiagBtn: View
 
-    private lateinit var chatPanel: LinearLayout
+    private lateinit var chatPanel: View
     private lateinit var chatLogTv: TextView
     private lateinit var hiveStateTv: TextView
     private lateinit var chatInput: EditText
     private lateinit var sendChatBtn: Button
     private lateinit var clearChatBtn: Button
 
-    private lateinit var memoryPanel: LinearLayout
+    private lateinit var memoryPanel: View
     private lateinit var memoryStateEdit: EditText
     private lateinit var memorySourcesTv: TextView
     private lateinit var saveMemoryBtn: Button
     private lateinit var rebuildMemoryBtn: Button
     private lateinit var clearMemoryBtn: Button
 
-    private lateinit var workPanel: LinearLayout
+    private lateinit var workPanel: View
     private lateinit var projectStatusTv: TextView
     private lateinit var importZipBtn: Button
     private lateinit var exportZipBtn: Button
@@ -83,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var undoChangeBtn: Button
     private lateinit var clearWorkspaceBtn: Button
 
-    private lateinit var diagPanel: LinearLayout
+    private lateinit var diagPanel: View
     private lateinit var resultTv: TextView
     private lateinit var throughputBtn: Button
     private lateinit var runAllBtn: Button
@@ -111,6 +118,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.statusBarColor = android.graphics.Color.parseColor("#050A11")
+        window.navigationBarColor = android.graphics.Color.parseColor("#050A11")
 
         bindViews()
         bundle = loadBundle()
@@ -118,7 +127,8 @@ class MainActivity : AppCompatActivity() {
         renderChat()
         renderMemory()
         renderProjectStatus()
-        showPanel("chat")
+        renderHome()
+        showPanel("home")
 
         deviceTv.text = deviceSummary()
         modelTv.text = "No model loaded"
@@ -165,6 +175,13 @@ class MainActivity : AppCompatActivity() {
         progress = findViewById(R.id.progress)
         selectModelBtn = findViewById(R.id.select_model)
         modelPageBtn = findViewById(R.id.model_page)
+        homePanel = findViewById(R.id.home_panel)
+        homeChatCard = findViewById(R.id.home_chat_card)
+        homeWorkCard = findViewById(R.id.home_work_card)
+        homeMemoryCard = findViewById(R.id.home_memory_card)
+        homeProjectTv = findViewById(R.id.home_project_status)
+        homeRecentTv = findViewById(R.id.home_recent_activity)
+        navHomeBtn = findViewById(R.id.nav_home)
         navChatBtn = findViewById(R.id.nav_chat)
         navWorkBtn = findViewById(R.id.nav_work)
         navMemoryBtn = findViewById(R.id.nav_memory)
@@ -215,10 +232,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(QWEN_MODEL_URL)))
         }
 
+        navHomeBtn.setOnClickListener { showPanel("home") }
         navChatBtn.setOnClickListener { showPanel("chat") }
         navWorkBtn.setOnClickListener { showPanel("work") }
         navMemoryBtn.setOnClickListener { showPanel("memory"); renderMemory() }
         navDiagBtn.setOnClickListener { showPanel("diag") }
+        homeChatCard.setOnClickListener { showPanel("chat") }
+        homeWorkCard.setOnClickListener { showPanel("work") }
+        homeMemoryCard.setOnClickListener { showPanel("memory"); renderMemory() }
 
         sendChatBtn.setOnClickListener { sendChat() }
         clearChatBtn.setOnClickListener {
@@ -257,10 +278,43 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showPanel(panel: String) {
+        homePanel.visibility = if (panel == "home") View.VISIBLE else View.GONE
         chatPanel.visibility = if (panel == "chat") View.VISIBLE else View.GONE
         memoryPanel.visibility = if (panel == "memory") View.VISIBLE else View.GONE
         workPanel.visibility = if (panel == "work") View.VISIBLE else View.GONE
         diagPanel.visibility = if (panel == "diag") View.VISIBLE else View.GONE
+        if (panel == "home") renderHome()
+
+        val active = android.graphics.Color.parseColor("#2BE3D6")
+        val inactive = android.graphics.Color.parseColor("#8296A6")
+        navHomeBtn.setTextColor(if (panel == "home") active else inactive)
+        navChatBtn.setTextColor(if (panel == "chat") active else inactive)
+        navWorkBtn.setTextColor(if (panel == "work") active else inactive)
+        navMemoryBtn.setTextColor(if (panel == "memory") active else inactive)
+    }
+
+    private fun renderHome() {
+        val files = workspaceFiles()
+        val task = prefs.getString("work_task", "").orEmpty().trim()
+        homeProjectTv.text = if (files.isEmpty()) {
+            "No project loaded\nOpen Work to import a project"
+        } else {
+            buildString {
+                append(projectName.ifBlank { "Workspace" })
+                append(" • ${files.size} files")
+                if (task.isNotBlank()) append("\n$task")
+            }
+        }
+
+        val recentChat = chatMessages.takeLast(3).asReversed()
+        homeRecentTv.text = if (recentChat.isEmpty()) {
+            "No activity yet"
+        } else {
+            recentChat.joinToString("\n\n") { message ->
+                val who = if (message.role == "user") "You" else "Hive"
+                "$who: ${message.text.take(110)}"
+            }
+        }
     }
 
     private val modelPicker = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
