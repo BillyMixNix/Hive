@@ -29,10 +29,14 @@ def allowed_launch(env, event, launch_message=LAUNCH_MESSAGE):
             and event.get("head_commit", {}).get("id") == env.get("GITHUB_SHA"))
 
 
-def main(*, repeat_of=None):
+def main(*, repeat_of=None, continuation=None):
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
     launch_message = REPEAT_MESSAGE if repeat_of is not None else LAUNCH_MESSAGE
-    if not allowed_launch(os.environ, event, launch_message):
+    launch_env = dict(os.environ)
+    if continuation is not None:
+        launch_message = continuation["launch_message"]
+        launch_env["HIVE_LAUNCH_PARENT"] = continuation["launch_parent"]
+    if not allowed_launch(launch_env, event, launch_message):
         os.environ.pop("OPENAI_API_KEY", None)
         print(json.dumps({"status": "LAUNCH_REFUSED", "model_requests": 0}))
         return 2
@@ -47,8 +51,13 @@ def main(*, repeat_of=None):
         else:
             guard = SpendingGuard(output / "spending.jsonl",
                                   prior_upper_nano_usd=repeat_of["spending"]["total_upper_nano_usd"])
-        adapter = OpenAIHive(MODEL, key, max_requests=325, max_output_tokens=4096,
-                             spending=guard)
+        adapter_options = {}
+        if continuation is not None:
+            from .response_trace import ResponseTrace
+            adapter_options["observer"] = ResponseTrace(output / "responses")
+        adapter = OpenAIHive(MODEL, key,
+                             max_requests=continuation["max_requests"] if continuation else 325,
+                             max_output_tokens=4096, spending=guard, **adapter_options)
         del key
         manifest = {"scope": "development_real_model", "fixture": "seen synthetic development suite",
                     "run_id": os.environ["GITHUB_RUN_ID"], "commit": os.environ["GITHUB_SHA"],
@@ -59,6 +68,9 @@ def main(*, repeat_of=None):
             manifest["diagnostic_replay_of"] = repeat_of["episode_id"]
             manifest["prior_spending"] = repeat_of["spending"]
             manifest["authorization"] = "Billy: So run it again (2026-09-08)"
+        if continuation is not None:
+            manifest["continuation"] = continuation
+            manifest["authorization"] = "Billy: Ok keep going as long as you need (2026-09-08)"
         (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
         store = Store(output / "jarvis.db")
         task = seed_failure(store, output / "failed-work")

@@ -116,12 +116,13 @@ class RequestBudget:
 
 class OpenAIMeter:
     def __init__(self, model, api_key, cap, budget, max_output_tokens, *,
-                 deadline=900, proposer=False):
+                 deadline=900, proposer=False, observer=None):
         self.model, self._api_key, self.cap = model, api_key, cap
         self.budget, self.max_output_tokens = budget, max_output_tokens
         self.end = time.monotonic() + deadline
         self.proposer, self.failed = proposer, False
         self.failure_code = None
+        self.observer = observer
         self.usage = {"calls": 0, "prompt_tokens": 0, "output_tokens": 0}
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
@@ -178,6 +179,11 @@ class OpenAIMeter:
                 raise ValueError("OpenAI response is missing valid measured token usage") from None
             self.usage["prompt_tokens"] += counts[0]
             self.usage["output_tokens"] += counts[1]
+            if self.observer is not None:
+                try:
+                    self.observer(self.budget.calls, payload, value, self._api_key)
+                except Exception:
+                    raise RuntimeError("could not preserve redacted response evidence") from None
             self.budget.settle(value.get("model"), *counts, value.get("service_tier"))
             if value.get("model") != self.model:
                 raise ValueError("OpenAI returned a different model; use an exact snapshot identifier")
@@ -218,7 +224,7 @@ class OpenAIMeter:
 
 class OpenAIHive(OllamaHive):
     def __init__(self, model, api_key, *, max_requests, max_output_tokens=4096, seed=42,
-                 spending=None):
+                 spending=None, observer=None):
         if (not isinstance(model, str) or not re.fullmatch(r"[A-Za-z0-9._:-]{1,200}", model)
                 or not isinstance(api_key, str) or not re.fullmatch(r"[A-Za-z0-9_-]{16,1024}", api_key)):
             raise ValueError("an exact model identifier and a privately provisioned key are required")
@@ -226,6 +232,7 @@ class OpenAIHive(OllamaHive):
             raise ValueError("max_output_tokens must be an integer from 1 to 32768")
         super().__init__(model, ENDPOINT, seed)
         self._api_key, self.max_output_tokens = api_key, max_output_tokens
+        self.observer = observer
         if spending is not None and (spending.model != model or spending.max_output_tokens != max_output_tokens):
             raise ValueError("spending guard does not match this transport")
         self.budget = RequestBudget(max_requests, spending)
@@ -241,7 +248,8 @@ class OpenAIHive(OllamaHive):
 
     def _new_meter(self, cap, deadline=900, *, proposer=False):
         meter = OpenAIMeter(self.model, self._api_key, cap, self.budget,
-                            self.max_output_tokens, deadline=deadline, proposer=proposer)
+                            self.max_output_tokens, deadline=deadline, proposer=proposer,
+                            observer=self.observer)
         self.meters.append(meter)
         return meter
 
