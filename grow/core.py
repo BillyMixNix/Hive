@@ -198,6 +198,9 @@ class LessonLedger(AppendOnlyLedger):
             if entry.get("record_type") != "rejection_lesson":
                 continue
             copied = json.loads(json.dumps(entry))
+            # Retain the timestamp in the source ledger, but do not inject a
+            # generated clock into the semantic lesson/leakage-scan context.
+            copied.pop("timestamp", None)
             text = stable_json(copied)
             if any(marker in text for marker in hidden):
                 raise ExperimentInvalid("hidden transfer material detected in rejection lesson")

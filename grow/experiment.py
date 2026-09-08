@@ -97,6 +97,16 @@ class Grow0Experiment:
             raise ExperimentInvalid("GROW-0 vertical slice expects exactly one mutable workshop path")
         return self.mutable_paths[0]
 
+    @property
+    def parent_generation_id(self) -> str:
+        """The frozen experiment always starts from G0."""
+        return "G0"
+
+    @property
+    def workshop_root(self) -> Path:
+        """Source for every parent operation, including candidate initialization."""
+        return self.repo_root
+
     def _next_candidate_id(self, parent_id: str) -> str:
         match = re.fullmatch(r"G(\d+)(?:-[A-Z]+)?", parent_id)
         if not match:
@@ -106,7 +116,7 @@ class Grow0Experiment:
         used = {
             entry.get("generation_id")
             for entry in self.ledger.entries()
-            if entry.get("record_type") == "generation" and entry.get("parent_id") == parent_id
+            if entry.get("record_type") == "generation"
         }
         index = 0
         while True:
@@ -192,6 +202,10 @@ class Grow0Experiment:
                 self._archive_generation(generation)
         return generation, snapshot
 
+    def _record_generation(self, record: GenerationRecord, workspace: CandidateWorkspace) -> None:
+        self.ledger.append({"record_type": "generation", **asdict(record)})
+        self._archive_generation(record, workspace=workspace)
+
     def build_failure_packet(self, g0_result: dict[str, Any]) -> FailurePacket:
         if g0_result.get("passed"):
             raise ExperimentInvalid("cannot create failure packet from a passing trigger case")
@@ -202,9 +216,9 @@ class Grow0Experiment:
         }
         return FailurePacket(
             failure_id=f"fail-{case['case_id']}",
-            generation="G0",
+            generation=self.parent_generation_id,
             task_id=case["case_id"],
-            observed_behavior=f"G0 returned an incorrect or unparsable active-value selection; output hash={g0_result.get('raw_output_sha256')}",
+            observed_behavior=f"{self.parent_generation_id} returned an incorrect or unparsable active-value selection; output hash={g0_result.get('raw_output_sha256')}",
             expected_behavior="Select the value whose provenance is the current/active call, not stale stored state.",
             smallest_counterexample=smallest,
             test_results={"trigger_passed": False},
@@ -214,7 +228,7 @@ class Grow0Experiment:
                 "available_sources": ["stored_value", "current_value"],
                 "surface_labels": case.get("surface_labels") or {},
             },
-            current_workshop_behavior=(self.repo_root / self.workshop_path).read_text(encoding="utf-8"),
+            current_workshop_behavior=(self.workshop_root / self.workshop_path).read_text(encoding="utf-8"),
             uncertainties=["The base model may also be failing for a reason unrelated to provenance loss."],
             candidate_failure_classes=["state_provenance_loss", "instruction_following_failure"],
         )
@@ -233,7 +247,7 @@ class Grow0Experiment:
 
     def run_probe(self, invoke_model: Callable[[str], str]) -> dict[str, Any]:
         return counterbalanced_probe(
-            workshop_module=self.repo_root / self.workshop_path,
+            workshop_module=self.workshop_root / self.workshop_path,
             case=self.trigger,
             invoke_model=invoke_model,
         )
@@ -248,7 +262,7 @@ class Grow0Experiment:
     ) -> str:
         if probe.get("status") != "DIAGNOSIS_SUPPORTED":
             raise ExperimentInvalid("diagnosis is not supported; mutation is forbidden")
-        workshop_text = (self.repo_root / self.workshop_path).read_text(encoding="utf-8")
+        workshop_text = (self.workshop_root / self.workshop_path).read_text(encoding="utf-8")
         safe_packet = asdict(packet)
         safe_packet["test_results"] = {"trigger_passed": False}
         safe_packet["oracle_results"] = {"public_verdict": "FAIL"}
@@ -413,7 +427,9 @@ class Grow0Experiment:
             "diagnosis_or_implementation": diagnosis_or_implementation,
             "future_candidates_should_avoid": avoid,
         }
-        text = stable_json(payload)
+        # The controller-generated clock is metadata, not learned content. A
+        # numeric answer can coincidentally occur in its fractional seconds.
+        text = stable_json({key: value for key, value in payload.items() if key != "timestamp"})
         if any(marker in text for marker in self._sensitive_case_markers(self._transfer)):
             raise ExperimentInvalid("refusing to persist hidden transfer answer in rejection lesson")
         self.lesson_ledger.append(payload)
@@ -450,13 +466,13 @@ class Grow0Experiment:
         prior_suite_g1: Callable[[Path], dict[str, Any]],
     ) -> dict[str, Any]:
         g0_trigger = self.evaluate_workshop_case(
-            self.repo_root / self.workshop_path, self.trigger, invoke_g0
+            self.workshop_root / self.workshop_path, self.trigger, invoke_g0
         )
         g0_transfer = self.evaluate_workshop_case(
-            self.repo_root / self.workshop_path, self._transfer, invoke_g0
+            self.workshop_root / self.workshop_path, self._transfer, invoke_g0
         )
         if g0_trigger["passed"]:
-            raise ExperimentInvalid("chosen capability challenge did not demonstrate a G0 failure")
+            raise ExperimentInvalid(f"chosen capability challenge did not demonstrate a {self.parent_generation_id} failure")
 
         packet = self.build_failure_packet(g0_trigger)
         diagnosis = self.diagnosis_template(packet)
@@ -473,9 +489,9 @@ class Grow0Experiment:
         )
         proposal_raw = invoke_modifier(modifier_prompt)
 
-        generation_id = self._next_candidate_id("G0")
+        generation_id = self._next_candidate_id(self.parent_generation_id)
         manifest: ModificationManifest | None = None
-        with CandidateWorkspace(self.repo_root, self.mutable_paths) as workspace:
+        with CandidateWorkspace(self.workshop_root, self.mutable_paths) as workspace:
             before_hashes = workspace.before_hashes
             try:
                 manifest = self.apply_proposal(workspace, proposal_raw, packet.failure_id)
@@ -490,7 +506,7 @@ class Grow0Experiment:
                 )
                 record = GenerationRecord(
                     generation_id=generation_id,
-                    parent_id="G0",
+                    parent_id=self.parent_generation_id,
                     source_workshop_snapshot_hash=hash_json(before_hashes),
                     model_configuration_hash=self.model_config.config_hash,
                     benchmark_bundle_id=self.config["benchmark_bundle_id"],
@@ -501,8 +517,7 @@ class Grow0Experiment:
                     disposition="INVALID",
                     rejection_reason=str(exc),
                 )
-                self.ledger.append({"record_type": "generation", **asdict(record)})
-                self._archive_generation(record, workspace=workspace)
+                self._record_generation(record, workspace)
                 return {
                     "g0": {"trigger": g0_trigger, "transfer": g0_transfer},
                     "g1": None,
@@ -516,7 +531,7 @@ class Grow0Experiment:
             if not integrity["passed"]:
                 record = GenerationRecord(
                     generation_id=generation_id,
-                    parent_id="G0",
+                    parent_id=self.parent_generation_id,
                     source_workshop_snapshot_hash=hash_json(before_hashes),
                     model_configuration_hash=self.model_config.config_hash,
                     benchmark_bundle_id=self.config["benchmark_bundle_id"],
@@ -538,8 +553,7 @@ class Grow0Experiment:
                     diagnosis_or_implementation="implementation",
                     avoid=["leakage", "forbidden writes", "syntax-invalid workshop changes"],
                 )
-                self.ledger.append({"record_type": "generation", **asdict(record)})
-                self._archive_generation(record, workspace=workspace)
+                self._record_generation(record, workspace)
                 return {
                     "g0": {"trigger": g0_trigger, "transfer": g0_transfer},
                     "g1": None,
@@ -585,7 +599,7 @@ class Grow0Experiment:
             rejection_reason = None if disposition == "PROMOTED" else ",".join(promotion["reasons"])
             record = GenerationRecord(
                 generation_id=generation_id,
-                parent_id="G0",
+                parent_id=self.parent_generation_id,
                 source_workshop_snapshot_hash=hash_json(before_hashes),
                 model_configuration_hash=self.model_config.config_hash,
                 benchmark_bundle_id=self.config["benchmark_bundle_id"],
@@ -601,8 +615,7 @@ class Grow0Experiment:
                 disposition=disposition,
                 rejection_reason=rejection_reason,
             )
-            self.ledger.append({"record_type": "generation", **asdict(record)})
-            self._archive_generation(record, workspace=workspace)
+            self._record_generation(record, workspace)
             if disposition != "PROMOTED":
                 self.record_rejection_lesson(
                     generation_id=generation_id,
