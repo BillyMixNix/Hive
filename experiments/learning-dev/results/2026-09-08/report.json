@@ -1,0 +1,44 @@
+{
+  "episode_id": "070f26ab17e167af098f591d33430a57beb1eae1c5348ed14cd9f9769ae5e390",
+  "suite_sha256": "119c5a5d476e7442ebfbebbba546be2391834b14a4db59326bd7a310cf58962a",
+  "scope": "development_real_model",
+  "verdict": "INVALID",
+  "lesson": {
+    "rationale": "The failure occurs at an equality boundary: a check expecting the quantity to be admitted when it equals capacity instead rejects it. This commonly indicates an exclusive comparison or an off-by-one condition. When a requirement includes equality, inspect the boundary operator and add focused tests for below, exactly at, and above the limit.",
+    "summary": "Translate inclusive requirements into inclusive comparisons, and test both sides of the boundary plus the equality case.",
+    "when": "Use this whenever a rule involves limits, capacities, ranges, quotas, indexes, or thresholds whose wording may include or exclude the endpoint."
+  },
+  "reason": "RuntimeError: model transport or usage failure; episode invalid",
+  "completed_trials": 0,
+  "proposal_usage": {
+    "calls": 1,
+    "prompt_tokens": 309,
+    "output_tokens": 170
+  },
+  "transport_usage": [
+    {
+      "calls": 1,
+      "prompt_tokens": 309,
+      "output_tokens": 170,
+      "complete": true
+    },
+    {
+      "calls": 1,
+      "prompt_tokens": 431,
+      "output_tokens": 145,
+      "complete": false
+    }
+  ],
+  "ledger_verified": true,
+  "ordinary_jarvis_guidance": 0,
+  "trials": [],
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "measured_usage_upper_nano_usd": 937000,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 937000,
+    "requests_reserved": 2,
+    "blocked": true
+  },
+  "interpretation": "Live integration on previously authored development fixtures. A pass is not evidence of RSI; a rejected lesson is not retained. Spending is a conservative token-charge upper bound, not an invoice; unresolved requests retain their full reservation."
+}

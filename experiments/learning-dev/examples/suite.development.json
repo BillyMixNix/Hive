@@ -1,0 +1,42 @@
+{
+  "schema": "hive.learning.suite.v1",
+  "suite_id": "scripted-wiring-only-v1",
+  "cases": [
+    {
+      "id": "capacity",
+      "split": "trigger",
+      "goal": "Admit quantities up to and including capacity; preserve tests.",
+      "files": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\ndef test_below():\n    assert admit(3, 5)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from capacity import admit\ndef test_boundary():\n    assert admit(5, 5)\n    assert not admit(6, 5)\n"
+      }
+    },
+    {
+      "id": "deadline",
+      "split": "transfer",
+      "goal": "Accept arrivals at or before the deadline; preserve tests.",
+      "files": {
+        "arrival.py": "def on_time(arrived, deadline):\n    return arrived < deadline\n",
+        "test_visible.py": "from arrival import on_time\ndef test_before():\n    assert on_time(4, 10)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from arrival import on_time\ndef test_boundary():\n    assert on_time(10, 10)\n    assert not on_time(11, 10)\n"
+      }
+    },
+    {
+      "id": "signed_sum",
+      "split": "retention",
+      "goal": "Preserve correct addition of signed integers and existing tests.",
+      "files": {
+        "arithmetic.py": "def add(a, b):\n    return a + b\n",
+        "test_visible.py": "from arithmetic import add\ndef test_positive():\n    assert add(2, 3) == 5\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from arithmetic import add\ndef test_signed():\n    assert add(-3, 2) == -1\n    assert add(0, 0) == 0\n"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "hive.development.repair-probe.v1",
+  "id": "visible-inclusive-boundary-v1",
+  "goal": "For integer inputs, admit quantities up to and including capacity. Preserve the tests.",
+  "files": {
+    "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+    "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+  },
+  "protected_tests": {
+    "test_protected.py": "from capacity import admit\n\ndef test_integer_boundaries():\n    for quantity in range(-3, 8):\n        for capacity in range(-3, 8):\n            assert admit(quantity, capacity) == (quantity <= capacity)\n"
+  }
+}

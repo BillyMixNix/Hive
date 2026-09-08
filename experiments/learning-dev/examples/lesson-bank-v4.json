@@ -1,0 +1,379 @@
+{
+  "schema": "hive.lesson-bank.v4",
+  "model": "gpt-5.6-luna",
+  "calls_per_recipient": 36,
+  "seed": 90417,
+  "families": [
+    "paired_sort",
+    "single_pass",
+    "versioned_cache"
+  ],
+  "cases": [
+    {
+      "id": "bank4_paired_sort_42",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_42 returns (label, payload) pairs sorted by label while preserving every original association. Equal labels preserve their input order. Unequal lengths raise ValueError. Preserve tests and the API.",
+      "files": {
+        "component_dfc0ba96.py": "def arrange_42(labels, payloads):\n    if len(labels) != len(payloads):\n        raise ValueError('length mismatch')\n    paired = zip(sorted(labels), payloads)\n    return list(paired)\n",
+        "test_visible.py": "from component_dfc0ba96 import arrange_42\n\ndef test_visible():\n    assert arrange_42([307, 305, 306], ['b', 'z', 'a']) == [(305, 'z'), (306, 'a'), (307, 'b')]\n    assert arrange_42([305, 305], ['z', 'a']) == [(305, 'z'), (305, 'a')]\n    assert arrange_42([], []) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_dfc0ba96 import arrange_42\n\ndef test_acceptance():\n    assert arrange_42([1307, 1305, 1306], ['b', 'z', 'a']) == [(1305, 'z'), (1306, 'a'), (1307, 'b')]\n    assert arrange_42([1305, 1305], ['z', 'a']) == [(1305, 'z'), (1305, 'a')]\n    assert arrange_42([], []) == []\n    assert arrange_42([2307, 2305, 2306], ['b', 'z', 'a']) == [(2305, 'z'), (2306, 'a'), (2307, 'b')]\n    assert arrange_42([2305, 2305], ['z', 'a']) == [(2305, 'z'), (2305, 'a')]\n    assert arrange_42([], []) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_dfc0ba96 import arrange_42\n\ndef test_protected():\n    assert arrange_42([408, 406, 407], ['b', 'z', 'a']) == [(406, 'z'), (407, 'a'), (408, 'b')]\n    assert arrange_42([406, 406], ['z', 'a']) == [(406, 'z'), (406, 'a')]\n    assert arrange_42([], []) == []\n    assert arrange_42([518, 516, 517], ['b', 'z', 'a']) == [(516, 'z'), (517, 'a'), (518, 'b')]\n    assert arrange_42([516, 516], ['z', 'a']) == [(516, 'z'), (516, 'a')]\n    assert arrange_42([], []) == []\n    assert arrange_42([614, 612, 613], ['b', 'z', 'a']) == [(612, 'z'), (613, 'a'), (614, 'b')]\n    assert arrange_42([612, 612], ['z', 'a']) == [(612, 'z'), (612, 'a')]\n    assert arrange_42([], []) == []\n    assert arrange_42([708, 706, 707], ['b', 'z', 'a']) == [(706, 'z'), (707, 'a'), (708, 'b')]\n    assert arrange_42([706, 706], ['z', 'a']) == [(706, 'z'), (706, 'a')]\n    assert arrange_42([], []) == []\n",
+        "test_varied_sort.py": "from component_dfc0ba96 import arrange_42 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            labels = [rng.randrange(-3, 4) for _ in range(size)]\n            payloads = [{'identity': i} for i in range(size)]\n            expected = sorted(zip(labels, payloads), key=lambda pair: pair[0])\n            assert arrange(labels, payloads) == expected\n\ndef test_length_mismatch():\n    import pytest\n    with pytest.raises(ValueError):\n        arrange([1, 2], ['x'])\n    with pytest.raises(ValueError):\n        arrange([], ['x'])\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_single_pass_42",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_42 consumes a possibly single-use iterable and reports its item count and sum. It must work for generators, including empty and signed inputs. Preserve tests and the API.",
+      "files": {
+        "component_d0ccc95f.py": "def summarize_42(stream):\n    observed = tuple(stream)\n    count = len(observed)\n    total = sum(stream)\n    return {'count': count, 'total': total}\n",
+        "test_visible.py": "from component_d0ccc95f import summarize_42\n\ndef test_visible():\n    assert summarize_42(iter([305, -2, 5])) == {'count': 3, 'total': 308}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-305, 305, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_d0ccc95f import summarize_42\n\ndef test_acceptance():\n    assert summarize_42(iter([1305, -2, 5])) == {'count': 3, 'total': 1308}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-1305, 1305, 1]) == {'count': 3, 'total': 1}\n    assert summarize_42(iter([2305, -2, 5])) == {'count': 3, 'total': 2308}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-2305, 2305, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_d0ccc95f import summarize_42\n\ndef test_protected():\n    assert summarize_42(iter([406, -2, 5])) == {'count': 3, 'total': 409}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-406, 406, 1]) == {'count': 3, 'total': 1}\n    assert summarize_42(iter([516, -2, 5])) == {'count': 3, 'total': 519}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-516, 516, 1]) == {'count': 3, 'total': 1}\n    assert summarize_42(iter([612, -2, 5])) == {'count': 3, 'total': 615}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-612, 612, 1]) == {'count': 3, 'total': 1}\n    assert summarize_42(iter([706, -2, 5])) == {'count': 3, 'total': 709}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-706, 706, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_versioned_cache_42",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_42.calculate caches the first sum independently for each (item, revision). A new revision recomputes; repeating the same item and revision returns its original cached sum even if values change. Preserve tests and the API.",
+      "files": {
+        "component_b34d1fd7.py": "class Memo_42:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, item, revision):\n        return item\n\n    def calculate(self, item, revision, values):\n        key = self.identity(item, revision)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+        "test_visible.py": "from component_b34d1fd7 import Memo_42\n\ndef test_visible():\n    m = Memo_42()\n    assert m.calculate('record', 305, [3, 5]) == 8\n    assert m.calculate('record', 306, [7, 9]) == 16\n    assert m.calculate('record', 305, [100]) == 8\n    assert m.calculate('other', 305, [2, 3]) == 5\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_b34d1fd7 import Memo_42\n\ndef test_acceptance():\n    m = Memo_42()\n    assert m.calculate('record', 1305, [3, 5]) == 8\n    assert m.calculate('record', 1306, [7, 9]) == 16\n    assert m.calculate('record', 1305, [100]) == 8\n    assert m.calculate('other', 1305, [2, 3]) == 5\n    m = Memo_42()\n    assert m.calculate('record', 2305, [3, 5]) == 8\n    assert m.calculate('record', 2306, [7, 9]) == 16\n    assert m.calculate('record', 2305, [100]) == 8\n    assert m.calculate('other', 2305, [2, 3]) == 5\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_b34d1fd7 import Memo_42\n\ndef test_protected():\n    m = Memo_42()\n    assert m.calculate('record', 406, [3, 5]) == 8\n    assert m.calculate('record', 407, [7, 9]) == 16\n    assert m.calculate('record', 406, [100]) == 8\n    assert m.calculate('other', 406, [2, 3]) == 5\n    m = Memo_42()\n    assert m.calculate('record', 516, [3, 5]) == 8\n    assert m.calculate('record', 517, [7, 9]) == 16\n    assert m.calculate('record', 516, [100]) == 8\n    assert m.calculate('other', 516, [2, 3]) == 5\n    m = Memo_42()\n    assert m.calculate('record', 612, [3, 5]) == 8\n    assert m.calculate('record', 613, [7, 9]) == 16\n    assert m.calculate('record', 612, [100]) == 8\n    assert m.calculate('other', 612, [2, 3]) == 5\n    m = Memo_42()\n    assert m.calculate('record', 706, [3, 5]) == 8\n    assert m.calculate('record', 707, [7, 9]) == 16\n    assert m.calculate('record', 706, [100]) == 8\n    assert m.calculate('other', 706, [2, 3]) == 5\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_paired_sort_43",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_43 orders record dictionaries by rank, preserving each rank/payload association and input order for equal ranks. Do not change input records. Preserve tests and the API.",
+      "files": {
+        "component_44814e4b.py": "def arrange_43(records):\n    ranks = sorted(row['rank'] for row in records)\n    selected = [dict(row, rank=rank) for row, rank in zip(records, ranks)]\n    return selected\n",
+        "test_visible.py": "from component_44814e4b import arrange_43\n\ndef test_visible():\n    rows = [{'rank': 313, 'value': 'b'}, {'rank': 312, 'value': 'z'}, {'rank': 312, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 313\n    assert arrange_43([]) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_44814e4b import arrange_43\n\ndef test_acceptance():\n    rows = [{'rank': 1313, 'value': 'b'}, {'rank': 1312, 'value': 'z'}, {'rank': 1312, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 1313\n    assert arrange_43([]) == []\n    rows = [{'rank': 2313, 'value': 'b'}, {'rank': 2312, 'value': 'z'}, {'rank': 2312, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 2313\n    assert arrange_43([]) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_44814e4b import arrange_43\n\ndef test_protected():\n    rows = [{'rank': 414, 'value': 'b'}, {'rank': 413, 'value': 'z'}, {'rank': 413, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 414\n    assert arrange_43([]) == []\n    rows = [{'rank': 524, 'value': 'b'}, {'rank': 523, 'value': 'z'}, {'rank': 523, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 524\n    assert arrange_43([]) == []\n    rows = [{'rank': 620, 'value': 'b'}, {'rank': 619, 'value': 'z'}, {'rank': 619, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 620\n    assert arrange_43([]) == []\n    rows = [{'rank': 714, 'value': 'b'}, {'rank': 713, 'value': 'z'}, {'rank': 713, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 714\n    assert arrange_43([]) == []\n",
+        "test_varied_sort.py": "from component_44814e4b import arrange_43 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            rows = [{'rank': rng.randrange(-3, 4), 'value': {'identity': i}, 'extra': i + 70} for i in range(size)]\n            original = copy.deepcopy(rows)\n            expected = sorted(copy.deepcopy(rows), key=lambda row: row['rank'])\n            assert arrange(rows) == expected\n            assert rows == original\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_single_pass_43",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_43 validates a possibly single-use iterable of nonnegative numbers and returns all its items as a tuple. Negative values raise ValueError. Preserve tests and the API.",
+      "files": {
+        "component_479bcdbe.py": "def summarize_43(stream):\n    observed = list(stream)\n    if any(value < 0 for value in observed):\n        raise ValueError('negative value')\n    accepted = tuple(stream)\n    return accepted\n",
+        "test_visible.py": "from component_479bcdbe import summarize_43\n\ndef test_visible():\n    assert summarize_43(iter([312, 0, 5])) == (312, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_479bcdbe import summarize_43\n\ndef test_acceptance():\n    assert summarize_43(iter([1312, 0, 5])) == (1312, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_43(iter([2312, 0, 5])) == (2312, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_479bcdbe import summarize_43\n\ndef test_protected():\n    assert summarize_43(iter([413, 0, 5])) == (413, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_43(iter([523, 0, 5])) == (523, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_43(iter([619, 0, 5])) == (619, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_43(iter([713, 0, 5])) == (713, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_versioned_cache_43",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_43.render must cache independently for each text and mode. Modes are lower and upper; the same text must render correctly under either mode regardless of earlier calls. Preserve tests and the API.",
+      "files": {
+        "component_f18828d1.py": "class Memo_43:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, text, mode):\n        return text\n\n    def render(self, text, mode):\n        key = self.identity(text, mode)\n        if key not in self.entries:\n            self.entries[key] = text.lower() if mode == 'lower' else text.upper()\n        return self.entries[key]\n",
+        "test_visible.py": "from component_f18828d1 import Memo_43\n\ndef test_visible():\n    m = Memo_43()\n    assert m.render('AbC312', 'lower') == 'abc312'\n    assert m.render('AbC312', 'upper') == 'ABC312'\n    assert m.render('AbC312', 'lower') == 'abc312'\n    assert len(m.entries) == 2\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_f18828d1 import Memo_43\n\ndef test_acceptance():\n    m = Memo_43()\n    assert m.render('AbC1312', 'lower') == 'abc1312'\n    assert m.render('AbC1312', 'upper') == 'ABC1312'\n    assert m.render('AbC1312', 'lower') == 'abc1312'\n    assert len(m.entries) == 2\n    m = Memo_43()\n    assert m.render('AbC2312', 'lower') == 'abc2312'\n    assert m.render('AbC2312', 'upper') == 'ABC2312'\n    assert m.render('AbC2312', 'lower') == 'abc2312'\n    assert len(m.entries) == 2\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_f18828d1 import Memo_43\n\ndef test_protected():\n    m = Memo_43()\n    assert m.render('AbC413', 'lower') == 'abc413'\n    assert m.render('AbC413', 'upper') == 'ABC413'\n    assert m.render('AbC413', 'lower') == 'abc413'\n    assert len(m.entries) == 2\n    m = Memo_43()\n    assert m.render('AbC523', 'lower') == 'abc523'\n    assert m.render('AbC523', 'upper') == 'ABC523'\n    assert m.render('AbC523', 'lower') == 'abc523'\n    assert len(m.entries) == 2\n    m = Memo_43()\n    assert m.render('AbC619', 'lower') == 'abc619'\n    assert m.render('AbC619', 'upper') == 'ABC619'\n    assert m.render('AbC619', 'lower') == 'abc619'\n    assert len(m.entries) == 2\n    m = Memo_43()\n    assert m.render('AbC713', 'lower') == 'abc713'\n    assert m.render('AbC713', 'upper') == 'ABC713'\n    assert m.render('AbC713', 'lower') == 'abc713'\n    assert len(m.entries) == 2\n"
+      },
+      "phase": 1
+    },
+    {
+      "id": "bank4_paired_sort_44",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_44 takes (group, rank, payload) rows and returns ((group, rank), payload) rows sorted by the composite key. Preserve associations and stable input order for equal keys. Preserve tests and the API.",
+      "files": {
+        "component_5f9b6c51.py": "def arrange_44(records):\n    keys = sorted((row[0], row[1]) for row in records)\n    paired = zip(keys, [row[2] for row in records])\n    return list(paired)\n",
+        "test_visible.py": "from component_5f9b6c51 import arrange_44\n\ndef test_visible():\n    rows = [('b', 319, 'x'), ('a', 320, 'z'), ('a', 319, 'm'), ('a', 319, 'a')]\n    assert arrange_44(rows) == [(('a', 319), 'm'), (('a', 319), 'a'), (('a', 320), 'z'), (('b', 319), 'x')]\n    assert arrange_44([]) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_5f9b6c51 import arrange_44\n\ndef test_acceptance():\n    rows = [('b', 1319, 'x'), ('a', 1320, 'z'), ('a', 1319, 'm'), ('a', 1319, 'a')]\n    assert arrange_44(rows) == [(('a', 1319), 'm'), (('a', 1319), 'a'), (('a', 1320), 'z'), (('b', 1319), 'x')]\n    assert arrange_44([]) == []\n    rows = [('b', 2319, 'x'), ('a', 2320, 'z'), ('a', 2319, 'm'), ('a', 2319, 'a')]\n    assert arrange_44(rows) == [(('a', 2319), 'm'), (('a', 2319), 'a'), (('a', 2320), 'z'), (('b', 2319), 'x')]\n    assert arrange_44([]) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_5f9b6c51 import arrange_44\n\ndef test_protected():\n    rows = [('b', 420, 'x'), ('a', 421, 'z'), ('a', 420, 'm'), ('a', 420, 'a')]\n    assert arrange_44(rows) == [(('a', 420), 'm'), (('a', 420), 'a'), (('a', 421), 'z'), (('b', 420), 'x')]\n    assert arrange_44([]) == []\n    rows = [('b', 530, 'x'), ('a', 531, 'z'), ('a', 530, 'm'), ('a', 530, 'a')]\n    assert arrange_44(rows) == [(('a', 530), 'm'), (('a', 530), 'a'), (('a', 531), 'z'), (('b', 530), 'x')]\n    assert arrange_44([]) == []\n    rows = [('b', 626, 'x'), ('a', 627, 'z'), ('a', 626, 'm'), ('a', 626, 'a')]\n    assert arrange_44(rows) == [(('a', 626), 'm'), (('a', 626), 'a'), (('a', 627), 'z'), (('b', 626), 'x')]\n    assert arrange_44([]) == []\n    rows = [('b', 720, 'x'), ('a', 721, 'z'), ('a', 720, 'm'), ('a', 720, 'a')]\n    assert arrange_44(rows) == [(('a', 720), 'm'), (('a', 720), 'a'), (('a', 721), 'z'), (('b', 720), 'x')]\n    assert arrange_44([]) == []\n",
+        "test_varied_sort.py": "from component_5f9b6c51 import arrange_44 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            rows = [(rng.choice(['a', 'b', 'c']), rng.randrange(-3, 4), {'identity': i}) for i in range(size)]\n            expected = sorted([((row[0], row[1]), row[2]) for row in rows], key=lambda pair: pair[0])\n            assert arrange(rows) == expected\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_single_pass_44",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_44 consumes a possibly single-use iterable of (key, value) rows into a dictionary. Later duplicate keys win. Preserve tests and the API.",
+      "files": {
+        "component_734d026d.py": "def summarize_44(stream):\n    records = tuple(stream)\n    keys = [row[0] for row in stream]\n    values = [row[1] for row in records]\n    return dict(zip(keys, values))\n",
+        "test_visible.py": "from component_734d026d import summarize_44\n\ndef test_visible():\n    assert summarize_44(iter([('a', 319), ('b', 3), ('a', 321)])) == {'a': 321, 'b': 3}\n    assert summarize_44(iter([])) == {}\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_734d026d import summarize_44\n\ndef test_acceptance():\n    assert summarize_44(iter([('a', 1319), ('b', 3), ('a', 1321)])) == {'a': 1321, 'b': 3}\n    assert summarize_44(iter([])) == {}\n    assert summarize_44(iter([('a', 2319), ('b', 3), ('a', 2321)])) == {'a': 2321, 'b': 3}\n    assert summarize_44(iter([])) == {}\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_734d026d import summarize_44\n\ndef test_protected():\n    assert summarize_44(iter([('a', 420), ('b', 3), ('a', 422)])) == {'a': 422, 'b': 3}\n    assert summarize_44(iter([])) == {}\n    assert summarize_44(iter([('a', 530), ('b', 3), ('a', 532)])) == {'a': 532, 'b': 3}\n    assert summarize_44(iter([])) == {}\n    assert summarize_44(iter([('a', 626), ('b', 3), ('a', 628)])) == {'a': 628, 'b': 3}\n    assert summarize_44(iter([])) == {}\n    assert summarize_44(iter([('a', 720), ('b', 3), ('a', 722)])) == {'a': 722, 'b': 3}\n    assert summarize_44(iter([])) == {}\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_versioned_cache_44",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_44.balance caches the first entry sum separately for every tenant/account pair. Equal account names in distinct tenants must never share results. Repeating a pair retains its original sum. Preserve tests and the API.",
+      "files": {
+        "component_9ad80db9.py": "class Memo_44:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, account, tenant):\n        return account\n\n    def balance(self, account, tenant, entries):\n        key = self.identity(account, tenant)\n        if key not in self.entries:\n            self.entries[key] = sum(entries)\n        return self.entries[key]\n",
+        "test_visible.py": "from component_9ad80db9 import Memo_44\n\ndef test_visible():\n    m = Memo_44()\n    assert m.balance('user', 'east', [319, 3]) == 322\n    assert m.balance('user', 'west', [327, 5]) == 332\n    assert m.balance('user', 'east', [9000]) == 322\n    assert len(m.entries) == 2\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_9ad80db9 import Memo_44\n\ndef test_acceptance():\n    m = Memo_44()\n    assert m.balance('user', 'east', [1319, 3]) == 1322\n    assert m.balance('user', 'west', [1327, 5]) == 1332\n    assert m.balance('user', 'east', [9000]) == 1322\n    assert len(m.entries) == 2\n    m = Memo_44()\n    assert m.balance('user', 'east', [2319, 3]) == 2322\n    assert m.balance('user', 'west', [2327, 5]) == 2332\n    assert m.balance('user', 'east', [9000]) == 2322\n    assert len(m.entries) == 2\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_9ad80db9 import Memo_44\n\ndef test_protected():\n    m = Memo_44()\n    assert m.balance('user', 'east', [420, 3]) == 423\n    assert m.balance('user', 'west', [428, 5]) == 433\n    assert m.balance('user', 'east', [9000]) == 423\n    assert len(m.entries) == 2\n    m = Memo_44()\n    assert m.balance('user', 'east', [530, 3]) == 533\n    assert m.balance('user', 'west', [538, 5]) == 543\n    assert m.balance('user', 'east', [9000]) == 533\n    assert len(m.entries) == 2\n    m = Memo_44()\n    assert m.balance('user', 'east', [626, 3]) == 629\n    assert m.balance('user', 'west', [634, 5]) == 639\n    assert m.balance('user', 'east', [9000]) == 629\n    assert len(m.entries) == 2\n    m = Memo_44()\n    assert m.balance('user', 'east', [720, 3]) == 723\n    assert m.balance('user', 'west', [728, 5]) == 733\n    assert m.balance('user', 'east', [9000]) == 723\n    assert len(m.entries) == 2\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_paired_sort_45",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_45 returns (label, payload) pairs sorted by label while preserving every original association. Equal labels preserve their input order. Unequal lengths raise ValueError. Preserve tests and the API.",
+      "files": {
+        "component_2456d0e2.py": "def arrange_45(labels, payloads):\n    if len(labels) != len(payloads):\n        raise ValueError('length mismatch')\n    paired = zip(sorted(labels), payloads)\n    return list(paired)\n",
+        "test_visible.py": "from component_2456d0e2 import arrange_45\n\ndef test_visible():\n    assert arrange_45([328, 326, 327], ['b', 'z', 'a']) == [(326, 'z'), (327, 'a'), (328, 'b')]\n    assert arrange_45([326, 326], ['z', 'a']) == [(326, 'z'), (326, 'a')]\n    assert arrange_45([], []) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_2456d0e2 import arrange_45\n\ndef test_acceptance():\n    assert arrange_45([1328, 1326, 1327], ['b', 'z', 'a']) == [(1326, 'z'), (1327, 'a'), (1328, 'b')]\n    assert arrange_45([1326, 1326], ['z', 'a']) == [(1326, 'z'), (1326, 'a')]\n    assert arrange_45([], []) == []\n    assert arrange_45([2328, 2326, 2327], ['b', 'z', 'a']) == [(2326, 'z'), (2327, 'a'), (2328, 'b')]\n    assert arrange_45([2326, 2326], ['z', 'a']) == [(2326, 'z'), (2326, 'a')]\n    assert arrange_45([], []) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_2456d0e2 import arrange_45\n\ndef test_protected():\n    assert arrange_45([429, 427, 428], ['b', 'z', 'a']) == [(427, 'z'), (428, 'a'), (429, 'b')]\n    assert arrange_45([427, 427], ['z', 'a']) == [(427, 'z'), (427, 'a')]\n    assert arrange_45([], []) == []\n    assert arrange_45([539, 537, 538], ['b', 'z', 'a']) == [(537, 'z'), (538, 'a'), (539, 'b')]\n    assert arrange_45([537, 537], ['z', 'a']) == [(537, 'z'), (537, 'a')]\n    assert arrange_45([], []) == []\n    assert arrange_45([635, 633, 634], ['b', 'z', 'a']) == [(633, 'z'), (634, 'a'), (635, 'b')]\n    assert arrange_45([633, 633], ['z', 'a']) == [(633, 'z'), (633, 'a')]\n    assert arrange_45([], []) == []\n    assert arrange_45([729, 727, 728], ['b', 'z', 'a']) == [(727, 'z'), (728, 'a'), (729, 'b')]\n    assert arrange_45([727, 727], ['z', 'a']) == [(727, 'z'), (727, 'a')]\n    assert arrange_45([], []) == []\n",
+        "test_varied_sort.py": "from component_2456d0e2 import arrange_45 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            labels = [rng.randrange(-3, 4) for _ in range(size)]\n            payloads = [{'identity': i} for i in range(size)]\n            expected = sorted(zip(labels, payloads), key=lambda pair: pair[0])\n            assert arrange(labels, payloads) == expected\n\ndef test_length_mismatch():\n    import pytest\n    with pytest.raises(ValueError):\n        arrange([1, 2], ['x'])\n    with pytest.raises(ValueError):\n        arrange([], ['x'])\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_single_pass_45",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_45 consumes a possibly single-use iterable and reports its item count and sum. It must work for generators, including empty and signed inputs. Preserve tests and the API.",
+      "files": {
+        "component_3ec7b46d.py": "def summarize_45(stream):\n    observed = tuple(stream)\n    count = len(observed)\n    total = sum(stream)\n    return {'count': count, 'total': total}\n",
+        "test_visible.py": "from component_3ec7b46d import summarize_45\n\ndef test_visible():\n    assert summarize_45(iter([326, -2, 5])) == {'count': 3, 'total': 329}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-326, 326, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_3ec7b46d import summarize_45\n\ndef test_acceptance():\n    assert summarize_45(iter([1326, -2, 5])) == {'count': 3, 'total': 1329}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-1326, 1326, 1]) == {'count': 3, 'total': 1}\n    assert summarize_45(iter([2326, -2, 5])) == {'count': 3, 'total': 2329}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-2326, 2326, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_3ec7b46d import summarize_45\n\ndef test_protected():\n    assert summarize_45(iter([427, -2, 5])) == {'count': 3, 'total': 430}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-427, 427, 1]) == {'count': 3, 'total': 1}\n    assert summarize_45(iter([537, -2, 5])) == {'count': 3, 'total': 540}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-537, 537, 1]) == {'count': 3, 'total': 1}\n    assert summarize_45(iter([633, -2, 5])) == {'count': 3, 'total': 636}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-633, 633, 1]) == {'count': 3, 'total': 1}\n    assert summarize_45(iter([727, -2, 5])) == {'count': 3, 'total': 730}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-727, 727, 1]) == {'count': 3, 'total': 1}\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_versioned_cache_45",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_45.calculate caches the first sum independently for each (item, revision). A new revision recomputes; repeating the same item and revision returns its original cached sum even if values change. Preserve tests and the API.",
+      "files": {
+        "component_e2d600fc.py": "class Memo_45:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, item, revision):\n        return item\n\n    def calculate(self, item, revision, values):\n        key = self.identity(item, revision)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+        "test_visible.py": "from component_e2d600fc import Memo_45\n\ndef test_visible():\n    m = Memo_45()\n    assert m.calculate('record', 326, [3, 5]) == 8\n    assert m.calculate('record', 327, [7, 9]) == 16\n    assert m.calculate('record', 326, [100]) == 8\n    assert m.calculate('other', 326, [2, 3]) == 5\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_e2d600fc import Memo_45\n\ndef test_acceptance():\n    m = Memo_45()\n    assert m.calculate('record', 1326, [3, 5]) == 8\n    assert m.calculate('record', 1327, [7, 9]) == 16\n    assert m.calculate('record', 1326, [100]) == 8\n    assert m.calculate('other', 1326, [2, 3]) == 5\n    m = Memo_45()\n    assert m.calculate('record', 2326, [3, 5]) == 8\n    assert m.calculate('record', 2327, [7, 9]) == 16\n    assert m.calculate('record', 2326, [100]) == 8\n    assert m.calculate('other', 2326, [2, 3]) == 5\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_e2d600fc import Memo_45\n\ndef test_protected():\n    m = Memo_45()\n    assert m.calculate('record', 427, [3, 5]) == 8\n    assert m.calculate('record', 428, [7, 9]) == 16\n    assert m.calculate('record', 427, [100]) == 8\n    assert m.calculate('other', 427, [2, 3]) == 5\n    m = Memo_45()\n    assert m.calculate('record', 537, [3, 5]) == 8\n    assert m.calculate('record', 538, [7, 9]) == 16\n    assert m.calculate('record', 537, [100]) == 8\n    assert m.calculate('other', 537, [2, 3]) == 5\n    m = Memo_45()\n    assert m.calculate('record', 633, [3, 5]) == 8\n    assert m.calculate('record', 634, [7, 9]) == 16\n    assert m.calculate('record', 633, [100]) == 8\n    assert m.calculate('other', 633, [2, 3]) == 5\n    m = Memo_45()\n    assert m.calculate('record', 727, [3, 5]) == 8\n    assert m.calculate('record', 728, [7, 9]) == 16\n    assert m.calculate('record', 727, [100]) == 8\n    assert m.calculate('other', 727, [2, 3]) == 5\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "bank4_paired_sort_46",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_46 orders record dictionaries by rank, preserving each rank/payload association and input order for equal ranks. Do not change input records. Preserve tests and the API.",
+      "files": {
+        "component_142142b1.py": "def arrange_46(records):\n    ranks = sorted(row['rank'] for row in records)\n    selected = [dict(row, rank=rank) for row, rank in zip(records, ranks)]\n    return selected\n",
+        "test_visible.py": "from component_142142b1 import arrange_46\n\ndef test_visible():\n    rows = [{'rank': 334, 'value': 'b'}, {'rank': 333, 'value': 'z'}, {'rank': 333, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 334\n    assert arrange_46([]) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_142142b1 import arrange_46\n\ndef test_acceptance():\n    rows = [{'rank': 1334, 'value': 'b'}, {'rank': 1333, 'value': 'z'}, {'rank': 1333, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 1334\n    assert arrange_46([]) == []\n    rows = [{'rank': 2334, 'value': 'b'}, {'rank': 2333, 'value': 'z'}, {'rank': 2333, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 2334\n    assert arrange_46([]) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_142142b1 import arrange_46\n\ndef test_protected():\n    rows = [{'rank': 435, 'value': 'b'}, {'rank': 434, 'value': 'z'}, {'rank': 434, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 435\n    assert arrange_46([]) == []\n    rows = [{'rank': 545, 'value': 'b'}, {'rank': 544, 'value': 'z'}, {'rank': 544, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 545\n    assert arrange_46([]) == []\n    rows = [{'rank': 641, 'value': 'b'}, {'rank': 640, 'value': 'z'}, {'rank': 640, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 641\n    assert arrange_46([]) == []\n    rows = [{'rank': 735, 'value': 'b'}, {'rank': 734, 'value': 'z'}, {'rank': 734, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 735\n    assert arrange_46([]) == []\n",
+        "test_varied_sort.py": "from component_142142b1 import arrange_46 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            rows = [{'rank': rng.randrange(-3, 4), 'value': {'identity': i}, 'extra': i + 70} for i in range(size)]\n            original = copy.deepcopy(rows)\n            expected = sorted(copy.deepcopy(rows), key=lambda row: row['rank'])\n            assert arrange(rows) == expected\n            assert rows == original\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_single_pass_46",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_46 validates a possibly single-use iterable of nonnegative numbers and returns all its items as a tuple. Negative values raise ValueError. Preserve tests and the API.",
+      "files": {
+        "component_ed20acc2.py": "def summarize_46(stream):\n    observed = list(stream)\n    if any(value < 0 for value in observed):\n        raise ValueError('negative value')\n    accepted = tuple(stream)\n    return accepted\n",
+        "test_visible.py": "from component_ed20acc2 import summarize_46\n\ndef test_visible():\n    assert summarize_46(iter([333, 0, 5])) == (333, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_ed20acc2 import summarize_46\n\ndef test_acceptance():\n    assert summarize_46(iter([1333, 0, 5])) == (1333, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_46(iter([2333, 0, 5])) == (2333, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_ed20acc2 import summarize_46\n\ndef test_protected():\n    assert summarize_46(iter([434, 0, 5])) == (434, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_46(iter([544, 0, 5])) == (544, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_46(iter([640, 0, 5])) == (640, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n    assert summarize_46(iter([734, 0, 5])) == (734, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_versioned_cache_46",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_46.render must cache independently for each text and mode. Modes are lower and upper; the same text must render correctly under either mode regardless of earlier calls. Preserve tests and the API.",
+      "files": {
+        "component_28990da7.py": "class Memo_46:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, text, mode):\n        return text\n\n    def render(self, text, mode):\n        key = self.identity(text, mode)\n        if key not in self.entries:\n            self.entries[key] = text.lower() if mode == 'lower' else text.upper()\n        return self.entries[key]\n",
+        "test_visible.py": "from component_28990da7 import Memo_46\n\ndef test_visible():\n    m = Memo_46()\n    assert m.render('AbC333', 'lower') == 'abc333'\n    assert m.render('AbC333', 'upper') == 'ABC333'\n    assert m.render('AbC333', 'lower') == 'abc333'\n    assert len(m.entries) == 2\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_28990da7 import Memo_46\n\ndef test_acceptance():\n    m = Memo_46()\n    assert m.render('AbC1333', 'lower') == 'abc1333'\n    assert m.render('AbC1333', 'upper') == 'ABC1333'\n    assert m.render('AbC1333', 'lower') == 'abc1333'\n    assert len(m.entries) == 2\n    m = Memo_46()\n    assert m.render('AbC2333', 'lower') == 'abc2333'\n    assert m.render('AbC2333', 'upper') == 'ABC2333'\n    assert m.render('AbC2333', 'lower') == 'abc2333'\n    assert len(m.entries) == 2\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_28990da7 import Memo_46\n\ndef test_protected():\n    m = Memo_46()\n    assert m.render('AbC434', 'lower') == 'abc434'\n    assert m.render('AbC434', 'upper') == 'ABC434'\n    assert m.render('AbC434', 'lower') == 'abc434'\n    assert len(m.entries) == 2\n    m = Memo_46()\n    assert m.render('AbC544', 'lower') == 'abc544'\n    assert m.render('AbC544', 'upper') == 'ABC544'\n    assert m.render('AbC544', 'lower') == 'abc544'\n    assert len(m.entries) == 2\n    m = Memo_46()\n    assert m.render('AbC640', 'lower') == 'abc640'\n    assert m.render('AbC640', 'upper') == 'ABC640'\n    assert m.render('AbC640', 'lower') == 'abc640'\n    assert len(m.entries) == 2\n    m = Memo_46()\n    assert m.render('AbC734', 'lower') == 'abc734'\n    assert m.render('AbC734', 'upper') == 'ABC734'\n    assert m.render('AbC734', 'lower') == 'abc734'\n    assert len(m.entries) == 2\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_paired_sort_47",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "arrange_47 takes (group, rank, payload) rows and returns ((group, rank), payload) rows sorted by the composite key. Preserve associations and stable input order for equal keys. Preserve tests and the API.",
+      "files": {
+        "component_91f2697d.py": "def arrange_47(records):\n    keys = sorted((row[0], row[1]) for row in records)\n    paired = zip(keys, [row[2] for row in records])\n    return list(paired)\n",
+        "test_visible.py": "from component_91f2697d import arrange_47\n\ndef test_visible():\n    rows = [('b', 340, 'x'), ('a', 341, 'z'), ('a', 340, 'm'), ('a', 340, 'a')]\n    assert arrange_47(rows) == [(('a', 340), 'm'), (('a', 340), 'a'), (('a', 341), 'z'), (('b', 340), 'x')]\n    assert arrange_47([]) == []\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_91f2697d import arrange_47\n\ndef test_acceptance():\n    rows = [('b', 1340, 'x'), ('a', 1341, 'z'), ('a', 1340, 'm'), ('a', 1340, 'a')]\n    assert arrange_47(rows) == [(('a', 1340), 'm'), (('a', 1340), 'a'), (('a', 1341), 'z'), (('b', 1340), 'x')]\n    assert arrange_47([]) == []\n    rows = [('b', 2340, 'x'), ('a', 2341, 'z'), ('a', 2340, 'm'), ('a', 2340, 'a')]\n    assert arrange_47(rows) == [(('a', 2340), 'm'), (('a', 2340), 'a'), (('a', 2341), 'z'), (('b', 2340), 'x')]\n    assert arrange_47([]) == []\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_91f2697d import arrange_47\n\ndef test_protected():\n    rows = [('b', 441, 'x'), ('a', 442, 'z'), ('a', 441, 'm'), ('a', 441, 'a')]\n    assert arrange_47(rows) == [(('a', 441), 'm'), (('a', 441), 'a'), (('a', 442), 'z'), (('b', 441), 'x')]\n    assert arrange_47([]) == []\n    rows = [('b', 551, 'x'), ('a', 552, 'z'), ('a', 551, 'm'), ('a', 551, 'a')]\n    assert arrange_47(rows) == [(('a', 551), 'm'), (('a', 551), 'a'), (('a', 552), 'z'), (('b', 551), 'x')]\n    assert arrange_47([]) == []\n    rows = [('b', 647, 'x'), ('a', 648, 'z'), ('a', 647, 'm'), ('a', 647, 'a')]\n    assert arrange_47(rows) == [(('a', 647), 'm'), (('a', 647), 'a'), (('a', 648), 'z'), (('b', 647), 'x')]\n    assert arrange_47([]) == []\n    rows = [('b', 741, 'x'), ('a', 742, 'z'), ('a', 741, 'm'), ('a', 741, 'a')]\n    assert arrange_47(rows) == [(('a', 741), 'm'), (('a', 741), 'a'), (('a', 742), 'z'), (('b', 741), 'x')]\n    assert arrange_47([]) == []\n",
+        "test_varied_sort.py": "from component_91f2697d import arrange_47 as arrange\nimport copy\nimport random\n\ndef test_varied_contract():\n    rng = random.Random(8317)\n    for size in range(17):\n        for repetition in range(6):\n            rows = [(rng.choice(['a', 'b', 'c']), rng.randrange(-3, 4), {'identity': i}) for i in range(size)]\n            expected = sorted([((row[0], row[1]), row[2]) for row in rows], key=lambda pair: pair[0])\n            assert arrange(rows) == expected\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_single_pass_47",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "summarize_47 consumes a possibly single-use iterable of (key, value) rows into a dictionary. Later duplicate keys win. Preserve tests and the API.",
+      "files": {
+        "component_7decc955.py": "def summarize_47(stream):\n    records = tuple(stream)\n    keys = [row[0] for row in stream]\n    values = [row[1] for row in records]\n    return dict(zip(keys, values))\n",
+        "test_visible.py": "from component_7decc955 import summarize_47\n\ndef test_visible():\n    assert summarize_47(iter([('a', 340), ('b', 3), ('a', 342)])) == {'a': 342, 'b': 3}\n    assert summarize_47(iter([])) == {}\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_7decc955 import summarize_47\n\ndef test_acceptance():\n    assert summarize_47(iter([('a', 1340), ('b', 3), ('a', 1342)])) == {'a': 1342, 'b': 3}\n    assert summarize_47(iter([])) == {}\n    assert summarize_47(iter([('a', 2340), ('b', 3), ('a', 2342)])) == {'a': 2342, 'b': 3}\n    assert summarize_47(iter([])) == {}\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_7decc955 import summarize_47\n\ndef test_protected():\n    assert summarize_47(iter([('a', 441), ('b', 3), ('a', 443)])) == {'a': 443, 'b': 3}\n    assert summarize_47(iter([])) == {}\n    assert summarize_47(iter([('a', 551), ('b', 3), ('a', 553)])) == {'a': 553, 'b': 3}\n    assert summarize_47(iter([])) == {}\n    assert summarize_47(iter([('a', 647), ('b', 3), ('a', 649)])) == {'a': 649, 'b': 3}\n    assert summarize_47(iter([])) == {}\n    assert summarize_47(iter([('a', 741), ('b', 3), ('a', 743)])) == {'a': 743, 'b': 3}\n    assert summarize_47(iter([])) == {}\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_versioned_cache_47",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo_47.balance caches the first entry sum separately for every tenant/account pair. Equal account names in distinct tenants must never share results. Repeating a pair retains its original sum. Preserve tests and the API.",
+      "files": {
+        "component_880b03aa.py": "class Memo_47:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, account, tenant):\n        return account\n\n    def balance(self, account, tenant, entries):\n        key = self.identity(account, tenant)\n        if key not in self.entries:\n            self.entries[key] = sum(entries)\n        return self.entries[key]\n",
+        "test_visible.py": "from component_880b03aa import Memo_47\n\ndef test_visible():\n    m = Memo_47()\n    assert m.balance('user', 'east', [340, 3]) == 343\n    assert m.balance('user', 'west', [348, 5]) == 353\n    assert m.balance('user', 'east', [9000]) == 343\n    assert len(m.entries) == 2\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_880b03aa import Memo_47\n\ndef test_acceptance():\n    m = Memo_47()\n    assert m.balance('user', 'east', [1340, 3]) == 1343\n    assert m.balance('user', 'west', [1348, 5]) == 1353\n    assert m.balance('user', 'east', [9000]) == 1343\n    assert len(m.entries) == 2\n    m = Memo_47()\n    assert m.balance('user', 'east', [2340, 3]) == 2343\n    assert m.balance('user', 'west', [2348, 5]) == 2353\n    assert m.balance('user', 'east', [9000]) == 2343\n    assert len(m.entries) == 2\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_880b03aa import Memo_47\n\ndef test_protected():\n    m = Memo_47()\n    assert m.balance('user', 'east', [441, 3]) == 444\n    assert m.balance('user', 'west', [449, 5]) == 454\n    assert m.balance('user', 'east', [9000]) == 444\n    assert len(m.entries) == 2\n    m = Memo_47()\n    assert m.balance('user', 'east', [551, 3]) == 554\n    assert m.balance('user', 'west', [559, 5]) == 564\n    assert m.balance('user', 'east', [9000]) == 554\n    assert len(m.entries) == 2\n    m = Memo_47()\n    assert m.balance('user', 'east', [647, 3]) == 650\n    assert m.balance('user', 'west', [655, 5]) == 660\n    assert m.balance('user', 'east', [9000]) == 650\n    assert len(m.entries) == 2\n    m = Memo_47()\n    assert m.balance('user', 'east', [741, 3]) == 744\n    assert m.balance('user', 'west', [749, 5]) == 754\n    assert m.balance('user', 'east', [9000]) == 744\n    assert len(m.entries) == 2\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "bank4_retention_0",
+      "family": "retention",
+      "split": "retention",
+      "goal": "allowed_v4 must return whether value is at most threshold, including equality. Preserve tests.",
+      "files": {
+        "bank4_retention_0.py": "def allowed_v4(value, threshold):\n    return value < threshold\n",
+        "test_visible.py": "from bank4_retention_0 import allowed_v4\n\ndef test_visible():\n    for threshold in [31]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value <= threshold)\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from bank4_retention_0 import allowed_v4\n\ndef test_acceptance():\n    for threshold in [71, 79]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value <= threshold)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from bank4_retention_0 import allowed_v4\n\ndef test_protected():\n    for threshold in [-20, 0, 18, 112]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value <= threshold)\n"
+      },
+      "phase": 4
+    },
+    {
+      "id": "bank4_retention_1",
+      "family": "retention",
+      "split": "retention",
+      "goal": "allowed_v4 must return whether value is at least threshold, including equality. Preserve tests.",
+      "files": {
+        "bank4_retention_1.py": "def allowed_v4(value, threshold):\n    return value > threshold\n",
+        "test_visible.py": "from bank4_retention_1 import allowed_v4\n\ndef test_visible():\n    for threshold in [32]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value >= threshold)\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from bank4_retention_1 import allowed_v4\n\ndef test_acceptance():\n    for threshold in [71, 79]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value >= threshold)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from bank4_retention_1 import allowed_v4\n\ndef test_protected():\n    for threshold in [-20, 0, 18, 112]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value >= threshold)\n"
+      },
+      "phase": 4
+    }
+  ],
+  "formation_path": "examples/lesson-v4-formation.json",
+  "formation_sha256": "591e3251e5f77d23da7b390bbae719fe24f4ee0e9e26709560932f1d708a5f22",
+  "references_sha256": "a94526d540c8e3d538717980c8b4b43c246833a92383ab33d9a4ada397a987dc",
+  "policy": {
+    "primary_endpoint": "model calls to independently verified repair, with unsuccessful repairs assigned 36",
+    "minimum_reduction": 0.15,
+    "alpha_one_sided": 0.00625,
+    "all_18_lesson_repairs_required": true,
+    "both_retention_repairs_required": true,
+    "both_controls_required": true,
+    "all_lessons_supplied_to_every_lesson_arm": true,
+    "model_mistakes_count_as_unsuccessful_repairs": true,
+    "unknown_usage_or_evaluation_integrity_failure_stops": true,
+    "no_human_lesson_edits": true,
+    "no_confirmation_feedback_to_proposer": true,
+    "one_frozen_attempt": true,
+    "no_optional_stopping": true,
+    "previous_studies_retained": true,
+    "model_weights_unchanged": true
+  }
+}

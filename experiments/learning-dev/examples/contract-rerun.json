@@ -1,0 +1,311 @@
+{
+  "schema": "hive.contract-rerun.v1",
+  "model": "gpt-5.6-luna",
+  "calls_per_recipient": 36,
+  "seed": 508918,
+  "families": [
+    "paired_sort",
+    "single_pass",
+    "versioned_cache"
+  ],
+  "cases": [
+    {
+      "id": "checkpoint_permuted_columns",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "process receives equally long key/payload lists and a list of valid indices which may repeat or omit indices. Return original pairs in exactly that index order. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_1322350d02.py": "def process(keys, values, order):\n    result = [(keys[index], values[position]) for position, index in enumerate(order)]\n    return result\n",
+        "test_visible.py": "from unit_1322350d02 import *\n\ndef test_public():\n    assert process([4, 8, 2], ['x', 'y', 'z'], [2, 0, 2]) == [(2, 'z'), (4, 'x'), (2, 'z')]\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_1322350d02 import *\n\ndef test_acceptance():\n    assert process([4, 8, 2], ['x', 'y', 'z'], [2, 0, 2]) == [(2, 'z'), (4, 'x'), (2, 'z')]\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_1322350d02 import *\n\ndef test_independent():\n    import random\n    import copy\n    rng = random.Random(190871)\n    for size in range(9):\n        for repeat in range(8):\n            keys = [rng.randrange(-5, 6) for _ in range(size)]\n            values = [{'position': i, 'payload': [repeat, i]} for i in range(size)]\n            flags = [bool(rng.randrange(2)) for _ in range(size)]\n            order = [rng.randrange(size) for _ in range(size+2)] if size else []\n            limit = repeat\n            before = copy.deepcopy((keys, values, flags, order))\n            expected = [(keys[index], values[index]) for index in order]\n            actual = process(keys, values, order)\n            assert actual == expected\n            assert (keys, values, flags, order) == before\n            assert isinstance(actual, list)\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_absolute_priority",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "process receives equally long numeric key and payload lists. Return original pairs sorted by increasing absolute key. Equal absolute keys retain input order; retain each original signed key. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_8c6b829a21.py": "def process(keys, values):\n    ordered = sorted(keys, key=abs)\n    result = list(zip(ordered, values))\n    return result\n",
+        "test_visible.py": "from unit_8c6b829a21 import *\n\ndef test_public():\n    assert process([-5, 2, -2], ['x', 'y', 'z']) == [(2, 'y'), (-2, 'z'), (-5, 'x')]\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_8c6b829a21 import *\n\ndef test_acceptance():\n    assert process([-5, 2, -2], ['x', 'y', 'z']) == [(2, 'y'), (-2, 'z'), (-5, 'x')]\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_8c6b829a21 import *\n\ndef test_independent():\n    import random\n    import copy\n    rng = random.Random(190871)\n    for size in range(9):\n        for repeat in range(8):\n            keys = [rng.randrange(-5, 6) for _ in range(size)]\n            values = [{'position': i, 'payload': [repeat, i]} for i in range(size)]\n            flags = [bool(rng.randrange(2)) for _ in range(size)]\n            order = [rng.randrange(size) for _ in range(size+2)] if size else []\n            limit = repeat\n            before = copy.deepcopy((keys, values, flags, order))\n            expected = sorted(zip(keys, values), key=lambda row: abs(row[0]))\n            actual = process(keys, values)\n            assert actual == expected\n            assert (keys, values, flags, order) == before\n            assert isinstance(actual, list)\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_stable_partition",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "process receives equally long key, payload and Boolean flag lists. Return the original triples with true-flag records first, preserving input order within each flag group. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_2cef8711d3.py": "def process(keys, values, flags):\n    first = sorted(flags, reverse=True)\n    result = [(key, value, flag) for key, value, flag in zip(keys, values, first)]\n    return result\n",
+        "test_visible.py": "from unit_2cef8711d3 import *\n\ndef test_public():\n    assert process([1, 2, 3], ['a', 'b', 'c'], [False, True, False]) == [(2, 'b', True), (1, 'a', False), (3, 'c', False)]\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_2cef8711d3 import *\n\ndef test_acceptance():\n    assert process([1, 2, 3], ['a', 'b', 'c'], [False, True, False]) == [(2, 'b', True), (1, 'a', False), (3, 'c', False)]\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_2cef8711d3 import *\n\ndef test_independent():\n    import random\n    import copy\n    rng = random.Random(190871)\n    for size in range(9):\n        for repeat in range(8):\n            keys = [rng.randrange(-5, 6) for _ in range(size)]\n            values = [{'position': i, 'payload': [repeat, i]} for i in range(size)]\n            flags = [bool(rng.randrange(2)) for _ in range(size)]\n            order = [rng.randrange(size) for _ in range(size+2)] if size else []\n            limit = repeat\n            before = copy.deepcopy((keys, values, flags, order))\n            expected = sorted(zip(keys, values, flags), key=lambda row: not row[2])\n            actual = process(keys, values, flags)\n            assert actual == expected\n            assert (keys, values, flags, order) == before\n            assert isinstance(actual, list)\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_top_k_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "goal": "process receives equally long key/payload lists and a nonnegative limit. Return up to limit original pairs with greatest keys first, preserving input order for equal keys. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_9e5c6035ea.py": "def process(keys, values, limit):\n    selected = sorted(keys, reverse=True)[:limit]\n    result = list(zip(selected, values[:limit]))\n    return result\n",
+        "test_visible.py": "from unit_9e5c6035ea import *\n\ndef test_public():\n    assert process([2, 8, 5], ['a', 'b', 'c'], 2) == [(8, 'b'), (5, 'c')]\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_9e5c6035ea import *\n\ndef test_acceptance():\n    assert process([2, 8, 5], ['a', 'b', 'c'], 2) == [(8, 'b'), (5, 'c')]\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_9e5c6035ea import *\n\ndef test_independent():\n    import random\n    import copy\n    rng = random.Random(190871)\n    for size in range(9):\n        for repeat in range(8):\n            keys = [rng.randrange(-5, 6) for _ in range(size)]\n            values = [{'position': i, 'payload': [repeat, i]} for i in range(size)]\n            flags = [bool(rng.randrange(2)) for _ in range(size)]\n            order = [rng.randrange(size) for _ in range(size+2)] if size else []\n            limit = repeat\n            before = copy.deepcopy((keys, values, flags, order))\n            expected = sorted(zip(keys, values), key=lambda row: row[0], reverse=True)[:limit]\n            actual = process(keys, values, limit)\n            assert actual == expected\n            assert (keys, values, flags, order) == before\n            assert isinstance(actual, list)\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_head_and_tail",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "process accepts any finite iterable, including single-use iterators, and returns (first item, tuple of remaining items). Empty input returns (None, ()). Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_f41cf80b88.py": "def process(stream):\n    saved = tuple(stream)\n    first = saved[0] if saved else None\n    tail = tuple(stream)\n    return first, tail\n",
+        "test_visible.py": "from unit_f41cf80b88 import *\n\ndef test_public():\n    assert process(iter([8, 2, 5])) == (8, (2, 5))\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_f41cf80b88 import *\n\ndef test_acceptance():\n    assert process(iter([8, 2, 5])) == (8, (2, 5))\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_f41cf80b88 import *\n\ndef test_independent():\n    import random\n    import math\n    class Opaque:\n        def __init__(self, items):\n            self.cursor = iter(items)\n        def __iter__(self):\n            return self\n        def __next__(self):\n            return next(self.cursor)\n        def __reduce__(self):\n            raise TypeError('not serializable')\n    rng = random.Random(310917)\n    for size in range(10):\n        values = [rng.randrange(-4, 5) for _ in range(size)]\n        expected = (values[0] if values else None, tuple(values[1:]))\n        advanced = iter(['discarded'] + values)\n        next(advanced)\n        for item in [list(values), iter(values), (x for x in values), Opaque(values), advanced]:\n            assert process(item) == expected\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_ordered_unique",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "process accepts any finite iterable of hashable items, including single-use iterators. Return the original count and a tuple containing each distinct item once in order of first occurrence. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_dab4e645e3.py": "def process(stream):\n    saved = tuple(stream)\n    count = len(saved)\n    unique = tuple(dict.fromkeys(stream))\n    return count, unique\n",
+        "test_visible.py": "from unit_dab4e645e3 import *\n\ndef test_public():\n    assert process(iter([3, 1, 3, 2])) == (4, (3, 1, 2))\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_dab4e645e3 import *\n\ndef test_acceptance():\n    assert process(iter([3, 1, 3, 2])) == (4, (3, 1, 2))\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_dab4e645e3 import *\n\ndef test_independent():\n    import random\n    import math\n    class Opaque:\n        def __init__(self, items):\n            self.cursor = iter(items)\n        def __iter__(self):\n            return self\n        def __next__(self):\n            return next(self.cursor)\n        def __reduce__(self):\n            raise TypeError('not serializable')\n    rng = random.Random(310917)\n    for size in range(10):\n        values = [rng.randrange(-2, 3) for _ in range(size)]\n        expected = (len(values), tuple(dict.fromkeys(values)))\n        advanced = iter(['discarded'] + values)\n        next(advanced)\n        for item in [list(values), iter(values), (x for x in values), Opaque(values), advanced]:\n            assert process(item) == expected\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_enumerated_rows",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "process accepts any finite iterable, including single-use iterators, and an integer start. Return (item count, list of (index, item) pairs), assigning consecutive indices from start. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_49ecbca5f4.py": "def process(stream, start):\n    saved = tuple(stream)\n    count = len(saved)\n    rows = list(enumerate(stream, start))\n    return count, rows\n",
+        "test_visible.py": "from unit_49ecbca5f4 import *\n\ndef test_public():\n    assert process(iter(['x', 'y', 'z']), 7) == (3, [(7, 'x'), (8, 'y'), (9, 'z')])\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_49ecbca5f4 import *\n\ndef test_acceptance():\n    assert process(iter(['x', 'y', 'z']), 7) == (3, [(7, 'x'), (8, 'y'), (9, 'z')])\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_49ecbca5f4 import *\n\ndef test_independent():\n    import random\n    import math\n    class Opaque:\n        def __init__(self, items):\n            self.cursor = iter(items)\n        def __iter__(self):\n            return self\n        def __next__(self):\n            return next(self.cursor)\n        def __reduce__(self):\n            raise TypeError('not serializable')\n    rng = random.Random(310917)\n    for size in range(10):\n        values = [str(rng.randrange(-4, 5)) for _ in range(size)]\n        expected = (len(values), list(enumerate(values, -7)))\n        advanced = iter(['discarded'] + values)\n        next(advanced)\n        for item in [list(values), iter(values), (x for x in values), Opaque(values), advanced]:\n            assert process(item, -7) == expected\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_validate_then_reverse",
+      "family": "single_pass",
+      "split": "confirmation",
+      "goal": "process accepts any finite iterable, including single-use iterators. Reject any None item with ValueError, otherwise return all items in reverse order as a tuple. Empty input returns (). Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_caeedf2782.py": "def process(stream):\n    saved = list(stream)\n    if any(value is None for value in saved):\n        raise ValueError('missing item')\n    result = tuple(reversed(list(stream)))\n    return result\n",
+        "test_visible.py": "from unit_caeedf2782 import *\n\ndef test_public():\n    assert process(iter([3, 0, 5])) == (5, 0, 3)\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_caeedf2782 import *\n\ndef test_acceptance():\n    assert process(iter([3, 0, 5])) == (5, 0, 3)\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_caeedf2782 import *\n\ndef test_independent():\n    import random\n    import math\n    class Opaque:\n        def __init__(self, items):\n            self.cursor = iter(items)\n        def __iter__(self):\n            return self\n        def __next__(self):\n            return next(self.cursor)\n        def __reduce__(self):\n            raise TypeError('not serializable')\n    rng = random.Random(310917)\n    for size in range(10):\n        values = [rng.randrange(-4, 5) for _ in range(size)]\n        expected = tuple(reversed(values))\n        advanced = iter(['discarded'] + values)\n        next(advanced)\n        for item in [list(values), iter(values), (x for x in values), Opaque(values), advanced]:\n            assert process(item) == expected\n    for item in [iter([2, None, 1]), Opaque([None]), (x for x in [0, None])]:\n        try:\n            process(item)\n        except ValueError:\n            pass\n        else:\n            raise AssertionError('None accepted')\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_factor_cache",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo.fetch caches the first sum(values) * factor separately for each (identity(name), factor), including zero and negative factors. Preserve reuse on an identical key and the overridable identity hook. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_dac49f99a0.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, factor, values):\n        key = self.identity(name)\n        if key not in self.entries:\n            self.entries[key] = sum(values) * factor\n        return self.entries[key]\n",
+        "test_visible.py": "from unit_dac49f99a0 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('row', 2, [2, 3]) == 10\n    assert m.fetch('row', 3, [4, 8]) == 36\n    assert m.fetch('row', 2, [99]) == 10\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_dac49f99a0 import *\n\ndef test_acceptance():\n    m = Memo()\n    assert m.fetch('row', 2, [2, 3]) == 10\n    assert m.fetch('row', 3, [4, 8]) == 36\n    assert m.fetch('row', 2, [99]) == 10\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_dac49f99a0 import *\n\ndef test_independent():\n    class Custom(Memo):\n        def identity(self, name):\n            return name.casefold()\n    for v in [-17, 0, 2, 39]:\n        m = Custom()\n        assert m.fetch('ALPHA', 0, [v, 2]) == 0\n        assert m.fetch('alpha', -2, [v+4, 3]) == -2 * (v+7)\n        assert m.fetch('alpha', 0, [999]) == 0\n        assert len(m.entries) == 2\n",
+        "test_cache_full_contract.py": "from unit_dac49f99a0 import Memo\n\ndef test_full_cache_identity():\n    class AliasMemo(Memo):\n        def identity(self, name):\n            alias = ('alias-domain', {'a-one': 11, 'a-two': 11, 'b-one': 23, 'b-two': 23}[name])\n            return alias\n\n    for memo_type, names in [(Memo, ['Alpha', 'Beta']), (AliasMemo, ['a-one', 'b-one', 'a-two', 'b-two'])]:\n        entries = {}\n        clients = {ns: memo_type(entries, ns) for ns in ['east', 'west']}\n        expected = {}\n        serial = 0\n        for repetition in range(3):\n            for namespace in ['east', 'west']:\n                memo = clients[namespace]\n                for name in names:\n                    for dimension in [-2, 0, 3]:\n                        serial += 1\n                        values = [serial * 7, -3, 5, repetition]\n                        memo.policy = dimension if 'factor_cache' == 'ambient_policy' else 0\n                        identity = memo.identity(name)\n                        expected_key = (namespace, identity) if False else (identity, dimension)\n                        if expected_key not in expected:\n                            expected[expected_key] = sum(values) * dimension\n                        assert memo.fetch(name, dimension, values) == expected[expected_key], (namespace, name, dimension, repetition)\n                        assert values == [serial * 7, -3, 5, repetition]\n        assert len(entries) == len(expected)\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_operation_cache",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo.fetch supports sum and count modes. Cache the first result independently for (identity(name), mode), even when the same name was previously requested with another mode. Preserve the overridable identity hook. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_e1ecffe6a3.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, mode, values):\n        key = self.identity(name)\n        if key not in self.entries:\n            self.entries[key] = sum(values) if mode == 'sum' else len(values)\n        return self.entries[key]\n",
+        "test_visible.py": "from unit_e1ecffe6a3 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('row', 'sum', [2, 3]) == 5\n    assert m.fetch('row', 'count', [1, 2, 3]) == 3\n    assert m.fetch('row', 'sum', [99]) == 5\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_e1ecffe6a3 import *\n\ndef test_acceptance():\n    m = Memo()\n    assert m.fetch('row', 'sum', [2, 3]) == 5\n    assert m.fetch('row', 'count', [1, 2, 3]) == 3\n    assert m.fetch('row', 'sum', [99]) == 5\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_e1ecffe6a3 import *\n\ndef test_independent():\n    class Custom(Memo):\n        def identity(self, name):\n            return name.casefold()\n    for v in [-17, 0, 2, 39]:\n        m = Custom()\n        assert m.fetch('ALPHA', 'sum', [v, 2]) == v+2\n        assert m.fetch('alpha', 'count', [v+4, 3]) == 2\n        assert m.fetch('alpha', 'sum', [999]) == v+2\n        assert len(m.entries) == 2\n",
+        "test_cache_full_contract.py": "from unit_e1ecffe6a3 import Memo\n\ndef test_full_cache_identity():\n    class AliasMemo(Memo):\n        def identity(self, name):\n            alias = ('alias-domain', {'a-one': 11, 'a-two': 11, 'b-one': 23, 'b-two': 23}[name])\n            return alias\n\n    for memo_type, names in [(Memo, ['Alpha', 'Beta']), (AliasMemo, ['a-one', 'b-one', 'a-two', 'b-two'])]:\n        entries = {}\n        clients = {ns: memo_type(entries, ns) for ns in ['east', 'west']}\n        expected = {}\n        serial = 0\n        for repetition in range(3):\n            for namespace in ['east', 'west']:\n                memo = clients[namespace]\n                for name in names:\n                    for dimension in ['sum', 'count']:\n                        serial += 1\n                        values = [serial * 7, -3, 5, repetition]\n                        memo.policy = dimension if 'operation_cache' == 'ambient_policy' else 0\n                        identity = memo.identity(name)\n                        expected_key = (namespace, identity) if False else (identity, dimension)\n                        if expected_key not in expected:\n                            expected[expected_key] = sum(values) if dimension == 'sum' else len(values)\n                        assert memo.fetch(name, dimension, values) == expected[expected_key], (namespace, name, dimension, repetition)\n                        assert values == [serial * 7, -3, 5, repetition]\n        assert len(entries) == len(expected)\n"
+      },
+      "phase": 2
+    },
+    {
+      "id": "checkpoint_ambient_policy",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo.policy is a mutable numeric adjustment. fetch caches the first sum(values) + policy for each (identity(name), policy). Changing policy must select a separate entry; restoring policy must reuse its earlier entry. Preserve the overridable identity hook. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_0525d40328.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, values):\n        key = self.identity(name)\n        if key not in self.entries:\n            self.entries[key] = sum(values) + self.policy\n        return self.entries[key]\n",
+        "test_visible.py": "from unit_0525d40328 import *\n\ndef test_public():\n    m = Memo()\n    m.policy = 2\n    assert m.fetch('row', [2, 3]) == 7\n    m.policy = 5\n    assert m.fetch('row', [4, 8]) == 17\n    m.policy = 2\n    assert m.fetch('row', [99]) == 7\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_0525d40328 import *\n\ndef test_acceptance():\n    m = Memo()\n    m.policy = 2\n    assert m.fetch('row', [2, 3]) == 7\n    m.policy = 5\n    assert m.fetch('row', [4, 8]) == 17\n    m.policy = 2\n    assert m.fetch('row', [99]) == 7\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_0525d40328 import *\n\ndef test_independent():\n    class Custom(Memo):\n        def identity(self, name):\n            return name.casefold()\n    for v in [-17, 0, 2, 39]:\n        m = Custom()\n        m.policy = 2\n        assert m.fetch('ALPHA', [v, 2]) == v+4\n        m.policy = 5\n        assert m.fetch('alpha', [v+4, 3]) == v+12\n        m.policy = 2\n        assert m.fetch('alpha', [999]) == v+4\n        assert len(m.entries) == 2\n",
+        "test_cache_full_contract.py": "from unit_0525d40328 import Memo\n\ndef test_full_cache_identity():\n    class AliasMemo(Memo):\n        def identity(self, name):\n            alias = ('alias-domain', {'a-one': 11, 'a-two': 11, 'b-one': 23, 'b-two': 23}[name])\n            return alias\n\n    for memo_type, names in [(Memo, ['Alpha', 'Beta']), (AliasMemo, ['a-one', 'b-one', 'a-two', 'b-two'])]:\n        entries = {}\n        clients = {ns: memo_type(entries, ns) for ns in ['east', 'west']}\n        expected = {}\n        serial = 0\n        for repetition in range(3):\n            for namespace in ['east', 'west']:\n                memo = clients[namespace]\n                for name in names:\n                    for dimension in [-3, 0, 4]:\n                        serial += 1\n                        values = [serial * 7, -3, 5, repetition]\n                        memo.policy = dimension if 'ambient_policy' == 'ambient_policy' else 0\n                        identity = memo.identity(name)\n                        expected_key = (namespace, identity) if False else (identity, dimension)\n                        if expected_key not in expected:\n                            expected[expected_key] = sum(values) + dimension\n                        assert memo.fetch(name, values) == expected[expected_key], (namespace, name, dimension, repetition)\n                        assert values == [serial * 7, -3, 5, repetition]\n        assert len(entries) == len(expected)\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_shared_namespace",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "goal": "Memo instances may share the supplied entries dictionary. fetch caches the first sum for (namespace, identity(name, revision)); namespaces must be isolated. The overridable identity hook controls identity within a namespace. Do not discard a supplied empty entries dictionary. Preserve the public API, inputs and tests.",
+      "files": {
+        "unit_b38ffe65cc.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name, revision):\n        return (name, revision)\n\n    def fetch(self, name, revision, values):\n        key = self.identity(name, revision)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+        "test_visible.py": "from unit_b38ffe65cc import *\n\ndef test_public():\n    shared = {}\n    a = Memo(shared, 'a')\n    b = Memo(shared, 'b')\n    assert a.fetch('row', 0, [2, 3]) == 5\n    assert b.fetch('row', 0, [4, 8]) == 12\n    assert a.fetch('row', 0, [99]) == 5\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from unit_b38ffe65cc import *\n\ndef test_acceptance():\n    shared = {}\n    a = Memo(shared, 'a')\n    b = Memo(shared, 'b')\n    assert a.fetch('row', 0, [2, 3]) == 5\n    assert b.fetch('row', 0, [4, 8]) == 12\n    assert a.fetch('row', 0, [99]) == 5\n"
+      },
+      "protected_tests": {
+        "test_independent.py": "from unit_b38ffe65cc import *\n\ndef test_independent():\n    class Custom(Memo):\n        def identity(self, name, revision):\n            return (name.casefold(), revision)\n    for v in [-17, 0, 2, 39]:\n        m = Custom()\n        assert m.fetch('ALPHA', 0, [v, 2]) == v+2\n        assert m.fetch('alpha', 1, [v+4, 3]) == v+7\n        assert m.fetch('alpha', 0, [999]) == v+2\n        assert len(m.entries) == 2\n    shared = {}\n    a = Custom(shared, 'east')\n    b = Custom(shared, 'west')\n    c = Custom(shared, 'east')\n    assert a.fetch('ALPHA', 0, [2, 7]) == 9\n    assert b.fetch('alpha', 0, [3, 8]) == 11\n    assert c.fetch('alpha', 0, [999]) == 9\n    assert a.fetch('alpha', 1, [3]) == 3\n    assert len(shared) == 3\n",
+        "test_cache_full_contract.py": "from unit_b38ffe65cc import Memo\n\ndef test_full_cache_identity():\n    class AliasMemo(Memo):\n        def identity(self, name, revision):\n            alias = ('alias-domain', {'a-one': 11, 'a-two': 11, 'b-one': 23, 'b-two': 23}[name])\n            return (alias, revision)\n\n    for memo_type, names in [(Memo, ['Alpha', 'Beta']), (AliasMemo, ['a-one', 'b-one', 'a-two', 'b-two'])]:\n        entries = {}\n        clients = {ns: memo_type(entries, ns) for ns in ['east', 'west']}\n        expected = {}\n        serial = 0\n        for repetition in range(3):\n            for namespace in ['east', 'west']:\n                memo = clients[namespace]\n                for name in names:\n                    for dimension in [-1, 0, 2]:\n                        serial += 1\n                        values = [serial * 7, -3, 5, repetition]\n                        memo.policy = dimension if 'shared_namespace' == 'ambient_policy' else 0\n                        identity = memo.identity(name, dimension)\n                        expected_key = (namespace, identity) if True else (identity, dimension)\n                        if expected_key not in expected:\n                            expected[expected_key] = sum(values)\n                        assert memo.fetch(name, dimension, values) == expected[expected_key], (namespace, name, dimension, repetition)\n                        assert values == [serial * 7, -3, 5, repetition]\n        assert len(entries) == len(expected)\n"
+      },
+      "phase": 3
+    },
+    {
+      "id": "checkpoint_explicit_zero_63",
+      "family": "explicit_zero",
+      "split": "retention",
+      "goal": "configure_63 overlays defaults without mutating either input. Only None means no override; explicit zero, False, empty strings and empty lists must override. Preserve tests and the API.",
+      "files": {
+        "component_d2117b3b.py": "def configure_63(defaults, overrides):\n    selected = {key: value for key, value in overrides.items() if value}\n    combined = defaults.copy()\n    combined.update(selected)\n    return combined\n",
+        "test_visible.py": "from component_d2117b3b import configure_63\n\ndef test_visible():\n    defaults = {'quota': 452, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 452\n    assert overrides['keep'] is None\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_d2117b3b import configure_63\n\ndef test_acceptance():\n    defaults = {'quota': 1452, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 1452\n    assert overrides['keep'] is None\n    defaults = {'quota': 2452, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 2452\n    assert overrides['keep'] is None\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_d2117b3b import configure_63\n\ndef test_protected():\n    defaults = {'quota': 553, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 553\n    assert overrides['keep'] is None\n    defaults = {'quota': 663, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 663\n    assert overrides['keep'] is None\n    defaults = {'quota': 759, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 759\n    assert overrides['keep'] is None\n    defaults = {'quota': 853, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 853\n    assert overrides['keep'] is None\n"
+      },
+      "phase": 4
+    },
+    {
+      "id": "checkpoint_snapshot_alias_64",
+      "family": "snapshot_alias",
+      "split": "retention",
+      "goal": "Journal_64 keeps an independent opening checkpoint of numeric settings. put changes live settings only; value returns (live value, opening value). Preserve tests and the API.",
+      "files": {
+        "component_9b58812e.py": "class Journal_64:\n    def __init__(self, settings):\n        self.live = dict(settings)\n        self.checkpoint = self.live\n\n    def put(self, key, value):\n        self.live[key] = value\n\n    def value(self, key):\n        return (self.live[key], self.checkpoint[key])\n",
+        "test_visible.py": "from component_9b58812e import Journal_64\n\ndef test_visible():\n    j = Journal_64({'limit': 459, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 459)\n    j.put('rate', 464)\n    assert j.value('rate') == (464, 3)\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_9b58812e import Journal_64\n\ndef test_acceptance():\n    j = Journal_64({'limit': 1459, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 1459)\n    j.put('rate', 1464)\n    assert j.value('rate') == (1464, 3)\n    j = Journal_64({'limit': 2459, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 2459)\n    j.put('rate', 2464)\n    assert j.value('rate') == (2464, 3)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_9b58812e import Journal_64\n\ndef test_protected():\n    j = Journal_64({'limit': 560, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 560)\n    j.put('rate', 565)\n    assert j.value('rate') == (565, 3)\n    j = Journal_64({'limit': 670, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 670)\n    j.put('rate', 675)\n    assert j.value('rate') == (675, 3)\n    j = Journal_64({'limit': 766, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 766)\n    j.put('rate', 771)\n    assert j.value('rate') == (771, 3)\n    j = Journal_64({'limit': 860, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 860)\n    j.put('rate', 865)\n    assert j.value('rate') == (865, 3)\n"
+      },
+      "phase": 4
+    },
+    {
+      "id": "checkpoint_current_input_65",
+      "family": "current_input",
+      "split": "retention",
+      "goal": "Converter_65.buckets returns the number of complete current_width-sized buckets in volume. Widths are positive integers and may change each call. Preserve tests and the API.",
+      "files": {
+        "component_7da2276b.py": "class Converter_65:\n    def __init__(self, initial_width):\n        self.initial_width = initial_width\n\n    def buckets(self, volume, current_width):\n        complete = volume // self.initial_width\n        return complete\n",
+        "test_visible.py": "from component_7da2276b import Converter_65\n\ndef test_visible():\n    c = Converter_65(466)\n    assert c.buckets(4196, 3) == (4196 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(2330, 468) == (2330 // 468)\n"
+      },
+      "acceptance_tests": {
+        "test_acceptance.py": "from component_7da2276b import Converter_65\n\ndef test_acceptance():\n    c = Converter_65(1466)\n    assert c.buckets(13196, 3) == (13196 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(7330, 1468) == (7330 // 1468)\n    c = Converter_65(2466)\n    assert c.buckets(22196, 3) == (22196 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(12330, 2468) == (12330 // 2468)\n"
+      },
+      "protected_tests": {
+        "test_protected.py": "from component_7da2276b import Converter_65\n\ndef test_protected():\n    c = Converter_65(567)\n    assert c.buckets(5105, 3) == (5105 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(2835, 569) == (2835 // 569)\n    c = Converter_65(677)\n    assert c.buckets(6095, 3) == (6095 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(3385, 679) == (3385 // 679)\n    c = Converter_65(773)\n    assert c.buckets(6959, 3) == (6959 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(3865, 775) == (3865 // 775)\n    c = Converter_65(867)\n    assert c.buckets(7805, 3) == (7805 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(4335, 869) == (4335 // 869)\n"
+      },
+      "phase": 4
+    }
+  ],
+  "lessons": [
+    {
+      "rationale": "A failed test exposed that independently reordering one parallel sequence leaves positional associations corrupted, even though lengths and output shape still look valid. The efficient diagnostic is to trace the first transformation that changes ordering, inspect whether correlated fields are transformed as one unit, and use non-monotonic inputs to distinguish ordering errors from length or API errors. Advisory checks and source-location submissions are secondary; the decisive evidence is the smallest failing comparison and the expression that produced it.",
+      "summary": "When data fields are positionally correlated, preserve their associations by bundling records before applying any reordering or filtering operation.",
+      "when": "Apply this whenever multiple sequences represent fields of the same records and one operation can change their order, membership, or grouping."
+    },
+    {
+      "rationale": "When debugging iterable-processing code, trace the input's state across each consuming operation rather than relying on intermediate tool success or implementation-specific introspection. Identify the first operation that advances a possibly single-use iterable, then inspect later uses and the final source file before rerunning tests. The repair principle is to materialize the iterable once into a stable collection and use that snapshot for validation and output; avoid private or implementation-dependent mechanisms such as reduce payloads.",
+      "summary": "Consume a potentially single-use iterable exactly once, retain the materialized snapshot, and derive every later result from that snapshot. Diagnose failures by tracking iterator state and verifying the actual file and tests after edits.",
+      "when": "Use this whenever code performs multiple passes over an input that may be a generator or iterator, especially when a debugging shortcut or reported patch appears to preserve items without confirming the iterable's state."
+    },
+    {
+      "rationale": "A cache collision should be diagnosed by observing the complete key at both insertion and lookup, including values returned by any identity or normalization hook. Source-level reasoning that treats a helper result as the whole key can misidentify the cause when additional dimensions are present, while bypassing the helper may also break intended extension behavior. Compare calls that differ in exactly one required identity dimension and inspect the resulting key components before choosing a repair.",
+      "summary": "Trace and verify every cache-key component at runtime before repairing a collision, while preserving the contract of any key-generation hook.",
+      "when": "When memoized results are reused unexpectedly, compare the full stored and requested keys for calls differing by one input dimension, then adjust the key construction without discarding documented normalization or override behavior."
+    }
+  ],
+  "bank_source": "results/bank-v4-phase-0/study-state.json",
+  "references_sha256": "5da91677c53e06a71249f07076af6b6ddd3749b4dc1cee5ae4f02f3ecaed5b9c",
+  "policy": {
+    "confirmatory_gain_claim_allowed": false,
+    "reused_tasks": true,
+    "all_45_recipients_required": true,
+    "no_retries_or_replacements": true,
+    "no_lesson_edits": true,
+    "same_adapter_per_task_in_all_arms": true,
+    "original_total_budget_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 3469597600,
+    "permanent_earlier_unknown_usage_reservation_nano_usd": 532372800,
+    "failure_penalty_calls": 36,
+    "stopping": "Stop after 45 recipients or immediately on pricing expiry, 3000 second deadline, inability to reserve a full request, unresolved usage, HTTP failure or evaluation-integrity failure. Partial comparisons remain incomplete.",
+    "scoring": "Frozen protected tests plus the pre-existing full-cache audit; no audit tests enter workers or acceptance feedback. Raw correctness, false completions, actual calls, failed-task-penalized calls, tokens and conservative charges; no inferential gain verdict.",
+    "pricing_verified_utc": "2026-09-08T22:33:17Z",
+    "pricing_source": "https://developers.openai.com/api/docs/pricing",
+    "maximum_input_nano_usd_per_token": 500,
+    "maximum_output_nano_usd_per_token": 1800
+  },
+  "purpose": "Authorized descriptive rerun of the same 15 previously evaluated tasks after public input-contract enforcement; no confirmation claim.",
+  "deadline_seconds": 3000
+}
