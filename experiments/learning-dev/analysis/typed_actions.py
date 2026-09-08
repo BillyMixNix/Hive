@@ -95,6 +95,9 @@ def typed_action(output, offered):
 
 
 class TypedMeter(OpenAIMeter):
+    tool_builder = staticmethod(native_tools)
+    action_decoder = staticmethod(typed_action)
+
     def __call__(self, messages, *, worker=False, **kwargs):
         if not worker:
             return super().__call__(messages, **kwargs)
@@ -112,7 +115,7 @@ class TypedMeter(OpenAIMeter):
                        "input": messages, "max_output_tokens": self.max_output_tokens,
                        "text": {"format": LESSON_FORMAT if self.proposer else {"type": "json_object"}}}
             if worker:
-                offered = native_tools(messages)
+                offered = self.tool_builder(messages)
                 del payload["text"]
                 payload.update({
                     "tools": offered, "tool_choice": "required", "parallel_tool_calls": False,
@@ -176,7 +179,7 @@ class TypedMeter(OpenAIMeter):
             if not isinstance(output, list) or any(not isinstance(item, dict) for item in output):
                 raise ValueError("OpenAI response has invalid output items")
             if worker:
-                return typed_action(output, offered)
+                return self.action_decoder(output, offered)
         except Exception as exc:
             if self.failure_code is None:
                 self.failure_code = FAILURE_CODES.get(str(exc), "transport_or_local_limit")
@@ -188,13 +191,15 @@ class TypedMeter(OpenAIMeter):
 
 
 class TypedHive(OpenAIHive):
+    meter_type = TypedMeter
+
     def __init__(self, *args, request_directory=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.request_directory = request_directory
         self.identity["output_format"] = "direct_typed_functions_v4"
 
     def _new_meter(self, cap, deadline=900, *, proposer=False):
-        meter = TypedMeter(self.model, self._api_key, cap, self.budget,
+        meter = self.meter_type(self.model, self._api_key, cap, self.budget,
                           self.max_output_tokens, deadline=deadline, proposer=proposer,
                           observer=self.observer)
         if self.request_directory is not None:
