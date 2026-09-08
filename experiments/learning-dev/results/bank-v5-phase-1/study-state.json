@@ -1,0 +1,481 @@
+{
+  "schema": "hive.lesson-bank.state.v5",
+  "study_sha256": "54a217701a44bdac1b25c1b669d190872b01ac5ee79a061e254b2be115335602",
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+  "phases": [
+    {
+      "phase": 1,
+      "status": "completed",
+      "schedule": [
+        {
+          "case_id": "checkpoint_product_and_count",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_epoch_cache",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_epoch_cache",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "checkpoint_mean_after_snapshot",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_mean_after_snapshot",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "checkpoint_descending_pairs",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "checkpoint_descending_pairs",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_masked_pairs",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_product_and_count",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "checkpoint_product_and_count",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_normalized_locale",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_descending_pairs",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_masked_pairs",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_normalized_locale",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "checkpoint_normalized_locale",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "checkpoint_mean_after_snapshot",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_epoch_cache",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "checkpoint_masked_pairs",
+          "arm": "neutral"
+        }
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "case_id": "checkpoint_product_and_count",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 13905,
+        "output_tokens": 1837
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "600d84b447e974114297abcf9a29b05fc4ace7c27590857891763d9bba1bd8eb",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 20349,
+        "output_tokens": 2613
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 13
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 27474,
+        "output_tokens": 2662
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 13
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14083,
+        "output_tokens": 1914
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "d4e95f4e7f91d15b644f6be34a97a0fc2b957346b29033da5201764fd79829cd",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 18911,
+        "output_tokens": 2538
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "315599af15068084a249320ddd8c16b8e1d8d73b2190b49657fa4519e336caca",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 19913,
+        "output_tokens": 2040
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "50e1b04a2beb9fcb38f54ed52b71df3f539b272fbc2993969f1c098a61099feb",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14983,
+        "output_tokens": 1956
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "50e1b04a2beb9fcb38f54ed52b71df3f539b272fbc2993969f1c098a61099feb",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 27,
+        "prompt_tokens": 54686,
+        "output_tokens": 7784
+      },
+      "score": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "0b32395a109ff7d2ff0d80c997730b802b02d2ee068c53a7503d4d82a9dfc7aa"
+      },
+      "candidate_sha256": "731baec7cc9a75a4c0d46ca5eb5d360ce453df3276edcb5ff3d1143179f68569",
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "checkpoint_count": 27
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 18873,
+        "output_tokens": 1911
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "600d84b447e974114297abcf9a29b05fc4ace7c27590857891763d9bba1bd8eb",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 5,
+        "prompt_tokens": 10277,
+        "output_tokens": 1034
+      },
+      "error": "RuntimeError",
+      "controller_decision": null,
+      "outcome": "model_failure_counted",
+      "checkpoint_count": 4
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 7,
+        "prompt_tokens": 15868,
+        "output_tokens": 1684
+      },
+      "error": "RuntimeError",
+      "controller_decision": null,
+      "outcome": "model_failure_counted",
+      "checkpoint_count": 6
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 20292,
+        "output_tokens": 2094
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "5f056ae1a1f7fe2134353132b8292a5b265507507f181c19ba35d60dee02aea0",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 31,
+        "prompt_tokens": 88670,
+        "output_tokens": 11184
+      },
+      "score": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "0b32395a109ff7d2ff0d80c997730b802b02d2ee068c53a7503d4d82a9dfc7aa"
+      },
+      "candidate_sha256": "731baec7cc9a75a4c0d46ca5eb5d360ce453df3276edcb5ff3d1143179f68569",
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "checkpoint_count": 31
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 19253,
+        "output_tokens": 1726
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 9
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 20213,
+        "output_tokens": 2406
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "controller_decision": "SATISFIED",
+      "checkpoint_count": 13
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 2,
+        "prompt_tokens": 3729,
+        "output_tokens": 293
+      },
+      "error": "RuntimeError",
+      "controller_decision": null,
+      "outcome": "model_failure_counted",
+      "checkpoint_count": 1
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 4,
+        "prompt_tokens": 8407,
+        "output_tokens": 765
+      },
+      "error": "RuntimeError",
+      "controller_decision": null,
+      "outcome": "model_failure_counted",
+      "checkpoint_count": 3
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 27,
+        "prompt_tokens": 69655,
+        "output_tokens": 6486
+      },
+      "score": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "0b32395a109ff7d2ff0d80c997730b802b02d2ee068c53a7503d4d82a9dfc7aa"
+      },
+      "candidate_sha256": "731baec7cc9a75a4c0d46ca5eb5d360ce453df3276edcb5ff3d1143179f68569",
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "checkpoint_count": 27
+    }
+  ]
+}
