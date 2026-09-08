@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hive-learning-dev"
+version = "0.1.1"
+description = "Visible, persistent, approval-gated Hive worker supervisor with a local Cockpit and Codex adapter"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = ["pytest>=8,<10"]
+
+[project.scripts]
+jarvis = "jarvis.cli:main"
+jarvis-codex-agent = "jarvis.codex_agent:main"
+hive-learning = "hive_learning.__main__:main"
+hive-jarvis-agent = "hive_learning.hive_agent:main"
+
+[tool.setuptools]
+py-modules = ["hive_orchestrator", "local_agent"]
+
+[tool.setuptools.packages.find]
+include = ["jarvis*", "hive_learning*"]
