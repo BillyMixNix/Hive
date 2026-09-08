@@ -1,0 +1,82 @@
+name: Hive API Access Check
+
+on:
+  push:
+    branches: [agent/hive-api-access]
+    paths: [.github/workflows/hive-api-access.yml]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: hive-api-access-check
+  cancel-in-progress: false
+
+jobs:
+  api-access:
+    if: github.repository == 'BillyMixNix/Hive'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Check credential without model inference
+        env:
+          HIVE_OPENAI_API_KEY: ${{ secrets.HIVE_OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import urllib.error
+          import urllib.request
+
+          ENDPOINT = 'https://api.openai.com/v1/models'
+
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  return None
+
+          def check():
+              key = os.environ.pop('HIVE_OPENAI_API_KEY', '')
+              if not key:
+                  return 2, {'status': 'KEY_REQUIRED', 'model_requests': 0,
+                             'message': 'Add the HIVE_OPENAI_API_KEY Actions secret, then rerun this job.'}
+              if not re.fullmatch(r'[A-Za-z0-9_-]{16,1024}', key):
+                  return 2, {'status': 'INVALID_KEY_FORMAT', 'model_requests': 0,
+                             'message': 'The secret must contain only the API key value.'}
+              request = urllib.request.Request(
+                  ENDPOINT, method='GET', headers={'Authorization': 'Bearer ' + key})
+              opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
+              try:
+                  with opener.open(request, timeout=20) as response:
+                      raw = response.read(1_000_001)
+                  if len(raw) > 1_000_000:
+                      raise ValueError
+                  result = json.loads(raw)
+                  models = result['data']
+                  if result.get('object') != 'list' or not isinstance(models, list):
+                      raise ValueError
+                  if any(not isinstance(item, dict) or not isinstance(item.get('id'), str) for item in models):
+                      raise ValueError
+              except urllib.error.HTTPError as error:
+                  status = error.code
+                  error.close()
+                  return 1, {'status': 'HTTP_REJECTED', 'http_status': status, 'model_requests': 0,
+                             'message': 'OpenAI rejected the request. No error body or secret is logged.'}
+              except (ValueError, KeyError, TypeError):
+                  return 1, {'status': 'INVALID_RESPONSE', 'model_requests': 0}
+              except Exception:
+                  return 1, {'status': 'TRANSPORT_ERROR', 'model_requests': 0,
+                             'message': 'The request did not complete. No automatic retry was made.'}
+              return 0, {'status': 'AUTHENTICATED', 'model_count': len(models), 'model_requests': 0,
+                         'message': 'Model listing succeeded. Inference permissions and credits are not tested.'}
+
+          exit_code, report = check()
+          print(json.dumps(report, sort_keys=True))
+          summary = os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary:
+              with Path(summary).open('a', encoding='utf-8') as file:
+                  file.write('## Hive API access check\n\n```json\n' + json.dumps(report, indent=2) + '\n```\n')
+          raise SystemExit(exit_code)
+          PY
