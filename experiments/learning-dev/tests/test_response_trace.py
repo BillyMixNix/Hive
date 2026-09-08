@@ -41,5 +41,5 @@ def test_trace_preserves_rejected_native_action_without_credentials_or_reasoning
 def test_committed_continuation_carries_both_previous_attempts():
     root = Path(__file__).resolve().parents[1]
     plan, prior = read_plan(root)
-    assert plan["max_requests"] in {2, 325}
+    assert plan["max_requests"] in {2, 36, 325}
     assert prior["spending"]["total_upper_nano_usd"] >= 1868900

@@ -10,6 +10,8 @@ from .demo import seed_failure
 from .loop import implementation_hashes, run
 from .openai_adapter import OpenAIHive, load_api_key
 from .spending import MODEL, SpendingGuard
+from .ledger import digest
+from .repair_probe import PROBE_SHA256, run_probe
 
 
 BRANCH = "refs/heads/agent/hive-live-trial-20260908"
@@ -43,6 +45,7 @@ def main(*, repeat_of=None, continuation=None):
     output = Path(sys.argv[1]).resolve()
     output.mkdir(parents=True, exist_ok=False)
     project = Path(__file__).resolve().parent.parent
+    is_probe = continuation is not None and continuation["mode"] == "repair_probe"
     guard = adapter = store = task = None
     try:
         key = load_api_key()  # Remove before any repository child can be launched.
@@ -71,16 +74,28 @@ def main(*, repeat_of=None, continuation=None):
         if continuation is not None:
             manifest["continuation"] = continuation
             manifest["authorization"] = "Billy: Ok keep going as long as you need (2026-09-08)"
+        if is_probe:
+            manifest.pop("suite_sha256")
+            manifest.pop("diagnostic_replay_of", None)
+            manifest["fixture"] = "frozen visible-failure development repair probe"
+            manifest["probe_sha256"] = PROBE_SHA256
+            manifest["continued_after"] = repeat_of["episode_id"]
+            manifest["proposer_call_cap"] = 0
         (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-        store = Store(output / "jarvis.db")
-        task = seed_failure(store, output / "failed-work")
-        report = run(store, task, project / "examples/suite.development.json", SUITE_SHA256, adapter,
-                     diagnostic_replay_of=repeat_of["episode_id"] if repeat_of is not None else None)
-        report["ledger_verified"] = store.verify_chain()[0]
-        report["ordinary_jarvis_guidance"] = len(store.guidance())
-        report["trials"] = [{key: e["data"][key] for key in
-                            ("case_id", "split", "arm", "candidate_sha256", "usage", "score")}
-                           for e in store.events(task) if e["type"] == "LEARNING_EVALUATED"]
+        if is_probe:
+            report = run_probe(adapter, output / "repair-work", project / "examples/repair-probe.json")
+            report["episode_id"] = digest(manifest)
+            report["continued_after"] = repeat_of["episode_id"]
+        else:
+            store = Store(output / "jarvis.db")
+            task = seed_failure(store, output / "failed-work")
+            report = run(store, task, project / "examples/suite.development.json", SUITE_SHA256, adapter,
+                         diagnostic_replay_of=repeat_of["episode_id"] if repeat_of is not None else None)
+            report["ledger_verified"] = store.verify_chain()[0]
+            report["ordinary_jarvis_guidance"] = len(store.guidance())
+            report["trials"] = [{key: e["data"][key] for key in
+                                ("case_id", "split", "arm", "candidate_sha256", "usage", "score")}
+                               for e in store.events(task) if e["type"] == "LEARNING_EVALUATED"]
     except Exception as exc:
         # Startup exceptions are never printed with arguments or traceback.
         report = {"scope": "development_real_model", "verdict": "INVALID",
@@ -100,7 +115,13 @@ def main(*, repeat_of=None, continuation=None):
         "Live integration on previously authored development fixtures. A pass is not evidence of RSI; "
         "a rejected lesson is not retained. Spending is a conservative token-charge upper bound, "
         "not an invoice; unresolved requests retain their full reservation.")
-    if repeat_of is not None:
+    if is_probe:
+        report["interpretation"] = (
+            "One frozen visible-failure development repair probe with no supplied lesson. "
+            "The initial failure and candidate are independently graded using the same frozen tests. "
+            "This verifies integration only; no learning gain, lesson promotion or RSI is established. "
+            "Spending carries every preceding attempt and is a conservative token-charge upper bound.")
+    elif repeat_of is not None:
         report["interpretation"] += (
             " This is the explicitly authorized diagnostic replay of the consumed development suite. "
             "Original evidence is unchanged; replay results cannot promote a lesson.")
@@ -112,6 +133,8 @@ def main(*, repeat_of=None, continuation=None):
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         Path(summary).write_text("```json\n" + json.dumps(report, indent=2) + "\n```\n")
+    if is_probe:
+        return 0 if report["verdict"] in {"REPAIR_VERIFIED", "REPAIR_NOT_VERIFIED"} and report.get("probe_integrity_verified") else 2
     return 0 if report["verdict"] in {"PROMOTED", "REJECTED", "REPLAY_GATE_PASSED"} and report.get("ledger_verified") else 2
 
 

@@ -68,3 +68,55 @@ per recipient, 325 total requests and the original spending guard. As a replay,
 it cannot promote a lesson; any otherwise passing gate is REPLAY_GATE_PASSED.
 This tests integration and measures behavior on seen development fixtures, not
 unseen confirmation or RSI.
+
+### Recorded result: REJECTED, all nine evaluations completed
+
+[Run 34204276223](https://github.com/BillyMixNix/Hive/actions/runs/34204276223)
+at commit `0eab531bc05234d64169ddc57d304adc08fb3c88` passed 122 offline tests
+(2 skips, 5 subtests), then completed 19 live API requests. All 18 worker
+responses were accepted native calls. No transport failure occurred.
+
+| Independent protected-test result | Baseline | Proposed lesson | Neutral guidance |
+| --- | --- | --- | --- |
+| Inclusive capacity repair | Fail | Fail | Fail |
+| Inclusive deadline transfer | Fail | Fail | Fail |
+| Correct signed addition retained | Pass | Pass | Pass |
+
+All nine candidates were evaluated with valid test exits, and each retained its
+original source bytes. The lesson was rejected, transfer gain was zero and no
+lesson entered ordinary guidance. The event ledger verified.
+
+The recorded requests show two Reproducer calls per recipient. Source inspection
+explains why the all-green public fixtures cannot advance: the unchanged
+Reproducer gate requires a failing command or a previously established external
+oracle counterexample. The demo's boundary failures exist only in its protected
+evaluation, which is deliberately withheld from recipients. This is an apparatus
+mismatch, not a measured inability of the model to change a comparison operator.
+
+This attempt used 12,709 input and 1,024 output tokens, with a conservative charge
+upper bound of **$0.0081977**. The cumulative bound across all four attempts is
+**$0.0112248** for **25 API requests**, with no unresolved reservation.
+
+The full artifact ZIP SHA-256 is
+`9d1d7499ad1f3b3c5e341f72b470462e9b00f38a237328b7a470fb78a26aba39`.
+Its digest and all 25 internal checksums verified. The unchanged
+[report](results/2026-09-08-cont4/report.json) and public response traces are
+preserved separately from the earlier failures.
+
+## Continuation 5: visible-failure repair probe
+
+Before launch, a separate fixture was committed in
+[repair-probe.json](examples/repair-probe.json), SHA-256
+`c6676e972b10de0ac475d0b8ae435877cf67dfca6f7053b906013e58cbe54a81`.
+Its public tests include the failing equality case; protected evaluation checks
+the complete 11-by-11 grid of integer quantities and capacities from -3 through 7.
+The previous learning suite and all its results remain unchanged.
+
+The same controller and repaired native adapter receive this one task, no lesson
+and at most 36 model calls. The existing $5 guard carries the entire $0.0112248
+prior upper bound. Verification requires a genuine initial test failure, a source
+change, unchanged public tests, a passing independent evaluation and the
+controller's SATISFIED decision. Full controller files and final source are kept.
+
+This is a development integration test. It can report REPAIR_VERIFIED or
+REPAIR_NOT_VERIFIED; it cannot promote a lesson or establish learning or RSI.
