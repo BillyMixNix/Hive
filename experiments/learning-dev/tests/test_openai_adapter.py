@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import os
+from pathlib import Path
 import subprocess
 import sys
 from types import SimpleNamespace
@@ -22,6 +23,10 @@ from jarvis.store import Store
 MODEL = "fixture-2026-01-01"
 KEY = "test_credential_not_a_real_api_key"
 MESSAGES = [{"role": "system", "content": "Return JSON."}, {"role": "user", "content": "public task"}]
+WORKER_MESSAGES = [MESSAGES[0], {"role": "user", "content": json.dumps({
+    "authority": {"allowed_tools": ["run_command"]},
+    "tool_contracts": [{"name": "run_command", "arguments": {"command": "pytest"}}],
+})}]
 
 
 @pytest.fixture(autouse=True)
@@ -51,16 +56,25 @@ def transport(monkeypatch, responses):
     return seen
 
 
+def action_reply(name="run_command", arguments=None):
+    value = reply()
+    value["output"][1] = {"type": "function_call", "name": "hive_action", "status": "completed",
+        "arguments": json.dumps({"name": name, "arguments_json": json.dumps(
+            {"command": "pytest"} if arguments is None else arguments)})}
+    return value
+
+
 def test_proposal_and_worker_judge_use_stateless_responses_with_shared_accounting(monkeypatch, tmp_path):
     from hive_orchestrator import ContinuationDecision, TaskState
-    seen = transport(monkeypatch, [reply(json.dumps(LESSON)), reply(), reply()])
+    seen = transport(monkeypatch, [reply(json.dumps(LESSON)), action_reply(), reply()])
     class Executive:
         def __init__(self, root, goal, criteria, worker, judge, config):
             self.worker, self.judge = worker, judge
             self.objective = SimpleNamespace(objective_id="fixture", task_state=TaskState())
         def add_atomic_cycle(self, **kwargs): pass
         def run_until_stable(self):
-            self.worker(copy.deepcopy(MESSAGES))
+            action = json.loads(self.worker(copy.deepcopy(WORKER_MESSAGES)))
+            assert action == {"name": "run_command", "arguments": {"command": "pytest"}}
             self.judge(copy.deepcopy(MESSAGES))
             return ContinuationDecision.SATISFIED
     monkeypatch.setattr("hive_learning.adapter.HiveExecutive", Executive)
@@ -72,16 +86,101 @@ def test_proposal_and_worker_judge_use_stateless_responses_with_shared_accountin
     bodies = [json.loads(request.data) for request in seen]
     assert bodies[0]["text"]["format"]["type"] == "json_schema"
     assert bodies[0]["text"]["format"]["strict"] is True
-    assert bodies[1]["text"]["format"] == {"type": "json_object"}
+    assert "text" not in bodies[1]
+    assert bodies[1]["tools"][0]["strict"] is True
+    assert bodies[1]["tools"][0]["parameters"]["properties"]["name"]["enum"] == ["finish", "run_command"]
+    assert bodies[1]["tool_choice"] == {"type": "function", "name": "hive_action"}
+    assert bodies[1]["parallel_tool_calls"] is False
+    assert "tools" not in bodies[0] and "tools" not in bodies[2]
+    assert bodies[2]["text"]["format"] == {"type": "json_object"}
     assert LESSON["summary"] in json.dumps(bodies[1])
     assert LESSON["summary"] not in json.dumps(bodies[2])
     assert all(body["store"] is False and body["model"] == MODEL for body in bodies)
     assert all(body["max_output_tokens"] == 512 for body in bodies)
-    assert all(not {"previous_response_id", "tools", "temperature", "seed"} & body.keys() for body in bodies)
+    assert all(not {"previous_response_id", "temperature", "seed"} & body.keys() for body in bodies)
     assert all(request.full_url == ENDPOINT for request in seen)
     assert all(request.get_header("Authorization") == "Bearer " + KEY for request in seen)
     assert KEY not in json.dumps(bodies) + json.dumps(adapter.identity) + json.dumps(adapter.observed_usage())
     assert adapter.budget.calls == 3 and all(item["complete"] for item in adapter.observed_usage())
+
+
+def test_actual_two_message_failure_cannot_become_a_worker_finish(monkeypatch):
+    path = Path(__file__).resolve().parents[1] / "results/2026-09-08-cont3/responses/response-0002.json"
+    captured = json.loads(path.read_text())
+    seen = transport(monkeypatch, [captured["response"]])
+    adapter = OpenAIHive(captured["response"]["model"], KEY, max_requests=2)
+    with pytest.raises(ValueError, match="exactly one native Hive action"):
+        adapter._new_meter(36).worker(captured["request"]["input"])
+    assert adapter.observed_usage()[0]["failure_code"] == "invalid_native_action"
+    assert len(seen) == 1
+
+
+def test_native_bridge_ignores_prose_and_passes_actual_controller_results(monkeypatch):
+    first = action_reply()
+    commentary = reply("I will run the test.")["output"][1]
+    commentary["phase"] = "commentary"
+    first["output"].insert(1, commentary)
+    seen = transport(monkeypatch, [first, action_reply("finish", {"status": "BLOCKED"})])
+    adapter = OpenAIHive(MODEL, KEY, max_requests=2)
+    meter = adapter._new_meter(36)
+    result = meter.worker(WORKER_MESSAGES)
+    assert json.loads(result) == {"name": "run_command", "arguments": {"command": "pytest"}}
+    followup = WORKER_MESSAGES + [{"role": "assistant", "content": result},
+        {"role": "user", "content": "TOOL RESULT:\npytest exited 1; test_boundary failed."}]
+    assert json.loads(meter.worker(followup))["arguments"]["status"] == "BLOCKED"
+    body = json.loads(seen[1].data)
+    assert body["input"] == followup
+    assert "previous_response_id" not in body
+
+
+@pytest.mark.parametrize("fault", ["multiple", "unknown_function", "unknown_action", "array_arguments",
+                                  "duplicate_arguments", "wrong_wrapper", "incomplete", "refusal", "hosted_tool"])
+def test_native_worker_rejects_ambiguous_or_invalid_actions_without_retry(monkeypatch, fault):
+    value = action_reply()
+    call = value["output"][1]
+    if fault == "multiple": value["output"].append(copy.deepcopy(call))
+    elif fault == "unknown_function": call["name"] = "run_command"
+    elif fault == "unknown_action": value = action_reply("delete_everything")
+    elif fault == "array_arguments": value = action_reply(arguments=[])
+    elif fault == "duplicate_arguments":
+        call["arguments"] = json.dumps({"name": "run_command", "arguments_json": '{"command":"pytest","command":"echo"}'})
+    elif fault == "wrong_wrapper": call["arguments"] = '{"name":"run_command","arguments":{}}'
+    elif fault == "incomplete": call["status"] = "incomplete"
+    elif fault == "refusal":
+        message = reply()["output"][1]
+        message["content"] = [{"type": "refusal", "refusal": "fixture"}]
+        value["output"].append(message)
+    elif fault == "hosted_tool": value["output"].append({"type": "web_search_call"})
+    seen = transport(monkeypatch, [value])
+    adapter = OpenAIHive(MODEL, KEY, max_requests=2)
+    meter = adapter._new_meter(36)
+    with pytest.raises(ValueError): meter.worker(WORKER_MESSAGES)
+    with pytest.raises(RuntimeError): meter.worker(WORKER_MESSAGES)
+    assert len(seen) == 1 and adapter.budget.failed
+
+
+def test_worker_tool_choices_come_only_from_original_authorized_packet(monkeypatch):
+    seen = transport(monkeypatch, [])
+    adapter = OpenAIHive(MODEL, KEY, max_requests=2)
+    invalid = copy.deepcopy(WORKER_MESSAGES)
+    packet = json.loads(invalid[1]["content"])
+    packet["tool_contracts"].append({"name": "write_file", "arguments": {}})
+    invalid[1]["content"] = json.dumps(packet)
+    with pytest.raises(ValueError, match="controller task packet"):
+        adapter._new_meter(36).worker(invalid)
+    assert not seen and adapter.budget.calls == 0
+
+
+def test_json_judge_uses_one_final_answer_after_labeled_commentary(monkeypatch):
+    value = reply('{"decision":"REVISE","reasons":["Test evidence is missing."]}')
+    value["output"][1]["phase"] = "final_answer"
+    commentary = copy.deepcopy(value["output"][1])
+    commentary["phase"] = "commentary"
+    commentary["content"][0]["text"] = "I am checking the evidence."
+    value["output"].insert(1, commentary)
+    transport(monkeypatch, [value])
+    adapter = OpenAIHive(MODEL, KEY, max_requests=1)
+    assert json.loads(adapter._new_meter(36)(MESSAGES))["decision"] == "REVISE"
 
 
 @pytest.mark.parametrize("fault", ["incomplete", "refusal", "multiple_messages", "tool_call", "model_drift",

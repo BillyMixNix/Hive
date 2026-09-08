@@ -34,6 +34,9 @@ FAILURE_CODES = {
     "OpenAI reported output beyond the configured token limit": "output_limit",
     "OpenAI response has invalid output items": "invalid_output_items",
     "OpenAI response must contain one assistant message and no tool actions": "unexpected_output_items",
+    "OpenAI worker requires a controller task packet with tool contracts": "invalid_worker_packet",
+    "OpenAI worker response must contain exactly one native Hive action": "invalid_native_action",
+    "OpenAI native Hive action has invalid or unauthorized arguments": "invalid_native_arguments",
     "OpenAI response refused or did not contain one complete text output": "refusal_or_invalid_message",
     "OpenAI output is not one strict JSON object": "invalid_json_object",
     "OpenAI response exceeds the fixed byte limit": "response_byte_limit",
@@ -48,6 +51,83 @@ LESSON_FORMAT = {
                               for key in ("when", "summary", "rationale")},
                "required": ["when", "summary", "rationale"]},
 }
+
+
+def worker_tool(messages):
+    """Describe only actions offered in the controller's initial task packet.
+
+    Contract argument values include placeholders, not JSON Schema definitions.
+    The wrapper therefore carries a strict JSON string rather than inventing
+    argument types. The recovered controller still checks and executes actions.
+    Later tool results and model messages cannot expand this set of tools.
+    """
+    try:
+        packet = strict_json(next(m["content"] for m in messages if m["role"] == "user"))
+        allowed = packet["authority"]["allowed_tools"]
+        contracts = packet["tool_contracts"]
+        if (not isinstance(allowed, list) or not isinstance(contracts, list)
+                or any(not isinstance(name, str) for name in allowed)):
+            raise ValueError
+        names = [item["name"] for item in contracts]
+        if (not names or len(set(names)) != len(names)
+                or any(not isinstance(name, str) or not re.fullmatch(r"[a-z_]{1,64}", name)
+                       or name not in allowed for name in names)):
+            raise ValueError
+    except (StopIteration, ValueError, TypeError, KeyError):
+        raise ValueError("OpenAI worker requires a controller task packet with tool contracts") from None
+    names = sorted(set(names) | {"finish"})
+    return {
+        "type": "function", "name": "hive_action", "strict": True,
+        "description": "Submit exactly one action for Hive to execute and record. Calling this function does not itself execute the action.",
+        "parameters": {
+            "type": "object", "additionalProperties": False,
+            "properties": {
+                "name": {"type": "string", "enum": names},
+                "arguments_json": {"type": "string", "description":
+                    "A JSON object encoded as a string, using the exact argument keys from the task's tool contract or finish format."},
+            },
+            "required": ["name", "arguments_json"],
+        },
+    }
+
+
+def message_text(message):
+    content = message.get("content")
+    if (message.get("role") != "assistant" or message.get("status") != "completed"
+            or not isinstance(content, list) or len(content) != 1
+            or not isinstance(content[0], dict) or content[0].get("type") != "output_text"
+            or not isinstance(content[0].get("text"), str)
+            or message.get("phase") not in {None, "commentary", "final_answer"}):
+        raise ValueError("OpenAI response refused or did not contain one complete text output")
+    return content[0]["text"]
+
+
+def native_action(output, tool):
+    calls = [item for item in output if item.get("type") == "function_call"]
+    if (len(calls) != 1 or any(item.get("type") not in {"reasoning", "message", "function_call"}
+                              for item in output)):
+        raise ValueError("OpenAI worker response must contain exactly one native Hive action")
+    for item in output:
+        if item.get("type") == "message":
+            message_text(item)  # Refusals remain failures; prose never becomes an action.
+    call = calls[0]
+    if call.get("name") != "hive_action" or call.get("status", "completed") != "completed":
+        raise ValueError("OpenAI worker response must contain exactly one native Hive action")
+    try:
+        action = strict_json(call["arguments"])
+        if (not isinstance(action, dict) or set(action) != {"name", "arguments_json"}
+                or action["name"] not in tool["parameters"]["properties"]["name"]["enum"]
+                or not isinstance(action["arguments_json"], str)):
+            raise ValueError
+        arguments = strict_json(action["arguments_json"])
+        if not isinstance(arguments, dict):
+            raise ValueError
+    except (ValueError, TypeError, KeyError):
+        raise ValueError("OpenAI native Hive action has invalid or unauthorized arguments") from None
+    # Stateless bridge: Hive executes this JSON action and includes the actual
+    # tool result in the next transcript. No API-side tool execution or claim of
+    # success is manufactured here, and no provider response IDs are replayed.
+    return canonical({"name": action["name"], "arguments": arguments})
 
 
 def load_api_key(env_file=None):
@@ -126,7 +206,10 @@ class OpenAIMeter:
         self.usage = {"calls": 0, "prompt_tokens": 0, "output_tokens": 0}
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
-    def __call__(self, messages, **kwargs):
+    def worker(self, messages):
+        return self(messages, worker=True)
+
+    def __call__(self, messages, *, worker=False, **kwargs):
         try:
             remaining = self.end - time.monotonic()
             if self.failed or self.usage["calls"] >= self.cap or remaining <= 0:
@@ -140,6 +223,17 @@ class OpenAIMeter:
                        "instructions": "Return exactly one JSON object in the format requested by the task.",
                        "input": messages, "max_output_tokens": self.max_output_tokens,
                        "text": {"format": LESSON_FORMAT if self.proposer else {"type": "json_object"}}}
+            if worker:
+                tool = worker_tool(messages)
+                del payload["text"]
+                payload.update({
+                    "tools": [tool], "tool_choice": {"type": "function", "name": "hive_action"},
+                    "parallel_tool_calls": False,
+                    "instructions": "Submit exactly one action using the hive_action function. "
+                    "Encode the task packet's JSON action name and arguments as name and arguments_json. "
+                    "Hive executes the action only after you return; wait for its actual tool result "
+                    "before claiming execution or completion. Text messages do not execute actions.",
+                })
             raw_request = canonical(payload).encode("utf-8")
             if len(raw_request) > MAX_INPUT_BYTES:
                 raise ValueError("OpenAI request exceeds the fixed input byte limit")
@@ -194,18 +288,16 @@ class OpenAIMeter:
             output = value.get("output")
             if not isinstance(output, list) or any(not isinstance(item, dict) for item in output):
                 raise ValueError("OpenAI response has invalid output items")
+            if worker:
+                return native_action(output, tool)
             messages_out = [item for item in output if item.get("type") == "message"]
-            if (len(messages_out) != 1
+            finals = [item for item in messages_out if item.get("phase") != "commentary"]
+            if (len(finals) != 1
                     or any(item.get("type") not in {"reasoning", "message"} for item in output)):
                 raise ValueError("OpenAI response must contain one assistant message and no tool actions")
-            message = messages_out[0]
-            content = message.get("content")
-            if (message.get("role") != "assistant" or message.get("status") != "completed"
-                    or not isinstance(content, list) or len(content) != 1
-                    or not isinstance(content[0], dict) or content[0].get("type") != "output_text"
-                    or not isinstance(content[0].get("text"), str)):
-                raise ValueError("OpenAI response refused or did not contain one complete text output")
-            text = content[0]["text"]
+            for message in messages_out:
+                message_text(message)
+            text = message_text(finals[0])
             try:
                 if not isinstance(strict_json(text), dict):
                     raise ValueError
@@ -240,7 +332,7 @@ class OpenAIHive(OllamaHive):
                          "model": model, "url": ENDPOINT, "store": False,
                          "max_requests": max_requests, "max_output_tokens": max_output_tokens,
                          "max_input_bytes": MAX_INPUT_BYTES, "model_seed": None,
-                         "output_format": "strict_lesson_schema_then_json_object",
+                         "output_format": "strict_lesson_schema_native_worker_action_json_judge_v2",
                          "controller_sha256": self.identity["controller_sha256"]}
         self.identity["service_tier"] = "default"
         if spending is not None:

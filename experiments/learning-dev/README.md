@@ -148,9 +148,13 @@ in experiment evidence. The loader removes that environment variable before
 Hive runs local repository tests. No env file or credential is included in this ZIP.
 
 Every request is stateless with `store=false`; no prior response ID or provider
-tools are used. The proposer uses a strict lesson JSON schema, while workers and
-judges return JSON objects in the recovered controller's existing formats.
-These formats follow the [OpenAI structured output guide](https://developers.openai.com/api/docs/guides/structured-outputs).
+tools are used. The proposer uses a strict lesson JSON schema and judges return
+JSON objects. Workers use one forced native `hive_action` function call with
+parallel tool calls disabled. The adapter translates its arguments into the
+recovered controller's existing JSON action format; only Hive executes it and
+supplies the observed result on the next turn. Text claims never execute actions.
+These formats follow the [OpenAI structured output guide](https://developers.openai.com/api/docs/guides/structured-outputs)
+and [function calling guide](https://developers.openai.com/api/docs/guides/function-calling).
 The adapter handles reasoning items before the assistant's text, as described in
 the [text generation guide](https://developers.openai.com/api/docs/guides/text).
 
