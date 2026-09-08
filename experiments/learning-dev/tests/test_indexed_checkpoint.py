@@ -6,7 +6,14 @@ import pytest
 
 from analysis.indexed_checkpoint import IndexedCheckpointHive, indexed_tools
 from analysis.typed_actions import typed_action
-from tests.test_typed_actions import MESSAGES, KEY
+# Keep this fixture independent of the repository-root tests package.
+KEY = "fixture_credential_never_a_real_key"
+MESSAGES = [{"role": "system", "content": "Use offered tools."},
+    {"role": "user", "content": json.dumps({
+        "authority": {"allowed_tools": ["submit_mechanism", "submit_callable"]},
+        "tool_contracts": [
+            {"name": "submit_mechanism", "arguments": {"location_id": "id", "mechanism": "explain"}},
+            {"name": "submit_callable", "arguments": {"source_file": "file.py", "definition_line": 0}}]})}]
 
 
 def test_actual_hash_copy_failure_cannot_be_generated_as_a_valid_indexed_choice():

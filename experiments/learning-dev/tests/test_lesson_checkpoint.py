@@ -9,7 +9,14 @@ import pytest
 from hive_orchestrator import HiveExecutive
 from hive_learning.ledger import digest
 from analysis.lesson_checkpoint import CheckpointHive, ContextHiveExecutive, checkpoint_tools
-from tests.test_typed_actions import MESSAGES, KEY
+# Keep this fixture independent of the repository-root tests package.
+KEY = "fixture_credential_never_a_real_key"
+MESSAGES = [{"role": "system", "content": "Use offered tools."},
+    {"role": "user", "content": json.dumps({
+        "authority": {"allowed_tools": ["submit_mechanism", "submit_callable"]},
+        "tool_contracts": [
+            {"name": "submit_mechanism", "arguments": {"location_id": "id", "mechanism": "explain"}},
+            {"name": "submit_callable", "arguments": {"source_file": "file.py", "definition_line": 0}}]})}]
 
 
 def test_complete_callable_exposes_snapshot_omitted_by_original_handoff():
