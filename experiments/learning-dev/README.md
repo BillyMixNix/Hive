@@ -155,6 +155,14 @@ recovered controller's existing JSON action format; only Hive executes it and
 supplies the observed result on the next turn. Text claims never execute actions.
 These formats follow the [OpenAI structured output guide](https://developers.openai.com/api/docs/guides/structured-outputs)
 and [function calling guide](https://developers.openai.com/api/docs/guides/function-calling).
+
+The recovered atomic profile also requires a deterministic acceptance checker
+before it can declare completion. Python callers can supply a trusted,
+goal-specific `acceptance_oracle` to `OpenAIHive.work`. Its result is measured from
+the candidate; a model's assertion is not a checker. The frozen development repair
+probe supplies one, retains its observations and separately grades protected tests.
+See [the recorded continuations](CONTINUATIONS.md) for the current live results
+and the limitations of the original learning fixtures.
 The adapter handles reasoning items before the assistant's text, as described in
 the [text generation guide](https://developers.openai.com/api/docs/guides/text).
 

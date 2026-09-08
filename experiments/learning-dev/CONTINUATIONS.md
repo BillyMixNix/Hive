@@ -120,3 +120,53 @@ controller's SATISFIED decision. Full controller files and final source are kept
 
 This is a development integration test. It can report REPAIR_VERIFIED or
 REPAIR_NOT_VERIFIED; it cannot promote a lesson or establish learning or RSI.
+
+### Recorded result: correct repair, incomplete controller acceptance
+
+[Run 34205105237](https://github.com/BillyMixNix/Hive/actions/runs/34205105237)
+at commit `489056ad77264320409f5e357cc896d45cfe961a` passed 125 offline tests
+(2 skips, 5 subtests). The live controller reproduced the failure, located and
+diagnosed the exact expression, changed `<` to `<=`, reran the original tests and
+obtained a read-only review. All 121 protected integer pairs passed afterward;
+the same evaluation failed on the broken original, and public tests were unchanged.
+
+The recorded overall verdict remains **REPAIR_NOT_VERIFIED**. The controller
+returned GENUINELY_BLOCKED even though its model judge said ACCEPT. Its atomic
+completion predicate also requires `acceptance_oracle_pass`, which remained false
+because the bridge had not supplied an acceptance oracle. Model-judge approval
+does not set that field. The code repair is observed, but this run did not satisfy
+all of its predeclared integration requirements.
+
+This used 10 API requests, 14,247 input and 954 output tokens, bounded at
+**$0.0088407** for the attempt and **$0.0200655** cumulatively across **35 requests**.
+No reservation is unresolved.
+
+The full archive SHA-256 is
+`c39eac1e86102ec1620c586d9a042c5234d8af344bb81abe139affd21e62ad8f`.
+The archive digest and all 16 available evidence checksums verified. GitHub's
+default artifact filtering omitted two files listed in checksums.json: the
+controller's state.json and trace.jsonl under the run directory. They cannot be
+recovered from this completed runner. The report, final source and all ten API
+traces survive, including the controller-brokered failure, diff and passing tests
+in the conformance request. The missing files are not fabricated or marked verified.
+
+## Continuation 6: connect the real acceptance checker
+
+The same public fixture and independent protected grid remain frozen. Before
+launch, the wrapper was extended to forward an explicit acceptance callback to
+the recovered controller. The probe's callback grades a copied candidate against
+nine separate contract checks at capacities -100, 100 and 1,000,000. Each capacity
+is tested below, at and above the limit, outside the final protected grid.
+The checker first has to reject the broken revision. It returns only a measured
+boolean to the controller, and its observations and hash are recorded.
+
+The existing controller chooses deterministic acceptance when this callback is
+present; its completion predicate is unchanged. No flag is forced true and no
+gate is removed. Offline verification replays the nine real actions from attempt
+5 through the original controller, substituting only controller-generated IDs,
+and requires SATISFIED with the genuine checker before the next live launch.
+
+The live replay starts from the original broken code with no lesson, at most
+36 API calls, and the full preceding $0.0200655 carried into the $5 guard. Artifact
+upload now includes the required controller run records. All previous results
+remain unchanged; this continues integration debugging, not learning confirmation.

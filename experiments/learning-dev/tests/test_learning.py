@@ -222,7 +222,7 @@ def test_real_adapter_injects_guidance_only_into_workers_and_meters_every_call(t
             self.worker, self.judge = worker, judge
             from types import SimpleNamespace
             from hive_orchestrator import TaskState
-            self.objective = SimpleNamespace(objective_id="fixture", task_state=TaskState())
+            self.objective = SimpleNamespace(objective_id="fixture", blocker="", task_state=TaskState())
         def add_atomic_cycle(self, **kwargs): pass
         def run_until_stable(self):
             from hive_orchestrator import ContinuationDecision

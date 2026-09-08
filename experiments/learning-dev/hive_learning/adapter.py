@@ -85,7 +85,7 @@ class OllamaHive:
         usage, _ = self.work(root, goal, lessons, calls)
         return usage
 
-    def work(self, root, goal, lessons, calls):
+    def work(self, root, goal, lessons, calls, *, acceptance_oracle=None):
         if calls != 36:
             raise ValueError("recovered Hive adapter requires the frozen 36-call allocation")
         meter = self._new_meter(calls)
@@ -101,7 +101,8 @@ class OllamaHive:
             return getattr(meter, "worker", meter)([messages[0], guidance, *messages[1:]])
         config = HiveConfig.atomic(call_budget=calls, max_model_concurrency=1,
                                    worker_timeout_seconds=135, command_timeout_seconds=30)
-        hive = HiveExecutive(root, goal, [goal], worker, meter, config)
+        options = {"acceptance_oracle": acceptance_oracle} if acceptance_oracle is not None else {}
+        hive = HiveExecutive(root, goal, [goal], worker, meter, config, **options)
         paths = [p.relative_to(root).as_posix() for p in root.rglob("*.py")
                  if not any(part.startswith(".") for part in p.relative_to(root).parts)]
         hive.add_atomic_cycle(source_files=sorted(p for p in paths if not Path(p).name.startswith("test_")),
@@ -110,6 +111,7 @@ class OllamaHive:
         if meter.failed:
             raise RuntimeError("model transport or usage failure; episode invalid")
         return meter.usage, {"decision": decision, "objective_id": hive.objective.objective_id,
+                             "blocker": hive.objective.blocker,
                              "task_state": asdict(hive.objective.task_state)}
 
     def observed_usage(self):

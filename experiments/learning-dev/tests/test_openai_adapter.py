@@ -70,7 +70,7 @@ def test_proposal_and_worker_judge_use_stateless_responses_with_shared_accountin
     class Executive:
         def __init__(self, root, goal, criteria, worker, judge, config):
             self.worker, self.judge = worker, judge
-            self.objective = SimpleNamespace(objective_id="fixture", task_state=TaskState())
+            self.objective = SimpleNamespace(objective_id="fixture", blocker="", task_state=TaskState())
         def add_atomic_cycle(self, **kwargs): pass
         def run_until_stable(self):
             action = json.loads(self.worker(copy.deepcopy(WORKER_MESSAGES)))

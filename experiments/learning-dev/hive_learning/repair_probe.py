@@ -10,6 +10,17 @@ from .loop import implementation_hashes
 
 
 PROBE_SHA256 = "c6676e972b10de0ac475d0b8ae435877cf67dfca6f7053b906013e58cbe54a81"
+# This controller-side contract check is distinct from the protected final grid.
+# Every tested value is outside that grid. Only the boolean result reaches Hive;
+# test source and the independent final evaluation never enter worker prompts.
+ACCEPTANCE_TESTS = {"test_acceptance.py": """from capacity import admit
+
+def test_contract_boundaries():
+    for cap in (-100, 100, 1000000):
+        assert admit(cap - 1, cap) is True
+        assert admit(cap, cap) is True
+        assert admit(cap + 1, cap) is False
+"""}
 
 
 def read_probe(path):
@@ -39,6 +50,7 @@ def run_probe(adapter, root, path):
     implementation = implementation_hashes()
     report = {"scope": "development_real_model", "kind": "visible_failure_repair_probe",
               "probe_sha256": PROBE_SHA256, "case_id": case["id"],
+              "acceptance_check_sha256": digest(ACCEPTANCE_TESTS), "acceptance_checks": [],
               "promotion_eligible": False, "lessons_supplied": [],
               "verdict": "INVALID", "probe_integrity_verified": False}
     root.mkdir(parents=True, exist_ok=False)
@@ -49,7 +61,15 @@ def run_probe(adapter, root, path):
         report["before"] = baseline
         if not baseline["valid"] or baseline["passed"]:
             raise ValueError("repair probe has no valid initial failure")
-        usage, result = adapter.work(root, case["goal"], [], 36)
+        def acceptance_oracle(workspace):
+            snapshot = candidate_snapshot(workspace, original)
+            checked = grade(snapshot, ACCEPTANCE_TESTS)
+            report["acceptance_checks"].append({"candidate_sha256": digest(snapshot), **checked})
+            return checked["valid"] and checked["passed"]
+        # Verify that the required checker itself rejects the broken revision.
+        if acceptance_oracle(root):
+            raise ValueError("acceptance checker accepted the broken revision")
+        usage, result = adapter.work(root, case["goal"], [], 36, acceptance_oracle=acceptance_oracle)
         report.update({"usage": usage, "controller": result})
         candidate = candidate_snapshot(root, original)
         report["candidate"] = candidate

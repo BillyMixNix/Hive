@@ -52,4 +52,5 @@ jobs:
             ${{ runner.temp }}/hive-continuation-evidence/
             ${{ runner.temp }}/hive-verification.xml
           if-no-files-found: warn
+          include-hidden-files: true # Required controller state and execution journal live under .agent_runs.
           retention-days: 30
