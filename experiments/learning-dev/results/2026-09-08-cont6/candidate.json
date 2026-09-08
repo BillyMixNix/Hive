@@ -1,0 +1,4 @@
+{
+  "capacity.py": "def admit(quantity, capacity):\n    return quantity <= capacity\n",
+  "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+}

@@ -170,3 +170,53 @@ The live replay starts from the original broken code with no lesson, at most
 36 API calls, and the full preceding $0.0200655 carried into the $5 guard. Artifact
 upload now includes the required controller run records. All previous results
 remain unchanged; this continues integration debugging, not learning confirmation.
+
+### Recorded result: REPAIR_VERIFIED / SATISFIED
+
+[Run 34205870864](https://github.com/BillyMixNix/Hive/actions/runs/34205870864)
+at commit `ef9ba194b7d532c1a945f0e765387a3ebf72bdea` passed 126 offline tests
+(2 skips, 5 subtests), then completed the repair with nine live native action calls.
+
+The controller reproduced the original failure, located the exact expression,
+grounded its diagnosis in the captured runtime values, changed `<` to `<=`,
+verified the regression and original tests, and completed its read-only review.
+The connected contract checker rejected the broken revision and accepted the
+repaired revision. Every required completion flag passed, and the controller's
+persisted objective reached **SATISFIED**. No model judge had to assert completion:
+the original controller selected its deterministic acceptance path.
+
+The independently copied final candidate passed all 121 protected integer pairs.
+Public test bytes remained unchanged. No lesson was supplied, evaluated for gain
+or promoted by this repair probe. The verdict is **REPAIR_VERIFIED** in development
+scope; it establishes a working repair path on this authored fixture, not RSI.
+
+| Measure | Continuation 6 | All six attempts |
+| --- | ---: | ---: |
+| API requests | 9 | 44 |
+| Reported input tokens | 9,813 | 38,982 |
+| Reported output tokens | 930 | 3,975 |
+| Conservative token-charge upper bound | $0.0065805 | $0.026646 |
+| Unresolved charge reservations | $0 | $0 |
+
+At least **$4.973354** remains within the original $5 allowance. This is a
+verified cumulative bound from the six spending journals, not an account invoice.
+No further paid request was made after this successful check.
+
+The archive SHA-256 is
+`b9a63eec30ab8dffd83eb47898ce08399892bcc017f25a62d0b1b0c3e88e4125`.
+Its digest and all 17 internal checksums verified, including the complete
+controller state and execution journal. The unchanged
+[report](results/2026-09-08-cont6/report.json),
+[final candidate](results/2026-09-08-cont6/candidate.json) and
+[controller state](results/2026-09-08-cont6/controller/state.json) are preserved.
+
+## What remains to test
+
+The original nine learning comparisons showed no improvement and retained no
+lesson. Their green public fixtures do not exercise this controller's repair
+entry condition, and their wrapper supplied no deterministic acceptance callback.
+A future learning protocol needs public reproducible failures and explicit
+controller acceptance checks while retaining separate final transfer and retention
+evaluation. It must be committed prospectively and measured against baseline and
+neutral guidance. This successful repair probe is reusable integration evidence,
+not a substitute for that learning measurement.
