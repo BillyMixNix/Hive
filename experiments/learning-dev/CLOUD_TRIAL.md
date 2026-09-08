@@ -1,5 +1,8 @@
 # First live development trial — 2026-09-08
 
+The completed attempt is **INVALID**, with two real API requests, a generated
+candidate lesson, and no evaluated recipient. See [FIRST_LIVE_RESULT.md](FIRST_LIVE_RESULT.md).
+
 This runs the recovered Hive executive and Jarvis learning loop with actual
 OpenAI responses. The three cases and source failure are the previously authored
 development fixtures. The lesson is generated from the recorded failure; the

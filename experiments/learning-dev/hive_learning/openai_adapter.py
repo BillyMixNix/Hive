@@ -20,6 +20,23 @@ from .ledger import canonical
 ENDPOINT = "https://api.openai.com/v1/responses"
 MAX_INPUT_BYTES = 250_000
 MAX_RESPONSE_BYTES = 1_000_000
+# Fixed labels preserve failure detail without logging provider bodies, prompts,
+# credential-bearing exceptions, or other untrusted text. Never overwrite the
+# first cause with the controller's subsequent refusal to retry.
+FAILURE_CODES = {
+    "OpenAI response is missing valid measured token usage": "invalid_usage",
+    "OpenAI returned a different model; use an exact snapshot identifier": "model_mismatch",
+    "OpenAI response did not complete; episode invalid": "response_incomplete",
+    "OpenAI reported output beyond the configured token limit": "output_limit",
+    "OpenAI response has invalid output items": "invalid_output_items",
+    "OpenAI response must contain one assistant message and no tool actions": "unexpected_output_items",
+    "OpenAI response refused or did not contain one complete text output": "refusal_or_invalid_message",
+    "OpenAI output is not one strict JSON object": "invalid_json_object",
+    "OpenAI response exceeds the fixed byte limit": "response_byte_limit",
+    "OpenAI transport failed; no retry; usage may be incomplete": "network_failure",
+    "cannot safely settle provider usage against the spending reservation": "unsettled_usage",
+    "remaining trial budget cannot cover another full request": "spending_limit",
+}
 LESSON_FORMAT = {
     "type": "json_schema", "name": "hive_lesson", "strict": True,
     "schema": {"type": "object", "additionalProperties": False,
@@ -100,6 +117,7 @@ class OpenAIMeter:
         self.budget, self.max_output_tokens = budget, max_output_tokens
         self.end = time.monotonic() + deadline
         self.proposer, self.failed = proposer, False
+        self.failure_code = None
         self.usage = {"calls": 0, "prompt_tokens": 0, "output_tokens": 0}
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
@@ -184,7 +202,11 @@ class OpenAIMeter:
             except (ValueError, TypeError):
                 raise ValueError("OpenAI output is not one strict JSON object") from None
             return text
-        except Exception:
+        except Exception as exc:
+            if self.failure_code is None:
+                self.failure_code = FAILURE_CODES.get(str(exc), "transport_or_local_limit")
+                if re.fullmatch(r"OpenAI HTTP [0-9]{3} \([a-z_]+\); no retry", str(exc)):
+                    self.failure_code = "http_error"
             self.failed = True
             self.budget.fail()  # The controller cannot turn an error into paid retries.
             raise
@@ -218,3 +240,10 @@ class OpenAIHive(OllamaHive):
                             self.max_output_tokens, deadline=deadline, proposer=proposer)
         self.meters.append(meter)
         return meter
+
+    def observed_usage(self):
+        result = super().observed_usage()
+        for item, meter in zip(result, self.meters):
+            if meter.failure_code is not None:
+                item["failure_code"] = meter.failure_code
+        return result

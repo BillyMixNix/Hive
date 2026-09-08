@@ -127,7 +127,25 @@ def test_transport_errors_are_redacted_and_counted_without_retry(monkeypatch, fa
     if failure == "http": assert "401" in str(caught.value)
     with pytest.raises(RuntimeError): meter(MESSAGES)
     assert len(seen) == 1 and adapter.observed_usage()[0] == {
-        "calls": 1, "prompt_tokens": 0, "output_tokens": 0, "complete": False}
+        "calls": 1, "prompt_tokens": 0, "output_tokens": 0, "complete": False,
+        "failure_code": "http_error" if failure == "http" else "network_failure"}
+
+
+def test_first_validation_failure_survives_controller_retry_and_report_export(monkeypatch, tmp_path):
+    store = Store(tmp_path / "jarvis.db")
+    task = seed_failure(store, tmp_path / "failed-work")
+    path = tmp_path / "suite.json"
+    raw = json.dumps(suite()).encode(); path.write_bytes(raw)
+    value = reply()
+    value["status"] = "incomplete"
+    seen = transport(monkeypatch, [value])
+    adapter = OpenAIHive(MODEL, KEY, max_requests=325)
+    report = run(store, task, path, hashlib.sha256(raw).hexdigest(), adapter)
+    assert report["verdict"] == "INVALID"
+    assert report["transport_usage"][0]["failure_code"] == "response_incomplete"
+    with pytest.raises(RuntimeError): adapter.meters[0](MESSAGES)
+    assert adapter.observed_usage()[0]["failure_code"] == "response_incomplete"
+    assert len(seen) == 1 and KEY not in json.dumps(report)
 
 
 def test_shared_budget_cannot_reset_at_trial_boundaries(monkeypatch):
