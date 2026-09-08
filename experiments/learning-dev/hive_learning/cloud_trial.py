@@ -14,23 +14,25 @@ from .spending import MODEL, SpendingGuard
 
 BRANCH = "refs/heads/agent/hive-live-trial-20260908"
 LAUNCH_MESSAGE = "Launch the authorized Hive development trial 2026-09-08"
+REPEAT_MESSAGE = "Launch the authorized Hive diagnostic repeat 2"
 SUITE_SHA256 = "119c5a5d476e7442ebfbebbba546be2391834b14a4db59326bd7a310cf58962a"
 
 
-def allowed_launch(env, event):
+def allowed_launch(env, event, launch_message=LAUNCH_MESSAGE):
     return (env.get("GITHUB_REPOSITORY") == "BillyMixNix/Hive"
             and env.get("GITHUB_REF") == BRANCH
             and env.get("GITHUB_EVENT_NAME") == "push"
             and env.get("GITHUB_RUN_ATTEMPT") == "1"
             and len(env.get("HIVE_LAUNCH_PARENT", "")) == 40
             and event.get("before") == env.get("HIVE_LAUNCH_PARENT")
-            and event.get("head_commit", {}).get("message") == LAUNCH_MESSAGE
+            and event.get("head_commit", {}).get("message") == launch_message
             and event.get("head_commit", {}).get("id") == env.get("GITHUB_SHA"))
 
 
-def main():
+def main(*, repeat_of=None):
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
-    if not allowed_launch(os.environ, event):
+    launch_message = REPEAT_MESSAGE if repeat_of is not None else LAUNCH_MESSAGE
+    if not allowed_launch(os.environ, event, launch_message):
         os.environ.pop("OPENAI_API_KEY", None)
         print(json.dumps({"status": "LAUNCH_REFUSED", "model_requests": 0}))
         return 2
@@ -40,7 +42,11 @@ def main():
     guard = adapter = store = task = None
     try:
         key = load_api_key()  # Remove before any repository child can be launched.
-        guard = SpendingGuard(output / "spending.jsonl")
+        if repeat_of is None:
+            guard = SpendingGuard(output / "spending.jsonl")
+        else:
+            guard = SpendingGuard(output / "spending.jsonl",
+                                  prior_upper_nano_usd=repeat_of["spending"]["total_upper_nano_usd"])
         adapter = OpenAIHive(MODEL, key, max_requests=325, max_output_tokens=4096,
                              spending=guard)
         del key
@@ -49,10 +55,15 @@ def main():
                     "suite_sha256": SUITE_SHA256, "adapter": adapter.identity,
                     "implementation": implementation_hashes(), "seed": 42,
                     "recipient_call_cap": 36, "proposer_call_cap": 1}
+        if repeat_of is not None:
+            manifest["diagnostic_replay_of"] = repeat_of["episode_id"]
+            manifest["prior_spending"] = repeat_of["spending"]
+            manifest["authorization"] = "Billy: So run it again (2026-09-08)"
         (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
         store = Store(output / "jarvis.db")
         task = seed_failure(store, output / "failed-work")
-        report = run(store, task, project / "examples/suite.development.json", SUITE_SHA256, adapter)
+        report = run(store, task, project / "examples/suite.development.json", SUITE_SHA256, adapter,
+                     diagnostic_replay_of=repeat_of["episode_id"] if repeat_of is not None else None)
         report["ledger_verified"] = store.verify_chain()[0]
         report["ordinary_jarvis_guidance"] = len(store.guidance())
         report["trials"] = [{key: e["data"][key] for key in
@@ -77,6 +88,10 @@ def main():
         "Live integration on previously authored development fixtures. A pass is not evidence of RSI; "
         "a rejected lesson is not retained. Spending is a conservative token-charge upper bound, "
         "not an invoice; unresolved requests retain their full reservation.")
+    if repeat_of is not None:
+        report["interpretation"] += (
+            " This is the explicitly authorized diagnostic replay of the consumed development suite. "
+            "Original evidence is unchanged; replay results cannot promote a lesson.")
     (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
     checksums = {p.relative_to(output).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(output.rglob("*")) if p.is_file()}
@@ -85,7 +100,7 @@ def main():
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         Path(summary).write_text("```json\n" + json.dumps(report, indent=2) + "\n```\n")
-    return 0 if report["verdict"] in {"PROMOTED", "REJECTED"} and report.get("ledger_verified") else 2
+    return 0 if report["verdict"] in {"PROMOTED", "REJECTED", "REPLAY_GATE_PASSED"} and report.get("ledger_verified") else 2
 
 
 if __name__ == "__main__":

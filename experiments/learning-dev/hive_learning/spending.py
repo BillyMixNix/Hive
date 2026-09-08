@@ -23,12 +23,16 @@ VALID_UNTIL = datetime(2026, 9, 9, tzinfo=timezone.utc)
 
 
 class SpendingGuard:
-    def __init__(self, journal, *, model=MODEL, max_output_tokens=4096, now=None):
+    def __init__(self, journal, *, model=MODEL, max_output_tokens=4096, now=None,
+                 prior_upper_nano_usd=0):
         instant = now or datetime.now(timezone.utc)
         if instant >= VALID_UNTIL or instant < datetime(2026, 9, 8, tzinfo=timezone.utc):
             raise ValueError("trial pricing authorization has expired or is not yet valid")
         if model != MODEL or type(max_output_tokens) is not int or not 1 <= max_output_tokens <= 32768:
             raise ValueError("spending guard requires its verified model and output bounds")
+        if type(prior_upper_nano_usd) is not int or not 0 <= prior_upper_nano_usd <= LIMIT_NUSD:
+            raise ValueError("prior spending must be a bounded integer charge reservation")
+        self.prior = prior_upper_nano_usd
         self.model, self.max_output_tokens = model, max_output_tokens
         self.reservation = CONTEXT_TOKENS * INPUT_NUSD + max_output_tokens * OUTPUT_NUSD
         self.committed = self.pending = self.requests = 0
@@ -42,6 +46,7 @@ class SpendingGuard:
     @property
     def identity(self):
         return {"model": self.model, "limit_nano_usd": LIMIT_NUSD,
+                "prior_upper_nano_usd": self.prior,
                 "input_nano_usd_per_token": INPUT_NUSD,
                 "output_nano_usd_per_token": OUTPUT_NUSD,
                 "input_reservation_tokens": CONTEXT_TOKENS,
@@ -52,9 +57,10 @@ class SpendingGuard:
 
     def snapshot(self):
         return {"limit_nano_usd": LIMIT_NUSD,
+                "prior_upper_nano_usd": self.prior,
                 "measured_usage_upper_nano_usd": self.committed,
                 "unresolved_reservation_nano_usd": self.pending,
-                "total_upper_nano_usd": self.committed + self.pending,
+                "total_upper_nano_usd": self.prior + self.committed + self.pending,
                 "requests_reserved": self.requests, "blocked": self.blocked}
 
     def _record(self, event):
@@ -66,7 +72,7 @@ class SpendingGuard:
         with self.lock:
             if self.blocked or self.pending:
                 raise RuntimeError("spending guard stopped after an unresolved request")
-            if self.committed + self.reservation > LIMIT_NUSD:
+            if self.prior + self.committed + self.reservation > LIMIT_NUSD:
                 raise RuntimeError("remaining trial budget cannot cover another full request")
             self.pending = self.reservation
             self.requests += 1

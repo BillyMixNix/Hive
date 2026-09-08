@@ -58,6 +58,46 @@ def test_small_measured_requests_refund_reservation_without_resetting_total(tmp_
     guard.close()
 
 
+def test_prior_spending_is_not_refunded_or_reset_by_the_authorized_repeat(tmp_path):
+    guard = SpendingGuard(tmp_path / "budget.jsonl", now=NOW, prior_upper_nano_usd=937000)
+    guard.reserve()
+    guard.settle(MODEL, 100, 10, "default")
+    assert guard.snapshot()["prior_upper_nano_usd"] == 937000
+    assert guard.snapshot()["total_upper_nano_usd"] == 937000 + 100 * INPUT_NUSD + 10 * OUTPUT_NUSD
+    guard.close()
+    exhausted = SpendingGuard(tmp_path / "exhausted.jsonl", now=NOW,
+                              prior_upper_nano_usd=LIMIT_NUSD - guard.reservation + 1)
+    with pytest.raises(RuntimeError, match="remaining trial budget"):
+        exhausted.reserve()
+    assert exhausted.requests == 0
+    exhausted.close()
+
+
+def test_prior_report_is_committed_and_replay_cannot_promote_a_lesson(tmp_path):
+    import hashlib
+    from hive_learning.cloud_repeat import read_prior, PRIOR_EPISODE
+    from hive_learning.demo import ScriptedAdapter, seed_failure, suite
+    from hive_learning.loop import run
+    from jarvis.store import Store
+    original = Path(__file__).resolve().parents[1] / "results/2026-09-08/report.json"
+    assert read_prior(original)["spending"]["total_upper_nano_usd"] == 937000
+    changed = tmp_path / "changed.json"
+    changed.write_bytes(original.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="commitment mismatch"): read_prior(changed)
+    store = Store(tmp_path / "repeat.db")
+    task = seed_failure(store, tmp_path / "failed-work")
+    path = tmp_path / "suite.json"
+    raw = json.dumps(suite()).encode(); path.write_bytes(raw)
+    sha = hashlib.sha256(raw).hexdigest()
+    result = run(store, task, path, sha, ScriptedAdapter(), diagnostic_replay_of=PRIOR_EPISODE)
+    assert result["verdict"] == "REPLAY_GATE_PASSED" and not result["promotion_eligible"]
+    assert result["diagnostic_replay_of"] == PRIOR_EPISODE
+    assert store.guidance() == store.guidance(learning_scope="development_simulated") == []
+    assert store.verify_chain()[0]
+    with pytest.raises(ValueError, match="consumed"):
+        run(store, task, path, sha, ScriptedAdapter(), diagnostic_replay_of=PRIOR_EPISODE)
+
+
 @pytest.mark.parametrize("kind", ["network", "missing_usage", "wrong_model", "wrong_tier", "quota"])
 def test_ambiguous_request_keeps_entire_reservation_and_blocks_paid_retry(monkeypatch, tmp_path, kind):
     guard = SpendingGuard(tmp_path / "budget.jsonl", now=NOW)

@@ -24,6 +24,10 @@ MAX_RESPONSE_BYTES = 1_000_000
 # credential-bearing exceptions, or other untrusted text. Never overwrite the
 # first cause with the controller's subsequent refusal to retry.
 FAILURE_CODES = {
+    "OpenAI transport requires plain text chat messages": "invalid_input_messages",
+    "OpenAI request exceeds the fixed input byte limit": "input_byte_limit",
+    "OpenAI recipient request limit or deadline reached": "recipient_limit_or_deadline",
+    "OpenAI episode request limit reached or prior transport failed": "episode_limit_or_prior_failure",
     "OpenAI response is missing valid measured token usage": "invalid_usage",
     "OpenAI returned a different model; use an exact snapshot identifier": "model_mismatch",
     "OpenAI response did not complete; episode invalid": "response_incomplete",

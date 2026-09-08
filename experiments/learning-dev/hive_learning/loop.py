@@ -36,7 +36,8 @@ def validate_usage(value, cap):
     return copy.deepcopy(value)
 
 
-def run(store, task_id, suite_path, suite_sha256, adapter, *, calls=36, seed=42):
+def run(store, task_id, suite_path, suite_sha256, adapter, *, calls=36, seed=42,
+        diagnostic_replay_of=None):
     """One consumed episode. Adapter is a trusted, metered, stateless transport.
 
     Proposer gets public failure only. Recipient gets public files and guidance.
@@ -52,6 +53,11 @@ def run(store, task_id, suite_path, suite_sha256, adapter, *, calls=36, seed=42)
     config = {"adapter": identity, "recipient_call_cap": calls, "proposer_call_cap": 1,
               "seed": seed, "implementation": implementation_hashes(),
               "gate": "all-treatment-pass_strict-transfer-gain_neutral-control.v1"}
+    if diagnostic_replay_of is not None:
+        if (not isinstance(diagnostic_replay_of, str) or len(diagnostic_replay_of) != 64
+                or any(c not in "0123456789abcdef" for c in diagnostic_replay_of)):
+            raise ValueError("diagnostic replay requires the prior episode's exact identifier")
+        config["diagnostic_replay_of"] = diagnostic_replay_of
     start, packet, parent, inherited = begin(store, task_id, suite_sha256, config, suite)
     suite = copy.deepcopy(suite)
     suite["cases"].extend(inherited)
@@ -131,4 +137,9 @@ def run(store, task_id, suite_path, suite_sha256, adapter, *, calls=36, seed=42)
                   "proposal_usage": proposal_usage}
     if hasattr(adapter, "observed_usage"):
         report["transport_usage"] = adapter.observed_usage()
+    if diagnostic_replay_of is not None:
+        report["diagnostic_replay_of"] = diagnostic_replay_of
+        report["promotion_eligible"] = False
+        if report["verdict"] == "PROMOTED":
+            report["verdict"] = "REPLAY_GATE_PASSED"
     return finish(store, task_id, report, frozen_parent)
