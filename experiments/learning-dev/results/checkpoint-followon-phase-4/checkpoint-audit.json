@@ -1,0 +1,913 @@
+{
+  "scope": "Model claims only; no automatic truth credit",
+  "checkpoints": [
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command `pytest` once will execute the controller's test suite and return its observed pass/fail output; it will not modify files. Boundary case: the suite may collect no tests or report failures.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one call with command='pytest' and permits pytest as the only command."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to select exactly one runtime callable; the boundary case is that the file may contain no callable matching the failing operation.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading component_d2117b3b.py and provides no reported callable candidate or observable counterexample name."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public configure_63 callable will identify the runtime operation whose truthiness filtering causes explicit zero, false, empty string, and empty list overrides to be ignored; the boundary case keep=None remains inherited from defaults.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source defines configure_63 at line 1, and the reported test failure shows all falsy overrides are omitted while keep=7 is preserved."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the filtering comprehension identifies the first point where falsy override values such as 0, False, empty strings, and empty lists are omitted; truthy overrides remain selected.",
+      "memory_id": "none",
+      "public_evidence": "The failure shows all falsy override values were ignored while keep=None was correctly left at its default, and the callable context filters overrides with `if value`."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The candidate's filtering step will omit falsy override values before the merge; non-falsy overrides remain selected, while falsy overrides cannot affect the combined result.",
+      "memory_id": "none",
+      "public_evidence": "The public packet shows selected is built from overrides.items() with the condition 'if value', and no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is relevant to this source-level truthiness filtering; submitting this mechanism should record the selected line as the cause tied to the captured falsy operands.",
+      "memory_id": "none",
+      "public_evidence": "The public packet identifies line 2 as `selected = {key: value for key, value in overrides.items() if value}`, shows falsy override operands in the pre-line frames, and lists `defaults` among current-call parameters not loaded by the RHS."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "The replacement should retain every override whose value is not None, including 0, False, empty strings, and empty lists; if all overrides are None, the selected mapping should be empty.",
+      "memory_id": "none",
+      "public_evidence": "The handoff states the current truthiness filter omits explicit falsy overrides and the objective requires only None to mean no override."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived memories concern session records and provide no review principle for the controller diff; the snapshot should return the authoritative changed lines and fresh test result for inspection.",
+      "memory_id": "none",
+      "public_evidence": "The task packet only identifies component_d2117b3b.py and test_visible.py and requires review_snapshot before any verdict; no current diff or test result is yet available."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting PASS should record that the reviewed diff has no concrete concern; the already reported test result remains passed.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows only the token change from `if value` to `if value is not None` and TEST EXIT CODE 0 with TEST STATUS PASSED; no hardcoded example or unnecessary changed line is visible."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and the broker will return the controller test output, including any failures; no test path or flags are added.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires calling run_command exactly once with command='pytest' and permits pytest as the only command."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the exact numbered callable definition for the failing buckets operation; the boundary case is that it may delegate to a helper that must then be selected only if needed.",
+      "memory_id": "none",
+      "public_evidence": "The observed pytest failure explicitly calls Converter_65.buckets(4196, 3) and reports the incorrect result 9."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the failing runtime operation should lock the callable that performs the observed bucket calculation; the boundary case is that the constructor is not selected instead.",
+      "memory_id": "none",
+      "public_evidence": "The source shows buckets defined at line 5, and the failure directly reports Converter_65.buckets(4196, 3) returning 9 instead of 1398."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the calculation line should identify the first point where the computed bucket count becomes 9 instead of the expected 4196 // 3; the return line only propagates that value.",
+      "memory_id": "none",
+      "public_evidence": "The visible failure reports buckets(4196, 3) returns 9, and the callable computes complete before returning it."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The locked candidate will produce the mismatched bucket count by computing complete from volume and self.initial_width; at an exact multiple of the width, the result should equal that quotient.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies line 6, `complete = volume // self.initial_width`, as the locked direct cause, and reports that no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The submitted explanation should identify that the line uses initial_width rather than current_width; no archived memory concerns this source-level mismatch.",
+      "memory_id": "none",
+      "public_evidence": "Controller runtime evidence shows the selected expression loads self.initial_width and volume, omits current_width, and records complete=9 from 4196 // 466."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected RHS will use current_width, so buckets(4196, 3) should produce 4196 // 3 rather than 9; if width changes on a later call, the result should follow that call's width.",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows 9 == (4196 // 3), and runtime evidence shows current_width=3 was not loaded while self.initial_width=466 was used."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot will provide the complete changed diff and fresh test result needed to identify any concrete changed-token concern; historical archive summaries do not bear on this code review.",
+      "memory_id": "none",
+      "public_evidence": "The task packet only specifies the controller-brokered snapshot and test result as the review evidence, with no code or test output yet visible."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review will accept the focused change when the tested behavior uses current_width; if current_width differs from initial_width, the changed token should govern the division. The fresh test result is expected to remain passing.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows only the token change from self.initial_width to current_width, and TEST EXIT CODE 0 with TEST STATUS PASSED."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "uncertain",
+      "expected_effect": "Running pytest once should capture the controller's exact test outcome and output; if no tests are collected or the command fails to start, that boundary outcome will be recorded by the broker.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes exactly one command, pytest, and requests capture of its failing test output."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the numbered callable definitions, including the runtime operation that produced the observed buckets result.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides only a failing call to Converter_65.buckets and no source contents or reported candidates."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public buckets callable will identify the runtime operation whose result is asserted and fails; the constructor is not selected, including for the boundary case where current_width differs from initial_width.",
+      "memory_id": "none",
+      "public_evidence": "The visible failure explicitly calls c.buckets(4196, 3), and the allowed source defines buckets at line 5 with the failing computation delegated directly inside it."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected assignment is where the computed bucket count first becomes 9 instead of the expected 1398; the return line will only propagate that already-wrong value.",
+      "memory_id": "none",
+      "public_evidence": "The failing test reports buckets(4196, 3) returns 9, and the callable context computes complete as volume // self.initial_width before returning it."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The locked computation is evaluated as the proposed first wrong producer; if it is causal, the incorrect bucket count should change while the method's return shape remains unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies this line as the candidate direct cause, and no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected assignment will remain insensitive to a changed current_width because that parameter is omitted from the RHS; with the captured operands it assigns 9.",
+      "memory_id": "none",
+      "public_evidence": "Controller runtime evidence shows current_width=3, self.initial_width=466, volume=4196, selected expression volume // self.initial_width, and complete=9 after the line."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing self.initial_width with current_width should make buckets(4196, 3) evaluate to 4196 // 3, while preserving the existing volume operand and expression structure.",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows the current result is 9 from 4196 // 466, while the expected result is 4196 // 3; runtime evidence confirms current_width is not loaded and self.initial_width is loaded."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "uncertain",
+      "expected_effect": "The snapshot will expose the complete changed-line diff and fresh test result; if correlated ordering, repeated iterable consumption, or cache-key dimensions appear in changed lines, the corresponding memory principle may identify a concrete review concern.",
+      "memory_id": "none",
+      "public_evidence": "The public task packet says the controller will provide the final diff and fresh test result, but it provides no changed code or test output yet."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting PASS will record that the complete changed line has no concrete snapshot-supported concern; the already-passed fresh test result remains passed.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows the sole change from volume // self.initial_width to volume // current_width, and the fresh test result exited 0 with status PASSED."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command `pytest` once will capture the controller's current test output; if no tests are collected or tests fail, that boundary outcome will be recorded by the broker.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and provides no historical memory entries."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the callable definitions and the runtime operation responsible for the observed value mismatch; no historical memory is available.",
+      "memory_id": "none",
+      "public_evidence": "The task permits reading component_9b58812e.py, and the failure identifies Journal_64.put followed by Journal_64.value as the visible path."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public value callable at line 9 will identify the runtime operation that returns the failing tuple; boundary behavior is the existing key lookup for a present key.",
+      "memory_id": "none",
+      "public_evidence": "The observed failure is at j.value('limit'), and the source defines value at line 9 returning (self.live[key], self.checkpoint[key])."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected return line will identify the observed wrong checkpoint component in the returned tuple; if the stored checkpoint were correct, the second tuple element would be 459 rather than 0.",
+      "memory_id": "none",
+      "public_evidence": "The visible test observes j.value('limit') == (0, 0) while expecting (0, 459), and the locked callable returns the live and checkpoint values."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available; rejecting the frontier should leave the locked candidate unconfirmed because no observable counterexample establishes it as the first wrong computation.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides no observable counterexample and no upstream cause choices, so there is no public evidence that the locked candidate explains every mismatched field."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available, so reading the only allowed source should reveal the callable definitions and their numbered lines without applying a prior principle.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading component_9b58812e.py and provides no reported operation candidates or counterexample."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public value callable at its numbered definition line will identify one callable without selecting a statement or constructor.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source contains Journal_64.value defined at line 9; no reported operation candidate or counterexample is available."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "No source-line choice can be predicted because the public packet provides an empty source_line_choices list; a submission with no choice_id should be rejected rather than identify a line.",
+      "memory_id": "none",
+      "public_evidence": "The packet explicitly shows source_line_choices: [] and the test failure only reports value('limit') returning (0, 0) instead of (0, 459)."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 9,
+      "action": "finish",
+      "applicability": "not_applicable",
+      "expected_effect": "No source location can be submitted because the public packet provides no source_line_choices; finishing as blocked should record that missing prerequisite rather than claim a line was selected.",
+      "memory_id": "none",
+      "public_evidence": "The task packet shows source_line_choices as an empty list, and the prior broker result rejected the submission because choice_id was invalid."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "call": 10,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is provided; selecting a valid offered source line would identify the first runtime assignment that makes the value wrong, but no source-line choice is publicly available.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows value('limit') returns (0, 0) instead of (0, 459) after put('limit', 0)."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; if tests fail, the broker result will contain the failure details.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes exactly one invocation with command='pytest' and provides no relevant historical memory about running this test."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the callable definitions and the runtime operation responsible for the observed value mismatch; if no callable is present, the broker will report that boundary case.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading component_9b58812e.py and provides no named operation candidate, while the failure occurs through Journal_64.put and value at runtime."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public value callable at line 9 will identify the runtime operation that returns the observed tuple; no historical memory is relevant to locating this callable.",
+      "memory_id": "none",
+      "public_evidence": "The source defines def value(self, key): at line 9, and the failing test invokes j.value('limit') with the incorrect result observed."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the only offered line should identify the first visible runtime return point; if accepted, Hive will record this locked source location without changing execution.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows value('limit') returned (0, 0) instead of (0, 459), and the locked callable context contains the sole return line producing that tuple."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "With no upstream producer choices and no observable counterexample, rejecting the frontier should leave the locked candidate unconfirmed rather than assert that it explains all mismatched fields.",
+      "memory_id": "none",
+      "public_evidence": "The task packet reports observable_counterexample as unavailable and cause_source_line_choices as an empty list."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to select exactly one callable; if the file has no callable, selection cannot be grounded.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading component_9b58812e.py and provides no reported operation or counterexample to prioritize."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the mutating runtime method should lock Journal_64.put as the selected callable; the constructor and value accessor remain unselected.",
+      "memory_id": "none",
+      "public_evidence": "The numbered source shows Journal_64.put defined at line 6 and it mutates self.live, while no reported operation candidate or counterexample is available."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the sole offered line should identify the first runtime assignment in the locked callable; if correct, the broker will accept that source location rather than a downstream use.",
+      "memory_id": "none",
+      "public_evidence": "The locked callable context contains only `self.live[key] = value`, and the observed failure shows putting 0 yields a returned second field of 0 instead of 459."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 9,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the exhausted frontier should leave the locked candidate unconfirmed because it cannot account for every mismatched observable field; no upstream choices remain as a boundary case.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly states that the remaining locked symptom cannot explain every mismatched observable field after its upstream frontier was exhausted, and cause_source_line_choices is empty."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 10,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the numbered callable definitions needed to select exactly one callable; if the file is unavailable, no definition can be selected.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits read_source_lines for component_9b58812e.py and provides no reported operation or counterexample to prioritize."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 11,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the numbered callable definition should register exactly one callable; because no counterexample or reported operation is provided, no historical memory changes the selection.",
+      "memory_id": "none",
+      "public_evidence": "The source contains callable definitions at lines 2, 6, and 9, while the task provides no named operation or failure details."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 12,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory identifies a source-line choice; the broker should reject or report that an exact choice is unavailable rather than execute an invented location.",
+      "memory_id": "none",
+      "public_evidence": "The public packet shows source_line_choices is empty while requiring one choice_id, and the observed failure is value('limit') returning (0, 0) instead of (0, 459)."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "call": 13,
+      "action": "finish",
+      "applicability": "not_applicable",
+      "expected_effect": "No source location can be submitted because the public packet exposes an empty source_line_choices list; finishing as blocked will record that acceptance cannot be evidenced.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly shows source_line_choices: [] and the prior submit_location result rejected an empty choice_id as invalid."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; if tests fail, the result will include the failure details.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and provides no historical memory."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the callable definitions and exact definition line needed for the single locator submission; no historical memory is present.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading component_7da2276b.py, and the failure identifies Converter_65.buckets as the failing public operation."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the buckets callable at its exact definition line will select the runtime operation named by the counterexample; no historical memory is available to predict a different target.",
+      "memory_id": "none",
+      "public_evidence": "The public failure calls Converter_65.buckets(4196, 3), and the source defines def buckets at line 5."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The computed complete value will be 9 for volume 4196 with initial_width 466, while the visible test expects 4196 // 3 = 1398; the return line only propagates that value.",
+      "memory_id": "none",
+      "public_evidence": "The failure reports buckets(4196, 3) returned 9 instead of 4196 // 3, and the locked callable computes complete using self.initial_width."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The computation at the locked candidate will produce the incorrect complete-bucket value; no upstream producer choices remain to explain the mismatch.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies this line as the candidate direct cause and states that no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available; submitting the directly observed operand evaluation should identify the line's width insensitivity without relying on prior guidance.",
+      "memory_id": "none",
+      "public_evidence": "Controller evidence shows `current_width` is 3, `self.initial_width` is 466, the selected expression is `volume // self.initial_width`, and the after-frame shows `complete` is 9 for volume 4196."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing self.initial_width with current_width will make the expression compute 4196 // 3 = 1398 for the captured call; if the widths are equal, the result remains unchanged.",
+      "memory_id": "none",
+      "public_evidence": "Controller runtime evidence shows current_width=3, initial_width=466, volume=4196, and the failing result is 9 instead of 4196 // 3; the selected RHS loads self.initial_width but not current_width."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available; the snapshot should provide the complete changed diff and fresh test result needed for review.",
+      "memory_id": "none",
+      "public_evidence": "The task packet provides an empty Historical memory list and instructs review from the controller-computed snapshot."
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting PASS will record that the complete one-line diff presents no concrete concern and the reported test suite remains passing; there is no historical memory to apply.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows only the token change from `self.initial_width` to `current_width`, and TEST EXIT CODE: 0 with TEST STATUS: PASSED."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run the repository's tests once and return the controller's exact test output; if tests fail, the result will include the failure details.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes and requires exactly one invocation with command='pytest'; no historical memory is provided."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is provided, so source inspection should reveal the available callable definitions and their exact definition lines.",
+      "memory_id": "none",
+      "public_evidence": "The task permits reading component_d2117b3b.py and requires selecting one callable, while no operation candidate is reported."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the only top-level callable at its exact definition line will identify configure_63 as the callable to inspect; no historical memory is available.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def configure_63(defaults, overrides):` at line 1 and contains the failing truthiness-based selection logic."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting this line should identify where falsy override values are excluded; the downstream merge then leaves defaults for quota, enabled, label, and rows while truthy keep remains unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The public test result shows all falsy overrides were ignored while keep=None did not replace keep=7, matching the filter `if value` on the selected line."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "Falsy override values are omitted from selected; truthy values remain, so the merged result changes only where an override passes the value filter.",
+      "memory_id": "none",
+      "public_evidence": "The public packet identifies this locked line as the direct candidate and provides no upstream producer choices; the line explicitly filters overrides with `if value`."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available; submitting the direct runtime-grounded mechanism should record that falsy override values are filtered and defaults is omitted from the selected expression.",
+      "memory_id": "none",
+      "public_evidence": "The controller-captured frames show overrides values 0, false, \"\", null, and [] before the line, selected becomes {} after it, and defaults is listed among current-call parameters not loaded by the RHS."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing the truthiness filter with a None-only filter will retain 0, False, empty strings, and empty lists, while omitting only None; the resulting combined mapping should overlay those explicit values without mutating defaults.",
+      "memory_id": "none",
+      "public_evidence": "The handoff shows overrides containing quota 0, enabled False, label '', rows [], and keep None, while the current truthiness-filtered result leaves defaults for the differing keys and the focused test fails."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is available; the snapshot should provide the complete changed diff and fresh test result for review.",
+      "memory_id": "none",
+      "public_evidence": "The task packet contains an empty Historical memory list and directs review from the controller snapshot."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review submission will record PASS when the complete changed diff has no concrete defect and the fresh test result is passing.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows one focused change from `if value` to `if value is not None`, and TEST STATUS: PASSED with exit code 0."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command once will execute the controller's test suite and return its observed pass/fail output; the boundary case is that the suite may pass or may report failures, but no source changes will be made.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and grants pytest as the allowed command."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the runtime callables and their exact definition lines; no ordering, iterable, or cache-key issue is established by the packet.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides a failing Journal_64 construction and put/value interaction but no observable counterexample naming a callable or source details."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public value callable should identify the runtime operation that returns the incorrect checkpoint pair; the boundary case is that the alias is created in initialization, but no separate helper callable exists to select.",
+      "memory_id": "none",
+      "public_evidence": "The failing assertion directly observes Journal_64.value('limit') returning (0, 0) instead of (0, 459), and the source defines value at line 9."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the only offered line will identify the return expression where the observed value exposes the incorrect checkpoint result; no other source line is available in the locked window.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows j.value('limit') returned (0, 0) instead of (0, 459), and the locked callable contains exactly one return line."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "No upstream producer choices remain; rejecting the frontier leaves the locked return expression unconfirmed because the packet provides no evidence that it is the first wrong computation or explains every mismatched field.",
+      "memory_id": "none",
+      "public_evidence": "The packet explicitly states that cause_source_line_choices is empty, observable_counterexample is unavailable, and confirmation is allowed only when the locked candidate is shown to be the first wrong computation."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered def or async-def lines so one callable can be submitted; with no observable counterexample, no behavioral selection is predicted.",
+      "memory_id": "none",
+      "public_evidence": "The task packet provides no reported operation, candidates, or observable counterexample, and permits only component_9b58812e.py."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public value callable should lock the runtime operation that returns the journal's observable fields; no memory principle applies to this non-iterable, non-cache, non-reordering code.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source defines Journal_64.value at line 9 and it is the only shown public runtime operation returning both live and checkpoint values; no reported operation candidate or counterexample is available."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "uncertain",
+      "expected_effect": "If the selected source line is the first runtime transformation that overwrites the preserved value, the reported value should retain 459 after putting 0; with no available source-line choices, no observable location can be selected reliably.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows value('limit') returns (0, 0) instead of (0, 459), and source_line_choices is empty."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 9,
+      "action": "finish",
+      "applicability": "not_applicable",
+      "expected_effect": "No source-location submission can be executed because the public packet contains no available choice_id; finishing as blocked should report the broker validation failure without claiming a location.",
+      "memory_id": "none",
+      "public_evidence": "The broker returned ValueError: location requires structured fields with invalid choice_id, and the packet showed source_line_choices as an empty list."
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "call": 10,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "No selectable source-line choice is available in the public packet, so submission cannot identify a line; if accepted, the broker would need to reject the missing choice rather than execute a location.",
+      "memory_id": "none",
+      "public_evidence": "The packet shows source_line_choices as an empty list, while the observed failure only reports value('limit') returning (0, 0) instead of (0, 459)."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command once will execute the test suite and return the controller's observed pass/fail output; no source changes or diagnosis are performed.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and grants pytest as the allowed command."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source will reveal the callable definitions and exact definition line needed for a single locator submission; no historical memory applies because this task is source-location selection without a named transformation diagnosis.",
+      "memory_id": "none",
+      "public_evidence": "The packet permits component_d2117b3b.py and reports a failing test calling configure_63, but provides no callable candidate or source line."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public configure_63 callable should identify the runtime operation responsible for combining defaults and overrides; the boundary case of falsy overrides is visible in its filtering expression.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source contains the public callable configure_63 at line 1, and the failing comparison shows falsy override values were not applied while keep=None remained default."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected mapping omits falsy override values such as 0, False, an empty string, and an empty list; truthy values remain eligible for update.",
+      "memory_id": "none",
+      "public_evidence": "The visible test shows all four falsy override values remain at their defaults, while keep=None leaves the default unchanged."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The filtering expression is the first computation shown to discard falsy override values; retaining those values would change the resulting selected mapping and any corresponding combined configuration fields.",
+      "memory_id": "none",
+      "public_evidence": "The callable context shows selected is built by including only override entries whose value is truthy, and no upstream cause choices remain."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected line's result will remain an empty selection for the captured falsy override values, while a truthiness-preserving overlay would need to retain them; no ordering, iterable-consumption, or cache-key behavior is involved.",
+      "memory_id": "none",
+      "public_evidence": "The controller-captured frames show override values 0, false, \"\", null, and [] and the selected expression filters with `if value`; defaults is listed as not loaded by the RHS."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected mapping will retain values such as 0, False, empty strings, and empty lists, while excluding only None; the captured falsy overrides should therefore replace corresponding defaults.",
+      "memory_id": "none",
+      "public_evidence": "The handoff states the current truthiness filter produces an empty selection and the objective requires every override except None to apply."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "uncertain",
+      "expected_effect": "The snapshot will expose the complete changed diff and fresh test result; if it shows correlated reordering, repeated iterable consumption, or cache-key changes, I will evaluate that specific boundary against the relevant memory.",
+      "memory_id": "none",
+      "public_evidence": "No diff or test result is available yet in the public packet, so no historical memory can be matched to an observed change."
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review submission will record PASS because the only changed token broadens selection from truthiness filtering to an explicit None check, and the fresh test result passes; no positional, iterable, or cache-key behavior is implicated by this diff.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows only `if value` changed to `if value is not None` in component_d2117b3b.py, and TEST STATUS is PASSED with exit code 0."
+    }
+  ],
+  "handoffs": [
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "call": null,
+      "lines": 5
+    }
+  ]
+}

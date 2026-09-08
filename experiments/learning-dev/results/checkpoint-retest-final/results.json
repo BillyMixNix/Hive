@@ -1,0 +1,438 @@
+{
+  "overall": "NO_CONFIRMED_LESSON_GAIN",
+  "original_v5_status": "INCOMPLETE_AFTER_INTERFACE_DEFECT",
+  "original_v5_recipients": 18,
+  "original_v5_arms": {
+    "baseline": {
+      "passed_original": 5,
+      "passed_audited": 4,
+      "tasks": 6,
+      "actual_calls": 80
+    },
+    "lesson": {
+      "passed_original": 1,
+      "passed_audited": 1,
+      "tasks": 6,
+      "actual_calls": 58
+    },
+    "neutral": {
+      "passed_original": 5,
+      "passed_audited": 4,
+      "tasks": 6,
+      "actual_calls": 76
+    }
+  },
+  "followon_status": "DESCRIPTIVE_ONLY",
+  "followon_recipients": 45,
+  "followon_original_assessment": {
+    "verdict": "DESCRIPTIVE_ONLY",
+    "confirmatory_gain_claim_allowed": false,
+    "transfer_successes": {
+      "baseline": 9,
+      "lesson": 9,
+      "neutral": 9
+    },
+    "retention_successes": {
+      "baseline": 2,
+      "lesson": 2,
+      "neutral": 2
+    },
+    "comparisons": {
+      "baseline": {
+        "control_penalized_calls": 193,
+        "lesson_penalized_calls": 203,
+        "relative_reduction": -0.051813471502590636,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -2,
+          -4,
+          0,
+          -4,
+          0
+        ],
+        "lesson_lower_effort": 0,
+        "lesson_higher_effort": 3,
+        "ties": 9
+      },
+      "neutral": {
+        "control_penalized_calls": 197,
+        "lesson_penalized_calls": 203,
+        "relative_reduction": -0.030456852791878264,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          -2,
+          -4,
+          4,
+          -4,
+          0
+        ],
+        "lesson_lower_effort": 1,
+        "lesson_higher_effort": 3,
+        "ties": 8
+      }
+    },
+    "interpretation": "The original V5 confirmation stopped after an interface defect. These untouched tasks use a changed handle schema and are reported separately. No alpha is reallocated and no confirmatory gain claim is made."
+  },
+  "followon_arms": {
+    "baseline": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 154,
+      "penalized_calls_original": 193,
+      "penalized_calls_audited": 220,
+      "input_tokens": 290503,
+      "output_tokens": 35534,
+      "charge_upper_nano_usd": 209212700,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 28
+    },
+    "lesson": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 165,
+      "penalized_calls_original": 203,
+      "penalized_calls_audited": 230,
+      "input_tokens": 388227,
+      "output_tokens": 41902,
+      "charge_upper_nano_usd": 269537100,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 28
+    },
+    "neutral": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 154,
+      "penalized_calls_original": 197,
+      "penalized_calls_audited": 220,
+      "input_tokens": 344709,
+      "output_tokens": 36407,
+      "charge_upper_nano_usd": 237887100,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 31
+    }
+  },
+  "followon_audited_comparisons": {
+    "baseline": {
+      "control_penalized_calls": 220,
+      "lesson_penalized_calls": 230,
+      "relative_reduction": -0.045454545454545414,
+      "lesson_lower_effort": 0,
+      "lesson_higher_effort": 3,
+      "ties": 9,
+      "paired_differences": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -2,
+        -4,
+        0,
+        -4,
+        0
+      ]
+    },
+    "neutral": {
+      "control_penalized_calls": 220,
+      "lesson_penalized_calls": 230,
+      "relative_reduction": -0.045454545454545414,
+      "lesson_lower_effort": 0,
+      "lesson_higher_effort": 3,
+      "ties": 9,
+      "paired_differences": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -2,
+        -4,
+        0,
+        -4,
+        0
+      ]
+    }
+  },
+  "cache_audit": [
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "dc2aa7e07f01677efb453945293d4729971c64b12bd1fbae90c29394813a2ab5"
+      }
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "original_passed": false,
+      "candidate_sha256": null,
+      "full_contract_passed": false,
+      "reason": "No final candidate after counted output failure; remains unsuccessful"
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "1c14b1c6144730e178a08c91e7068ced848dfd0152eef135647f6463014797b5"
+      }
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "lesson",
+      "original_passed": false,
+      "candidate_sha256": null,
+      "full_contract_passed": false,
+      "reason": "No final candidate after counted output failure; remains unsuccessful"
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "lesson",
+      "original_passed": true,
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "149e983c325e1215d8fe411fd58fb9c0fa38bc5dfa119c4a6a92d44ee61e3e10"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "39f65a04eb36831851b7bc731af9f067a37dcdfd5db93940792ddb9d75d6dc26"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "lesson",
+      "original_passed": true,
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "397f2a7cbde743868f96f97b321c706a005af600f21f43c7a9553f4b1f8ad5e2"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "86c1e2f0fb4aef524627d60b2eaa1a1ab48795e825e01619340a2b07fcf33547"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "149e983c325e1215d8fe411fd58fb9c0fa38bc5dfa119c4a6a92d44ee61e3e10"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "lesson",
+      "original_passed": true,
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "lesson",
+      "original_passed": true,
+      "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    }
+  ],
+  "checkpoint_selections": {
+    "baseline": {
+      "not_applicable": 182
+    },
+    "lesson": {
+      "uncertain": 24,
+      "applies": 132,
+      "not_applicable": 36
+    },
+    "neutral": {
+      "not_applicable": 185
+    }
+  },
+  "followon_model_failures": [
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "lesson",
+      "passed": false,
+      "calls": 29,
+      "outcome": "model_failure_counted"
+    }
+  ],
+  "followon_provider_requests": 560,
+  "followon_repair_handoffs_verified": 80,
+  "total_new_recipients": 63,
+  "total_new_provider_requests": 774,
+  "cumulative_upper_nano_usd": 3469597600,
+  "redesign_retest_upper_nano_usd": 1154690300,
+  "followon_upper_nano_usd": 829651200,
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+  "study_sha256": "e5ad65904e74ede49e94f66dc0ac4779a36e741223d56b6b63b88292e1e74527",
+  "source_sha256": "c6edd5410e93f4c57bd24519dec9deb475f261514093769f28bbdcec043e98c0",
+  "no_alpha_reallocated": true,
+  "no_weight_training": true
+}
