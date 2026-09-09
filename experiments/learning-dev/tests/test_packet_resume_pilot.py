@@ -88,6 +88,8 @@ def test_real_transport_duplicate_final_boundary(tmp_path, conflicting):
     first={'type':'message','status':'completed','role':'assistant','phase':'final_answer',
            'content':[{'type':'output_text','text':'{"action":"run_tests","latest_revision_verified":false}'}]}
     second=copy.deepcopy(first)
+    first['id']='provider-message-1'
+    second['id']='provider-message-2'
     if conflicting: second['content'][0]['text']='{"action":"complete"}'
     response={'model':MODEL,'status':'completed','service_tier':'default','error':None,
               'usage':{'input_tokens':464,'output_tokens':139},

@@ -29,7 +29,10 @@ class ResumeTrace(ResponseTrace):
         super().__call__(sequence, request, response, secret)
         finals = [m for m in response.get('output', [])
                   if m.get('type') == 'message' and m.get('phase') != 'commentary']
-        if len(finals) > 1 and all(m == finals[0] for m in finals):
+        # Provider-generated message IDs may differ for identical final content.
+        def semantic(m):
+            return {k:v for k,v in m.items() if k != 'id'}
+        if len(finals) > 1 and all(semantic(m) == semantic(finals[0]) for m in finals):
             seen = False
             output = []
             for m in response['output']:
@@ -232,6 +235,15 @@ def audit(directory, commitment):
         expected = None if row['arm']=='no_context' else False
         totals[row['arm']]['correct_verification_state'] += int('latest_revision_verified' in row['actions'][0] and row['actions'][0]['latest_revision_verified'] is expected)
     spending = report['spending']
+    if 'recovery' in report:
+        recovery=report['recovery']
+        old,new=recovery['prior_guard'],recovery['new_guard']
+        old_journal=[strict_json(l) for l in (directory/'spending.jsonl').read_text().splitlines()]
+        new_journal=[strict_json(l) for l in (directory/'recovery-spending.jsonl').read_text().splitlines()]
+        assert old_journal[-1]['total_upper_nano_usd']==old['total_upper_nano_usd']==new['prior_upper_nano_usd']
+        assert new_journal[-1]['total_upper_nano_usd']==new['total_upper_nano_usd']==spending['total_upper_nano_usd']
+        assert spending['requests_reserved']==old['requests_reserved']+new['requests_reserved']
+        assert spending['measured_usage_upper_nano_usd']==old['measured_usage_upper_nano_usd']+new['measured_usage_upper_nano_usd']
     assert spending['prior_upper_nano_usd'] == PRIOR and spending['unresolved_reservation_nano_usd'] == 0
     assert spending['measured_usage_upper_nano_usd'] == charge and spending['requests_reserved'] == calls
     assert spending['total_upper_nano_usd'] == PRIOR+charge <= 5_000_000_000
