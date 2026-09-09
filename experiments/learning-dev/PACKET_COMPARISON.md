@@ -18,11 +18,19 @@ source bytes, the study, the schedule, the model, and a separate fresh $5 ceilin
 Freezing also runs the existing task/reference and contract mutation preflight.
 Any Python source change requires a new plan and digest.
 
-Paid execution is currently BLOCKED: the inherited pricing guard expired on
-September 9, 2026. Do not override its clock. Verify pricing and update the guard
-before freezing a replacement plan. No paid execution was performed for this
-integration. The approved credential is the existing GitHub secret
-`HIVE_OPENAI_API_KEY`; no workflow or secret-export mechanism is added here.
+Pricing was reverified September 9 at
+https://developers.openai.com/api/docs/models/gpt-5.6-luna . Standard input/output
+remain $0.20/$1.20 per million tokens; long-context and cache-write multipliers
+remain 2x/1.5x and 1.25x respectively. The separate `packet_spending.py` guard
+uses conservative $0.50/$1.80 bounds and expires September 10 UTC, checked at
+initialization and before each request. The historical guard is unchanged.
+The endpoint is the standard global OpenAI Responses endpoint.
+
+The replacement committed plan is `examples/packet-comparison-live-20260909.json`;
+SHA256: `5c049fae2e3f06162019d403077855bb34d0b97f61386bdbfa54a398202c9d70`.
+The GitHub workflow uses the approved `HIVE_OPENAI_API_KEY` only in the paid step.
+It accepts only the first attempt of the push from the pinned preceding commit,
+and serializes executions. Later pushes and workflow reruns cannot launch it.
 
 Once pricing and a supported secret-backed execution environment are ready:
 

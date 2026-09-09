@@ -1,6 +1,6 @@
 """Freeze/check/run a descriptive packet comparison. No retries or auto-launch.
 
-Uses the existing pricing guard unchanged: expired pricing blocks paid execution.
+Uses a separately verified September 9 pricing guard; expiration blocks execution.
 No command here installs credentials or updates old experiment records.
 """
 import argparse
@@ -21,7 +21,7 @@ from hive_learning.evaluate import strict_json
 from hive_learning.lesson_study import save_json
 from hive_learning.openai_adapter import load_api_key
 from hive_learning.response_trace import ResponseTrace
-from hive_learning.spending import SpendingGuard, MODEL
+from analysis.packet_spending import SpendingGuard, MODEL
 
 ARMS = ("raw", "lessons", "packet")
 

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from hive_learning.evaluate import grade, strict_json
 from hive_learning.ledger import digest
-from hive_learning.spending import INPUT_NUSD, OUTPUT_NUSD
+from analysis.packet_spending import INPUT_NUSD, OUTPUT_NUSD
 from analysis.indexed_checkpoint import indexed_tools
 
 
