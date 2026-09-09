@@ -16,8 +16,28 @@ from hive_learning.lesson_study import save_json
 from hive_learning.openai_adapter import OpenAIMeter, RequestBudget, load_api_key
 from hive_learning.response_trace import ResponseTrace
 
-PRIOR = 919758800
+PRIOR = 920241000  # Includes the settled, aborted first pilot request.
 ARMS = ['history', 'packet', 'no_context']
+
+
+class ResumeTrace(ResponseTrace):
+    """Preserve original response, then collapse only identical final messages.
+
+    No action is executed twice. Conflicting finals remain a transport failure.
+    """
+    def __call__(self, sequence, request, response, secret):
+        super().__call__(sequence, request, response, secret)
+        finals = [m for m in response.get('output', [])
+                  if m.get('type') == 'message' and m.get('phase') != 'commentary']
+        if len(finals) > 1 and all(m == finals[0] for m in finals):
+            seen = False
+            output = []
+            for m in response['output']:
+                if m.get('type') == 'message' and m.get('phase') != 'commentary':
+                    if seen: continue
+                    seen = True
+                output.append(m)
+            response['output'] = output
 
 
 def fixtures():
@@ -147,7 +167,7 @@ def run(plan_path, commitment, directory):
         for entry in plan['schedule']:
             case = cases[entry['case_id']]
             label = entry['case_id']+'-'+entry['arm']
-            meter = OpenAIMeter(MODEL, key, 3, budget, 4096, observer=ResponseTrace(directory/label))
+            meter = OpenAIMeter(MODEL, key, 3, budget, 4096, observer=ResumeTrace(directory/label))
             conversation = messages(case, entry['arm'])
             actions = []
             for _ in range(3):
@@ -200,6 +220,7 @@ def audit(directory, commitment):
             response = trace['response']
             assert response['model'] == MODEL and response['service_tier'] == 'default'
             finals = [m for m in response['output'] if m['type']=='message' and m.get('phase')!='commentary']
+            assert finals and all(m == finals[0] for m in finals)
             answer = ''.join(p['text'] for p in finals[0]['content'] if p['type']=='output_text')
             assert strict_json(answer) == action
             feedback = execute(case,row['actions'][:i+1])['steps'][-1]

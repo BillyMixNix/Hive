@@ -2,7 +2,7 @@ name: Hive Packet Resume Pilot September 9
 on:
   push:
     branches: [agent/state-packet-offline-20260909]
-    paths: [experiments/learning-dev/examples/packet-resume-pilot-20260909.json]
+    paths: [experiments/learning-dev/examples/packet-resume-pilot-v2-20260909.json]
 permissions:
   contents: read
 concurrency:
@@ -10,14 +10,14 @@ concurrency:
   cancel-in-progress: false
 jobs:
   pilot:
-    if: github.repository == 'BillyMixNix/Hive' && github.event_name == 'push' && github.run_attempt == 1 && github.event.before == 'bcb6f1bc387fb0d94550dbac71e5527b199efa9c'
+    if: github.repository == 'BillyMixNix/Hive' && github.event_name == 'push' && github.run_attempt == 1 && github.event.before == 'a5c22012231b6f38a20d90548f5d32e70bd50b9c'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
-      PLAN: examples/packet-resume-pilot-20260909.json
-      PLAN_SHA: 22dae503e3c6a2ae73f3f7fac3a4a6d026040cf9069070220fac4bd157155934
+      PLAN: examples/packet-resume-pilot-v2-20260909.json
+      PLAN_SHA: 4743ae6c73154f4d5f36bf4066f9d81af7a4126399312fdc9bb33a847aa1cad9
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -36,7 +36,9 @@ jobs:
       - name: Replay and reconcile without credentials
         if: always()
         working-directory: experiments/learning-dev
-        run: '"$RUNNER_TEMP/resume-env/bin/python" analysis/packet_resume_pilot.py audit "$RUNNER_TEMP/resume-evidence" --sha256 "$PLAN_SHA" | tee "$RUNNER_TEMP/resume-audit.json"'
+        run: |
+          "$RUNNER_TEMP/resume-env/bin/python" analysis/packet_resume_pilot.py audit "$RUNNER_TEMP/resume-evidence" --sha256 "$PLAN_SHA" > "$RUNNER_TEMP/resume-audit.json"
+          cat "$RUNNER_TEMP/resume-audit.json"
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

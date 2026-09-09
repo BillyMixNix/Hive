@@ -77,3 +77,29 @@ def test_offline_run_and_trace_replay(tmp_path, monkeypatch):
     assert result['totals']['packet']['correct']==3
     assert result['totals']['history']['correct']==3
     assert result['totals']['no_context']['requested_context']==3
+
+
+@pytest.mark.parametrize('conflicting',[False,True])
+def test_real_transport_duplicate_final_boundary(tmp_path, conflicting):
+    import copy
+    import io
+    from analysis.packet_resume_pilot import ResumeTrace, MODEL
+    from hive_learning.openai_adapter import OpenAIMeter, RequestBudget
+    first={'type':'message','status':'completed','role':'assistant','phase':'final_answer',
+           'content':[{'type':'output_text','text':'{"action":"run_tests","latest_revision_verified":false}'}]}
+    second=copy.deepcopy(first)
+    if conflicting: second['content'][0]['text']='{"action":"complete"}'
+    response={'model':MODEL,'status':'completed','service_tier':'default','error':None,
+              'usage':{'input_tokens':464,'output_tokens':139},
+              'output':[{'type':'reasoning'},first,{'type':'reasoning'},second]}
+    class OfflineOpener:
+        def open(self,*args,**kwargs): return io.BytesIO(json.dumps(response).encode())
+    meter=OpenAIMeter(MODEL,'offline-placeholder',1,RequestBudget(1),4096,observer=ResumeTrace(tmp_path/'trace'))
+    meter.opener=OfflineOpener()
+    if conflicting:
+        with pytest.raises(ValueError,match='one assistant message'):
+            meter([{'role':'user','content':'Return a JSON action.'}])
+    else:
+        assert json.loads(meter([{'role':'user','content':'Return a JSON action.'}]))['action']=='run_tests'
+    saved=json.loads((tmp_path/'trace/response-0001.json').read_text())
+    assert len([m for m in saved['response']['output'] if m['type']=='message'])==2
