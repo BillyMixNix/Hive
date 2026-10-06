@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "phase": "pre-adversarial deterministic gate",
+  "classification": "PASS_WITH_HOST_LOCAL_REPRODUCIBILITY_LIMIT",
+  "anchor_commit": "dd5db7108c7d4e37ef757f7577456e0d9f5105db",
+  "anchor_tree": "3b10957cb562929b1d9e7031882d73931c63e104",
+  "source_manifest_sha256": "df18a1484c81b7b31a237265ef81a3733b0890d5e598c335d2da27ee2fc28610",
+  "fixture_map_sha256": "d216a98dc39062bc6bad7c0a2aff21b13f58b30e3c97aab333a062ac0b929bdc",
+  "environment_manifest_sha256": "35ff471ff9e5ab7e85db71e10bf5347bb034eec8777fe5c9468ea235000191fe",
+  "historical_corpus_tree": "214a81054c99ec4a12db04f60d17bb25ec9011bb",
+  "frozen_baseline_git_tree": "517e5cb3a523f944c68833b196bd511cbcd0fc07",
+  "frozen_baseline_source_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "frozen_j001_test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+  "versions": {"python": "3.13.14", "pytest": "9.1.1", "docker_client": "29.7.2", "docker_server": "29.7.2", "java_container": "Temurin 21.0.12.1+1", "gradle": "9.2.1"},
+  "checks": [
+    {"name": "source_provenance", "command": "python -B recovery/rc1-closure/verify_source.py verify", "result": "PASS", "files": 48},
+    {"name": "fixture_resolver_tests_and_rc1_authority", "command": "python -B -m pytest -q tests/recovery --basetemp C:/Users/billy/Documents/Codex/2026-10-06/rc1b-recovery-test-temp5 --tb=line", "result": "PASS_WITH_SKIP", "passed": 54, "failed": 0, "skipped": 2, "elapsed_seconds": 2.62},
+    {"name": "archived_workshop_isolated_fixture_worktree", "command": "python -B -m pytest -q tests --basetemp C:/Users/billy/Documents/Codex/2026-10-06/rc1b-legacy-test-temp --tb=short", "result": "PASS_WITH_SKIP", "passed": 613, "failed": 0, "skipped": 8, "elapsed_seconds": 79.3},
+    {"name": "verifier_isolation_and_observability", "command": "python -B -m pytest -q tests/test_verifier_observability.py tests/test_hive_isolated_verifier.py tests/test_hive_external_root.py --basetemp C:/Users/billy/Documents/Codex/2026-10-06/rc1b-verifier-test-temp --tb=line", "result": "PASS_WITH_SKIP", "passed": 18, "failed": 0, "skipped": 2, "elapsed_seconds": 24.04},
+    {"name": "malicious_build_control_probe", "command": "python -B recovery/rc1-closure/gradle_trust_probe.py --output recovery/rc1-closure/gradle-trust-probe.json", "result": "EXPECTED_FALSE_PASS_DEMONSTRATED", "original_junit_cases": 1, "original_junit_failures": 1, "attacked_junit_cases": 1, "attacked_junit_failures": 0, "attacked_only_build_file_changed": true, "probe_sha256": "9eb4c2b3a54736a6d1d263c3388a180724a5f6daf1dcf27e94aac53b051e59c4"},
+    {"name": "fresh_environment_relocation", "command": "python -B recovery/rc1-closure/environment/verify_environment.py provision --root C:/Users/billy/Documents/Codex/2026-10-06/rc1b-provision-fresh --source-cache <approved cache from FREEZE.json>", "result": "PASS_HOST_LOCAL_RELOCATION", "files": 4866, "bytes": 1438483301, "independent_reacquisition": false},
+    {"name": "fresh_j001_baseline", "command": "python -B recovery/rc1-closure/baseline_control.py --fresh-root C:/Users/billy/Documents/Codex/2026-10-06/rc1b-provision-fresh --output recovery/rc1-closure/j001-baseline-control.json", "result": "EXPECTED_FROZEN_ACCEPTANCE_FAILURE", "elapsed_seconds": 135.57, "timed_out": false, "cases": 3, "failures": 1, "errors": 0, "skipped": 0, "failing_case": "truncationNeverSplitsAPair()"},
+    {"name": "post-verifier_environment_integrity", "command": "python -B recovery/rc1-closure/environment/verify_environment.py verify --root C:/Users/billy/Documents/Codex/2026-10-06/rc1b-provision-fresh", "result": "PASS", "files": 4866},
+    {"name": "historical_corpus_immutability", "command": "git rev-parse HEAD:recovery/workshop-source-20261006; git rev-parse dd5db71:recovery/workshop-source-20261006", "result": "PASS", "tree": "214a81054c99ec4a12db04f60d17bb25ec9011bb"}
+  ],
+  "model_calls": 0,
+  "promotion_attempts": 0,
+  "unresolved": ["Exact approved Docker image and 1.438 GB cache payload remain host-local; immutable independent reacquisition is not proven", "Python wheel/digest lock is not recovered"]
+}

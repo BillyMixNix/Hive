@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "anchor_commit": "dd5db7108c7d4e37ef757f7577456e0d9f5105db",
+  "source_freeze": "recovery/workshop-source-20261006/workspace/HIVE-FACTORIAL-003R1/FREEZE.json",
+  "source_freeze_sha256": "8c6f4c1404e97b7a1a3eccd8a87c775c7199d5b513530ad8c4fc36207d3a097f",
+  "approved_cache_run_id": "e5a7c314b902",
+  "artifact_inventory_sha256": "83759b6046e4290e6388ea95b2013f12edf500d4f86f39cc3401dd646117c2f9",
+  "downloaded_input_manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+  "downloaded_input_provenance_sha256": "0805a46b429c299d752928cc68b2306f642e34e2bc1c0ff6dfc50236984df5c4",
+  "nfrt_attestation_sha256": "9ec38a4912981e3e34e0ee4bbeb7c8dfa04a6d23beba3b49829a43e5b2a124a3",
+  "baseline_tree_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "verifier_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+  "components": [
+    {"name": "verifier container image", "version": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy", "digest": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26", "origin": "existing local Docker image; immutable remote registry origin not verified", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT", "redistributable": "unverified", "trust_boundary": "image ID checked before verifier launch"},
+    {"name": "Java", "version": "Temurin 21.0.12.1+1", "origin": "inside pinned verifier image", "acquisition": "bound by verifier image ID", "redistributable": "upstream license applies", "trust_boundary": "container Java, not host Java"},
+    {"name": "Gradle", "version": "9.2.1", "distribution_zip_sha256": "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f", "origin": "Gradle wrapper distribution and sealed priming inventory", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT for exact extracted tree; upstream ZIP origin is recorded but independent reacquisition untested", "redistributable": "unverified in this recovery", "trust_boundary": "each selected extracted file SHA-256 checked against sealed inventory"},
+    {"name": "Gradle module cache", "version": "frozen dependency set including ModDevGradle 2.0.147, NeoForm Runtime 2.0.31, NeoForge 21.1.251", "origin": "historical approved cache; upstream Maven/plugin origins in external provenance", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT", "redistributable": "unverified", "trust_boundary": "selected files checked against sealed priming inventory"},
+    {"name": "Minecraft and NeoForge downloaded inputs", "version": "frozen M3.2 dependency set", "origin": "historical external-input provenance records upstream URLs and artifact identities", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT for exact approved bytes", "redistributable": "unverified", "trust_boundary": "3,895 inputs checked against downloaded-input manifest"},
+    {"name": "NFRT reconstruction intermediates", "version": "ten nodes, 22 files", "origin": "approved historical priming cache", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT", "redistributable": "unverified", "trust_boundary": "private seeding after file and attestation verification; no candidate classes or results reused"},
+    {"name": "Python runtime and dependencies", "version": "CPython 3.13.14; pytest 9.1.1; jsonschema 4.26.0; fastapi 0.141.1; httpx 0.28.1; pydantic 2.13.4", "origin": "host Python environment", "acquisition": "package versions recorded; lockfile/wheel digests not recovered", "redistributable": "package-specific licenses", "trust_boundary": "recovery harness and controller process; not verifier container"}
+  ],
+  "layout": {
+    "cache": "<root>/hive_runs/approved-gradle-caches/e5a7c314b902",
+    "external_provenance": "<root>/hive_runs/e5a7c314b902",
+    "nfrt_attestation": "<root>/approved-nfrt-seed-v2.json"
+  },
+  "offline_verification": true,
+  "platform": "Windows PowerShell host, Linux Docker daemon; exact image and cache are currently host-local",
+  "independent_reacquisition_proven": false,
+  "binary_payloads_committed": false
+}
