@@ -240,5 +240,8 @@ def test_frozen_acceptance_source_is_not_worker_context(monkeypatch, tmp_path):
 
 def test_absolute_verifier_import_is_bound_to_private_recovered_copy():
     import verification.nfrt_seed as historical_name
+    import workshop.external_root as historical_workshop_name
     from hive_canonical.legacy.verification import nfrt_seed as private_copy
+    from hive_canonical.legacy.workshop import external_root as private_workshop_copy
     assert historical_name is private_copy
+    assert historical_workshop_name is private_workshop_copy

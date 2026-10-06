@@ -1,15 +1,18 @@
 """Byte-preserved FACTORIAL-003R1 engine; only the RC1 adapter is authoritative.
 
-The recovered verifier uses absolute ``verification.nfrt_seed`` imports. Bind
-that historical package name to this private copy before importing the engine;
+The recovered verifier uses absolute ``verification.nfrt_seed`` and
+``workshop.external_root`` imports. Bind those historical package names to
+this private copy before importing the engine;
 the underlying archived files remain byte-identical.
 """
 
 import sys
 
 from . import verification as _verification
+from . import workshop as _workshop
 
-existing = sys.modules.get("verification")
-if existing is not None and existing is not _verification:
-    raise ImportError("another verification package is already loaded; RC1 cannot bind recovered verifier authority")
-sys.modules["verification"] = _verification
+for _name, _package in (("verification", _verification), ("workshop", _workshop)):
+    existing = sys.modules.get(_name)
+    if existing is not None and existing is not _package:
+        raise ImportError(f"another {_name} package is already loaded; RC1 cannot bind recovered authority")
+    sys.modules[_name] = _package
