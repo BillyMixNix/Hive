@@ -82,16 +82,26 @@ def _safe_scope(scope: tuple[str, ...], frozen_paths: set[str]) -> tuple[str, ..
 
 def _failure_class(run: dict, verification_status: str) -> str | None:
     failures = list(run.get("errors") or [])
-    for record in (run.get("agents") or {}).values():
+    for role, record in (run.get("agents") or {}).items():
+        # A semantic-review provider failure is separately represented by the
+        # recovered review disposition. It cannot erase a completed verifier PASS.
+        if role == "reviewer":
+            continue
         if isinstance(record, dict) and isinstance(record.get("failure"), dict):
             failures.append(record["failure"])
-    if any(isinstance(item, dict) and item.get("stage") == "agent_call" for item in failures):
+    # The recovered controller wraps *every* terminal exception as
+    # run/agent_call, including plan validation. A failed provider invocation
+    # is evidenced by the per-call trace, not that generic exception label.
+    if any(isinstance(item, dict) and item.get("status") == "failed"
+           and item.get("role") != "reviewer" for item in run.get("prompt_trace") or []):
         return "LOCAL_RUNTIME_FAILURE"
     if any(isinstance(item, dict) and item.get("role") == "verifier"
            and item.get("stage") == "verify" for item in failures):
         return "VERIFIER_RUNTIME_FAILURE"
     if verification_status != "passed":
-        return "DETERMINISTIC_VERIFICATION_FAILURE" if run.get("verification") else "NO_VERIFICATION_RESULT"
+        if run.get("verification"):
+            return "DETERMINISTIC_VERIFICATION_FAILURE"
+        return "PLANNER_FAILURE" if not run.get("plan") else "WORKER_FAILURE"
     if failures:
         return "CONTROLLER_FAILURE"
     return None
@@ -127,6 +137,12 @@ async def produce_candidate(spec: CandidateSpec, agent_call: AgentCall) -> Candi
     baseline_sha256 = external_root.tree_sha256(baseline)
     profile = hive_jvm.inspect_gradle_project(baseline)
     frozen = hive_jvm.freeze_junit_tests(baseline, list(spec.frozen_junit_tests))
+    # The recovered JVM host accepts an identical test already in source. RC1
+    # cannot treat such a file as protected: read-only worker observations can
+    # inspect any baseline source path. Require protected tests to be separate
+    # host evidence, then mount them only inside the isolated verifier.
+    if any((baseline / item["path"]).exists() for item in frozen):
+        raise CandidatePolicyError("protected frozen acceptance source must not reside in the model-visible baseline")
     if profile is not None and not frozen:
         raise CandidatePolicyError("a Gradle candidate requires host-frozen acceptance tests")
     if profile is None and frozen:

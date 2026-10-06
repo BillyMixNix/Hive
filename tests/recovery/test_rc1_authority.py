@@ -102,6 +102,24 @@ def test_verifier_decision_not_overridden_by_reviewer(monkeypatch, tmp_path, ver
     assert result.promotion_authorization == "unavailable"
 
 
+def test_reviewer_unavailable_preserves_verified_result(monkeypatch, tmp_path):
+    baseline, runs = fixture(tmp_path)
+    monkeypatch.setattr(hive, "targeted_verify", lambda *_: {"passed": True, "checks": []})
+    monkeypatch.setattr(hive, "verify_tree", lambda *_: {"passed": True, "checks": []})
+    normal, _ = scripted_call()
+
+    async def reviewer_failure(role, prompt):
+        if role == "reviewer":
+            raise RuntimeError("synthetic reviewer provider unavailable")
+        return await normal(role, prompt)
+
+    result = asyncio.run(produce_candidate(spec(baseline, runs), reviewer_failure))
+    assert result.software_verified
+    assert result.verification_status == "passed"
+    assert result.semantic_review == "unavailable"
+    assert result.promotion_authorization == "unavailable" and not result.applied
+
+
 @pytest.mark.parametrize("scope", [
     (), ("../escape",), ("src/../Widget.txt",),
     ("src/Widget.txt", "src/widget.TXT"), ("build/output.txt",),
@@ -145,6 +163,15 @@ def test_provider_failure_is_not_software_failure(monkeypatch, tmp_path):
     assert result.verification_status != "passed"
 
 
+def test_planner_exhaustion_is_not_mislabeled_provider_failure(tmp_path):
+    baseline, runs = fixture(tmp_path)
+    call, calls = scripted_call(planner={"invalid": "plan"})
+    result = asyncio.run(produce_candidate(spec(baseline, runs), call))
+    assert not result.software_verified
+    assert result.failure_class == "PLANNER_FAILURE"
+    assert len([role for role, _ in calls if role == "planner"]) == hive.MAX_PLAN_CORRECTIONS + 1
+
+
 def test_targeted_failure_correction_budget_and_rollback(monkeypatch, tmp_path):
     baseline, runs = fixture(tmp_path)
     before = source_index(baseline)
@@ -164,6 +191,21 @@ def test_targeted_failure_correction_budget_and_rollback(monkeypatch, tmp_path):
     assert len([role for role, _ in calls if role == "backend"]) == 2
     assert run["targeted_repairs"]
     assert run["applied"] is False
+
+
+def test_post_verification_stage_mutation_cannot_claim_verified(monkeypatch, tmp_path):
+    baseline, runs = fixture(tmp_path)
+    monkeypatch.setattr(hive, "targeted_verify", lambda *_: {"passed": True, "checks": []})
+
+    def tampering_verifier(tree):
+        (Path(tree) / "src/Widget.txt").write_text("value=3\n")
+        return {"passed": True, "checks": []}
+
+    monkeypatch.setattr(hive, "verify_tree", tampering_verifier)
+    call, _ = scripted_call()
+    with pytest.raises(CandidateIntegrityError, match="verified stage identity"):
+        asyncio.run(produce_candidate(spec(baseline, runs), call))
+    assert (baseline / "src/Widget.txt").read_text() == "value=1\n"
 
 
 def test_duplicate_ownership_rejected_before_worker(tmp_path):
@@ -236,6 +278,33 @@ def test_frozen_acceptance_source_is_not_worker_context(monkeypatch, tmp_path):
     assert result.software_verified
     assert all("PRIVATE_FROZEN_SENTINEL" not in prompt for _, prompt in calls)
     assert not (result.candidate_stage / frozen[0]["path"]).exists()
+
+
+def test_baseline_resident_frozen_test_rejected_before_observation(tmp_path):
+    baseline, runs = fixture(tmp_path)
+    (baseline / "build.gradle").write_text("plugins { id 'java' }\n")
+    (baseline / "gradlew").write_text("#!/bin/sh\nexit 0\n")
+    (baseline / "gradlew.bat").write_text("@echo off\r\nexit /b 0\r\n")
+    wrapper = baseline / "gradle/wrapper"
+    wrapper.mkdir(parents=True)
+    (wrapper / "gradle-wrapper.jar").write_bytes(b"fixture wrapper jar")
+    (wrapper / "gradle-wrapper.properties").write_text(
+        "distributionUrl=https\\://services.gradle.org/distributions/gradle-9.2.1-bin.zip\n"
+        "distributionSha256Sum=" + "a" * 64 + "\n")
+    path = "src/test/java/example/HiddenAcceptance.java"
+    source = "// PRIVATE_FROZEN_SENTINEL_DO_NOT_SHOW_TO_MODEL\nclass HiddenAcceptance {}\n"
+    resident = baseline / path
+    resident.parent.mkdir(parents=True)
+    resident.write_bytes(source.encode("utf-8"))
+    from hive_canonical.legacy.workshop import hive_context
+    observed = hive_context.observe(baseline, "read_file_excerpt", {"path": path})
+    assert "PRIVATE_FROZEN_SENTINEL" in str(observed)
+    frozen = ({"path": path, "class_name": "example.HiddenAcceptance",
+               "expected_cases": 1, "source": source},)
+    call, calls = scripted_call()
+    with pytest.raises(CandidatePolicyError, match="model-visible baseline"):
+        asyncio.run(produce_candidate(spec(baseline, runs, frozen_junit_tests=frozen), call))
+    assert not calls
 
 
 def test_absolute_verifier_import_is_bound_to_private_recovered_copy():
