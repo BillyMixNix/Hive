@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "phase": "post-adversarial deterministic gate; final clean checkout pending",
+  "phase": "post-adversarial final clean-checkout deterministic gate",
   "classification": "PASS_WITH_HOST_LOCAL_REPRODUCIBILITY_LIMIT",
   "anchor_commit": "dd5db7108c7d4e37ef757f7577456e0d9f5105db",
   "anchor_tree": "3b10957cb562929b1d9e7031882d73931c63e104",
-  "source_manifest_sha256": "c571da6185a021a200781058985693862b8a35fa7b32b4a16f9238ad8c4c5ad4",
+  "source_manifest_sha256": "4e5ecf5e037d519f4a695e73ee73a1783074cce7d049bb4942f802fa95671592",
   "fixture_map_sha256": "d216a98dc39062bc6bad7c0a2aff21b13f58b30e3c97aab333a062ac0b929bdc",
   "environment_manifest_sha256": "5faa81bdeba226b797c3ce1e0af70e391b2351f7d3080c1151beb0304e8422de",
   "historical_corpus_tree": "214a81054c99ec4a12db04f60d17bb25ec9011bb",
@@ -26,6 +26,18 @@
   "model_calls": 0,
   "promotion_attempts": 0,
   "initial_clean_checkout_finding": "Recovery test incorrectly expected physical fixture absence after intentional isolated materialization; corrected to assert committed historical tree absence. Initial archived pytest was invoked at repository root and collected unrelated tests; final run must use repaired-workshop directory.",
+  "final_clean_checkout": {
+    "commit": "154c04c",
+    "kind": "detached sparse Git worktree, clean before recovery-only fixture materialization",
+    "source_provenance": {"result": "PASS", "files": 49},
+    "recovery_tests": {"result": "PASS_WITH_SKIP", "passed": 60, "failed": 0, "skipped": 2, "elapsed_seconds": 8.56},
+    "archived_workshop": {"result": "PASS_WITH_SKIP", "passed": 613, "failed": 0, "skipped": 8, "elapsed_seconds": 65.61},
+    "verifier_isolation_subset": {"result": "PASS_WITH_SKIP", "passed": 18, "failed": 0, "skipped": 2, "elapsed_seconds": 23.88},
+    "gradle_adversarial_probe": {"result": "EXPECTED_FALSE_PASS_DEMONSTRATED", "baseline_exit": 1, "attacked_exit": 0, "evidence_sha256": "9040e803dfcb8a0719e80f1b66f9a83e3415363928e7ba93bab4d16c6b6de490"},
+    "j001_baseline_control": {"result": "EXPECTED_FROZEN_ACCEPTANCE_FAILURE", "elapsed_seconds": 134.229, "timed_out": false, "cases": 3, "failures": 1, "errors": 0, "skipped": 0, "evidence_sha256": "1759ea7774cf9c152659f31d3d4b84afcf1cee1c0a12cef851d11406d7916ce1"},
+    "environment_post_run": "PASS; all 4866 selected hashes and invoked tag-to-ID binding verified"
+  },
   "post_adversarial_controls": ["protected frozen-test diagnostic/model calls fail closed", "resolver requires registered detached worktree", "all Gradle profiles source-only", "nested build-control paths rejected", "actual verifier tag resolves to frozen image ID"],
+  "post_clean_checkout_portability_change": "Resolver uses getattr for platform-specific st_file_attributes; source provenance and affected recovery suite rerun: 60 passed, 2 skipped in 8.72 seconds. Archived fixtures and verifier behavior unaffected.",
   "unresolved": ["Exact approved Docker image and 1.438 GB cache payload remain host-local; immutable independent reacquisition is not proven", "Python wheel/digest lock is not recovered", "useful post-verification model diagnostics for frozen tests remain unqualified and are blocked"]
 }

@@ -41,7 +41,7 @@ def _assert_no_links(root: Path, destination: Path) -> None:
         current = current / part
         if current.exists() or current.is_symlink():
             info = current.lstat()
-            if current.is_symlink() or info.st_file_attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0):
+            if current.is_symlink() or getattr(info, "st_file_attributes", 0) & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0):
                 raise FixtureResolutionError(f"link or junction in fixture destination: {current}")
 
 
