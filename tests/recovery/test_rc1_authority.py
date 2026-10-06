@@ -259,6 +259,9 @@ def test_review_schema_rejects_truthy_string():
 
 def test_frozen_acceptance_source_is_not_worker_context(monkeypatch, tmp_path):
     baseline, runs = fixture(tmp_path)
+    java_path = "src/main/java/example/Widget.java"
+    (baseline / java_path).parent.mkdir(parents=True)
+    (baseline / java_path).write_text("value=1\n", encoding="utf-8")
     (baseline / "build.gradle").write_text("plugins { id 'java' }\n")
     (baseline / "gradlew").write_text("#!/bin/sh\nexit 0\n")
     (baseline / "gradlew.bat").write_text("@echo off\r\nexit /b 0\r\n")
@@ -273,8 +276,8 @@ def test_frozen_acceptance_source_is_not_worker_context(monkeypatch, tmp_path):
                "class_name": "example.HiddenAcceptance", "expected_cases": 1, "source": hidden},)
     monkeypatch.setattr(hive, "targeted_verify", lambda *_: {"passed": True, "checks": []})
     monkeypatch.setattr(hive, "verify_tree", lambda *_: {"passed": True, "checks": []})
-    call, calls = scripted_call()
-    result = asyncio.run(produce_candidate(spec(baseline, runs, frozen_junit_tests=frozen), call))
+    call, calls = scripted_call(edit_path=java_path, planner=plan([java_path]))
+    result = asyncio.run(produce_candidate(spec(baseline, runs, scope=(java_path,), frozen_junit_tests=frozen), call))
     assert result.software_verified
     assert all("PRIVATE_FROZEN_SENTINEL" not in prompt for _, prompt in calls)
     assert not (result.candidate_stage / frozen[0]["path"]).exists()

@@ -10,6 +10,8 @@
   "nfrt_attestation_sha256": "9ec38a4912981e3e34e0ee4bbeb7c8dfa04a6d23beba3b49829a43e5b2a124a3",
   "baseline_tree_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
   "verifier_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+  "verifier_invoked_tag": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+  "tag_to_image_id_binding_required": true,
   "components": [
     {"name": "verifier container image", "version": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy", "digest": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26", "origin": "existing local Docker image; immutable remote registry origin not verified", "acquisition": "HOST_LOCAL_REQUIRED_ARTIFACT", "redistributable": "unverified", "trust_boundary": "image ID checked before verifier launch"},
     {"name": "Java", "version": "Temurin 21.0.12.1+1", "origin": "inside pinned verifier image", "acquisition": "bound by verifier image ID", "redistributable": "upstream license applies", "trust_boundary": "container Java, not host Java"},

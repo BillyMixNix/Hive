@@ -45,9 +45,36 @@ def _assert_no_links(root: Path, destination: Path) -> None:
                 raise FixtureResolutionError(f"link or junction in fixture destination: {current}")
 
 
+def _git(repo: Path, *args: str) -> str:
+    proc = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True, check=False)
+    if proc.returncode:
+        raise FixtureResolutionError(f"Git worktree identity check failed: {' '.join(args)}")
+    return proc.stdout.strip()
+
+
+def _assert_isolated_worktree(repo: Path, root: Path, mapping: dict) -> None:
+    # A linked detached worktree is disposable recovery test state; an arbitrary
+    # directory or the original recovered corpus is not an acceptable target.
+    if not (root / ".git").is_file() or _git(root, "rev-parse", "--abbrev-ref", "HEAD") != "HEAD":
+        raise FixtureResolutionError("destination must be a detached linked test worktree")
+    if Path(_git(root, "rev-parse", "--show-toplevel")).resolve() != root:
+        raise FixtureResolutionError("destination is not its Git worktree root")
+    if Path(_git(repo, "rev-parse", "--git-common-dir")).resolve() != Path(_git(root, "rev-parse", "--git-common-dir")).resolve():
+        raise FixtureResolutionError("destination is not linked to the recovered repository")
+    corpus = "recovery/workshop-source-20261006"
+    if _git(root, "rev-parse", f"HEAD:{corpus}") != _git(repo, "rev-parse", f"{mapping['anchor_commit']}:{corpus}"):
+        raise FixtureResolutionError("destination historical corpus identity differs")
+    test_base = "recovery/workshop-source-20261006/workspace/HIVE-FACTORIAL-003R1/repaired-workshop/tests"
+    for name, expected in mapping["requesting_test_sha256"].items():
+        raw = subprocess.run(["git", "-C", str(root), "show", f"HEAD:{test_base}/{name}"],
+                             capture_output=True, check=False)
+        if raw.returncode or hashlib.sha256(raw.stdout).hexdigest() != expected:
+            raise FixtureResolutionError(f"frozen requesting test identity differs: {name}")
+
+
 def materialize(repo: Path, isolated_root: Path, map_file: Path, requested: tuple[str, ...] | None = None) -> list[dict]:
     repo = repo.resolve(strict=True)
-    if isolated_root.is_symlink():
+    if isolated_root.is_symlink() or (hasattr(isolated_root, "is_junction") and isolated_root.is_junction()):
         raise FixtureResolutionError("isolated root is a link")
     isolated_root = isolated_root.resolve(strict=True)
     if repo == isolated_root or repo in isolated_root.parents or isolated_root in repo.parents:
@@ -56,6 +83,7 @@ def materialize(repo: Path, isolated_root: Path, map_file: Path, requested: tupl
     if hashlib.sha256(raw_map).hexdigest() != REVIEWED_MAP_SHA256:
         raise FixtureResolutionError("fixture mapping differs from reviewed identity")
     mapping = json.loads(raw_map)
+    _assert_isolated_worktree(repo, isolated_root, mapping)
     rows = mapping["fixtures"]
     by_name = {row["relative_path"]: row for row in rows}
     if len(by_name) != len(rows):

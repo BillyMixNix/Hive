@@ -36,6 +36,27 @@ class UnqualifiedBuildControlScopeError(CandidatePolicyError):
     classification = "UNQUALIFIED_BUILD_CONTROL_SCOPE"
 
 
+class ProtectedDiagnosticTransportError(CandidatePolicyError):
+    """Untrusted verifier emissions cannot be sent beside protected test source."""
+
+    classification = "PROTECTED_DIAGNOSTIC_TRANSPORT_UNQUALIFIED"
+
+
+def _protected_agent_call(agent_call: AgentCall, *, frozen_tests: bool) -> AgentCall:
+    async def guarded(role: str, prompt: str) -> str:
+        if frozen_tests and (role == "reviewer" or
+                             str(prompt).startswith("TARGETED VERIFICATION CORRECTION\n")):
+            # The recovered controller includes candidate-emitted JUnit failure
+            # messages in correction/reviewer evidence. Candidate code can read
+            # mounted frozen test source. Until that transport is qualified,
+            # do not expose those messages to any model at all.
+            raise ProtectedDiagnosticTransportError(
+                "PROTECTED_DIAGNOSTIC_TRANSPORT_UNQUALIFIED: post-verification model evidence may contain frozen test source"
+            )
+        return await agent_call(role, prompt)
+    return guarded
+
+
 def _qualify_gradle_scope(scope: tuple[str, ...], *, gradle_project: bool) -> None:
     """Keep candidate-controlled build logic outside RC1 verifier authority.
 
@@ -47,9 +68,9 @@ def _qualify_gradle_scope(scope: tuple[str, ...], *, gradle_project: bool) -> No
         name = path.casefold()
         parts = name.split("/")
         control = (
-            name in {"build.gradle", "build.gradle.kts", "settings.gradle",
+            parts[-1] in {"build.gradle", "build.gradle.kts", "settings.gradle",
                      "settings.gradle.kts", "gradle.properties", "gradlew", "gradlew.bat"}
-            or parts[0] in {"gradle", "buildsrc", "build-logic"}
+            or any(part in {"gradle", "buildsrc", "build-logic"} for part in parts[:-1])
             or name.endswith(".gradle") or name.endswith(".gradle.kts")
         )
         qualified_source = (len(parts) >= 4 and parts[:3] == ["src", "main", "java"]
@@ -119,6 +140,11 @@ def _failure_class(run: dict, verification_status: str) -> str | None:
             continue
         if isinstance(record, dict) and isinstance(record.get("failure"), dict):
             failures.append(record["failure"])
+    failures.extend(item.get("failure") for item in run.get("targeted_repairs") or []
+                    if isinstance(item, dict) and isinstance(item.get("failure"), dict))
+    if any(isinstance(item, dict) and item.get("exception_type") == "ProtectedDiagnosticTransportError"
+           for item in failures):
+        return "PROTECTED_DIAGNOSTIC_TRANSPORT_UNQUALIFIED"
     # The recovered controller wraps *every* terminal exception as
     # run/agent_call, including plan validation. A failed provider invocation
     # is evidenced by the per-call trace, not that generic exception label.
@@ -177,12 +203,9 @@ async def produce_candidate(spec: CandidateSpec, agent_call: AgentCall) -> Candi
         raise CandidatePolicyError("a Gradle candidate requires host-frozen acceptance tests")
     if profile is None and frozen:
         raise CandidatePolicyError("frozen JUnit acceptance requires a Gradle profile")
-    # The source-only qualification is specific to the recovered NeoForm
-    # dependency profile, rather than every arbitrary Gradle fixture. Known
-    # Gradle control paths remain forbidden for every profile.
-    gradle_project = (isinstance(profile, Mapping)
-                      and isinstance(profile.get("external_build_inputs"), Mapping)
-                      and profile["external_build_inputs"].get("kind") == "neoformruntime")
+    # Candidate-controlled Gradle logic can forge acceptance reports for any
+    # Gradle profile, so every recognized Gradle candidate is source-only.
+    gradle_project = profile is not None
     _qualify_gradle_scope(allowed, gradle_project=gradle_project)
 
     run_id = secrets.token_hex(6)
@@ -199,7 +222,8 @@ async def produce_candidate(spec: CandidateSpec, agent_call: AgentCall) -> Candi
         metadata["frozen_junit_tests"] = hive_jvm.store_frozen_junit_tests(frozen, runs / run_id)
 
     run = await hive.run_build(
-        candidate_root, runs, spec.request, spec.local_model, agent_call,
+        candidate_root, runs, spec.request, spec.local_model,
+        _protected_agent_call(agent_call, frozen_tests=bool(frozen)),
         metadata={"external_root": metadata, "external_root_mode": "candidate_only",
                   "rc1_source_anchor": "HIVE-FACTORIAL-003R1"},
         run_id=run_id, external_root_mode=True,

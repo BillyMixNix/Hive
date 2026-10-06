@@ -44,6 +44,18 @@ def paths(root: Path):
     return cache, sibling
 
 
+def verify_image_binding(expected_id: str) -> tuple[str, str]:
+    sys.path.insert(0, str(ROOT))
+    from hive_canonical.legacy.workshop.hive_verifier import DEFAULT_IMAGE
+    exact = subprocess.run(["docker", "image", "inspect", expected_id, "--format", "{{.Id}}"],
+                           capture_output=True, text=True, check=True).stdout.strip()
+    launched = subprocess.run(["docker", "image", "inspect", DEFAULT_IMAGE, "--format", "{{.Id}}"],
+                              capture_output=True, text=True, check=True).stdout.strip()
+    if exact != expected_id or launched != expected_id:
+        raise ValueError("verifier image tag does not resolve to the frozen image ID")
+    return DEFAULT_IMAGE, launched
+
+
 def _source_manifest(source_cache: Path, freeze: dict) -> tuple[bytes, list[dict]]:
     manifest_path = source_cache / ".hive-priming-provenance" / RUN_ID / "artifacts.manifest.json"
     data = manifest_path.read_bytes()
@@ -132,13 +144,12 @@ def verify(fresh_root: Path) -> dict:
     seed = fresh_root / "approved-nfrt-seed-v2.json"
     if file_digest(seed) != freeze["nfrt"]["sha256"]:
         raise ValueError("relocated NFRT attestation mismatch")
-    image = subprocess.run(["docker", "image", "inspect", freeze["verifier"]["verifier_image_id"],
-                            "--format", "{{.Id}}"], capture_output=True, text=True, check=True).stdout.strip()
-    if image != freeze["verifier"]["verifier_image_id"]:
-        raise ValueError("verifier image identity mismatch")
+    image = freeze["verifier"]["verifier_image_id"]
+    invoked_tag, launched_image = verify_image_binding(image)
     return {"status": "PASS", "cache_root": str(cache), "seed_manifest": str(seed),
             "selected_artifact_count": len(rows), "selected_bytes": sum(r["size"] for r in rows),
             "artifact_manifest_sha256": digest(data), "image_id": image,
+            "invoked_image_tag": invoked_tag, "invoked_image_tag_id": launched_image,
             "host_local_required_artifact": True}
 
 

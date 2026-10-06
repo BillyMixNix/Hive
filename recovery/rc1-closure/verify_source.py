@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,6 +17,7 @@ PARENT_SOURCE_MANIFEST_SHA = "35617f3e24887b013bcc0e237c2f51276dee20983c4b2004f1
 PATHS = (
     "RECOVERY_FIXTURE_MAP.json",
     "tests/recovery/test_rc1_closure.py",
+    "tests/recovery/test_rc1_authority.py",
     "recovery/rc1-closure/fixture_resolver.py",
     "recovery/rc1-closure/gradle_trust_probe.py",
     "recovery/rc1-closure/baseline_control.py",
@@ -53,10 +55,17 @@ def build() -> dict:
         rows.append(entry)
     for path in PATHS:
         data = (ROOT / path).read_bytes()
-        rows.append({"path": path, "sha256": sha(data), "bytes": len(data),
-                     "status": "NEW_RECOVERY_CODE", "recovered_source_path": None,
-                     "recovered_revision": None,
-                     "adaptation_reason": "Deterministic closure evidence, resolver or guard tests"})
+        entry = {"path": path, "sha256": sha(data), "bytes": len(data),
+                 "status": "NEW_RECOVERY_CODE", "recovered_source_path": None,
+                 "recovered_revision": None,
+                 "adaptation_reason": "Deterministic closure evidence, resolver or guard tests"}
+        if path == "tests/recovery/test_rc1_authority.py":
+            old = subprocess.run(["git", "-C", str(ROOT), "show", f"{PARENT_COMMIT}:{path}"],
+                                 capture_output=True, check=True).stdout
+            entry.update(status="ADAPTED", recovered_source_path=path,
+                         recovered_revision=PARENT_COMMIT, pre_adaptation_sha256=sha(old),
+                         adaptation_reason="Use a qualified application-Java scope in the frozen-test isolation probe")
+        rows.append(entry)
     return {"schema_version": 1, "parent_commit": PARENT_COMMIT,
             "parent_source_manifest_sha256": PARENT_SOURCE_MANIFEST_SHA,
             "files": rows}

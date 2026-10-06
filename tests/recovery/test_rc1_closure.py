@@ -10,7 +10,9 @@ from pathlib import Path
 import pytest
 
 from hive_canonical import CandidateSpec, produce_candidate
-from hive_canonical.controller import UnqualifiedBuildControlScopeError, _qualify_gradle_scope
+from hive_canonical.controller import (UnqualifiedBuildControlScopeError,
+                                       ProtectedDiagnosticTransportError,
+                                       _qualify_gradle_scope, _protected_agent_call)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +20,23 @@ MODULE = ROOT / "recovery/rc1-closure/fixture_resolver.py"
 SPEC = importlib.util.spec_from_file_location("fixture_resolver", MODULE)
 resolver = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(resolver)
+ENV_SPEC = importlib.util.spec_from_file_location(
+    "verify_environment", ROOT / "recovery/rc1-closure/environment/verify_environment.py")
+environment = importlib.util.module_from_spec(ENV_SPEC)
+ENV_SPEC.loader.exec_module(environment)
+
+
+@pytest.fixture
+def isolated_worktree(tmp_path, request):
+    root = tmp_path / "isolated"
+    subprocess.run(["git", "-C", str(ROOT), "worktree", "add", "--detach", "--no-checkout",
+                    str(root), "HEAD"], check=True, capture_output=True)
+    def cleanup():
+        assert root.resolve().is_relative_to(tmp_path.resolve())
+        subprocess.run(["git", "-C", str(ROOT), "worktree", "remove", "--force", str(root)],
+                       check=True, capture_output=True)
+    request.addfinalizer(cleanup)
+    return root
 
 
 @pytest.mark.parametrize("path", [
@@ -26,6 +45,7 @@ SPEC.loader.exec_module(resolver)
     "gradle/init.d/inject.gradle", "gradle/libs.versions.toml", "buildSrc/src/main/java/X.java",
     "build-logic/build.gradle.kts", "src/test/java/ForgedTest.java",
     "src/main/resources/anything", "src/main/java/X.txt", "VERIFICATION.md",
+    "subproject/gradle.properties", "subproject/settings.gradle.kts",
 ])
 def test_gradle_control_scope_rejected(path):
     with pytest.raises(UnqualifiedBuildControlScopeError, match="UNQUALIFIED_BUILD_CONTROL_SCOPE"):
@@ -41,6 +61,42 @@ def test_gradle_control_scope_rejected(path):
 ])
 def test_source_only_gradle_scope_eligible(path):
     _qualify_gradle_scope((path,), gradle_project=True)
+
+
+def test_protected_verifier_feedback_cannot_reach_model():
+    calls = []
+    async def model(role, prompt):
+        calls.append((role, prompt))
+        return "{}"
+    guarded = _protected_agent_call(model, frozen_tests=True)
+    with pytest.raises(ProtectedDiagnosticTransportError):
+        asyncio.run(guarded("backend", "TARGETED VERIFICATION CORRECTION\nsecret emitted by candidate"))
+    with pytest.raises(ProtectedDiagnosticTransportError):
+        asyncio.run(guarded("reviewer", "review context with possible emitted secret"))
+    assert calls == []
+    assert asyncio.run(guarded("planner", "ordinary plan")) == "{}"
+    assert len(calls) == 1
+
+
+def test_no_frozen_test_does_not_disable_normal_correction():
+    calls = []
+    async def model(role, prompt):
+        calls.append(role)
+        return "{}"
+    guarded = _protected_agent_call(model, frozen_tests=False)
+    assert asyncio.run(guarded("backend", "TARGETED VERIFICATION CORRECTION\nsynthetic")) == "{}"
+    assert asyncio.run(guarded("reviewer", "synthetic review")) == "{}"
+    assert calls == ["backend", "reviewer"]
+
+
+def test_verifier_invoked_tag_must_match_frozen_image(monkeypatch):
+    class Completed:
+        def __init__(self, value):
+            self.stdout = value
+    outputs = iter([Completed("sha256:expected\n"), Completed("sha256:other\n")])
+    monkeypatch.setattr(environment.subprocess, "run", lambda *a, **k: next(outputs))
+    with pytest.raises(ValueError, match="image tag"):
+        environment.verify_image_binding("sha256:expected")
 
 
 def test_gradle_scope_rejected_before_worker(monkeypatch, tmp_path):
@@ -68,9 +124,8 @@ def _map(tmp_path):
     return path
 
 
-def test_exact_fixture_bytes_and_repeat_materialization(tmp_path):
-    isolated = tmp_path / "isolated"
-    isolated.mkdir()
+def test_exact_fixture_bytes_and_repeat_materialization(tmp_path, isolated_worktree):
+    isolated = isolated_worktree
     mapping = _map(tmp_path)
     name = "ordinal-03/planner-1.response.txt"
     first = resolver.materialize(ROOT, isolated, mapping, (name,))
@@ -78,6 +133,13 @@ def test_exact_fixture_bytes_and_repeat_materialization(tmp_path):
     assert first == second
     dest = Path(first[0]["destination"])
     assert hashlib.sha256(dest.read_bytes()).hexdigest() == first[0]["sha256"]
+
+
+def test_unregistered_directory_cannot_receive_fixtures(tmp_path):
+    destination = tmp_path / "arbitrary-directory"
+    destination.mkdir()
+    with pytest.raises(resolver.FixtureResolutionError, match="detached linked test worktree"):
+        resolver.materialize(ROOT, destination, _map(tmp_path))
 
 
 def test_frozen_test_and_recovered_source_identity():
@@ -96,17 +158,15 @@ def test_frozen_test_and_recovered_source_identity():
 
 
 @pytest.mark.parametrize("name", ["../escape", "unmapped.json"])
-def test_unmapped_or_traversal_fixture_fails_closed(tmp_path, name):
-    isolated = tmp_path / "isolated"
-    isolated.mkdir()
+def test_unmapped_or_traversal_fixture_fails_closed(tmp_path, isolated_worktree, name):
+    isolated = isolated_worktree
     with pytest.raises(resolver.FixtureResolutionError):
         resolver.materialize(ROOT, isolated, _map(tmp_path), (name,))
 
 
 @pytest.mark.parametrize("mutation", ["ambiguous", "wrong_hash", "missing", "traversal", "unknown_state"])
-def test_bad_fixture_mapping_fails_closed(tmp_path, mutation):
-    isolated = tmp_path / "isolated"
-    isolated.mkdir()
+def test_bad_fixture_mapping_fails_closed(tmp_path, isolated_worktree, mutation):
+    isolated = isolated_worktree
     mapping = _map(tmp_path)
     data = json.loads(mapping.read_text(encoding="utf-8"))
     if mutation == "ambiguous":
@@ -124,9 +184,8 @@ def test_bad_fixture_mapping_fails_closed(tmp_path, mutation):
         resolver.materialize(ROOT, isolated, mapping, (data["fixtures"][0]["relative_path"],))
 
 
-def test_existing_mismatched_fixture_rejected(tmp_path):
-    isolated = tmp_path / "isolated"
-    isolated.mkdir()
+def test_existing_mismatched_fixture_rejected(tmp_path, isolated_worktree):
+    isolated = isolated_worktree
     data = json.loads(_map(tmp_path).read_text(encoding="utf-8"))
     name = data["fixtures"][0]["relative_path"]
     dest = isolated / data["destination_prefix"] / name
@@ -136,9 +195,8 @@ def test_existing_mismatched_fixture_rejected(tmp_path):
         resolver.materialize(ROOT, isolated, _map(tmp_path), (name,))
 
 
-def test_link_escape_rejected(tmp_path):
-    isolated = tmp_path / "isolated"
-    isolated.mkdir()
+def test_link_escape_rejected(tmp_path, isolated_worktree):
+    isolated = isolated_worktree
     data = json.loads(_map(tmp_path).read_text(encoding="utf-8"))
     prefix = isolated / data["destination_prefix"]
     prefix.parent.mkdir(parents=True)
