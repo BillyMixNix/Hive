@@ -1,0 +1,11 @@
+# Promotion authority audit
+
+**Disposition: PARTIALLY_RECOVERED.** This corrects the earlier recovery inventory's narrower claim that no separate bundle generator had been located. A historical generator exists, but a complete, verified bundle chain does not.
+
+| Mechanism | Source and observed evidence | Authority conclusion |
+|---|---|---|
+| EVAL-009 bundle generator | `recovery/workshop-source-20261006/workspace/hive-transition-003/evidence/eval009/hive_orchestrator.py:assemble_bundle` (96–128) copies accepted child writable files, runs final Gradle, and writes `promotion-bundle/manifest.json` marked `manualPromotion:true`, `promoted:false`. The preserved `orchestrated-runs/20260924-073647-a040db65/result.json` records acceptance exit 0, frozen test hash and two promoted-file hashes. | Historical exporter source recovered. The actual bundle directory/manifest and an independently verified consumer are absent. The exporter lacks a bound baseline tree and complete candidate tree. Not RC1 promotion authority. |
+| EVAL-009 direct `--promote` | `.../eval009/hive_pipeline.py:287–297` copies accepted files into PROJECT after Gradle exit 0. Preserved child `boundary.json` records `promote:false`; the orchestrator does not invoke this path. | No stale-base check, authorization record, post-apply gate or rollback; excluded from RC1. |
+| Later Workshop internal apply | `recovery/workshop-source-20261006/workspace/HIVE-FACTORIAL-003R1/repaired-workshop/workshop/hive.py:_apply_run_locked`, `apply_run`, `rollback_run` (2807–2967); tests `test_reviewer_policy.py`, `test_hive_stale_apply.py`. | Source-backed internal Workshop self-apply with human approval, stage identity, changed-file stale checks and post-apply rollback. Distinct from a bundle consumer. External-root `candidate_only` runs are explicitly rejected. Manual rollback has weaker standalone stale-state checks. |
+
+RC1 operates only on isolated external candidates. Its public controller has no apply or rollback method, and promotion authorization is `unavailable` regardless of deterministic verification or reviewer result. The copied historical engine's dormant apply entry points are disabled by the RC1 adapter. A verified candidate remains evidence for a separately authorized future promotion design. No model or reviewer judgment may turn it into an applied artifact.
