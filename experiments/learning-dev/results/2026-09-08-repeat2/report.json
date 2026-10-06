@@ -1,0 +1,48 @@
+{
+  "episode_id": "aa1f0718e1175e522985e8e6fcff64dd407d75bd3f23a17f43c579702c81622d",
+  "suite_sha256": "119c5a5d476e7442ebfbebbba546be2391834b14a4db59326bd7a310cf58962a",
+  "scope": "development_real_model",
+  "verdict": "INVALID",
+  "lesson": {
+    "rationale": "The failure occurs at an equality boundary: a check expected to accept a value equal to its limit instead rejected it. This commonly indicates an exclusive comparison was used where the requirement is inclusive.",
+    "summary": "When a limit should include equality, implement and test the boundary with an inclusive comparison such as `value <= limit` rather than `value < limit`.",
+    "when": "Use this whenever a predicate governs a maximum, minimum, range, or capacity and the specification permits values exactly at the boundary."
+  },
+  "reason": "RuntimeError: model transport or usage failure; episode invalid",
+  "completed_trials": 0,
+  "proposal_usage": {
+    "calls": 1,
+    "prompt_tokens": 309,
+    "output_tokens": 191
+  },
+  "transport_usage": [
+    {
+      "calls": 1,
+      "prompt_tokens": 309,
+      "output_tokens": 191,
+      "complete": true
+    },
+    {
+      "calls": 1,
+      "prompt_tokens": 428,
+      "output_tokens": 122,
+      "complete": false,
+      "failure_code": "unexpected_output_items"
+    }
+  ],
+  "diagnostic_replay_of": "070f26ab17e167af098f591d33430a57beb1eae1c5348ed14cd9f9769ae5e390",
+  "promotion_eligible": false,
+  "ledger_verified": true,
+  "ordinary_jarvis_guidance": 0,
+  "trials": [],
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 937000,
+    "measured_usage_upper_nano_usd": 931900,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 1868900,
+    "requests_reserved": 2,
+    "blocked": true
+  },
+  "interpretation": "Live integration on previously authored development fixtures. A pass is not evidence of RSI; a rejected lesson is not retained. Spending is a conservative token-charge upper bound, not an invoice; unresolved requests retain their full reservation. This is the explicitly authorized diagnostic replay of the consumed development suite. Original evidence is unchanged; replay results cannot promote a lesson."
+}

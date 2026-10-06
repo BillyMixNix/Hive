@@ -1,0 +1,86 @@
+{
+  "checkpoint_descending_pairs": {
+    "unit_6ea1cbf91e.py": "def process(keys, values):\n    result = sorted(zip(keys, values), key=lambda row: row[0], reverse=True)\n    return result\n",
+    "test_visible.py": "from unit_6ea1cbf91e import *\n\ndef test_public():\n    assert process([2, 5, 3], ['a', 'b', 'c']) == [(5, 'b'), (3, 'c'), (2, 'a')]\n"
+  },
+  "checkpoint_masked_pairs": {
+    "unit_9def8078f0.py": "def process(keys, values, flags):\n    selected = [key for key, keep in zip(keys, flags) if keep]\n    result = [(key, value) for key, value, keep in zip(keys, values, flags) if keep]\n    return result\n",
+    "test_visible.py": "from unit_9def8078f0 import *\n\ndef test_public():\n    assert process([4, 8, 2], ['x', 'y', 'z'], [False, True, True]) == [(8, 'y'), (2, 'z')]\n"
+  },
+  "checkpoint_permuted_columns": {
+    "unit_1322350d02.py": "def process(keys, values, order):\n    result = [(keys[index], values[index]) for index in order]\n    return result\n",
+    "test_visible.py": "from unit_1322350d02 import *\n\ndef test_public():\n    assert process([4, 8, 2], ['x', 'y', 'z'], [2, 0, 2]) == [(2, 'z'), (4, 'x'), (2, 'z')]\n"
+  },
+  "checkpoint_absolute_priority": {
+    "unit_8c6b829a21.py": "def process(keys, values):\n    ordered = sorted(keys, key=abs)\n    result = sorted(zip(keys, values), key=lambda row: abs(row[0]))\n    return result\n",
+    "test_visible.py": "from unit_8c6b829a21 import *\n\ndef test_public():\n    assert process([-5, 2, -2], ['x', 'y', 'z']) == [(2, 'y'), (-2, 'z'), (-5, 'x')]\n"
+  },
+  "checkpoint_stable_partition": {
+    "unit_2cef8711d3.py": "def process(keys, values, flags):\n    first = sorted(flags, reverse=True)\n    result = sorted(zip(keys, values, flags), key=lambda row: not row[2])\n    return result\n",
+    "test_visible.py": "from unit_2cef8711d3 import *\n\ndef test_public():\n    assert process([1, 2, 3], ['a', 'b', 'c'], [False, True, False]) == [(2, 'b', True), (1, 'a', False), (3, 'c', False)]\n"
+  },
+  "checkpoint_top_k_pairs": {
+    "unit_9e5c6035ea.py": "def process(keys, values, limit):\n    selected = sorted(keys, reverse=True)[:limit]\n    result = sorted(zip(keys, values), key=lambda row: row[0], reverse=True)[:limit]\n    return result\n",
+    "test_visible.py": "from unit_9e5c6035ea import *\n\ndef test_public():\n    assert process([2, 8, 5], ['a', 'b', 'c'], 2) == [(8, 'b'), (5, 'c')]\n"
+  },
+  "checkpoint_product_and_count": {
+    "unit_ed595d07c8.py": "import math\n\ndef process(stream):\n    saved = tuple(stream)\n    count = len(saved)\n    product = math.prod(saved)\n    return count, product\n",
+    "test_visible.py": "from unit_ed595d07c8 import *\n\ndef test_public():\n    assert process(iter([2, 3, 4])) == (3, 24)\n"
+  },
+  "checkpoint_mean_after_snapshot": {
+    "unit_b6d4e8653e.py": "def process(stream):\n    saved = list(stream)\n    count = len(saved)\n    average = sum(saved) / count if count else 0\n    return count, average\n",
+    "test_visible.py": "from unit_b6d4e8653e import *\n\ndef test_public():\n    assert process(iter([2, 4, 9])) == (3, 5)\n"
+  },
+  "checkpoint_head_and_tail": {
+    "unit_f41cf80b88.py": "def process(stream):\n    saved = tuple(stream)\n    first = saved[0] if saved else None\n    tail = saved[1:]\n    return first, tail\n",
+    "test_visible.py": "from unit_f41cf80b88 import *\n\ndef test_public():\n    assert process(iter([8, 2, 5])) == (8, (2, 5))\n"
+  },
+  "checkpoint_ordered_unique": {
+    "unit_dab4e645e3.py": "def process(stream):\n    saved = tuple(stream)\n    count = len(saved)\n    unique = tuple(dict.fromkeys(saved))\n    return count, unique\n",
+    "test_visible.py": "from unit_dab4e645e3 import *\n\ndef test_public():\n    assert process(iter([3, 1, 3, 2])) == (4, (3, 1, 2))\n"
+  },
+  "checkpoint_enumerated_rows": {
+    "unit_49ecbca5f4.py": "def process(stream, start):\n    saved = tuple(stream)\n    count = len(saved)\n    rows = list(enumerate(saved, start))\n    return count, rows\n",
+    "test_visible.py": "from unit_49ecbca5f4 import *\n\ndef test_public():\n    assert process(iter(['x', 'y', 'z']), 7) == (3, [(7, 'x'), (8, 'y'), (9, 'z')])\n"
+  },
+  "checkpoint_validate_then_reverse": {
+    "unit_caeedf2782.py": "def process(stream):\n    saved = list(stream)\n    if any(value is None for value in saved):\n        raise ValueError('missing item')\n    result = tuple(reversed(saved))\n    return result\n",
+    "test_visible.py": "from unit_caeedf2782 import *\n\ndef test_public():\n    assert process(iter([3, 0, 5])) == (5, 0, 3)\n"
+  },
+  "checkpoint_normalized_locale": {
+    "unit_57523768a0.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name.casefold()\n\n    def fetch(self, name, locale, values):\n        key = (self.identity(name), locale)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_57523768a0 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('Ada', 'en', [3, 4]) == 7\n    assert m.fetch('Ada', 'fr', [8, 9]) == 17\n    assert m.fetch('ADA', 'en', [99]) == 7\n"
+  },
+  "checkpoint_epoch_cache": {
+    "unit_3c975b00a8.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, epoch, values):\n        key = (self.identity(name), epoch)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_3c975b00a8 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('row', 0, [2, 3]) == 5\n    assert m.fetch('row', 1, [4, 8]) == 12\n    assert m.fetch('row', 0, [99]) == 5\n"
+  },
+  "checkpoint_factor_cache": {
+    "unit_dac49f99a0.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, factor, values):\n        key = (self.identity(name), factor)\n        if key not in self.entries:\n            self.entries[key] = sum(values) * factor\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_dac49f99a0 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('row', 2, [2, 3]) == 10\n    assert m.fetch('row', 3, [4, 8]) == 36\n    assert m.fetch('row', 2, [99]) == 10\n"
+  },
+  "checkpoint_operation_cache": {
+    "unit_e1ecffe6a3.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, mode, values):\n        key = (self.identity(name), mode)\n        if key not in self.entries:\n            self.entries[key] = sum(values) if mode == 'sum' else len(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_e1ecffe6a3 import *\n\ndef test_public():\n    m = Memo()\n    assert m.fetch('row', 'sum', [2, 3]) == 5\n    assert m.fetch('row', 'count', [1, 2, 3]) == 3\n    assert m.fetch('row', 'sum', [99]) == 5\n"
+  },
+  "checkpoint_ambient_policy": {
+    "unit_0525d40328.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name):\n        return name\n\n    def fetch(self, name, values):\n        key = (self.identity(name), self.policy)\n        if key not in self.entries:\n            self.entries[key] = sum(values) + self.policy\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_0525d40328 import *\n\ndef test_public():\n    m = Memo()\n    m.policy = 2\n    assert m.fetch('row', [2, 3]) == 7\n    m.policy = 5\n    assert m.fetch('row', [4, 8]) == 17\n    m.policy = 2\n    assert m.fetch('row', [99]) == 7\n"
+  },
+  "checkpoint_shared_namespace": {
+    "unit_b38ffe65cc.py": "class Memo:\n    def __init__(self, entries=None, namespace='default'):\n        self.entries = {} if entries is None else entries\n        self.namespace = namespace\n        self.policy = 0\n\n    def identity(self, name, revision):\n        return (name, revision)\n\n    def fetch(self, name, revision, values):\n        key = (self.namespace, self.identity(name, revision))\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from unit_b38ffe65cc import *\n\ndef test_public():\n    shared = {}\n    a = Memo(shared, 'a')\n    b = Memo(shared, 'b')\n    assert a.fetch('row', 0, [2, 3]) == 5\n    assert b.fetch('row', 0, [4, 8]) == 12\n    assert a.fetch('row', 0, [99]) == 5\n"
+  },
+  "checkpoint_explicit_zero_63": {
+    "component_d2117b3b.py": "def configure_63(defaults, overrides):\n    selected = {key: value for key, value in overrides.items() if value is not None}\n    combined = defaults.copy()\n    combined.update(selected)\n    return combined\n",
+    "test_visible.py": "from component_d2117b3b import configure_63\n\ndef test_visible():\n    defaults = {'quota': 452, 'enabled': True, 'label': 'old', 'rows': [1], 'keep': 7}\n    overrides = {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': None}\n    assert configure_63(defaults, overrides) == {'quota': 0, 'enabled': False, 'label': '', 'rows': [], 'keep': 7}\n    assert defaults['quota'] == 452\n    assert overrides['keep'] is None\n"
+  },
+  "checkpoint_snapshot_alias_64": {
+    "component_9b58812e.py": "class Journal_64:\n    def __init__(self, settings):\n        self.live = dict(settings)\n        self.checkpoint = self.live.copy()\n\n    def put(self, key, value):\n        self.live[key] = value\n\n    def value(self, key):\n        return (self.live[key], self.checkpoint[key])\n",
+    "test_visible.py": "from component_9b58812e import Journal_64\n\ndef test_visible():\n    j = Journal_64({'limit': 459, 'rate': 3})\n    j.put('limit', 0)\n    assert j.value('limit') == (0, 459)\n    j.put('rate', 464)\n    assert j.value('rate') == (464, 3)\n"
+  },
+  "checkpoint_current_input_65": {
+    "component_7da2276b.py": "class Converter_65:\n    def __init__(self, initial_width):\n        self.initial_width = initial_width\n\n    def buckets(self, volume, current_width):\n        complete = volume // current_width\n        return complete\n",
+    "test_visible.py": "from component_7da2276b import Converter_65\n\ndef test_visible():\n    c = Converter_65(466)\n    assert c.buckets(4196, 3) == (4196 // 3)\n    assert c.buckets(0, 5) == 0\n    assert c.buckets(2330, 468) == (2330 // 468)\n"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "review_role": "Adversarial Reviewer",
+  "reviewer_modified_experimental_system": false,
+  "review_scope": [
+    "oracle leakage",
+    "benchmark leakage",
+    "ancestor mutation",
+    "evaluator mutation",
+    "false promotion",
+    "accidental overfitting",
+    "incomplete rollback",
+    "ambiguous attribution"
+  ],
+  "mechanical_checks": {
+    "oracle_leakage": "covered by modification-prompt isolation tests",
+    "benchmark_answer_leakage": "covered by exact expected-answer exclusion test",
+    "hidden_transfer_leakage": "covered by marker exclusion and candidate-workspace absence tests",
+    "ancestor_mutation": "covered by full static-tree manifest hash plus copy-on-write candidate tests",
+    "evaluator_mutation": "covered by pinned evaluator hash and invalidation test",
+    "false_promotion": "covered by pure promotion-function truth conditions",
+    "overfitting": "covered by trigger/transfer literal and identifier marker scan",
+    "rollback": "covered by temporary workspace destruction and ancestor hash equality",
+    "attribution": "candidate changed-files hashes and causal modification manifest are recorded",
+    "candidate_code_execution": "resolved with AST allowlist plus empty builtins; imports, calls, attributes, and filesystem access are rejected before evaluation",
+    "oracle_field_isolation": "resolved by passing candidate builder a public case projection with no expected_value/expected_source, plus explicit AST rejection of those keys"
+  },
+  "open_finding": "A real lineage must not be claimed until the exact local Ollama model digest is pinned and the model is available. Ambient Claude routing is not acceptable for GROW-0.",
+  "severity": "BLOCKING_FOR_REAL_RUN_ONLY",
+  "resolved_findings": [
+    "Candidate Python originally executed with normal interpreter privileges and could theoretically read hidden files. The evaluator now permits only a narrow pure formatting AST and executes with empty builtins; a regression test verifies filesystem-reading code is rejected.",
+    "Evaluator originally passed the full case object to mutable workshop code, allowing dynamic access to expected_value. It now passes only goal/stored/current evidence; expected fields remain evaluator-private, and AST checks reject direct oracle-key references and candidate input mutation."
+  ]
+}

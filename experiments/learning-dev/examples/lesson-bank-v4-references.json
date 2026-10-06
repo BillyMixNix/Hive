@@ -1,0 +1,82 @@
+{
+  "bank4_paired_sort_42": {
+    "component_dfc0ba96.py": "def arrange_42(labels, payloads):\n    if len(labels) != len(payloads):\n        raise ValueError('length mismatch')\n    paired = sorted(zip(labels, payloads), key=lambda item: item[0])\n    return list(paired)\n",
+    "test_visible.py": "from component_dfc0ba96 import arrange_42\n\ndef test_visible():\n    assert arrange_42([307, 305, 306], ['b', 'z', 'a']) == [(305, 'z'), (306, 'a'), (307, 'b')]\n    assert arrange_42([305, 305], ['z', 'a']) == [(305, 'z'), (305, 'a')]\n    assert arrange_42([], []) == []\n"
+  },
+  "bank4_single_pass_42": {
+    "component_d0ccc95f.py": "def summarize_42(stream):\n    observed = tuple(stream)\n    count = len(observed)\n    total = sum(observed)\n    return {'count': count, 'total': total}\n",
+    "test_visible.py": "from component_d0ccc95f import summarize_42\n\ndef test_visible():\n    assert summarize_42(iter([305, -2, 5])) == {'count': 3, 'total': 308}\n    assert summarize_42(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_42(x for x in [-305, 305, 1]) == {'count': 3, 'total': 1}\n"
+  },
+  "bank4_versioned_cache_42": {
+    "component_b34d1fd7.py": "class Memo_42:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, item, revision):\n        return (item, revision)\n\n    def calculate(self, item, revision, values):\n        key = self.identity(item, revision)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from component_b34d1fd7 import Memo_42\n\ndef test_visible():\n    m = Memo_42()\n    assert m.calculate('record', 305, [3, 5]) == 8\n    assert m.calculate('record', 306, [7, 9]) == 16\n    assert m.calculate('record', 305, [100]) == 8\n    assert m.calculate('other', 305, [2, 3]) == 5\n"
+  },
+  "bank4_paired_sort_43": {
+    "component_44814e4b.py": "def arrange_43(records):\n    ranks = sorted(row['rank'] for row in records)\n    selected = sorted(records, key=lambda row: row['rank'])\n    return selected\n",
+    "test_visible.py": "from component_44814e4b import arrange_43\n\ndef test_visible():\n    rows = [{'rank': 313, 'value': 'b'}, {'rank': 312, 'value': 'z'}, {'rank': 312, 'value': 'a'}]\n    assert arrange_43(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 313\n    assert arrange_43([]) == []\n"
+  },
+  "bank4_single_pass_43": {
+    "component_479bcdbe.py": "def summarize_43(stream):\n    observed = list(stream)\n    if any(value < 0 for value in observed):\n        raise ValueError('negative value')\n    accepted = tuple(observed)\n    return accepted\n",
+    "test_visible.py": "from component_479bcdbe import summarize_43\n\ndef test_visible():\n    assert summarize_43(iter([312, 0, 5])) == (312, 0, 5)\n    assert summarize_43(iter([])) == ()\n    try:\n        summarize_43(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+  },
+  "bank4_versioned_cache_43": {
+    "component_f18828d1.py": "class Memo_43:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, text, mode):\n        return (text, mode)\n\n    def render(self, text, mode):\n        key = self.identity(text, mode)\n        if key not in self.entries:\n            self.entries[key] = text.lower() if mode == 'lower' else text.upper()\n        return self.entries[key]\n",
+    "test_visible.py": "from component_f18828d1 import Memo_43\n\ndef test_visible():\n    m = Memo_43()\n    assert m.render('AbC312', 'lower') == 'abc312'\n    assert m.render('AbC312', 'upper') == 'ABC312'\n    assert m.render('AbC312', 'lower') == 'abc312'\n    assert len(m.entries) == 2\n"
+  },
+  "bank4_paired_sort_44": {
+    "component_5f9b6c51.py": "def arrange_44(records):\n    keys = sorted((row[0], row[1]) for row in records)\n    paired = sorted([((row[0], row[1]), row[2]) for row in records], key=lambda item: item[0])\n    return list(paired)\n",
+    "test_visible.py": "from component_5f9b6c51 import arrange_44\n\ndef test_visible():\n    rows = [('b', 319, 'x'), ('a', 320, 'z'), ('a', 319, 'm'), ('a', 319, 'a')]\n    assert arrange_44(rows) == [(('a', 319), 'm'), (('a', 319), 'a'), (('a', 320), 'z'), (('b', 319), 'x')]\n    assert arrange_44([]) == []\n"
+  },
+  "bank4_single_pass_44": {
+    "component_734d026d.py": "def summarize_44(stream):\n    records = tuple(stream)\n    keys = [row[0] for row in records]\n    values = [row[1] for row in records]\n    return dict(zip(keys, values))\n",
+    "test_visible.py": "from component_734d026d import summarize_44\n\ndef test_visible():\n    assert summarize_44(iter([('a', 319), ('b', 3), ('a', 321)])) == {'a': 321, 'b': 3}\n    assert summarize_44(iter([])) == {}\n"
+  },
+  "bank4_versioned_cache_44": {
+    "component_9ad80db9.py": "class Memo_44:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, account, tenant):\n        return (account, tenant)\n\n    def balance(self, account, tenant, entries):\n        key = self.identity(account, tenant)\n        if key not in self.entries:\n            self.entries[key] = sum(entries)\n        return self.entries[key]\n",
+    "test_visible.py": "from component_9ad80db9 import Memo_44\n\ndef test_visible():\n    m = Memo_44()\n    assert m.balance('user', 'east', [319, 3]) == 322\n    assert m.balance('user', 'west', [327, 5]) == 332\n    assert m.balance('user', 'east', [9000]) == 322\n    assert len(m.entries) == 2\n"
+  },
+  "bank4_paired_sort_45": {
+    "component_2456d0e2.py": "def arrange_45(labels, payloads):\n    if len(labels) != len(payloads):\n        raise ValueError('length mismatch')\n    paired = sorted(zip(labels, payloads), key=lambda item: item[0])\n    return list(paired)\n",
+    "test_visible.py": "from component_2456d0e2 import arrange_45\n\ndef test_visible():\n    assert arrange_45([328, 326, 327], ['b', 'z', 'a']) == [(326, 'z'), (327, 'a'), (328, 'b')]\n    assert arrange_45([326, 326], ['z', 'a']) == [(326, 'z'), (326, 'a')]\n    assert arrange_45([], []) == []\n"
+  },
+  "bank4_single_pass_45": {
+    "component_3ec7b46d.py": "def summarize_45(stream):\n    observed = tuple(stream)\n    count = len(observed)\n    total = sum(observed)\n    return {'count': count, 'total': total}\n",
+    "test_visible.py": "from component_3ec7b46d import summarize_45\n\ndef test_visible():\n    assert summarize_45(iter([326, -2, 5])) == {'count': 3, 'total': 329}\n    assert summarize_45(iter([])) == {'count': 0, 'total': 0}\n    assert summarize_45(x for x in [-326, 326, 1]) == {'count': 3, 'total': 1}\n"
+  },
+  "bank4_versioned_cache_45": {
+    "component_e2d600fc.py": "class Memo_45:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, item, revision):\n        return (item, revision)\n\n    def calculate(self, item, revision, values):\n        key = self.identity(item, revision)\n        if key not in self.entries:\n            self.entries[key] = sum(values)\n        return self.entries[key]\n",
+    "test_visible.py": "from component_e2d600fc import Memo_45\n\ndef test_visible():\n    m = Memo_45()\n    assert m.calculate('record', 326, [3, 5]) == 8\n    assert m.calculate('record', 327, [7, 9]) == 16\n    assert m.calculate('record', 326, [100]) == 8\n    assert m.calculate('other', 326, [2, 3]) == 5\n"
+  },
+  "bank4_paired_sort_46": {
+    "component_142142b1.py": "def arrange_46(records):\n    ranks = sorted(row['rank'] for row in records)\n    selected = sorted(records, key=lambda row: row['rank'])\n    return selected\n",
+    "test_visible.py": "from component_142142b1 import arrange_46\n\ndef test_visible():\n    rows = [{'rank': 334, 'value': 'b'}, {'rank': 333, 'value': 'z'}, {'rank': 333, 'value': 'a'}]\n    assert arrange_46(rows) == [rows[1], rows[2], rows[0]]\n    assert rows[0]['rank'] == 334\n    assert arrange_46([]) == []\n"
+  },
+  "bank4_single_pass_46": {
+    "component_ed20acc2.py": "def summarize_46(stream):\n    observed = list(stream)\n    if any(value < 0 for value in observed):\n        raise ValueError('negative value')\n    accepted = tuple(observed)\n    return accepted\n",
+    "test_visible.py": "from component_ed20acc2 import summarize_46\n\ndef test_visible():\n    assert summarize_46(iter([333, 0, 5])) == (333, 0, 5)\n    assert summarize_46(iter([])) == ()\n    try:\n        summarize_46(iter([1, -1]))\n    except ValueError:\n        pass\n    else:\n        raise AssertionError('negative accepted')\n"
+  },
+  "bank4_versioned_cache_46": {
+    "component_28990da7.py": "class Memo_46:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, text, mode):\n        return (text, mode)\n\n    def render(self, text, mode):\n        key = self.identity(text, mode)\n        if key not in self.entries:\n            self.entries[key] = text.lower() if mode == 'lower' else text.upper()\n        return self.entries[key]\n",
+    "test_visible.py": "from component_28990da7 import Memo_46\n\ndef test_visible():\n    m = Memo_46()\n    assert m.render('AbC333', 'lower') == 'abc333'\n    assert m.render('AbC333', 'upper') == 'ABC333'\n    assert m.render('AbC333', 'lower') == 'abc333'\n    assert len(m.entries) == 2\n"
+  },
+  "bank4_paired_sort_47": {
+    "component_91f2697d.py": "def arrange_47(records):\n    keys = sorted((row[0], row[1]) for row in records)\n    paired = sorted([((row[0], row[1]), row[2]) for row in records], key=lambda item: item[0])\n    return list(paired)\n",
+    "test_visible.py": "from component_91f2697d import arrange_47\n\ndef test_visible():\n    rows = [('b', 340, 'x'), ('a', 341, 'z'), ('a', 340, 'm'), ('a', 340, 'a')]\n    assert arrange_47(rows) == [(('a', 340), 'm'), (('a', 340), 'a'), (('a', 341), 'z'), (('b', 340), 'x')]\n    assert arrange_47([]) == []\n"
+  },
+  "bank4_single_pass_47": {
+    "component_7decc955.py": "def summarize_47(stream):\n    records = tuple(stream)\n    keys = [row[0] for row in records]\n    values = [row[1] for row in records]\n    return dict(zip(keys, values))\n",
+    "test_visible.py": "from component_7decc955 import summarize_47\n\ndef test_visible():\n    assert summarize_47(iter([('a', 340), ('b', 3), ('a', 342)])) == {'a': 342, 'b': 3}\n    assert summarize_47(iter([])) == {}\n"
+  },
+  "bank4_versioned_cache_47": {
+    "component_880b03aa.py": "class Memo_47:\n    def __init__(self):\n        self.entries = {}\n\n    def identity(self, account, tenant):\n        return (account, tenant)\n\n    def balance(self, account, tenant, entries):\n        key = self.identity(account, tenant)\n        if key not in self.entries:\n            self.entries[key] = sum(entries)\n        return self.entries[key]\n",
+    "test_visible.py": "from component_880b03aa import Memo_47\n\ndef test_visible():\n    m = Memo_47()\n    assert m.balance('user', 'east', [340, 3]) == 343\n    assert m.balance('user', 'west', [348, 5]) == 353\n    assert m.balance('user', 'east', [9000]) == 343\n    assert len(m.entries) == 2\n"
+  },
+  "bank4_retention_0": {
+    "bank4_retention_0.py": "def allowed_v4(value, threshold):\n    return value <= threshold\n",
+    "test_visible.py": "from bank4_retention_0 import allowed_v4\n\ndef test_visible():\n    for threshold in [31]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value <= threshold)\n"
+  },
+  "bank4_retention_1": {
+    "bank4_retention_1.py": "def allowed_v4(value, threshold):\n    return value >= threshold\n",
+    "test_visible.py": "from bank4_retention_1 import allowed_v4\n\ndef test_visible():\n    for threshold in [32]:\n        for delta in (-1, 0, 1):\n            value = threshold + delta\n            assert allowed_v4(value, threshold) == (value >= threshold)\n"
+  }
+}

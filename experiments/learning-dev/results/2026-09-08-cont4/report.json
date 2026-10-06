@@ -1,0 +1,265 @@
+{
+  "episode_id": "8f3c368e9a7d80132b202734f9d48e2a096dbf514cbc896365fa3936e66e988f",
+  "suite_sha256": "119c5a5d476e7442ebfbebbba546be2391834b14a4db59326bd7a310cf58962a",
+  "scope": "development_real_model",
+  "verdict": "REJECTED",
+  "lesson": {
+    "rationale": "The failure occurs at an equality boundary: the check expects a quantity exactly equal to capacity to be admitted, but the implementation rejects it. This indicates a likely off-by-one or incorrect comparison operator, such as using `<` where `<=` is required. When diagnosing similar failures, compare the intended boundary semantics with the predicate and test values just below, exactly at, and just above the limit.",
+    "summary": "For inclusive capacity limits, permit values equal to the capacity by using an inclusive comparison and explicitly testing the boundary case.",
+    "when": "When a test fails on a value exactly at a stated limit, inspect whether the implementation uses the correct inclusive or exclusive comparison, then verify both sides of the boundary."
+  },
+  "parent_bank_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "transfer_passes": {
+    "baseline": 0,
+    "lesson": 0,
+    "neutral": 0
+  },
+  "inherited_retention_cases": 0,
+  "gates": {
+    "valid": true,
+    "all_treatment_pass": false,
+    "strict_transfer_gain": false,
+    "neutral_control": true
+  },
+  "proposal_usage": {
+    "calls": 1,
+    "prompt_tokens": 311,
+    "output_tokens": 188
+  },
+  "recipient_usage": {
+    "calls": 18,
+    "prompt_tokens": 12398,
+    "output_tokens": 836
+  },
+  "transport_usage": [
+    {
+      "calls": 1,
+      "prompt_tokens": 311,
+      "output_tokens": 188,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1264,
+      "output_tokens": 91,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1270,
+      "output_tokens": 99,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1554,
+      "output_tokens": 93,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1554,
+      "output_tokens": 94,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1316,
+      "output_tokens": 101,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1312,
+      "output_tokens": 89,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1308,
+      "output_tokens": 93,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1266,
+      "output_tokens": 100,
+      "complete": true
+    },
+    {
+      "calls": 2,
+      "prompt_tokens": 1554,
+      "output_tokens": 76,
+      "complete": true
+    }
+  ],
+  "diagnostic_replay_of": "5a857d82ae4623202533eec72afb012e81fd923ee9972c80b38a13bba3668b74",
+  "promotion_eligible": false,
+  "ledger_verified": true,
+  "ordinary_jarvis_guidance": 0,
+  "trials": [
+    {
+      "case_id": "deadline",
+      "split": "transfer",
+      "arm": "baseline",
+      "candidate_sha256": "276885eb236a316d6a0f35d7b36976f0379cc3913e21042fd5a06cbb5020839f",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 91,
+        "prompt_tokens": 1264
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "69b91fc1829be507b7a5a4cf204f5276981f3294d30938d67e7f3756e6028bdb",
+        "passed": false,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "signed_sum",
+      "split": "retention",
+      "arm": "baseline",
+      "candidate_sha256": "43fd7b7cc2fd7e8d82b98a0e7139099694640a681138b4246192b87d210d6a1b",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 99,
+        "prompt_tokens": 1270
+      },
+      "score": {
+        "exit_code": 0,
+        "output_sha256": "f9991bfc1c7ebd12bb16ce56e1cf3117618ca286795cd280e4f6ac597c67ff48",
+        "passed": true,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "signed_sum",
+      "split": "retention",
+      "arm": "lesson",
+      "candidate_sha256": "43fd7b7cc2fd7e8d82b98a0e7139099694640a681138b4246192b87d210d6a1b",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 93,
+        "prompt_tokens": 1554
+      },
+      "score": {
+        "exit_code": 0,
+        "output_sha256": "f9991bfc1c7ebd12bb16ce56e1cf3117618ca286795cd280e4f6ac597c67ff48",
+        "passed": true,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "deadline",
+      "split": "transfer",
+      "arm": "lesson",
+      "candidate_sha256": "276885eb236a316d6a0f35d7b36976f0379cc3913e21042fd5a06cbb5020839f",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 94,
+        "prompt_tokens": 1554
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "69b91fc1829be507b7a5a4cf204f5276981f3294d30938d67e7f3756e6028bdb",
+        "passed": false,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "signed_sum",
+      "split": "retention",
+      "arm": "neutral",
+      "candidate_sha256": "43fd7b7cc2fd7e8d82b98a0e7139099694640a681138b4246192b87d210d6a1b",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 101,
+        "prompt_tokens": 1316
+      },
+      "score": {
+        "exit_code": 0,
+        "output_sha256": "f9991bfc1c7ebd12bb16ce56e1cf3117618ca286795cd280e4f6ac597c67ff48",
+        "passed": true,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "capacity",
+      "split": "trigger",
+      "arm": "neutral",
+      "candidate_sha256": "08b7b4ef0b1560939352c386f5f07f0ad32d4f1183c27e4e458e8eeb66be24aa",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 89,
+        "prompt_tokens": 1312
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "3aa04615facdd4a4db9429371033218587be103f83c18e6771f742a498dd53dc",
+        "passed": false,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "deadline",
+      "split": "transfer",
+      "arm": "neutral",
+      "candidate_sha256": "276885eb236a316d6a0f35d7b36976f0379cc3913e21042fd5a06cbb5020839f",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 93,
+        "prompt_tokens": 1308
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "69b91fc1829be507b7a5a4cf204f5276981f3294d30938d67e7f3756e6028bdb",
+        "passed": false,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "capacity",
+      "split": "trigger",
+      "arm": "baseline",
+      "candidate_sha256": "08b7b4ef0b1560939352c386f5f07f0ad32d4f1183c27e4e458e8eeb66be24aa",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 100,
+        "prompt_tokens": 1266
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "3aa04615facdd4a4db9429371033218587be103f83c18e6771f742a498dd53dc",
+        "passed": false,
+        "valid": true
+      }
+    },
+    {
+      "case_id": "capacity",
+      "split": "trigger",
+      "arm": "lesson",
+      "candidate_sha256": "08b7b4ef0b1560939352c386f5f07f0ad32d4f1183c27e4e458e8eeb66be24aa",
+      "usage": {
+        "calls": 2,
+        "output_tokens": 76,
+        "prompt_tokens": 1554
+      },
+      "score": {
+        "exit_code": 1,
+        "output_sha256": "3aa04615facdd4a4db9429371033218587be103f83c18e6771f742a498dd53dc",
+        "passed": false,
+        "valid": true
+      }
+    }
+  ],
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 3027100,
+    "measured_usage_upper_nano_usd": 8197700,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 11224800,
+    "requests_reserved": 19,
+    "blocked": false
+  },
+  "interpretation": "Live integration on previously authored development fixtures. A pass is not evidence of RSI; a rejected lesson is not retained. Spending is a conservative token-charge upper bound, not an invoice; unresolved requests retain their full reservation. This is the explicitly authorized diagnostic replay of the consumed development suite. Original evidence is unchanged; replay results cannot promote a lesson."
+}

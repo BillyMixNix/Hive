@@ -1,0 +1,174 @@
+{
+  "scope": "Post-outcome diagnosis only; no changed score, paid replay or new lesson. The top-k input mutation was already caught by frozen protected tests.",
+  "workflow_url": "https://github.com/BillyMixNix/Hive/actions/runs/34264678245",
+  "rows": [
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "baseline",
+      "candidate_sha256": "f0896b16a9636075826d0009ff47164cc4e101b51c5abc27f1c38b0b0e046631",
+      "calls": 9,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "SATISFIED",
+      "source_unchanged": false,
+      "counterexample": {
+        "limit": 2,
+        "before": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "a",
+            "b",
+            "c"
+          ]
+        },
+        "returned": [
+          [
+            3,
+            "b"
+          ],
+          [
+            2,
+            "c"
+          ]
+        ],
+        "after": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "b",
+            "c",
+            "a"
+          ]
+        },
+        "values_mutated": true
+      }
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "lesson",
+      "candidate_sha256": "f0896b16a9636075826d0009ff47164cc4e101b51c5abc27f1c38b0b0e046631",
+      "calls": 9,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "SATISFIED",
+      "source_unchanged": false,
+      "counterexample": {
+        "limit": 2,
+        "before": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "a",
+            "b",
+            "c"
+          ]
+        },
+        "returned": [
+          [
+            3,
+            "b"
+          ],
+          [
+            2,
+            "c"
+          ]
+        ],
+        "after": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "b",
+            "c",
+            "a"
+          ]
+        },
+        "values_mutated": true
+      }
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "neutral",
+      "candidate_sha256": "4da7f995936ebd6d3e0fe5a6f0d6ca138425ec5de8a6af0ec928f4ddd3887e1e",
+      "calls": 9,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "SATISFIED",
+      "source_unchanged": false,
+      "counterexample": {
+        "limit": 2,
+        "before": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "a",
+            "b",
+            "c"
+          ]
+        },
+        "returned": [
+          [
+            3,
+            "b"
+          ],
+          [
+            2,
+            "c"
+          ]
+        ],
+        "after": {
+          "keys": [
+            1,
+            3,
+            2
+          ],
+          "values": [
+            "b",
+            "c",
+            "c"
+          ]
+        },
+        "values_mutated": true
+      }
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "baseline",
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "calls": 31,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "source_unchanged": true
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "lesson",
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "calls": 32,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "source_unchanged": true
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "neutral",
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "calls": 30,
+      "frozen_protected_checks_passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "source_unchanged": true
+    }
+  ]
+}

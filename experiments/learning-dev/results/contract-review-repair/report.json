@@ -1,0 +1,210 @@
+{
+  "verdict": "PUBLIC_INPUT_GATE_REGRESSION_VERIFIED",
+  "scope": "Post-outcome engineering regression on public examples only.",
+  "new_model_requests": 0,
+  "new_api_charge_nano_usd": 0,
+  "learning_gain_tested": false,
+  "cumulative_prior_upper_nano_usd": 3469597600,
+  "fixture_sha256": "83072486f8db6eab4f1591a50fdba85f2ff0c6dcc9f5f6b917186b6493b8c64a",
+  "original_workflow_url": "https://github.com/BillyMixNix/Hive/actions/runs/34264678245",
+  "frozen_runtime_unchanged": true,
+  "frozen_runtime_sha256": "c6edd5410e93f4c57bd24519dec9deb475f261514093769f28bbdcec043e98c0",
+  "source_hashes": {
+    "analysis/public_contracts.py": "32be271f7303f668f3f6b2693142e79846738d7ef8fb6565e50816365d393350",
+    "analysis/contract_checked_hive.py": "1a6e1b35ca09e330a01f6edfa81bd000c112ce3a20a10582f0080990cf5e7f3a",
+    "analysis/verify_contract_repair.py": "d36a4d7b2136d44d9ae21f38b5fcc6bdfbd4ce3235c77a0722f3667c6cc96812",
+    "tests/test_public_contracts.py": "e7066ce9cc93b396a55c94d84de85b03599ee46cfa8192fba2612a42e8da14e4",
+    "tests/test_contract_checked_hive.py": "600ab10d1c0a7f65fc77b7941091903c5deb79e93a6ceb7bed210278c1aad5e4",
+    "examples/input-preservation-regression.json": "83072486f8db6eab4f1591a50fdba85f2ff0c6dcc9f5f6b917186b6493b8c64a"
+  },
+  "public_contract_policy": {
+    "baseline_sha256": "cdd59e39e3bebd268f27b914dd9a5ae5627af4d0cc5a46af283f73d72a3aadf9",
+    "contracts": [
+      {
+        "arguments": [
+          "keys",
+          "values",
+          "limit"
+        ],
+        "kind": "preserve_argument_values",
+        "scope": "After each observed public-test call, including exceptions.",
+        "source_file": "unit_9e5c6035ea.py",
+        "symbol": "process"
+      }
+    ],
+    "maximum_observed_calls": 1000,
+    "schema": "hive.public-contract-policy.v1",
+    "timeout_seconds": 10
+  },
+  "public_contract_policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+  "saved_bad_patches": [
+    {
+      "arm": "baseline",
+      "original_controller_decision": "SATISFIED",
+      "original_protected_checks_passed": false,
+      "new_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "f0896b16a9636075826d0009ff47164cc4e101b51c5abc27f1c38b0b0e046631",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": [
+              {
+                "after": "[\"list\",[[\"str\",\"b\"],[\"str\",\"c\"],[\"str\",\"a\"]]]",
+                "after_sha256": "8c269135ff68eed499a894590f138624fff6d1bbe48328f7037ab4528acc2b05",
+                "argument": "values",
+                "before": "[\"list\",[[\"str\",\"a\"],[\"str\",\"b\"],[\"str\",\"c\"]]]",
+                "before_sha256": "9675800daa4486bd352cec7271f7a806560bb30bde691ab3391d2b7d896811a7",
+                "call": 1
+              }
+            ]
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "arm": "lesson",
+      "original_controller_decision": "SATISFIED",
+      "original_protected_checks_passed": false,
+      "new_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "f0896b16a9636075826d0009ff47164cc4e101b51c5abc27f1c38b0b0e046631",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": [
+              {
+                "after": "[\"list\",[[\"str\",\"b\"],[\"str\",\"c\"],[\"str\",\"a\"]]]",
+                "after_sha256": "8c269135ff68eed499a894590f138624fff6d1bbe48328f7037ab4528acc2b05",
+                "argument": "values",
+                "before": "[\"list\",[[\"str\",\"a\"],[\"str\",\"b\"],[\"str\",\"c\"]]]",
+                "before_sha256": "9675800daa4486bd352cec7271f7a806560bb30bde691ab3391d2b7d896811a7",
+                "call": 1
+              }
+            ]
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "arm": "neutral",
+      "original_controller_decision": "SATISFIED",
+      "original_protected_checks_passed": false,
+      "new_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "4da7f995936ebd6d3e0fe5a6f0d6ca138425ec5de8a6af0ec928f4ddd3887e1e",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": [
+              {
+                "after": "[\"list\",[[\"str\",\"b\"],[\"str\",\"c\"],[\"str\",\"c\"]]]",
+                "after_sha256": "f6eaab78b32597940dfc20453d0e5d9fb6870473f97ccfdc45070cb556dccd89",
+                "argument": "values",
+                "before": "[\"list\",[[\"str\",\"a\"],[\"str\",\"b\"],[\"str\",\"c\"]]]",
+                "before_sha256": "9675800daa4486bd352cec7271f7a806560bb30bde691ab3391d2b7d896811a7",
+                "call": 1
+              }
+            ]
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    }
+  ],
+  "distinct_bad_candidate_hashes": 2,
+  "correct_reference": {
+    "schema": "hive.public-contract-result.v1",
+    "status": "PASSED",
+    "accepted": true,
+    "valid": true,
+    "candidate_sha256": "16362375ec13db746d7c259335ace3843d9998a647a01afa718a14d4444d1f8c",
+    "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+    "observed_calls": 1,
+    "public_test_exit_code": 0,
+    "checks": [
+      {
+        "completed_calls": 1,
+        "contract": {
+          "arguments": [
+            "keys",
+            "values",
+            "limit"
+          ],
+          "source_file": "unit_9e5c6035ea.py",
+          "symbol": "process"
+        },
+        "errors": [],
+        "observed_calls": 1,
+        "violations": []
+      }
+    ],
+    "output_sha256": "016a4093788648644b08006f7d1d171ca7639313677f5aa929f004d4a3e52465"
+  },
+  "limitations": [
+    "Known regressions, not unseen tasks or a new learning comparison.",
+    "Caller-declared final-value preservation on observed public-test calls only.",
+    "Bounded built-in data; incomplete observations cannot approve.",
+    "No general proof of correctness, object identity, thread behavior or adversarial containment."
+  ],
+  "offline_test_evidence": {
+    "tests": 206,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2,
+    "junit_sha256": "c944c6baf034d192894e0741f701a56bc199483e76412c0b1d4c3d1d8ab5d2d6"
+  }
+}

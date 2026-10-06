@@ -1,0 +1,48 @@
+{
+  "episode_id": "5a857d82ae4623202533eec72afb012e81fd923ee9972c80b38a13bba3668b74",
+  "suite_sha256": "119c5a5d476e7442ebfbebbba546be2391834b14a4db59326bd7a310cf58962a",
+  "scope": "development_real_model",
+  "verdict": "INVALID",
+  "lesson": {
+    "rationale": "The failing assertion targets the boundary where the requested quantity exactly matches the allowed capacity, showing that the implementation or predicate treats the upper limit as exclusive. Boundary-value failures should be traced to the comparison operator and to any validation logic that transforms the limit before comparison.",
+    "summary": "For limits intended to be inclusive, accept values at both endpoints by using an inclusive comparison and test below, at, and above the boundary. A failure at equality usually indicates an off-by-one or incorrect strictness in the predicate.",
+    "when": "Use this principle whenever code validates counts, capacities, ranges, quotas, indexes, or other upper and lower limits, especially after a test fails exactly at a stated boundary."
+  },
+  "reason": "RuntimeError: model transport or usage failure; episode invalid",
+  "completed_trials": 0,
+  "proposal_usage": {
+    "calls": 1,
+    "prompt_tokens": 308,
+    "output_tokens": 231
+  },
+  "transport_usage": [
+    {
+      "calls": 1,
+      "prompt_tokens": 308,
+      "output_tokens": 231,
+      "complete": true
+    },
+    {
+      "calls": 1,
+      "prompt_tokens": 428,
+      "output_tokens": 208,
+      "complete": false,
+      "failure_code": "unexpected_output_items"
+    }
+  ],
+  "diagnostic_replay_of": "aa1f0718e1175e522985e8e6fcff64dd407d75bd3f23a17f43c579702c81622d",
+  "promotion_eligible": false,
+  "ledger_verified": true,
+  "ordinary_jarvis_guidance": 0,
+  "trials": [],
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 1868900,
+    "measured_usage_upper_nano_usd": 1158200,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 3027100,
+    "requests_reserved": 2,
+    "blocked": true
+  },
+  "interpretation": "Live integration on previously authored development fixtures. A pass is not evidence of RSI; a rejected lesson is not retained. Spending is a conservative token-charge upper bound, not an invoice; unresolved requests retain their full reservation. This is the explicitly authorized diagnostic replay of the consumed development suite. Original evidence is unchanged; replay results cannot promote a lesson."
+}

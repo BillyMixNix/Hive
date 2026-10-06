@@ -1,0 +1,26 @@
+{"baseline_revision": "3e0c82442a4f", "event": "objective_created", "objective_id": "objective_6c5a0a8ed1e1", "timestamp": "2026-09-08T08:42:08.060931+00:00"}
+{"capability": "reproducer", "dependencies": [], "event": "task_added", "task_id": "task_962b87d53909", "timestamp": "2026-09-08T08:42:08.061781+00:00"}
+{"capability": "callable_locator", "dependencies": ["task_962b87d53909"], "event": "task_added", "task_id": "task_6b9c7fbea4cb", "timestamp": "2026-09-08T08:42:08.062154+00:00"}
+{"capability": "source_locator", "dependencies": ["task_6b9c7fbea4cb"], "event": "task_added", "task_id": "task_93f65dc82378", "timestamp": "2026-09-08T08:42:08.062634+00:00"}
+{"capability": "cause_locator", "dependencies": ["task_93f65dc82378"], "event": "task_added", "task_id": "task_7c42fa318c62", "timestamp": "2026-09-08T08:42:08.063074+00:00"}
+{"capability": "investigator", "dependencies": ["task_7c42fa318c62"], "event": "task_added", "task_id": "task_0e7765b1af82", "timestamp": "2026-09-08T08:42:08.063511+00:00"}
+{"capability": "regression_designer", "dependencies": ["task_0e7765b1af82"], "event": "task_added", "task_id": "task_cd1910a11f69", "timestamp": "2026-09-08T08:42:08.063982+00:00"}
+{"capability": "repair", "dependencies": ["task_cd1910a11f69"], "event": "task_added", "task_id": "task_ef59540c942b", "timestamp": "2026-09-08T08:42:08.064470+00:00"}
+{"capability": "reviewer", "dependencies": ["task_ef59540c942b"], "event": "task_added", "task_id": "task_09a87f97350c", "timestamp": "2026-09-08T08:42:08.065000+00:00"}
+{"event": "worker_started", "fingerprint": "6bc4ec77ea6bf2c4", "task_id": "task_962b87d53909", "timestamp": "2026-09-08T08:42:08.099892+00:00", "worker_run_id": "worker_24aa641b973b"}
+{"callable_locator_task_id": "task_6b9c7fbea4cb", "cause_locator_task_id": "task_7c42fa318c62", "event": "existing_regression_adopted", "investigator_task_id": "task_0e7765b1af82", "regression_node": "test_visible.py::test_at_capacity", "repair_task_id": "task_ef59540c942b", "reproducer_task_id": "task_962b87d53909", "skipped_regression_task_id": "task_cd1910a11f69", "source_locator_task_id": "task_93f65dc82378", "timestamp": "2026-09-08T08:42:12.258183+00:00"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_962b87d53909", "timestamp": "2026-09-08T08:42:12.259102+00:00", "worker_run_id": "worker_24aa641b973b"}
+{"event": "worker_started", "fingerprint": "58444f1065e6d81a", "task_id": "task_6b9c7fbea4cb", "timestamp": "2026-09-08T08:42:12.262393+00:00", "worker_run_id": "worker_a42b10a67aaf"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_6b9c7fbea4cb", "timestamp": "2026-09-08T08:42:16.760216+00:00", "worker_run_id": "worker_a42b10a67aaf"}
+{"event": "worker_started", "fingerprint": "47c11ca62c5e238e", "task_id": "task_93f65dc82378", "timestamp": "2026-09-08T08:42:16.764103+00:00", "worker_run_id": "worker_cdba400de2ea"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_93f65dc82378", "timestamp": "2026-09-08T08:42:18.661577+00:00", "worker_run_id": "worker_cdba400de2ea"}
+{"event": "worker_started", "fingerprint": "ff97db916f8a78a4", "task_id": "task_7c42fa318c62", "timestamp": "2026-09-08T08:42:18.665740+00:00", "worker_run_id": "worker_d9f7c2f817f9"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_7c42fa318c62", "timestamp": "2026-09-08T08:42:23.001560+00:00", "worker_run_id": "worker_d9f7c2f817f9"}
+{"event": "worker_started", "fingerprint": "73e45b36d668652b", "task_id": "task_0e7765b1af82", "timestamp": "2026-09-08T08:42:23.249013+00:00", "worker_run_id": "worker_638417456af6"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_0e7765b1af82", "timestamp": "2026-09-08T08:42:28.932644+00:00", "worker_run_id": "worker_638417456af6"}
+{"event": "worker_started", "fingerprint": "0cb56a0676bfee21", "task_id": "task_ef59540c942b", "timestamp": "2026-09-08T08:42:29.547366+00:00", "worker_run_id": "worker_de7805c42068"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_ef59540c942b", "timestamp": "2026-09-08T08:42:32.339592+00:00", "worker_run_id": "worker_de7805c42068"}
+{"event": "worker_started", "fingerprint": "e3a1dce16aee6b86", "task_id": "task_09a87f97350c", "timestamp": "2026-09-08T08:42:32.344823+00:00", "worker_run_id": "worker_37f438da48da"}
+{"event": "review_advisory_recorded", "findings": [], "task_id": "task_09a87f97350c", "timestamp": "2026-09-08T08:42:37.307674+00:00", "verdict": "PASS"}
+{"event": "worker_finished", "status": "COMPLETED", "task_id": "task_09a87f97350c", "timestamp": "2026-09-08T08:42:37.309361+00:00", "worker_run_id": "worker_37f438da48da"}
+{"accepted": true, "decision": "ACCEPT", "event": "objective_validated", "reasons": ["deterministic acceptance oracle passed"], "revision": "668ffce330bf", "timestamp": "2026-09-08T08:42:38.049217+00:00"}

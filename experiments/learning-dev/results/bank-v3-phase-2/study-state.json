@@ -1,0 +1,825 @@
+{
+  "schema": "hive.lesson-bank.state.v3",
+  "study_sha256": "87fc27ac5f0b59027cc80929366006d47fb21c2a1fab5e30633032bb9e472d20",
+  "bank_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+  "phases": [
+    {
+      "phase": 1,
+      "status": "completed",
+      "schedule": [
+        {
+          "case_id": "bank3_paired_sort_30",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_versioned_cache_31",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_paired_sort_31",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_versioned_cache_30",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_31",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_30",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_paired_sort_31",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_paired_sort_30",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_single_pass_30",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_versioned_cache_30",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_versioned_cache_31",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_paired_sort_31",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_paired_sort_30",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_31",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_single_pass_31",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_single_pass_30",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_versioned_cache_30",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_versioned_cache_31",
+          "arm": "neutral"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "status": "running",
+      "schedule": [
+        {
+          "case_id": "bank3_single_pass_33",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_versioned_cache_32",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_paired_sort_33",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_versioned_cache_32",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_paired_sort_32",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_versioned_cache_32",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_32",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_versioned_cache_33",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_paired_sort_33",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank3_single_pass_33",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_paired_sort_32",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_33",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_paired_sort_32",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_single_pass_32",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_versioned_cache_33",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank3_paired_sort_33",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_versioned_cache_33",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank3_single_pass_32",
+          "arm": "baseline"
+        }
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "case_id": "bank3_paired_sort_30",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 18728,
+        "output_tokens": 1173
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "737f8b9796a5507f2c687416c1f49d4165b6f724d6e6614a37f399432d70c89a",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_31",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14624,
+        "output_tokens": 1251
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "15c340427999f71c8b5cd9c427178214c5ef95b20a5eb922ce8538bce201d902",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_31",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 15540,
+        "output_tokens": 4270
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "candidate_sha256": "7e9af019c46519f8083dfe627531a0927ebc049e4e082bb3d1fbc2f96f19ceb5",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_30",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 20267,
+        "output_tokens": 1481
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "7aef9f0fd21ae5137351df142a1e388590a374b55541824351e7c2f14929b485",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_31",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 30,
+        "prompt_tokens": 56847,
+        "output_tokens": 11501
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "5fd77e623de1e0ff8fb994ec16310cccd8e23ac53c503fc0c7514cacd01cc1a6",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_30",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11336,
+        "output_tokens": 1348
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "de56b9c7b7e0e378d626f4b9a704e931fedac1a119530b4fe3d1b1a549190a04",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_31",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 18867,
+        "output_tokens": 2842
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "candidate_sha256": "4a4408743a3a03e369e46adb8048e9f43a463bbce56250acb41ab8d9264c86fe",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_30",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 14734,
+        "output_tokens": 1287
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "737f8b9796a5507f2c687416c1f49d4165b6f724d6e6614a37f399432d70c89a",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_30",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 20429,
+        "output_tokens": 1338
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "de56b9c7b7e0e378d626f4b9a704e931fedac1a119530b4fe3d1b1a549190a04",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_30",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 15795,
+        "output_tokens": 1768
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "e87af959e50b05cc0ee8d15d0778fc49295f7d33758f37c81a111dd32fb7464c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_31",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 15503,
+        "output_tokens": 1915
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "15c340427999f71c8b5cd9c427178214c5ef95b20a5eb922ce8538bce201d902",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_31",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 19418,
+        "output_tokens": 3614
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "candidate_sha256": "0e9216f45f6eab286df1db2a06a235cc1dbc5fb9ded8ce43a4b723dec0f276c4",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_30",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 18182,
+        "output_tokens": 1214
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "737f8b9796a5507f2c687416c1f49d4165b6f724d6e6614a37f399432d70c89a",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_31",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 30,
+        "prompt_tokens": 58671,
+        "output_tokens": 7846
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "1979df8a510ffc198fffc0df04ec067f06c9c2f585a9c1f6072e8dcd9666da80",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_31",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 31,
+        "prompt_tokens": 48784,
+        "output_tokens": 9005
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "1979df8a510ffc198fffc0df04ec067f06c9c2f585a9c1f6072e8dcd9666da80",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_30",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14962,
+        "output_tokens": 948
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "de56b9c7b7e0e378d626f4b9a704e931fedac1a119530b4fe3d1b1a549190a04",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_30",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 21042,
+        "output_tokens": 1840
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "7aef9f0fd21ae5137351df142a1e388590a374b55541824351e7c2f14929b485",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_31",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14088,
+        "output_tokens": 1374
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "949d6ad7e506fbf39e49b5eee49a64c8717664e413d68480de6b7f1b089bbe4b",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_33",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11311,
+        "output_tokens": 1119
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "72bb72de20c250632fc3f26ec4e05f6294106a82b6dcb75829346763b39d2e13",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_32",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 15748,
+        "output_tokens": 1598
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "34c81257a4317d5c6ec200a5a1ed6cf819b8ded72f68e35f35a3284c4ed50eae",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_33",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 18643,
+        "output_tokens": 1118
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "16ada059141c521eeb55a1a16b19b42105c070dd94ff6c34ae150633a212e08d",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_32",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14410,
+        "output_tokens": 887
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "1de4c9098b22dca3bcf8dd367eecc6f5dc99637a23e205368409c4997e86cf23",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_32",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 13194,
+        "output_tokens": 2217
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "candidate_sha256": "ed9ba42c5a07c5a5156f4683d50d31d7690fb2c7601032d9ff09ff34fdf21840",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_32",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 17,
+        "prompt_tokens": 25937,
+        "output_tokens": 2086
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "34c81257a4317d5c6ec200a5a1ed6cf819b8ded72f68e35f35a3284c4ed50eae",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_32",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14810,
+        "output_tokens": 1010
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "df10718160d9da736feac1ce035c6df6684818ce9aad070d9bcdff5b771a938c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_versioned_cache_33",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 15775,
+        "output_tokens": 1655
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "ea6c56c8be2a67a84351058c36080a661b7638db8f20a5902744548c6cb1897c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_33",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 14606,
+        "output_tokens": 1410
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "16ada059141c521eeb55a1a16b19b42105c070dd94ff6c34ae150633a212e08d",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_33",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14377,
+        "output_tokens": 1047
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "72bb72de20c250632fc3f26ec4e05f6294106a82b6dcb75829346763b39d2e13",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_paired_sort_32",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "e6a18ab09686a3572d4403f0a3507a9392be09a36eea92a4642b453468dcabef",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 16893,
+        "output_tokens": 1340
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "candidate_sha256": "a92b66cd77b9995d4e2c976fc48b63be7b9bbd418a75becd34b9b657e0922fb5",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank3_single_pass_33",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "eb9d089e282f9226998910c2abcec23d805a1e5af453e7f2e1cdcf4ff42be4e3",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 14913,
+        "output_tokens": 781
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "72bb72de20c250632fc3f26ec4e05f6294106a82b6dcb75829346763b39d2e13",
+      "controller_decision": "SATISFIED"
+    }
+  ]
+}

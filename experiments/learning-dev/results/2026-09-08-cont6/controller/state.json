@@ -1,0 +1,1269 @@
+{
+  "artifacts": {},
+  "controller_usage": {
+    "model_calls": 9,
+    "responsibility_calls": {
+      "CALLABLE_LOCATOR": 2,
+      "CAUSE_LOCATOR": 1,
+      "INVESTIGATOR": 1,
+      "REPAIR": 1,
+      "REPRODUCER": 1,
+      "REVIEWER": 2,
+      "SOURCE_LOCATOR": 1
+    }
+  },
+  "evidence": {
+    "evidence_15220db39609": {
+      "created_at": "2026-09-08T08:42:16.759354+00:00",
+      "evidence_id": "evidence_15220db39609",
+      "kind": "OBSERVATION",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "path": "capacity.py"
+        },
+        "output": "SOURCE FILE: capacity.py\nSOURCE SHA256: 6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02\n1 | def admit(quantity, capacity):\n2 |     return quantity < capacity",
+        "tool": "read_source_lines"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_a42b10a67aaf",
+      "summary": "Broker executed read_source_lines",
+      "task_id": "task_6b9c7fbea4cb",
+      "verified": true
+    },
+    "evidence_2795ed4b1c7f": {
+      "created_at": "2026-09-08T08:42:38.047750+00:00",
+      "evidence_id": "evidence_2795ed4b1c7f",
+      "kind": "TEST_RESULT",
+      "lifecycle": "CURRENT",
+      "payload": {
+        "accepted": true,
+        "command": "pytest",
+        "decision": "ACCEPT",
+        "exit_code": 0,
+        "output": "EXIT CODE: 0\nSTDOUT:\n============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/_temp/hive-continuation-evidence/repair-work\ncollected 3 items\n\ntest_visible.py ...                                                      [100%]\n\n============================== 3 passed in 0.00s ===============================\n\nSTDERR:\n",
+        "output_truncated": false,
+        "reasons": [
+          "deterministic acceptance oracle passed"
+        ],
+        "validation_id": "validation_68615eb2bac5"
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "controller",
+      "summary": "Controller objective validation",
+      "task_id": "controller",
+      "verified": true
+    },
+    "evidence_3e4e4fbe11d9": {
+      "created_at": "2026-09-08T08:42:37.307889+00:00",
+      "evidence_id": "evidence_3e4e4fbe11d9",
+      "kind": "INFERENCE",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {},
+            "output": "FINAL DIFF:\n--- a/capacity.py\n+++ b/capacity.py\n@@ -1,2 +1,2 @@\n def admit(quantity, capacity):\n-    return quantity < capacity\n+    return quantity <= capacity\n\n\nTEST EXIT CODE: 0\nTEST STATUS: PASSED",
+            "tool": "review_snapshot"
+          },
+          {
+            "arguments": {
+              "findings": [],
+              "verdict": "PASS"
+            },
+            "output": "SUCCESS: Advisory review submitted for controller verification",
+            "tool": "submit_review"
+          }
+        ],
+        "reported_payload": {
+          "findings": [],
+          "verdict": "PASS"
+        }
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "worker_37f438da48da",
+      "summary": "Read-only advisory review after controller snapshot inspection",
+      "task_id": "task_09a87f97350c",
+      "verified": false
+    },
+    "evidence_4d815414a15a": {
+      "created_at": "2026-09-08T08:42:23.000481+00:00",
+      "evidence_id": "evidence_4d815414a15a",
+      "kind": "INFERENCE",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "candidate_location_id": "fade0495beec03b0"
+            },
+            "output": "SUCCESS: Direct candidate cause submitted for controller verification",
+            "tool": "confirm_candidate"
+          }
+        ],
+        "reported_payload": {
+          "candidate_location_id": "fade0495beec03b0"
+        }
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_d9f7c2f817f9",
+      "summary": "Structured upstream-cause location hypothesis",
+      "task_id": "task_7c42fa318c62",
+      "verified": false
+    },
+    "evidence_4db2e04cdf1c": {
+      "created_at": "2026-09-08T08:42:32.338219+00:00",
+      "evidence_id": "evidence_4db2e04cdf1c",
+      "kind": "OBSERVATION",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "new": "quantity <= capacity"
+            },
+            "output": "SUCCESS: Updated locked line in capacity.py",
+            "tool": "replace_selected_expression"
+          }
+        ],
+        "reported_payload": null
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "worker_de7805c42068",
+      "summary": "Required atomic tools completed with broker provenance.",
+      "task_id": "task_ef59540c942b",
+      "verified": false
+    },
+    "evidence_56a0fc101e11": {
+      "created_at": "2026-09-08T08:42:28.931444+00:00",
+      "evidence_id": "evidence_56a0fc101e11",
+      "kind": "OBSERVATION",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "location_id": "e852bc57ed6af9b3",
+          "mechanism": "The selected RHS compares the loaded operands with a strict inequality. With quantity=5 and capacity=5 immediately before the line, `quantity < capacity` evaluates to False, so the function returns False (no target is assigned; frames_after_line is empty). This makes the public result reject the at-capacity input, although the requirement admits quantities up to and including capacity. Both current-call parameters, quantity and capacity, are loaded by this RHS; no current-call parameter is omitted, so the result is specifically insensitive to equality as an admitted case."
+        },
+        "output": "SUCCESS: Causal mechanism submitted for controller verification",
+        "tool": "submit_mechanism"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_638417456af6",
+      "summary": "Broker executed submit_mechanism",
+      "task_id": "task_0e7765b1af82",
+      "verified": true
+    },
+    "evidence_713d993a0b07": {
+      "created_at": "2026-09-08T08:42:18.660623+00:00",
+      "evidence_id": "evidence_713d993a0b07",
+      "kind": "OBSERVATION",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "callable_id": "f67c0afe7f93c3c5",
+          "choice_id": "26c2a04ae613517e"
+        },
+        "output": "SUCCESS: Structured source location submitted for controller verification",
+        "tool": "submit_location"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_cdba400de2ea",
+      "summary": "Broker executed submit_location",
+      "task_id": "task_93f65dc82378",
+      "verified": true
+    },
+    "evidence_9716c896cfbd": {
+      "created_at": "2026-09-08T08:42:18.660602+00:00",
+      "evidence_id": "evidence_9716c896cfbd",
+      "kind": "INFERENCE",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "callable_id": "f67c0afe7f93c3c5",
+              "choice_id": "26c2a04ae613517e"
+            },
+            "output": "SUCCESS: Structured source location submitted for controller verification",
+            "tool": "submit_location"
+          }
+        ],
+        "reported_payload": {
+          "callable_id": "f67c0afe7f93c3c5",
+          "choice_id": "26c2a04ae613517e"
+        }
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_cdba400de2ea",
+      "summary": "Structured line-location hypothesis",
+      "task_id": "task_93f65dc82378",
+      "verified": false
+    },
+    "evidence_a09f1dd691c1": {
+      "created_at": "2026-09-08T08:42:12.258303+00:00",
+      "evidence_id": "evidence_a09f1dd691c1",
+      "kind": "TEST_RESULT",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "command": "pytest"
+        },
+        "output": "EXIT CODE: 1\nSTDOUT:\n============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/_temp/hive-continuation-evidence/repair-work\ncollected 3 items\n\ntest_visible.py .F.                                                      [100%]\n\n=================================== FAILURES ===================================\n_______________________________ test_at_capacity _______________________________\n\n    def test_at_capacity():\n>       assert admit(5, 5)\nE       assert False\nE        +  where False = admit(5, 5)\n\ntest_visible.py:7: AssertionError\n=========================== short test summary info ============================\nFAILED test_visible.py::test_at_capacity - assert False\n +  where False = admit(5, 5)\n========================= 1 failed, 2 passed in 0.01s ==========================\n\nSTDERR:\n",
+        "tool": "run_command"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_24aa641b973b",
+      "summary": "Broker executed run_command",
+      "task_id": "task_962b87d53909",
+      "verified": true
+    },
+    "evidence_a79756718137": {
+      "created_at": "2026-09-08T08:42:32.338243+00:00",
+      "evidence_id": "evidence_a79756718137",
+      "kind": "DIFF",
+      "lifecycle": "CURRENT",
+      "payload": {
+        "arguments": {
+          "new": "quantity <= capacity"
+        },
+        "output": "SUCCESS: Updated locked line in capacity.py",
+        "tool": "replace_selected_expression"
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "worker_de7805c42068",
+      "summary": "Broker executed replace_selected_expression",
+      "task_id": "task_ef59540c942b",
+      "verified": true
+    },
+    "evidence_ac29b455e380": {
+      "created_at": "2026-09-08T08:42:16.759362+00:00",
+      "evidence_id": "evidence_ac29b455e380",
+      "kind": "OBSERVATION",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "definition_line": 1,
+          "source_file": "capacity.py"
+        },
+        "output": "SUCCESS: Structured callable submitted for controller verification",
+        "tool": "submit_callable"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_a42b10a67aaf",
+      "summary": "Broker executed submit_callable",
+      "task_id": "task_6b9c7fbea4cb",
+      "verified": true
+    },
+    "evidence_bd58a76effbd": {
+      "created_at": "2026-09-08T08:42:37.307903+00:00",
+      "evidence_id": "evidence_bd58a76effbd",
+      "kind": "OBSERVATION",
+      "lifecycle": "CURRENT",
+      "payload": {
+        "arguments": {},
+        "output": "FINAL DIFF:\n--- a/capacity.py\n+++ b/capacity.py\n@@ -1,2 +1,2 @@\n def admit(quantity, capacity):\n-    return quantity < capacity\n+    return quantity <= capacity\n\n\nTEST EXIT CODE: 0\nTEST STATUS: PASSED",
+        "tool": "review_snapshot"
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "worker_37f438da48da",
+      "summary": "Broker executed review_snapshot",
+      "task_id": "task_09a87f97350c",
+      "verified": true
+    },
+    "evidence_c23822c11371": {
+      "created_at": "2026-09-08T08:42:12.258286+00:00",
+      "evidence_id": "evidence_c23822c11371",
+      "kind": "OBSERVATION",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "command": "pytest"
+            },
+            "output": "EXIT CODE: 1\nSTDOUT:\n============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/_temp/hive-continuation-evidence/repair-work\ncollected 3 items\n\ntest_visible.py .F.                                                      [100%]\n\n=================================== FAILURES ===================================\n_______________________________ test_at_capacity _______________________________\n\n    def test_at_capacity():\n>       assert admit(5, 5)\nE       assert False\nE        +  where False = admit(5, 5)\n\ntest_visible.py:7: AssertionError\n=========================== short test summary info ============================\nFAILED test_visible.py::test_at_capacity - assert False\n +  where False = admit(5, 5)\n========================= 1 failed, 2 passed in 0.01s ==========================\n\nSTDERR:\n",
+            "tool": "run_command"
+          }
+        ],
+        "reported_payload": null
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_24aa641b973b",
+      "summary": "Required atomic tools completed with broker provenance.",
+      "task_id": "task_962b87d53909",
+      "verified": false
+    },
+    "evidence_d8f59284cb14": {
+      "created_at": "2026-09-08T08:42:37.307909+00:00",
+      "evidence_id": "evidence_d8f59284cb14",
+      "kind": "OBSERVATION",
+      "lifecycle": "CURRENT",
+      "payload": {
+        "arguments": {
+          "findings": [],
+          "verdict": "PASS"
+        },
+        "output": "SUCCESS: Advisory review submitted for controller verification",
+        "tool": "submit_review"
+      },
+      "revision": "668ffce330bf",
+      "source_worker_run_id": "worker_37f438da48da",
+      "summary": "Broker executed submit_review",
+      "task_id": "task_09a87f97350c",
+      "verified": true
+    },
+    "evidence_dc22a0a93613": {
+      "created_at": "2026-09-08T08:42:16.759331+00:00",
+      "evidence_id": "evidence_dc22a0a93613",
+      "kind": "INFERENCE",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "path": "capacity.py"
+            },
+            "output": "SOURCE FILE: capacity.py\nSOURCE SHA256: 6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02\n1 | def admit(quantity, capacity):\n2 |     return quantity < capacity",
+            "tool": "read_source_lines"
+          },
+          {
+            "arguments": {
+              "definition_line": 1,
+              "source_file": "capacity.py"
+            },
+            "output": "SUCCESS: Structured callable submitted for controller verification",
+            "tool": "submit_callable"
+          }
+        ],
+        "reported_payload": {
+          "definition_line": 1,
+          "source_file": "capacity.py"
+        }
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_a42b10a67aaf",
+      "summary": "Structured callable-location hypothesis",
+      "task_id": "task_6b9c7fbea4cb",
+      "verified": false
+    },
+    "evidence_e72884f71d4c": {
+      "created_at": "2026-09-08T08:42:28.931423+00:00",
+      "evidence_id": "evidence_e72884f71d4c",
+      "kind": "INFERENCE",
+      "lifecycle": "UNVERIFIED",
+      "payload": {
+        "broker_observations": [
+          {
+            "arguments": {
+              "location_id": "e852bc57ed6af9b3",
+              "mechanism": "The selected RHS compares the loaded operands with a strict inequality. With quantity=5 and capacity=5 immediately before the line, `quantity < capacity` evaluates to False, so the function returns False (no target is assigned; frames_after_line is empty). This makes the public result reject the at-capacity input, although the requirement admits quantities up to and including capacity. Both current-call parameters, quantity and capacity, are loaded by this RHS; no current-call parameter is omitted, so the result is specifically insensitive to equality as an admitted case."
+            },
+            "output": "SUCCESS: Causal mechanism submitted for controller verification",
+            "tool": "submit_mechanism"
+          }
+        ],
+        "reported_payload": {
+          "location_id": "e852bc57ed6af9b3",
+          "mechanism": "The selected RHS compares the loaded operands with a strict inequality. With quantity=5 and capacity=5 immediately before the line, `quantity < capacity` evaluates to False, so the function returns False (no target is assigned; frames_after_line is empty). This makes the public result reject the at-capacity input, although the requirement admits quantities up to and including capacity. Both current-call parameters, quantity and capacity, are loaded by this RHS; no current-call parameter is omitted, so the result is specifically insensitive to equality as an admitted case."
+        }
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_638417456af6",
+      "summary": "Structured source-grounded diagnosis hypothesis",
+      "task_id": "task_0e7765b1af82",
+      "verified": false
+    },
+    "evidence_fb54423e5409": {
+      "created_at": "2026-09-08T08:42:23.000502+00:00",
+      "evidence_id": "evidence_fb54423e5409",
+      "kind": "OBSERVATION",
+      "lifecycle": "SUPERSEDED",
+      "payload": {
+        "arguments": {
+          "candidate_location_id": "fade0495beec03b0"
+        },
+        "output": "SUCCESS: Direct candidate cause submitted for controller verification",
+        "tool": "confirm_candidate"
+      },
+      "revision": "3e0c82442a4f",
+      "source_worker_run_id": "worker_d9f7c2f817f9",
+      "summary": "Broker executed confirm_candidate",
+      "task_id": "task_7c42fa318c62",
+      "verified": true
+    }
+  },
+  "objective": {
+    "artifact_ids": [],
+    "baseline_revision": "3e0c82442a4f",
+    "baseline_snapshot": {
+      "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+      "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+    },
+    "blocker": "",
+    "created_at": "2026-09-08T08:42:08.060296+00:00",
+    "evidence_ids": [
+      "evidence_c23822c11371",
+      "evidence_a09f1dd691c1",
+      "evidence_dc22a0a93613",
+      "evidence_15220db39609",
+      "evidence_ac29b455e380",
+      "evidence_9716c896cfbd",
+      "evidence_713d993a0b07",
+      "evidence_4d815414a15a",
+      "evidence_fb54423e5409",
+      "evidence_e72884f71d4c",
+      "evidence_56a0fc101e11",
+      "evidence_4db2e04cdf1c",
+      "evidence_a79756718137",
+      "evidence_3e4e4fbe11d9",
+      "evidence_bd58a76effbd",
+      "evidence_d8f59284cb14",
+      "evidence_2795ed4b1c7f"
+    ],
+    "graph_revisions": [],
+    "objective_id": "objective_6c5a0a8ed1e1",
+    "original_request": "For integer inputs, admit quantities up to and including capacity. Preserve the tests.",
+    "parent_objective_id": null,
+    "priority": 0,
+    "state": "SATISFIED",
+    "success_criteria": [
+      "For integer inputs, admit quantities up to and including capacity. Preserve the tests."
+    ],
+    "task_ids": [
+      "task_962b87d53909",
+      "task_6b9c7fbea4cb",
+      "task_93f65dc82378",
+      "task_7c42fa318c62",
+      "task_0e7765b1af82",
+      "task_cd1910a11f69",
+      "task_ef59540c942b",
+      "task_09a87f97350c"
+    ],
+    "task_state": {
+      "acceptance_oracle_pass": true,
+      "accepted_regression_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "atomic_cycle": 1,
+      "atomic_source_files": [
+        "capacity.py"
+      ],
+      "atomic_test_files": [
+        "test_visible.py"
+      ],
+      "callable_location": {
+        "callable_id": "f67c0afe7f93c3c5",
+        "definition_line": 1,
+        "end_line": 2,
+        "source_file": "capacity.py",
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "symbol": "admit"
+      },
+      "callable_location_grounded": true,
+      "candidate_source_location": {
+        "callable_id": "f67c0afe7f93c3c5",
+        "line": 2,
+        "location_id": "fade0495beec03b0",
+        "source_file": "capacity.py",
+        "source_line": "return quantity < capacity",
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "symbol": "admit"
+      },
+      "cause_location_grounded": true,
+      "cycle_history": [],
+      "diagnosis_grounded": true,
+      "gate_failures": {},
+      "invalid_callable_location_submissions": [],
+      "invalid_repair_submissions": [],
+      "invalid_source_location_submissions": [],
+      "investigator_diagnosis": {
+        "actual": null,
+        "expected": null,
+        "line": 2,
+        "location_id": "e852bc57ed6af9b3",
+        "mechanism": "The selected RHS compares the loaded operands with a strict inequality. With quantity=5 and capacity=5 immediately before the line, `quantity < capacity` evaluates to False, so the function returns False (no target is assigned; frames_after_line is empty). This makes the public result reject the at-capacity input, although the requirement admits quantities up to and including capacity. Both current-call parameters, quantity and capacity, are loaded by this RHS; no current-call parameter is omitted, so the result is specifically insensitive to equality as an admitted case.",
+        "source_file": "capacity.py",
+        "source_line": "return quantity < capacity",
+        "symbol": "admit"
+      },
+      "last_failed_gate": "",
+      "last_gate_feedback": "",
+      "location_repair_failures": {},
+      "location_repair_stagnations": {},
+      "operationally_deferred_cause_locations": [],
+      "operationally_deferred_source_locations": [],
+      "oracle_feedback": "{\"accepted\": false}",
+      "original_failure_reproduced": true,
+      "original_tests_pass": true,
+      "regression_baseline_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "regression_created": false,
+      "regression_established": true,
+      "regression_fails_on_broken_revision": true,
+      "regression_nodes": [
+        "test_visible.py::test_at_capacity"
+      ],
+      "regression_origin": "existing",
+      "regression_passes_after_repair": true,
+      "regression_target": {},
+      "rejected_callable_locations": [],
+      "rejected_cause_locations": [],
+      "rejected_investigator_diagnoses": [],
+      "rejected_repair_action_locations": {},
+      "rejected_repair_actions": [],
+      "rejected_source_locations": [],
+      "repair_oracle_target": {},
+      "reproduced_failure_nodes": [
+        "test_visible.py::test_at_capacity"
+      ],
+      "reproduction_origin": "pytest",
+      "review_pass": true,
+      "root_cause_identified": true,
+      "source_location": {
+        "callable_id": "f67c0afe7f93c3c5",
+        "candidate_location_id": "fade0495beec03b0",
+        "cause_relation": "direct_candidate_confirmation",
+        "expression_frame": {
+          "assigned_targets": [],
+          "mode": "expression",
+          "old_expression": "quantity < capacity",
+          "prefix": "return ",
+          "statement_kind": "return",
+          "suffix": "",
+          "template": "return <MODEL_EXPRESSION>"
+        },
+        "leaf_replacement_choices": [],
+        "line": 2,
+        "location_id": "e852bc57ed6af9b3",
+        "source_file": "capacity.py",
+        "source_line": "return quantity < capacity",
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "symbol": "admit"
+      },
+      "source_location_grounded": true,
+      "source_repaired": true,
+      "source_runtime_evidence": {
+        "assigned_targets": [],
+        "branch_control_parameters": [],
+        "captured": true,
+        "current_call_parameters_not_loaded": [],
+        "frames_after_line": [],
+        "frames_before_line": [
+          {
+            "capacity": 5,
+            "quantity": 5
+          }
+        ],
+        "line": 2,
+        "location_id": "e852bc57ed6af9b3",
+        "omitted_data_parameters": [],
+        "pytest_exit": 1,
+        "runtime_evidence_id": "334b46c97f9c5d83",
+        "selected_expression": "quantity < capacity",
+        "selected_loads": [
+          "capacity",
+          "quantity"
+        ],
+        "source_file": "capacity.py",
+        "test_nodes": [
+          "test_visible.py::test_at_capacity"
+        ]
+      }
+    },
+    "updated_at": "2026-09-08T08:42:38.047756+00:00",
+    "validation": {
+      "accepted": true,
+      "command": "pytest",
+      "conformance_decision": "ACCEPT",
+      "created_at": "2026-09-08T08:42:38.047726+00:00",
+      "exit_code": 0,
+      "output": "EXIT CODE: 0\nSTDOUT:\n============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0\nrootdir: /home/runner/work/_temp/hive-continuation-evidence/repair-work\ncollected 3 items\n\ntest_visible.py ...                                                      [100%]\n\n============================== 3 passed in 0.00s ===============================\n\nSTDERR:\n",
+      "reasons": [
+        "deterministic acceptance oracle passed"
+      ],
+      "revision": "668ffce330bf",
+      "validation_id": "validation_68615eb2bac5"
+    }
+  },
+  "tasks": {
+    "task_09a87f97350c": {
+      "acceptance_conditions": [
+        "Report advisory findings supported by reads and tests"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_37f438da48da",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "review_snapshot",
+          "submit_review"
+        ],
+        "read_scopes": [
+          "capacity.py",
+          "test_visible.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "reviewer",
+      "created_at": "2026-09-08T08:42:08.064526+00:00",
+      "dependencies": [
+        "task_ef59540c942b"
+      ],
+      "description": "Read only: look for cheating, weakened behavior, obvious nearby defects, or unnecessary modifications.",
+      "evidence_ids": [
+        "evidence_3e4e4fbe11d9",
+        "evidence_bd58a76effbd",
+        "evidence_d8f59284cb14"
+      ],
+      "expected_output": "Advisory findings only; Hive mechanically verifies every approval claim",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857252.343569,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [
+        "capacity.py",
+        "test_visible.py"
+      ],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_09a87f97350c",
+      "updated_at": "2026-09-08T08:42:37.307917+00:00"
+    },
+    "task_0e7765b1af82": {
+      "acceptance_conditions": [
+        "Submit one mechanism for the accepted source location"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_638417456af6",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "submit_mechanism"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "investigator",
+      "created_at": "2026-09-08T08:42:08.063122+00:00",
+      "dependencies": [
+        "task_7c42fa318c62"
+      ],
+      "description": "Explain only how the accepted source location produces actual instead of expected.",
+      "evidence_ids": [
+        "evidence_e72884f71d4c",
+        "evidence_56a0fc101e11"
+      ],
+      "expected_output": "One causal mechanism only; no source selection or repair",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857243.24775,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_0e7765b1af82",
+      "updated_at": "2026-09-08T08:42:28.931451+00:00"
+    },
+    "task_6b9c7fbea4cb": {
+      "acceptance_conditions": [
+        "Submit one exact callable definition line"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_a42b10a67aaf",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "read_source_lines",
+          "submit_callable"
+        ],
+        "read_scopes": [
+          "capacity.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "callable_locator",
+      "created_at": "2026-09-08T08:42:08.061839+00:00",
+      "dependencies": [
+        "task_962b87d53909"
+      ],
+      "description": "Locate only the callable that can produce the observed wrong value.",
+      "evidence_ids": [
+        "evidence_dc22a0a93613",
+        "evidence_15220db39609",
+        "evidence_ac29b455e380"
+      ],
+      "expected_output": "Source file and exact callable definition line only",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857232.261735,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [
+        "capacity.py"
+      ],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_6b9c7fbea4cb",
+      "updated_at": "2026-09-08T08:42:16.759368+00:00"
+    },
+    "task_7c42fa318c62": {
+      "acceptance_conditions": [
+        "Submit one controller-owned cause or frontier decision"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_d9f7c2f817f9",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "confirm_candidate",
+          "reject_cause_frontier"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "cause_locator",
+      "created_at": "2026-09-08T08:42:08.062706+00:00",
+      "dependencies": [
+        "task_93f65dc82378"
+      ],
+      "description": "Confirm the selected computation, choose one upstream producer, or reject an exhausted causal frontier.",
+      "evidence_ids": [
+        "evidence_4d815414a15a",
+        "evidence_fb54423e5409"
+      ],
+      "expected_output": "Locked candidate id and one direct or upstream cause choice only",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857238.6648948,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_7c42fa318c62",
+      "updated_at": "2026-09-08T08:42:23.000508+00:00"
+    },
+    "task_93f65dc82378": {
+      "acceptance_conditions": [
+        "Submit one exact line from the locked callable window"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_cdba400de2ea",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "submit_location"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "source_locator",
+      "created_at": "2026-09-08T08:42:08.062205+00:00",
+      "dependencies": [
+        "task_6b9c7fbea4cb"
+      ],
+      "description": "Select only one causal line from the controller-locked callable.",
+      "evidence_ids": [
+        "evidence_9716c896cfbd",
+        "evidence_713d993a0b07"
+      ],
+      "expected_output": "Locked callable id and one exact source line only",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857236.7632525,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_93f65dc82378",
+      "updated_at": "2026-09-08T08:42:18.660630+00:00"
+    },
+    "task_962b87d53909": {
+      "acceptance_conditions": [
+        "A controller-observed command exits nonzero"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_24aa641b973b",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "run_command"
+        ],
+        "read_scopes": [
+          "capacity.py",
+          "test_visible.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "reproducer",
+      "created_at": "2026-09-08T08:42:08.061452+00:00",
+      "dependencies": [],
+      "description": "Reproduce the reported problem and return the exact failing command and output.",
+      "evidence_ids": [
+        "evidence_c23822c11371",
+        "evidence_a09f1dd691c1"
+      ],
+      "expected_output": "Exact failing command, observed result, expected result, and relevant files",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857228.099356,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [
+        "test_visible.py"
+      ],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_962b87d53909",
+      "updated_at": "2026-09-08T08:42:12.258311+00:00"
+    },
+    "task_cd1910a11f69": {
+      "acceptance_conditions": [
+        "A new test node fails on the broken revision"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": null,
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "read_file",
+          "run_command",
+          "append_to_file"
+        ],
+        "read_scopes": [
+          "test_visible.py"
+        ],
+        "write_scopes": [
+          "test_visible.py"
+        ]
+      },
+      "capability": "regression_designer",
+      "created_at": "2026-09-08T08:42:08.063564+00:00",
+      "dependencies": [
+        "task_0e7765b1af82"
+      ],
+      "description": "Add the smallest new regression test demonstrating the observed defect. Do not modify source or existing tests.",
+      "evidence_ids": [],
+      "expected_output": "One new focused test and its red-phase result",
+      "failure_reason": "SKIPPED: existing focused failing test adopted as regression: test_visible.py::test_at_capacity",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 0.0,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [
+        "capacity.py",
+        "test_visible.py"
+      ],
+      "retry_count": 0,
+      "status": "CANCELLED",
+      "task_id": "task_cd1910a11f69",
+      "updated_at": "2026-09-08T08:42:12.258151+00:00"
+    },
+    "task_ef59540c942b": {
+      "acceptance_conditions": [
+        "The accepted regression and original suite pass"
+      ],
+      "artifact_ids": [],
+      "assigned_worker_run_id": "worker_de7805c42068",
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "replace_selected_expression"
+        ],
+        "read_scopes": [
+          "capacity.py"
+        ],
+        "write_scopes": [
+          "capacity.py"
+        ]
+      },
+      "capability": "repair",
+      "created_at": "2026-09-08T08:42:08.064028+00:00",
+      "dependencies": [
+        "task_0e7765b1af82"
+      ],
+      "description": "Repair only the source defect exposed by the accepted regression. Do not modify tests.",
+      "evidence_ids": [
+        "evidence_4db2e04cdf1c",
+        "evidence_a79756718137"
+      ],
+      "expected_output": "Minimal source repair and exact green-phase result",
+      "failure_reason": "",
+      "last_failure_fingerprint": null,
+      "lease_expires_at": 1788857249.5461226,
+      "lease_id": null,
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "required_context": [
+        "capacity.py"
+      ],
+      "retry_count": 0,
+      "status": "COMPLETED",
+      "task_id": "task_ef59540c942b",
+      "updated_at": "2026-09-08T08:42:32.338251+00:00"
+    }
+  },
+  "worker_runs": {
+    "worker_24aa641b973b": {
+      "action_fingerprints": [
+        "31bddec0f65108ac"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "run_command"
+        ],
+        "read_scopes": [
+          "capacity.py",
+          "test_visible.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "reproducer",
+      "commands_executed": [
+        "pytest"
+      ],
+      "edited_files": [],
+      "end_revision": "3e0c82442a4f",
+      "error": "",
+      "evidence_ids": [
+        "evidence_c23822c11371",
+        "evidence_a09f1dd691c1"
+      ],
+      "finished_at": "2026-09-08T08:42:12.258308+00:00",
+      "inference_calls": 1,
+      "input_fingerprint": "6bc4ec77ea6bf2c4",
+      "lease_id": "lease_02173fa26396",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_24aa641b973b",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:08.099348+00:00",
+      "status": "COMPLETED",
+      "summary": "Atomic responsibility satisfied by brokered evidence.",
+      "task_id": "task_962b87d53909"
+    },
+    "worker_37f438da48da": {
+      "action_fingerprints": [
+        "8f9b6da55521e631",
+        "eef8b70b0d844b7f"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "review_snapshot",
+          "submit_review"
+        ],
+        "read_scopes": [
+          "capacity.py",
+          "test_visible.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "reviewer",
+      "commands_executed": [],
+      "edited_files": [],
+      "end_revision": "668ffce330bf",
+      "error": "",
+      "evidence_ids": [
+        "evidence_3e4e4fbe11d9",
+        "evidence_bd58a76effbd",
+        "evidence_d8f59284cb14"
+      ],
+      "finished_at": "2026-09-08T08:42:37.307913+00:00",
+      "inference_calls": 2,
+      "input_fingerprint": "e3a1dce16aee6b86",
+      "lease_id": "lease_e7d92c7851d9",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_37f438da48da",
+      "start_revision": "668ffce330bf",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity <= capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:32.343561+00:00",
+      "status": "COMPLETED",
+      "summary": "{\"findings\": [], \"verdict\": \"PASS\"}",
+      "task_id": "task_09a87f97350c"
+    },
+    "worker_638417456af6": {
+      "action_fingerprints": [
+        "9970d885f24d5fac"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "submit_mechanism"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "investigator",
+      "commands_executed": [],
+      "edited_files": [],
+      "end_revision": "3e0c82442a4f",
+      "error": "",
+      "evidence_ids": [
+        "evidence_e72884f71d4c",
+        "evidence_56a0fc101e11"
+      ],
+      "finished_at": "2026-09-08T08:42:28.931448+00:00",
+      "inference_calls": 1,
+      "input_fingerprint": "73e45b36d668652b",
+      "lease_id": "lease_c634279c30c5",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_638417456af6",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:23.247733+00:00",
+      "status": "COMPLETED",
+      "summary": "{\"location_id\": \"e852bc57ed6af9b3\", \"mechanism\": \"The selected RHS compares the loaded operands with a strict inequality. With quantity=5 and capacity=5 immediately before the line, `quantity < capacity` evaluates to False, so the function returns False (no target is assigned; frames_after_line is empty). This makes the public result reject the at-capacity input, although the requirement admits quantities up to and including capacity. Both current-call parameters, quantity and capacity, are loaded by this RHS; no current-call parameter is omitted, so the result is specifically insensitive to equality as an admitted case.\"}",
+      "task_id": "task_0e7765b1af82"
+    },
+    "worker_a42b10a67aaf": {
+      "action_fingerprints": [
+        "70a7469b2c2bfc22",
+        "21201f9df5ba7bce"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "read_source_lines",
+          "submit_callable"
+        ],
+        "read_scopes": [
+          "capacity.py"
+        ],
+        "write_scopes": []
+      },
+      "capability": "callable_locator",
+      "commands_executed": [],
+      "edited_files": [],
+      "end_revision": "3e0c82442a4f",
+      "error": "",
+      "evidence_ids": [
+        "evidence_dc22a0a93613",
+        "evidence_15220db39609",
+        "evidence_ac29b455e380"
+      ],
+      "finished_at": "2026-09-08T08:42:16.759365+00:00",
+      "inference_calls": 2,
+      "input_fingerprint": "58444f1065e6d81a",
+      "lease_id": "lease_f0f67258b20e",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_a42b10a67aaf",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:12.261727+00:00",
+      "status": "COMPLETED",
+      "summary": "{\"definition_line\": 1, \"source_file\": \"capacity.py\"}",
+      "task_id": "task_6b9c7fbea4cb"
+    },
+    "worker_cdba400de2ea": {
+      "action_fingerprints": [
+        "3a76487f3a201e83"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "submit_location"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "source_locator",
+      "commands_executed": [],
+      "edited_files": [],
+      "end_revision": "3e0c82442a4f",
+      "error": "",
+      "evidence_ids": [
+        "evidence_9716c896cfbd",
+        "evidence_713d993a0b07"
+      ],
+      "finished_at": "2026-09-08T08:42:18.660627+00:00",
+      "inference_calls": 1,
+      "input_fingerprint": "47c11ca62c5e238e",
+      "lease_id": "lease_1bcaac0349eb",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_cdba400de2ea",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:16.763245+00:00",
+      "status": "COMPLETED",
+      "summary": "{\"callable_id\": \"f67c0afe7f93c3c5\", \"choice_id\": \"26c2a04ae613517e\"}",
+      "task_id": "task_93f65dc82378"
+    },
+    "worker_d9f7c2f817f9": {
+      "action_fingerprints": [
+        "5ac5fe80ae66af74"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "confirm_candidate",
+          "reject_cause_frontier"
+        ],
+        "read_scopes": [],
+        "write_scopes": []
+      },
+      "capability": "cause_locator",
+      "commands_executed": [],
+      "edited_files": [],
+      "end_revision": "3e0c82442a4f",
+      "error": "",
+      "evidence_ids": [
+        "evidence_4d815414a15a",
+        "evidence_fb54423e5409"
+      ],
+      "finished_at": "2026-09-08T08:42:23.000506+00:00",
+      "inference_calls": 1,
+      "input_fingerprint": "ff97db916f8a78a4",
+      "lease_id": "lease_a716f515a789",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_d9f7c2f817f9",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:18.664887+00:00",
+      "status": "COMPLETED",
+      "summary": "{\"candidate_location_id\": \"fade0495beec03b0\"}",
+      "task_id": "task_7c42fa318c62"
+    },
+    "worker_de7805c42068": {
+      "action_fingerprints": [
+        "09e4d95bf5b7bb19"
+      ],
+      "artifact_ids": [],
+      "authority": {
+        "allowed_commands": [
+          "pytest",
+          "pytest -v",
+          "pytest --verbose"
+        ],
+        "allowed_tools": [
+          "replace_selected_expression"
+        ],
+        "read_scopes": [
+          "capacity.py"
+        ],
+        "write_scopes": [
+          "capacity.py"
+        ]
+      },
+      "capability": "repair",
+      "commands_executed": [],
+      "edited_files": [
+        "capacity.py"
+      ],
+      "end_revision": "668ffce330bf",
+      "error": "",
+      "evidence_ids": [
+        "evidence_4db2e04cdf1c",
+        "evidence_a79756718137"
+      ],
+      "finished_at": "2026-09-08T08:42:32.338247+00:00",
+      "inference_calls": 1,
+      "input_fingerprint": "0cb56a0676bfee21",
+      "lease_id": "lease_659283fe1bad",
+      "model": "qwen2.5-coder:7b",
+      "objective_id": "objective_6c5a0a8ed1e1",
+      "run_id": "worker_de7805c42068",
+      "start_revision": "3e0c82442a4f",
+      "start_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "started_at": "2026-09-08T08:42:29.546108+00:00",
+      "status": "COMPLETED",
+      "summary": "Atomic responsibility satisfied by brokered evidence.",
+      "task_id": "task_ef59540c942b"
+    }
+  }
+}
