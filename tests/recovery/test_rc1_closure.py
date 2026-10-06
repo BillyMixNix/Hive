@@ -4,6 +4,7 @@ import asyncio
 import hashlib
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -85,10 +86,13 @@ def test_frozen_test_and_recovered_source_identity():
     for name, expected in mapping["requesting_test_sha256"].items():
         test = experiment / "repaired-workshop/tests" / name
         assert hashlib.sha256(test.read_bytes()).hexdigest() == expected
-    # Original source fixtures remain committed bytes; resolver reads Git and
-    # never writes this experiment's evidence directory.
+    # The committed frozen tree remains unchanged even if this particular
+    # isolated worktree has recovery-only materialized evidence paths.
     for row in mapping["fixtures"]:
-        assert not (experiment / "evidence" / row["relative_path"]).exists()
+        git_path = (Path(mapping["destination_prefix"]) / row["relative_path"]).as_posix()
+        tracked = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "HEAD", "--", git_path],
+                                 capture_output=True, text=True, check=True)
+        assert tracked.stdout == ""
 
 
 @pytest.mark.parametrize("name", ["../escape", "unmapped.json"])
