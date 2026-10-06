@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "anchor_commit": "dd5db7108c7d4e37ef757f7577456e0d9f5105db",
+  "destination_prefix": "recovery/workshop-source-20261006/workspace/HIVE-FACTORIAL-003R1/evidence/",
+  "source_prefix": "recovery/workshop-source-20261006/workspace/HIVE-NFRT-ATTESTATION-002/evidence/",
+  "identity_basis": "The three requesting test source blobs are byte-identical in HIVE-NFRT-ATTESTATION-002 and HIVE-FACTORIAL-003R1; the source fixtures are committed Git blobs and the destination fixtures are absent in the 003R1 tree. Each source blob hash is independently checked before materialization.",
+  "requesting_test_sha256": {
+    "test_ownership_representation.py": "4bb6fefc736d4fe8121155d3f9ce218102f921c9e685de21be5b3cd95f93742b",
+    "test_planner_transition.py": "454189aa9cc09a4486f1582a8160352561628a92e6deed24ac8ba6bc042e8479",
+    "test_planning_input_fidelity.py": "f6327ce591e260cc1400d75643f1b1fa824d6da7eedf7e688e17397576e5a5d8"
+  },
+  "fixtures": [
+    {
+      "relative_path": "ownership-historical-replay.json",
+      "sha256": "3b859a77482c4517dbd12cf168ff5eb9f230b6666ff3e39f8a5b0120907a6fd5",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "Replay the before/after ownership dispositions of preserved invalid plans",
+      "requesters": ["test_ownership_representation.py::test_all_historically_invalid_outputs_remain_invalid"]
+    },
+    {
+      "relative_path": "ordinal-03/planner-1.response.txt",
+      "sha256": "12ddb25fd0494eab31749cc97a354c1e082fce6ca78cadd9dbce9c615ddba93f",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "First preserved ordinal-3 planner response for validation and scope-correction tests",
+      "requesters": ["test_planner_transition.py::test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[1]", "test_planner_transition.py::test_valid_equivalent_historical_plan_passes_without_invented_contract", "test_planner_transition.py::test_both_scoped_schemas_exclude_unauthorized_paths_and_keep_global_schema"]
+    },
+    {
+      "relative_path": "ordinal-03/planner-2.response.txt",
+      "sha256": "64cba174e37cea552725dd23d0389c45f0d9f57653f4e2ee586cda537960478e",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "Corrected preserved ordinal-3 planner response",
+      "requesters": ["test_planner_transition.py::test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[2]"]
+    },
+    {
+      "relative_path": "live/01-J001-r1-qwen2.5-coder-14b-hive/run.json",
+      "sha256": "a860c8b9ddfde5887e3ddde731f31c399ce714b8062d59ed02729a57f44f7a3f",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "Preserved live duplicate-ownership run record",
+      "requesters": ["test_planner_transition.py::test_live_duplicate_ownership_is_rejected_before_dispatch"]
+    },
+    {
+      "relative_path": "planner-input-fixtures/01/request.json",
+      "sha256": "5f1fffd53fe3f4b9b374cc2b40600f331eea8345561fd677dc4a29c96aaccded",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "First preserved serialized planner request for context-fidelity assertions",
+      "requesters": ["test_planning_input_fidelity.py::test_historical_critical_information_survives_actual_http_serialization[1]"]
+    },
+    {
+      "relative_path": "planner-input-fixtures/02/request.json",
+      "sha256": "9d64793c08e365217d7cd16afd703c321718f455b38f23866af9ac5d4bb0ec4b",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "Second preserved serialized planner correction request",
+      "requesters": ["test_planning_input_fidelity.py::test_historical_critical_information_survives_actual_http_serialization[2]", "test_planning_input_fidelity.py::test_correction_construction_still_matches_preserved_full_input"]
+    },
+    {
+      "relative_path": "planner-input-fixtures/run.json",
+      "sha256": "4deb228a6aa1e3ab8572ce842fbbb85fa53c18e69d33831b03b7a0a7452de401",
+      "disposition": "EXACT_FIXTURE_IDENTITY_PROVEN_AT_OTHER_PATH",
+      "semantic_purpose": "Preserved planner trace and correction record for request-fidelity and overlap assertions",
+      "requesters": ["test_planning_input_fidelity.py::test_correction_construction_still_matches_preserved_full_input", "test_planning_input_fidelity.py::test_prior_overlap_outputs_still_rejected_after_transport_repair[0]", "test_planning_input_fidelity.py::test_prior_overlap_outputs_still_rejected_after_transport_repair[1]"]
+    }
+  ]
+}

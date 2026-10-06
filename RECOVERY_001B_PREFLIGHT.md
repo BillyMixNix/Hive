@@ -1,0 +1,17 @@
+# RC1 deterministic closure preflight
+
+Starting point: `dd5db7108c7d4e37ef757f7577456e0d9f5105db`, tree `3b10957cb562929b1d9e7031882d73931c63e104`. Closure changes are confined to the new branch and new recovery artifacts plus the RC1 candidate-only adapter. The copied legacy controller/verifier and historical corpus are unchanged. Exact commands and machine-readable results are in [PREFLIGHT.json](recovery/rc1-closure/PREFLIGHT.json).
+
+The seven exact proven historical fixtures were materialized from committed NFRT-ATTESTATION-002 Git blobs into a separate test worktree. This resolved all 11 missing-file failures: archived Workshop suite **613 passed, 8 skipped, 0 failed** (79.30 s). The recovery authority and resolver suite: **54 passed, 2 skipped** (2.62 s). The targeted verifier isolation/observability subset: **18 passed, 2 skipped** (24.04 s). The skips include host symlink-privilege dependent cases; no frozen tests were edited.
+
+The synthetic Gradle adversarial control demonstrated a real false-PASS possibility under candidate-controlled `build.gradle`: unchanged failing JUnit source was bypassed through source-set substitution, and the recovered parser accepted the forged passing case. RC1 now raises `UNQUALIFIED_BUILD_CONTROL_SCOPE` before model execution for Gradle authority files in all profiles. The recovered NeoForm Runtime profile also limits writable scope to `src/main/java/**/*.java`; J001–J004 source scopes remain eligible. No verifier behavior or frozen assertion changed.
+
+The verifier environment was relocated into a fresh disposable root using a hash-checked copy of 4,866 selected approved files (1,438,483,301 bytes). All selected destination hashes matched the sealed priming inventory; the NFRT attestation and Docker image IDs matched. This is host-local relocation. Independent reacquisition of the exact image and third-party cache bytes is **not demonstrated**. The approved artifacts remain outside Git.
+
+From that fresh root, the unchanged J001 baseline reached an actual frozen JUnit decision in **135.57 seconds**, within the unchanged 240-second targeted deadline: **3 cases, 1 failure, 0 errors, 0 skipped** (`truncationNeverSplitsAPair()`). Baseline PASS would have been an integrity failure; it did not occur. Post-run verification found the relocated approved inputs unchanged. The frozen baseline source SHA-256 remained `230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388`; frozen test SHA-256 remained `80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159`.
+
+Provenance check `python -B recovery/rc1-closure/verify_source.py verify` validated **48** runtime/recovery files. The old RC1 source manifest remains unchanged; `hive_canonical/controller.py` is explicitly marked `ADAPTED` in the closure manifest. Historical corpus Git tree is still `214a81054c99ec4a12db04f60d17bb25ec9011bb`, equal to the RC1 anchor. No model call or promotion operation occurred.
+
+Environment: Windows PowerShell host; Python 3.13.14, pytest 9.1.1, Docker client/server 29.7.2, pinned image Temurin 21.0.12.1+1, Gradle 9.2.1. The exact image and cache are `HOST_LOCAL_REQUIRED_ARTIFACT`; Python dependency wheels are version-recorded but not digest-locked. These limits prevent a claim of independent clean-machine reproduction.
+
+An independent adversarial review and final clean-checkout rerun are pending. Findings will be preserved in `RECOVERY_001B_ADVERSARIAL_REVIEW.md`; affected checks will be rerun if any repair is justified.

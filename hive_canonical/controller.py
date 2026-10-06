@@ -30,6 +30,36 @@ class CandidatePolicyError(ValueError):
     """Host policy was not complete enough to start an autonomous run."""
 
 
+class UnqualifiedBuildControlScopeError(CandidatePolicyError):
+    """A writable Gradle control surface has not been verifier-qualified."""
+
+    classification = "UNQUALIFIED_BUILD_CONTROL_SCOPE"
+
+
+def _qualify_gradle_scope(scope: tuple[str, ...], *, gradle_project: bool) -> None:
+    """Keep candidate-controlled build logic outside RC1 verifier authority.
+
+    The recovered Gradle runner consumes candidate-controlled task execution and
+    JUnit XML. Only ordinary application Java edits are qualified for this
+    frozen source-only profile. This is a scope gate, not a verifier shortcut.
+    """
+    for path in scope:
+        name = path.casefold()
+        parts = name.split("/")
+        control = (
+            name in {"build.gradle", "build.gradle.kts", "settings.gradle",
+                     "settings.gradle.kts", "gradle.properties", "gradlew", "gradlew.bat"}
+            or parts[0] in {"gradle", "buildsrc", "build-logic"}
+            or name.endswith(".gradle") or name.endswith(".gradle.kts")
+        )
+        qualified_source = (len(parts) >= 4 and parts[:3] == ["src", "main", "java"]
+                            and name.endswith(".java"))
+        if control or (gradle_project and not qualified_source):
+            raise UnqualifiedBuildControlScopeError(
+                f"UNQUALIFIED_BUILD_CONTROL_SCOPE: {path} is not a qualified application Java write"
+            )
+
+
 @dataclass(frozen=True)
 class CandidateSpec:
     baseline_root: Path
@@ -147,6 +177,13 @@ async def produce_candidate(spec: CandidateSpec, agent_call: AgentCall) -> Candi
         raise CandidatePolicyError("a Gradle candidate requires host-frozen acceptance tests")
     if profile is None and frozen:
         raise CandidatePolicyError("frozen JUnit acceptance requires a Gradle profile")
+    # The source-only qualification is specific to the recovered NeoForm
+    # dependency profile, rather than every arbitrary Gradle fixture. Known
+    # Gradle control paths remain forbidden for every profile.
+    gradle_project = (isinstance(profile, Mapping)
+                      and isinstance(profile.get("external_build_inputs"), Mapping)
+                      and profile["external_build_inputs"].get("kind") == "neoformruntime")
+    _qualify_gradle_scope(allowed, gradle_project=gradle_project)
 
     run_id = secrets.token_hex(6)
     candidate_root = runs / "external_candidates" / run_id
