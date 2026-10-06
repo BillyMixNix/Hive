@@ -1,0 +1,89 @@
+{
+  "status": "ready_for_promotion",
+  "started": 1790260607.4406803,
+  "observationsFinished": 1790260607.4556165,
+  "routing": [
+    {
+      "child": "oversized-activity-reset-parent",
+      "decision": "decompose",
+      "characters": 54096,
+      "limit": 35000,
+      "children": [
+        "activity-reset-service",
+        "activity-reset-command"
+      ]
+    }
+  ],
+  "children": [
+    {
+      "id": "activity-reset-service",
+      "started": 1790260607.4563026,
+      "finished": 1790260784.299826,
+      "exitCode": 0,
+      "run": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073647",
+      "result": {
+        "status": "accepted",
+        "run": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073647",
+        "attempts": [
+          {
+            "attempt": 0,
+            "gradleExitCode": 0
+          }
+        ],
+        "promoted": false
+      }
+    },
+    {
+      "id": "activity-reset-command",
+      "started": 1790260784.2998967,
+      "finished": 1790261013.8832264,
+      "exitCode": 0,
+      "run": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073944",
+      "result": {
+        "status": "accepted",
+        "run": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073944",
+        "attempts": [
+          {
+            "attempt": 0,
+            "gradleExitCode": 0
+          }
+        ],
+        "promoted": false
+      }
+    }
+  ],
+  "manualPromotion": true,
+  "promotionBundle": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\orchestrated-runs\\20260924-073647-a040db65\\promotion-bundle",
+  "finalAcceptance": {
+    "status": "verified",
+    "manualPromotion": true,
+    "promoted": false,
+    "files": {
+      "src/main/java/dev/atmcompanion/activity/ActivityCommandService.java": {
+        "sha256": "db1e2b17668a6f9182d235ac7184c099e181e929a12a741582f37674ebd1cac7",
+        "sourceRun": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073647"
+      },
+      "src/main/java/dev/atmcompanion/command/CompanionCommands.java": {
+        "sha256": "101056a882da61d8d9862f0ddeca1c0292d3c3213dd2898bbb71623634564a53",
+        "sourceRun": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\runs\\20260924-073944"
+      }
+    },
+    "frozenTests": {
+      "src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java": "ab88cd35c39e4c8a56e5f2520257f7fe74136f0ec1a528e6c42bde00e93e9441"
+    },
+    "frozenTestsChanged": [],
+    "acceptanceCommand": [
+      "C:\\Users\\billy\\.gradle\\wrapper\\dists\\gradle-9.2.1-bin\\2t0n5ozlw9xmuyvbp7dnzaxug\\gradle-9.2.1\\bin\\gradle.bat",
+      "test",
+      "--no-daemon",
+      "--console=plain",
+      "-Dorg.gradle.jvmargs=-Xmx512m",
+      "--max-workers=2",
+      "--rerun-tasks",
+      "--no-build-cache"
+    ],
+    "acceptanceExitCode": 0,
+    "orchestrationResult": "C:\\Users\\billy\\Documents\\Codex\\2026-09-22\\atm10-ai-companion-autonomous-build-mega\\local-model-trial\\orchestrated-runs\\20260924-073647-a040db65\\result.json"
+  },
+  "promoted": false
+}

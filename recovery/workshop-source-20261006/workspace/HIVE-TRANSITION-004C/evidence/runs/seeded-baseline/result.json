@@ -1,0 +1,54 @@
+{
+  "report": {
+    "passed": false,
+    "checks": [
+      {
+        "name": "jvm_profile",
+        "passed": false,
+        "detail": "AttributeError: module 'hashlib' has no attribute 'file_digest'"
+      }
+    ],
+    "gradle_wrapper_version": "9.2.1",
+    "executed_commands": [],
+    "isolation": {
+      "backend": "docker",
+      "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+      "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+      "available": true,
+      "network": "none",
+      "rootfs": "readonly",
+      "source": "sanitized-readonly",
+      "workspace": "tmpfs",
+      "limits": {
+        "pids": 448,
+        "memory": "4g",
+        "memory_swap": "4g",
+        "swap_additional": "0 bytes",
+        "cpus": 2
+      },
+      "java_runtime": "pinned JDK 21 in verifier image",
+      "gradle_wrapper_version": "9.2.1",
+      "host_controlled_build_concurrency": {
+        "gradle_max_workers": 2,
+        "gradle_heap": "-Xmx768m",
+        "active_processor_count": 2
+      },
+      "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+      "inherited_host_environment": [],
+      "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+    },
+    "runtime_stderr": "HIVE_VERIFIER_EVENT {\"monotonic\": 9.2981828, \"wall_timestamp\": \"2026-10-05T17:09:07.615824+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"container_verifier_started\", \"pid\": 1, \"elapsed_ms\": 0.26, \"clock_domain\": \"container\", \"mode\": \"targeted\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 9.2983678, \"wall_timestamp\": \"2026-10-05T17:09:07.615999+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"project_materialization_started\", \"pid\": 1, \"elapsed_ms\": 0.445, \"clock_domain\": \"container\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 16.3319771, \"wall_timestamp\": \"2026-10-05T17:09:14.649609+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"project_available\", \"pid\": 1, \"elapsed_ms\": 7034.054, \"clock_domain\": \"container\", \"project\": \"/work/candidate\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 16.3322797, \"wall_timestamp\": \"2026-10-05T17:09:14.649910+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"frozen_tests_validated\", \"pid\": 1, \"elapsed_ms\": 7034.357, \"clock_domain\": \"container\", \"classes\": [\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\"]}\nHIVE_VERIFIER_EVENT {\"monotonic\": 16.3323746, \"wall_timestamp\": \"2026-10-05T17:09:14.650004+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"wrapper_copy_started\", \"pid\": 1, \"elapsed_ms\": 7034.452, \"clock_domain\": \"container\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 23.7756102, \"wall_timestamp\": \"2026-10-05T17:09:22.093242+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"wrapper_copy_complete\", \"pid\": 1, \"elapsed_ms\": 14477.687, \"clock_domain\": \"container\", \"gradle_version\": \"9.2.1\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 23.7757875, \"wall_timestamp\": \"2026-10-05T17:09:22.093417+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"external_inputs_copy_started\", \"pid\": 1, \"elapsed_ms\": 14477.865, \"clock_domain\": \"container\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 96.6865082, \"wall_timestamp\": \"2026-10-05T17:10:34.998121+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"external_inputs_copy_complete\", \"pid\": 1, \"elapsed_ms\": 87388.585, \"clock_domain\": \"container\", \"details\": {\"files\": 3895, \"bytes\": 914224273, \"manifest_sha256\": \"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\", \"approved_cache_mount\": \"read-only\", \"verification_copy\": \"private tmpfs\"}}\nHIVE_VERIFIER_EVENT {\"monotonic\": 96.709320658, \"wall_timestamp\": \"2026-10-05T17:10:35.020931+00:00\", \"run_id\": \"seeded-baseline\", \"phase\": \"nfrt_seed_copy_started\", \"pid\": 1, \"elapsed_ms\": 87411.398, \"clock_domain\": \"container\"}\n",
+    "diagnostics": {
+      "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004C\\evidence\\runs\\seeded-baseline\\diagnostics",
+      "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004C\\evidence\\runs\\seeded-baseline\\diagnostics\\verification-events.jsonl",
+      "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004C\\evidence\\runs\\seeded-baseline\\diagnostics\\stdout.log",
+      "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004C\\evidence\\runs\\seeded-baseline\\diagnostics\\stderr.log",
+      "last_observed_phase": "nfrt_seed_copy_started",
+      "elapsed_ms": 128371.485
+    }
+  },
+  "total_host_elapsed_seconds": 128.37915910000447,
+  "model_calls": 0,
+  "post_hoc_candidate_verification": false,
+  "candidate_unchanged": true
+}

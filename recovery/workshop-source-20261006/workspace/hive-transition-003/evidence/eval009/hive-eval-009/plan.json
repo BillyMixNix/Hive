@@ -1,0 +1,74 @@
+{
+  "parent": "Add /companion activity reset with bounded verified orchestration",
+  "budget_policy": {
+    "max_local_context_characters": 35000,
+    "local_attempt_timeout_seconds": 600,
+    "maximum_repairs": 1,
+    "on_oversize": "decompose_then_escalate",
+    "on_exhausted_local_worker": "escalate_failed_child_only"
+  },
+  "observations": [
+    {
+      "id": "activity-reset-api",
+      "read_only": [
+        "src/main/java/dev/atmcompanion/activity/ActivityCommandService.java",
+        "src/main/java/dev/atmcompanion/activity/LiveActivityService.java"
+      ]
+    },
+    {
+      "id": "command-reset-anchor",
+      "read_only": [
+        "src/main/java/dev/atmcompanion/command/CompanionCommands.java"
+      ]
+    }
+  ],
+  "children": [
+    {
+      "id": "oversized-activity-reset-parent",
+      "depends_on": [],
+      "writable": ["src/main/java/dev/atmcompanion/command/CompanionCommands.java"],
+      "read_only": [
+        "src/main/java/dev/atmcompanion/activity/ActivityCommandService.java",
+        "src/main/java/dev/atmcompanion/activity/LiveActivityService.java",
+        "src/main/java/dev/atmcompanion/planning/DeterministicPlanner.java"
+      ],
+      "decompose_into": [
+        {
+          "id": "activity-reset-service",
+          "depends_on": [],
+          "writable": ["src/main/java/dev/atmcompanion/activity/ActivityCommandService.java"],
+          "read_only": ["src/main/java/dev/atmcompanion/activity/LiveActivityService.java"],
+          "contract": "local-model-trial/hive-eval-009/activity-reset-service-contract.txt",
+          "seed": [
+            {
+              "path": "src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java",
+              "source": "local-model-trial/hive-eval-009/frozen-tests/ActivityCommandServiceResetTest.java"
+            }
+          ],
+          "frozen_tests": ["src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"],
+          "edit_format": "diff",
+          "max_changed_lines": 20
+        },
+        {
+          "id": "activity-reset-command",
+          "depends_on": ["activity-reset-service"],
+          "writable": ["src/main/java/dev/atmcompanion/command/CompanionCommands.java"],
+          "read_only": ["src/main/java/dev/atmcompanion/activity/ActivityCommandService.java"],
+          "contract": "local-model-trial/hive-eval-009/activity-reset-command-contract.txt",
+          "seed": [
+            {
+              "path": "src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java",
+              "source": "local-model-trial/hive-eval-009/frozen-tests/ActivityCommandServiceResetTest.java"
+            }
+          ],
+          "frozen_tests": ["src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"],
+          "edit_format": "diff",
+          "max_changed_lines": 30,
+          "preflight": "local-model-trial/hive-eval-009/activity_reset_command_preflight.py"
+        }
+      ]
+    }
+  ],
+  "manual_promotion": true,
+  "max_repairs_per_child": 1
+}

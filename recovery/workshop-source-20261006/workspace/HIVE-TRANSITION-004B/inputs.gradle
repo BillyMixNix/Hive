@@ -1,0 +1,37 @@
+import groovy.json.JsonOutput
+import java.security.MessageDigest
+
+gradle.taskGraph.whenReady { graph ->
+    def task = gradle.rootProject.tasks.getByName('createMinecraftArtifacts')
+    def digest = { File f ->
+        def md = MessageDigest.getInstance('SHA-256')
+        f.withInputStream { stream ->
+            byte[] buffer = new byte[1048576]
+            int count
+            while ((count = stream.read(buffer)) > 0) { md.update(buffer, 0, count) }
+        }
+        md.digest().encodeHex().toString()
+    }
+    def fileRecord = { File f -> [path:f.absolutePath, exists:f.exists(),
+                                  sha256:f.isFile() ? digest(f) : null] }
+    def normalize
+    normalize = { value ->
+        if (value == null || value instanceof Number || value instanceof Boolean || value instanceof String) return value
+        if (value instanceof File) return fileRecord(value)
+        if (value instanceof Map) return value.collectEntries { k, v -> [(k.toString()):normalize(v)] }
+        if (value instanceof Iterable) return value.collect { normalize(it) }.sort { JsonOutput.toJson(it) }
+        if (value.class.name == 'net.neoforged.nfrtgradle.ArtifactManifestEntry') {
+            return [artifactId:value.artifactId(), file:fileRecord(value.file())]
+        }
+        return [className:value.class.name, value:value.toString()]
+    }
+    println 'HIVE_ARTIFACT_INPUTS ' + JsonOutput.toJson([
+        project:gradle.rootProject.projectDir.absolutePath,
+        taskClass:task.class.name,
+        graph:graph.allTasks.collect { t -> [path:t.path, dependencies:t.taskDependencies.getDependencies(t).collect { it.path }.sort()] },
+        inputProperties:normalize(task.inputs.properties),
+        inputFiles:task.inputs.files.files.collect { fileRecord(it) }.sort { it.path },
+        outputFiles:task.outputs.files.files.collect { it.absolutePath }.sort(),
+        enableNativeCache:task.enableCache.get(),
+        dryRun:gradle.startParameter.dryRun])
+}

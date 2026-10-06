@@ -1,0 +1,1788 @@
+{
+  "project": "/work/preserved",
+  "taskClass": "net.neoforged.nfrtgradle.CreateMinecraftArtifacts_Decorated",
+  "graph": [
+    {
+      "path": ":createMinecraftArtifacts",
+      "dependencies": []
+    },
+    {
+      "path": ":compileJava",
+      "dependencies": [
+        ":createMinecraftArtifacts"
+      ]
+    },
+    {
+      "path": ":processResources",
+      "dependencies": []
+    },
+    {
+      "path": ":classes",
+      "dependencies": [
+        ":compileJava",
+        ":processResources"
+      ]
+    },
+    {
+      "path": ":compileTestJava",
+      "dependencies": [
+        ":classes",
+        ":compileJava"
+      ]
+    },
+    {
+      "path": ":processTestResources",
+      "dependencies": []
+    },
+    {
+      "path": ":testClasses",
+      "dependencies": [
+        ":compileTestJava",
+        ":processTestResources"
+      ]
+    },
+    {
+      "path": ":test",
+      "dependencies": [
+        ":classes",
+        ":compileJava",
+        ":compileTestJava",
+        ":testClasses"
+      ]
+    }
+  ],
+  "inputProperties": {
+    "neoForgeArtifact": "net.neoforged:neoforge:21.1.251:userdev",
+    "useEclipseCompiler": false,
+    "disableRecompilation": true,
+    "neoFormArtifact": null,
+    "artifactManifestEntries": [
+      {
+        "artifactId": "ca.weblite:java-objc-bridge:1.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.1/1227f9e0666314f9de41477e3ec277e542ed7f7b/java-objc-bridge-1.1.jar",
+          "exists": true,
+          "sha256": "77e34a13bccffc6c8b1a0e3ed46ddb0ea7dd56f2104ecdfacaaec9e4054ac332"
+        }
+      },
+      {
+        "artifactId": "com.electronwill.night-config:core:3.8.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.electronwill.night-config/core/3.8.3/b442a95f09e349927f5a945ecb594455870fcf4f/core-3.8.3.jar",
+          "exists": true,
+          "sha256": "971dc88c1c22085611ee1c300f5bbf8595938178e819befbb5e98c3cbd272b79"
+        }
+      },
+      {
+        "artifactId": "com.electronwill.night-config:toml:3.8.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.electronwill.night-config/toml/3.8.3/90b2fd6efcb4a7d5b9810cf78f9d824994d717f2/toml-3.8.3.jar",
+          "exists": true,
+          "sha256": "ccb92882264bf071e3916ab122fe5ea3e211b8ebf199201698a1324f151f928f"
+        }
+      },
+      {
+        "artifactId": "com.github.oshi:oshi-core:6.4.10",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.github.oshi/oshi-core/6.4.10/b1d8ab82d11d92fd639b56d639f8f46f739dd5fa/oshi-core-6.4.10.jar",
+          "exists": true,
+          "sha256": "fef001a7a13515c273f30915915580782afbc45273cc07aa15994e51563ef310"
+        }
+      },
+      {
+        "artifactId": "com.google.code.findbugs:jsr305:3.0.2",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar",
+          "exists": true,
+          "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+        }
+      },
+      {
+        "artifactId": "com.google.code.gson:gson:2.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar",
+          "exists": true,
+          "sha256": "4241c14a7727c34feea6507ec801318a3d4a90f070e4525681079fb94ee4c593"
+        }
+      },
+      {
+        "artifactId": "com.google.errorprone:error_prone_annotations:2.18.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar",
+          "exists": true,
+          "sha256": "9e6814cb71816988a4fd1b07a993a8f21bb7058d522c162b1de849e19bea54ae"
+        }
+      },
+      {
+        "artifactId": "com.google.guava:failureaccess:1.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar",
+          "exists": true,
+          "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26"
+        }
+      },
+      {
+        "artifactId": "com.google.guava:guava:32.1.2-jre",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/guava/32.1.2-jre/5e64ec7e056456bef3a4bc4c6fdaef71e8ab6318/guava-32.1.2-jre.jar",
+          "exists": true,
+          "sha256": "bc65dea7cfd9e4dacf8419d8af0e741655857d27885bb35d943d7187fc3a8fce"
+        }
+      },
+      {
+        "artifactId": "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+          "exists": true,
+          "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+        }
+      },
+      {
+        "artifactId": "com.google.j2objc:j2objc-annotations:2.8",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar",
+          "exists": true,
+          "sha256": "f02a95fa1a5e95edb3ed859fd0fb7df709d121a35290eff8b74dce2ab7f4d6ed"
+        }
+      },
+      {
+        "artifactId": "com.ibm.icu:icu4j:73.2",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.ibm.icu/icu4j/73.2/61ad4ef7f9131fcf6d25c34b817f90d6da06c9e9/icu4j-73.2.jar",
+          "exists": true,
+          "sha256": "29280822f4b0796acef1f79b90b1d0c1edd86c10e876a848e04b8a6298a16bf9"
+        }
+      },
+      {
+        "artifactId": "com.machinezoo.noexception:noexception:1.7.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.machinezoo.noexception/noexception/1.7.1/b65330c98e38a1f915fa54a6e5eca496505e3f0a/noexception-1.7.1.jar",
+          "exists": true,
+          "sha256": "3d70aaea3904918587a21bdf99ab6ade9ab1dd0eaf6119344ba513f60f575816"
+        }
+      },
+      {
+        "artifactId": "com.mojang:authlib:6.0.54",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar",
+          "exists": true,
+          "sha256": "319ea7b53b5e52f62ad3e2b81e9db7f0751240edac548bd74f5f19e35dc21a3b"
+        }
+      },
+      {
+        "artifactId": "com.mojang:blocklist:1.0.10",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar",
+          "exists": true,
+          "sha256": "830bfd639c8db49236bbd8e45d3a2b8c96c56ff654a10118654958a6235d4c44"
+        }
+      },
+      {
+        "artifactId": "com.mojang:brigadier:1.3.10",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar",
+          "exists": true,
+          "sha256": "c8ee4136e474ac7723ca2b432ec8d1a2bc88ef7d1ec57c314ba9e33cdc83dd75"
+        }
+      },
+      {
+        "artifactId": "com.mojang:datafixerupper:8.0.16",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar",
+          "exists": true,
+          "sha256": "ffc138bc2596c291781b0d5e211ccac51f0f2345f27fc2742f335cedf7e2870d"
+        }
+      },
+      {
+        "artifactId": "com.mojang:logging:1.2.7",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/logging/1.2.7/24cb95ffb0e3433fd6e844c04e68009e504ca1c0/logging-1.2.7.jar",
+          "exists": true,
+          "sha256": "3dc3190204bac5f4184d8405bfe1f724f73a6a15a0d3f36ec7f69e6872c1a76c"
+        }
+      },
+      {
+        "artifactId": "com.mojang:patchy:2.2.10",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar",
+          "exists": true,
+          "sha256": "16d70e7968b45caffc81576268eb000f473fb60bf257182d3447dea8ec919d5a"
+        }
+      },
+      {
+        "artifactId": "com.mojang:text2speech:1.17.9",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/text2speech/1.17.9/3cad216e3a7f0c19b4b394388bc9ffc446f13b14/text2speech-1.17.9.jar",
+          "exists": true,
+          "sha256": "c2a95b499e76fada7dd63e9b0ec797b678d411c2b0ee6f37f4dc674662bfb0af"
+        }
+      },
+      {
+        "artifactId": "com.nothome:javaxdelta:2.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/com.nothome/javaxdelta/2.0.1/d4f5d077f1b15c6f67595015d69572303ad3f66d/javaxdelta-2.0.1.jar",
+          "exists": true,
+          "sha256": "a661dfcb749053fc26eada2a0a8e619a8ead1ca9eda29e1698687aa2cdd80152"
+        }
+      },
+      {
+        "artifactId": "commons-codec:commons-codec:1.16.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/commons-codec/commons-codec/1.16.0/4e3eb3d79888d76b54e28b350915b5dc3919c9de/commons-codec-1.16.0.jar",
+          "exists": true,
+          "sha256": "56595fb20b0b85bc91d0d503dad50bb7f1b9afc0eed5dffa6cbb25929000484d"
+        }
+      },
+      {
+        "artifactId": "commons-io:commons-io:2.15.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar",
+          "exists": true,
+          "sha256": "a58af12ee1b68cfd2ebb0c27caef164f084381a00ec81a48cc275fd7ea54e154"
+        }
+      },
+      {
+        "artifactId": "commons-logging:commons-logging:1.2",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar",
+          "exists": true,
+          "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+        }
+      },
+      {
+        "artifactId": "cpw.mods:bootstraplauncher:2.0.2",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/bootstraplauncher/2.0.2/1a2d076cbc33b0520cbacd591224427b2a20047d/bootstraplauncher-2.0.2.jar",
+          "exists": true,
+          "sha256": "d3f29309140540570fd6c709509706aa8fb133c1c8aef24491688f1a3f4e1d49"
+        }
+      },
+      {
+        "artifactId": "cpw.mods:modlauncher:11.0.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/modlauncher/11.0.5/b8f0d49294f733fdb6173931b263553e943dc950/modlauncher-11.0.5.jar",
+          "exists": true,
+          "sha256": "fd9b9fc7cf043d2264ea0113eac6b258f0a71fece5b00e831bfbdf9726c78a24"
+        }
+      },
+      {
+        "artifactId": "cpw.mods:securejarhandler:3.0.8",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/securejarhandler/3.0.8/c0ef95cecd8699a0449053ac7d9c160748d902cd/securejarhandler-3.0.8.jar",
+          "exists": true,
+          "sha256": "945c63d6deafc821616b0380c23867d9b8c2852438f8a6df72732ab933fc587d"
+        }
+      },
+      {
+        "artifactId": "de.siegmar:fastcsv:2.0.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/de.siegmar/fastcsv/2.0.0/b615f26c03edeac966618b93b9ee4f4eed50aae1/fastcsv-2.0.0.jar",
+          "exists": true,
+          "sha256": "665d52cb6f35ca236919be9ac81653c208628507f91d6bf13479bc11496db616"
+        }
+      },
+      {
+        "artifactId": "io.codechicken:DiffPatch:2.0.0.36:all",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.codechicken/DiffPatch/2.0.0.36/5b32f9baa0c0371c0dc80a3b88794960af0c6b44/DiffPatch-2.0.0.36-all.jar",
+          "exists": true,
+          "sha256": "30d1ff26c112bf3a488e1e5a32a345f75ff0ef985c3315b2d987d607e7038580"
+        }
+      },
+      {
+        "artifactId": "io.github.llamalad7:mixinextras-neoforge:0.5.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.github.llamalad7/mixinextras-neoforge/0.5.3/a0919957808de97707c5fb4ce073e66aeef3e187/mixinextras-neoforge-0.5.3.jar",
+          "exists": true,
+          "sha256": "9822e773bd9f42d36ed53ea3d67486207291747a7bfacc29beeb92040721bc9b"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-buffer:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "a4393f5b395486cc74d0325c9b41311abb9513ba0fd7ef8cf46e9345c3bffbea"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-codec:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "bcc96737a0f912fcf031cf8c45ebda352a90a40437db0832caad3d5a63618b38"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-common:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "a8aca0c8e9347acc75c885ecc749195d9775369aa520b9276f2d1128210a6c17"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-handler:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "bd4771d19149cbc9c7464ed2d58035d79cdfed7adb59d38718b0d8e7a3dcc2de"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-resolver:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "38a018c6d9fb2cb11b72881354782b45080bbd20b9a0ad6cde28b80d431ed0b1"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-transport-classes-epoll:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "ee65fa17fe65f18fd22269f92bddad85bfb3a263cf65eba01e116a2f30b86ff5"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-transport-native-epoll:4.1.97.Final:linux-aarch_64",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/5514744c588190ffda076b35a9b8c9f24946a960/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar",
+          "exists": true,
+          "sha256": "93b5fe8f3829dcb5e033d8d40d59159366ff4cf8266c903bbd6a4aeed9e59bac"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-transport-native-epoll:4.1.97.Final:linux-x86_64",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/54188f271e388e7f313aea995e82f58ce2cdb809/netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar",
+          "exists": true,
+          "sha256": "1e83fc9f82e5415cdbb688c6a5c6bbbd7d198e9fdd6fdf64b3dc5d54dd1acfd0"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-transport-native-unix-common:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "412fe140257c2dda5a5e15bee911298bd61928d03ee6be4db588e82c196c5dc6"
+        }
+      },
+      {
+        "artifactId": "io.netty:netty-transport:4.1.97.Final",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar",
+          "exists": true,
+          "sha256": "197fd2d6c6b4afe677d9e95bf2e36b49a0bcabdfce0583683fb73f29a3f5a407"
+        }
+      },
+      {
+        "artifactId": "it.unimi.dsi:fastutil:8.3.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.3.1/ff33b340d60b81f4c1015fa8008bb30ff0a0d53b/fastutil-8.3.1.jar",
+          "exists": true,
+          "sha256": "1ee5da1ebfdc86ab9574be3cc290769f319df901ae95932a118889b7c63636b9"
+        }
+      },
+      {
+        "artifactId": "it.unimi.dsi:fastutil:8.5.12",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar",
+          "exists": true,
+          "sha256": "b5543ee08d062d551cf0a5c9bc0fb70588b0382079029ba48941fa9c9be8a5d4"
+        }
+      },
+      {
+        "artifactId": "net.covers1624:Quack:0.4.10.101",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.covers1624/Quack/0.4.10.101/970b7f652b5c40c893ef9a4bf13a97a291587d74/Quack-0.4.10.101.jar",
+          "exists": true,
+          "sha256": "22afc1694fd7ff99d71fce3544d54c3bd81df71ef1a83e96ced1daba19cf68e6"
+        }
+      },
+      {
+        "artifactId": "net.fabricmc:sponge-mixin:0.15.2+mixin.0.8.7",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar",
+          "exists": true,
+          "sha256": "1d45cfe3ae4a2eab38dc74276803748cf799088986260d6d912e50ddb35d15c5"
+        }
+      },
+      {
+        "artifactId": "net.java.dev.jna:jna-platform:5.14.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar",
+          "exists": true,
+          "sha256": "ae4caceb3840730c2537f9b7fb55a01baba580286b4122951488bcee558c2449"
+        }
+      },
+      {
+        "artifactId": "net.java.dev.jna:jna:5.14.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar",
+          "exists": true,
+          "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6"
+        }
+      },
+      {
+        "artifactId": "net.jodah:typetools:0.6.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.jodah/typetools/0.6.3/a01aaa6ddaea9ec07ec4f209487b7a46a526283a/typetools-0.6.3.jar",
+          "exists": true,
+          "sha256": "408300867804be05d1083cc0287dd3a21295a9e76090e288013ba5a4182dc96d"
+        }
+      },
+      {
+        "artifactId": "net.minecraftforge:mergetool:1.1.7:fatjar",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecraftforge/mergetool/1.1.7/3d41564f78f123d64573cae7948014baf3aaba3f/mergetool-1.1.7-fatjar.jar",
+          "exists": true,
+          "sha256": "2fbb74386cc9f9f4e816d2b5167ed9274c0864eae532d658e34587b2a47857e8"
+        }
+      },
+      {
+        "artifactId": "net.minecraftforge:srgutils:0.4.15",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecraftforge/srgutils/0.4.15/ca408b131759478f164e010fae0d73997e125fb5/srgutils-0.4.15.jar",
+          "exists": true,
+          "sha256": "f6bdebb7fae108329acddfc812f237c7f6328a98e3f282a105edfc161d0215e3"
+        }
+      },
+      {
+        "artifactId": "net.minecrell:terminalconsoleappender:1.3.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.3.0/b562e9bb61235c9520e26282cdee71f8f802d1fc/terminalconsoleappender-1.3.0.jar",
+          "exists": true,
+          "sha256": "1afea1bca095068f7f4483f061feed94753be34233ddb0df9ec380fc14d5a985"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.accesstransformers:at-modlauncher:10.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.accesstransformers/at-modlauncher/10.0.1/5aba50202aceead086bc09fbc2751c9f05cb4890/at-modlauncher-10.0.1.jar",
+          "exists": true,
+          "sha256": "2a4b447c6944a2b89e383c1eed9a26bb5cc60330a5bb26ef0a912a38d52df935"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.accesstransformers:at-parser:13.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.accesstransformers/at-parser/13.0.1/32c7515f7d07f8099642dab5825cd6cfec86e4e/at-parser-13.0.1.jar",
+          "exists": true,
+          "sha256": "4576507635fd434a47668bd13ab11209ba036cab682616b3e1082637939fb2fc"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.fancymodloader:earlydisplay:4.0.44",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.fancymodloader/earlydisplay/4.0.44/cb2afcf15672180eca1c49b1c9b1208951ef322e/earlydisplay-4.0.44.jar",
+          "exists": true,
+          "sha256": "96922d7589000af7550f42d437f05676eea6b9708823e47c78e882560746042e"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.fancymodloader:loader:4.0.44",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.fancymodloader/loader/4.0.44/63433608b68302a442e3dba87880e54f42ea0583/loader-4.0.44.jar",
+          "exists": true,
+          "sha256": "f2096cd86d605c0484971fc712208e0dc6cecfe53e056db61d44a98cadc19499"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.installertools:binarypatcher:4.0.12",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/binarypatcher/4.0.12/806a085347408d6883b1317959a8b4b6161596cb/binarypatcher-4.0.12.jar",
+          "exists": true,
+          "sha256": "0ba74c89a9b1f2e32df8150b4dd90904584e4343c79fc5d66706588d2a5b6ae4"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.installertools:cli-utils:4.0.12",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/cli-utils/4.0.12/b00bf1b512f149f9f16890a966352f680e1b02b8/cli-utils-4.0.12.jar",
+          "exists": true,
+          "sha256": "e8e2c41f0b058689acfbacd4204a7e32ec5d0b28e02c4020f788003ca26e77a5"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.installertools:installertools:2.1.2:fatjar",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/installertools/2.1.2/62740d5aa8f75f4a4d542d363bdda5b64a198f7a/installertools-2.1.2-fatjar.jar",
+          "exists": true,
+          "sha256": "9fe7c6df17299f661b9cd07fc1c4e85493b63efae6bb9da0255a97d9d0a87c60"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.installertools:installertools:4.0.12:fatjar",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/installertools/4.0.12/94b6e47c3f51f8ca40f8c54720369a952b821e95/installertools-4.0.12-fatjar.jar",
+          "exists": true,
+          "sha256": "ba3e9d27d9f5145f829ac94124e3d97b80f027949d690b430305734526f143db"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.javadoctor:gson-io:2.0.17",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.javadoctor/gson-io/2.0.17/40edf7077205615bffe214a9d250c50cd0d13de/gson-io-2.0.17.jar",
+          "exists": true,
+          "sha256": "de40a10adb58105e84864dff41e3ef490d87411afa390d86a940c74a6bf69821"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.javadoctor:spec:2.0.17",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.javadoctor/spec/2.0.17/fbe5da0da41957dccf9004014781bd8d05d16192/spec-2.0.17.jar",
+          "exists": true,
+          "sha256": "67d6fdde98770e91e82303fde1ce5560f12081b733da07bfa7bac71968a93dff"
+        }
+      },
+      {
+        "artifactId": "net.neoforged.jst:jst-cli-bundle:2.0.11",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.jst/jst-cli-bundle/2.0.11/412417e49aa463f599ea6a5a3f40823cdd4c7fa1/jst-cli-bundle-2.0.11.jar",
+          "exists": true,
+          "sha256": "1e058f87f6c3de0d13d76d6d14a7698a749e7268521a95298f764228ebee88db"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:AutoRenamingTool:2.0.17",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.17/453980338983da2c30a37774d625fd2dac7cea4f/AutoRenamingTool-2.0.17.jar",
+          "exists": true,
+          "sha256": "db39a2c95f8299d23bf3bc81b7c17fcd2693081b7d3fe68f2c7d11ab1ff3cdde"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:AutoRenamingTool:2.0.17:all",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.17/9388df4c3589faf10c35d9154cfb2451c83bd717/AutoRenamingTool-2.0.17-all.jar",
+          "exists": true,
+          "sha256": "e977ee4422efb51eb54cc99f939833cef769de8b4aa1043294ce5400c60f3b1f"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:AutoRenamingTool:2.0.3:all",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.3/d9890c71b4366f886c2b1006782043a6a6816eb6/AutoRenamingTool-2.0.3-all.jar",
+          "exists": true,
+          "sha256": "43fcb978664ba04fc0b3b1b1a14eccabb4bc87b7a415e0eb8bdd1c2f12324321"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:JarJarFileSystems:0.4.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarFileSystems/0.4.1/78f59f89defcd032ed788b151ca6a0d40ace796a/JarJarFileSystems-0.4.1.jar",
+          "exists": true,
+          "sha256": "d9f88af1223ff23395c64ff0b0fe367563288a37bd38709bf667b6b39944bfab"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:JarJarMetadata:0.4.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarMetadata/0.4.1/f8da03683dc81694556dc3e177c5e3bb77ae6fcb/JarJarMetadata-0.4.1.jar",
+          "exists": true,
+          "sha256": "05d7b89f09c6de1a9b61d0e786c8fd808aed044babf321653e14abd6740d5546"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:JarJarSelector:0.4.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarSelector/0.4.1/fb3cc7a58af22ad2880adb98af6d518128c47dae/JarJarSelector-0.4.1.jar",
+          "exists": true,
+          "sha256": "f34bab02a5e967650dc52b7cb37a200051a7078f7d1868597699d78697da2400"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:accesstransformers:10.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/accesstransformers/10.0.1/fd83b5725f76eae9115e9355fa1c456a6a441400/accesstransformers-10.0.1.jar",
+          "exists": true,
+          "sha256": "89fb0dc3d68f8a5961f309ee110dad7d2c1094ba204595602b71e02e104838a1"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:accesstransformers:13.0.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/accesstransformers/13.0.1/5c6200bc80dc1d38b984a106a04d488dddcd642c/accesstransformers-13.0.1.jar",
+          "exists": true,
+          "sha256": "d7354d343b276466d68856d93a78e90838eb2e729fb1a10d9425dbcb186f5a22"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:bus:8.0.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/bus/8.0.5/5b2d33285ab5d1554e9798ad98c40d6ea3868bd5/bus-8.0.5.jar",
+          "exists": true,
+          "sha256": "705e24f37752809499a5cd0c7dd31eaabf3d933c5d3b2060168e94e9ef62593a"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:coremods:7.0.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/coremods/7.0.3/9147e6f638b4272b3bd5fc8f92ad37802512c6c/coremods-7.0.3.jar",
+          "exists": true,
+          "sha256": "d24c0d3e31af23cac36a0f9f98654b875f678b27ddccd8b28d331c1878a6de4a"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:mergetool:2.0.0:api",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.0/52fe1949be64e3303aabaaa21e315f551db9c9f4/mergetool-2.0.0-api.jar",
+          "exists": true,
+          "sha256": "0260881294d8b218afe3d673f084d3745a55c28b35205d07d5e62d7f22202a00"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:mergetool:2.0.3:api",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.3/1275202cbbb248f49345cf6787ce299afd9a02fb/mergetool-2.0.3-api.jar",
+          "exists": true,
+          "sha256": "e13e61c0437d6db17e7b3581ff261292015dcd9e11683f5a365b4b9a5c192283"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:mergetool:2.0.3:fatjar",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.3/85c096b0155715275f84922d41462484c9a0285c/mergetool-2.0.3-fatjar.jar",
+          "exists": true,
+          "sha256": "3dbd19d9489348e838b1bedcf7ffd6d9810dac40543f3c34d3bcf6e39e674922"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:neoforge:21.1.251:sources",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/9e3113afdf4cb849acc7723ded08f1cc8ba438a0/neoforge-21.1.251-sources.jar",
+          "exists": true,
+          "sha256": "39b7c03467c5ebb54dbe70eeaa946680ee679f03daaa7a51333609e23aa8f36b"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:neoforge:21.1.251:universal",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/ea8ce807780eecf9689ff74185c3bdd16cb3adde/neoforge-21.1.251-universal.jar",
+          "exists": true,
+          "sha256": "6d2e128d8901db0522c9766a91911ea019a9e92ab1c8bc7fa20eb2bcb8ffe170"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:neoforge:21.1.251:userdev",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/fe0aafde48bcb27751855d6408c0e921c848d156/neoforge-21.1.251-userdev.jar",
+          "exists": true,
+          "sha256": "b85e0cb78168858253a6e11ba4b03231c6acea2e025d52f2daab6289e0a8c928"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:neoform:1.21.1-20240808.144430@zip",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform/1.21.1-20240808.144430/811e2bd86fa2cda2812e5e8e51d718ea8bd6d3f4/neoform-1.21.1-20240808.144430.zip",
+          "exists": true,
+          "sha256": "3fcdf0f0d115774cfceaf206a05a6dc964e2189bfd00f5b5f863e37f4b7733c7"
+        }
+      },
+      {
+        "artifactId": "net.neoforged:srgutils:1.0.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/srgutils/1.0.0/b9fe6cdab494983217cbc14cc6f92c8e6c616526/srgutils-1.0.0.jar",
+          "exists": true,
+          "sha256": "16663ae2504a0522cca386af6c11281d3fde61d25b6bd2690d7200e900b26c36"
+        }
+      },
+      {
+        "artifactId": "net.sf.jopt-simple:jopt-simple:5.0.4",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar",
+          "exists": true,
+          "sha256": "df26cc58f235f477db07f753ba5a3ab243ebe5789d9f89ecf68dd62ea9a66c28"
+        }
+      },
+      {
+        "artifactId": "net.sf.jopt-simple:jopt-simple:6.0-alpha-3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/6.0-alpha-3/2ab1a73e1e22d2b73469362a0908a98644b681d/jopt-simple-6.0-alpha-3.jar",
+          "exists": true,
+          "sha256": "d440ceb839d6adb5cfa81aa321813d60255e68a3e9ca564c91126599310abde5"
+        }
+      },
+      {
+        "artifactId": "org.antlr:antlr4-runtime:4.13.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.1/17125bae1d965624e265ef49552f6465a2bfa307/antlr4-runtime-4.13.1.jar",
+          "exists": true,
+          "sha256": "54665d2838cc66458343468efc539e454fc95b46a8a04b13c6ac43fc9be63505"
+        }
+      },
+      {
+        "artifactId": "org.apache.commons:commons-compress:1.18",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.18/1191f9f2bc0c47a8cce69193feb1ff0a8bcb37d5/commons-compress-1.18.jar",
+          "exists": true,
+          "sha256": "5f2df1e467825e4cac5996d44890c4201c000b43c0b23cffc0782d28a0beb9b0"
+        }
+      },
+      {
+        "artifactId": "org.apache.commons:commons-compress:1.26.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.26.0/659feffdd12280201c8aacb8f7be94f9a883c824/commons-compress-1.26.0.jar",
+          "exists": true,
+          "sha256": "051aceb8bbcc62d0f5b2b8ac72c53767f9c59bfbd050151e65bef6f51c8ed9c9"
+        }
+      },
+      {
+        "artifactId": "org.apache.commons:commons-lang3:3.14.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar",
+          "exists": true,
+          "sha256": "7b96bf3ee68949abb5bc465559ac270e0551596fa34523fddf890ec418dde13c"
+        }
+      },
+      {
+        "artifactId": "org.apache.commons:commons-lang3:3.9",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-lang3/3.9/122c7cee69b53ed4a7681c03d4ee4c0e2765da5/commons-lang3-3.9.jar",
+          "exists": true,
+          "sha256": "de2e1dcdcf3ef917a8ce858661a06726a9a944f28e33ad7f9e08bea44dc3c230"
+        }
+      },
+      {
+        "artifactId": "org.apache.httpcomponents:httpclient:4.5.13",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar",
+          "exists": true,
+          "sha256": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743"
+        }
+      },
+      {
+        "artifactId": "org.apache.httpcomponents:httpcore:4.4.16",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar",
+          "exists": true,
+          "sha256": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f"
+        }
+      },
+      {
+        "artifactId": "org.apache.logging.log4j:log4j-api:2.22.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.22.1/bea6fede6328fabafd7e68363161a7ea6605abd1/log4j-api-2.22.1.jar",
+          "exists": true,
+          "sha256": "5d7beae7ff15d8516d6517121d7f12a79a6ac180df64b5fcec55d5be21056e53"
+        }
+      },
+      {
+        "artifactId": "org.apache.logging.log4j:log4j-core:2.22.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.22.1/7183a25510a02ad00cc6a95d3b3d2a7d3c5a8dc4/log4j-core-2.22.1.jar",
+          "exists": true,
+          "sha256": "46dccecac556623d8e2ce8648496824a82951d139062a4e61148aff1a25ed18d"
+        }
+      },
+      {
+        "artifactId": "org.apache.logging.log4j:log4j-slf4j2-impl:2.22.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar",
+          "exists": true,
+          "sha256": "1920cd69d8682c7ef249bb407a3d0685723aa1785867cf4c53258da6bf14da97"
+        }
+      },
+      {
+        "artifactId": "org.apache.maven:maven-artifact:3.8.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.maven/maven-artifact/3.8.5/4433f50c07debefaed0553bd0068f4f48d449313/maven-artifact-3.8.5.jar",
+          "exists": true,
+          "sha256": "91172bc294d6eab02fc9f45f4ea01fd0e418962d128cf489abea7b6957d988ee"
+        }
+      },
+      {
+        "artifactId": "org.checkerframework:checker-qual:3.33.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar",
+          "exists": true,
+          "sha256": "e316255bbfcd9fe50d165314b85abb2b33cb2a66a93c491db648e498a82c2de1"
+        }
+      },
+      {
+        "artifactId": "org.codehaus.plexus:plexus-utils:3.3.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.3.0/cf43b5391de623b36fe066a21127baef82c64022/plexus-utils-3.3.0.jar",
+          "exists": true,
+          "sha256": "76d174792540e2775af94d03d10fb2d3c776e2cd0ac0ebf427d3e570072bb9ce"
+        }
+      },
+      {
+        "artifactId": "org.jcraft:jorbis:0.0.17",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/8872d22b293e8f5d7d56ff92be966e6dc28ebdc6/jorbis-0.0.17.jar",
+          "exists": true,
+          "sha256": "e067f29a3701426b67ed973036949c6e58ca5bb53eef7240b2e71e286d252a9e"
+        }
+      },
+      {
+        "artifactId": "org.jetbrains:annotations:24.1.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.jetbrains/annotations/24.1.0/7af6a669488450c4a07c2c3254e2151df42d7d04/annotations-24.1.0.jar",
+          "exists": true,
+          "sha256": "27a770dc7ce50500918bb8c3c0660c98290630ec796b5e3cf6b90f403b3033c6"
+        }
+      },
+      {
+        "artifactId": "org.jline:jline-reader:3.20.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-reader/3.20.0/8f15415b022a25b473e8e16c28ae913186ffb9c4/jline-reader-3.20.0.jar",
+          "exists": true,
+          "sha256": "acd1c94d1e228aa7b7962f69b21ed3a9fd828eb3a63e4baf9086954e626af1f0"
+        }
+      },
+      {
+        "artifactId": "org.jline:jline-terminal:3.20.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar",
+          "exists": true,
+          "sha256": "12125170e795519ba6dc8010c070b53c76aae92b485c1e37530e54ab5dd08d43"
+        }
+      },
+      {
+        "artifactId": "org.joml:joml:1.10.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar",
+          "exists": true,
+          "sha256": "cac9f22f83a7aa33eebda73c16ff5261e3cb4911b6bafcf4c79ea486099d0c9a"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-freetype:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/a0db6c84a8becc8ca05f9dbfa985edc348a824c7/lwjgl-freetype-3.3.3.jar",
+          "exists": true,
+          "sha256": "e1a7ab07106349d9a8a68f6860b7b73b353c502b81e662aca77f931c6fdd3de8"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-freetype:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/149070a5480900347071b7074779531f25a6e3dc/lwjgl-freetype-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "9fc63518a27b8ff1ab78196343710ce28e8000ce88f60be851a2d3db5beab8e9"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-glfw:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/efa1eb78c5ccd840e9f329717109b5e892d72f8e/lwjgl-glfw-3.3.3.jar",
+          "exists": true,
+          "sha256": "bedc757fd2b1b255146db26b74b9cbd1fcf5644b89b47b104fa721c741604259"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-glfw:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/a03684c5e4b1b1dbbe0d29dbbdc27b985b6840f2/lwjgl-glfw-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "b8306062b17741f34269088751421f1ac21a597bfbbd0c6c61226301cde744b8"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-jemalloc:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/b543467b7ff3c6920539a88ee602d34098628be5/lwjgl-jemalloc-3.3.3.jar",
+          "exists": true,
+          "sha256": "e99e31269e6678a4bfc62ef24c50a481c01cbdd004861ece9a59ba12768c6516"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-jemalloc:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/4f86728bf449b1dd61251c4e0ac01df1389cb51e/lwjgl-jemalloc-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "4e4a13d7015d42605bbcf7ef9faead46deac6409e4377a8ed4aea815f14634b3"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-openal:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/daada81ceb5fc0c291fbfdd4433cb8d9423577f2/lwjgl-openal-3.3.3.jar",
+          "exists": true,
+          "sha256": "ae0e82767cacf08921f578fba9d84753ddeb00ceada0510a2b4a882be28fbf95"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-openal:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/3037360cc4595079bea240af250b6d1a527e0905/lwjgl-openal-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "9030fed928a71eac2fdf4ce1643cc4ec724d8710e3b437bdce750bdc9e982b2a"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-opengl:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/2f6b0147078396a58979125a4c947664e98293a/lwjgl-opengl-3.3.3.jar",
+          "exists": true,
+          "sha256": "5062da750e5f7ec89e27e8b67b7d40fa8c4b16890159e35f828116ce6c8eca1e"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-opengl:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/62c70a4b00ca5391882b0f4b787c1588d24f1c86/lwjgl-opengl-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "d823a92c6a2810b5112da304dcc6abcd4cb102706f74f7e934a223cea2051250"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-stb:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/25dd6161988d7e65f71d5065c99902402ee32746/lwjgl-stb-3.3.3.jar",
+          "exists": true,
+          "sha256": "0cff7aa46ea9d70fcc20857015293ea80fbf21adcac34600c84da9b81a44ca93"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-stb:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/fd1271ccd9d85eff2fa31f3fd543e02ccfaf5041/lwjgl-stb-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "c4489068ddc6dc44b103071943f801a2d076634d4b74db470927f84a308219e1"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-tinyfd:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/82d755ca94b102e9ca77283b9e2dc46d1b15fbe5/lwjgl-tinyfd-3.3.3.jar",
+          "exists": true,
+          "sha256": "ee0515054ee19a3f4088426fee9d879eb2ee657b07e5064e4e2c851f6adcf14b"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl-tinyfd:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/d8d58daa0c3e5fd906fee96f5fddbcbc07cc308b/lwjgl-tinyfd-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "a076fa05a4d174762eab5852ee72c29d14ab10a5654f27fb00664ef1b52c0c05"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl:3.3.3",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar",
+          "exists": true,
+          "sha256": "dc9c7b2d48e8396d68895f8902ffa01e46253de44dfe927533ff09457ebfeec4"
+        }
+      },
+      {
+        "artifactId": "org.lwjgl:lwjgl:3.3.3:natives-linux",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/1713758e3660ba66e1e954396fd18126038b33c0/lwjgl-3.3.3-natives-linux.jar",
+          "exists": true,
+          "sha256": "e663738c519a06f6d659882fa8e4e09af7f10e921929ee5cc54a7587f62ed4c9"
+        }
+      },
+      {
+        "artifactId": "org.lz4:lz4-java:1.8.0",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar",
+          "exists": true,
+          "sha256": "d74a3334fb35195009b338a951f918203d6bbca3d1d359033dc33edd1cadc9ef"
+        }
+      },
+      {
+        "artifactId": "org.openjdk.nashorn:nashorn-core:15.4",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.openjdk.nashorn/nashorn-core/15.4/f67f5ffaa5f5130cf6fb9b133da00c7df3b532a5/nashorn-core-15.4.jar",
+          "exists": true,
+          "sha256": "6f816e84dfd63a81d4eaa7829c08337bbaff3ec683ff3bf6bbd90d017a00dc6f"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-analysis:9.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.10.1/8d49f14d51f632cb1d87c88d1ceaf50db0d8af1b/asm-analysis-9.10.1.jar",
+          "exists": true,
+          "sha256": "dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-analysis:9.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.5/490bacc77de7cbc0be1a30bb3471072d705be4a4/asm-analysis-9.5.jar",
+          "exists": true,
+          "sha256": "39f1cf1791335701c3b02cae7b2bc21057ec9a55b2240789cb6d552b2b2c62fa"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-commons:9.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-commons/9.10.1/4229e4c55fd8e01c23f9fe9884075cc628aacc50/asm-commons-9.10.1.jar",
+          "exists": true,
+          "sha256": "6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-commons:9.9.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-commons/9.9.1/ab35de4c537184a09339069f1a3b3aacf2289149/asm-commons-9.9.1.jar",
+          "exists": true,
+          "sha256": "c2319e014ce7199f2b7f7d56d6bb991863168c3f4b6cd6c9f542a4937ef7ef88"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-tree:9.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-tree/9.10.1/e244332a17564c1d1572449399a842de35881be2/asm-tree-9.10.1.jar",
+          "exists": true,
+          "sha256": "3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-tree:9.9.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-tree/9.9.1/b6b1b3366296163b4b1f540731aad0a2baa484d8/asm-tree-9.9.1.jar",
+          "exists": true,
+          "sha256": "0f3555096b720b820bbacab0b515589bee0200bee099bda14c561738ae837ba1"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-util:9.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-util/9.10.1/7bb9d450e8d4cbf9f9e04096c44bbfe7fba80b15/asm-util-9.10.1.jar",
+          "exists": true,
+          "sha256": "1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm-util:9.5",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-util/9.5/64b5a1fc8c1b15ed2efd6a063e976bc8d3dc5ffe/asm-util-9.5.jar",
+          "exists": true,
+          "sha256": "c467f1bb3c08888f47243e2d475209b34a772d627e44fca06752e18bb038bd74"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm:9.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm/9.10.1/ada2141c0cc52ee8f5c48cd5fa4ce0e794f22236/asm-9.10.1.jar",
+          "exists": true,
+          "sha256": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb"
+        }
+      },
+      {
+        "artifactId": "org.ow2.asm:asm:9.9.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm/9.9.1/2ceea6ab43bcae1979b2a6d85fc0ca429877e5ab/asm-9.9.1.jar",
+          "exists": true,
+          "sha256": "6f3828a215c920059a5efa2fb55c233d6c54ec5cadca99ce1b1bdd10077c7ddd"
+        }
+      },
+      {
+        "artifactId": "org.slf4j:slf4j-api:2.0.9",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.9/7cf2726fdcfbc8610f9a71fb3ed639871f315340/slf4j-api-2.0.9.jar",
+          "exists": true,
+          "sha256": "0818930dc8d7debb403204611691da58e49d42c50b6ffcfdce02dadb7c3c2b6c"
+        }
+      },
+      {
+        "artifactId": "org.tukaani:xz:1.10",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.tukaani/xz/1.10/1be8166f89e035a56c6bfc67dbc423996fe577e2/xz-1.10.jar",
+          "exists": true,
+          "sha256": "95c63c1a55b22dd6453890a419cc1a640f790bbf7d8ae82db1e30aefefb08888"
+        }
+      },
+      {
+        "artifactId": "org.vineflower:vineflower:1.10.1",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/org.vineflower/vineflower/1.10.1/4f48c5947b21f9ebc743e7c80215ee839d3dc668/vineflower-1.10.1.jar",
+          "exists": true,
+          "sha256": "b9b208e50793b64657a6b6292067526613f549de7405f9243624b02f4276e409"
+        }
+      },
+      {
+        "artifactId": "trove:trove:1.0.2",
+        "file": {
+          "path": "/approved-gradle-cache/modules-2/files-2.1/trove/trove/1.0.2/112b40581ab9a4d3de4636d49985a7f686d181c8/trove-1.0.2.jar",
+          "exists": true,
+          "sha256": "ad68a86cfd0255a2bc0525ce11ec49640caea7e34ff91eb89c3193dcccd77f05"
+        }
+      }
+    ],
+    "includeResourcesInGameJar": false,
+    "includeNeoForgeInGameJar": true,
+    "parchmentConflictResolutionPrefix": "p_",
+    "javaExecutable": "/opt/java/openjdk/bin/java",
+    "launcherManifestUrl": null,
+    "validateAccessTransformers": false,
+    "parchmentEnabled": false,
+    "toolsJavaExecutable": "/opt/java/openjdk/bin/java",
+    "artifacts": [
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.1/1227f9e0666314f9de41477e3ec277e542ed7f7b/java-objc-bridge-1.1.jar",
+        "exists": true,
+        "sha256": "77e34a13bccffc6c8b1a0e3ed46ddb0ea7dd56f2104ecdfacaaec9e4054ac332"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.electronwill.night-config/core/3.8.3/b442a95f09e349927f5a945ecb594455870fcf4f/core-3.8.3.jar",
+        "exists": true,
+        "sha256": "971dc88c1c22085611ee1c300f5bbf8595938178e819befbb5e98c3cbd272b79"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.electronwill.night-config/toml/3.8.3/90b2fd6efcb4a7d5b9810cf78f9d824994d717f2/toml-3.8.3.jar",
+        "exists": true,
+        "sha256": "ccb92882264bf071e3916ab122fe5ea3e211b8ebf199201698a1324f151f928f"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.github.oshi/oshi-core/6.4.10/b1d8ab82d11d92fd639b56d639f8f46f739dd5fa/oshi-core-6.4.10.jar",
+        "exists": true,
+        "sha256": "fef001a7a13515c273f30915915580782afbc45273cc07aa15994e51563ef310"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar",
+        "exists": true,
+        "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar",
+        "exists": true,
+        "sha256": "4241c14a7727c34feea6507ec801318a3d4a90f070e4525681079fb94ee4c593"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar",
+        "exists": true,
+        "sha256": "9e6814cb71816988a4fd1b07a993a8f21bb7058d522c162b1de849e19bea54ae"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar",
+        "exists": true,
+        "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/guava/32.1.2-jre/5e64ec7e056456bef3a4bc4c6fdaef71e8ab6318/guava-32.1.2-jre.jar",
+        "exists": true,
+        "sha256": "bc65dea7cfd9e4dacf8419d8af0e741655857d27885bb35d943d7187fc3a8fce"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+        "exists": true,
+        "sha256": "b372a037d4230aa57fbeffdef30fd6123f9c0c2db85d0aced00c91b974f33f99"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar",
+        "exists": true,
+        "sha256": "f02a95fa1a5e95edb3ed859fd0fb7df709d121a35290eff8b74dce2ab7f4d6ed"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.ibm.icu/icu4j/73.2/61ad4ef7f9131fcf6d25c34b817f90d6da06c9e9/icu4j-73.2.jar",
+        "exists": true,
+        "sha256": "29280822f4b0796acef1f79b90b1d0c1edd86c10e876a848e04b8a6298a16bf9"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.machinezoo.noexception/noexception/1.7.1/b65330c98e38a1f915fa54a6e5eca496505e3f0a/noexception-1.7.1.jar",
+        "exists": true,
+        "sha256": "3d70aaea3904918587a21bdf99ab6ade9ab1dd0eaf6119344ba513f60f575816"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar",
+        "exists": true,
+        "sha256": "319ea7b53b5e52f62ad3e2b81e9db7f0751240edac548bd74f5f19e35dc21a3b"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar",
+        "exists": true,
+        "sha256": "830bfd639c8db49236bbd8e45d3a2b8c96c56ff654a10118654958a6235d4c44"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar",
+        "exists": true,
+        "sha256": "c8ee4136e474ac7723ca2b432ec8d1a2bc88ef7d1ec57c314ba9e33cdc83dd75"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar",
+        "exists": true,
+        "sha256": "ffc138bc2596c291781b0d5e211ccac51f0f2345f27fc2742f335cedf7e2870d"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/logging/1.2.7/24cb95ffb0e3433fd6e844c04e68009e504ca1c0/logging-1.2.7.jar",
+        "exists": true,
+        "sha256": "3dc3190204bac5f4184d8405bfe1f724f73a6a15a0d3f36ec7f69e6872c1a76c"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar",
+        "exists": true,
+        "sha256": "16d70e7968b45caffc81576268eb000f473fb60bf257182d3447dea8ec919d5a"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.mojang/text2speech/1.17.9/3cad216e3a7f0c19b4b394388bc9ffc446f13b14/text2speech-1.17.9.jar",
+        "exists": true,
+        "sha256": "c2a95b499e76fada7dd63e9b0ec797b678d411c2b0ee6f37f4dc674662bfb0af"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/com.nothome/javaxdelta/2.0.1/d4f5d077f1b15c6f67595015d69572303ad3f66d/javaxdelta-2.0.1.jar",
+        "exists": true,
+        "sha256": "a661dfcb749053fc26eada2a0a8e619a8ead1ca9eda29e1698687aa2cdd80152"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/commons-codec/commons-codec/1.16.0/4e3eb3d79888d76b54e28b350915b5dc3919c9de/commons-codec-1.16.0.jar",
+        "exists": true,
+        "sha256": "56595fb20b0b85bc91d0d503dad50bb7f1b9afc0eed5dffa6cbb25929000484d"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar",
+        "exists": true,
+        "sha256": "a58af12ee1b68cfd2ebb0c27caef164f084381a00ec81a48cc275fd7ea54e154"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar",
+        "exists": true,
+        "sha256": "daddea1ea0be0f56978ab3006b8ac92834afeefbd9b7e4e6316fca57df0fa636"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/bootstraplauncher/2.0.2/1a2d076cbc33b0520cbacd591224427b2a20047d/bootstraplauncher-2.0.2.jar",
+        "exists": true,
+        "sha256": "d3f29309140540570fd6c709509706aa8fb133c1c8aef24491688f1a3f4e1d49"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/modlauncher/11.0.5/b8f0d49294f733fdb6173931b263553e943dc950/modlauncher-11.0.5.jar",
+        "exists": true,
+        "sha256": "fd9b9fc7cf043d2264ea0113eac6b258f0a71fece5b00e831bfbdf9726c78a24"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/cpw.mods/securejarhandler/3.0.8/c0ef95cecd8699a0449053ac7d9c160748d902cd/securejarhandler-3.0.8.jar",
+        "exists": true,
+        "sha256": "945c63d6deafc821616b0380c23867d9b8c2852438f8a6df72732ab933fc587d"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/de.siegmar/fastcsv/2.0.0/b615f26c03edeac966618b93b9ee4f4eed50aae1/fastcsv-2.0.0.jar",
+        "exists": true,
+        "sha256": "665d52cb6f35ca236919be9ac81653c208628507f91d6bf13479bc11496db616"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.codechicken/DiffPatch/2.0.0.36/5b32f9baa0c0371c0dc80a3b88794960af0c6b44/DiffPatch-2.0.0.36-all.jar",
+        "exists": true,
+        "sha256": "30d1ff26c112bf3a488e1e5a32a345f75ff0ef985c3315b2d987d607e7038580"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.github.llamalad7/mixinextras-neoforge/0.5.3/a0919957808de97707c5fb4ce073e66aeef3e187/mixinextras-neoforge-0.5.3.jar",
+        "exists": true,
+        "sha256": "9822e773bd9f42d36ed53ea3d67486207291747a7bfacc29beeb92040721bc9b"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "a4393f5b395486cc74d0325c9b41311abb9513ba0fd7ef8cf46e9345c3bffbea"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "bcc96737a0f912fcf031cf8c45ebda352a90a40437db0832caad3d5a63618b38"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "a8aca0c8e9347acc75c885ecc749195d9775369aa520b9276f2d1128210a6c17"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "bd4771d19149cbc9c7464ed2d58035d79cdfed7adb59d38718b0d8e7a3dcc2de"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "38a018c6d9fb2cb11b72881354782b45080bbd20b9a0ad6cde28b80d431ed0b1"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "ee65fa17fe65f18fd22269f92bddad85bfb3a263cf65eba01e116a2f30b86ff5"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/54188f271e388e7f313aea995e82f58ce2cdb809/netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar",
+        "exists": true,
+        "sha256": "1e83fc9f82e5415cdbb688c6a5c6bbbd7d198e9fdd6fdf64b3dc5d54dd1acfd0"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.97.Final/5514744c588190ffda076b35a9b8c9f24946a960/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar",
+        "exists": true,
+        "sha256": "93b5fe8f3829dcb5e033d8d40d59159366ff4cf8266c903bbd6a4aeed9e59bac"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "412fe140257c2dda5a5e15bee911298bd61928d03ee6be4db588e82c196c5dc6"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar",
+        "exists": true,
+        "sha256": "197fd2d6c6b4afe677d9e95bf2e36b49a0bcabdfce0583683fb73f29a3f5a407"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.3.1/ff33b340d60b81f4c1015fa8008bb30ff0a0d53b/fastutil-8.3.1.jar",
+        "exists": true,
+        "sha256": "1ee5da1ebfdc86ab9574be3cc290769f319df901ae95932a118889b7c63636b9"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar",
+        "exists": true,
+        "sha256": "b5543ee08d062d551cf0a5c9bc0fb70588b0382079029ba48941fa9c9be8a5d4"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.covers1624/Quack/0.4.10.101/970b7f652b5c40c893ef9a4bf13a97a291587d74/Quack-0.4.10.101.jar",
+        "exists": true,
+        "sha256": "22afc1694fd7ff99d71fce3544d54c3bd81df71ef1a83e96ced1daba19cf68e6"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar",
+        "exists": true,
+        "sha256": "1d45cfe3ae4a2eab38dc74276803748cf799088986260d6d912e50ddb35d15c5"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar",
+        "exists": true,
+        "sha256": "ae4caceb3840730c2537f9b7fb55a01baba580286b4122951488bcee558c2449"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar",
+        "exists": true,
+        "sha256": "34ed1e1f27fa896bca50dbc4e99cf3732967cec387a7a0d5e3486c09673fe8c6"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.jodah/typetools/0.6.3/a01aaa6ddaea9ec07ec4f209487b7a46a526283a/typetools-0.6.3.jar",
+        "exists": true,
+        "sha256": "408300867804be05d1083cc0287dd3a21295a9e76090e288013ba5a4182dc96d"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecraftforge/mergetool/1.1.7/3d41564f78f123d64573cae7948014baf3aaba3f/mergetool-1.1.7-fatjar.jar",
+        "exists": true,
+        "sha256": "2fbb74386cc9f9f4e816d2b5167ed9274c0864eae532d658e34587b2a47857e8"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecraftforge/srgutils/0.4.15/ca408b131759478f164e010fae0d73997e125fb5/srgutils-0.4.15.jar",
+        "exists": true,
+        "sha256": "f6bdebb7fae108329acddfc812f237c7f6328a98e3f282a105edfc161d0215e3"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.minecrell/terminalconsoleappender/1.3.0/b562e9bb61235c9520e26282cdee71f8f802d1fc/terminalconsoleappender-1.3.0.jar",
+        "exists": true,
+        "sha256": "1afea1bca095068f7f4483f061feed94753be34233ddb0df9ec380fc14d5a985"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.accesstransformers/at-modlauncher/10.0.1/5aba50202aceead086bc09fbc2751c9f05cb4890/at-modlauncher-10.0.1.jar",
+        "exists": true,
+        "sha256": "2a4b447c6944a2b89e383c1eed9a26bb5cc60330a5bb26ef0a912a38d52df935"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.accesstransformers/at-parser/13.0.1/32c7515f7d07f8099642dab5825cd6cfec86e4e/at-parser-13.0.1.jar",
+        "exists": true,
+        "sha256": "4576507635fd434a47668bd13ab11209ba036cab682616b3e1082637939fb2fc"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.fancymodloader/earlydisplay/4.0.44/cb2afcf15672180eca1c49b1c9b1208951ef322e/earlydisplay-4.0.44.jar",
+        "exists": true,
+        "sha256": "96922d7589000af7550f42d437f05676eea6b9708823e47c78e882560746042e"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.fancymodloader/loader/4.0.44/63433608b68302a442e3dba87880e54f42ea0583/loader-4.0.44.jar",
+        "exists": true,
+        "sha256": "f2096cd86d605c0484971fc712208e0dc6cecfe53e056db61d44a98cadc19499"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/binarypatcher/4.0.12/806a085347408d6883b1317959a8b4b6161596cb/binarypatcher-4.0.12.jar",
+        "exists": true,
+        "sha256": "0ba74c89a9b1f2e32df8150b4dd90904584e4343c79fc5d66706588d2a5b6ae4"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/cli-utils/4.0.12/b00bf1b512f149f9f16890a966352f680e1b02b8/cli-utils-4.0.12.jar",
+        "exists": true,
+        "sha256": "e8e2c41f0b058689acfbacd4204a7e32ec5d0b28e02c4020f788003ca26e77a5"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/installertools/2.1.2/62740d5aa8f75f4a4d542d363bdda5b64a198f7a/installertools-2.1.2-fatjar.jar",
+        "exists": true,
+        "sha256": "9fe7c6df17299f661b9cd07fc1c4e85493b63efae6bb9da0255a97d9d0a87c60"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.installertools/installertools/4.0.12/94b6e47c3f51f8ca40f8c54720369a952b821e95/installertools-4.0.12-fatjar.jar",
+        "exists": true,
+        "sha256": "ba3e9d27d9f5145f829ac94124e3d97b80f027949d690b430305734526f143db"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.javadoctor/gson-io/2.0.17/40edf7077205615bffe214a9d250c50cd0d13de/gson-io-2.0.17.jar",
+        "exists": true,
+        "sha256": "de40a10adb58105e84864dff41e3ef490d87411afa390d86a940c74a6bf69821"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.javadoctor/spec/2.0.17/fbe5da0da41957dccf9004014781bd8d05d16192/spec-2.0.17.jar",
+        "exists": true,
+        "sha256": "67d6fdde98770e91e82303fde1ce5560f12081b733da07bfa7bac71968a93dff"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged.jst/jst-cli-bundle/2.0.11/412417e49aa463f599ea6a5a3f40823cdd4c7fa1/jst-cli-bundle-2.0.11.jar",
+        "exists": true,
+        "sha256": "1e058f87f6c3de0d13d76d6d14a7698a749e7268521a95298f764228ebee88db"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.17/453980338983da2c30a37774d625fd2dac7cea4f/AutoRenamingTool-2.0.17.jar",
+        "exists": true,
+        "sha256": "db39a2c95f8299d23bf3bc81b7c17fcd2693081b7d3fe68f2c7d11ab1ff3cdde"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.17/9388df4c3589faf10c35d9154cfb2451c83bd717/AutoRenamingTool-2.0.17-all.jar",
+        "exists": true,
+        "sha256": "e977ee4422efb51eb54cc99f939833cef769de8b4aa1043294ce5400c60f3b1f"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.3/d9890c71b4366f886c2b1006782043a6a6816eb6/AutoRenamingTool-2.0.3-all.jar",
+        "exists": true,
+        "sha256": "43fcb978664ba04fc0b3b1b1a14eccabb4bc87b7a415e0eb8bdd1c2f12324321"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarFileSystems/0.4.1/78f59f89defcd032ed788b151ca6a0d40ace796a/JarJarFileSystems-0.4.1.jar",
+        "exists": true,
+        "sha256": "d9f88af1223ff23395c64ff0b0fe367563288a37bd38709bf667b6b39944bfab"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarMetadata/0.4.1/f8da03683dc81694556dc3e177c5e3bb77ae6fcb/JarJarMetadata-0.4.1.jar",
+        "exists": true,
+        "sha256": "05d7b89f09c6de1a9b61d0e786c8fd808aed044babf321653e14abd6740d5546"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarSelector/0.4.1/fb3cc7a58af22ad2880adb98af6d518128c47dae/JarJarSelector-0.4.1.jar",
+        "exists": true,
+        "sha256": "f34bab02a5e967650dc52b7cb37a200051a7078f7d1868597699d78697da2400"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/accesstransformers/10.0.1/fd83b5725f76eae9115e9355fa1c456a6a441400/accesstransformers-10.0.1.jar",
+        "exists": true,
+        "sha256": "89fb0dc3d68f8a5961f309ee110dad7d2c1094ba204595602b71e02e104838a1"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/accesstransformers/13.0.1/5c6200bc80dc1d38b984a106a04d488dddcd642c/accesstransformers-13.0.1.jar",
+        "exists": true,
+        "sha256": "d7354d343b276466d68856d93a78e90838eb2e729fb1a10d9425dbcb186f5a22"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/bus/8.0.5/5b2d33285ab5d1554e9798ad98c40d6ea3868bd5/bus-8.0.5.jar",
+        "exists": true,
+        "sha256": "705e24f37752809499a5cd0c7dd31eaabf3d933c5d3b2060168e94e9ef62593a"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/coremods/7.0.3/9147e6f638b4272b3bd5fc8f92ad37802512c6c/coremods-7.0.3.jar",
+        "exists": true,
+        "sha256": "d24c0d3e31af23cac36a0f9f98654b875f678b27ddccd8b28d331c1878a6de4a"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.0/52fe1949be64e3303aabaaa21e315f551db9c9f4/mergetool-2.0.0-api.jar",
+        "exists": true,
+        "sha256": "0260881294d8b218afe3d673f084d3745a55c28b35205d07d5e62d7f22202a00"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.3/1275202cbbb248f49345cf6787ce299afd9a02fb/mergetool-2.0.3-api.jar",
+        "exists": true,
+        "sha256": "e13e61c0437d6db17e7b3581ff261292015dcd9e11683f5a365b4b9a5c192283"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/mergetool/2.0.3/85c096b0155715275f84922d41462484c9a0285c/mergetool-2.0.3-fatjar.jar",
+        "exists": true,
+        "sha256": "3dbd19d9489348e838b1bedcf7ffd6d9810dac40543f3c34d3bcf6e39e674922"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/9e3113afdf4cb849acc7723ded08f1cc8ba438a0/neoforge-21.1.251-sources.jar",
+        "exists": true,
+        "sha256": "39b7c03467c5ebb54dbe70eeaa946680ee679f03daaa7a51333609e23aa8f36b"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/ea8ce807780eecf9689ff74185c3bdd16cb3adde/neoforge-21.1.251-universal.jar",
+        "exists": true,
+        "sha256": "6d2e128d8901db0522c9766a91911ea019a9e92ab1c8bc7fa20eb2bcb8ffe170"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoforge/21.1.251/fe0aafde48bcb27751855d6408c0e921c848d156/neoforge-21.1.251-userdev.jar",
+        "exists": true,
+        "sha256": "b85e0cb78168858253a6e11ba4b03231c6acea2e025d52f2daab6289e0a8c928"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform/1.21.1-20240808.144430/811e2bd86fa2cda2812e5e8e51d718ea8bd6d3f4/neoform-1.21.1-20240808.144430.zip",
+        "exists": true,
+        "sha256": "3fcdf0f0d115774cfceaf206a05a6dc964e2189bfd00f5b5f863e37f4b7733c7"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/srgutils/1.0.0/b9fe6cdab494983217cbc14cc6f92c8e6c616526/srgutils-1.0.0.jar",
+        "exists": true,
+        "sha256": "16663ae2504a0522cca386af6c11281d3fde61d25b6bd2690d7200e900b26c36"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar",
+        "exists": true,
+        "sha256": "df26cc58f235f477db07f753ba5a3ab243ebe5789d9f89ecf68dd62ea9a66c28"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/6.0-alpha-3/2ab1a73e1e22d2b73469362a0908a98644b681d/jopt-simple-6.0-alpha-3.jar",
+        "exists": true,
+        "sha256": "d440ceb839d6adb5cfa81aa321813d60255e68a3e9ca564c91126599310abde5"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.1/17125bae1d965624e265ef49552f6465a2bfa307/antlr4-runtime-4.13.1.jar",
+        "exists": true,
+        "sha256": "54665d2838cc66458343468efc539e454fc95b46a8a04b13c6ac43fc9be63505"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.18/1191f9f2bc0c47a8cce69193feb1ff0a8bcb37d5/commons-compress-1.18.jar",
+        "exists": true,
+        "sha256": "5f2df1e467825e4cac5996d44890c4201c000b43c0b23cffc0782d28a0beb9b0"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.26.0/659feffdd12280201c8aacb8f7be94f9a883c824/commons-compress-1.26.0.jar",
+        "exists": true,
+        "sha256": "051aceb8bbcc62d0f5b2b8ac72c53767f9c59bfbd050151e65bef6f51c8ed9c9"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar",
+        "exists": true,
+        "sha256": "7b96bf3ee68949abb5bc465559ac270e0551596fa34523fddf890ec418dde13c"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-lang3/3.9/122c7cee69b53ed4a7681c03d4ee4c0e2765da5/commons-lang3-3.9.jar",
+        "exists": true,
+        "sha256": "de2e1dcdcf3ef917a8ce858661a06726a9a944f28e33ad7f9e08bea44dc3c230"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar",
+        "exists": true,
+        "sha256": "6fe9026a566c6a5001608cf3fc32196641f6c1e5e1986d1037ccdbd5f31ef743"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar",
+        "exists": true,
+        "sha256": "6c9b3dd142a09dc468e23ad39aad6f75a0f2b85125104469f026e52a474e464f"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.22.1/bea6fede6328fabafd7e68363161a7ea6605abd1/log4j-api-2.22.1.jar",
+        "exists": true,
+        "sha256": "5d7beae7ff15d8516d6517121d7f12a79a6ac180df64b5fcec55d5be21056e53"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.22.1/7183a25510a02ad00cc6a95d3b3d2a7d3c5a8dc4/log4j-core-2.22.1.jar",
+        "exists": true,
+        "sha256": "46dccecac556623d8e2ce8648496824a82951d139062a4e61148aff1a25ed18d"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar",
+        "exists": true,
+        "sha256": "1920cd69d8682c7ef249bb407a3d0685723aa1785867cf4c53258da6bf14da97"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.apache.maven/maven-artifact/3.8.5/4433f50c07debefaed0553bd0068f4f48d449313/maven-artifact-3.8.5.jar",
+        "exists": true,
+        "sha256": "91172bc294d6eab02fc9f45f4ea01fd0e418962d128cf489abea7b6957d988ee"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar",
+        "exists": true,
+        "sha256": "e316255bbfcd9fe50d165314b85abb2b33cb2a66a93c491db648e498a82c2de1"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.3.0/cf43b5391de623b36fe066a21127baef82c64022/plexus-utils-3.3.0.jar",
+        "exists": true,
+        "sha256": "76d174792540e2775af94d03d10fb2d3c776e2cd0ac0ebf427d3e570072bb9ce"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/8872d22b293e8f5d7d56ff92be966e6dc28ebdc6/jorbis-0.0.17.jar",
+        "exists": true,
+        "sha256": "e067f29a3701426b67ed973036949c6e58ca5bb53eef7240b2e71e286d252a9e"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.jetbrains/annotations/24.1.0/7af6a669488450c4a07c2c3254e2151df42d7d04/annotations-24.1.0.jar",
+        "exists": true,
+        "sha256": "27a770dc7ce50500918bb8c3c0660c98290630ec796b5e3cf6b90f403b3033c6"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-reader/3.20.0/8f15415b022a25b473e8e16c28ae913186ffb9c4/jline-reader-3.20.0.jar",
+        "exists": true,
+        "sha256": "acd1c94d1e228aa7b7962f69b21ed3a9fd828eb3a63e4baf9086954e626af1f0"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar",
+        "exists": true,
+        "sha256": "12125170e795519ba6dc8010c070b53c76aae92b485c1e37530e54ab5dd08d43"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar",
+        "exists": true,
+        "sha256": "cac9f22f83a7aa33eebda73c16ff5261e3cb4911b6bafcf4c79ea486099d0c9a"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/149070a5480900347071b7074779531f25a6e3dc/lwjgl-freetype-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "9fc63518a27b8ff1ab78196343710ce28e8000ce88f60be851a2d3db5beab8e9"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/a0db6c84a8becc8ca05f9dbfa985edc348a824c7/lwjgl-freetype-3.3.3.jar",
+        "exists": true,
+        "sha256": "e1a7ab07106349d9a8a68f6860b7b73b353c502b81e662aca77f931c6fdd3de8"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/a03684c5e4b1b1dbbe0d29dbbdc27b985b6840f2/lwjgl-glfw-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "b8306062b17741f34269088751421f1ac21a597bfbbd0c6c61226301cde744b8"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/efa1eb78c5ccd840e9f329717109b5e892d72f8e/lwjgl-glfw-3.3.3.jar",
+        "exists": true,
+        "sha256": "bedc757fd2b1b255146db26b74b9cbd1fcf5644b89b47b104fa721c741604259"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/4f86728bf449b1dd61251c4e0ac01df1389cb51e/lwjgl-jemalloc-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "4e4a13d7015d42605bbcf7ef9faead46deac6409e4377a8ed4aea815f14634b3"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/b543467b7ff3c6920539a88ee602d34098628be5/lwjgl-jemalloc-3.3.3.jar",
+        "exists": true,
+        "sha256": "e99e31269e6678a4bfc62ef24c50a481c01cbdd004861ece9a59ba12768c6516"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/3037360cc4595079bea240af250b6d1a527e0905/lwjgl-openal-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "9030fed928a71eac2fdf4ce1643cc4ec724d8710e3b437bdce750bdc9e982b2a"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/daada81ceb5fc0c291fbfdd4433cb8d9423577f2/lwjgl-openal-3.3.3.jar",
+        "exists": true,
+        "sha256": "ae0e82767cacf08921f578fba9d84753ddeb00ceada0510a2b4a882be28fbf95"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/2f6b0147078396a58979125a4c947664e98293a/lwjgl-opengl-3.3.3.jar",
+        "exists": true,
+        "sha256": "5062da750e5f7ec89e27e8b67b7d40fa8c4b16890159e35f828116ce6c8eca1e"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/62c70a4b00ca5391882b0f4b787c1588d24f1c86/lwjgl-opengl-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "d823a92c6a2810b5112da304dcc6abcd4cb102706f74f7e934a223cea2051250"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/25dd6161988d7e65f71d5065c99902402ee32746/lwjgl-stb-3.3.3.jar",
+        "exists": true,
+        "sha256": "0cff7aa46ea9d70fcc20857015293ea80fbf21adcac34600c84da9b81a44ca93"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/fd1271ccd9d85eff2fa31f3fd543e02ccfaf5041/lwjgl-stb-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "c4489068ddc6dc44b103071943f801a2d076634d4b74db470927f84a308219e1"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/82d755ca94b102e9ca77283b9e2dc46d1b15fbe5/lwjgl-tinyfd-3.3.3.jar",
+        "exists": true,
+        "sha256": "ee0515054ee19a3f4088426fee9d879eb2ee657b07e5064e4e2c851f6adcf14b"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/d8d58daa0c3e5fd906fee96f5fddbcbc07cc308b/lwjgl-tinyfd-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "a076fa05a4d174762eab5852ee72c29d14ab10a5654f27fb00664ef1b52c0c05"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/1713758e3660ba66e1e954396fd18126038b33c0/lwjgl-3.3.3-natives-linux.jar",
+        "exists": true,
+        "sha256": "e663738c519a06f6d659882fa8e4e09af7f10e921929ee5cc54a7587f62ed4c9"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar",
+        "exists": true,
+        "sha256": "dc9c7b2d48e8396d68895f8902ffa01e46253de44dfe927533ff09457ebfeec4"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar",
+        "exists": true,
+        "sha256": "d74a3334fb35195009b338a951f918203d6bbca3d1d359033dc33edd1cadc9ef"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.openjdk.nashorn/nashorn-core/15.4/f67f5ffaa5f5130cf6fb9b133da00c7df3b532a5/nashorn-core-15.4.jar",
+        "exists": true,
+        "sha256": "6f816e84dfd63a81d4eaa7829c08337bbaff3ec683ff3bf6bbd90d017a00dc6f"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.10.1/8d49f14d51f632cb1d87c88d1ceaf50db0d8af1b/asm-analysis-9.10.1.jar",
+        "exists": true,
+        "sha256": "dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.5/490bacc77de7cbc0be1a30bb3471072d705be4a4/asm-analysis-9.5.jar",
+        "exists": true,
+        "sha256": "39f1cf1791335701c3b02cae7b2bc21057ec9a55b2240789cb6d552b2b2c62fa"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-commons/9.10.1/4229e4c55fd8e01c23f9fe9884075cc628aacc50/asm-commons-9.10.1.jar",
+        "exists": true,
+        "sha256": "6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-commons/9.9.1/ab35de4c537184a09339069f1a3b3aacf2289149/asm-commons-9.9.1.jar",
+        "exists": true,
+        "sha256": "c2319e014ce7199f2b7f7d56d6bb991863168c3f4b6cd6c9f542a4937ef7ef88"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-tree/9.10.1/e244332a17564c1d1572449399a842de35881be2/asm-tree-9.10.1.jar",
+        "exists": true,
+        "sha256": "3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-tree/9.9.1/b6b1b3366296163b4b1f540731aad0a2baa484d8/asm-tree-9.9.1.jar",
+        "exists": true,
+        "sha256": "0f3555096b720b820bbacab0b515589bee0200bee099bda14c561738ae837ba1"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-util/9.10.1/7bb9d450e8d4cbf9f9e04096c44bbfe7fba80b15/asm-util-9.10.1.jar",
+        "exists": true,
+        "sha256": "1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-util/9.5/64b5a1fc8c1b15ed2efd6a063e976bc8d3dc5ffe/asm-util-9.5.jar",
+        "exists": true,
+        "sha256": "c467f1bb3c08888f47243e2d475209b34a772d627e44fca06752e18bb038bd74"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm/9.10.1/ada2141c0cc52ee8f5c48cd5fa4ce0e794f22236/asm-9.10.1.jar",
+        "exists": true,
+        "sha256": "ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm/9.9.1/2ceea6ab43bcae1979b2a6d85fc0ca429877e5ab/asm-9.9.1.jar",
+        "exists": true,
+        "sha256": "6f3828a215c920059a5efa2fb55c233d6c54ec5cadca99ce1b1bdd10077c7ddd"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.9/7cf2726fdcfbc8610f9a71fb3ed639871f315340/slf4j-api-2.0.9.jar",
+        "exists": true,
+        "sha256": "0818930dc8d7debb403204611691da58e49d42c50b6ffcfdce02dadb7c3c2b6c"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.tukaani/xz/1.10/1be8166f89e035a56c6bfc67dbc423996fe577e2/xz-1.10.jar",
+        "exists": true,
+        "sha256": "95c63c1a55b22dd6453890a419cc1a640f790bbf7d8ae82db1e30aefefb08888"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/org.vineflower/vineflower/1.10.1/4f48c5947b21f9ebc743e7c80215ee839d3dc668/vineflower-1.10.1.jar",
+        "exists": true,
+        "sha256": "b9b208e50793b64657a6b6292067526613f549de7405f9243624b02f4276e409"
+      },
+      {
+        "path": "/approved-gradle-cache/modules-2/files-2.1/trove/trove/1.0.2/112b40581ab9a4d3de4636d49985a7f686d181c8/trove-1.0.2.jar",
+        "exists": true,
+        "sha256": "ad68a86cfd0255a2bc0525ce11ec49640caea7e34ff91eb89c3193dcccd77f05"
+      }
+    ]
+  },
+  "inputFiles": [
+    {
+      "path": "/approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar",
+      "exists": true,
+      "sha256": "6f5b0aae7e423efeea21cb848c5096e76fc4eec40256cbefdcfaa1583b197c07"
+    }
+  ],
+  "outputFiles": [
+    "/work/preserved/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar",
+    "/work/preserved/build/moddev/artifacts/neoforge-21.1.251.jar"
+  ],
+  "enableNativeCache": true,
+  "dryRun": true
+}

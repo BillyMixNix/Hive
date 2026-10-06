@@ -1,0 +1,76 @@
+{
+  "label": "before",
+  "started_at": "2026-10-06T14:42:10.643149+00:00",
+  "monotonic_start": 209841.664545,
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-06T14:42:13.3253595Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 7931164,
+        "total_virtual_kib": 26684692,
+        "free_virtual_kib": 8476100,
+        "available_bytes": 8090406912,
+        "committed_bytes": 18661847040,
+        "commit_limit_bytes": 27325124608
+      },
+      "related_processes": [
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 20076,
+          "ParentProcessId": 18920,
+          "WorkingSetSize": 24711168,
+          "PrivatePageCount": 88305664,
+          "UserModeTime": 195312500,
+          "KernelModeTime": 200625000,
+          "CommandLine": "\"D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe\""
+        },
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 1888,
+          "ParentProcessId": 20076,
+          "WorkingSetSize": 117846016,
+          "PrivatePageCount": 181436416,
+          "UserModeTime": 2038750000,
+          "KernelModeTime": 5454375000,
+          "CommandLine": "D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe services"
+        },
+        {
+          "Name": "ollama.exe",
+          "ProcessId": 3116,
+          "ParentProcessId": 19664,
+          "WorkingSetSize": 26902528,
+          "PrivatePageCount": 78213120,
+          "UserModeTime": 883437500,
+          "KernelModeTime": 837968750,
+          "CommandLine": "\"C:\\Users\\billy\\AppData\\Local\\Programs\\Ollama\\ollama.exe\" serve"
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 598, 5358\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": []
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "docker": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "finished_at": "2026-10-06T14:42:21.469954+00:00"
+}

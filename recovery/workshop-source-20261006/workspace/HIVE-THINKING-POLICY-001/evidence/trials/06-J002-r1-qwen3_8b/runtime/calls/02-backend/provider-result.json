@@ -1,0 +1,13 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Validated input parameters in IngredientAllocation.canSatisfy to reject null/invalid values\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java\",\n      \"operation\": \"replace\",\n      \"find\": \"public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {\",\n      \"replace\": \"public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {\\n        if (matchingSlots == null || counts == null) {\\n            throw new IllegalArgumentException(\\\"Null input parameters\\\");\\n        }\\n        if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {\\n            throw new IllegalArgumentException(\\\"Crafting allocation bounds exceeded\\\");\\n        }\\n        if (counts.values().stream().anyMatch(count -> count < 0)) {\\n            throw new IllegalArgumentException(\\\"Negative stack count\\\");\\n        }\\n        if (matchingSlots.stream().anyMatch(slots -> slots == null || slots.contains(null))) {\\n            throw new IllegalArgumentException(\\\"Null slot identity in matching-slot lists\\\");\\n        }\\n        if (counts.values().stream().anyMatch(count -> count == null)) {\\n            throw new IllegalArgumentException(\\\"Null count value in counts map\\\");\\n        }\\n        if (matchingSlots.stream().anyMatch(slots -> slots.stream().anyMatch(slot -> slot < 0 || slot >= 36))) {\\n            throw new IllegalArgumentException(\\\"Out-of-range slot identity in matching-slot lists\\\");\\n        }\\n        if (counts.values().stream().anyMatch(count -> count < 0)) {\\n            throw new IllegalArgumentException(\\\"Negative stack count\\\");\\n        }\\n\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 5378,
+  "output_tokens": 417,
+  "raw_id": null,
+  "thinking_policy": {
+    "requested": false,
+    "validation": "host-attested boolean control",
+    "provider_version": "0.34.0",
+    "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "template_sha256": "ae370d884f108d16e7cc8fd5259ebc5773a0afa6e078b11f4ed7e39a27e0dfc4"
+  }
+}

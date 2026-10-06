@@ -1,0 +1,32 @@
+{"event": "control_started", "label": "A-direct", "at": "2026-10-06T01:45:20.668725+00:00", "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388"}
+{"event": "control_finished", "label": "A-direct", "passed": false, "seconds": 145.55237259998103, "native_invocations": 1, "measurement": null}
+{"event": "control_started", "label": "A-wrapped", "at": "2026-10-06T01:47:56.130314+00:00", "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388"}
+{"event": "control_finished", "label": "A-wrapped", "passed": false, "seconds": 137.29869299998973, "native_invocations": 1, "measurement": {"measurement_status": "MEASURED", "measurement_errors": [], "invocations_observed": 1, "complete_outcome_records": 1, "known_verification_seconds": 137.2961745999928, "timing_complete": true, "software_outcome": null, "scoring_permitted": true}}
+{"event": "control_started", "label": "B-direct", "at": "2026-10-06T01:50:22.220651+00:00", "candidate_sha256": "05b66d7852034a79920793935517234336b7e126c7882016f6a10859b7c6ca7e"}
+{"event": "control_finished", "label": "B-direct", "passed": true, "seconds": 135.76112609999836, "native_invocations": 1, "measurement": null}
+{"event": "control_started", "label": "B-wrapped", "at": "2026-10-06T01:52:46.609061+00:00", "candidate_sha256": "05b66d7852034a79920793935517234336b7e126c7882016f6a10859b7c6ca7e"}
+{"event": "control_finished", "label": "B-wrapped", "passed": true, "seconds": 137.3887974000245, "native_invocations": 1, "measurement": {"measurement_status": "MEASURED", "measurement_errors": [], "invocations_observed": 1, "complete_outcome_records": 1, "known_verification_seconds": 137.38675820000935, "timing_complete": true, "software_outcome": null, "scoring_permitted": true}}
+[
+  {
+    "control": "A",
+    "candidate_identity_equal": true,
+    "frozen_test_identity_equal": true,
+    "acceptance_fields_equal": true,
+    "direct_seconds": 145.55237259998103,
+    "wrapped_seconds": 137.29869299998973,
+    "exactly_one_native_invocation_each": true,
+    "integrity_passed": true,
+    "measurement_status": "MEASURED"
+  },
+  {
+    "control": "B",
+    "candidate_identity_equal": true,
+    "frozen_test_identity_equal": true,
+    "acceptance_fields_equal": true,
+    "direct_seconds": 135.76112609999836,
+    "wrapped_seconds": 137.3887974000245,
+    "exactly_one_native_invocation_each": true,
+    "integrity_passed": true,
+    "measurement_status": "MEASURED"
+  }
+]

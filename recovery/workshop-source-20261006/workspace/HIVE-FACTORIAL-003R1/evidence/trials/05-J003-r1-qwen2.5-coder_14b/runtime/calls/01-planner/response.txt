@@ -1,0 +1,18 @@
+{
+  "summary": "Add `Observation.map` method to `Observation.java`.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Implement `Observation.map` method in `Observation.java`.",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/Observation.java"],
+    "tests": []
+  },
+  "acceptance": ["The `Observation.map` method should correctly apply the mapper to available data and preserve status and detail. It should handle null mappers and null mapped results appropriately, and preserve status and detail with null data for unavailable or not-integrated observations."],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["The `Observation.map` method should be implemented as specified, preserving the existing interface contract and behavior."],
+    "tests": []
+  },
+  "interface_contracts": []
+}

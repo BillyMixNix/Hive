@@ -1,0 +1,26 @@
+{
+  "study": "HIVE-THINKING-POLICY-001",
+  "method": "Read-only inspection of completed model responses and actual verifier results; no model, compiler, or candidate modifications.",
+  "assessments": [
+    {
+      "run_id": "bbdaf13b14fd",
+      "prospective_cell": 6,
+      "historical_cell": 15,
+      "earlier_call": 2,
+      "later_call": 3,
+      "classification": "MATERIALLY_DIFFERENT",
+      "basis": "The revision removes the earlier counts.values().stream().anyMatch(count -> count < 0) check that preceded explicit null-value validation. It retains the later negative-count check. This changes evaluation order and possible exceptions for null count values; it is not merely formatting or a changed summary.",
+      "initial_tests": {"cases": 3, "failures": 3, "errors": 0, "skipped": 0},
+      "revised_tests": {"cases": 3, "failures": 3, "errors": 0, "skipped": 0},
+      "failure_identities_unchanged": true,
+      "compilation_succeeded_both_times": true,
+      "frozen_acceptance": false,
+      "full_gate": "not_run",
+      "diagnostics_delivered": "All three emitted failing test names, exception types and messages were present in the exact correction request. Hidden test source was not supplied.",
+      "initial_response": "trials/06-J002-r1-qwen3_8b/runtime/calls/02-backend/response.txt",
+      "revised_response": "trials/06-J002-r1-qwen3_8b/runtime/calls/03-backend/response.txt",
+      "initial_verification": "trials/06-J002-r1-qwen3_8b/verifications/001-result.json",
+      "revised_verification": "trials/06-J002-r1-qwen3_8b/verifications/002-result.json"
+    }
+  ]
+}

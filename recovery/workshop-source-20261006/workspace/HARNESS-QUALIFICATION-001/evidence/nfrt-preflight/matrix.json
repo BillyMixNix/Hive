@@ -1,0 +1,73 @@
+{
+  "attestation_sha256": "8c6df7a0c494053f083b4e97a24647b6a066ae024d6402b8ff2c89d0df781b04",
+  "policy_changed": false,
+  "future_factorial": "NOT READY",
+  "tasks": [
+    {
+      "task": "J001",
+      "authorized_write_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "attested_mutable_files": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "static_scope_compatible": true,
+      "candidate_sha256": "509891bbaab6b3a8bc1c5b7f36ec6aa445d02766bdcb5419c6bef07fe9834d87",
+      "probe_accepted": true,
+      "error": null,
+      "compatible": true
+    },
+    {
+      "task": "J002",
+      "authorized_write_scope": [
+        "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+      ],
+      "attested_mutable_files": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "static_scope_compatible": false,
+      "candidate_sha256": "37c4cac74d49a9f325c8202d691eef48a3c430763e1506ad38cd99ac590f8b76",
+      "probe_accepted": false,
+      "error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+      },
+      "compatible": false
+    },
+    {
+      "task": "J003",
+      "authorized_write_scope": [
+        "src/main/java/dev/atmcompanion/state/Observation.java"
+      ],
+      "attested_mutable_files": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "static_scope_compatible": false,
+      "candidate_sha256": "3a16637259f9bd4aac7825d8c53025d6cf1a89e6e8d4c27c23a305b0bdd184c2",
+      "probe_accepted": false,
+      "error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/state/Observation.java"
+      },
+      "compatible": false
+    },
+    {
+      "task": "J004",
+      "authorized_write_scope": [
+        "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+        "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+      ],
+      "attested_mutable_files": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "static_scope_compatible": false,
+      "candidate_sha256": "de4ba6732f10b0d8b6e3342b250ceb69e96035a2f04d8df49ff2916fc5f503f8",
+      "probe_accepted": false,
+      "error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+      },
+      "compatible": false
+    }
+  ]
+}

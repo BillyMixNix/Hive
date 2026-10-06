@@ -1,0 +1,50 @@
+{
+  "study": "HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1",
+  "model": {
+    "name": "qwen2.5-coder:14b",
+    "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+    "bytes": 8988124298,
+    "quantization": "Q4_K_M",
+    "parameter_size": "14.8B",
+    "native_context_length": 32768
+  },
+  "source": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\repaired-workshop",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "options": {
+    "temperature": 0.1,
+    "num_predict": 2048,
+    "num_ctx": 12288
+  },
+  "truncate": false,
+  "stream": true,
+  "schema": "unchanged Hive response_schema_for_prompt(role,prompt)",
+  "provider_generation_limit_seconds": 900,
+  "read_timeout_seconds": 900,
+  "existing_max_http_attempts": 2,
+  "planner_corrections": 1,
+  "structural_worker_corrections": 1,
+  "targeted_worker_corrections": 1,
+  "targeted_timeout_seconds": 240,
+  "full_outer_timeout_seconds": 660,
+  "full_inner_timeout_seconds": 600,
+  "full_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "seed_manifest": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005\\evidence\\approved-nfrt-seed.json",
+  "seed_sha256": "8c6df7a0c494053f083b4e97a24647b6a066ae024d6402b8ff2c89d0df781b04",
+  "output_cap_interpretation": "Latest user explicitly requires 2048; applied to every role. Historical T005 harness used planner2048/workers6000/reviewer1536. No Hive production source changed.",
+  "unspecified_provider_settings": "seed, stop, keep_alive, num_gpu, num_batch and other unspecified options remain unspecified",
+  "client_environment": {
+    "OLLAMA_BASE_URL": null,
+    "OLLAMA_CONTEXT_LENGTH": null,
+    "OLLAMA_NUM_PARALLEL": null,
+    "OLLAMA_MAX_LOADED_MODELS": null,
+    "OLLAMA_KEEP_ALIVE": null
+  },
+  "provider_retry_scope": "Unchanged implementation applies generation limit to each _ollama_chat_once; existing retry at most two attempts. No manual retries.",
+  "stop_policy": "After a logical provider call fails, no further inference is allowed; normal existing retry stays inside that call."
+}

@@ -1,0 +1,772 @@
+[
+  {
+    "case": "measured-baseline",
+    "complete": true,
+    "host_preflight_s": 24.954,
+    "launch_to_container_event_s": 27.057,
+    "project_copy_s": 12.194,
+    "wrapper_copy_s": 11.119,
+    "native_inputs_copy_s": 98.599,
+    "outer_budget_before_gradle_s": 149.348,
+    "gradle_wall_s": null,
+    "gradle_exposure_before_outer_timeout_s": 90.703,
+    "docker_total_s": 240.051,
+    "post_process_to_return_s": 16.934,
+    "last_phase": "verification_returned",
+    "task_markers": [
+      "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.",
+      "Daemon will be stopped at the end of the build ",
+      "> Configure project :",
+      "> Task :createMinecraftArtifacts"
+    ],
+    "stdout_tail": "gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.06s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.09s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.09s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.10s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 3.58s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 16.85s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 12.89s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 17.72s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 8.06s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 19.83s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 8.52s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 2.82s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n",
+    "stderr_tail": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)\n",
+    "result": {
+      "report": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verification timed out after 240s."
+          }
+        ],
+        "isolation": {
+          "backend": "docker",
+          "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+          "available": false
+        },
+        "diagnostics": {
+          "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-baseline\\diagnostics",
+          "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-baseline\\diagnostics\\verification-events.jsonl",
+          "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-baseline\\diagnostics\\stdout.log",
+          "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-baseline\\diagnostics\\stderr.log",
+          "last_observed_phase": "gradle_output_marker",
+          "elapsed_ms": 281942.864
+        }
+      },
+      "wall_seconds": 282.155,
+      "model_calls": 0,
+      "candidate_unchanged": true,
+      "baseline_unchanged": true,
+      "historical_source_unchanged": true,
+      "disposition": "VERIFIER_ONLY_CONTROL",
+      "historical_classification_unchanged": true,
+      "applied": false
+    },
+    "process_samples": [
+      {
+        "monotonic": 126561.4243608,
+        "wall_timestamp": "2026-10-05T15:34:10.403151+00:00",
+        "run_id": "measured-baseline",
+        "phase": "process_state",
+        "elapsed_ms": 147409.793,
+        "clock_domain": "host",
+        "container": "hive-verify-263094c6b667",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-263094c6b667"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":378,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:32:33.9359643Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-263094c6b667",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN               COMMAND\n378                 354                 Ds                  01:34               00:00:13            -                   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-263094c6b667"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"20.3MB / 0B\",\"CPUPerc\":\"21.14%\",\"Container\":\"hive-verify-263094c6b667\",\"ID\":\"d304c853b5ac\",\"MemPerc\":\"17.03%\",\"MemUsage\":\"697.4MiB / 4GiB\",\"Name\":\"hive-verify-263094c6b667\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"1\"}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "monotonic": 126665.7267119,
+        "wall_timestamp": "2026-10-05T15:35:54.705504+00:00",
+        "run_id": "measured-baseline",
+        "phase": "process_state",
+        "elapsed_ms": 251712.144,
+        "clock_domain": "host",
+        "container": "hive-verify-263094c6b667",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-263094c6b667"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":378,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:32:33.9359643Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-263094c6b667",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n378                 354                 Ssl                 03:19               00:00:19            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n439                 378                 Sl                  01:16               00:00:04            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n462                 439                 Sl                  01:13               00:00:40            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n520                 462                 Sl                  00:47               00:00:21            futex_do_wait              /opt/java/openjdk/bin/java -Dstderr.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar --home-dir /work/gradle-user-home/caches/neoformruntime --work-dir /work/candidate/build/tmp/neoformruntime run --java-executable /opt/java/openjdk/bin/java --neoforge net.neoforged:neoforge:21.1.251:userdev --dist joined --write-result clientResources:/work/candidate/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar --write-result gameJarNoRecompWithNeoForge:/work/candidate/build/moddev/artifacts/neoforge-21.1.251.jar --problems-report /work/candidate/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json --artifact-manifest /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties --warn-on-artifact-manifest-miss\n622                 520                 Sl                  00:17               00:00:30            futex_do_wait              /opt/java/openjdk/bin/java -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.3/d9890c71b4366f886c2b1006782043a6a6816eb6/AutoRenamingTool-2.0.3-all.jar --input /work/gradle-user-home/caches/neoformruntime/intermediate_results/merge_8503fda02cff83cf4896f8b254e4fde2d657ec61_output.jar --output ./output.jar --map /work/gradle-user-home/caches/neoformruntime/intermediate_results/mergeMappings_2100ae7c755bb34ac4545c9eeec4a90c42ad48c4_output.tsrg --cfg ./libraries.txt --ann-fix --ids-fix --src-fix --record-fix --unfinal-params\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-263094c6b667"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"151MB / 0B\",\"CPUPerc\":\"121.56%\",\"Container\":\"hive-verify-263094c6b667\",\"ID\":\"d304c853b5ac\",\"MemPerc\":\"60.71%\",\"MemUsage\":\"2.428GiB / 4GiB\",\"Name\":\"hive-verify-263094c6b667\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"129\"}\n",
+            "stderr": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": "measured-known-good",
+    "complete": true,
+    "host_preflight_s": 16.268,
+    "launch_to_container_event_s": 2.161,
+    "project_copy_s": 10.035,
+    "wrapper_copy_s": 12.226,
+    "native_inputs_copy_s": 115.7,
+    "outer_budget_before_gradle_s": 140.482,
+    "gradle_wall_s": null,
+    "gradle_exposure_before_outer_timeout_s": 99.594,
+    "docker_total_s": 240.077,
+    "post_process_to_return_s": 23.444,
+    "last_phase": "verification_returned",
+    "task_markers": [
+      "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.",
+      "Daemon will be stopped at the end of the build ",
+      "> Configure project :",
+      "> Task :createMinecraftArtifacts"
+    ],
+    "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.08s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.12s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 4.06s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 9.80s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 16.69s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 21.75s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 15.48s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n",
+    "stderr_tail": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)\n",
+    "result": {
+      "report": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verification timed out after 240s."
+          }
+        ],
+        "isolation": {
+          "backend": "docker",
+          "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+          "available": false
+        },
+        "diagnostics": {
+          "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-known-good\\diagnostics",
+          "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-known-good\\diagnostics\\verification-events.jsonl",
+          "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-known-good\\diagnostics\\stdout.log",
+          "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-known-good\\diagnostics\\stderr.log",
+          "last_observed_phase": "gradle_output_marker",
+          "elapsed_ms": 279790.575
+        }
+      },
+      "wall_seconds": 279.919,
+      "model_calls": 0,
+      "candidate_unchanged": true,
+      "baseline_unchanged": true,
+      "historical_source_unchanged": true,
+      "disposition": "VERIFIER_ONLY_CONTROL",
+      "historical_classification_unchanged": true,
+      "applied": false
+    },
+    "process_samples": [
+      {
+        "monotonic": 127138.8889118,
+        "wall_timestamp": "2026-10-05T15:43:47.867702+00:00",
+        "run_id": "measured-known-good",
+        "phase": "process_state",
+        "elapsed_ms": 138409.115,
+        "clock_domain": "host",
+        "container": "hive-verify-e1e7714b2ea3",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-e1e7714b2ea3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":1480,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:41:46.893789654Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-e1e7714b2ea3",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN               COMMAND\n1480                1457                Ds                  01:59               00:00:19            p9_client_rpc       python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-e1e7714b2ea3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"17.47%\",\"Container\":\"hive-verify-e1e7714b2ea3\",\"ID\":\"31d235d42d20\",\"MemPerc\":\"20.62%\",\"MemUsage\":\"844.8MiB / 4GiB\",\"Name\":\"hive-verify-e1e7714b2ea3\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"1\"}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "monotonic": 127243.837244,
+        "wall_timestamp": "2026-10-05T15:45:32.816035+00:00",
+        "run_id": "measured-known-good",
+        "phase": "process_state",
+        "elapsed_ms": 243357.447,
+        "clock_domain": "host",
+        "container": "hive-verify-e1e7714b2ea3",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-e1e7714b2ea3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":1480,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:41:46.893789654Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-e1e7714b2ea3",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n1480                1457                Ssl                 03:44               00:00:23            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n1519                1480                Sl                  01:25               00:00:05            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n1542                1519                Sl                  01:22               00:00:50            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n1600                1542                Sl                  00:48               00:00:24            futex_do_wait              /opt/java/openjdk/bin/java -Dstderr.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar --home-dir /work/gradle-user-home/caches/neoformruntime --work-dir /work/candidate/build/tmp/neoformruntime run --java-executable /opt/java/openjdk/bin/java --neoforge net.neoforged:neoforge:21.1.251:userdev --dist joined --write-result clientResources:/work/candidate/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar --write-result gameJarNoRecompWithNeoForge:/work/candidate/build/moddev/artifacts/neoforge-21.1.251.jar --problems-report /work/candidate/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json --artifact-manifest /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties --warn-on-artifact-manifest-miss\n1731                1600                Sl                  00:08               00:00:10            futex_do_wait              /opt/java/openjdk/bin/java -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/AutoRenamingTool/2.0.3/d9890c71b4366f886c2b1006782043a6a6816eb6/AutoRenamingTool-2.0.3-all.jar --input /work/gradle-user-home/caches/neoformruntime/intermediate_results/merge_8503fda02cff83cf4896f8b254e4fde2d657ec61_output.jar --output ./output.jar --map /work/gradle-user-home/caches/neoformruntime/intermediate_results/mergeMappings_2100ae7c755bb34ac4545c9eeec4a90c42ad48c4_output.tsrg --cfg ./libraries.txt --ann-fix --ids-fix --src-fix --record-fix --unfinal-params\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-e1e7714b2ea3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"198.10%\",\"Container\":\"hive-verify-e1e7714b2ea3\",\"ID\":\"31d235d42d20\",\"MemPerc\":\"50.22%\",\"MemUsage\":\"2.009GiB / 4GiB\",\"Name\":\"hive-verify-e1e7714b2ea3\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"129\"}\n",
+            "stderr": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": "measured-preserved",
+    "complete": true,
+    "host_preflight_s": 13.838,
+    "launch_to_container_event_s": 1.123,
+    "project_copy_s": 6.908,
+    "wrapper_copy_s": 9.391,
+    "native_inputs_copy_s": 78.48,
+    "outer_budget_before_gradle_s": 96.14,
+    "gradle_wall_s": null,
+    "gradle_exposure_before_outer_timeout_s": 143.965,
+    "docker_total_s": 240.105,
+    "post_process_to_return_s": 22.085,
+    "last_phase": "verification_returned",
+    "task_markers": [
+      "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.",
+      "Daemon will be stopped at the end of the build ",
+      "> Configure project :",
+      "> Task :createMinecraftArtifacts"
+    ],
+    "stdout_tail": "only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.12s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.15s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.15s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.16s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 3.82s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 9.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 14.19s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 18.01s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 10.81s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 34.80s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 17.29s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 7.02s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 8.63s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n",
+    "stderr_tail": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)\n",
+    "result": {
+      "report": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verification timed out after 240s."
+          }
+        ],
+        "isolation": {
+          "backend": "docker",
+          "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+          "available": false
+        },
+        "diagnostics": {
+          "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-preserved\\diagnostics",
+          "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-preserved\\diagnostics\\verification-events.jsonl",
+          "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-preserved\\diagnostics\\stdout.log",
+          "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\measured-preserved\\diagnostics\\stderr.log",
+          "last_observed_phase": "gradle_output_marker",
+          "elapsed_ms": 276029.627
+        }
+      },
+      "wall_seconds": 276.111,
+      "model_calls": 0,
+      "candidate_unchanged": true,
+      "baseline_unchanged": true,
+      "historical_source_unchanged": true,
+      "disposition": "POST_HOC_CANDIDATE_VERIFICATION",
+      "historical_classification_unchanged": true,
+      "applied": false
+    },
+    "process_samples": [
+      {
+        "monotonic": 126843.145105,
+        "wall_timestamp": "2026-10-05T15:38:52.123895+00:00",
+        "run_id": "measured-preserved",
+        "phase": "process_state",
+        "elapsed_ms": 135783.556,
+        "clock_domain": "host",
+        "container": "hive-verify-1162680259d3",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-1162680259d3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":754,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:36:50.839876764Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-1162680259d3",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n754                 732                 Ssl                 01:59               00:00:17            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n788                 754                 Sl                  00:24               00:00:03            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n811                 788                 Sl                  00:22               00:00:33            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-1162680259d3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"85.58%\",\"Container\":\"hive-verify-1162680259d3\",\"ID\":\"e2a51d9e4f24\",\"MemPerc\":\"35.65%\",\"MemUsage\":\"1.426GiB / 4GiB\",\"Name\":\"hive-verify-1162680259d3\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"78\"}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "monotonic": 126948.0078197,
+        "wall_timestamp": "2026-10-05T15:40:36.986610+00:00",
+        "run_id": "measured-preserved",
+        "phase": "process_state",
+        "elapsed_ms": 240646.27,
+        "clock_domain": "host",
+        "container": "hive-verify-1162680259d3",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-1162680259d3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":754,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:36:50.839876764Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-1162680259d3",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n754                 732                 Ssl                 03:44               00:00:17            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n788                 754                 Sl                  02:09               00:00:04            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n811                 788                 Sl                  02:07               00:00:39            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n876                 811                 Sl                  01:43               00:00:31            futex_do_wait              /opt/java/openjdk/bin/java -Dstderr.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar --home-dir /work/gradle-user-home/caches/neoformruntime --work-dir /work/candidate/build/tmp/neoformruntime run --java-executable /opt/java/openjdk/bin/java --neoforge net.neoforged:neoforge:21.1.251:userdev --dist joined --write-result clientResources:/work/candidate/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar --write-result gameJarNoRecompWithNeoForge:/work/candidate/build/moddev/artifacts/neoforge-21.1.251.jar --problems-report /work/candidate/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json --artifact-manifest /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties --warn-on-artifact-manifest-miss\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-1162680259d3"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"96.40%\",\"Container\":\"hive-verify-1162680259d3\",\"ID\":\"e2a51d9e4f24\",\"MemPerc\":\"44.18%\",\"MemUsage\":\"1.767GiB / 4GiB\",\"Name\":\"hive-verify-1162680259d3\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"105\"}\n",
+            "stderr": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": "post-regression-baseline",
+    "complete": true,
+    "host_preflight_s": 16.678,
+    "launch_to_container_event_s": 1.68,
+    "project_copy_s": 6.967,
+    "wrapper_copy_s": 10.815,
+    "native_inputs_copy_s": 81.798,
+    "outer_budget_before_gradle_s": 101.566,
+    "gradle_wall_s": null,
+    "gradle_exposure_before_outer_timeout_s": 138.477,
+    "docker_total_s": 240.043,
+    "post_process_to_return_s": 20.795,
+    "last_phase": "verification_returned",
+    "task_markers": [
+      "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.",
+      "Daemon will be stopped at the end of the build ",
+      "> Configure project :",
+      "> Task :createMinecraftArtifacts"
+    ],
+    "stdout_tail": "only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.06s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.12s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 3.43s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 9.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 16.43s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 18.47s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 15.41s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 24.86s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 13.22s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 3.24s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 6.35s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n",
+    "stderr_tail": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)\n",
+    "result": {
+      "report": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verification timed out after 240s."
+          }
+        ],
+        "isolation": {
+          "backend": "docker",
+          "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+          "available": false
+        },
+        "diagnostics": {
+          "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-baseline\\diagnostics",
+          "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-baseline\\diagnostics\\verification-events.jsonl",
+          "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-baseline\\diagnostics\\stdout.log",
+          "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-baseline\\diagnostics\\stderr.log",
+          "last_observed_phase": "gradle_output_marker",
+          "elapsed_ms": 277517.808
+        }
+      },
+      "wall_seconds": 277.633,
+      "model_calls": 0,
+      "candidate_unchanged": true,
+      "baseline_unchanged": true,
+      "historical_source_unchanged": true,
+      "disposition": "VERIFIER_ONLY_CONTROL",
+      "historical_classification_unchanged": true,
+      "applied": false
+    },
+    "process_samples": [
+      {
+        "monotonic": 128016.7749676,
+        "wall_timestamp": "2026-10-05T15:58:25.753758+00:00",
+        "run_id": "post-regression-baseline",
+        "phase": "process_state",
+        "elapsed_ms": 138570.446,
+        "clock_domain": "host",
+        "container": "hive-verify-cdf2a44e68a2",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-cdf2a44e68a2"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":2005,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:56:24.604027052Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-cdf2a44e68a2",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n2005                1982                Ssl                 01:59               00:00:14            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n2037                2005                Sl                  00:18               00:00:03            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n2060                2037                Sl                  00:17               00:00:30            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-cdf2a44e68a2"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"129MB / 0B\",\"CPUPerc\":\"194.39%\",\"Container\":\"hive-verify-cdf2a44e68a2\",\"ID\":\"6e3365215687\",\"MemPerc\":\"35.49%\",\"MemUsage\":\"1.42GiB / 4GiB\",\"Name\":\"hive-verify-cdf2a44e68a2\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"69\"}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "monotonic": 128122.6619652,
+        "wall_timestamp": "2026-10-05T16:00:11.640756+00:00",
+        "run_id": "post-regression-baseline",
+        "phase": "process_state",
+        "elapsed_ms": 244457.444,
+        "clock_domain": "host",
+        "container": "hive-verify-cdf2a44e68a2",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-cdf2a44e68a2"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":2005,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T15:56:24.604027052Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-cdf2a44e68a2",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n2005                1982                Ssl                 03:44               00:00:14            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n2037                2005                Sl                  02:04               00:00:03            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n2060                2037                Sl                  02:02               00:00:39            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n2126                2060                Sl                  01:37               00:00:38            futex_do_wait              /opt/java/openjdk/bin/java -Dstderr.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar --home-dir /work/gradle-user-home/caches/neoformruntime --work-dir /work/candidate/build/tmp/neoformruntime run --java-executable /opt/java/openjdk/bin/java --neoforge net.neoforged:neoforge:21.1.251:userdev --dist joined --write-result clientResources:/work/candidate/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar --write-result gameJarNoRecompWithNeoForge:/work/candidate/build/moddev/artifacts/neoforge-21.1.251.jar --problems-report /work/candidate/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json --artifact-manifest /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties --warn-on-artifact-manifest-miss\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-cdf2a44e68a2"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"151MB / 0B\",\"CPUPerc\":\"126.49%\",\"Container\":\"hive-verify-cdf2a44e68a2\",\"ID\":\"6e3365215687\",\"MemPerc\":\"43.51%\",\"MemUsage\":\"1.741GiB / 4GiB\",\"Name\":\"hive-verify-cdf2a44e68a2\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"106\"}\n",
+            "stderr": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case": "post-regression-preserved",
+    "complete": true,
+    "host_preflight_s": 22.236,
+    "launch_to_container_event_s": 3.063,
+    "project_copy_s": 8.049,
+    "wrapper_copy_s": 11.474,
+    "native_inputs_copy_s": 102.581,
+    "outer_budget_before_gradle_s": 125.471,
+    "gradle_wall_s": null,
+    "gradle_exposure_before_outer_timeout_s": 114.594,
+    "docker_total_s": 240.065,
+    "post_process_to_return_s": 18.583,
+    "last_phase": "verification_returned",
+    "task_markers": [
+      "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.",
+      "Daemon will be stopped at the end of the build ",
+      "> Configure project :",
+      "> Task :createMinecraftArtifacts"
+    ],
+    "stdout_tail": "radle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.05s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.09s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.09s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.09s\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 6.49s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 17.66s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 10.62s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 27.20s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 16.18s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 26.04s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 7.99s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 2.84s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n",
+    "stderr_tail": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)\n",
+    "result": {
+      "report": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verification timed out after 240s."
+          }
+        ],
+        "isolation": {
+          "backend": "docker",
+          "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+          "available": false
+        },
+        "diagnostics": {
+          "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-preserved\\diagnostics",
+          "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-preserved\\diagnostics\\verification-events.jsonl",
+          "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-preserved\\diagnostics\\stdout.log",
+          "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004\\evidence\\verifier-replays\\post-regression-preserved\\diagnostics\\stderr.log",
+          "last_observed_phase": "gradle_output_marker",
+          "elapsed_ms": 280884.563
+        }
+      },
+      "wall_seconds": 281.018,
+      "model_calls": 0,
+      "candidate_unchanged": true,
+      "baseline_unchanged": true,
+      "historical_source_unchanged": true,
+      "disposition": "POST_HOC_CANDIDATE_VERIFICATION",
+      "historical_classification_unchanged": true,
+      "applied": false
+    },
+    "process_samples": [
+      {
+        "monotonic": 128313.7316194,
+        "wall_timestamp": "2026-10-05T16:03:22.710410+00:00",
+        "run_id": "post-regression-preserved",
+        "phase": "process_state",
+        "elapsed_ms": 144072.022,
+        "clock_domain": "host",
+        "container": "hive-verify-07e53cb5b069",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-07e53cb5b069"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":2760,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T16:01:23.016889184Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-07e53cb5b069",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN               COMMAND\n2760                2736                Rs                  01:57               00:00:21            -                   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-07e53cb5b069"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"20.58%\",\"Container\":\"hive-verify-07e53cb5b069\",\"ID\":\"81ad094d8e68\",\"MemPerc\":\"24.58%\",\"MemUsage\":\"1007MiB / 4GiB\",\"Name\":\"hive-verify-07e53cb5b069\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"1\"}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "monotonic": 128418.7170035,
+        "wall_timestamp": "2026-10-05T16:05:07.695793+00:00",
+        "run_id": "post-regression-preserved",
+        "phase": "process_state",
+        "elapsed_ms": 249057.406,
+        "clock_domain": "host",
+        "container": "hive-verify-07e53cb5b069",
+        "samples": [
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "inspect",
+              "--format",
+              "{{json .State}}",
+              "hive-verify-07e53cb5b069"
+            ],
+            "returncode": 0,
+            "stdout": "{\"Status\":\"running\",\"Running\":true,\"Paused\":false,\"Restarting\":false,\"OOMKilled\":false,\"Dead\":false,\"Pid\":2760,\"ExitCode\":0,\"Error\":\"\",\"StartedAt\":\"2026-10-05T16:01:23.016889184Z\",\"FinishedAt\":\"0001-01-01T00:00:00Z\"}\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "top",
+              "hive-verify-07e53cb5b069",
+              "-eo",
+              "pid,ppid,stat,etime,time,wchan:24,args"
+            ],
+            "returncode": 0,
+            "stdout": "PID                 PPID                STAT                ELAPSED             TIME                WCHAN                      COMMAND\n2760                2736                Ssl                 03:42               00:00:22            poll_schedule_timeout.co   python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"}\n2800                2760                Sl                  01:39               00:00:05            futex_do_wait              /opt/java/openjdk/bin/java -Djava.io.tmpdir=/work/tmp -classpath gradle/wrapper/gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain --no-daemon --offline --console=plain --max-workers=2 --rerun-tasks --no-build-cache -Dorg.gradle.jvmargs=-Xmx768m test --tests dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\n2823                2800                Sl                  01:37               00:00:46            futex_do_wait              /opt/java/openjdk/bin/java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED -Xmx768m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/work/tmp -Duser.country -Duser.language=en -Duser.variant -cp /work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/gradle-daemon-main-9.2.1.jar -javaagent:/work/gradle-user-home/wrapper/dists/gradle-9.2.1-bin/2t0n5ozlw9xmuyvbp7dnzaxug/gradle-9.2.1/lib/agents/gradle-instrumentation-agent-9.2.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 9.2.1\n2881                2823                Sl                  01:07               00:00:26            futex_do_wait              /opt/java/openjdk/bin/java -Dstderr.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -jar /approved-gradle-cache/modules-2/files-2.1/net.neoforged/neoform-runtime/2.0.31/8aa24964ce5b7a55bcec656f1ba7d987dab642b7/neoform-runtime-2.0.31-all.jar --home-dir /work/gradle-user-home/caches/neoformruntime --work-dir /work/candidate/build/tmp/neoformruntime run --java-executable /opt/java/openjdk/bin/java --neoforge net.neoforged:neoforge:21.1.251:userdev --dist joined --write-result clientResources:/work/candidate/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar --write-result gameJarNoRecompWithNeoForge:/work/candidate/build/moddev/artifacts/neoforge-21.1.251.jar --problems-report /work/candidate/build/tmp/createMinecraftArtifacts/nfrt-problem-report.json --artifact-manifest /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties --warn-on-artifact-manifest-miss\n3005                2881                Sl                  00:00               00:00:01            futex_do_wait              /opt/java/openjdk/bin/java -jar /work/gradle-user-home/caches/neoformruntime/artifacts/net/neoforged/installertools/binarypatcher/2.1.2/binarypatcher-2.1.2-fatjar.jar --clean /work/gradle-user-home/caches/neoformruntime/intermediate_results/rename_1a893e034a07f18b78686946288be2d24ab3fcfb_output.jar --output ./output.jar --apply ./joined.lzma\n",
+            "stderr": ""
+          },
+          {
+            "argv": [
+              "D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE",
+              "stats",
+              "--no-stream",
+              "--format",
+              "{{json .}}",
+              "hive-verify-07e53cb5b069"
+            ],
+            "returncode": 0,
+            "stdout": "{\"BlockIO\":\"0B / 0B\",\"CPUPerc\":\"101.82%\",\"Container\":\"hive-verify-07e53cb5b069\",\"ID\":\"81ad094d8e68\",\"MemPerc\":\"41.99%\",\"MemUsage\":\"1.68GiB / 4GiB\",\"Name\":\"hive-verify-07e53cb5b069\",\"NetIO\":\"0B / 0B\",\"PIDs\":\"126\"}\n",
+            "stderr": ""
+          }
+        ]
+      }
+    ]
+  }
+]

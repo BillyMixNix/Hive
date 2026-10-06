@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Validate input parameters in IngredientAllocation.canSatisfy to reject null, negative, or out-of-range slot identities and null count values.\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Update IngredientAllocation.canSatisfy to validate input parameters and throw IllegalArgumentException for invalid cases\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java\"],\n    \"tests\": []\n  },\n  \"acceptance\": [\"Validation rejects null/invalid inputs without mutating caller data\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"Implementation matches interface contract without input mutation\"],\n    \"tests\": []\n  },\n  \"interface_contracts\": [],\n  \"provider_changes\": []\n}",
+  "input_tokens": 3821,
+  "output_tokens": 2051,
+  "raw_id": null
+}

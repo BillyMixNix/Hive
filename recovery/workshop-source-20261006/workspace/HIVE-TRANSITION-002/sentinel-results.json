@@ -1,0 +1,265 @@
+{
+  "study": "HIVE-TRANSITION-002",
+  "probe_count": 4,
+  "results": [
+    {
+      "label": "short-default",
+      "synthetic_not_J001": true,
+      "wire_file": "evidence\\sentinels\\short-default\\wire\\01\\wire-request.json",
+      "wire_sha256": "d1c9a90b2d82f07dd09545b0b72aa3b136874f5b05c90845bd78b08bfd87c564",
+      "options": {
+        "temperature": 0.1,
+        "num_predict": 2048
+      },
+      "truncate": "omitted",
+      "result": {
+        "text": "{\n  \"beginning\": \"SABLE-731\",\n  \"early_middle\": \"CEDAR-428\",\n  \"middle\": \"MICA-962\",\n  \"late_middle\": \"ORBIT-315\",\n  \"end\": \"LILAC-684\"\n}",
+        "input_tokens": 322,
+        "output_tokens": 67,
+        "raw_id": null,
+        "expected": {
+          "beginning": "SABLE-731",
+          "early_middle": "CEDAR-428",
+          "middle": "MICA-962",
+          "late_middle": "ORBIT-315",
+          "end": "LILAC-684"
+        },
+        "matches": {
+          "beginning": true,
+          "early_middle": true,
+          "middle": true,
+          "late_middle": true,
+          "end": true
+        }
+      },
+      "terminal_metadata": {
+        "model": "qwen2.5-coder:14b",
+        "created_at": "2026-10-05T14:00:51.0953298Z",
+        "message": {
+          "role": "assistant",
+          "content": ""
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 58649676200,
+        "load_duration": 41126184500,
+        "prompt_eval_count": 322,
+        "prompt_eval_cached_count": 0,
+        "prompt_eval_duration": 1138372000,
+        "eval_count": 67,
+        "eval_duration": 16373874000
+      },
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "model": "qwen2.5-coder:14b",
+            "size": 9953733507,
+            "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen2",
+              "families": [
+                "qwen2"
+              ],
+              "parameter_size": "14.8B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-05T07:05:51.0953298-07:00",
+            "size_vram": 4256620871,
+            "context_length": 4096
+          }
+        ]
+      },
+      "interpretation": "positional retrieval evidence only; not semantic reasoning or reliability measurement"
+    },
+    {
+      "label": "long-default",
+      "synthetic_not_J001": true,
+      "wire_file": "evidence\\sentinels\\long-default\\wire\\01\\wire-request.json",
+      "wire_sha256": "5f887988ffbea8c7d72b583914e16ec8be9d37098add50d2a467da20309af880",
+      "options": {
+        "temperature": 0.1,
+        "num_predict": 2048
+      },
+      "truncate": "omitted",
+      "result": {
+        "text": "{\n  \"beginning\": \"ORBIT-315\",\n  \"early_middle\": \"ORBIT-315\",\n  \"middle\": \"ORBIT-315\",\n  \"late_middle\": \"ORBIT-315\",\n  \"end\": \"LILAC-684\"\n}",
+        "input_tokens": 2050,
+        "output_tokens": 67,
+        "raw_id": null,
+        "expected": {
+          "beginning": "SABLE-731",
+          "early_middle": "CEDAR-428",
+          "middle": "MICA-962",
+          "late_middle": "ORBIT-315",
+          "end": "LILAC-684"
+        },
+        "matches": {
+          "beginning": false,
+          "early_middle": false,
+          "middle": false,
+          "late_middle": true,
+          "end": true
+        }
+      },
+      "terminal_metadata": {
+        "model": "qwen2.5-coder:14b",
+        "created_at": "2026-10-05T14:01:48.5372419Z",
+        "message": {
+          "role": "assistant",
+          "content": ""
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 27336856400,
+        "load_duration": 14656400,
+        "prompt_eval_count": 2050,
+        "prompt_eval_cached_count": 4,
+        "prompt_eval_duration": 5504054000,
+        "eval_count": 67,
+        "eval_duration": 21731756000
+      },
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "model": "qwen2.5-coder:14b",
+            "size": 9953733507,
+            "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen2",
+              "families": [
+                "qwen2"
+              ],
+              "parameter_size": "14.8B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-05T07:06:48.537746-07:00",
+            "size_vram": 4256620871,
+            "context_length": 4096
+          }
+        ]
+      },
+      "interpretation": "positional retrieval evidence only; not semantic reasoning or reliability measurement"
+    },
+    {
+      "label": "long-no-truncate",
+      "synthetic_not_J001": true,
+      "wire_file": "evidence\\sentinels\\long-no-truncate\\wire\\01\\wire-request.json",
+      "wire_sha256": "37ca673c414f3c34493bd5842aecf6f0c2dfcb1bb6060fd2c20191d87a4eba8f",
+      "options": {
+        "temperature": 0.1,
+        "num_predict": 2048
+      },
+      "truncate": false,
+      "result": {
+        "exception": "OllamaRequestError",
+        "message": "HTTP 400: {\"error\":\"{\\\"error\\\":{\\\"code\\\":400,\\\"message\\\":\\\"request (5034 tokens) exceeds the available context size (4096 tokens), try increasing it\\\",\\\"type\\\":\\\"exceed_context_size_error\\\",\\\"n_prompt_tokens\\\":5034,\\\"n_ctx\\\":4096}}\"}"
+      },
+      "terminal_metadata": {
+        "error": "{\"error\":{\"code\":400,\"message\":\"request (5034 tokens) exceeds the available context size (4096 tokens), try increasing it\",\"type\":\"exceed_context_size_error\",\"n_prompt_tokens\":5034,\"n_ctx\":4096}}"
+      },
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "model": "qwen2.5-coder:14b",
+            "size": 9953733507,
+            "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen2",
+              "families": [
+                "qwen2"
+              ],
+              "parameter_size": "14.8B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-05T07:09:48.8515953-07:00",
+            "size_vram": 4256620871,
+            "context_length": 4096
+          }
+        ]
+      },
+      "interpretation": "positional retrieval evidence only; not semantic reasoning or reliability measurement"
+    },
+    {
+      "label": "long-sized",
+      "synthetic_not_J001": true,
+      "wire_file": "evidence\\sentinels\\long-sized\\wire\\01\\wire-request.json",
+      "wire_sha256": "c85ee6992fdb8219db42494071e3cca1159d877e00c10fa84240ccda75184054",
+      "options": {
+        "temperature": 0.1,
+        "num_predict": 2048,
+        "num_ctx": 8192
+      },
+      "truncate": false,
+      "result": {
+        "text": "{\n  \"beginning\": \"SABLE-731\",\n  \"early_middle\": \"CEDAR-428\",\n  \"middle\": \"MICA-962\",\n  \"late_middle\": \"ORBIT-315\",\n  \"end\": \"LILAC-684\"\n}",
+        "input_tokens": 5034,
+        "output_tokens": 67,
+        "raw_id": null,
+        "expected": {
+          "beginning": "SABLE-731",
+          "early_middle": "CEDAR-428",
+          "middle": "MICA-962",
+          "late_middle": "ORBIT-315",
+          "end": "LILAC-684"
+        },
+        "matches": {
+          "beginning": true,
+          "early_middle": true,
+          "middle": true,
+          "late_middle": true,
+          "end": true
+        }
+      },
+      "terminal_metadata": {
+        "model": "qwen2.5-coder:14b",
+        "created_at": "2026-10-05T14:06:44.1925802Z",
+        "message": {
+          "role": "assistant",
+          "content": ""
+        },
+        "done": true,
+        "done_reason": "stop",
+        "total_duration": 94701514400,
+        "load_duration": 41210678600,
+        "prompt_eval_count": 5034,
+        "prompt_eval_cached_count": 0,
+        "prompt_eval_duration": 14112863000,
+        "eval_count": 67,
+        "eval_duration": 39359842000
+      },
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen2.5-coder:14b",
+            "model": "qwen2.5-coder:14b",
+            "size": 10775880005,
+            "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen2",
+              "families": [
+                "qwen2"
+              ],
+              "parameter_size": "14.8B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-05T07:11:44.193105-07:00",
+            "size_vram": 4191525272,
+            "context_length": 8192
+          }
+        ]
+      },
+      "interpretation": "positional retrieval evidence only; not semantic reasoning or reliability measurement"
+    }
+  ]
+}

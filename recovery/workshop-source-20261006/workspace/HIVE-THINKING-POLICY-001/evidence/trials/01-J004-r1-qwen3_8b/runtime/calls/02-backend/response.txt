@@ -1,0 +1,19 @@
+{
+  "status": "implemented",
+  "summary": "Implemented coveragePercent() in ExecutionContext and observedCoveragePercent() in ExecutionAssessment",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+      "operation": "insert_after_anchor",
+      "anchor": "public record Scan(int radius, int totalPositions, int scannedPositions, int loadedPositions,",
+      "insert": "    public int coveragePercent() {\n        if (totalPositions == 0) return 0;\n        return (int) (100.0 * scannedPositions / totalPositions);\n    }"
+    },
+    {
+      "path": "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java",
+      "operation": "insert_after_anchor",
+      "anchor": "public record ExecutionAssessment(String status, String recipeId, long operations, String station,",
+      "insert": "    public int observedCoveragePercent() {\n        if (observation == null) return -1;\n        return observation.scan().coveragePercent();\n    }"
+    }
+  ],
+  "risks": []
+}

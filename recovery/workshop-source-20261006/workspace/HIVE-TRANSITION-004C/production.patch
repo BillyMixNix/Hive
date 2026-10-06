@@ -1,0 +1,663 @@
+--- a/verification/nfrt_seed.py
++++ b/verification/nfrt_seed.py
+@@ -0,0 +1,173 @@
++"""Host-pinned NFRT dependency seeds. No candidate results or cache-existence trust."""
++from __future__ import annotations
++import hashlib
++import json
++import os
++import re
++import shutil
++import stat
++import zipfile
++from pathlib import Path
++
++PREFIX = 'caches/neoformruntime/intermediate_results/'
++NAME = re.compile(r'[A-Za-z][A-Za-z0-9]*_[0-9a-f]{40}(?:_[A-Za-z][A-Za-z0-9]*\.(?:jar|tsrg|txt)|\.txt)')
++SHA = re.compile(r'[0-9a-f]{64}')
++
++
++def ordinary(path: Path, directory=False):
++    info = path.lstat()
++    if (stat.S_ISLNK(info.st_mode) or getattr(info, 'st_file_attributes', 0) & 0x400
++            or not (stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode))):
++        raise ValueError(f'NFRT seed linked or nonordinary path: {path}')
++    return info
++
++
++def digest(path):
++    ordinary(Path(path))
++    with Path(path).open('rb') as stream:
++        value=hashlib.sha256()
++        while chunk:=stream.read(1024*1024):value.update(chunk)
++        return value.hexdigest()
++
++
++def relative(value):
++    if (not isinstance(value, str) or '\\' in value or ':' in value or
++            value.startswith('/') or any(x in ('', '.', '..') for x in value.split('/'))):
++        raise ValueError('unsafe NFRT attestation path')
++    return value
++
++
++def load_attestation(path, expected):
++    path=Path(path)
++    if not isinstance(expected,str) or not SHA.fullmatch(expected) or digest(path)!=expected:
++        raise ValueError('NFRT attestation hash mismatch')
++    if path.stat().st_size>32_000_000:
++        raise ValueError('NFRT attestation too large')
++    doc=json.loads(path.read_bytes())
++    if doc.get('schema')!='hive-nfrt-seed-v1' or doc.get('kind')!='dependency-intermediates':
++        raise ValueError('unsupported NFRT attestation')
++    entries=doc.get('entries',[])
++    if not 1<=len(entries)<=10000 or sum(r['size'] for r in entries)>1_000_000_000:
++        raise ValueError('NFRT seed inventory bounds')
++    names=set()
++    for r in entries:
++        name=r['path']
++        if (not NAME.fullmatch(name) or name in names or type(r['size']) is not int
++                or r['size']<0 or not SHA.fullmatch(r['sha256'])):
++            raise ValueError('invalid NFRT intermediate entry')
++        names.add(name)
++    for r in entries:
++        stem=r['path'].split('_')
++        if f'{stem[0]}_{stem[1].split(".")[0]}.txt' not in names:
++            raise ValueError('NFRT output lacks its attested node key')
++    if not doc.get('forbidden_packages') or any(not re.fullmatch(r'[A-Za-z0-9_/]+/',p) for p in doc['forbidden_packages']):
++        raise ValueError('NFRT application namespaces required')
++    return doc
++
++
++def verify_seed(source, doc):
++    source=Path(source);ordinary(source,True)
++    entries=doc['entries']
++    if {p.name for p in source.iterdir()}!={r['path'] for r in entries}:
++        raise ValueError('NFRT seed inventory mismatch (missing/extra file)')
++    for row in entries:
++        p=source/row['path']
++        if ordinary(p).st_size!=row['size'] or digest(p)!=row['sha256']:
++            raise ValueError('NFRT intermediate content hash/size mismatch')
++        if p.suffix=='.jar':
++            with zipfile.ZipFile(p) as jar:
++                if any(n.startswith(tuple(doc['forbidden_packages'])) for n in jar.namelist()):
++                    raise ValueError('NFRT seed contains candidate application/test artifact')
++        elif re.fullmatch(r'[A-Za-z][A-Za-z0-9]*_[0-9a-f]{40}\.txt',p.name):
++            key=json.loads(p.read_bytes())
++            if f"{key['type']}_{key['hashValue']}.txt"!=p.name or not key.get('components'):
++                raise ValueError('NFRT node key mismatch')
++            material='\n'.join(f"{k}: {v['value']}" for k,v in sorted(key['components'].items()))
++            if hashlib.sha1(material.encode()).hexdigest()!=key['hashValue']:
++                raise ValueError('NFRT node components mismatch')
++    return len(entries)
++
++
++def private_copy(source, destination, manifest, expected):
++    doc=load_attestation(manifest,expected)
++    verify_seed(source,doc)
++    destination=Path(destination)
++    if destination.exists():
++        raise ValueError('NFRT intermediate destination must be fresh and private')
++    destination.mkdir(parents=True)
++    try:
++        for row in doc['entries']:
++            original=Path(source)/row['path'];target=destination/row['path']
++            # Byte copies, never links or shared writable cache paths.
++            with original.open('rb') as src,target.open('xb') as dst:
++                shutil.copyfileobj(src,dst,1024*1024)
++        verify_seed(destination,doc)
++    except Exception:
++        shutil.rmtree(destination)
++        raise
++    return {'files':len(doc['entries']),'bytes':sum(r['size'] for r in doc['entries']),
++            'attestation_sha256':expected,'private_copy':True}
++
++
++def configured_seed(tree, cache, profile, baseline_sha256, image_id, downloaded_manifest_sha256):
++    """Only host environment selects an attestation. Candidate config cannot select it."""
++    manifest=os.environ.get('HIVE_NFRT_SEED_MANIFEST')
++    expected=os.environ.get('HIVE_NFRT_SEED_SHA256')
++    if manifest is None and expected is None:
++        return None  # Explicit policy: verified reconstruction when no seed is configured.
++    if not manifest or not expected:
++        raise ValueError('incomplete NFRT seed configuration')
++    doc=load_attestation(manifest,expected)
++    identity=doc['identity']
++    if (identity['baseline_sha256']!=baseline_sha256 or identity['image_id']!=image_id
++            or identity['jvm_profile']!=profile or identity['downloaded_manifest_sha256']!=downloaded_manifest_sha256):
++        raise ValueError('NFRT build/tool identity mismatch')
++    cache=Path(cache)
++    proof=cache/'.hive-priming-provenance'/cache.name
++    for name in ('artifacts.manifest.json','provenance.json'):
++        if digest(proof/name)!=identity[name]:
++            raise ValueError('NFRT priming provenance mismatch')
++    priming=json.loads((proof/'provenance.json').read_bytes())
++    if (priming.get('candidate_sha256')!=baseline_sha256 or priming.get('cache_priming_succeeded') is not True
++            or priming.get('artifact_manifest_sha256')!=identity['artifacts.manifest.json']):
++        raise ValueError('NFRT priming not approved')
++    inventory=json.loads((proof/'artifacts.manifest.json').read_bytes())['artifacts']
++    indexed={r['path']:r for r in inventory}
++    for row in doc['entries']:
++        if indexed.get(PREFIX+row['path'])!={**row,'path':PREFIX+row['path']}:
++            raise ValueError('NFRT intermediate not sealed by priming')
++    # Bind ALL approved module/tool bytes, not only version strings. Existing
++    # downloaded-input checks remain responsible for assets/artifacts.
++    actual=[]
++    modules=cache/'caches/modules-2';ordinary(modules,True)
++    for p in modules.rglob('*'):
++        if p.is_dir():ordinary(p,True)
++        else:actual.append(p.relative_to(cache).as_posix())
++    module_rows=[r for r in inventory if r['path'].startswith('caches/modules-2/')]
++    if set(actual)!={r['path'] for r in module_rows}:
++        raise ValueError('NFRT tool/dependency inventory mismatch')
++    for row in module_rows:
++        p=cache/relative(row['path'])
++        if ordinary(p).st_size!=row['size'] or digest(p)!=row['sha256']:
++            raise ValueError('NFRT tool/dependency hash mismatch')
++    # These paths and this compatibility review are host-attested, never model
++    # supplied. All other source/config bytes and the exact file set are fixed.
++    from workshop import external_root
++    source_rows=doc['source_inventory']
++    fixed={relative(r['path']):r['sha256'] for r in source_rows}
++    mutable=doc['independent_java_sources']
++    if (not mutable or len(set(mutable))!=len(mutable) or
++            any(p not in fixed or not p.startswith('src/main/java/') or not p.endswith('.java') for p in mutable)):
++        raise ValueError('invalid independently attested source scope')
++    measured=doc.get('reconstruction_inputs')
++    if not isinstance(measured,dict) or not measured.get('inputProperties') or not measured.get('inputFiles'):
++        raise ValueError('missing measured reconstruction compatibility evidence')
++    current=external_root._inventory(Path(tree))
++    if {r.as_posix() for _,r,_ in current}!=set(fixed):
++        raise ValueError('NFRT source inventory changed')
++    for p,rel,info in current:
++        if rel.as_posix() not in mutable and external_root._file_digest(p,Path(tree).resolve(),info)!=fixed[rel.as_posix()]:
++            raise ValueError(f'NFRT reconstruction input changed: {rel.as_posix()}')
++    source=cache/PREFIX.rstrip('/')
++    verify_seed(source,doc)
++    return {'source':source,'manifest':Path(manifest),'sha256':expected,'document':doc}
+--- a/verification/jvm_runner.py
++++ b/verification/jvm_runner.py
+@@ -43,6 +43,55 @@
+ _TRACE_LOCK = threading.Lock()
+ _TRACE_OUTPUT_BYTES = 0
+ _TRACE_OUTPUT_LIMIT = 2_000_000
++
++# A fresh isolated verifier has no reusable candidate compilation history.
++# Full compilation retains all sources/checks and avoids producing incremental
++# dependency analysis that would be discarded with this container.
++FRESH_COMPILATION_POLICY = r'''
++gradle.projectsEvaluated {
++    gradle.rootProject.allprojects { p ->
++        p.tasks.withType(JavaCompile).configureEach {
++            options.incremental = false
++        }
++    }
++}
++'''
++
++
++def _install_fresh_compilation_policy(gradle_home):
++    init_dir=Path(gradle_home)/'init.d'
++    init_dir.mkdir(parents=True,exist_ok=True)
++    (init_dir/'hive-fresh-compilation.gradle').write_text(FRESH_COMPILATION_POLICY,encoding='utf-8')
++
++# Observe task actions without replacing compiler options, task dependencies or
++# acceptance commands. A doFirst event is NOT proof of entry into javac.
++GRADLE_DIAGNOSTICS = r'''
++import groovy.json.JsonOutput
++def emit = { event, fields ->
++    System.err.println('HIVE_GRADLE_DIAGNOSTIC '+JsonOutput.toJson([
++        event:event, nanoTime:System.nanoTime(), wallTimestamp:java.time.Instant.now().toString(),
++        pid:ProcessHandle.current().pid()] + fields))
++}
++gradle.settingsEvaluated { emit('settings_evaluated', [:]) }
++gradle.projectsEvaluated { emit('projects_evaluated', [:]) }
++gradle.taskGraph.whenReady { graph -> emit('task_graph_ready', [tasks:graph.allTasks.collect {it.path}]) }
++gradle.beforeProject { p ->
++    p.tasks.withType(JavaCompile).configureEach { task ->
++        task.doFirst {
++            try {
++                emit('java_compile_actions_entered', [task:task.path,
++                    sources:task.source.files.collect {it.absolutePath}.sort(),
++                    classpath:task.classpath.files.collect {[path:it.absolutePath, bytes:it.length()]},
++                    compilerArgs:task.options.compilerArgs,
++                    annotationProcessorPath:task.options.annotationProcessorPath?.files?.collect {it.absolutePath},
++                    incremental:task.options.incremental, fork:task.options.fork,
++                    compiler:task.javaCompiler.get().metadata.installationPath.asFile.absolutePath])
++            } catch(Exception ex) {emit('compile_diagnostic_error',[type:ex.class.name,detail:ex.message])}
++        }
++        task.doLast { emit('java_compile_actions_complete', [task:task.path]) }
++    }
++}
++'''
+ 
+ 
+ def _event(phase, **fields):
+@@ -337,6 +386,7 @@
+     native_cache = gradle_home / "caches" / "neoformruntime"
+     native_cache.mkdir(parents=True, exist_ok=True)
+     native_source = approved_root / "neoformruntime"
++    _event('external_input_inventory_started')
+     actual = set()
+     for name in ("artifacts", "assets"):
+         source = approved_root / "neoformruntime" / name
+@@ -359,9 +409,17 @@
+                 actual.add(item_path.relative_to(native_source).as_posix())
+     if actual != set(expected):
+         raise ValueError("read-only NeoForm input inventory differs from the frozen manifest")
++    _event('external_input_inventory_complete', files=len(actual))
+ 
+     copied = 0
++    family=None;family_bytes=0;family_files=0
+     for rel in sorted(expected):
++        next_family=rel.split('/')[0]
++        if next_family!=family:
++            if family is not None:
++                _event('external_input_family_complete', family=family, bytes=family_bytes, files=family_files)
++            family=next_family;family_bytes=0;family_files=0
++            _event('external_input_family_started', family=family)
+         size_expected, hash_expected = expected[rel]
+         source = native_source.joinpath(*rel.split("/"))
+         target = native_cache.joinpath(*rel.split("/"))
+@@ -378,6 +436,8 @@
+         if copied_size != size_expected or digest.hexdigest() != hash_expected:
+             raise ValueError(f"manifested external build-input hash mismatch while copying: {rel}")
+         copied += copied_size
++        family_bytes+=copied_size;family_files+=1
++    _event('external_input_family_complete', family=family, bytes=family_bytes, files=family_files)
+     return {"files": len(expected), "bytes": copied,
+             "manifest_sha256": expected_manifest_sha256,
+             "approved_cache_mount": "read-only", "verification_copy": "private tmpfs"}
+@@ -524,6 +584,19 @@
+                 config.get("external_build_inputs_manifest_sha256"),
+             )
+             _event("external_inputs_copy_complete", details=external_copy)
++        if config.get('nfrt_seed_sha256') is not None:
++            try:
++                from .nfrt_seed import private_copy
++            except ImportError:
++                from nfrt_seed import private_copy
++            _event('nfrt_seed_copy_started')
++            seeded = private_copy(Path('/approved-nfrt-intermediates'),
++                gradle_home/'caches/neoformruntime/intermediate_results',
++                Path('/tmp/hive-nfrt-seed.json'), config['nfrt_seed_sha256'])
++            _event('nfrt_seed_copy_complete', details=seeded)
++        if os.environ.get('HIVE_VERIFICATION_RUN_ID'):
++            init_dir=gradle_home/'init.d';init_dir.mkdir(exist_ok=True)
++            (init_dir/'hive-observability.gradle').write_text(GRADLE_DIAGNOSTICS,encoding='utf-8')
+         (Path(work_root) / "home").mkdir(parents=True, exist_ok=True)
+         (Path(work_root) / "tmp").mkdir(parents=True, exist_ok=True)
+         env = {
+@@ -557,6 +630,9 @@
+         source_before = _source_digest(project, runtime_output_dirs)
+         _clear_build_outputs(project)
+         _event("source_hashing_complete")
++        _install_fresh_compilation_policy(gradle_home)
++        _event('fresh_full_compilation_policy_installed', incremental=False,
++               policy_sha256=hashlib.sha256(FRESH_COMPILATION_POLICY.encode()).hexdigest())
+         targeted_argv = [
+             f"{JAVA_HOME}/bin/java", "-Djava.io.tmpdir=/work/tmp", "-classpath",
+             "gradle/wrapper/gradle-wrapper.jar", "org.gradle.wrapper.GradleWrapperMain",
+--- a/verification/NFRT-SEED-POLICY.md
++++ b/verification/NFRT-SEED-POLICY.md
+@@ -0,0 +1,11 @@
++# Optional attested NFRT seeds
++
++The verifier defaults to verified dependency reconstruction. To enable a reviewed dependency-only seed, the host operator supplies both `HIVE_NFRT_SEED_MANIFEST` (absolute JSON path) and `HIVE_NFRT_SEED_SHA256` (approved manifest digest). These are host configuration, never planner/worker fields. Configuring an unavailable or incompatible seed fails verification; unset both to use the original verified reconstruction policy.
++
++The `hive-nfrt-seed-v1` attestation binds the baseline, image/JDK, Gradle profile, downloaded-input manifest, sealed priming provenance/inventory, exact measured reconstruction inputs and complete source inventory. `independent_java_sources` is a reviewed list of existing main-source files whose edits do not participate in reconstruction. It is not automatically inferred from a Java suffix. All other source/config bytes and file membership must match. Build/config/resource/tool changes need a new review and attestation. The complete approved modules inventory is verified, including plugin/tool bytes.
++
++Only flat named NFRT key records and dependency outputs sealed in the priming inventory are allowed. Every file is checked for size/hash/type, key records are checked, and dependency JARs are checked for forbidden application namespaces. The operator must list all application/test package prefixes in `forbidden_packages`. Cached existence or NFRT's own key lookup is not attestation.
++
++The host mounts the approved seed and manifest read-only; the container validates again, copies bytes into a fresh private intermediate directory, and validates the result. NFRT may update only the private copy. No project output, compilation history, application/test classes, reports or prior acceptance decisions are reused. Downloaded-input validation, fresh project compilation, offline execution and all frozen gates remain in force.
++
++This mechanism does not claim that all Gradle builds or source-only edits have invariant reconstruction inputs. An attestation requires evidence for its particular build and allowed source scope. TRANSITION-004C's approved attestation and supporting measurements are outside production code; production contains no task name or application filename.
+--- a/workshop/hive_verifier.py
++++ b/workshop/hive_verifier.py
+@@ -108,6 +108,7 @@
+     native_assets_cache = native_artifacts_cache = None
+     native_manifest_path = None
+     native_manifest_sha256 = None
++    nfrt_seed = None
+     if external_root:
+         try:
+             from . import hive_jvm
+@@ -200,6 +201,12 @@
+                     return _failed("External build-input manifest exceeds its verification bound.", image=image)
+                 native_manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+                 trace.event("approved_cache_validation_complete", manifest_sha256=native_manifest_sha256)
++                from verification.nfrt_seed import configured_seed
++                trace.event("nfrt_seed_validation_started")
++                nfrt_seed = configured_seed(Path(tree), run_cache_root, jvm_profile,
++                    expected_external_baseline_sha256, image_id, native_manifest_sha256)
++                trace.event("nfrt_seed_validation_complete", policy="attested-private-copy" if nfrt_seed else "verified-reconstruction",
++                            attestation_sha256=nfrt_seed['sha256'] if nfrt_seed else None)
+             if ("," in modules_mount or "," in wrapper_mount
+                     or (native_assets_mount is not None and "," in native_assets_mount)
+                     or (native_artifacts_mount is not None and "," in native_artifacts_mount)
+@@ -207,6 +214,8 @@
+                 return _failed("Gradle cache path contains a comma and cannot be mounted safely.", image=image)
+             payload_object = json.loads(payload)
+             payload_object["external_build_inputs_manifest_sha256"] = native_manifest_sha256
++            if nfrt_seed:
++                payload_object['nfrt_seed_sha256'] = nfrt_seed['sha256']
+             payload = json.dumps(payload_object, separators=(",", ":"))
+             container_mode = "jvm-full" if mode == "full" else "jvm-targeted"
+             container_limit = JVM_CONTAINER_LIMITS["memory"]
+@@ -241,6 +250,17 @@
+                 "--env", f"HIVE_VERIFICATION_RUN_ID={trace.run_id}",
+             ])
+             trace.event("verifier_instrumentation_identified", runner_sha256=hashlib.sha256(runner_source.read_bytes()).hexdigest())
++            if nfrt_seed:
++                seed_module = runner_source.with_name('nfrt_seed.py')
++                for source_path, target_path in (
++                    (seed_module, '/opt/verifier/nfrt_seed.py'),
++                    (nfrt_seed['source'], '/approved-nfrt-intermediates'),
++                    (nfrt_seed['manifest'], '/tmp/hive-nfrt-seed.json'),
++                ):
++                    if ',' in str(source_path):
++                        raise ValueError('NFRT seed mount contains comma')
++                    command.extend(['--mount', f'type=bind,source={source_path.resolve(strict=True)},target={target_path},readonly'])
++                trace.event('nfrt_seed_module_identified', sha256=hashlib.sha256(seed_module.read_bytes()).hexdigest())
+             command.extend([
+                 "--mount", f"type=bind,source={modules_mount},target=/approved-gradle-cache/modules-2,readonly",
+                 "--mount", f"type=bind,source={wrapper_mount},target=/approved-gradle-cache/wrapper/dists/{Path(jvm_profile['distribution']).stem},readonly",
+@@ -272,6 +292,10 @@
+             trace.event("container_after_termination", container=container_name, returncode=state.returncode,
+                         stdout=_bounded(state.stdout), stderr=_bounded(state.stderr),
+                         absence_confirmed=state.returncode != 0 and "no such" in (state.stderr or "").lower())
++            if nfrt_seed:
++                from verification.nfrt_seed import verify_seed
++                verify_seed(nfrt_seed['source'], nfrt_seed['document'])
++                trace.event('nfrt_seed_unchanged')
+             if jvm_profile is not None and native_assets_cache is not None:
+                 try:
+                     hive_jvm.external_build_input_locations(
+@@ -281,6 +305,10 @@
+                 except Exception as exc:
+                     return _failed(f"External build-input cache integrity failed after timeout: {exc}", image=image)
+             return _failed(f"Isolated verification timed out after {timeout}s.", image=image)
++        if nfrt_seed:
++            from verification.nfrt_seed import verify_seed
++            verify_seed(nfrt_seed['source'], nfrt_seed['document'])
++            trace.event('nfrt_seed_unchanged')
+         if jvm_profile is not None and native_assets_cache is not None:
+             try:
+                 hive_jvm.external_build_input_locations(
+--- a/workshop/verifier_trace.py
++++ b/workshop/verifier_trace.py
+@@ -10,6 +10,38 @@
+ from pathlib import Path
+ 
+ EVENT_PREFIX = "HIVE_VERIFIER_EVENT "
++
++# Read-only, bounded diagnostic sample. Thread.print briefly attaches to the
++# JVM; this is recorded as diagnostic activity, never acceptance evidence.
++JVM_SAMPLE = r'''
++import json,pathlib,subprocess,time
++rows=[]
++for p in pathlib.Path('/proc').iterdir():
++ if not p.name.isdigit():continue
++ try:
++  cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode(errors='replace')
++  if not cmd.split(' ',1)[0].endswith('/bin/java'):continue
++  row={'pid':int(p.name),'cmdline':cmd}
++  for f in ['stat','status','io','wchan']:
++   try:row[f]=(p/f).read_text()
++   except OSError as e:row[f]=str(e)
++  if 'org.gradle.launcher.daemon.bootstrap.GradleDaemon' in cmd:
++   try:
++    cp=subprocess.run(['/opt/java/openjdk/bin/jcmd',p.name,'Thread.print'],capture_output=True,text=True,timeout=4)
++    row['thread_dump']={'returncode':cp.returncode,'stdout':cp.stdout[:160000],'stderr':cp.stderr[:2000]}
++   except Exception as e:row['thread_dump_error']=str(e)
++  rows.append(row)
++ except OSError:pass
++cgroup={}
++for name in ['cpu.stat','memory.current','memory.events','memory.stat','io.stat','pids.current']:
++ try:cgroup[name]=(pathlib.Path('/sys/fs/cgroup')/name).read_text()
++ except OSError:pass
++p=pathlib.Path('/work/candidate/build')
++print(json.dumps({'wall_timestamp':time.time(),'processes':rows,'cgroup':cgroup,
++ 'main_class_count':len(list((p/'classes/java/main').rglob('*.class'))),
++ 'test_class_count':len(list((p/'classes/java/test').rglob('*.class'))),
++ 'generated_java_count':len(list((p/'generated').rglob('*.java')))}))
++'''
+ 
+ 
+ class VerificationTrace:
+@@ -52,6 +84,16 @@
+             except Exception as exc:
+                 rows.append({"argv": [docker,*args], "error": f"{type(exc).__name__}: {exc}"})
+         self.event("process_state", container=container, samples=rows)
++        if not stop.is_set():
++            try:
++                cp=subprocess.run([docker,'exec',container,'python3','-c',JVM_SAMPLE],
++                                  capture_output=True,text=True,timeout=7)
++                filename=f'jvm-state-{int((time.monotonic()-self.started)*1000)}.json'
++                self.save(filename, {'returncode':cp.returncode,'stdout':cp.stdout,'stderr':cp.stderr,
++                                     'probe':'read-only procfs and bounded jcmd Thread.print'})
++                self.event('jvm_state_sample', container=container, artifact=filename, returncode=cp.returncode)
++            except Exception as exc:
++                self.event('diagnostic_error',detail=f'JVM sample: {exc}')
+ 
+     def capture(self, command, *, timeout, docker, container):
+         stdout_path, stderr_path = self.root/"stdout.log", self.root/"stderr.log"
+@@ -81,7 +123,7 @@
+         def sample():
+             # No delayed samples may hold up deadline enforcement/termination.
+             if timeout < 10: return
+-            for due in (min(120, timeout*.5), max(0, timeout-15)):
++            for due in (min(120, timeout*.5), min(180,timeout*.75), max(0, timeout-15)):
+                 delay=max(0, launched+due-time.monotonic())
+                 if stop.wait(delay): return
+                 self.state(docker, container, stop)
+--- a/tests/test_nfrt_seed.py
++++ b/tests/test_nfrt_seed.py
+@@ -0,0 +1,147 @@
++import copy,hashlib,json,zipfile
++from pathlib import Path
++import pytest
++from verification import nfrt_seed as seed
++from workshop import external_root
++
++def write(path,value):
++    path.parent.mkdir(parents=True,exist_ok=True)
++    path.write_text(json.dumps(value))
++    return seed.digest(path)
++
++@pytest.fixture
++def setup_seed(tmp_path,monkeypatch):
++    tree=tmp_path/'candidate';tree.mkdir()
++    (tree/'build.gradle').write_text('pinned build')
++    app=tree/'src/main/java/example/App.java';app.parent.mkdir(parents=True);app.write_text('package example; class App {}')
++    test=tree/'src/test/java/example/AppTest.java';test.parent.mkdir(parents=True);test.write_text('package example; class AppTest {}')
++    cache=tmp_path/'approved-gradle-caches/abcdef123456';native=cache/seed.PREFIX
++    native.mkdir(parents=True)
++    key=hashlib.sha1(b'input: dependency').hexdigest();stem='dependency_'+key
++    write(native/(stem+'.txt'),{'type':'dependency','hashValue':key,'components':{'input':{'value':'dependency'}}})
++    with zipfile.ZipFile(native/(stem+'_output.jar'),'w') as jar:jar.writestr('dependency/Runtime.class',b'dependency bytes')
++    module=cache/'caches/modules-2/files-2.1/tool.jar';module.parent.mkdir(parents=True);module.write_bytes(b'tool')
++    rows=[{'path':p.relative_to(cache).as_posix(),'size':p.stat().st_size,'sha256':seed.digest(p)} for p in cache.rglob('*') if p.is_file()]
++    proof=cache/'.hive-priming-provenance'/cache.name
++    invhash=write(proof/'artifacts.manifest.json',{'artifacts':rows})
++    provhash=write(proof/'provenance.json',{'candidate_sha256':'baseline','cache_priming_succeeded':True,'artifact_manifest_sha256':invhash})
++    entries=[{**r,'path':Path(r['path']).name} for r in rows if r['path'].startswith(seed.PREFIX)]
++    doc={'schema':'hive-nfrt-seed-v1','kind':'dependency-intermediates','entries':entries,'forbidden_packages':['example/'],
++        'identity':{'baseline_sha256':'baseline','image_id':'image','jvm_profile':{'version':'9'},
++            'downloaded_manifest_sha256':'downloaded','artifacts.manifest.json':invhash,'provenance.json':provhash},
++        'source_inventory':[{'path':r.as_posix(),'sha256':seed.digest(p)} for p,r,_ in external_root._inventory(tree)],
++        'independent_java_sources':['src/main/java/example/App.java'],
++        'reconstruction_inputs':{'inputProperties':{'dependency':'immutable'},'inputFiles':['tool.jar']}}
++    manifest=tmp_path/'attestation.json'
++    expected=write(manifest,doc)
++    monkeypatch.setenv('HIVE_NFRT_SEED_MANIFEST',str(manifest));monkeypatch.setenv('HIVE_NFRT_SEED_SHA256',expected)
++    def call(**changes):
++        args=dict(tree=tree,cache=cache,profile={'version':'9'},baseline_sha256='baseline',image_id='image',downloaded_manifest_sha256='downloaded')
++        args.update(changes);return seed.configured_seed(**args)
++    return locals()
++
++def test_valid_attested_private_copy_and_shared_mutation_prevention(setup_seed,tmp_path):
++    s=setup_seed;assert s['call']()
++    original={p.name:p.read_bytes() for p in s['native'].iterdir()}
++    private=tmp_path/'private/intermediate_results'
++    result=seed.private_copy(s['native'],private,s['manifest'],s['expected'])
++    assert result['private_copy'] and result['files']==2
++    (private/next(iter(original))).write_bytes(b'NFRT private update')
++    assert {p.name:p.read_bytes() for p in s['native'].iterdir()}==original
++    with pytest.raises(ValueError,match='fresh'):seed.private_copy(s['native'],private,s['manifest'],s['expected'])
++
++@pytest.mark.parametrize('mutation',['corrupt','missing','extra','incorrect_hash'])
++def test_invalid_seed_is_fail_closed(setup_seed,mutation,monkeypatch):
++    s=setup_seed;p=next(s['native'].glob('*.jar'))
++    if mutation=='corrupt':p.write_bytes(b'corrupted')
++    if mutation=='missing':p.unlink()
++    if mutation=='extra':(s['native']/'extra.txt').write_text('extra')
++    if mutation=='incorrect_hash':
++        s['doc']['entries'][0]['sha256']='0'*64
++        monkeypatch.setenv('HIVE_NFRT_SEED_SHA256',write(s['manifest'],s['doc']))
++    with pytest.raises(ValueError):s['call']()
++
++@pytest.mark.parametrize('field,value',[('image_id','other-image'),('baseline_sha256','other-baseline'),('profile',{'version':'other'}),('downloaded_manifest_sha256','other-downloads')])
++def test_build_tool_identity_invalidation(setup_seed,field,value):
++    with pytest.raises(ValueError,match='identity'):setup_seed['call'](**{field:value})
++
++@pytest.mark.parametrize('mutation',['build','new_source','deleted_source','tool','test'])
++def test_incompatible_reconstruction_or_scope_invalidates(setup_seed,mutation):
++    s=setup_seed
++    if mutation=='build':(s['tree']/'build.gradle').write_text('other configuration')
++    if mutation=='new_source':(s['app'].parent/'New.java').write_text('class New{}')
++    if mutation=='deleted_source':s['app'].unlink()
++    if mutation=='tool':s['module'].write_bytes(b'changed tool')
++    if mutation=='test':s['test'].write_text('changed tests')
++    with pytest.raises(ValueError):s['call']()
++
++def test_only_attested_source_bytes_may_change(setup_seed):
++    s=setup_seed;s['app'].write_text('package example; class App {int changed;}')
++    assert s['call']()
++
++@pytest.mark.parametrize('entry',['example/App.class','example/AppTest.class','example/generated/Output.class'])
++def test_candidate_classes_and_tests_never_seeded(setup_seed,entry,tmp_path):
++    s=setup_seed;p=next(s['native'].glob('*.jar'))
++    with zipfile.ZipFile(p,'w') as jar:jar.writestr(entry,b'candidate')
++    doc=copy.deepcopy(s['doc'])
++    row=next(r for r in doc['entries'] if r['path']==p.name);row.update(size=p.stat().st_size,sha256=seed.digest(p))
++    expected=write(s['manifest'],doc)
++    with pytest.raises(ValueError,match='candidate'):seed.private_copy(s['native'],tmp_path/'private',s['manifest'],expected)
++
++@pytest.mark.parametrize('name',['App.class','Test.class','TEST-result.xml','result.json','build/output.jar','.gradle/history.bin','candidate.java'])
++def test_reports_results_history_and_classes_forbidden_even_if_attested(setup_seed,name):
++    s=setup_seed;doc=copy.deepcopy(s['doc']);doc['entries'].append({'path':name,'size':0,'sha256':'0'*64})
++    expected=write(s['manifest'],doc)
++    with pytest.raises(ValueError):seed.load_attestation(s['manifest'],expected)
++
++def test_no_seed_policy_is_explicit_and_partial_configuration_fails(setup_seed,monkeypatch):
++    s=setup_seed;monkeypatch.delenv('HIVE_NFRT_SEED_MANIFEST');monkeypatch.delenv('HIVE_NFRT_SEED_SHA256')
++    assert s['call']() is None
++    monkeypatch.setenv('HIVE_NFRT_SEED_MANIFEST',str(s['manifest']))
++    with pytest.raises(ValueError,match='incomplete'):s['call']()
++
++def test_missing_configured_attestation_cannot_fallback(setup_seed):
++    s=setup_seed;s['manifest'].unlink()
++    with pytest.raises(OSError):s['call']()
++
++def test_wrong_attestation_pin_or_provenance_is_rejected(setup_seed,monkeypatch):
++    s=setup_seed;monkeypatch.setenv('HIVE_NFRT_SEED_SHA256','0'*64)
++    with pytest.raises(ValueError,match='attestation'):s['call']()
++    monkeypatch.setenv('HIVE_NFRT_SEED_SHA256',s['expected'])
++    (s['proof']/'provenance.json').write_text('{}')
++    with pytest.raises(ValueError,match='provenance'):s['call']()
++
++def test_private_copy_failure_cleans_up(setup_seed,tmp_path,monkeypatch):
++    s=setup_seed;private=tmp_path/'private'
++    def fail(*a,**k):raise OSError('copy failed')
++    monkeypatch.setattr(seed.shutil,'copyfileobj',fail)
++    with pytest.raises(OSError):seed.private_copy(s['native'],private,s['manifest'],s['expected'])
++    assert not private.exists()
++    assert seed.verify_seed(s['native'],s['doc'])==2
++
++def test_production_seed_mounts_are_readonly_and_payload_is_pinned(tmp_path,monkeypatch,setup_seed):
++    import test_hive_jvm_profile as fixtures
++    from workshop import hive_jvm,hive_verifier
++    root,_,specs=fixtures._project(tmp_path)
++    profile=fixtures._neoform_profile(root)
++    cache,_,_,baseline,image=fixtures._neoform_approved_cache(tmp_path,profile)
++    frozen=hive_jvm.store_frozen_junit_tests(specs,tmp_path/'hive_runs/123456789abc')
++    s=setup_seed
++    monkeypatch.setenv('GRADLE_USER_HOME',str(cache))
++    monkeypatch.setattr(seed,'configured_seed',lambda *a,**k:{'source':s['native'],'manifest':s['manifest'],'sha256':s['expected'],'document':s['doc']})
++    commands=[]
++    from subprocess import CompletedProcess
++    def run(argv,**kw):
++        commands.append(argv)
++        return CompletedProcess(argv,0,image+'\n' if argv[1:3]==['image','inspect'] else json.dumps({'passed':True,'checks':[]}),'')
++    monkeypatch.setattr(hive_verifier.shutil,'which',lambda _: 'docker')
++    monkeypatch.setattr(hive_verifier.subprocess,'run',run)
++    result=hive_verifier.run_isolated(root,'targeted',timeout=240,external_root=True,frozen_junit_tests=frozen,
++         expected_jvm_profile=profile,expected_external_baseline_sha256=baseline)
++    assert result['passed'],result
++    command=next(c for c in commands if c[1]=='run')
++    mounts=[command[i+1] for i,v in enumerate(command) if v=='--mount']
++    assert len(mounts)==10 and all(m.endswith(',readonly') for m in mounts)
++    assert any('target=/approved-nfrt-intermediates,readonly' in m for m in mounts)
++    payload=json.loads(command[-1]);assert payload['nfrt_seed_sha256']==s['expected']
++    assert payload['targeted_timeout']==240 and payload['frozen_tests'][0]['sha256']==specs[0]['sha256']
+--- a/tests/test_fresh_compilation_policy.py
++++ b/tests/test_fresh_compilation_policy.py
+@@ -0,0 +1,58 @@
++"""Actual pinned Gradle compiler control; synthetic probe, not acceptance evidence."""
++import json,os,shutil,subprocess,uuid
++from pathlib import Path
++import pytest
++from verification import jvm_runner
++from workshop import hive_verifier
++
++def test_policy_is_private_and_does_not_change_source(tmp_path):
++    source=tmp_path/'source';source.mkdir();(source/'App.java').write_text('class App {}')
++    before=(source/'App.java').read_bytes()
++    home=tmp_path/'private-gradle-home'
++    jvm_runner._install_fresh_compilation_policy(home)
++    assert (source/'App.java').read_bytes()==before
++    assert list(source.iterdir())==[source/'App.java']
++    assert (home/'init.d/hive-fresh-compilation.gradle').read_text()==jvm_runner.FRESH_COMPILATION_POLICY
++
++PROBE=r'''
++import json,os,pathlib,shutil,subprocess,sys
++sys.path.insert(0,'/probe');import jvm_runner as runner
++p=pathlib.Path('/work/probe');p.mkdir()
++shutil.copytree('/baseline/gradle',p/'gradle')
++home=pathlib.Path('/work/gradle-home')
++runner._copy_wrapper_distribution(pathlib.Path('/approved/wrapper/dists/gradle-9.2.1-bin'),home,'9.2.1')
++runner._install_fresh_compilation_policy(home)
++(p/'settings.gradle').write_text("rootProject.name='synthetic-verifier-policy'")
++(p/'build.gradle').write_text("plugins { id 'java' }; tasks.withType(JavaCompile).configureEach { doFirst { assert !options.incremental; println 'HIVE_TEST_FULL_COMPILATION' } }")
++src=p/'src/main/java/Demo.java';src.parent.mkdir(parents=True)
++env=dict(os.environ,GRADLE_USER_HOME=str(home),HOME='/work',TMPDIR='/work',JAVA_HOME='/opt/java/openjdk')
++argv=['/opt/java/openjdk/bin/java','-Djava.io.tmpdir=/work','-classpath','gradle/wrapper/gradle-wrapper.jar','org.gradle.wrapper.GradleWrapperMain','--no-daemon','--offline','--console=plain','--max-workers=2','--rerun-tasks','--no-build-cache','-Dorg.gradle.jvmargs=-Xmx768m','compileJava']
++src.write_text('public class Demo { public static int value() { return 17; } }')
++ok=subprocess.run(argv,cwd=p,env=env,capture_output=True,text=True,timeout=90)
++first={'returncode':ok.returncode,'stdout':ok.stdout,'stderr':ok.stderr,'class_created':(p/'build/classes/java/main/Demo.class').is_file()}
++src.write_text('public class Demo { invalid syntax }')
++bad=subprocess.run(argv,cwd=p,env=env,capture_output=True,text=True,timeout=90)
++second={'returncode':bad.returncode,'stdout':bad.stdout,'stderr':bad.stderr,'old_class_retained':(p/'build/classes/java/main/Demo.class').exists()}
++print(json.dumps({'first':first,'second':second}))
++'''
++
++def test_real_full_compilation_and_invalid_source_rejection(tmp_path):
++    docker=shutil.which('docker');baseline=os.environ.get('HIVE_GRADLE_TEST_BASELINE');cache=os.environ.get('HIVE_GRADLE_TEST_CACHE')
++    if not docker or not baseline or not cache:pytest.skip('Explicit approved Gradle test fixtures unavailable')
++    script=tmp_path/'probe.py';script.write_text(PROBE)
++    name='hive-full-compile-test-'+uuid.uuid4().hex[:10]
++    command=[docker,'run','--rm','--name',name,'--network','none','--read-only','--cap-drop','ALL',
++       '--security-opt','no-new-privileges','--pids-limit','448','--cpus','2','--memory','4g','--memory-swap','4g',
++       '--tmpfs','/work:rw,size=2g,mode=1777','--tmpfs','/tmp:rw,size=128m,mode=1777','--env','PYTHONDONTWRITEBYTECODE=1']
++    for host,target in [(Path(jvm_runner.__file__).parent,'/probe'),(Path(baseline),'/baseline'),(Path(cache),'/approved'),(script,'/probe-test.py')]:
++        command+=['--mount',f'type=bind,source={host},target={target},readonly']
++    command+=['--entrypoint','python3',hive_verifier.DEFAULT_IMAGE,'/probe-test.py']
++    try:cp=subprocess.run(command,capture_output=True,text=True,timeout=200)
++    finally:subprocess.run([docker,'rm','-f',name],capture_output=True,timeout=10)
++    (tmp_path/'actual-gradle-result.json').write_text(cp.stdout)
++    assert cp.returncode==0,cp.stderr
++    result=json.loads(cp.stdout)
++    assert result['first']['returncode']==0 and result['first']['class_created'],result
++    assert 'HIVE_TEST_FULL_COMPILATION' in result['first']['stdout']
++    assert result['second']['returncode']!=0 and 'error:' in result['second']['stderr'],result
++    assert not result['second']['old_class_retained']

@@ -1,0 +1,189 @@
+{
+  "freeze": {
+    "study": "HIVE-TRANSITION-003",
+    "status": "diagnostic-preregistered",
+    "parent_freeze_sha256": "0401e62799635c819d5225a96373c9042af320f0c3171d053ccd9268de979f52",
+    "apparatus_change": "Single-file ownership capacity in planner generation schema; existing validators and context controls unchanged",
+    "reference_lock_sha256": "4a408406e1f73d4a30edc2269255a82e99023a39dfd8f37101adb7663afa5c58",
+    "baseline": {
+      "root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+      "sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388"
+    },
+    "approved_cache_run_id": "e5a7c314b902",
+    "verifier_image": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "verifier_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "verifier_limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "cpus": 2,
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m"
+    },
+    "models": [
+      {
+        "name": "qwen3:8b",
+        "digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+        "bytes": 5225388164,
+        "quantization": "Q4_K_M",
+        "parameter_size": "8.2B",
+        "native_context_length": 40960
+      },
+      {
+        "name": "qwen2.5-coder:14b",
+        "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+        "bytes": 8988124298,
+        "quantization": "Q4_K_M",
+        "parameter_size": "14.8B",
+        "native_context_length": 32768
+      }
+    ],
+    "ollama_version": "ollama version is 0.34.0",
+    "ollama_environment": {
+      "OLLAMA_CONTEXT_LENGTH": null,
+      "OLLAMA_NUM_PARALLEL": null,
+      "OLLAMA_MAX_LOADED_MODELS": null,
+      "OLLAMA_KEEP_ALIVE": null
+    },
+    "tasks": [
+      {
+        "id": "J001",
+        "request": "In `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.",
+        "request_sha256": "c48982936e87f8147bf1c4581cf10903cb091b49b2b8d2576988ab5cb5c13ebc",
+        "files": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "test_filename": "SnapshotFormatterUnicodeAcceptanceTest.java",
+        "test_path": "src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java",
+        "test_class": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+        "test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+        "test_cases": 3
+      },
+      {
+        "id": "J002",
+        "request": "In `IngredientAllocation.canSatisfy`, reject with `IllegalArgumentException` any null, negative, or out-of-range (36 or greater) slot identity in either the matching-slot lists or the counts map, and reject null count values. Preserve valid allocation behavior and do not mutate caller inputs.\n\nWrite scope: `src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java`.",
+        "request_sha256": "4c5fdf400bf3fd553e69db28c2e531eeaf2c578e34b68e1ed0c2d07c9bb463bd",
+        "files": [
+          "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+        ],
+        "test_filename": "IngredientAllocationSlotAcceptanceTest.java",
+        "test_path": "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationSlotAcceptanceTest.java",
+        "test_class": "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+        "test_sha256": "ba419614ac0603345a1284cf6d7924d6a2c42bd00291c76c531d20ef81ae6372",
+        "test_cases": 3
+      },
+      {
+        "id": "J003",
+        "request": "Add `Observation.map(java.util.function.Function<? super T, ? extends U>)` returning `Observation<U>`. For available data, apply the mapper exactly once and preserve status and detail; a null mapper or null mapped result must be rejected. For unavailable or not-integrated observations, preserve status and detail with null data and never invoke the mapper. Do not change the existing factories or constructor invariants.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/Observation.java`.",
+        "request_sha256": "c998c4994397681b7ff37deb972c562ba7d27f0aa8b06226865888e7825393b7",
+        "files": [
+          "src/main/java/dev/atmcompanion/state/Observation.java"
+        ],
+        "test_filename": "ObservationMapAcceptanceTest.java",
+        "test_path": "src/test/java/dev/atmcompanion/state/ObservationMapAcceptanceTest.java",
+        "test_class": "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+        "test_sha256": "300538d10ceadaa6c63d750a398849165fdf37b282fbcfe87f99e84e5f60abc9",
+        "test_cases": 3
+      },
+      {
+        "id": "J004",
+        "request": "Add `ExecutionContext.Scan.coveragePercent()` returning the integer floor of `100 * scannedPositions / totalPositions`, with zero when totalPositions is zero. Coverage counts scanned positions even when some are unloaded; it is not the same as `complete()`. Add `ExecutionAssessment.observedCoveragePercent()` delegating to its observation's scan; return `-1` when the assessment has no observation. Preserve all current assessment and scan invariants.\n\nWrite scope: `src/main/java/dev/atmcompanion/execution/ExecutionContext.java`, `src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java`.",
+        "request_sha256": "962dd0852821cf3efb43c3f8d97aebbc7aa8135f8fc2b2db5c410bb38e2f6d3e",
+        "files": [
+          "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+          "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+        ],
+        "test_filename": "ExecutionCoverageAcceptanceTest.java",
+        "test_path": "src/test/java/dev/atmcompanion/execution/ExecutionCoverageAcceptanceTest.java",
+        "test_class": "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest",
+        "test_sha256": "1be437ad056fa49e7ee8980fe6ceaa0d2d45ba8e81b52d917cb8dcbf7138303c",
+        "test_cases": 3
+      }
+    ],
+    "order": [
+      {
+        "task_id": "J001",
+        "replicate": 1,
+        "model": "qwen2.5-coder:14b",
+        "controller": "hive"
+      }
+    ],
+    "source_manifest_sha256": "b3d0d3f57a34854233009d3ebe37e436e208eebb4a13febada55da21c5165b91",
+    "files_sha256": {
+      "live_diagnostic.py": "b575ce5675b2413a4d89d6191c72d509c91484df3c187cc2ebff712f97b40dee",
+      "diagnostic_runner.py": "1d852976f0f0130e110e80554b06b958ccd9381cdbdec3c7101a3b7c68d839e3",
+      "diagnostic_environment.py": "72941565e7b17950c048b83a4eb68cd0df945d5b08a879d690aff2cecb10c06a",
+      "diagnostic_capture.py": "6b2f169ec1657a5800bc819886e58c483990f19e140c091bf80e1f209e3e4198",
+      "diagnosis.md": "1db735e06a562f44ad88f4bbd63db15954c6cd73f13fa67a08086edb68d2c0c2",
+      "evidence/pre-edit-seal.json": "2c2736da081857c4d9779a5df8ebabd4d78aa137dd4679f9c1652adf94ebcb41",
+      "repaired-workshop/workshop/hive.py": "be96f465678568c6307b9a6c59bd4368c4d8bebd529428420b3f6576c3aad9a5"
+    },
+    "baseline_red_sha256": "1355a2592514419bdf7f3c154ff872b572899d0c121f19bd535a2c321d21f48e",
+    "oracle_targeted_sha256": "b7f0f77a353aff6884ada562d456b87e9929229c3054903df8c7a6931c291ae1",
+    "oracle_full_sha256": "1cc1aaec40f9950bc9b973d23fc224635df578232b160404ad62faaf3494701f",
+    "oracle_candidate_sha256": "a9131c1f834dc10b0edf3f7426d578f007d7c7ec14f2b9836f58fe5b9fe28baa",
+    "policy": {
+      "allow_cloud": false,
+      "max_tier": "local",
+      "max_cost": 0,
+      "token_ceiling": 250000,
+      "wall_ceiling_seconds": 3600,
+      "promotion": false,
+      "replicates_per_cell": 2,
+      "seed": 20261004
+    },
+    "parent_study": "HIVE-TRANSITION-002",
+    "production_changes_from_transition_002": [
+      "workshop/hive.py"
+    ],
+    "context_window": 12288,
+    "diagnostic_policy": "Exactly one J001 trial; no success-rate inference. No additional live generation probes.",
+    "parent_files_sha256": {
+      "historical/TASKS.md": "c69bf8913cd5ef5bd76ced1f9dc1aa2a269a946eb33b7e979b3faae5c964aced",
+      "historical/PROTOCOL.md": "4e95076f9f50a1773578281b256aa39677ca8c7410de952a113c3920e42115f6",
+      "historical/PREFLIGHT_RESULTS.md": "128a5acf8b07e80aa545466faac168bcaa47a5473aeb56c32df080bdeec571c5",
+      "historical/preflight.py": "aeac80864782d6bd8b41395a285772b0ffa82246af72ae51ccdd862821e2a935",
+      "historical/dry_run.py": "f394d9e00670f469a804e0db4bfe8c51aae6d382fd63ff31e11f5d4a89586da3",
+      "historical/oracle_check.py": "6d7896aaf2983ce17804c3df3ea7787e79fe70f5ca795a95ce807a098ff86bdb",
+      "historical/test_runner.py": "0fd6322badbd4e10bd1769362ae9771caab81f3b3210a065dbd317538f7276ee",
+      "runner.py": "51098a20eaf056074c70d44466175c753d1b98e95a2920f834301b513dc973f3",
+      "local_harness.py": "0cddcb26b9079278ebc261c2cf50518e80dbc1bd8c141c8ac50772b508b928f1",
+      "freeze_new_study.py": "de2809d69ac7d367516a776c472b04e7314c8380f30a2909c239a14b7d2e9e1b",
+      "factorial_runner_adapter.py": "61e628ac1acd8bdfe03234665aba53e705ae8020da675e2bb54d667e9cfa731b",
+      "APPARATUS-REPAIR.md": "9af923a1a2b73b70475d1ecb1c0258475870ae260c62ac52a9659c0b200e61a0"
+    }
+  },
+  "approved": {
+    "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "verifier_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "approved_cache_run_id": "e5a7c314b902",
+    "approved_cache_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\e5a7c314b902",
+    "jvm_profile": {
+      "version": "9.2.1",
+      "distribution": "gradle-9.2.1-bin.zip",
+      "distribution_sha256": "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f",
+      "wrapper_jar_sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172",
+      "wrapper_properties_sha256": "e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e",
+      "full_tasks": [
+        "clean",
+        "build",
+        "runGameTestServer",
+        "runQuestTestServer",
+        "packTestJar"
+      ],
+      "verification_policy_sha256": "708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e",
+      "external_build_inputs": {
+        "kind": "neoformruntime",
+        "cache_relative": "caches/neoformruntime",
+        "input_directories": [
+          "artifacts",
+          "assets"
+        ]
+      },
+      "runtime_output_dirs": [
+        "run-gametest",
+        "run-questtest"
+      ]
+    }
+  }
+}

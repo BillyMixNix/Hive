@@ -1,0 +1,128 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+
+version = mod_version
+group = 'dev.atmcompanion'
+base { archivesName = 'ATM-Companion' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.ftb.dev/releases' }
+    maven { url = 'https://maven.architectury.dev' }
+}
+
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+    questtest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+    packtest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+    questtestImplementation.extendsFrom implementation
+    questtestRuntimeOnly.extendsFrom runtimeOnly
+    questtestCompileOnly.extendsFrom compileOnly
+    packtestImplementation.extendsFrom implementation
+    packtestRuntimeOnly.extendsFrom runtimeOnly
+    packtestCompileOnly.extendsFrom compileOnly
+}
+
+neoForge {
+    version = project.neo_version
+    addModdingDependenciesTo(sourceSets.gametest)
+    addModdingDependenciesTo(sourceSets.questtest)
+    addModdingDependenciesTo(sourceSets.packtest)
+    mods {
+        atm_companion { sourceSet sourceSets.main }
+        atm_companion_tests { sourceSet sourceSets.gametest }
+        atm_companion_questtests { sourceSet sourceSets.questtest }
+        atm_companion_packtests { sourceSet sourceSets.packtest }
+    }
+    runs {
+        client {
+            client()
+            loadedMods = [mods.atm_companion]
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            loadedMods = [mods.atm_companion]
+        }
+        gameTestServer {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.gametest
+            gameDirectory = project.file('run-gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'atm_companion_tests'
+            jvmArgument "-Xmx${providers.gradleProperty('testServerHeap').getOrElse('2G')}"
+            loadedMods = [mods.atm_companion, mods.atm_companion_tests]
+        }
+        questTestServer {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.questtest
+            gameDirectory = project.file('run-questtest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'atm_companion_questtests'
+            jvmArgument "-Xmx${providers.gradleProperty('testServerHeap').getOrElse('2G')}"
+            if (providers.gradleProperty('questProfile').isPresent()) {
+                jvmArgument '-XX:StartFlightRecording=filename=quest-profile.jfr,settings=profile,dumponexit=true'
+            }
+            loadedMods = [mods.atm_companion, mods.atm_companion_questtests]
+        }
+        // Optional smoke probe: provide the official server pack in this separate directory first.
+        // It never selects a launcher instance or a user's save. Pack files are not release inputs.
+        packTestServer {
+            type = 'gameTestServer'
+            sourceSet = sourceSets.packtest
+            gameDirectory = project.file('../runtime-m3-atm10')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'atm_companion_packtests'
+            jvmArgument '-Xms512m'
+            jvmArgument '-Xmx4G'
+            loadedMods = [mods.atm_companion, mods.atm_companion_packtests]
+        }
+        configureEach { logLevel = org.slf4j.event.Level.INFO }
+    }
+}
+
+dependencies {
+    // Optional production integration: dependencies are never bundled or required by M1/M2 core.
+    compileOnly('dev.ftb.mods:ftb-quests-neoforge:2101.1.36') { transitive = false }
+    compileOnly('dev.ftb.mods:ftb-teams-neoforge:2101.1.11') { transitive = false }
+    compileOnly('dev.ftb.mods:ftb-library-neoforge:2101.1.36') { transitive = false }
+    compileOnly('dev.architectury:architectury-neoforge:13.0.11') { transitive = false }
+    questtestRuntimeOnly('dev.ftb.mods:ftb-quests-neoforge:2101.1.36') { transitive = false }
+    questtestRuntimeOnly('dev.ftb.mods:ftb-teams-neoforge:2101.1.11') { transitive = false }
+    questtestRuntimeOnly('dev.ftb.mods:ftb-library-neoforge:2101.1.36') { transitive = false }
+    questtestRuntimeOnly('dev.architectury:architectury-neoforge:13.0.11') { transitive = false }
+    // Pure DTO tests do not bootstrap Minecraft; use the same Gson version as 1.21.1.
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    testLogging { events 'passed', 'skipped', 'failed' }
+}
+// Optional production-loader test artifact. Never bundled with the distributable mod.
+tasks.register('packTestJar', Jar) {
+    archiveClassifier = 'packtests'
+    from sourceSets.packtest.output
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.named('createMinecraftArtifacts') { includeResourcesInGameJar = true }

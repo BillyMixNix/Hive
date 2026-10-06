@@ -1,0 +1,455 @@
+[
+  {
+    "role": "planner",
+    "prompt": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\nADVERSARIAL-REVIEW.md\nARCHITECTURE.md\nbuild.gradle\ndocs/\n  M3-RUNTIME-RESEARCH.md\n  M3.1-REAL-PLAYTEST.md\n  M3.1-STARTUP-RECIPE-RESEARCH.md\n  M3.2-QUEST-RESEARCH.md\n  M3.2-REAL-PLAYTEST.md\nevidence-m2/\n  ftb-quests-fixture.json\n  junit/\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  m2-budget-regression.json\n  m2-index.json\n  m2-live-plan.json\n  m2-reload.json\n  README.md\n  real-server-player-snapshot.json\nevidence-m3/\n  atm10-production-smoke.json\n  cooking-plan.json\n  crafting-plan.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  runtime-preparation.json\n  source-provenance.json\n  suite-summary.json\n  tested-jar-sha256.txt\nevidence-m31/\n  cooking-plan.json\n  crafting-plan.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  suite-summary.json\nevidence-m32/\n  cooking-plan.json\n  crafting-plan.json\n  ftb-large-book.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestIdsTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestOverviewTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  official-pack-source-provenance.json\n  quest-production-baseline.json\n  quest-production-optimized.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  suite-summary.json\nevidence/\n  command-export.json\n  junit/\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  README.md\n  real-server-player-snapshot.json\ngradle.properties\ngradle/\n  wrapper/\n    gradle-wrapper.properties\n    LICENSE.txt\ngradlew.bat\nM2-ADVERSARIAL-REVIEW.md\nM2-ARCHITECTURE.md\nM2-RESEARCH.md\nM3-ADVERSARIAL-REVIEW.md\nM3-ARCHITECTURE.md\nM3.1-ADVERSARIAL-REVIEW.md\nM3.2-ADVERSARIAL-REVIEW.md\nPLAYTEST-M2.md\nREADME.md\nRESEARCH.md\nsettings.gradle\nsrc/\n  gametest/\n    java/\n      dev/\n        atmcompanion/\n          tests/\n            CompanionGameTests.java\n            CompanionTestMod.java\n            M2GameTests.java\n            M3GameTests.java\n            RecipeBudgetGameTests.java\n            RuntimeKnowledgeRecoveryGameTests.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  main/\n    java/\n      dev/\n        atmcompanion/\n          activity/\n            ActivityCommandService.java\n            ActivityContext.java\n            ActivityDiffService.java\n            ActivityEvent.java\n            ActivityHistory.java\n            ActivitySummary.java\n            ActivityTracker.java\n            LiveActivityService.java\n          ai/\n            AIContext.java\n          ATMCompanion.java\n          command/\n            CompanionCommands.java\n          execution/\n            ExecutionAssessment.java\n            ExecutionAssessor.java\n            ExecutionContext.java\n            OperationInputs.java\n            StationService.java\n          integration/\n            Integration.java\n            IntegrationRegistry.java\n            quest/\n              FtbQuestsAdapter.java\n              OptionalQuestAccess.java\n              QuestIds.java\n              QuestOverview.java\n              QuestService.java\n              QuestSnapshot.java\n          knowledge/\n            IngredientAllocation.java\n            NormalizedRecipe.java\n            RecipeIndex.java\n            RecipeIndexBuilder.java\n            RecipeReport.java\n            RecipeSelection.java\n            RecipeService.java\n            RetainedIngredientBudget.java\n            RuntimeKnowledge.java\n          planning/\n            BoundedJson.java\n            DeterministicPlanner.java\n            Goal.java\n            GoalSavedData.java\n            KnowledgeGraph.java\n            PlanFormatter.java\n            PlanningReport.java\n            PlanningService.java\n            PlanResult.java\n          state/\n            Capability.java\n            CapabilityStatus.java\n            GameSnapshot.java\n            Observation.java\n            SnapshotFormatter.java\n            SnapshotJson.java\n            SnapshotService.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  packtest/\n    java/\n      dev/\n        atmcompanion/\n          packtests/\n            CompanionPackGameTests.java\n            CompanionPackTestMod.java\n            ProductionPackProbe.java\n            QuestProductionProbe.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  questtest/\n    java/\n      dev/\n        atmcompanion/\n          questtests/\n            CompanionQuestTestMod.java\n            FtbQuestGameTests.java\n            LargeFtbQuestGameTests.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  test/\n    java/\n      dev/\n        atmcompanion/\n          activity/\n            ActivityCommandServiceResetTest.java\n            ActivityContextTest.java\n            ActivityDiffServiceTest.java\n            ActivityEventTest.java\n            ActivityHistoryTest.java\n            ActivitySummaryTest.java\n            ActivityTrackerTest.java\n          execution/\n            ExecutionAssessorTest.java\n            ExecutionContextTest.java\n            OperationInputsTest.java\n          integration/\n            IntegrationRegistryTest.java\n            quest/\n              OptionalQuestAccessTest.java\n              QuestFixtures.java\n              QuestIdsTest.java\n              QuestOverviewTest.java\n              QuestSnapshotTest.java\n          knowledge/\n            IngredientAllocationTest.java\n            NormalizedRecipeTest.java\n            RecipeFixtures.java\n            RecipeIndexTest.java\n            RecipeReportTest.java\n            RetainedIngredientBudgetTest.java\n          planning/\n            DeterministicPlannerTest.java\n            PlanningOutputTest.java\n          state/\n            GameSnapshotTest.java\n            ObservationTest.java\n            SnapshotFixtures.java\n            SnapshotFormatterTest.java\n            SnapshotJsonTest.java\nTHIRD-PARTY-NOTICES.md\ntools/\n  collect-m2-evidence.py\n    functions: sanitized\n  collect-m3-evidence.py\n    functions: sanitized\n  collect-m31-evidence.py\n    functions: sanitized\n  collect-m32-evidence.py\n    functions: sanitized\n  generate-test-structure.py\n    functions: string, tag\n  package-m3-release.py\n  package-m31-release.py\n  package-m32-release.py\n  package-release.py\nVERIFICATION-M3-0.3.0.md\nVERIFICATION-M3.1-0.3.1.md\nVERIFICATION.md\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected\n\nUSER CHANGE REQUEST:\nIn `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nHOST-AUTHORIZED TASK WRITE FILES (exact paths; this is a hard outer boundary):\n- src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\nEvery worker_files entry must be one of these paths. Do not assign a test file just to create regression coverage when that file is not authorized. Host-owned frozen acceptance/verification does not grant worker write authority.\n\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing exact-file validator):\n- ui: frontend and presentation changes only; never implement backend behavior or tests.\n- backend: application and service behavior only; never implement frontend display or tests.\n- tests: regression tests only; never implement application or UI source.\n- External mode has no repository-wide role prefixes. Each worker may write ONLY the exact relative paths assigned to it by the validated plan.\n- The host rejects absolute paths, traversal, hidden/reserved paths, cross-role overlap, and edits outside exact ownership.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nUse repository-specific paths shown in the map; do not assume app.py, static/index.html, or any framework.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. Assign exact repository-relative files shown in this repository map. The host permits each active worker to write only its planner-approved exact files; no worker may expand its assignment. Do not assume Workshop filenames or frameworks. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ui_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "backend_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tests_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worker_files": {
+          "type": "object",
+          "properties": {
+            "ui": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "backend": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            }
+          },
+          "required": [
+            "ui",
+            "backend",
+            "tests"
+          ],
+          "additionalProperties": false
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "worker_acceptance": {
+          "type": "object",
+          "properties": {
+            "ui": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            },
+            "backend": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            }
+          },
+          "required": [
+            "ui",
+            "backend",
+            "tests"
+          ],
+          "additionalProperties": false
+        },
+        "interface_contracts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "ui",
+                  "backend",
+                  "tests"
+                ]
+              },
+              "consumer_roles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ui",
+                    "backend",
+                    "tests"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 3
+              },
+              "contract": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "owner",
+              "consumer_roles",
+              "contract"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 8
+        },
+        "provider_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requirement_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE",
+                  "OPTIONS",
+                  "HEAD"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "response_fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "boolean",
+                        "string",
+                        "integer",
+                        "number",
+                        "array",
+                        "object",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "maxItems": 24
+              }
+            },
+            "required": [
+              "requirement_id",
+              "method",
+              "path",
+              "response_fields"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "summary",
+        "ui_goal",
+        "backend_goal",
+        "tests_goal",
+        "worker_files",
+        "acceptance",
+        "worker_acceptance",
+        "interface_contracts"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "role": "planner",
+    "prompt": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\nADVERSARIAL-REVIEW.md\nARCHITECTURE.md\nbuild.gradle\ndocs/\n  M3-RUNTIME-RESEARCH.md\n  M3.1-REAL-PLAYTEST.md\n  M3.1-STARTUP-RECIPE-RESEARCH.md\n  M3.2-QUEST-RESEARCH.md\n  M3.2-REAL-PLAYTEST.md\nevidence-m2/\n  ftb-quests-fixture.json\n  junit/\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  m2-budget-regression.json\n  m2-index.json\n  m2-live-plan.json\n  m2-reload.json\n  README.md\n  real-server-player-snapshot.json\nevidence-m3/\n  atm10-production-smoke.json\n  cooking-plan.json\n  crafting-plan.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  runtime-preparation.json\n  source-provenance.json\n  suite-summary.json\n  tested-jar-sha256.txt\nevidence-m31/\n  cooking-plan.json\n  crafting-plan.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  suite-summary.json\nevidence-m32/\n  cooking-plan.json\n  crafting-plan.json\n  ftb-large-book.json\n  ftb-quests-fixture.json\n  index-budget-regression.json\n  junit/\n    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml\n    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml\n    TEST-dev.atmcompanion.execution.OperationInputsTest.xml\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestIdsTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestOverviewTest.xml\n    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml\n    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml\n    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  official-pack-source-provenance.json\n  quest-production-baseline.json\n  quest-production-optimized.json\n  real-server-player-snapshot.json\n  reload.json\n  runtime-index.json\n  suite-summary.json\nevidence/\n  command-export.json\n  junit/\n    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml\n    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml\n    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml\n    TEST-dev.atmcompanion.state.GameSnapshotTest.xml\n    TEST-dev.atmcompanion.state.ObservationTest.xml\n    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml\n    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml\n  live-snapshot.json\n  README.md\n  real-server-player-snapshot.json\ngradle.properties\ngradle/\n  wrapper/\n    gradle-wrapper.properties\n    LICENSE.txt\ngradlew.bat\nM2-ADVERSARIAL-REVIEW.md\nM2-ARCHITECTURE.md\nM2-RESEARCH.md\nM3-ADVERSARIAL-REVIEW.md\nM3-ARCHITECTURE.md\nM3.1-ADVERSARIAL-REVIEW.md\nM3.2-ADVERSARIAL-REVIEW.md\nPLAYTEST-M2.md\nREADME.md\nRESEARCH.md\nsettings.gradle\nsrc/\n  gametest/\n    java/\n      dev/\n        atmcompanion/\n          tests/\n            CompanionGameTests.java\n            CompanionTestMod.java\n            M2GameTests.java\n            M3GameTests.java\n            RecipeBudgetGameTests.java\n            RuntimeKnowledgeRecoveryGameTests.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  main/\n    java/\n      dev/\n        atmcompanion/\n          activity/\n            ActivityCommandService.java\n            ActivityContext.java\n            ActivityDiffService.java\n            ActivityEvent.java\n            ActivityHistory.java\n            ActivitySummary.java\n            ActivityTracker.java\n            LiveActivityService.java\n          ai/\n            AIContext.java\n          ATMCompanion.java\n          command/\n            CompanionCommands.java\n          execution/\n            ExecutionAssessment.java\n            ExecutionAssessor.java\n            ExecutionContext.java\n            OperationInputs.java\n            StationService.java\n          integration/\n            Integration.java\n            IntegrationRegistry.java\n            quest/\n              FtbQuestsAdapter.java\n              OptionalQuestAccess.java\n              QuestIds.java\n              QuestOverview.java\n              QuestService.java\n              QuestSnapshot.java\n          knowledge/\n            IngredientAllocation.java\n            NormalizedRecipe.java\n            RecipeIndex.java\n            RecipeIndexBuilder.java\n            RecipeReport.java\n            RecipeSelection.java\n            RecipeService.java\n            RetainedIngredientBudget.java\n            RuntimeKnowledge.java\n          planning/\n            BoundedJson.java\n            DeterministicPlanner.java\n            Goal.java\n            GoalSavedData.java\n            KnowledgeGraph.java\n            PlanFormatter.java\n            PlanningReport.java\n            PlanningService.java\n            PlanResult.java\n          state/\n            Capability.java\n            CapabilityStatus.java\n            GameSnapshot.java\n            Observation.java\n            SnapshotFormatter.java\n            SnapshotJson.java\n            SnapshotService.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  packtest/\n    java/\n      dev/\n        atmcompanion/\n          packtests/\n            CompanionPackGameTests.java\n            CompanionPackTestMod.java\n            ProductionPackProbe.java\n            QuestProductionProbe.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  questtest/\n    java/\n      dev/\n        atmcompanion/\n          questtests/\n            CompanionQuestTestMod.java\n            FtbQuestGameTests.java\n            LargeFtbQuestGameTests.java\n    resources/\n      META-INF/\n        neoforge.mods.toml\n  test/\n    java/\n      dev/\n        atmcompanion/\n          activity/\n            ActivityCommandServiceResetTest.java\n            ActivityContextTest.java\n            ActivityDiffServiceTest.java\n            ActivityEventTest.java\n            ActivityHistoryTest.java\n            ActivitySummaryTest.java\n            ActivityTrackerTest.java\n          execution/\n            ExecutionAssessorTest.java\n            ExecutionContextTest.java\n            OperationInputsTest.java\n          integration/\n            IntegrationRegistryTest.java\n            quest/\n              OptionalQuestAccessTest.java\n              QuestFixtures.java\n              QuestIdsTest.java\n              QuestOverviewTest.java\n              QuestSnapshotTest.java\n          knowledge/\n            IngredientAllocationTest.java\n            NormalizedRecipeTest.java\n            RecipeFixtures.java\n            RecipeIndexTest.java\n            RecipeReportTest.java\n            RetainedIngredientBudgetTest.java\n          planning/\n            DeterministicPlannerTest.java\n            PlanningOutputTest.java\n          state/\n            GameSnapshotTest.java\n            ObservationTest.java\n            SnapshotFixtures.java\n            SnapshotFormatterTest.java\n            SnapshotJsonTest.java\nTHIRD-PARTY-NOTICES.md\ntools/\n  collect-m2-evidence.py\n    functions: sanitized\n  collect-m3-evidence.py\n    functions: sanitized\n  collect-m31-evidence.py\n    functions: sanitized\n  collect-m32-evidence.py\n    functions: sanitized\n  generate-test-structure.py\n    functions: string, tag\n  package-m3-release.py\n  package-m31-release.py\n  package-m32-release.py\n  package-release.py\nVERIFICATION-M3-0.3.0.md\nVERIFICATION-M3.1-0.3.1.md\nVERIFICATION.md\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected\n\nUSER CHANGE REQUEST:\nIn `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nHOST-AUTHORIZED TASK WRITE FILES (exact paths; this is a hard outer boundary):\n- src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\nEvery worker_files entry must be one of these paths. Do not assign a test file just to create regression coverage when that file is not authorized. Host-owned frozen acceptance/verification does not grant worker write authority.\n\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing exact-file validator):\n- ui: frontend and presentation changes only; never implement backend behavior or tests.\n- backend: application and service behavior only; never implement frontend display or tests.\n- tests: regression tests only; never implement application or UI source.\n- External mode has no repository-wide role prefixes. Each worker may write ONLY the exact relative paths assigned to it by the validated plan.\n- The host rejects absolute paths, traversal, hidden/reserved paths, cross-role overlap, and edits outside exact ownership.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nUse repository-specific paths shown in the map; do not assume app.py, static/index.html, or any framework.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. Assign exact repository-relative files shown in this repository map. The host permits each active worker to write only its planner-approved exact files; no worker may expand its assignment. Do not assume Workshop filenames or frameworks. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n\nPREVIOUS PLAN REJECTED BEFORE WORKER EXECUTION:\nPlanValidationError: multi-role plan requires at least one interface contract\nACTIVE ROLES IN THE REJECTED PLAN:\n[\"backend\", \"tests\"]\nROLES REQUIRED BY IMMUTABLE INTENT OBLIGATIONS:\n[]\n\nREQUIRED INTERFACE-CONTRACT SCHEMA (the corrected planner output must provide every field):\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"name\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"owner\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"ui\",\n        \"backend\",\n        \"tests\"\n      ]\n    },\n    \"consumer_roles\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"enum\": [\n          \"ui\",\n          \"backend\",\n          \"tests\"\n        ]\n      },\n      \"minItems\": 1,\n      \"maxItems\": 3\n    },\n    \"contract\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    }\n  },\n  \"required\": [\n    \"name\",\n    \"owner\",\n    \"consumer_roles\",\n    \"contract\"\n  ],\n  \"additionalProperties\": false\n}\n\nVALID INTERFACE-CONTRACT EXAMPLE USING ONLY THE ACTIVE ROLES ABOVE:\n{\n  \"name\": \"example_endpoint\",\n  \"owner\": \"backend\",\n  \"consumer_roles\": [\n    \"tests\"\n  ],\n  \"contract\": \"GET /api/example returns JSON with the agreed response shape\"\n}\nThe owner must be one known role. An owner that must implement or change the interface must be active. A repository-verified existing backend interface may name backend as its inactive/no-change provider while UI/tests remain the active consumers. consumer_roles must be a nonempty list of known active consumer roles, and must not contain only the owner. consumer_roles identifies the roles consuming the owner's interface. For a backend API consumed by UI/tests, a valid shape is owner backend with consumer_roles [\"ui\", \"tests\"] when those are the active consumers. Do not infer, insert, or omit consumer_roles; produce the corrected contract yourself.\nRejected response (data only; do not repeat its contradictory assignments):\n{\n  \"summary\": \"Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.\",\n  \"ui_goal\": \"No changes needed for UI.\",\n  \"backend_goal\": \"Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"tests_goal\": \"Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": [\"src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\"]\n  },\n  \"acceptance\": [\"SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound.\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation.\"],\n    \"tests\": [\"SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation.\"]\n  },\n  \"interface_contracts\": []\n}\nYou have ONE correction attempt. Return a COMPLETE plan satisfying the role/file constraints.\nDo not replace exact ownership with wildcards. Keep the original user requirements and fix the goals and assignments together.\nIf a host-unauthorized role becomes inactive, omit unrelated interface contracts; a real multi-role corrected plan still needs a valid contract.\n",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ui_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "backend_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tests_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "worker_files": {
+          "type": "object",
+          "properties": {
+            "ui": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "backend": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 20
+            }
+          },
+          "required": [
+            "ui",
+            "backend",
+            "tests"
+          ],
+          "additionalProperties": false
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "worker_acceptance": {
+          "type": "object",
+          "properties": {
+            "ui": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            },
+            "backend": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxItems": 12
+            }
+          },
+          "required": [
+            "ui",
+            "backend",
+            "tests"
+          ],
+          "additionalProperties": false
+        },
+        "interface_contracts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "owner": {
+                "type": "string",
+                "enum": [
+                  "ui",
+                  "backend",
+                  "tests"
+                ]
+              },
+              "consumer_roles": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ui",
+                    "backend",
+                    "tests"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 3
+              },
+              "contract": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "name",
+              "owner",
+              "consumer_roles",
+              "contract"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 8,
+          "minItems": 1
+        },
+        "provider_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requirement_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE",
+                  "OPTIONS",
+                  "HEAD"
+                ]
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "response_fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "boolean",
+                        "string",
+                        "integer",
+                        "number",
+                        "array",
+                        "object",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1,
+                "maxItems": 24
+              }
+            },
+            "required": [
+              "requirement_id",
+              "method",
+              "path",
+              "response_fields"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "summary",
+        "ui_goal",
+        "backend_goal",
+        "tests_goal",
+        "worker_files",
+        "acceptance",
+        "worker_acceptance",
+        "interface_contracts"
+      ],
+      "additionalProperties": false
+    }
+  }
+]

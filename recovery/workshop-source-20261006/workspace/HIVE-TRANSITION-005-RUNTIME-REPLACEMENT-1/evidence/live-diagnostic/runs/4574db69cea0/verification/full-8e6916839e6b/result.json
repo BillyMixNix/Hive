@@ -1,0 +1,332 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 63.501,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.06s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.06s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.06s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mstripClient\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mmergeMappings\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mextractServer\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mstripServer\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mmerge\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mrename\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mbinaryPatch\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mapplyDevTransforms\u001b[23;0m in 0.00s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m♻\u001b[23;0m Used cache of \u001b[4mbinaryWithNeoForge\u001b[23;0m in 0.00s\nTotal runtime: 4.61s\n\n\n> Task :compileJava\n\n> Task :processResources\n> Task :classes\n\n> Task :compileTestJava\n\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nSnapshotFormatterUnicodeAcceptanceTest > truncationNeverSplitsAPair() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > asciiAndSanitizationStayCompatible() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > fullPairAtExactBoundRemainsIntact() PASSED\n\nBUILD SUCCESSFUL in 1m 3s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "bytes\":979212},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar\",\"bytes\":4617},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.ibm.icu/icu4j/73.2/61ad4ef7f9131fcf6d25c34b817f90d6da06c9e9/icu4j-73.2.jar\",\"bytes\":14567819},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar\",\"bytes\":115242},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar\",\"bytes\":964},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar\",\"bytes\":80082},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar\",\"bytes\":724313},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar\",\"bytes\":4439},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/text2speech/1.17.9/3cad216e3a7f0c19b4b394388bc9ffc446f13b14/text2speech-1.17.9.jar\",\"bytes\":12243},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-codec/commons-codec/1.16.0/4e3eb3d79888d76b54e28b350915b5dc3919c9de/commons-codec-1.16.0.jar\",\"bytes\":360738},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar\",\"bytes\":501218},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar\",\"bytes\":61829},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar\",\"bytes\":306590},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar\",\"bytes\":345274},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar\",\"bytes\":659930},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar\",\"bytes\":560040},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar\",\"bytes\":37792},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar\",\"bytes\":147139},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar\",\"bytes\":43897},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar\",\"bytes\":489624},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar\",\"bytes\":23326598},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar\",\"bytes\":1369287},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar\",\"bytes\":1878533},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar\",\"bytes\":78146},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.26.0/659feffdd12280201c8aacb8f7be94f9a883c824/commons-compress-1.26.0.jar\",\"bytes\":1078328},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar\",\"bytes\":780321},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar\",\"bytes\":327891},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar\",\"bytes\":27364},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/8872d22b293e8f5d7d56ff92be966e6dc28ebdc6/jorbis-0.0.17.jar\",\"bytes\":99701},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar\",\"bytes\":712082},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/a0db6c84a8becc8ca05f9dbfa985edc348a824c7/lwjgl-freetype-3.3.3.jar\",\"bytes\":450896},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/efa1eb78c5ccd840e9f329717109b5e892d72f8e/lwjgl-glfw-3.3.3.jar\",\"bytes\":135546},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/b543467b7ff3c6920539a88ee602d34098628be5/lwjgl-jemalloc-3.3.3.jar\",\"bytes\":43896},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/daada81ceb5fc0c291fbfdd4433cb8d9423577f2/lwjgl-openal-3.3.3.jar\",\"bytes\":110586},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/2f6b0147078396a58979125a4c947664e98293a/lwjgl-opengl-3.3.3.jar\",\"bytes\":929192},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/25dd6161988d7e65f71d5065c99902402ee32746/lwjgl-stb-3.3.3.jar\",\"bytes\":120283},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/82d755ca94b102e9ca77283b9e2dc46d1b15fbe5/lwjgl-tinyfd-3.3.3.jar\",\"bytes\":13400},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar\",\"bytes\":785029},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar\",\"bytes\":682804},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar\",\"bytes\":228481},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar\",\"bytes\":2199},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar\",\"bytes\":223979},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar\",\"bytes\":16017},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar\",\"bytes\":9301}],\"compilerArgs\":[],\"annotationProcessorPath\":[],\"incremental\":false,\"fork\":false,\"compiler\":\"/opt/java/openjdk\"}\nHIVE_GRADLE_DIAGNOSTIC {\"event\":\"java_compile_actions_complete\",\"nanoTime\":439118765144,\"wallTimestamp\":\"2026-10-05T20:29:09.499357405Z\",\"pid\":55,\"task\":\":compileJava\"}\nHIVE_GRADLE_DIAGNOSTIC {\"event\":\"java_compile_actions_entered\",\"nanoTime\":440042894359,\"wallTimestamp\":\"2026-10-05T20:29:10.423483420Z\",\"pid\":55,\"task\":\":compileTestJava\",\"sources\":[\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityContextTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityDiffServiceTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityEventTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityHistoryTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivitySummaryTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityTrackerTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionAssessorTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/execution/OperationInputsTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationRegistryTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/quest/OptionalQuestAccessTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestFixtures.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestIdsTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestSnapshotTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/NormalizedRecipeTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeFixtures.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeIndexTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeReportTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/knowledge/RetainedIngredientBudgetTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/planning/DeterministicPlannerTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/planning/PlanningOutputTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/GameSnapshotTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/ObservationTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/SnapshotFixtures.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"/work/candidate/src/test/java/dev/atmcompanion/state/SnapshotJsonTest.java\"],\"classpath\":[{\"path\":\"/work/candidate/build/classes/java/main\",\"bytes\":60},{\"path\":\"/work/candidate/build/resources/main\",\"bytes\":60},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar\",\"bytes\":283367},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.junit.jupiter/junit-jupiter/5.11.4/a699f024a4a4706b36bddbeb42d499aff9e09379/junit-jupiter-5.11.4.jar\",\"bytes\":6367},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-params/5.11.4/e4c86fbe2a39c60c6b87260ef7f7e7c1a1906481/junit-jupiter-params-5.11.4.jar\",\"bytes\":591594},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.junit.jupiter/junit-jupiter-api/5.11.4/308315b28e667db4091b2ba1f7aa220d1ddadb97/junit-jupiter-api-5.11.4.jar\",\"bytes\":216413},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.junit.platform/junit-platform-commons/1.11.4/8898eea3ed0da2641548d602c3e308804f166303/junit-platform-commons-1.11.4.jar\",\"bytes\":142008},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.opentest4j/opentest4j/1.3.0/152ea56b3a72f655d4fd677fc0ef2596c3dd5e6e/opentest4j-1.3.0.jar\",\"bytes\":14304},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apiguardian/apiguardian-api/1.1.2/a231e0d844d2721b0fa1b238006d15c6ded6842a/apiguardian-api-1.1.2.jar\",\"bytes\":6806}],\"compilerArgs\":[],\"annotationProcessorPath\":[],\"incremental\":false,\"fork\":false,\"compiler\":\"/opt/java/openjdk\"}\nHIVE_GRADLE_DIAGNOSTIC {\"event\":\"java_compile_actions_complete\",\"nanoTime\":442208277760,\"wallTimestamp\":\"2026-10-05T20:29:12.588866721Z\",\"pid\":55,\"task\":\":compileTestJava\"}\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "full_gradle_check",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 130.231,
+        "stdout_tail": "a:307) ~[?:?] {}\n\tat MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%2377!/:?] {}\n\t... 9 more\n[20:31:10] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes\n[20:31:11] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements\n[20:31:14] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld\n[20:31:14] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[20:31:14] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[20:31:15] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 891 ms\n[20:31:15] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server\n[20:31:15] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler\n[20:31:15] [Server thread/INFO] [minecraft/GameTestServer]: 3 tests are now running at position -14505258, -59, -13526005!\n[20:31:16] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...\n[20:31:16] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[20:31:16] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 117 active ms, 1409 elapsed ms, 22 slices, 53 max slice ms, generation 1)\n[20:31:16] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions\n[20:31:16] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.026502 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.026502\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0073 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0073\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.094207 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.094207\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.002901 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.002901\n[20:31:17] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-7.5, -60.0, 10.5)\n[20:31:17] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.613145 definitionsMs=0.088907 chaptersMs=1.368201 questsTasksMs=8.752347 validationMs=1.839936 totalMs=12.662536\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.014001 definitionsMs=0.018402 chaptersMs=0.036503 questsTasksMs=0.318023 validationMs=0.294522 totalMs=0.681451\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.021402 definitionsMs=0.021201 chaptersMs=0.037403 questsTasksMs=0.346325 validationMs=0.154412 totalMs=0.580743\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.011501 definitionsMs=0.014401 chaptersMs=0.022502 questsTasksMs=0.151411 validationMs=0.244318 totalMs=0.444133\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0107 definitionsMs=0.015301 chaptersMs=0.045404 questsTasksMs=0.206215 validationMs=0.215016 totalMs=0.492636\n[20:31:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.024602 definitionsMs=0.020001 chaptersMs=0.013701 questsTasksMs=0.048904 validationMs=0.13391 totalMs=0.241118\n[20:31:18] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'large_ftb_book:0' (1 tests)...\n[20:31:18] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[20:31:18] [Server thread/INFO] [minecraft/PlayerList]: quest_scale[embedded] logged in with entity id 4 at (6.5, -60.0, 2.5)\n[20:31:18] [Server thread/INFO] [minecraft/MinecraftServer]: quest_scale joined the game\n[20:31:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.017601 definitionsMs=32.946836 chaptersMs=0.505337 questsTasksMs=21.217968 validationMs=0.581243 totalMs=55.268985\n[20:31:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=timed_out chapters=67/67 quests=3419/4793 tasks=6837/9583 dependencies=2998 readinessMs=0.019601 definitionsMs=6.853907 chaptersMs=2.625094 questsTasksMs=240.67659 validationMs=0.0 totalMs=250.175192\n[20:31:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.027702 definitionsMs=5.698621 chaptersMs=0.336925 questsTasksMs=127.002588 validationMs=4.580138 totalMs=137.645974\n[20:31:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.020801 definitionsMs=5.715923 chaptersMs=0.496937 questsTasksMs=90.315576 validationMs=2.796806 totalMs=99.346043\n[20:31:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.016501 definitionsMs=3.297444 chaptersMs=0.330624 questsTasksMs=86.466992 validationMs=2.386776 totalMs=92.498337\n[20:31:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.042903 definitionsMs=4.241813 chaptersMs=0.623346 questsTasksMs=177.75754 validationMs=2.56959 totalMs=185.235192\n[20:31:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.021401 definitionsMs=1.974946 chaptersMs=0.13011 questsTasksMs=4.962767 validationMs=0.196014 totalMs=7.285238\n[20:31:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.025002 definitionsMs=2.500385 chaptersMs=0.171913 questsTasksMs=9.289586 validationMs=0.40903 totalMs=12.395916\n[20:31:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.045503 definitionsMs=3.177235 chaptersMs=0.209116 questsTasksMs=65.273325 validationMs=3.640169 totalMs=72.345348\n[20:31:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.024402 definitionsMs=2.506685 chaptersMs=0.174713 questsTasksMs=1.379702 validationMs=0.194515 totalMs=4.280017\n[20:31:20] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.064505 definitionsMs=3.962693 chaptersMs=0.167412 questsTasksMs=60.508373 validationMs=2.214764 totalMs=66.917747\n[20:31:20] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.013901 definitionsMs=1.375102 chaptersMs=0.078706 questsTasksMs=7.780875 validationMs=0.14051 totalMs=9.389094\n[20:31:20] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4792/4792 tasks=0/0 dependencies=0 readinessMs=0.015202 definitionsMs=1.277394 chaptersMs=0.079006 questsTasksMs=3.857585 validationMs=0.183214 totalMs=5.412401\n[20:31:20] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4792/4792 tasks=9581/9581 dependencies=4193 readinessMs=0.025202 definitionsMs=2.253567 chaptersMs=0.842562 questsTasksMs=121.931813 validationMs=2.339373 totalMs=127.392517\n[20:31:22] [Server thread/INFO] [minecraft/GameTestServer]: [+++]\n[20:31:22] [Server thread/INFO] [minecraft/GameTestServer]: ========= 3 GAME TESTS COMPLETE IN 6.908 s ======================\n[20:31:22] [Server thread/INFO] [minecraft/GameTestServer]: All 3 required tests passed :)\n[20:31:22] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================\n[20:31:22] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server\n[20:31:22] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players\n[20:31:22] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\n[20:31:24] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n\nBUILD SUCCESSFUL in 2m 10s\n21 actionable tasks: 20 executed, 1 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "ixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar\",\"bytes\":1494751},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.openjdk.nashorn/nashorn-core/15.4/f67f5ffaa5f5130cf6fb9b133da00c7df3b532a5/nashorn-core-15.4.jar\",\"bytes\":2167292},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar\",\"bytes\":657952},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/cpw.mods/securejarhandler/3.0.8/c0ef95cecd8699a0449053ac7d9c160748d902cd/securejarhandler-3.0.8.jar\",\"bytes\":103765},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-commons/9.10.1/4229e4c55fd8e01c23f9fe9884075cc628aacc50/asm-commons-9.10.1.jar\",\"bytes\":74840},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-util/9.10.1/7bb9d450e8d4cbf9f9e04096c44bbfe7fba80b15/asm-util-9.10.1.jar\",\"bytes\":95628},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-analysis/9.10.1/8d49f14d51f632cb1d87c88d1ceaf50db0d8af1b/asm-analysis-9.10.1.jar\",\"bytes\":35140},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm-tree/9.10.1/e244332a17564c1d1572449399a842de35881be2/asm-tree-9.10.1.jar\",\"bytes\":51958},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.ow2.asm/asm/9.10.1/ada2141c0cc52ee8f5c48cd5fa4ce0e794f22236/asm-9.10.1.jar\",\"bytes\":126151},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/cpw.mods/bootstraplauncher/2.0.2/1a2d076cbc33b0520cbacd591224427b2a20047d/bootstraplauncher-2.0.2.jar\",\"bytes\":11116},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.neoforged/JarJarFileSystems/0.4.1/78f59f89defcd032ed788b151ca6a0d40ace796a/JarJarFileSystems-0.4.1.jar\",\"bytes\":31807},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.github.llamalad7/mixinextras-neoforge/0.5.3/a0919957808de97707c5fb4ce073e66aeef3e187/mixinextras-neoforge-0.5.3.jar\",\"bytes\":725927},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.guava/guava/32.1.2-jre/5e64ec7e056456bef3a4bc4c6fdaef71e8ab6318/guava-32.1.2-jre.jar\",\"bytes\":3041591},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar\",\"bytes\":19936},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jetbrains/annotations/24.1.0/7af6a669488450c4a07c2c3254e2151df42d7d04/annotations-24.1.0.jar\",\"bytes\":30570},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/ca.weblite/java-objc-bridge/1.1/1227f9e0666314f9de41477e3ec277e542ed7f7b/java-objc-bridge-1.1.jar\",\"bytes\":1330045},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.22.1/7183a25510a02ad00cc6a95d3b3d2a7d3c5a8dc4/log4j-core-2.22.1.jar\",\"bytes\":1900022},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.22.1/bea6fede6328fabafd7e68363161a7ea6605abd1/log4j-api-2.22.1.jar\",\"bytes\":335001},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar\",\"bytes\":283367},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/logging/1.2.7/24cb95ffb0e3433fd6e844c04e68009e504ca1c0/logging-1.2.7.jar\",\"bytes\":15343},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.9/7cf2726fdcfbc8610f9a71fb3ed639871f315340/slf4j-api-2.0.9.jar\",\"bytes\":64579},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.1/17125bae1d965624e265ef49552f6465a2bfa307/antlr4-runtime-4.13.1.jar\",\"bytes\":326305},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.codehaus.plexus/plexus-utils/3.3.0/cf43b5391de623b36fe066a21127baef82c64022/plexus-utils-3.3.0.jar\",\"bytes\":263253},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-reader/3.20.0/8f15415b022a25b473e8e16c28ae913186ffb9c4/jline-reader-3.20.0.jar\",\"bytes\":171052},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.machinezoo.noexception/noexception/1.7.1/b65330c98e38a1f915fa54a6e5eca496505e3f0a/noexception-1.7.1.jar\",\"bytes\":250861},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.github.oshi/oshi-core/6.4.10/b1d8ab82d11d92fd639b56d639f8f46f739dd5fa/oshi-core-6.4.10.jar\",\"bytes\":979212},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.guava/failureaccess/1.0.1/1dcf1de382a0bf95a3d8b0849546c88bac1292c9/failureaccess-1.0.1.jar\",\"bytes\":4617},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.ibm.icu/icu4j/73.2/61ad4ef7f9131fcf6d25c34b817f90d6da06c9e9/icu4j-73.2.jar\",\"bytes\":14567819},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/authlib/6.0.54/de8bc95660e1b2fe8793fd427a7a10dcec5b3ea7/authlib-6.0.54.jar\",\"bytes\":115242},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/blocklist/1.0.10/5c685c5ffa94c4cd39496c7184c1d122e515ecef/blocklist-1.0.10.jar\",\"bytes\":964},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/brigadier/1.3.10/d15b53a14cf20fdcaa98f731af5dda654452c010/brigadier-1.3.10.jar\",\"bytes\":80082},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/datafixerupper/8.0.16/67d4de6d7f95d89bcf5862995fb854ebaec02a34/datafixerupper-8.0.16.jar\",\"bytes\":724313},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/patchy/2.2.10/da05971b07cbb379d002cf7eaec6a2048211fefc/patchy-2.2.10.jar\",\"bytes\":4439},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.mojang/text2speech/1.17.9/3cad216e3a7f0c19b4b394388bc9ffc446f13b14/text2speech-1.17.9.jar\",\"bytes\":12243},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-codec/commons-codec/1.16.0/4e3eb3d79888d76b54e28b350915b5dc3919c9de/commons-codec-1.16.0.jar\",\"bytes\":360738},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-io/commons-io/2.15.1/f11560da189ab563a5c8e351941415430e9304ea/commons-io-2.15.1.jar\",\"bytes\":501218},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar\",\"bytes\":61829},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-buffer/4.1.97.Final/f8f3d8644afa5e6e1a40a3a6aeb9d9aa970ecb4f/netty-buffer-4.1.97.Final.jar\",\"bytes\":306590},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-codec/4.1.97.Final/384ba4d75670befbedb45c4d3b497a93639c206d/netty-codec-4.1.97.Final.jar\",\"bytes\":345274},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-common/4.1.97.Final/7cceacaf11df8dc63f23d0fb58e9d4640fc88404/netty-common-4.1.97.Final.jar\",\"bytes\":659930},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-handler/4.1.97.Final/abb86c6906bf512bf2b797a41cd7d2e8d3cd7c36/netty-handler-4.1.97.Final.jar\",\"bytes\":560040},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-resolver/4.1.97.Final/cec8348108dc76c47cf87c669d514be52c922144/netty-resolver-4.1.97.Final.jar\",\"bytes\":37792},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.97.Final/795da37ded759e862457a82d9d92c4d39ce8ecee/netty-transport-classes-epoll-4.1.97.Final.jar\",\"bytes\":147139},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.97.Final/d469d84265ab70095b01b40886cabdd433b6e664/netty-transport-native-unix-common-4.1.97.Final.jar\",\"bytes\":43897},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/io.netty/netty-transport/4.1.97.Final/f37380d23c9bb079bc702910833b2fd532c9abd0/netty-transport-4.1.97.Final.jar\",\"bytes\":489624},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.12/c24946d46824bd528054bface3231d2ecb7e95e8/fastutil-8.5.12.jar\",\"bytes\":23326598},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna-platform/5.14.0/28934d48aed814f11e4c584da55c49fa7032b31b/jna-platform-5.14.0.jar\",\"bytes\":1369287},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.java.dev.jna/jna/5.14.0/67bf3eaea4f0718cb376a181a629e5f88fa1c9dd/jna-5.14.0.jar\",\"bytes\":1878533},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/net.sf.jopt-simple/jopt-simple/5.0.4/4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c/jopt-simple-5.0.4.jar\",\"bytes\":78146},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.commons/commons-compress/1.26.0/659feffdd12280201c8aacb8f7be94f9a883c824/commons-compress-1.26.0.jar\",\"bytes\":1078328},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.13/e5f6cae5ca7ecaac1ec2827a9e2d65ae2869cada/httpclient-4.5.13.jar\",\"bytes\":780321},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar\",\"bytes\":327891},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j2-impl/2.22.1/d7e6693c2606cb7e7335047d7bb96dec52db5665/log4j-slf4j2-impl-2.22.1.jar\",\"bytes\":27364},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jcraft/jorbis/0.0.17/8872d22b293e8f5d7d56ff92be966e6dc28ebdc6/jorbis-0.0.17.jar\",\"bytes\":99701},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.joml/joml/1.10.5/22566d58af70ad3d72308bab63b8339906deb649/joml-1.10.5.jar\",\"bytes\":712082},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-freetype/3.3.3/a0db6c84a8becc8ca05f9dbfa985edc348a824c7/lwjgl-freetype-3.3.3.jar\",\"bytes\":450896},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.3/efa1eb78c5ccd840e9f329717109b5e892d72f8e/lwjgl-glfw-3.3.3.jar\",\"bytes\":135546},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-jemalloc/3.3.3/b543467b7ff3c6920539a88ee602d34098628be5/lwjgl-jemalloc-3.3.3.jar\",\"bytes\":43896},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-openal/3.3.3/daada81ceb5fc0c291fbfdd4433cb8d9423577f2/lwjgl-openal-3.3.3.jar\",\"bytes\":110586},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-opengl/3.3.3/2f6b0147078396a58979125a4c947664e98293a/lwjgl-opengl-3.3.3.jar\",\"bytes\":929192},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.3.3/25dd6161988d7e65f71d5065c99902402ee32746/lwjgl-stb-3.3.3.jar\",\"bytes\":120283},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.3.3/82d755ca94b102e9ca77283b9e2dc46d1b15fbe5/lwjgl-tinyfd-3.3.3.jar\",\"bytes\":13400},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lwjgl/lwjgl/3.3.3/29589b5f87ed335a6c7e7ee6a5775f81f97ecb84/lwjgl-3.3.3.jar\",\"bytes\":785029},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.lz4/lz4-java/1.8.0/4b986a99445e49ea5fbf5d149c4b63f6ed6c6780/lz4-java-1.8.0.jar\",\"bytes\":682804},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.jline/jline-terminal/3.20.0/d0ddcc708ddf527a3454c941b7b9225cc83a15ff/jline-terminal-3.20.0.jar\",\"bytes\":228481},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar\",\"bytes\":2199},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/org.checkerframework/checker-qual/3.33.0/de2b60b62da487644fc11f734e73c8b0b431238f/checker-qual-3.33.0.jar\",\"bytes\":223979},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.18.0/89b684257096f548fa39a7df9fdaa409d4d4df91/error_prone_annotations-2.18.0.jar\",\"bytes\":16017},{\"path\":\"/approved-gradle-cache/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/2.8/c85270e307e7b822f1086b93689124b89768e273/j2objc-annotations-2.8.jar\",\"bytes\":9301},{\"path\":\"/work/candidate/build/classes/java/main\",\"bytes\":60},{\"path\":\"/work/candidate/build/resources/main\",\"bytes\":60}],\"compilerArgs\":[],\"annotationProcessorPath\":[],\"incremental\":false,\"fork\":false,\"compiler\":\"/opt/java/openjdk\"}\nHIVE_GRADLE_DIAGNOSTIC {\"event\":\"java_compile_actions_complete\",\"nanoTime\":534931533985,\"wallTimestamp\":\"2026-10-05T20:30:45.305699826Z\",\"pid\":248,\"task\":\":compileQuesttestJava\"}\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "source_immutability",
+      "passed": true,
+      "detail": "non-generated candidate source remained unchanged"
+    }
+  ],
+  "java_version": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest"
+      ]
+    },
+    {
+      "phase": "full_gradle_check",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "clean",
+        "build",
+        "runGameTestServer",
+        "runQuestTestServer",
+        "packTestJar"
+      ]
+    }
+  ],
+  "external_build_inputs_copy": {
+    "files": 3895,
+    "bytes": 914224273,
+    "manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "approved_cache_mount": "read-only",
+    "verification_copy": "private tmpfs"
+  },
+  "runtime_output_dirs": [
+    "run-gametest",
+    "run-questtest"
+  ],
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "swap_additional": "0 bytes",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    },
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": [],
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+  },
+  "runtime_stderr": "eam\": \"stdout\", \"child_pid\": 225, \"text\": \"[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\\n\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 574.451423965, \"wall_timestamp\": \"2026-10-05T20:31:24.821508+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"process_output\", \"pid\": 1, \"elapsed_ms\": 359092.745, \"clock_domain\": \"container\", \"stream\": \"stdout\", \"child_pid\": 225, \"text\": \"[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\\n\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 574.552254069, \"wall_timestamp\": \"2026-10-05T20:31:24.922347+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"process_output\", \"pid\": 1, \"elapsed_ms\": 359193.575, \"clock_domain\": \"container\", \"stream\": \"stdout\", \"child_pid\": 225, \"text\": \"[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\\n[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\\n\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 574.552785608, \"wall_timestamp\": \"2026-10-05T20:31:24.922872+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"process_output\", \"pid\": 1, \"elapsed_ms\": 359194.106, \"clock_domain\": \"container\", \"stream\": \"stdout\", \"child_pid\": 225, \"text\": \"[20:31:24] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\\n[20:31:24] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\\n\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 575.051376126, \"wall_timestamp\": \"2026-10-05T20:31:25.421463+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"process_output\", \"pid\": 1, \"elapsed_ms\": 359692.697, \"clock_domain\": \"container\", \"stream\": \"stdout\", \"child_pid\": 225, \"text\": \"\\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\\n\\nBUILD SUCCESSFUL in 2m 10s\\n21 actionable tasks: 20 executed, 1 up-to-date\\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\\n\"}\nHIVE_VERIFIER_EVENT {\"monotonic\": 575.22026956, \"wall_timestamp\": \"2026-10-05T20:31:25.590356+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"process_exit\", \"pid\": 1, \"elapsed_ms\": 359861.59, \"clock_domain\": \"container\", \"child_pid\": 225, \"returncode\": 0, \"timed_out\": false, \"readers_finished\": true}\nHIVE_VERIFIER_EVENT {\"monotonic\": 575.22053858, \"wall_timestamp\": \"2026-10-05T20:31:25.590623+00:00\", \"run_id\": \"4574db69cea0\", \"phase\": \"gradle_returned\", \"pid\": 1, \"elapsed_ms\": 359861.859, \"clock_domain\": \"container\", \"gate\": \"full_gradle_check\", \"returncode\": 0, \"timed_out\": false}\n\n[OUTPUT TRUNCATED]",
+  "diagnostics": {
+    "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\runs\\4574db69cea0\\verification\\full-8e6916839e6b",
+    "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\runs\\4574db69cea0\\verification\\full-8e6916839e6b\\verification-events.jsonl",
+    "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\runs\\4574db69cea0\\verification\\full-8e6916839e6b\\stdout.log",
+    "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\runs\\4574db69cea0\\verification\\full-8e6916839e6b\\stderr.log",
+    "last_observed_phase": "gradle_returned",
+    "elapsed_ms": 397324.911
+  }
+}

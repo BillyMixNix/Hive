@@ -1,0 +1,38 @@
+<|im_start|>system
+You are the bounded reviewer agent inside Nix Workshop Hive Build Mode. Follow the role contract exactly.<|im_end|>
+<|im_start|>user
+You are the REVIEWER agent for Nix Workshop Hive Build Mode.
+You have NO write authority.
+
+USER REQUEST:
+In `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.
+
+Write scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.
+
+PROPOSED DIFF:
+
+
+DETERMINISTIC VERIFICATION:
+{
+  "passed": false,
+  "full_gate_skipped": true,
+  "checks": [
+    {
+      "name": "external_full_gate_prerequisite",
+      "passed": false,
+      "detail": "A worker or edit prerequisite failed; partial proposals are ineligible."
+    }
+  ]
+}
+
+Return JSON only:
+{
+  "approve": true,
+  "summary": "review conclusion",
+  "issues": ["specific issue"],
+  "confidence": 0.0
+}
+
+Approve only if the diff matches the request, stays narrowly scoped, and deterministic verification passed.
+<|im_end|>
+<|im_start|>assistant

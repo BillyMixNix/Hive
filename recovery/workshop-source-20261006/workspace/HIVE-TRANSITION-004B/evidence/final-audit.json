@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "checks": {
+    "prior_evidence_baseline_and_cache_intact": true,
+    "no_model_calls_or_production_edits": true,
+    "bounded_preregistered_run_count": true,
+    "identical_reconstruction_inputs": true,
+    "all_ten_native_keys_recomputed": true,
+    "all_ten_nodes_hit_in_both_replays": true,
+    "compilation_still_required": true,
+    "timeout_never_passes": true,
+    "all_diagnostic_containers_absent": true,
+    "baseline_gate_command_unchanged": true,
+    "baseline_same_deadline_isolation": true,
+    "baseline_seed_manifest_verified": true,
+    "baseline_no_prior_test_report_used": true,
+    "preserved_gate_command_unchanged": true,
+    "preserved_same_deadline_isolation": true,
+    "preserved_seed_manifest_verified": true,
+    "preserved_no_prior_test_report_used": true,
+    "all_gate_functions_identical": true,
+    "report_links_resolve": true,
+    "report_complete": true
+  },
+  "report_sha256": "b02870dad24cd8d7ae84986a3f629d22329095c71fe549d261752aa4ce8843e3",
+  "conclusion": "AVOIDABLE_PER_CANDIDATE_DEPENDENCY_RECONSTRUCTION_DEMONSTRATED",
+  "scope": "Frozen M3.2/J001 source-only edit; not arbitrary build-input changes.",
+  "furthest_observed_transition": "Artifact creation completed; compileJava observed; outer timeout; no frozen-test verdict.",
+  "production_repair": "None; diagnostic-only attested native cache seed."
+}

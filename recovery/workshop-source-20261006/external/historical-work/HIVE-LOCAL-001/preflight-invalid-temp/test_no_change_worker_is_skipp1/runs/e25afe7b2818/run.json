@@ -1,0 +1,219 @@
+{
+  "id": "e25afe7b2818",
+  "request": "request",
+  "local_model": "local",
+  "status": "rejected",
+  "metadata": {},
+  "provenance": {
+    "schema_version": 1,
+    "experiment": null,
+    "source_manifest_sha256": "6cf5b8ca9f21b1810728b9bfcfe9da04c7a630c43fb9852a5d2a23a413c5eeda",
+    "environment": {
+      "python": "3.13.14",
+      "platform": "Windows-11-10.0.26200-SP0"
+    },
+    "model_policy": {
+      "local_model": "local"
+    },
+    "started_at": 1790867144.6499379,
+    "finished_at": 1790867144.6504307,
+    "wall_seconds": 0.000493
+  },
+  "agents": {
+    "planner": {
+      "raw": "{\"summary\": \"worker failure fixture\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The scoped UI task succeeds\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}}",
+      "parsed": {
+        "summary": "worker failure fixture",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "The scoped UI task succeeds"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": [],
+        "_intent_envelope": {
+          "version": 1,
+          "requirements": []
+        }
+      }
+    },
+    "ui": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "backend": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "tests": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "reviewer": {
+      "raw": "{\"approve\":false}",
+      "parsed": {
+        "approve": false,
+        "issues": [
+          "No valid scoped edits were produced."
+        ]
+      }
+    }
+  },
+  "changed_files": [],
+  "diff": "",
+  "verification": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "isolated_fixture",
+        "passed": true,
+        "detail": "unit fixture"
+      }
+    ],
+    "isolation": {
+      "backend": "test-fixture",
+      "available": true
+    }
+  },
+  "review": {
+    "approve": false,
+    "issues": [
+      "No valid scoped edits were produced."
+    ]
+  },
+  "applied": false,
+  "repository_map": "REPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py",
+  "repository_facts": "REPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected",
+  "intent_envelope": {
+    "version": 1,
+    "requirements": []
+  },
+  "replans": [],
+  "plan_attempts": [
+    {
+      "attempt": 1,
+      "raw": "{\"summary\": \"worker failure fixture\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The scoped UI task succeeds\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}}",
+      "status": "accepted"
+    }
+  ],
+  "prompt_trace": [
+    {
+      "call_id": "e25afe7b2818:call:0001",
+      "parent_call_id": null,
+      "role": "planner",
+      "started_at": 1790867144.649979,
+      "prompt_chars": 5297,
+      "prompt_sha256": "137d92d99d0338f68578d14078d68f870ce7d1eba2fd3e166aa25ec3dfc4e047",
+      "prompt_text": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected\n\nUSER CHANGE REQUEST:\nrequest\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing validator):\n- ui: static/index.html. HTML/CSS/JavaScript, Settings controls and display; never implement Python endpoints.\n- backend: app.py, workshop/*.py. Python endpoints and helpers; never implement HTML/JavaScript display or tests.\n- tests: tests/*.py. Regression tests only; never implement application or UI source.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nFor a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. For a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n",
+      "finished_at": 1790867144.6500056,
+      "wall_seconds": 2.6e-05,
+      "status": "completed",
+      "response_chars": 302,
+      "response_sha256": "dfe26725c1e9962d2e41d4a07d7356a07b9f4dc056bbaa6f419ce4ab79ce905b",
+      "response_text": "{\"summary\": \"worker failure fixture\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The scoped UI task succeeds\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}}"
+    },
+    {
+      "call_id": "e25afe7b2818:call:0002",
+      "parent_call_id": null,
+      "role": "reviewer",
+      "started_at": 1790867144.650403,
+      "prompt_chars": 610,
+      "prompt_sha256": "6e4eaf14caf41305afd210c33b0098976d6cb96b475bd0b55d7847d359ff3f36",
+      "prompt_text": "You are the REVIEWER agent for Nix Workshop Hive Build Mode.\nYou have NO write authority.\n\nUSER REQUEST:\nrequest\n\nPROPOSED DIFF:\n\n\nDETERMINISTIC VERIFICATION:\n{\n  \"passed\": true,\n  \"checks\": [\n    {\n      \"name\": \"isolated_fixture\",\n      \"passed\": true,\n      \"detail\": \"unit fixture\"\n    }\n  ],\n  \"isolation\": {\n    \"backend\": \"test-fixture\",\n    \"available\": true\n  }\n}\n\nReturn JSON only:\n{\n  \"approve\": true,\n  \"summary\": \"review conclusion\",\n  \"issues\": [\"specific issue\"],\n  \"confidence\": 0.0\n}\n\nApprove only if the diff matches the request, stays narrowly scoped, and deterministic verification passed.\n",
+      "finished_at": 1790867144.6504135,
+      "wall_seconds": 1e-05,
+      "status": "completed",
+      "response_chars": 17,
+      "response_sha256": "0037bbfa8088b2349c7d1fe72af48685afb38df02ad9e48225808bae61b3227b",
+      "response_text": "{\"approve\":false}"
+    }
+  ],
+  "edit_repairs": [],
+  "targeted_repairs": [],
+  "observations": [],
+  "stage_events": [
+    {
+      "stage": "planning",
+      "progress": 10,
+      "message": "Hive planner is building the bounded worker contracts",
+      "at": 1790867144.649951
+    },
+    {
+      "stage": "ui",
+      "progress": 30,
+      "message": "Hive ui worker is evaluating its bounded contract",
+      "at": 1790867144.6500697
+    },
+    {
+      "stage": "backend",
+      "progress": 45,
+      "message": "Hive backend worker is evaluating its bounded contract",
+      "at": 1790867144.650074
+    },
+    {
+      "stage": "tests",
+      "progress": 60,
+      "message": "Hive tests worker is evaluating its bounded contract",
+      "at": 1790867144.6500764
+    },
+    {
+      "stage": "verification",
+      "progress": 75,
+      "message": "Hive is running deterministic verification",
+      "at": 1790867144.6500826
+    },
+    {
+      "stage": "review",
+      "progress": 90,
+      "message": "Hive reviewer is evaluating the staged diff and verification",
+      "at": 1790867144.6503818
+    },
+    {
+      "stage": "completed",
+      "progress": 100,
+      "message": "Hive run rejected",
+      "at": 1790867144.6504304
+    }
+  ],
+  "plan": {
+    "summary": "worker failure fixture",
+    "ui_goal": "no change needed",
+    "backend_goal": "no change needed",
+    "tests_goal": "no change needed",
+    "worker_files": {
+      "ui": [],
+      "backend": [],
+      "tests": []
+    },
+    "acceptance": [
+      "The scoped UI task succeeds"
+    ],
+    "worker_acceptance": {
+      "ui": [],
+      "backend": [],
+      "tests": []
+    },
+    "interface_contracts": [],
+    "provider_changes": [],
+    "_intent_envelope": {
+      "version": 1,
+      "requirements": []
+    }
+  },
+  "base_manifest": {},
+  "staged_manifest": {}
+}

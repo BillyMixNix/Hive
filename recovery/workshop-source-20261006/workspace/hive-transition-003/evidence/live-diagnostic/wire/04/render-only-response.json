@@ -1,0 +1,12 @@
+{
+  "model": "qwen2.5-coder:14b",
+  "created_at": "2026-10-05T15:02:53.5869895Z",
+  "message": {
+    "role": "",
+    "content": ""
+  },
+  "done": false,
+  "_debug_info": {
+    "rendered_template": "<|im_start|>system\nYou are the bounded reviewer agent inside Nix Workshop Hive Build Mode. Follow the role contract exactly.<|im_end|>\n<|im_start|>user\nYou are the REVIEWER agent for Nix Workshop Hive Build Mode.\nYou have NO write authority.\n\nUSER REQUEST:\nIn `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.\n\nPROPOSED DIFF:\n\n\nDETERMINISTIC VERIFICATION:\n{\n  \"passed\": false,\n  \"full_gate_skipped\": true,\n  \"checks\": [\n    {\n      \"name\": \"external_full_gate_prerequisite\",\n      \"passed\": false,\n      \"detail\": \"A worker or edit prerequisite failed; partial proposals are ineligible.\"\n    }\n  ]\n}\n\nReturn JSON only:\n{\n  \"approve\": true,\n  \"summary\": \"review conclusion\",\n  \"issues\": [\"specific issue\"],\n  \"confidence\": 0.0\n}\n\nApprove only if the diff matches the request, stays narrowly scoped, and deterministic verification passed.\n<|im_end|>\n<|im_start|>assistant\n"
+  }
+}

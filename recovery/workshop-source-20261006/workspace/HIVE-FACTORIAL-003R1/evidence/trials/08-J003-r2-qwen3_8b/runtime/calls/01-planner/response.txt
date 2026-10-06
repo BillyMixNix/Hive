@@ -1,0 +1,18 @@
+{
+  "summary": "Add Observation.map method with specified behavior to Observation.java",
+  "ui_goal": "no change needed",
+  "backend_goal": "Implement Observation.map(java.util.function.Function<? super T, ? extends U>) with exact mapper application, null rejection, and status preservation",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/Observation.java"],
+    "tests": []
+  },
+  "acceptance": ["Observation.map applies mapper exactly once for available/integrated data, rejects null mapper/results, preserves status/detail for unavailable observations"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Observation.map implements specified behavior without altering existing factories/constructors"],
+    "tests": []
+  },
+  "interface_contracts": []
+}

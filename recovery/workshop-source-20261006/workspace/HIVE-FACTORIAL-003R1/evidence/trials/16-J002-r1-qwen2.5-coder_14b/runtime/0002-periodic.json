@@ -1,0 +1,96 @@
+{
+  "label": "0002-periodic",
+  "started_at": "2026-10-06T08:25:54.689541+00:00",
+  "monotonic_start": 187265.7109566,
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-06T08:25:55.8570492Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 2541116,
+        "total_virtual_kib": 29464228,
+        "free_virtual_kib": 1001876,
+        "available_bytes": 2620817408,
+        "committed_bytes": 29148672000,
+        "commit_limit_bytes": 30171369472
+      },
+      "related_processes": [
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 20076,
+          "ParentProcessId": 18920,
+          "WorkingSetSize": 24059904,
+          "PrivatePageCount": 88338432,
+          "UserModeTime": 171406250,
+          "KernelModeTime": 183906250,
+          "CommandLine": "\"D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe\""
+        },
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 1888,
+          "ParentProcessId": 20076,
+          "WorkingSetSize": 89042944,
+          "PrivatePageCount": 176025600,
+          "UserModeTime": 1852031250,
+          "KernelModeTime": 4917812500,
+          "CommandLine": "D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe services"
+        },
+        {
+          "Name": "ollama.exe",
+          "ProcessId": 3116,
+          "ParentProcessId": 19664,
+          "WorkingSetSize": 26173440,
+          "PrivatePageCount": 80875520,
+          "UserModeTime": 869062500,
+          "KernelModeTime": 820156250,
+          "CommandLine": "\"C:\\Users\\billy\\AppData\\Local\\Programs\\Ollama\\ollama.exe\" serve"
+        },
+        {
+          "Name": "vmmemWSL",
+          "ProcessId": 26596,
+          "ParentProcessId": 11304,
+          "WorkingSetSize": 399925248,
+          "PrivatePageCount": 1245499392,
+          "UserModeTime": 0,
+          "KernelModeTime": 18991562500,
+          "CommandLine": null
+        },
+        {
+          "Name": "llama-server.exe",
+          "ProcessId": 21660,
+          "ParentProcessId": 3116,
+          "WorkingSetSize": 6169673728,
+          "PrivatePageCount": 9487822848,
+          "UserModeTime": 28437500,
+          "KernelModeTime": 49687500,
+          "CommandLine": "C:\\Users\\billy\\AppData\\Local\\Programs\\Ollama\\lib\\ollama\\llama-server.exe --model C:\\Users\\billy\\.ollama\\models\\blobs\\sha256-ac9bc7a69dab38da1c790838955f1293420b55ab555ef6b4615efa1c1507b1ed --port 59209 --host 127.0.0.1 --no-webui --offline -c 12288 -np 1 --log-verbosity 4 --no-log-prefix --no-log-timestamps --no-jinja --chat-template chatml --load-mode none --flash-attn auto -b 512 -ub 512 --context-shift --keep 4"
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 3686, 2270\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": []
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "docker": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "finished_at": "2026-10-06T08:25:57.108639+00:00"
+}

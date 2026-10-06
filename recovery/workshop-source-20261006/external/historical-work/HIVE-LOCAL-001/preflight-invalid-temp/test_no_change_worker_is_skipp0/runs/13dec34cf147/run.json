@@ -1,0 +1,213 @@
+{
+  "id": "13dec34cf147",
+  "request": "Implement the health summary",
+  "local_model": "local",
+  "status": "rejected",
+  "metadata": {},
+  "provenance": {
+    "schema_version": 1,
+    "experiment": null,
+    "source_manifest_sha256": "2938082198a09b769d117fd9bc41cbb2fc3b40c06e85366710b196f363417bae",
+    "environment": {
+      "python": "3.13.14",
+      "platform": "Windows-11-10.0.26200-SP0"
+    },
+    "model_policy": {
+      "local_model": "local"
+    },
+    "started_at": 1790867130.4848955,
+    "finished_at": 1790867130.4854805,
+    "wall_seconds": 0.000585
+  },
+  "agents": {
+    "planner": {
+      "raw": "{\"summary\": \"Implement the health summary feature\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The health summary feature is safe and verified.\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"interface_contracts\": []}",
+      "parsed": {
+        "summary": "Implement the health summary feature",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "The health summary feature is safe and verified."
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": [],
+        "_intent_envelope": {
+          "version": 1,
+          "requirements": []
+        }
+      }
+    },
+    "ui": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "backend": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "tests": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "reviewer": {
+      "raw": "{\"approve\": true, \"summary\": \"reviewed\", \"issues\": [], \"confidence\": 1.0}",
+      "parsed": {
+        "approve": false,
+        "summary": "reviewed",
+        "issues": [
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      }
+    }
+  },
+  "changed_files": [],
+  "diff": "",
+  "verification": {
+    "passed": true,
+    "checks": []
+  },
+  "review": {
+    "approve": false,
+    "summary": "reviewed",
+    "issues": [
+      "No valid scoped edits were produced."
+    ],
+    "confidence": 1.0
+  },
+  "applied": false,
+  "repository_map": "REPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n  functions: health\nstatic/\n  index.html\ntests/\n  test_existing.py\n    functions: test_existing\nworkshop/\n  core.py\n    functions: core_helper",
+  "repository_facts": "REPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: FastAPI\nbackend_contract: use FastAPI route decorators and return JSON-compatible Python values\nbackend_forbidden_substitutions: do not use Flask @app.route or jsonify\nlocal_route_examples:\n  @app.get('/health')\n  def health():\nexisting_http_interfaces:\n  GET /health -> health; response_keys: ok; response_types: ok=boolean\nfrontend_contract: use the existing static/index.html api()/fetch() request path for backend data",
+  "intent_envelope": {
+    "version": 1,
+    "requirements": []
+  },
+  "replans": [],
+  "plan_attempts": [
+    {
+      "attempt": 1,
+      "raw": "{\"summary\": \"Implement the health summary feature\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The health summary feature is safe and verified.\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"interface_contracts\": []}",
+      "status": "accepted"
+    }
+  ],
+  "prompt_trace": [
+    {
+      "call_id": "13dec34cf147:call:0001",
+      "parent_call_id": null,
+      "role": "planner",
+      "started_at": 1790867130.4849405,
+      "prompt_chars": 5769,
+      "prompt_sha256": "5012598849e6d85ea01b171301e4a9b9e1835e646aa4cc471325e8eb2c849c2f",
+      "prompt_text": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n  functions: health\nstatic/\n  index.html\ntests/\n  test_existing.py\n    functions: test_existing\nworkshop/\n  core.py\n    functions: core_helper\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: FastAPI\nbackend_contract: use FastAPI route decorators and return JSON-compatible Python values\nbackend_forbidden_substitutions: do not use Flask @app.route or jsonify\nlocal_route_examples:\n  @app.get('/health')\n  def health():\nexisting_http_interfaces:\n  GET /health -> health; response_keys: ok; response_types: ok=boolean\nfrontend_contract: use the existing static/index.html api()/fetch() request path for backend data\n\nUSER CHANGE REQUEST:\nImplement the health summary\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing validator):\n- ui: static/index.html. HTML/CSS/JavaScript, Settings controls and display; never implement Python endpoints.\n- backend: app.py, workshop/*.py. Python endpoints and helpers; never implement HTML/JavaScript display or tests.\n- tests: tests/*.py. Regression tests only; never implement application or UI source.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nFor a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. For a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n",
+      "finished_at": 1790867130.4849796,
+      "wall_seconds": 3.9e-05,
+      "status": "completed",
+      "response_chars": 364,
+      "response_sha256": "c0b4df2ed6fc922509e4d2e6f8a1341c6641d7a38cb35e82cc59bf46fa9ad688",
+      "response_text": "{\"summary\": \"Implement the health summary feature\", \"ui_goal\": \"no change needed\", \"backend_goal\": \"no change needed\", \"tests_goal\": \"no change needed\", \"worker_files\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"acceptance\": [\"The health summary feature is safe and verified.\"], \"worker_acceptance\": {\"ui\": [], \"backend\": [], \"tests\": []}, \"interface_contracts\": []}"
+    },
+    {
+      "call_id": "13dec34cf147:call:0002",
+      "parent_call_id": null,
+      "role": "reviewer",
+      "started_at": 1790867130.4854293,
+      "prompt_chars": 454,
+      "prompt_sha256": "07b044ad9117cda856f7cfb14c53d49defe9ebdd4e49a7bd8fe97acc3ef00fea",
+      "prompt_text": "You are the REVIEWER agent for Nix Workshop Hive Build Mode.\nYou have NO write authority.\n\nUSER REQUEST:\nImplement the health summary\n\nPROPOSED DIFF:\n\n\nDETERMINISTIC VERIFICATION:\n{\n  \"passed\": true,\n  \"checks\": []\n}\n\nReturn JSON only:\n{\n  \"approve\": true,\n  \"summary\": \"review conclusion\",\n  \"issues\": [\"specific issue\"],\n  \"confidence\": 0.0\n}\n\nApprove only if the diff matches the request, stays narrowly scoped, and deterministic verification passed.\n",
+      "finished_at": 1790867130.4854546,
+      "wall_seconds": 2.5e-05,
+      "status": "completed",
+      "response_chars": 73,
+      "response_sha256": "4c96e8a517f272e4511c34e6f387c9d55437b1d3a373e1cca549d13434630884",
+      "response_text": "{\"approve\": true, \"summary\": \"reviewed\", \"issues\": [], \"confidence\": 1.0}"
+    }
+  ],
+  "edit_repairs": [],
+  "targeted_repairs": [],
+  "observations": [],
+  "stage_events": [
+    {
+      "stage": "planning",
+      "progress": 10,
+      "message": "Hive planner is building the bounded worker contracts",
+      "at": 1790867130.4849112
+    },
+    {
+      "stage": "ui",
+      "progress": 30,
+      "message": "Hive ui worker is evaluating its bounded contract",
+      "at": 1790867130.4850545
+    },
+    {
+      "stage": "backend",
+      "progress": 45,
+      "message": "Hive backend worker is evaluating its bounded contract",
+      "at": 1790867130.4850588
+    },
+    {
+      "stage": "tests",
+      "progress": 60,
+      "message": "Hive tests worker is evaluating its bounded contract",
+      "at": 1790867130.4850612
+    },
+    {
+      "stage": "verification",
+      "progress": 75,
+      "message": "Hive is running deterministic verification",
+      "at": 1790867130.485068
+    },
+    {
+      "stage": "review",
+      "progress": 90,
+      "message": "Hive reviewer is evaluating the staged diff and verification",
+      "at": 1790867130.4854054
+    },
+    {
+      "stage": "completed",
+      "progress": 100,
+      "message": "Hive run rejected",
+      "at": 1790867130.4854798
+    }
+  ],
+  "plan": {
+    "summary": "Implement the health summary feature",
+    "ui_goal": "no change needed",
+    "backend_goal": "no change needed",
+    "tests_goal": "no change needed",
+    "worker_files": {
+      "ui": [],
+      "backend": [],
+      "tests": []
+    },
+    "acceptance": [
+      "The health summary feature is safe and verified."
+    ],
+    "worker_acceptance": {
+      "ui": [],
+      "backend": [],
+      "tests": []
+    },
+    "interface_contracts": [],
+    "provider_changes": [],
+    "_intent_envelope": {
+      "version": 1,
+      "requirements": []
+    }
+  },
+  "base_manifest": {},
+  "staged_manifest": {}
+}

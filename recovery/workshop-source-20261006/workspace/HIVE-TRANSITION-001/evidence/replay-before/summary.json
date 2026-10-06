@@ -1,0 +1,36 @@
+{
+  "variant": "before",
+  "run_id": "f7fac6ddb7b1",
+  "status": "failed",
+  "roles_called": [
+    "planner",
+    "planner"
+  ],
+  "changed_files": [],
+  "verification": null,
+  "applied": false,
+  "failures": [
+    {
+      "role": "planner",
+      "stage": "plan_validation",
+      "exception_type": "PlanValidationError",
+      "exception_message": "multi-role plan requires at least one interface contract",
+      "raw_excerpt": "{\n  \"summary\": \"Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.\",\n  \"ui_goal\": \"No changes needed for UI.\",\n  \"backend_goal\": \"Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"tests_goal\": \"Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": [\"src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\"]\n  },\n  \"acceptance\": [\"SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound.\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation.\"],\n    \"tests\": [\"SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation.\"]\n  },\n  \"interface_contracts\": []\n}",
+      "raw_output_excerpt": "{\n  \"summary\": \"Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.\",\n  \"ui_goal\": \"No changes needed for UI.\",\n  \"backend_goal\": \"Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"tests_goal\": \"Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": [\"src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\"]\n  },\n  \"acceptance\": [\"SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound.\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation.\"],\n    \"tests\": [\"SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation.\"]\n  },\n  \"interface_contracts\": []\n}"
+    },
+    {
+      "role": "planner",
+      "stage": "plan_validation",
+      "exception_type": "HostWriteScopeError",
+      "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']",
+      "raw_excerpt": "{\n  \"summary\": \"Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.\",\n  \"ui_goal\": \"No changes needed for UI.\",\n  \"backend_goal\": \"Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"tests_goal\": \"Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": [\"src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\"]\n  },\n  \"acceptance\": [\"SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound.\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation.\"],\n    \"tests\": [\"SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation.\"]\n  },\n  \"interface_contracts\": [\n    {\n      \"name\": \"SnapshotFormatter.boundLine\",\n      \"owner\": \"backend\",\n      \"consumer_roles\": [\"tests\"],\n      \"contract\": \"SnapshotFormatter.boundLine truncates lines to MAX_LINE_CHARS while preserving complete UTF-16 surrogate pairs and does not introduce unpaired surrogates.\"\n    }\n  ]\n}",
+      "raw_output_excerpt": "{\n  \"summary\": \"Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.\",\n  \"ui_goal\": \"No changes needed for UI.\",\n  \"backend_goal\": \"Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"tests_goal\": \"Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": [\"src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java\"]\n  },\n  \"acceptance\": [\"SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound.\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation.\"],\n    \"tests\": [\"SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation.\"]\n  },\n  \"interface_contracts\": [\n    {\n      \"name\": \"SnapshotFormatter.boundLine\",\n      \"owner\": \"backend\",\n      \"consumer_roles\": [\"tests\"],\n      \"contract\": \"SnapshotFormatter.boundLine truncates lines to MAX_LINE_CHARS while preserving complete UTF-16 surrogate pairs and does not introduce unpaired surrogates.\"\n    }\n  ]\n}"
+    }
+  ],
+  "response_hashes_match": [
+    true,
+    true
+  ],
+  "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "stage_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388"
+}

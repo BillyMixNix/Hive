@@ -1,0 +1,348 @@
+--- historical/app.py
++++ prospective/app.py
+@@ -679,15 +679,22 @@
+     ok, models = await providers.ollama_status()
+     if ok and local_model in models:
+         try:
++            response_format = hive.response_schema_for_prompt(role, prompt)
++            output_limit = HIVE_LOCAL_OUTPUT_TOKEN_LIMITS.get(role, 6000)
+             result = await providers.ollama_chat(
+                 local_model,
+                 [{"role":"user","content":prompt}],
+                 f"You are the bounded {role} agent inside Nix Workshop Hive Build Mode. Follow the role contract exactly.",
+-                response_format=hive.response_schema_for_prompt(role, prompt),
++                response_format=response_format,
+                 temperature=hive.LOCAL_TEMPERATURE,
+-                max_output_tokens=HIVE_LOCAL_OUTPUT_TOKEN_LIMITS.get(role, 6000),
++                max_output_tokens=output_limit,
+                 context_window=LOCAL_CONTEXT_WINDOW,
+                 cancel_event=cancel_event,
++                **providers.thinking_policy.worker_options(
++                    local_model, role, response_format=response_format,
++                    max_output_tokens=output_limit,
++                    total_timeout=providers.OLLAMA_TOTAL_GENERATION_TIMEOUT,
++                ),
+             )
+             db.add_ledger(
+                 "hive_agent",
+--- historical/tests/test_semantic_fidelity.py
++++ prospective/tests/test_semantic_fidelity.py
+@@ -156,7 +156,7 @@
+     root=Path(__file__).resolve().parents[1]
+     old=root.parent.parent/'HIVE-TRANSITION-004C/repaired-workshop'
+     if not old.exists():pytest.skip('historical comparison available only in experiment workspace')
+-    for name in ['workshop/providers.py','workshop/hive_protocol.py','workshop/hive_verifier.py',
++    for name in ['workshop/hive_protocol.py','workshop/hive_verifier.py',
+                  'workshop/external_root.py','workshop/hive_jvm.py']:
+         assert hashlib.sha256((root/name).read_bytes()).digest()==hashlib.sha256((old/name).read_bytes()).digest()
+     # Source compatibility is intentionally generalized by NFRT-ATTESTATION-002.
+@@ -166,3 +166,10 @@
+     current=functions(root/'verification/nfrt_seed.py');previous=functions(old/'verification/nfrt_seed.py')
+     for name in ('ordinary','digest','relative','verify_seed','private_copy'):
+         assert current[name]==previous[name]
++    # The optional thinking transport extends ollama_chat only. Stream parsing,
++    # cancellation, deadlines, retry classification and unrelated providers stay exact.
++    def provider_functions(path):
++        return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(path.read_text()).body
++                if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef))}
++    current=provider_functions(root/'workshop/providers.py');previous=provider_functions(old/'workshop/providers.py')
++    assert {k:v for k,v in current.items() if k!='ollama_chat'}=={k:v for k,v in previous.items() if k!='ollama_chat'}
+--- historical/tests/test_thinking_policy.py
++++ prospective/tests/test_thinking_policy.py
+@@ -0,0 +1,176 @@
++import asyncio
++import ast
++import hashlib
++import json
++from pathlib import Path
++import httpx
++import pytest
++from workshop import providers, thinking_policy as policy
++from test_ollama_structured_output import mock_http, ollama_response
++
++MODEL='synthetic-switchable'
++TEMPLATE='synthetic boolean switch template'
++SCHEMA={'type':'object','properties':{'status':{'type':'string'}},'required':['status']}
++
++@pytest.fixture
++def profile(monkeypatch):
++    p={'provider_version':'test-version','model_digest':'a'*64,'template_sha256':hashlib.sha256(TEMPLATE.encode()).hexdigest(),
++       'values':[True,False],'bounded_worker_think':False}
++    monkeypatch.setattr(policy,'PROFILES',{MODEL:p})
++    return p
++
++def handler(profile,chat=None,overrides=None):
++    values={'/api/version':{'version':profile['provider_version']},
++        '/api/tags':{'models':[{'name':MODEL,'digest':profile['model_digest']}]},
++        '/api/show':{'template':TEMPLATE,'capabilities':['completion','thinking']}}
++    values.update(overrides or {})
++    def dispatch(req):
++        if req.url.path=='/api/chat':return chat(req) if chat else ollama_response('{"status":"ok"}')
++        return httpx.Response(200,json=values[req.url.path])
++    return dispatch
++
++def invoke(**kw):
++    return asyncio.run(providers.ollama_chat(MODEL,[{'role':'user','content':'unchanged source and task'}],'unchanged system',
++        response_format=SCHEMA,temperature=.1,max_output_tokens=6000,context_window=12288,total_timeout=900,**kw))
++
++@pytest.mark.parametrize('value',[False,True])
++def test_supported_exact_wire_value_and_unchanged_settings(profile,mock_http,value):
++    requests,_=mock_http(handler(profile));result=invoke(think=value)
++    body=json.loads(requests[-1].content)
++    assert body['think'] is value
++    assert body['format']==SCHEMA and body['truncate'] is False
++    assert body['options']=={'temperature':.1,'num_predict':6000,'num_ctx':12288}
++    assert body['messages']==[{'role':'system','content':'unchanged system'},{'role':'user','content':'unchanged source and task'}]
++    assert result['thinking_policy']['requested'] is value
++    assert result['text']=='{"status":"ok"}'
++    assert [r.url.path for r in requests]==['/api/version','/api/tags','/api/show','/api/chat']
++
++@pytest.mark.parametrize('kwargs',[{}, {'think':None}])
++def test_default_no_capability_requests_or_wire_change(profile,mock_http,kwargs):
++    requests,_=mock_http(handler(profile));invoke(**kwargs)
++    assert len(requests)==1 and 'think' not in json.loads(requests[0].content)
++
++@pytest.mark.parametrize('bad',[0,1,'false','true',{},[]])
++def test_wrong_types_fail_before_generation(profile,mock_http,bad):
++    requests,_=mock_http(handler(profile))
++    with pytest.raises(providers.OllamaRequestError,match='think must be boolean'):invoke(think=bad)
++    assert not requests
++
++def test_unattested_model_fails_explicitly(profile,mock_http,monkeypatch):
++    monkeypatch.setattr(policy,'PROFILES',{});requests,_=mock_http(handler(profile))
++    with pytest.raises(providers.OllamaRequestError,match='not attested'):invoke(think=False)
++    assert not requests
++
++@pytest.mark.parametrize('override',[
++    {'/api/version':{'version':'other'}},
++    {'/api/tags':{'models':[{'name':MODEL,'digest':'changed'}]}},
++    {'/api/show':{'template':'changed','capabilities':['thinking']}},
++    {'/api/show':{'template':TEMPLATE,'capabilities':['completion']}},
++])
++def test_identity_drift_no_chat_or_silent_fallback(profile,mock_http,override):
++    requests,_=mock_http(handler(profile,overrides=override))
++    with pytest.raises(providers.OllamaRequestError,match='identity mismatch'):invoke(think=False)
++    assert all(r.url.path!='/api/chat' for r in requests)
++
++def test_provider_capability_error_is_error(profile,mock_http):
++    requests,_=mock_http(lambda r:httpx.Response(500,text='discovery failed'))
++    with pytest.raises(providers.OllamaRequestError,match='validation failed'):invoke(think=False)
++    assert all(r.url.path!='/api/chat' for r in requests)
++
++def test_retry_same_request_no_mode_switch(profile,mock_http):
++    bodies=[]
++    def chat(req):
++        bodies.append(req.content)
++        return httpx.Response(500,text='allocation failure') if len(bodies)==1 else ollama_response('{}')
++    requests,_=mock_http(handler(profile,chat));result=invoke(think=False)
++    assert len(bodies)==2 and bodies[0]==bodies[1]
++    assert json.loads(bodies[0])['think'] is False
++    assert result['text']=='{}'
++    assert sum(r.url.path=='/api/show' for r in requests)==1
++
++def test_exhausted_provider_errors_remain_errors(profile,mock_http):
++    bodies=[]
++    def chat(req):bodies.append(req.content);return httpx.Response(500,text='allocation failed')
++    mock_http(handler(profile,chat))
++    with pytest.raises(providers.OllamaRequestError,match='allocation failed'):invoke(think=False)
++    assert len(bodies)==2 and bodies[0]==bodies[1]
++
++def test_generation_deadline_does_not_switch_or_retry(profile,mock_http,monkeypatch):
++    mock_http(handler(profile));bodies=[]
++    async def timeout(body,**kw):
++        bodies.append(body.copy());assert kw['total_timeout']==900
++        raise providers.OllamaRequestError('900-second total limit',retryable=False)
++    monkeypatch.setattr(providers,'_ollama_chat_once',timeout)
++    with pytest.raises(providers.OllamaRequestError,match='900-second'):invoke(think=False)
++    assert len(bodies)==1 and bodies[0]['think'] is False
++
++@pytest.mark.parametrize('role',['backend','ui','tests'])
++@pytest.mark.parametrize('turn',['initial','structural correction','targeted correction'])
++def test_all_worker_turns_use_same_preselected_policy(profile,role,turn):
++    # No prompt inspection: semantic/structural correction text cannot switch policy.
++    assert policy.worker_options(MODEL,role,response_format=SCHEMA,max_output_tokens=6000,total_timeout=900)=={'think':False}
++
++@pytest.mark.parametrize('role',['planner','reviewer'])
++def test_nonworker_policy_unchanged(profile,role):
++    assert policy.worker_options(MODEL,role,response_format=SCHEMA,max_output_tokens=2048,total_timeout=900)=={}
++
++@pytest.mark.parametrize('override',[
++    {'provider':'openai'},{'model':'unrelated'}, {'response_format':None},
++    {'max_output_tokens':None},{'max_output_tokens':0},{'total_timeout':None},{'total_timeout':float('inf')},
++])
++def test_unrelated_or_unbounded_retains_defined_default(profile,override):
++    args=dict(model=MODEL,role='backend',provider='ollama',response_format=SCHEMA,max_output_tokens=6000,total_timeout=900)
++    args.update(override);assert policy.worker_options(**args)=={}
++
++def test_application_uses_same_policy_and_retains_role_schema():
++    tree=ast.parse((Path(__file__).parents[1]/'app.py').read_text(encoding='utf-8'))
++    fn=next(n for n in tree.body if isinstance(n,ast.AsyncFunctionDef) and n.name=='hive_agent_call')
++    calls=[n for n in ast.walk(fn) if isinstance(n,ast.Call)]
++    request=next(n for n in calls if ast.unparse(n.func)=='providers.ollama_chat')
++    assert any(k.arg is None and ast.unparse(k.value.func)=='providers.thinking_policy.worker_options' for k in request.keywords)
++    assert any(ast.unparse(n.func)=='hive.response_schema_for_prompt' for n in calls)
++    assert next(k.value.id for k in request.keywords if k.arg=='context_window')=='LOCAL_CONTEXT_WINDOW'
++
++def test_context_guard_still_fails(profile,mock_http):
++    requests,_=mock_http(handler(profile))
++    with pytest.raises(ValueError,match='must exceed'):
++        asyncio.run(providers.ollama_chat(MODEL,[],'x',max_output_tokens=6000,context_window=6000,think=False))
++    assert not requests
++
++@pytest.mark.parametrize('structural_first',[False,True])
++def test_real_app_worker_and_correction_dispatch_use_frozen_mode(profile,tmp_path,monkeypatch,structural_first):
++    import time
++    from types import SimpleNamespace
++    from workshop import hive
++    from test_hive_observation_loop import _source,_plan,_implementation,_review
++    root=_source(tmp_path);seen=[]
++    async def status():return True,[MODEL]
++    async def chat(model,messages,instructions,**kwargs):
++        role=instructions.split('bounded ',1)[1].split(' agent',1)[0]
++        seen.append({'role':role,'kwargs':kwargs,'prompt':messages[0]['content']})
++        if role=='planner':text=json.dumps(_plan())
++        elif role=='reviewer':text=_review()
++        elif structural_first and sum(s['role']=='backend' for s in seen)==1:
++            obj=json.loads(_implementation());obj['edits'][0]['find']='nonexistent synthetic anchor';text=json.dumps(obj)
++        else:text=_implementation()
++        return {'text':text,'input_tokens':10,'output_tokens':10}
++    tree=ast.parse((Path(__file__).parents[1]/'app.py').read_text(encoding='utf-8'))
++    fn=next(n for n in tree.body if isinstance(n,ast.AsyncFunctionDef) and n.name=='hive_agent_call')
++    ns={'time':time,'json':json,'hive':hive,'LOCAL_CONTEXT_WINDOW':12288,
++        'HIVE_LOCAL_OUTPUT_TOKEN_LIMITS':{'planner':2048,'backend':6000,'reviewer':1536},
++        'providers':SimpleNamespace(ollama_status=status,ollama_chat=chat,thinking_policy=policy,OLLAMA_TOTAL_GENERATION_TIMEOUT=900),
++        'db':SimpleNamespace(add_ledger=lambda *a:None)}
++    exec(compile(ast.Module(body=[fn],type_ignores=[]),'app.py','exec'),ns)
++    async def call(role,prompt):return await ns['hive_agent_call'](role,prompt,MODEL,False,'local',{})
++    monkeypatch.setattr(hive,'targeted_verify',lambda *a:{'passed':False,'checks':[{'name':'synthetic','passed':False,'detail':'synthetic failure'}]})
++    monkeypatch.setattr(hive,'verify_tree',lambda *a:{'passed':True,'checks':[]})
++    result=asyncio.run(hive.run_build(root,tmp_path/'runs','Preserve task semantics',MODEL,call))
++    workers=[s for s in seen if s['role']=='backend']
++    assert len(workers)==(3 if structural_first else 2),result.get('errors')
++    assert all(s['kwargs']['think'] is False and s['kwargs']['max_output_tokens']==6000 for s in workers)
++    assert all('think' not in s['kwargs'] for s in seen if s['role'] in ('planner','reviewer'))
++    assert all('Preserve task semantics' in s['prompt'] for s in workers)
++    assert len(result['targeted_repairs'])==1
++    assert len(result['edit_repairs'])==(1 if structural_first else 0)
++    assert result['agents']['backend']['failure']['exception_type']=='RepeatedFailedProposal'
++    assert result['changed_files']==[]
+--- historical/workshop/providers.py
++++ prospective/workshop/providers.py
+@@ -2,6 +2,7 @@
+ from __future__ import annotations
+ import os, base64, httpx, shutil, subprocess, asyncio, json, contextlib
+ from pathlib import Path
++from . import thinking_policy
+ 
+ OPENAI_BASE = "https://api.openai.com/v1"
+ OLLAMA_BASE = os.environ.get("OLLAMA_BASE_URL","http://127.0.0.1:11434").rstrip("/")
+@@ -226,7 +227,7 @@
+ async def ollama_chat(model, messages, instructions, image_data_url=None, *,
+                       response_format=None, temperature=None,
+                       max_output_tokens=None, context_window=None, cancel_event=None,
+-                      total_timeout=OLLAMA_TOTAL_GENERATION_TIMEOUT):
++                      total_timeout=OLLAMA_TOTAL_GENERATION_TIMEOUT, think=None):
+     """Chat locally, optionally using a JSON schema or 'json' response format."""
+     global _last_ollama_error
+     msgs = [{"role":"system","content":instructions}] + [{"role":m["role"],"content":m["content"]} for m in messages]
+@@ -258,6 +259,15 @@
+         body["truncate"] = False
+     if options:
+         body["options"] = options
++    thinking_evidence = None
++    if think is not None:
++        try:
++            async with httpx.AsyncClient(timeout=10.0, trust_env=False) as client:
++                thinking_evidence = await thinking_policy.validate(client, OLLAMA_BASE, model, think)
++        except Exception as exc:
++            _last_ollama_error = f"Thinking-control validation failed: {type(exc).__name__}: {exc}"
++            raise OllamaRequestError(_last_ollama_error, retryable=False) from exc
++        body["think"] = think
+     last=None
+     for attempt in (1, 2):
+         try:
+@@ -277,6 +287,8 @@
+         raise OllamaRequestError(f"Ollama chat failed at {OLLAMA_BASE}: {_last_ollama_error}") from last
+     if last is not None and "result" not in locals():
+         raise OllamaRequestError(f"Ollama chat failed at {OLLAMA_BASE}: {_last_ollama_error}") from last
++    if thinking_evidence is not None:
++        result["thinking_policy"] = thinking_evidence
+     return result
+ 
+ async def generate_image(prompt, quality="low", size="1024x1024", model="gpt-image-2.5-flare"):
+--- historical/workshop/thinking_policy.py
++++ prospective/workshop/thinking_policy.py
+@@ -0,0 +1,57 @@
++"""Host-approved thinking controls; omission preserves the provider default.
++
++Profiles bind locally proven boolean controls to exact runtime/model identities.
++A thinking-capable model does not necessarily support disabling thinking.
++"""
++from __future__ import annotations
++import hashlib
++import json
++import math
++from pathlib import Path
++
++PROFILES = json.loads(Path(__file__).with_name("thinking_profiles.json").read_text(encoding="utf-8"))
++WORKER_ROLES = frozenset(("ui", "backend", "tests"))
++
++
++def worker_options(model, role, *, provider="ollama", response_format=None,
++                   max_output_tokens=None, total_timeout=None):
++    """Choose once, before generation, only for bounded structured workers."""
++    if provider != "ollama" or role not in WORKER_ROLES:
++        return {}
++    profile = PROFILES.get(model)
++    if profile is None:
++        return {}  # Unrelated combinations retain their existing/default policy.
++    if not (response_format == "json" or isinstance(response_format, dict)):
++        return {}
++    if (type(max_output_tokens) is not int or max_output_tokens < 1
++            or type(total_timeout) not in (int, float)
++            or not math.isfinite(total_timeout) or total_timeout <= 0):
++        return {}
++    value = profile["bounded_worker_think"]
++    if type(value) is not bool:
++        raise ValueError("Invalid host thinking policy")
++    return {"think": value}
++
++
++async def validate(client, base, model, value):
++    """Fail closed without generation when explicit control lacks local proof."""
++    if type(value) is not bool:
++        raise ValueError("think must be boolean or omitted")
++    profile = PROFILES.get(model)
++    if profile is None or not any(type(v) is bool and v is value for v in profile["values"]):
++        raise ValueError("Explicit thinking control is not attested for this model")
++    # Neither a tag name nor the mere presence of 'thinking' establishes support.
++    version = await client.get(base + "/api/version")
++    tags = await client.get(base + "/api/tags")
++    show = await client.post(base + "/api/show", json={"model": model})
++    for response in (version, tags, show):
++        response.raise_for_status()
++    details = show.json()
++    actual = {
++        "provider_version": version.json().get("version"),
++        "model_digest": next((m.get("digest") for m in tags.json().get("models", []) if m.get("name") == model), None),
++        "template_sha256": hashlib.sha256(details.get("template", "").encode()).hexdigest(),
++    }
++    if actual != {key: profile[key] for key in actual} or "thinking" not in details.get("capabilities", []):
++        raise ValueError("Thinking-control capability identity mismatch; requalification required")
++    return {"requested": value, "validation": "host-attested boolean control", **actual}
+--- historical/workshop/thinking_profiles.json
++++ prospective/workshop/thinking_profiles.json
+@@ -0,0 +1,13 @@
++{
++  "qwen3:8b": {
++    "provider_version": "0.34.0",
++    "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
++    "template_sha256": "ae370d884f108d16e7cc8fd5259ebc5773a0afa6e078b11f4ed7e39a27e0dfc4",
++    "values": [
++      false,
++      true
++    ],
++    "bounded_worker_think": false,
++    "capability_proof_sha256": "c9ee983060d86aad68d2d4888a369dc76fa1796b3bf7d51debe67f7720d29f2c"
++  }
++}

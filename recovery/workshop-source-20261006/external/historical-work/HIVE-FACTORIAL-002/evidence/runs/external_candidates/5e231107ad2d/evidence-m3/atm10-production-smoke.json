@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-23T04:54:35.933579400Z",
+  "scope": "Opt-in disposable production-loader full-server-pack smoke; no graphical client or survival-world playtest",
+  "observedServerTicks": 811,
+  "probeElapsedMillis": 179027,
+  "minecraft": "1.21.1",
+  "loadedModCount": 503,
+  "companionVersion": "0.3.0",
+  "indexStatus": {
+    "state": "ready",
+    "generation": 1,
+    "phase": "complete",
+    "totalDefinitions": 95229,
+    "visitedDefinitions": 95229,
+    "selectedDefinitions": 50000,
+    "normalizedDefinitions": 50000,
+    "lookupDefinitions": 50000,
+    "slices": 811,
+    "activeMillis": 1663,
+    "elapsedMillis": 55595,
+    "maxSliceMillis": 71,
+    "detail": "Completed bounded index; per-recipe and coverage limitations still apply"
+  },
+  "indexStats": {
+    "totalRecipes": 95229,
+    "inspectedRecipes": 50000,
+    "indexedRecipes": 50000,
+    "unknownOutputs": 4499,
+    "unsupportedRecipes": 14662,
+    "definitionsTruncated": true,
+    "buildMillis": 55594
+  },
+  "indexCoverage": {
+    "reasons": [
+      "retained_definition_cap",
+      "unknown_or_nonfixed_outputs",
+      "unsupported_dependencies",
+      "ingredient_retention_budget",
+      "output_route_cap"
+    ],
+    "invalidIdentities": 0,
+    "retainedAlternatives": 200000,
+    "retainedIdentities": 400000,
+    "truncatedOutputs": 4,
+    "slices": 811,
+    "activeMillis": 1663,
+    "maxSliceMillis": 71
+  },
+  "indexComplete": false,
+  "outputItems": 40020,
+  "stationScan": {
+    "radius": 8,
+    "totalPositions": 4913,
+    "scannedPositions": 3514,
+    "loadedPositions": 3514,
+    "unloadedPositions": 0,
+    "discoveredStations": 0,
+    "recordsTruncated": false,
+    "budgetExceeded": true,
+    "deepInspections": 0,
+    "predicateChecks": 0
+  },
+  "observedStationCount": 0,
+  "plans": [
+    {
+      "goal": "minecraft:diamond_pickaxe",
+      "materialStatus": "unsupported",
+      "executionStatus": "unknown",
+      "metrics": {
+        "indexGeneration": 1,
+        "expandedNodes": 258,
+        "depth": 0,
+        "searchTruncated": true,
+        "indexComplete": false,
+        "planningNanos": 32881900
+      },
+      "timings": {
+        "materialNanos": 40177000,
+        "executionNanos": 11253900,
+        "questNanos": 10200,
+        "totalNanos": 56810700
+      },
+      "nextAction": {
+        "kind": "inspect",
+        "item": "minecraft:diamond_pickaxe",
+        "quantity": 1,
+        "recipeId": "",
+        "reason": "aether:diamond_pickaxe_repairing: Unrecognized or dynamic recipe class: advertised output is a preview, never guaranteed fixed output"
+      },
+      "ownedRequirements": [],
+      "missingCount": 0,
+      "missingPreview": [],
+      "unsupportedCount": 1,
+      "unsupportedPreview": [
+        {
+          "item": "minecraft:diamond_pickaxe",
+          "quantity": 1,
+          "kind": "unsupported_recipe",
+          "reason": "aether:diamond_pickaxe_repairing: Unrecognized or dynamic recipe class: advertised output is a preview, never guaranteed fixed output"
+        }
+      ],
+      "stepCount": 1,
+      "recipePreview": [
+        "aether:diamond_pickaxe_repairing"
+      ],
+      "previewLimits": "At most 16 missing entries, 8 unsupported entries and 12 recipe IDs; totals are separate."
+    },
+    {
+      "goal": "minecraft:glass",
+      "materialStatus": "blocked",
+      "executionStatus": "blocked",
+      "metrics": {
+        "indexGeneration": 1,
+        "expandedNodes": 268,
+        "depth": 1,
+        "searchTruncated": true,
+        "indexComplete": false,
+        "planningNanos": 14228200
+      },
+      "timings": {
+        "materialNanos": 14614600,
+        "executionNanos": 7622400,
+        "questNanos": 700,
+        "totalNanos": 22422300
+      },
+      "nextAction": {
+        "kind": "obtain",
+        "item": "create:framed_glass",
+        "quantity": 1,
+        "recipeId": "",
+        "reason": "First unresolved material on the selected production path. No indexed supported route was found for this leaf; gathering methods are not modeled."
+      },
+      "ownedRequirements": [],
+      "missingCount": 1,
+      "missingPreview": [
+        {
+          "item": "create:framed_glass",
+          "quantity": 1
+        }
+      ],
+      "unsupportedCount": 0,
+      "unsupportedPreview": [],
+      "stepCount": 1,
+      "recipePreview": [
+        "create:smelting/glass_from_framed_glass"
+      ],
+      "previewLimits": "At most 16 missing entries, 8 unsupported entries and 12 recipe IDs; totals are separate."
+    },
+    {
+      "goal": "minecraft:stone",
+      "materialStatus": "blocked",
+      "executionStatus": "blocked",
+      "metrics": {
+        "indexGeneration": 1,
+        "expandedNodes": 391,
+        "depth": 1,
+        "searchTruncated": true,
+        "indexComplete": false,
+        "planningNanos": 22469700
+      },
+      "timings": {
+        "materialNanos": 22645400,
+        "executionNanos": 4838300,
+        "questNanos": 800,
+        "totalNanos": 27532200
+      },
+      "nextAction": {
+        "kind": "obtain",
+        "item": "iceandfire:frozen_stone",
+        "quantity": 1,
+        "recipeId": "",
+        "reason": "First unresolved material on the selected production path. No indexed supported route was found for this leaf; gathering methods are not modeled."
+      },
+      "ownedRequirements": [],
+      "missingCount": 1,
+      "missingPreview": [
+        {
+          "item": "iceandfire:frozen_stone",
+          "quantity": 1
+        }
+      ],
+      "unsupportedCount": 0,
+      "unsupportedPreview": [],
+      "stepCount": 1,
+      "recipePreview": [
+        "iceandfire:furnace/frozen_stone"
+      ],
+      "previewLimits": "At most 16 missing entries, 8 unsupported entries and 12 recipe IDs; totals are separate."
+    }
+  ],
+  "terminalStatus": "passed"
+}

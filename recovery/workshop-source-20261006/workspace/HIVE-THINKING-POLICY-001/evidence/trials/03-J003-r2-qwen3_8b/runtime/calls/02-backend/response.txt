@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "summary": "Added Observation.map(Function) method with exact mapper application and null rejection logic",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/state/Observation.java",
+      "operation": "insert_after_anchor",
+      "anchor": "public static <T> Observation<T> notIntegrated(String reason) {",
+      "insert": "    public <U> Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {\n        Objects.requireNonNull(mapper, \"mapper\");\n        if (status == CapabilityStatus.AVAILABLE && data != null) {\n            return new Observation<>(\n                status,\n                mapper.apply(data),\n                detail\n            );\n        }\n        return new Observation<>(\n            status,\n            data,\n            detail\n        );\n    }"
+    }
+  ],
+  "risks": []
+}

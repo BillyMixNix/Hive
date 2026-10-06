@@ -1,0 +1,26 @@
+{
+  "request": "Add `IntegrationRegistry.inspectSelected(Set<String> capabilities)`. Inspect\nexactly the named registered capabilities using the existing failure and\nunavailable semantics. Do not invoke a mod predicate or adapter factory for\nan unselected registration. Reject null, a null member, or any unknown name\nwith `IllegalArgumentException` before inspecting anything. Return an\nimmutable map; leave registrations and `inspect()` behavior unchanged.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.integration.IntegrationSelectedAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.integration;\n\nimport dev.atmcompanion.state.Capability;\nimport dev.atmcompanion.state.CapabilityStatus;\nimport org.junit.jupiter.api.Test;\nimport java.util.Map;\nimport java.util.Set;\nimport java.util.concurrent.atomic.AtomicInteger;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass IntegrationSelectedAcceptanceTest {\n    @Test void skipsUnselectedFactoriesAndRejectsBadRequestsBeforeInspection() {\n        var inspected = new AtomicInteger();\n        var registry = new IntegrationRegistry(mod -> { inspected.incrementAndGet(); return true; }, message -> fail(message));\n        registry.register(\"selected\", \"example\", () -> new Integration() {\n            public boolean isAvailable() { return true; }\n            public Map<String, Capability> capabilities() {\n                return Map.of(\"selected\", new Capability(CapabilityStatus.AVAILABLE, \"observed\"));\n            }\n        });\n        registry.register(\"skipped\", \"example\", () -> { throw new AssertionError(\"unselected factory executed\"); });\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(Set.of(\"unknown\")));\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(null));\n        var withNull = new java.util.HashSet<String>();\n        withNull.add(\"selected\");\n        withNull.add(null);\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(withNull));\n        assertEquals(0, inspected.get());\n        var selected = registry.inspectSelected(Set.of(\"selected\"));\n        assertEquals(Set.of(\"selected\"), selected.keySet());\n        assertEquals(CapabilityStatus.AVAILABLE, selected.get(\"selected\").status());\n        assertEquals(1, inspected.get());\n        assertThrows(UnsupportedOperationException.class, () -> selected.clear());\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N005",
+    "replicate_index": 1,
+    "trial_id": "a09b7aedd5d7",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

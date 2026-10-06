@@ -1,0 +1,28 @@
+Nix Workshop v0.11.1 verification
+
+Source compileall: PASS.
+Source full pytest: 308 passed, 2 skipped, 1 failed during setup.
+The only failure is the existing `test_sanitized_copy_rejects_symlinks`; Windows returned
+WinError 1314 because this account cannot create symlinks. The test and safety behavior were
+not weakened. With only that OS-blocked test deselected: 308 passed, 2 skipped.
+Focused feature-catalog, feature-ID endpoint/UI, and release tests: 20 passed.
+
+Extracted archive compileall: PASS.
+Extracted archive full pytest: 308 passed, 2 skipped, 1 failed during setup with the same
+Windows WinError 1314 symlink-privilege limitation. This is not a product assertion failure.
+The source and extracted archive therefore agree on the limitation and test counts.
+The package has 111 files, ZIP integrity passes, and the archive scan found 0 forbidden
+runtime/cache/build artifacts.
+
+v0.11.1 changes:
+- Added a bounded, read-only parser/resolver for structured `FEATURES.md` entries.
+- Added `GET /api/hive/features/{feature_id}` to preview buildable status and the specification hash.
+- The Hive Build UI displays the selected entry and requires explicit confirmation.
+- The build endpoint re-resolves the specification and rejects unknown, non-planned, incomplete,
+  malformed-hash, or stale selections before queueing.
+- The resolved feature ID, original command, structured specification, and section hash are
+  persisted in run metadata; normal free-form requests are unchanged.
+- Feature selection does not grant ownership or bypass planning, validation, verification,
+  review, human approval, apply, or rollback gates.
+
+Verification environment: Windows, Python 3.13, pytest 9.1.1.

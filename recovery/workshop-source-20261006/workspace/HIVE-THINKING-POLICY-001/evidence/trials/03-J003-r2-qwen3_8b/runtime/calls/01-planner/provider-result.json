@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Add `Observation.map(Function)` method to transform available integrated observations while preserving status and detail\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Implement `Observation.map(Function)` method with exact mapper application and null rejection logic\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/Observation.java\"],\n    \"tests\": []\n  },\n  \"acceptance\": [\"Observation.map() transforms available integrated observations with mapper, preserves status/detail for unavailable cases, rejects null mappers/results\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"Observation.map() applies mapper exactly once for available/integrated observations, rejects null mappers/results, preserves status/detail for unavailable cases\"],\n    \"tests\": []\n  },\n  \"interface_contracts\": []\n}",
+  "input_tokens": 3843,
+  "output_tokens": 796,
+  "raw_id": null
+}

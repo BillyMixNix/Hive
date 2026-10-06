@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Add map method to Observation class with specified constraints\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Implement Observation.map method with exact mapper application and null rejection\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/Observation.java\"],\n    \"tests\": []\n  },\n  \"acceptance\": [\"Observation.map applies mapper exactly once for available data, rejects nulls, preserves status/detail\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"Observation.map implementation matches specification\"],\n    \"tests\": []\n  },\n  \"interface_contracts\": [],\n  \"provider_changes\": []\n}",
+  "input_tokens": 3843,
+  "output_tokens": 948,
+  "raw_id": null
+}

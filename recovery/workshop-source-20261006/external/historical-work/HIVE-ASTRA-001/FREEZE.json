@@ -1,0 +1,119 @@
+{
+  "benchmark": "HIVE-ASTRA-001",
+  "status": "pre_registered_awaiting_spend_cap",
+  "created_utc_date": "2026-09-30",
+  "model_calls_made_during_preparation": 0,
+  "promotion_allowed": false,
+  "workshop": {
+    "version": "0.11.1",
+    "source_root": "work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1",
+    "source_manifest_sha256": "0f05bd36049996965dd96344202b74b428710750c18dfd3473dbe5e529195f16",
+    "source_manifest_file_count": 127,
+    "telemetry_change_files": [
+      "app.py",
+      "workshop/persistent_agent.py",
+      "tests/test_agent_usage_telemetry.py",
+      "tests/test_persistent_agent_backend.py"
+    ],
+    "source_verification": "python -m compileall -q . passed; python -m pytest -q: 370 passed, 6 skipped"
+  },
+  "provider": {
+    "provider_family": "OpenAI Agents API",
+    "model": "gpt-6-astra",
+    "persistent_sessions": true,
+    "agent_environment": "none",
+    "multi_agent": false,
+    "agent_turn_timeout_seconds": 900,
+    "usage_policy": "Record provider-reported turn usage when present; absent usage stays null; do not treat missing usage or an unrelated Hive budget counter as zero cost. Agents turn usage is best-effort and is not a billed-cost receipt."
+  },
+  "baseline": {
+    "root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+    "tree_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "candidate_policy": "Each task-condition receives a fresh independent disposable copy. No candidate is promoted or applied."
+  },
+  "verifier": {
+    "image": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "java_version": "21.0.12.1",
+    "gradle_wrapper_version": "9.2.1",
+    "gradle_distribution_sha256": "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f",
+    "wrapper_jar_sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172",
+    "wrapper_properties_sha256": "e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e",
+    "network": "none",
+    "root_filesystem": "read-only",
+    "approved_caches": "read-only",
+    "workspace": "bounded tmpfs",
+    "limits": {
+      "pids": 384,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "additional_swap": "0 bytes",
+      "cpus": 2,
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    }
+  },
+  "approved_cache": {
+    "run_id": "e5a7c314b902",
+    "gradle_artifact_manifest_sha256": "83759b6046e4290e6388ea95b2013f12edf500d4f86f39cc3401dd646117c2f9",
+    "gradle_priming_provenance_sha256": "259c05807ca37790a151a51fe1d125a0978720942dac963462943f9d0d35ba49",
+    "external_build_inputs_manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "external_build_inputs_provenance_sha256": "0805a46b429c299d752928cc68b2306f642e34e2bc1c0ff6dfc50236984df5c4",
+    "frozen_junit_manifest_sha256": "8918b7de6ffda2ef40c03a29abca5c2c6b13aa0bf615039828929775bf2be92e"
+  },
+  "existing_hive_limits": {
+    "planner_corrections_per_run": 1,
+    "worker_replans_per_worker": 1,
+    "structural_edit_repairs_per_worker": 1,
+    "targeted_corrections_per_worker": 1,
+    "observations_per_worker": 6,
+    "reviewer": "existing independent reviewer; unchanged",
+    "verification": "frozen acceptance first; full documented M3.2 Gradle gate only after acceptance passes"
+  },
+  "task_freeze": {
+    "task_spec_path": "TASKS.md",
+    "task_spec_sha256": "263ac0547b41703d95dff0a92a677177782c29c616c1fca9614d5bb2ad969243",
+    "acceptance_tests": {
+      "frozen-tests/ActivityDiffValidationAcceptanceTest.java": "04345786ba9de7a8bab780e769c98cc538228411de9fe44df280aaaeb28904b7",
+      "frozen-tests/ActivityHistoryRecentLimitAcceptanceTest.java": "c42aaba1a1ab822836bf3cc0506aa327c68c5120034c2b4f2823f2bca7a43396",
+      "frozen-tests/ActivityHistorySummaryAcceptanceTest.java": "70f73e8b45c0f844e86c8ca61c047fe7fcc4569ffbd1e2d4c0d84c862933cd01",
+      "frozen-tests/ActivitySummaryCountAcceptanceTest.java": "cd34270fc94519ac04fe1bbcec912c9c97b9a470dde5d3977d84d402c7038380",
+      "frozen-tests/ActivityWindowAcceptanceTest.java": "4e5c65fabe849d9e6dafe4412268027da1f0861439a9504dc86836b469e40f6b",
+      "frozen-tests/PlanningReportDiagnosticsAcceptanceTest.java": "dd9daa490231394df678ae1336366dd6505d82538fb28914912c062ceca99edc",
+      "frozen-tests/QuestOverviewCompletionPercentAcceptanceTest.java": "a701e8bd7696c94598351337c09f9e947bb0cd05de665c5581a6af60a633b6b7",
+      "frozen-tests/QuestOverviewSnapshotProjectionAcceptanceTest.java": "24c6ac371e5b1c331b0497d3db156cc6a3bd8ec095c9d9e4ca1f00133c223553"
+    },
+    "expected_cases": {
+      "frozen-tests/ActivityDiffValidationAcceptanceTest.java": 1,
+      "frozen-tests/ActivityHistoryRecentLimitAcceptanceTest.java": 1,
+      "frozen-tests/ActivityHistorySummaryAcceptanceTest.java": 1,
+      "frozen-tests/ActivitySummaryCountAcceptanceTest.java": 1,
+      "frozen-tests/ActivityWindowAcceptanceTest.java": 1,
+      "frozen-tests/PlanningReportDiagnosticsAcceptanceTest.java": 2,
+      "frozen-tests/QuestOverviewCompletionPercentAcceptanceTest.java": 1,
+      "frozen-tests/QuestOverviewSnapshotProjectionAcceptanceTest.java": 1
+    },
+    "test_sources_are_not_in_model_prompts": true
+  },
+  "paired_evaluation": {
+    "conditions": ["persistent Astra direct, one coding turn", "Hive plus persistent Astra, existing limits"],
+    "same_task_text_and_baseline_per_pair": true,
+    "direct_condition_has_no_hive_planner_worker_reviewer_or_repair": true,
+    "acceptance_test_first": true,
+    "full_gradle_gate_only_after_acceptance_pass": true,
+    "within_pair_order_seed_hex": "e2411e2f04ff95a52a2c8df80ad99472",
+    "within_pair_order": {
+      "T001": "hive-first",
+      "T002": "direct-first",
+      "T003": "hive-first",
+      "T004": "direct-first",
+      "T005": "hive-first",
+      "T006": "direct-first",
+      "T007": "direct-first",
+      "T008": "hive-first"
+    },
+    "promotion": false
+  },
+  "usage_cost_caveat": "Provider turn token usage may be unavailable or partial; billed API cost must be taken from the provider's billing/usage records, not inferred as zero from turn telemetry."
+}

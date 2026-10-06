@@ -1,0 +1,81 @@
+{
+  "label": "0074-call-03-attempt-02-end",
+  "started_at": "2026-10-05T20:32:45.882118+00:00",
+  "monotonic_start": 144476.9033467,
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-05T20:32:46.6916376Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 9408940,
+        "total_virtual_kib": 26360372,
+        "free_virtual_kib": 6601892,
+        "available_bytes": 9624657920,
+        "committed_bytes": 20229771264,
+        "commit_limit_bytes": 26993020928
+      },
+      "related_processes": [
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 20076,
+          "ParentProcessId": 18920,
+          "WorkingSetSize": 18014208,
+          "PrivatePageCount": 88580096,
+          "UserModeTime": 130312500,
+          "KernelModeTime": 131406250,
+          "CommandLine": "\"D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe\""
+        },
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 1888,
+          "ParentProcessId": 20076,
+          "WorkingSetSize": 73826304,
+          "PrivatePageCount": 184995840,
+          "UserModeTime": 1298906250,
+          "KernelModeTime": 3512031250,
+          "CommandLine": "D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe services"
+        },
+        {
+          "Name": "ollama.exe",
+          "ProcessId": 3116,
+          "ParentProcessId": 19664,
+          "WorkingSetSize": 24911872,
+          "PrivatePageCount": 80187392,
+          "UserModeTime": 629531250,
+          "KernelModeTime": 534062500,
+          "CommandLine": "\"C:\\Users\\billy\\AppData\\Local\\Programs\\Ollama\\ollama.exe\" serve"
+        },
+        {
+          "Name": "vmmemWSL",
+          "ProcessId": 21940,
+          "ParentProcessId": 19180,
+          "WorkingSetSize": 423137280,
+          "PrivatePageCount": 2652794880,
+          "UserModeTime": 0,
+          "KernelModeTime": 4847968750,
+          "CommandLine": null
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 626, 5330\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": []
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "finished_at": "2026-10-05T20:32:47.532391+00:00"
+}

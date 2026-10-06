@@ -1,0 +1,19 @@
+HIVE-EVAL-009A — Activity Reset Service
+
+Objective
+Add `public String reset(String playerId)` to ActivityCommandService.
+
+Allowed edit path
+- src/main/java/dev/atmcompanion/activity/ActivityCommandService.java
+
+Contract
+- Reject null or blank playerId with IllegalArgumentException.
+- Call the injected LiveActivityService's existing `forget(playerId)` method.
+- Return exactly `Activity history reset for <playerId>.`
+- Do not alter observe behavior, bounds, constructors, or other classes.
+- Do not add or edit tests.
+
+Acceptance
+- Frozen ActivityCommandServiceResetTest passes.
+- Full Gradle suite passes.
+- Promotion remains manual.

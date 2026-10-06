@@ -1,0 +1,21 @@
+{
+  "source_run_sha256": "eb02b4ba1c19ccfdd0ab5fb259856869ab368c24ba24ee63fe18038c5be2b0a9",
+  "expected_reclassification": "MODEL_TASK_FAILURE",
+  "run": {
+    "status": "rejected",
+    "errors": [{
+      "role": "tests",
+      "stage": "verify",
+      "exception_type": "TargetedVerificationError",
+      "exception_message": "targeted verification failed",
+      "targeted_verification": {"checks": [{
+        "name": "frozen_junit_acceptance",
+        "passed": false,
+        "detail": {
+          "stdout_tail": "Shared read-only dependency cache is an incubating feature.\n> Task :compileTestJava FAILED",
+          "stderr_tail": "/work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeSelectionTest.java:15: error: cannot find symbol\nOptional<RecipeSelection> best = RecipeSelection.bestOf(candidates);\n^\n> Compilation failed"
+        }
+      }]}
+    }]
+  }
+}

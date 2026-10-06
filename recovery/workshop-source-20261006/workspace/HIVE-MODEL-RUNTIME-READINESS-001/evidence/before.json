@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-10-05T19:42:05.170050+00:00",
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-05T19:42:09.3975671Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 8337756,
+        "total_virtual_kib": 28398320,
+        "free_virtual_kib": 5618812,
+        "available_bytes": 8489172992,
+        "committed_bytes": 23354859520,
+        "commit_limit_bytes": 29079879680
+      },
+      "related_processes": [
+        {
+          "ProcessName": "com.docker.backend",
+          "Id": 1888,
+          "WorkingSet64": 112177152,
+          "PrivateMemorySize64": 163262464,
+          "CPU": 465.796875
+        },
+        {
+          "ProcessName": "com.docker.backend",
+          "Id": 20076,
+          "WorkingSet64": 23437312,
+          "PrivateMemorySize64": 88248320,
+          "CPU": 25.265625
+        },
+        {
+          "ProcessName": "ollama",
+          "Id": 3116,
+          "WorkingSet64": 24285184,
+          "PrivateMemorySize64": 76759040,
+          "CPU": 112.71875
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB as reported by nvidia-smi; dedicated GPU memory, not shared host RAM",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 2306, 3650\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": []
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "finished_at": "2026-10-05T19:42:10.505762+00:00"
+}

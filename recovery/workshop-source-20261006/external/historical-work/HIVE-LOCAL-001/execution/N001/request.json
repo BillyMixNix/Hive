@@ -1,0 +1,26 @@
+{
+  "request": "Add `ActivityEvent.withSource(ActivityEvent.Source source)`. Return a new event\nwith only `source` changed. Preserve every other field and do not mutate the\noriginal. Reject a null source with `IllegalArgumentException`.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityEventWithSourceAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityEventWithSourceAcceptanceTest {\n    @Test void changesOnlySourceAndRejectsNull() {\n        var original = new ActivityEvent(1, \"2026-09-01T00:00:00Z\", ActivityEvent.Type.ITEM_GAINED,\n                List.of(\"minecraft:stone\"), 3L, ActivityEvent.Source.GAME_EVENT);\n        var changed = original.withSource(ActivityEvent.Source.MANUAL);\n        assertNotSame(original, changed);\n        assertEquals(original.schemaVersion(), changed.schemaVersion());\n        assertEquals(original.timestamp(), changed.timestamp());\n        assertEquals(original.type(), changed.type());\n        assertEquals(original.registryIds(), changed.registryIds());\n        assertEquals(original.quantity(), changed.quantity());\n        assertEquals(ActivityEvent.Source.MANUAL, changed.source());\n        assertEquals(ActivityEvent.Source.GAME_EVENT, original.source());\n        assertThrows(IllegalArgumentException.class, () -> original.withSource(null));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N001",
+    "replicate_index": 1,
+    "trial_id": "682ed8475062",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

@@ -1,0 +1,45 @@
+[
+  {
+    "role": "planner",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:37:46.623744+00:00",
+    "prompt_sha256": "31c95bab067d23d9a7f2efb58936e249de3c005fe38c002fe214f3f4e2043890",
+    "prompt_bytes": 17631,
+    "status": "completed",
+    "input_tokens": 3884,
+    "output_tokens": 967,
+    "response_sha256": "eaf71e7a54f4a4ca4645c76bbaca56cddfb4b53594f9db8276712f81c6462664",
+    "ended_at": "2026-10-06T06:42:34.027790+00:00",
+    "wall_seconds": 287.4039855999872
+  },
+  {
+    "role": "backend",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:42:35.811009+00:00",
+    "prompt_sha256": "6e44a1d8f09fc7cf2cd6be9e7edc19f39de0c7b3d916ff5a582370290b29695e",
+    "prompt_bytes": 31345,
+    "status": "failed",
+    "error": {
+      "type": "OllamaRequestError",
+      "message": "Ollama chat failed at http://127.0.0.1:11434: chat attempt 1/2: OllamaRequestError: Ollama generation exceeded the 900-second total limit"
+    },
+    "ended_at": "2026-10-06T06:57:35.833991+00:00",
+    "wall_seconds": 900.0229236999876
+  },
+  {
+    "role": "reviewer",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:57:36.171943+00:00",
+    "prompt_sha256": "7f64e620716f76463f7e39af4688f066c860fe227e796853667b00bc7b53a3d6",
+    "prompt_bytes": 3248,
+    "status": "completed",
+    "input_tokens": 821,
+    "output_tokens": 473,
+    "response_sha256": "df4756458340cefbcfa1a257bb2f0a2bbf7ac2bb2378a5ae0b6bc981babb9216",
+    "ended_at": "2026-10-06T06:58:38.778963+00:00",
+    "wall_seconds": 62.60699889998068
+  }
+]

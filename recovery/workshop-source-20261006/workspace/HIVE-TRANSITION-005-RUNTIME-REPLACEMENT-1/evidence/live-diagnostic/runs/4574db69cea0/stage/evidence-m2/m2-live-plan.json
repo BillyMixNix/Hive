@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "timestamp": "2026-09-22T17:06:00.416069200Z",
+  "plan": {
+    "schemaVersion": 1,
+    "goal": "minecraft:diamond_pickaxe",
+    "quantity": 1,
+    "status": "materials_ready",
+    "ownedRequirements": [
+      {
+        "item": "minecraft:diamond",
+        "quantity": 3
+      },
+      {
+        "item": "minecraft:stick",
+        "quantity": 2
+      }
+    ],
+    "missingRequirements": [],
+    "selectedPath": [
+      {
+        "recipeId": "minecraft:diamond_pickaxe",
+        "output": "minecraft:diamond_pickaxe",
+        "outputQuantity": 1,
+        "crafts": 1,
+        "type": "minecraft:crafting",
+        "depth": 0,
+        "limitations": [
+          "Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified",
+          "Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+        ]
+      }
+    ],
+    "nextAction": {
+      "kind": "prepare_recipe",
+      "item": "minecraft:diamond_pickaxe",
+      "quantity": 1,
+      "recipeId": "minecraft:diamond_pickaxe",
+      "reason": "The selected path's first material step has inputs reserved. Verify execution conditions before processing: Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified; Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+    },
+    "alternativePaths": [],
+    "unsupportedSteps": [],
+    "metrics": {
+      "indexGeneration": 1,
+      "expandedNodes": 7,
+      "depth": 0,
+      "searchTruncated": false,
+      "indexComplete": false,
+      "planningNanos": 2285000
+    },
+    "limitations": [
+      "Material planning only; crafting access, recipe unlocks, fuel, machines, energy, fluids, and execution are not verified.",
+      "Only main inventory slots 0..35; equipment, nested inventories and storage networks are not included.",
+      "Future outputs are hypothetical until every prerequisite is satisfied; they are never reported as currently owned.",
+      "Crafting remainders/byproducts are not credited. Route selection is bounded and may miss a better allocation.",
+      "Recipe knowledge has unknown or truncated outputs; no indexed route does not prove no route exists."
+    ]
+  },
+  "questContext": {
+    "status": "not_integrated",
+    "data": null,
+    "detail": "FTB Quests is not loaded"
+  },
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "item:minecraft:diamond_pickaxe",
+        "kind": "ITEM"
+      },
+      {
+        "id": "recipe:minecraft:diamond_pickaxe",
+        "kind": "RECIPE"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/0",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "tag:c:gems/diamond",
+        "kind": "TAG"
+      },
+      {
+        "id": "item:minecraft:diamond",
+        "kind": "ITEM"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/1",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/2",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/4",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "tag:c:rods/wooden",
+        "kind": "TAG"
+      },
+      {
+        "id": "item:minecraft:stick",
+        "kind": "ITEM"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/7",
+        "kind": "REQUIREMENT"
+      }
+    ],
+    "edges": [
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "PRODUCES",
+        "to": "item:minecraft:diamond_pickaxe",
+        "quantity": 1,
+        "detail": "fixed_recipe_output"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/0",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/0",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/0",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/1",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/1",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/1",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/2",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/2",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/2",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/4",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/4",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:rods/wooden",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/4",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:stick",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/7",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/7",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:rods/wooden",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/7",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:stick",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      }
+    ],
+    "truncated": false
+  }
+}

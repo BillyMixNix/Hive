@@ -1,0 +1,240 @@
+--- a/workshop/hive.py
++++ b/workshop/hive.py
+@@ -656,6 +656,29 @@
+                 field["items"] = {"type": "string", "enum": paths}
+             else:
+                 field["maxItems"] = 0
++        if len(set(allowed)) == 1:
++            # A single writable file cannot support two active file owners.
++            # Let the planner choose among eligible owners; do not select or
++            # discard a writer in normalization. Complete alternatives avoid
++            # cross-property schema predicates unsupported by some grammars.
++            eligible = [role for role in _active_agent_scopes()
++                        if schema["properties"]["worker_files"]["properties"][role].get("maxItems") != 0]
++            alternatives = []
++            for owner in [*eligible, None]:
++                branch = copy.deepcopy(schema)
++                fields = branch["properties"]
++                for role in _active_agent_scopes():
++                    files = fields["worker_files"]["properties"][role]
++                    criteria = fields["worker_acceptance"]["properties"][role]
++                    if role == owner:
++                        files.update(minItems=1, maxItems=1)
++                        criteria["minItems"] = 1
++                    else:
++                        fields[f"{role}_goal"] = {"type": "string", "enum": ["no change needed"]}
++                        files["maxItems"] = 0
++                        criteria["maxItems"] = 0
++                alternatives.append(branch)
++            return {"anyOf": alternatives}
+     return schema
+ 
+ RUNTIME_EXCLUDES = {
+@@ -1593,7 +1616,8 @@
+     # Do not force a contract based only on roles in the rejected plan; the
+     # corrected plan's normal validator still requires one when roles remain.
+     if intent_requirements or (len(active_roles) >= 2 and not isinstance(error, HostWriteScopeError)):
+-        correction_schema["properties"]["interface_contracts"]["minItems"] = 1
++        for branch in correction_schema.get("anyOf", [correction_schema]):
++            branch["properties"]["interface_contracts"]["minItems"] = 1
+     text = _planner_prompt(request, repository_map, repository_facts_text, intent_envelope,
+                            external_mode=external_mode) + f"""
+ PREVIOUS PLAN REJECTED BEFORE WORKER EXECUTION:
+--- a/tests/test_host_write_scope.py
++++ b/tests/test_host_write_scope.py
+@@ -134,7 +134,8 @@
+     assert result["status"] == "ready", result.get("errors")
+     assert len(checks) == 1
+     correction_prompt = prompts[1][1]
+-    assert "minItems" not in correction_prompt.response_schema["properties"]["interface_contracts"]
++    assert all("minItems" not in branch["properties"]["interface_contracts"]
++               for branch in correction_prompt.response_schema["anyOf"])
+     assert OUTSIDE in correction_prompt
+     assert result["plan"]["worker_files"]["tests"] == []
+     assert result["plan"]["interface_contracts"] == []
+--- a/tests/test_planner_transition.py
++++ b/tests/test_planner_transition.py
+@@ -66,10 +66,12 @@
+     correction = hive._plan_correction_prompt('Change behavior', '', raw, failure.value, external_mode=True)
+     for prompt in (first, correction):
+         schema = response_schema_for_prompt('planner', prompt)
+-        for role in hive.AGENT_SCOPES:
+-            assert schema['properties']['worker_files']['properties'][role]['items']['enum'] == HISTORICAL_SCOPE
++        for branch in schema.get('anyOf', [schema]):
++            for role in hive.AGENT_SCOPES:
++                assert branch['properties']['worker_files']['properties'][role]['items']['enum'] == HISTORICAL_SCOPE
+         assert "exact goal 'no change needed'" in prompt
+-    assert 'minItems' not in correction.response_schema['properties']['interface_contracts']
++    assert all('minItems' not in branch['properties']['interface_contracts']
++               for branch in correction.response_schema['anyOf'])
+     assert 'SnapshotFormatterTest.java' in correction
+     assert PLAN_SCHEMA == before
+ 
+@@ -111,7 +113,8 @@
+     result, roles, prompts, checks, _ = run_fixture(tmp_path, monkeypatch, [bad, plan()])
+     assert roles == ['planner', 'planner', 'backend', 'reviewer']
+     assert 'assigned to both' in result['plan_attempts'][0]['failure']['exception_message']
+-    assert 'minItems' not in prompts[1][1].response_schema['properties']['interface_contracts']
++    assert all('minItems' not in branch['properties']['interface_contracts']
++               for branch in prompts[1][1].response_schema['anyOf'])
+     assert result['changed_files'] == [ALLOWED] and len(checks) == 1
+ 
+ 
+@@ -138,7 +141,8 @@
+     assert failure['exception_type'] == 'HostWriteScopeError'
+     assert OUTSIDE in failure['exception_message']
+     assert 'multi-role plan requires' in failure['exception_message']
+-    assert 'minItems' not in prompts[1][1].response_schema['properties']['interface_contracts']
++    assert all('minItems' not in branch['properties']['interface_contracts']
++               for branch in prompts[1][1].response_schema['anyOf'])
+ 
+ 
+ @pytest.mark.parametrize('defect', ['scope', 'missing_contract', 'malformed'])
+--- a/tests/test_planning_input_fidelity.py
++++ b/tests/test_planning_input_fidelity.py
+@@ -45,7 +45,13 @@
+         failure.value, run['repository_facts'], run['intent_envelope'], external_mode=True)
+     saved = json.loads((FIXTURES / '02/request.json').read_text())
+     assert str(correction) == saved['messages'][0]['content']
+-    assert response_schema_for_prompt('planner', correction) == saved['options']['response_format']
++    # T003 narrows ownership generation; task/source/scope/correction text is
++    # still byte-identical, and every branch retains the historical path enum.
++    schema = response_schema_for_prompt('planner', correction)
++    assert len(schema['anyOf']) == 4
++    for branch in schema['anyOf']:
++        for role in ('ui', 'backend', 'tests'):
++            assert branch['properties']['worker_files']['properties'][role]['items'] == saved['options']['response_format']['properties']['worker_files']['properties'][role]['items']
+ 
+ 
+ @pytest.mark.parametrize('context', [4096, 8192, 12288])
+--- /dev/null
++++ b/tests/test_ownership_representation.py
+@@ -0,0 +1,128 @@
++"""One-file ownership capacity is encoded without choosing a role or accepting bad plans."""
++import copy
++import itertools
++import json
++from pathlib import Path
++
++import pytest
++from jsonschema import Draft202012Validator
++from workshop import hive, hive_context
++from test_host_write_scope import ALLOWED, OUTSIDE, plan, run_fixture
++
++ROLES=('ui','backend','tests')
++
++@pytest.fixture
++def scoped():
++    values=[(hive._HOST_WRITE_SCOPE,hive._HOST_WRITE_SCOPE.set((ALLOWED,))),
++            (hive._ACTIVE_AGENT_SCOPES,hive._ACTIVE_AGENT_SCOPES.set(hive.EXTERNAL_AGENT_SCOPES)),
++            (hive._EXTERNAL_ROOT_MODE,hive._EXTERNAL_ROOT_MODE.set(True))]
++    yield
++    for var,token in reversed(values):var.reset(token)
++
++def accept(schema,p):return Draft202012Validator(schema).is_valid(p)
++
++@pytest.mark.parametrize('members',list(itertools.product((False,True),repeat=3)))
++def test_single_file_generation_excludes_every_duplicate_owner_subset(scoped,members):
++    p=plan()
++    active=[r for r,b in zip(ROLES,members) if b]
++    for role in ROLES:
++        p[role+'_goal']='Implement assigned behavior' if role in active else 'no change needed'
++        p['worker_files'][role]=[ALLOWED] if role in active else []
++        p['worker_acceptance'][role]=['Assigned behavior works'] if role in active else []
++    if len(active)>1:p['interface_contracts']=[{'name':'coordination','owner':active[0],
++        'consumer_roles':active[1:],'contract':'Coordinate distinct responsibilities'}]
++    schema=hive._planner_response_schema();Draft202012Validator.check_schema(schema)
++    assert accept(schema,p)==(len(active)<=1)
++    if len(active)>1:
++        with pytest.raises(hive.HostWriteScopeError,match='assigned to both'):hive._normalize_plan(p)
++    else:
++        normalized,_=hive._normalize_plan(p);hive._validate_host_write_scope(normalized)
++
++@pytest.mark.parametrize('path',['lib/math.js','src/domain/Thing.java','component.py','docs/manual.md'])
++def test_single_file_capacity_is_path_and_language_independent(scoped,path):
++    token=hive._HOST_WRITE_SCOPE.set((path,))
++    try:
++        schema=hive._planner_response_schema()
++        for role in ROLES:
++            p=plan()
++            for r in ROLES:
++                p[r+'_goal']='Implement assigned change' if r==role else 'no change needed'
++                p['worker_files'][r]=[path] if r==role else []
++                p['worker_acceptance'][r]=['Change works'] if r==role else []
++            assert accept(schema,p)
++    finally:hive._HOST_WRITE_SCOPE.reset(token)
++
++def test_no_arbitrary_priority_and_role_intersections_retained():
++    token=hive._HOST_WRITE_SCOPE.set(('app.py',))
++    try:
++        schema=hive._planner_response_schema()
++        assert len(schema['anyOf'])==2  # backend or none; UI/tests scopes do not include app.py
++        assert all(b['properties']['worker_files']['properties']['ui']['maxItems']==0 for b in schema['anyOf'])
++        assert all(b['properties']['worker_files']['properties']['tests']['maxItems']==0 for b in schema['anyOf'])
++    finally:hive._HOST_WRITE_SCOPE.reset(token)
++
++def test_unauthorized_and_inactive_claims_still_rejected(scoped):
++    bad=plan([OUTSIDE])
++    assert not accept(hive._planner_response_schema(),bad)
++    with pytest.raises(hive.HostWriteScopeError):hive._normalize_plan(bad)
++    bad=plan();bad['backend_goal']='no change needed'
++    # Even a selected branch's freeform goal cannot evade the normal validator.
++    with pytest.raises(hive.PlanValidationError,match='no change needed'):hive._normalize_plan(bad)
++    bad=plan();bad['worker_files']['tests']=[ALLOWED]
++    assert not accept(hive._planner_response_schema(),bad)
++    with pytest.raises(hive.HostWriteScopeError):hive._normalize_plan(bad)
++
++def test_context_access_is_not_write_ownership(scoped,tmp_path):
++    source=tmp_path/ALLOWED;source.parent.mkdir(parents=True)
++    source.write_text('class Widget { int value() { return 1; } }')
++    observed=hive_context.observe(tmp_path,'read_file_excerpt',{'path':ALLOWED})
++    assert 'return 1' in json.dumps(observed)
++    okay,reason=hive.validate_edit('tests',{'path':ALLOWED,'operation':'replace','find':'return 1;','replace':'return 2;'},[OUTSIDE])
++    assert not okay and 'unplanned' in reason
++
++def test_genuine_disjoint_multi_role_plan_unchanged(scoped):
++    token=hive._HOST_WRITE_SCOPE.set((ALLOWED,OUTSIDE))
++    try:
++        p=plan();p['tests_goal']='Add regression coverage';p['worker_files']['tests']=[OUTSIDE]
++        p['worker_acceptance']['tests']=['Regression covers behavior']
++        p['interface_contracts']=[{'name':'api','owner':'backend','consumer_roles':['tests'],'contract':'Widget value is available'}]
++        schema=hive._planner_response_schema();assert 'anyOf' not in schema
++        assert accept(schema,p)
++        normalized,_=hive._normalize_plan(p);hive._validate_host_write_scope(normalized)
++    finally:hive._HOST_WRITE_SCOPE.reset(token)
++
++def test_correction_schema_retains_single_owner_and_independent_intent_contract(scoped):
++    bad=plan();bad['tests_goal']='Add coverage';bad['worker_files']['tests']=[ALLOWED]
++    bad['worker_acceptance']['tests']=['Coverage exists']
++    with pytest.raises(hive.HostWriteScopeError) as failure:hive._normalize_plan(bad)
++    prompt=hive._plan_correction_prompt('Change behavior','map',json.dumps(bad),failure.value,external_mode=True)
++    assert not accept(prompt.response_schema,bad)
++    assert all('minItems' not in b['properties']['interface_contracts'] for b in prompt.response_schema['anyOf'])
++    intent={'requirements':[{'consumer_role':'ui','require_tests':False,
++                            'existing_interface':{'method':'GET','path':'/api/value','response_keys':['value']}}]}
++    prompt=hive._plan_correction_prompt('Read existing API','map',json.dumps(bad),failure.value,intent_envelope=intent,external_mode=True)
++    assert all(b['properties']['interface_contracts']['minItems']==1 for b in prompt.response_schema['anyOf'])
++
++def test_single_owner_dispatch_and_conflicting_output_containment(tmp_path,monkeypatch):
++    bad=plan();bad['tests_goal']='Add tests';bad['worker_files']['tests']=[ALLOWED];bad['worker_acceptance']['tests']=['Tests work']
++    result,roles,_,checks,_=run_fixture(tmp_path,monkeypatch,[bad,plan()])
++    assert roles==['planner','planner','backend','reviewer']
++    assert result['plan_attempts'][0]['status']=='rejected'
++    assert len(checks)==1
++
++def test_schema_alternatives_are_independent_and_global_contract_unmodified(scoped):
++    from workshop.hive_protocol import PLAN_SCHEMA
++    before=copy.deepcopy(PLAN_SCHEMA)
++    schema=hive._planner_response_schema()
++    schema['anyOf'][0]['properties']['worker_files']['properties']['backend']['maxItems']=999
++    assert hive._planner_response_schema()['anyOf'][0]['properties']['worker_files']['properties']['backend']['maxItems']!=999
++    assert PLAN_SCHEMA==before
++
++def test_all_historically_invalid_outputs_remain_invalid():
++    artifact=Path(__file__).resolve().parents[2]/'evidence/historical-replay.json'
++    result=json.loads(artifact.read_text())
++    for before,after in zip(result['before'],result['after'],strict=True):
++        assert before['id']==after['id']
++        assert before['accepted']==after['accepted']
++        assert before.get('error')==after.get('error')
++        if not before['accepted']:assert not after['dispatch_eligible']

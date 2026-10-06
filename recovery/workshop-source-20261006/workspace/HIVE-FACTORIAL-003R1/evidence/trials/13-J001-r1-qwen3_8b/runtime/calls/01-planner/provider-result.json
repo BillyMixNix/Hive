@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Modify SnapshotFormatter.boundLine to preserve UTF-16 surrogate pairs during truncation\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Update SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs during truncation while maintaining existing sanitization and truncation behavior\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\"],\n    \"tests\": []\n  },\n  \"acceptance\": [\"Truncation preserves complete UTF-16 surrogate pairs without introducing unpaired surrogates\", \"Maintains existing control-character and section-sign sanitization\", \"Adds ... suffix for truncated lines\", \"Leaves ASCII lines unchanged\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"Implements UTF-16 surrogate pair preservation in boundLine with truncation logic\", \"Maintains existing sanitization and truncation behavior\"],\n    \"tests\": []\n  },\n  \"interface_contracts\": [],\n  \"provider_changes\": []\n}",
+  "input_tokens": 3836,
+  "output_tokens": 1237,
+  "raw_id": null
+}

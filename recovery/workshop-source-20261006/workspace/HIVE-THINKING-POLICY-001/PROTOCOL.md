@@ -1,0 +1,21 @@
+# Prospective thinking-policy protocol
+
+Historical control: immutable HIVE-FACTORIAL-003R1. Selection was specified before new outcomes: its cells 3, 6, 8, 9, 12, 15, in that relative order. Six fresh whole Hive executions, one each. No replacements, extra trials, promotion or task-specific hints. No controller repair after the first prospective cell starts.
+
+The only task-call intervention is explicit top-level `think:false` for bounded schema-constrained workers on the capability-proven local qwen3:8b configuration, including normal structural and targeted corrections. Planner and reviewer omit `think`, as before. All other model/provider combinations retain the existing default. Model digest, context 12288, worker cap 6000, planner cap 2048, reviewer cap 1536, temperature 0.1, `truncate:false`, normal 900-second generation limit, retry/correction limits, task/source transport and verifier policy remain fixed. The inherited 3600-second per-cell decision ceiling and aggregate reservation ceiling remain unchanged.
+
+Before edits: reconstruct six failed calls, then exactly two non-task capability requests in order true/false with the same synthetic prompt, schema, context, cap, temperature and 900-second bound. No residency normalization, unloading, service restart, GPU tuning or selective warmup. A successful transport probe is not task evidence. If false is unsupported or ignored, stop.
+
+Capability validation must not assume all thinking-capable models support disabling it. For this older provider's absent value metadata, use a host-owned profile bound to the measured model digest, template hash and exact provider version. Explicit requests with unknown or mismatched capabilities fail clearly before generation. The default omitted policy adds neither thinking fields nor capability requests.
+
+Primary endpoint: at least one completed, parseable, host-valid structured worker response within its unchanged deadline in each fresh cell. Also report every individual initial/structural/targeted call. Historical selected-call completion is 0/6, but historical whole-cell any-worker completion is 1/6: cell 15 failed during correction after a completed initial worker. Do not conflate denominators. If a fresh planner prevents worker dispatch, record that separately, not as a worker timeout.
+
+Secondary endpoints: actionability, scoped executable edit, real targeted verification, compilation, frozen test execution/acceptance, full gate and software success. Reviewer disposition is separate and never changes deterministic success. Preserve compile failures, behavioral failures, invalid/unauthorized operations, anchor mismatches, repeated proposals and runtime errors. Completed but unusable work is not software success. Historical interrupted implementations have unknown quality; do not infer a quality regression merely from newly observable failures.
+
+Use copied qualified recorder/cell wrapper unchanged, a fresh isolated baseline per cell, hidden acceptance outside model context, exact frozen attestation and no candidate reuse. Record wire requests, raw streams, timestamps, provider accounting and pre/periodic/post resources. Token counts absent from incomplete streams remain unknown. Never label character counts as tokens.
+
+Freeze source, harness, provenance, hardware, tasks, tests, model/provider/verifier identities and selected cell order before task calls. Check identities between cells and after completion. Stop only on completion, compromised integrity, unrecoverable environment failure or explicit user instruction. Runtime/model failures are results and do not justify reruns or configuration changes.
+
+Mechanism falsifier: explicit supported false continues producing thinking-only deadline exhaustion. Usefulness falsifier: completed outputs do not improve actionable/edit/verification outcomes or show systematic unusable quality. Six selected failures cannot establish general reliability or an unbiased factorial treatment effect.
+
+API reference (transport background only): [Ollama thinking controls](https://docs.ollama.com/capabilities/thinking) and [chat request API](https://docs.ollama.com/api/chat). Local probes and pinned artifacts, rather than current online documentation, determine installed capability.

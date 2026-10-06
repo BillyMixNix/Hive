@@ -1,0 +1,1196 @@
+{
+  "cases": [
+    {
+      "id": "01_single_owner",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend"
+      ]
+    },
+    {
+      "id": "02_duplicate_writers",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Add regression tests",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "bounded_line",
+            "owner": "backend",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Consumer tests inspect the bounded-line API supplied by backend"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "03_active_read_only_role",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Read application source without editing",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "bounded_line",
+            "owner": "backend",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Consumer tests inspect the bounded-line API supplied by backend"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "PlanValidationError",
+      "error": "tests: active goal needs files; no change needed must have no files",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "04_one_active_canonical_inactive",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend"
+      ]
+    },
+    {
+      "id": "05_two_inactive_roles",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend"
+      ]
+    },
+    {
+      "id": "06_unauthorized",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/example/Support.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": false,
+      "schema_errors": [
+        "'src/main/java/example/Support.java' is not one of ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+      ],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": []
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "worker_files.backend proposes 'src/main/java/example/Support.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "07_overlap_plus_missing_contract",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work; multi-role plan requires at least one interface contract",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "08_disjoint_multi_role_with_contract",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Add regression tests using application source as context",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/test/java/example/ConsumerTest.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "bounded_line",
+            "owner": "backend",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Consumer tests inspect the bounded-line API supplied by backend"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+        "src/test/java/example/ConsumerTest.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ],
+        "src/test/java/example/ConsumerTest.java": [
+          "tests"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Add regression tests using application source as context",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/test/java/example/ConsumerTest.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "bounded_line",
+            "owner": "backend",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Consumer tests inspect the bounded-line API supplied by backend"
+          }
+        ],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend",
+        "tests"
+      ]
+    },
+    {
+      "id": "09_single_no_contract_required",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend"
+      ]
+    },
+    {
+      "id": "10_inactive_with_write",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work; tests: active goal needs files; no change needed must have no files",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "11_disjoint_multi_role_missing_contract",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/test/java/example/ConsumerTest.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Implement the requested bounded-line behavior in the authorized file"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+        "src/test/java/example/ConsumerTest.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ],
+        "src/test/java/example/ConsumerTest.java": [
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "PlanValidationError",
+      "error": "multi-role plan requires at least one interface contract",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "12_all_inactive",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": []
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": []
+    }
+  ],
+  "owner_subsets": [
+    {
+      "id": "owners:",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": []
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": []
+    },
+    {
+      "id": "owners:tests",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "tests"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "no change needed",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [],
+          "backend": [],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "tests"
+      ]
+    },
+    {
+      "id": "owners:backend",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Implement assigned work",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Assigned behavior is implemented"
+          ],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Implement assigned work",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Assigned behavior is implemented"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "backend"
+      ]
+    },
+    {
+      "id": "owners:backend,tests",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "no change needed",
+        "backend_goal": "Implement assigned work",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [],
+          "backend": [
+            "Assigned behavior is implemented"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "dependency",
+            "owner": "backend",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Shared behavior"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "backend",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "owners:ui",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "Implement assigned work",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [
+            "Assigned behavior is implemented"
+          ],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": []
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "ui"
+        ]
+      },
+      "accepted": true,
+      "normalized_plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "Implement assigned work",
+        "backend_goal": "no change needed",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "backend": [],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [
+            "Assigned behavior is implemented"
+          ],
+          "backend": [],
+          "tests": []
+        },
+        "interface_contracts": [],
+        "provider_changes": []
+      },
+      "dispatch_eligible": [
+        "ui"
+      ]
+    },
+    {
+      "id": "owners:ui,tests",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "Implement assigned work",
+        "backend_goal": "no change needed",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "backend": [],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [
+            "Assigned behavior is implemented"
+          ],
+          "backend": [],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "dependency",
+            "owner": "ui",
+            "consumer_roles": [
+              "tests"
+            ],
+            "contract": "Shared behavior"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "ui",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both ui and tests; keep exactly one owner and deactivate roles without authorized work",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "owners:ui,backend",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "Implement assigned work",
+        "backend_goal": "Implement assigned work",
+        "tests_goal": "no change needed",
+        "worker_files": {
+          "ui": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": []
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [
+            "Assigned behavior is implemented"
+          ],
+          "backend": [
+            "Assigned behavior is implemented"
+          ],
+          "tests": []
+        },
+        "interface_contracts": [
+          {
+            "name": "dependency",
+            "owner": "ui",
+            "consumer_roles": [
+              "backend"
+            ],
+            "contract": "Shared behavior"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "ui",
+          "backend"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both ui and backend; keep exactly one owner and deactivate roles without authorized work",
+      "dispatch_eligible": []
+    },
+    {
+      "id": "owners:ui,backend,tests",
+      "plan": {
+        "summary": "Preserve complete surrogate pairs in bounded lines",
+        "ui_goal": "Implement assigned work",
+        "backend_goal": "Implement assigned work",
+        "tests_goal": "Implement assigned work",
+        "worker_files": {
+          "ui": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "backend": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ],
+          "tests": [
+            "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+          ]
+        },
+        "acceptance": [
+          "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+        ],
+        "worker_acceptance": {
+          "ui": [
+            "Assigned behavior is implemented"
+          ],
+          "backend": [
+            "Assigned behavior is implemented"
+          ],
+          "tests": [
+            "Assigned behavior is implemented"
+          ]
+        },
+        "interface_contracts": [
+          {
+            "name": "dependency",
+            "owner": "ui",
+            "consumer_roles": [
+              "backend",
+              "tests"
+            ],
+            "contract": "Shared behavior"
+          }
+        ]
+      },
+      "host_scope": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "schema_valid": true,
+      "schema_errors": [],
+      "claims": {
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java": [
+          "ui",
+          "backend",
+          "tests"
+        ]
+      },
+      "accepted": false,
+      "normalized_plan": null,
+      "error_type": "HostWriteScopeError",
+      "error": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both ui and backend; keep exactly one owner and deactivate roles without authorized work; file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work",
+      "dispatch_eligible": []
+    }
+  ]
+}

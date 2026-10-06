@@ -1,0 +1,147 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 167.245,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 3.29s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 6.52s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.72s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 12.55s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.64s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.31s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n \u21b3 Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.04s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.81s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 3.99s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 23.53s\nTotal runtime: 69.80s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n\n> Task :compileTestJava\n\n> Task :compileTestJava FAILED\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n4 actionable tasks: 4 executed\n",
+        "stderr_tail": "dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:22: error: cannot find symbol\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(Set.of(\"unknown\")));\n                                                                   ^\n  symbol:   method inspectSelected(Set<String>)\n  location: variable registry of type IntegrationRegistry\n/work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:23: error: cannot find symbol\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(null));\n                                                                   ^\n  symbol:   method inspectSelected(<null>)\n  location: variable registry of type IntegrationRegistry\n/work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:27: error: cannot find symbol\n        assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(withNull));\n                                                                   ^\n  symbol:   method inspectSelected(HashSet<String>)\n  location: variable registry of type IntegrationRegistry\n/work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:29: error: cannot find symbol\n        var selected = registry.inspectSelected(Set.of(\"selected\"));\n                               ^\n  symbol:   method inspectSelected(Set<String>)\n  location: variable registry of type IntegrationRegistry\n/work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java:11: error: cannot find symbol\n        var reasons = assessment.blockingReasons();\n                                ^\n  symbol:   method blockingReasons()\n  location: variable assessment of type ExecutionAssessment\n/work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java:15: error: cannot find symbol\n        var empty = ExecutionAssessment.unnecessary().blockingReasons();\n                                                     ^\n  symbol:   method blockingReasons()\n  location: class ExecutionAssessment\n/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java:14: error: cannot find symbol\n        assertEquals(List.of(), history.uniqueRegistryIds());\n                                       ^\n  symbol:   method uniqueRegistryIds()\n  location: variable history of type ActivityHistory\n/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java:19: error: cannot find symbol\n        var ids = history.uniqueRegistryIds();\n                         ^\n  symbol:   method uniqueRegistryIds()\n  location: variable history of type ActivityHistory\n/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java:11: error: cannot find symbol\n        var changed = original.withSource(ActivityEvent.Source.MANUAL);\n                              ^\n  symbol:   method withSource(Source)\n  location: variable original of type ActivityEvent\n/work/candidate/src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java:20: error: cannot find symbol\n        assertThrows(IllegalArgumentException.class, () -> original.withSource(null));\n                                                                   ^\n  symbol:   method withSource(<null>)\n  location: variable original of type ActivityEvent\n23 errors\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':compileTestJava'.\n> Compilation failed; see the compiler output below.\n  /work/candidate/src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java:13: error: cannot find symbol\n          assertEquals(4_000_000_000L, inventory.totalCount(\"minecraft:stone\"));\n                                                ^\n    symbol:   method totalCount(String)\n    location: variable inventory of type Inventory\n  /work/candidate/src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java:14: error: cannot find symbol\n          assertEquals(5L, inventory.totalCount(\"minecraft:dirt\"));\n                                    ^\n    symbol:   method totalCount(String)\n    location: variable inventory of type Inventory\n  /work/candidate/src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java:15: error: cannot find symbol\n          assertEquals(0L, inventory.totalCount(\"minecraft:glass\"));\n                                    ^\n    symbol:   method totalCount(String)\n    location: variable inventory of type Inventory\n  /work/candidate/src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java:17: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> inventory.totalCount(null));\n                                                                      ^\n    symbol:   method totalCount(<null>)\n    location: variable inventory of type Inventory\n  /work/candidate/src/test/java/dev/atmcompanion/planning/PlanResultLimitationsAcceptanceTest.java:17: error: cannot find symbol\n          var changed = plan.withLimitations(input);\n                            ^\n    symbol:   method withLimitations(ArrayList<String>)\n    location: variable plan of type PlanResult\n  /work/candidate/src/test/java/dev/atmcompanion/planning/PlanResultLimitationsAcceptanceTest.java:31: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> plan.withLimitations(null));\n                                                                 ^\n    symbol:   method withLimitations(<null>)\n    location: variable plan of type PlanResult\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java:15: error: cannot find symbol\n          assertEquals(Optional.of(best), RecipeSelection.bestOf(candidates));\n                                                         ^\n    symbol:   method bestOf(ArrayList<RecipeSelection>)\n    location: class RecipeSelection\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java:17: error: cannot find symbol\n          assertEquals(Optional.empty(), RecipeSelection.bestOf(List.of()));\n                                                        ^\n    symbol:   method bestOf(List<Object>)\n    location: class RecipeSelection\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java:18: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> RecipeSelection.bestOf(null));\n                                                                            ^\n    symbol:   method bestOf(<null>)\n    location: class RecipeSelection\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java:19: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> RecipeSelection.bestOf(java.util.Arrays.asList(best, null)));\n                                                                            ^\n    symbol:   method bestOf(List<RecipeSelection>)\n    location: class RecipeSelection\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeCandidatesForTypeAcceptanceTest.java:14: error: cannot find symbol\n          var selected = report.candidatesForType(\"smelting\");\n                               ^\n    symbol:   method candidatesForType(String)\n    location: variable report of type RecipeReport\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeCandidatesForTypeAcceptanceTest.java:17: error: cannot find symbol\n          assertTrue(report.candidatesForType(\"blasting\").isEmpty());\n                           ^\n    symbol:   method candidatesForType(String)\n    location: variable report of type RecipeReport\n  /work/candidate/src/test/java/dev/atmcompanion/knowledge/RecipeCandidatesForTypeAcceptanceTest.java:19: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> report.candidatesForType(null));\n                                                                   ^\n    symbol:   method candidatesForType(<null>)\n    location: variable report of type RecipeReport\n  /work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:22: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(Set.of(\"unknown\")));\n                                                                     ^\n    symbol:   method inspectSelected(Set<String>)\n    location: variable registry of type IntegrationRegistry\n  /work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:23: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(null));\n                                                                     ^\n    symbol:   method inspectSelected(<null>)\n    location: variable registry of type IntegrationRegistry\n  /work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:27: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> registry.inspectSelected(withNull));\n                                                                     ^\n    symbol:   method inspectSelected(HashSet<String>)\n    location: variable registry of type IntegrationRegistry\n  /work/candidate/src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java:29: error: cannot find symbol\n          var selected = registry.inspectSelected(Set.of(\"selected\"));\n                                 ^\n    symbol:   method inspectSelected(Set<String>)\n    location: variable registry of type IntegrationRegistry\n  /work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java:11: error: cannot find symbol\n          var reasons = assessment.blockingReasons();\n                                  ^\n    symbol:   method blockingReasons()\n    location: variable assessment of type ExecutionAssessment\n  /work/candidate/src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java:15: error: cannot find symbol\n          var empty = ExecutionAssessment.unnecessary().blockingReasons();\n                                                       ^\n    symbol:   method blockingReasons()\n    location: class ExecutionAssessment\n  /work/candidate/src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java:14: error: cannot find symbol\n          assertEquals(List.of(), history.uniqueRegistryIds());\n                                         ^\n    symbol:   method uniqueRegistryIds()\n    location: variable history of type ActivityHistory\n  /work/candidate/src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java:19: error: cannot find symbol\n          var ids = history.uniqueRegistryIds();\n                           ^\n    symbol:   method uniqueRegistryIds()\n    location: variable history of type ActivityHistory\n  /work/candidate/src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java:11: error: cannot find symbol\n          var changed = original.withSource(ActivityEvent.Source.MANUAL);\n                                ^\n    symbol:   method withSource(Source)\n    location: variable original of type ActivityEvent\n  /work/candidate/src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java:20: error: cannot find symbol\n          assertThrows(IllegalArgumentException.class, () -> original.withSource(null));\n                                                                     ^\n    symbol:   method withSource(<null>)\n    location: variable original of type ActivityEvent\n  23 errors\n\n* Try:\n> Check your code and dependencies to fix the compilation error(s)\n> Run with --scan to generate a Build Scan (powered by Develocity).\n\nBUILD FAILED in 2m 46s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventWithSourceAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityUniqueIdsAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionBlockingReasonsAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationSelectedAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.InventoryTotalCountAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanResultLimitationsAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeCandidatesForTypeAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeSelectionBestOfAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    }
+  ],
+  "java_version": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "dev.atmcompanion.activity.ActivityEventWithSourceAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.activity.ActivityUniqueIdsAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.execution.ExecutionBlockingReasonsAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.integration.IntegrationSelectedAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.state.InventoryTotalCountAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.planning.PlanResultLimitationsAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.knowledge.RecipeCandidatesForTypeAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.knowledge.RecipeSelectionBestOfAcceptanceTest"
+      ]
+    }
+  ],
+  "external_build_inputs_copy": {
+    "files": 3895,
+    "bytes": 914224273,
+    "manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "approved_cache_mount": "read-only",
+    "verification_copy": "private tmpfs"
+  },
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "swap_additional": "0 bytes",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    },
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": [],
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+  }
+}

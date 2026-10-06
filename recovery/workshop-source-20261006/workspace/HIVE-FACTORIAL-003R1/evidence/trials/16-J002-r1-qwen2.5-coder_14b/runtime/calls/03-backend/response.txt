@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "summary": "Updated IngredientAllocation.canSatisfy to validate slot identity and count values.",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java",
+      "operation": "replace",
+      "find": "if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {",
+      "replace": "if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.stream().anyMatch(slot -> slot < 0 || slot >= 36)) || counts.values().stream().anyMatch(count -> count == null || count < 0)) {"
+    }
+  ],
+  "risks": []
+}

@@ -1,0 +1,28 @@
+{"at": "2026-10-06T00:56:28.308930+00:00", "monotonic": 160299.3303166, "event": "readiness_started", "model": "qwen2.5-coder:14b"}
+Model call 1: planner; unchanged provider/context settings.
+Model call 1: completed after 47.726s; HTTP attempts 1.
+{"at": "2026-10-06T00:57:23.141217+00:00", "monotonic": 160354.162621, "event": "readiness_finished", "model": "qwen2.5-coder:14b", "status": "completed", "seconds": 54.83017689999542}
+{"at": "2026-10-06T00:57:24.757108+00:00", "monotonic": 160355.7784955, "event": "readiness_started", "model": "qwen3:8b"}
+Model call 1: planner; unchanged provider/context settings.
+Model call 1: completed after 38.770s; HTTP attempts 1.
+{"at": "2026-10-06T00:58:08.407718+00:00", "monotonic": 160399.4291145, "event": "readiness_finished", "model": "qwen3:8b", "status": "completed", "seconds": 43.64858050001203}
+{"at": "2026-10-06T00:58:10.765381+00:00", "monotonic": 160401.7867793, "event": "trial_started", "ordinal": 1, "task_id": "J001", "replicate": 2, "model": "qwen2.5-coder:14b", "controller": "hive", "historical_ordinal": 3}
+{"at": "2026-10-06T00:58:17.245497+00:00", "monotonic": 160408.2668935, "event": "stopped", "type": "TypeError", "message": "freeze_junit_tests() got an unexpected keyword argument 'profile'", "completed": 0}
+Traceback (most recent call last):
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\study.py", line 223, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\study.py", line 215, in main
+    result=asyncio.run(run_trial(cell,lock,ordinal));results.append(result);save(HERE/'evidence/raw-results.json',results)
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\study.py", line 91, in run_trial
+    frozen=env.hive_jvm.freeze_junit_tests(candidate,[{'path':task['test_path'],'class_name':task['test_class'],'expected_cases':task['test_cases'],'source':hidden}],RUNS/runid,profile=profile)
+TypeError: freeze_junit_tests() got an unexpected keyword argument 'profile'

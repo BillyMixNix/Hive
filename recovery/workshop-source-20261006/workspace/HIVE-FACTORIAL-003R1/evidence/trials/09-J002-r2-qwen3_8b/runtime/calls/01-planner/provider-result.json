@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Validate input parameters in IngredientAllocation.canSatisfy to reject null/invalid values\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Update IngredientAllocation.canSatisfy to validate input parameters\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\"src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java\"],\n    \"tests\": []\n  },\n  \"acceptance\": [\"Validation rejects null/invalid inputs while preserving existing behavior\"],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\"Rejects null/invalid inputs in canSatisfy with IllegalArgumentException\", \"Preserves existing allocation behavior\"],\n    \"tests\": []\n  },\n  \"interface_contracts\": []\n}",
+  "input_tokens": 3821,
+  "output_tokens": 551,
+  "raw_id": null
+}

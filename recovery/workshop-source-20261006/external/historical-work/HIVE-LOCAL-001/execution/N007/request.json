@@ -1,0 +1,26 @@
+{
+  "request": "Add `ActivityHistory.uniqueRegistryIds()`. Return distinct registry IDs from\nthe *currently retained* events, sorted lexicographically in an immutable\ndetached list. An empty history returns an empty list. Evicted events must\nnot contribute, and calling the method must not change history state.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityUniqueIdsAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityUniqueIdsAcceptanceTest {\n    private static ActivityEvent event(String id) {\n        return new ActivityEvent(1, \"2026-09-01T00:00:00Z\", ActivityEvent.Type.ITEM_GAINED,\n                List.of(id), 1L, ActivityEvent.Source.GAME_EVENT);\n    }\n    @Test void usesRetainedEventsOnlyAndReturnsDetachedSortedIds() {\n        var history = new ActivityHistory(3);\n        assertEquals(List.of(), history.uniqueRegistryIds());\n        history.append(event(\"minecraft:evicted\"));\n        history.append(event(\"minecraft:zinc\"));\n        history.append(event(\"minecraft:apple\"));\n        history.append(event(\"minecraft:apple\"));\n        var ids = history.uniqueRegistryIds();\n        assertEquals(List.of(\"minecraft:apple\", \"minecraft:zinc\"), ids);\n        assertThrows(UnsupportedOperationException.class, () -> ids.add(\"minecraft:stone\"));\n        history.clear();\n        assertEquals(List.of(\"minecraft:apple\", \"minecraft:zinc\"), ids);\n        assertEquals(0, history.size());\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N007",
+    "replicate_index": 1,
+    "trial_id": "470d6ada270d",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

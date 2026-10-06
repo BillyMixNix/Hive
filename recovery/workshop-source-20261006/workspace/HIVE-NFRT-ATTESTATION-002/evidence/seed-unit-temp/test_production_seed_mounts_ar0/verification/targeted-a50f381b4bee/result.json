@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "checks": [],
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "swap_additional": "0 bytes",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    },
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": [],
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+  },
+  "diagnostics": {
+    "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\seed-unit-temp\\test_production_seed_mounts_ar0\\verification\\targeted-a50f381b4bee",
+    "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\seed-unit-temp\\test_production_seed_mounts_ar0\\verification\\targeted-a50f381b4bee\\verification-events.jsonl",
+    "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\seed-unit-temp\\test_production_seed_mounts_ar0\\verification\\targeted-a50f381b4bee\\stdout.log",
+    "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\seed-unit-temp\\test_production_seed_mounts_ar0\\verification\\targeted-a50f381b4bee\\stderr.log",
+    "last_observed_phase": "verification_returned",
+    "elapsed_ms": 114.916
+  }
+}

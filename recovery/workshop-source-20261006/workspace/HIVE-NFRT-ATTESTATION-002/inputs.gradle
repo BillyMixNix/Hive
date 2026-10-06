@@ -1,0 +1,33 @@
+import groovy.json.JsonOutput
+import java.security.MessageDigest
+
+gradle.taskGraph.whenReady { graph ->
+    def p = gradle.rootProject
+    def t = p.tasks.getByName('createMinecraftArtifacts')
+    def digest = { File f ->
+        def md = MessageDigest.getInstance('SHA-256')
+        f.withInputStream { stream ->
+            byte[] b = new byte[1048576]; int n
+            while ((n=stream.read(b))>0) md.update(b,0,n)
+        }
+        md.digest().encodeHex().toString()
+    }
+    def fr = { File f -> [path:f.absolutePath,exists:f.exists(),sha256:f.isFile()?digest(f):null] }
+    def norm
+    norm = { v ->
+        if (v==null || v instanceof Number || v instanceof Boolean || v instanceof String) return v
+        if (v instanceof File) return fr(v)
+        if (v instanceof Map) return v.collectEntries { k,x -> [(k.toString()):norm(x)] }
+        if (v instanceof Iterable) return v.collect { norm(it) }.sort { JsonOutput.toJson(it) }
+        if (v.class.name=='net.neoforged.nfrtgradle.ArtifactManifestEntry') return [artifactId:v.artifactId(),file:fr(v.file())]
+        return [className:v.class.name,value:v.toString()]
+    }
+    println 'NFRT_INPUT_SNAPSHOT '+JsonOutput.toJson([
+        project:p.projectDir.absolutePath,taskClass:t.class.name,
+        graph:graph.allTasks.collect { x -> [path:x.path,dependencies:x.taskDependencies.getDependencies(x).collect {it.path}.sort()] },
+        inputProperties:norm(t.inputs.properties),inputFiles:t.inputs.files.files.collect {fr(it)}.sort {it.path},
+        outputFiles:t.outputs.files.files.collect {it.absolutePath}.sort(),enableNativeCache:t.enableCache.get(),
+        javaSourceSets:p.sourceSets.collect {s -> [name:s.name,javaRoots:s.java.srcDirs.collect {it.absolutePath}.sort(),javaFiles:s.java.files.collect {it.absolutePath}.sort()]},
+        optionalInputs:[accessTransformers:t.accessTransformers.files.collect{fr(it)},validatedAccessTransformers:t.validatedAccessTransformers.files.collect{fr(it)},interfaceInjection:t.interfaceInjectionData.files.collect{fr(it)},parchment:t.parchmentData.files.collect{fr(it)}],
+        dryRun:gradle.startParameter.dryRun])
+}

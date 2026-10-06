@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "summary": "Modified SnapshotFormatter.boundLine to handle UTF-16 surrogate pairs correctly.",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+      "operation": "replace",
+      "find": "return safe.length() <= MAX_LINE_CHARS ? safe : safe.substring(0, MAX_LINE_CHARS - 3) + \"...\";",
+      "replace": "int length = safe.length();\nif (length <= MAX_LINE_CHARS) {\n    return safe;\n}\n\nint truncateIndex = MAX_LINE_CHARS - 3;\nwhile (truncateIndex > 0 && Character.isHighSurrogate(safe.charAt(truncateIndex - 1))) {\n    truncateIndex--;\n}\n\nreturn safe.substring(0, truncateIndex) + \"...\";"
+    }
+  ],
+  "risks": []
+}

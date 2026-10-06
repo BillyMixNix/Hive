@@ -1,0 +1,179 @@
+......................................s................s................ [ 11%]
+.....s.......................................s............s............. [ 23%]
+........................................................................ [ 34%]
+........................................................................ [ 46%]
+........................................................................ [ 57%]
+........................................................................ [ 69%]
+..........................................F.........FFF....F..F......FFF [ 81%]
+...........FF........................................................... [ 92%]
+........................F......s.............                            [100%]
+================================== FAILURES ===================================
+____________ test_all_historically_invalid_outputs_remain_invalid _____________
+tests\test_ownership_representation.py:123: in test_all_historically_invalid_outputs_remain_invalid
+    result=json.loads(artifact.read_text())
+                      ^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\ownership-historical-replay.json'
+__ test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[1] __
+tests\test_planner_transition.py:30: in test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic
+    raw = (ARTIFACTS / f'planner-{attempt}.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\ordinal-03\\planner-1.response.txt'
+__ test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[2] __
+tests\test_planner_transition.py:30: in test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic
+    raw = (ARTIFACTS / f'planner-{attempt}.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\ordinal-03\\planner-2.response.txt'
+___ test_valid_equivalent_historical_plan_passes_without_invented_contract ____
+tests\test_planner_transition.py:42: in test_valid_equivalent_historical_plan_passes_without_invented_contract
+    p = json.loads((ARTIFACTS / 'planner-1.response.txt').read_text())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\ordinal-03\\planner-1.response.txt'
+_ test_both_scoped_schemas_exclude_unauthorized_paths_and_keep_global_schema __
+tests\test_planner_transition.py:62: in test_both_scoped_schemas_exclude_unauthorized_paths_and_keep_global_schema
+    raw = (ARTIFACTS / 'planner-1.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\ordinal-03\\planner-1.response.txt'
+__________ test_live_duplicate_ownership_is_rejected_before_dispatch __________
+tests\test_planner_transition.py:104: in test_live_duplicate_ownership_is_rejected_before_dispatch
+    run = json.loads((ARTIFACTS.parent / 'live/01-J001-r1-qwen2.5-coder-14b-hive/run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\live\\01-J001-r1-qwen2.5-coder-14b-hive\\run.json'
+_ test_historical_critical_information_survives_actual_http_serialization[1] __
+tests\test_planning_input_fidelity.py:19: in test_historical_critical_information_survives_actual_http_serialization
+    saved = json.loads((FIXTURES / f'{attempt:02d}/request.json').read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\planner-input-fixtures\\01\\request.json'
+_ test_historical_critical_information_survives_actual_http_serialization[2] __
+tests\test_planning_input_fidelity.py:19: in test_historical_critical_information_survives_actual_http_serialization
+    saved = json.loads((FIXTURES / f'{attempt:02d}/request.json').read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\planner-input-fixtures\\02\\request.json'
+_______ test_correction_construction_still_matches_preserved_full_input _______
+tests\test_planning_input_fidelity.py:40: in test_correction_construction_still_matches_preserved_full_input
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\planner-input-fixtures\\run.json'
+_____ test_prior_overlap_outputs_still_rejected_after_transport_repair[0] _____
+tests\test_planning_input_fidelity.py:96: in test_prior_overlap_outputs_still_rejected_after_transport_repair
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\planner-input-fixtures\\run.json'
+_____ test_prior_overlap_outputs_still_rejected_after_transport_repair[1] _____
+tests\test_planning_input_fidelity.py:96: in test_prior_overlap_outputs_still_rejected_after_transport_repair
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\planner-input-fixtures\\run.json'
+________ test_scope_context_ownership_verifier_policy_files_unchanged _________
+tests\test_semantic_fidelity.py:161: in test_scope_context_ownership_verifier_policy_files_unchanged
+    assert hashlib.sha256((root/name).read_bytes()).digest()==hashlib.sha256((old/name).read_bytes()).digest()
+E   assert b'}V\xca\x13s...5\xce\xce\xfa' == b"\xcdg,'\x95...xd8\x07\x80/3"
+E     
+E     At index 0 diff: b'}' != b'\xcd'
+E     Use -v to get more diff
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_gradle_cache_priming.py:118: symlinks unavailable on this platform
+SKIPPED [1] tests\test_hive_context_contract.py:261: symlink creation is unavailable on this host
+SKIPPED [1] tests\test_hive_external_root.py:311: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_external_snapshot_rejects0\\outside' -> 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_external_snapshot_rejects0\\external-repository\\linked-outside'
+SKIPPED [1] tests\test_hive_isolated_verifier.py:107: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_sanitized_copy_rejects_sy0\\secret.txt' -> 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_sanitized_copy_rejects_sy0\\source\\tests\\leak.py'
+SKIPPED [1] tests\test_hive_jvm_profile.py:119: directory symlinks are unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_runtime_output_exclusion_0' -> 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\regression-temp\\test_runtime_output_exclusion_0\\candidate\\run-gametest'
+SKIPPED [1] tests\test_v05_runtime.py:63: symlink creation is unavailable on this host
+12 failed, 603 passed, 6 skipped in 95.19s (0:01:35)

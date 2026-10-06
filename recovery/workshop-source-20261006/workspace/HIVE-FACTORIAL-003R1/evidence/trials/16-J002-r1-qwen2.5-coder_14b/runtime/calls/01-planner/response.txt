@@ -1,0 +1,18 @@
+{
+  "summary": "Update IngredientAllocation.canSatisfy to validate slot identity and count values.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Update IngredientAllocation.canSatisfy to validate slot identity and count values.",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"],
+    "tests": []
+  },
+  "acceptance": ["IngredientAllocation.canSatisfy rejects null, negative, or out-of-range slot identity and null count values without mutating caller inputs."],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["IngredientAllocation.canSatisfy correctly validates slot identity and count values as specified."],
+    "tests": []
+  },
+  "interface_contracts": []
+}

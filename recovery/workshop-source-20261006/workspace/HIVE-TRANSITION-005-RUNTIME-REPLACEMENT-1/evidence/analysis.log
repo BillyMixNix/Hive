@@ -1,0 +1,175 @@
+{
+  "trajectory": {
+    "study": "HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1",
+    "run_id": "4574db69cea0",
+    "classification": "LOCAL_RUNTIME_FAILURE",
+    "failure_role": "reviewer",
+    "hive_status": "rejected",
+    "frozen_acceptance": true,
+    "full_gate_passed": true,
+    "reviewer_approved": false,
+    "promoted": false,
+    "planner_attempts": 1,
+    "logical_model_calls": 3,
+    "http_attempts": 4,
+    "http_500_errors": 2,
+    "planner_corrections": 0,
+    "worker_structural_corrections": 0,
+    "worker_targeted_corrections": 0,
+    "revised_proposal_classification": "NOT_APPLICABLE: initial edit passed; no correction or second proposal",
+    "furthest_verified_transition": "FULL GATE; subsequent reviewer runtime failure",
+    "trajectory": [
+      {
+        "transition": "TASK",
+        "status": "REACHED"
+      },
+      {
+        "transition": "PLANNER CALL",
+        "status": "REACHED"
+      },
+      {
+        "transition": "PLAN",
+        "status": "REACHED"
+      },
+      {
+        "transition": "PLAN VALIDATION",
+        "status": "REACHED"
+      },
+      {
+        "transition": "OWNERSHIP",
+        "status": "REACHED"
+      },
+      {
+        "transition": "WORKER DISPATCH",
+        "status": "REACHED"
+      },
+      {
+        "transition": "WORKER RESPONSE",
+        "status": "REACHED"
+      },
+      {
+        "transition": "EDIT PREFLIGHT",
+        "status": "REACHED"
+      },
+      {
+        "transition": "EXECUTABLE EDIT",
+        "status": "REACHED"
+      },
+      {
+        "transition": "TARGETED VERIFICATION",
+        "status": "REACHED"
+      },
+      {
+        "transition": "TARGETED RESULT",
+        "status": "REACHED"
+      },
+      {
+        "transition": "FROZEN ACCEPTANCE",
+        "status": "REACHED"
+      },
+      {
+        "transition": "FULL GATE",
+        "status": "REACHED"
+      },
+      {
+        "transition": "WORKER CORRECTION",
+        "status": "NOT_NEEDED"
+      },
+      {
+        "transition": "REVISED WORKER RESPONSE",
+        "status": "NOT_NEEDED"
+      },
+      {
+        "transition": "REVISED EDIT",
+        "status": "NOT_NEEDED"
+      },
+      {
+        "transition": "TARGETED REVERIFICATION",
+        "status": "NOT_NEEDED"
+      },
+      {
+        "transition": "REVIEWER",
+        "status": "LOCAL_RUNTIME_FAILURE_AFTER_TWO_HTTP_500_ATTEMPTS"
+      },
+      {
+        "transition": "PROMOTION",
+        "status": "NOT_AUTHORIZED_OR_PERFORMED"
+      }
+    ],
+    "stage_events": [
+      {
+        "stage": "planning",
+        "progress": 10,
+        "message": "Hive planner is building the bounded worker contracts",
+        "at": 1791230181.195365,
+        "at_utc": "2026-10-05T19:56:21.195365+00:00"
+      },
+      {
+        "stage": "ui",
+        "progress": 30,
+        "message": "Hive ui worker is evaluating its bounded contract",
+        "at": 1791231064.057596,
+        "at_utc": "2026-10-05T20:11:04.057596+00:00"
+      },
+      {
+        "stage": "backend",
+        "progress": 45,
+        "message": "Hive backend worker is evaluating its bounded contract",
+        "at": 1791231064.0576086,
+        "at_utc": "2026-10-05T20:11:04.057609+00:00"
+      },
+      {
+        "stage": "tests",
+        "progress": 60,
+        "message": "Hive tests worker is evaluating its bounded contract",
+        "at": 1791231896.8578467,
+        "at_utc": "2026-10-05T20:24:56.857847+00:00"
+      },
+      {
+        "stage": "verification",
+        "progress": 75,
+        "message": "Hive is running deterministic verification",
+        "at": 1791231896.860537,
+        "at_utc": "2026-10-05T20:24:56.860537+00:00"
+      },
+      {
+        "stage": "review",
+        "progress": 90,
+        "message": "Hive reviewer is evaluating the staged diff and verification",
+        "at": 1791232300.0610468,
+        "at_utc": "2026-10-05T20:31:40.061047+00:00"
+      },
+      {
+        "stage": "completed",
+        "progress": 100,
+        "message": "Hive run rejected",
+        "at": 1791232365.8911524,
+        "at_utc": "2026-10-05T20:32:45.891152+00:00"
+      }
+    ],
+    "trial_wall_seconds": 2200.777,
+    "complete_usage_only": {
+      "input_tokens": 9440,
+      "output_tokens": 417
+    },
+    "aggregate_usage": "UNKNOWN: reviewer did not complete; known completed usage must not be called total usage",
+    "model_request_elapsed_seconds": 1567.1976482999744,
+    "original_task_delivered": true
+  },
+  "resources": {
+    "sample_count": 78,
+    "minimum_observed_free_host_gib": 0.42848968505859375,
+    "minimum_observed_free_virtual_gib": 0.5115280151367188,
+    "minimum_observed_free_gpu_mib": 315,
+    "limitations": "Read-only asynchronous boundary and approximately 30-second samples; not continuous extrema or a causal resource diagnosis."
+  },
+  "hashes": {
+    "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "unpromoted_external_candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "verified_stage_sha256": "05b66d7852034a79920793935517234336b7e126c7882016f6a10859b7c6ca7e",
+    "verified_source_sha256": "b8a17817ccbf0846cfb4e765f5b530b4790e8c5dcdf6fef16a02d19a0f35a4d3",
+    "stage_path": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\runs\\4574db69cea0\\stage",
+    "applied": false,
+    "promotion_allowed": false
+  }
+}

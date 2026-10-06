@@ -1,0 +1,18 @@
+{
+  "summary": "Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"],
+    "tests": []
+  },
+  "acceptance": ["SnapshotFormatter correctly truncates lines without introducing unpaired surrogates and maintains existing behavior for ASCII lines and control-character/section-sign sanitization."],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["SnapshotFormatter truncates lines to MAX_LINE_CHARS without introducing unpaired surrogates and maintains existing behavior for ASCII lines and control-character/section-sign sanitization."],
+    "tests": []
+  },
+  "interface_contracts": []
+}

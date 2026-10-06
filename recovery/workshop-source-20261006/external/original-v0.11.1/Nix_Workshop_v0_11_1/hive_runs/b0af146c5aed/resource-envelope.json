@@ -1,0 +1,48 @@
+{
+  "milestone": "HIVE-EXTROOT-002E",
+  "run_id": "b0af146c5aed",
+  "approved_cache_run_id": "6992ee6447df",
+  "network": "none",
+  "old": {
+    "memory": "4g",
+    "memory_plus_swap": "4g (0 additional swap)",
+    "cpu_quota": "2 CPUs",
+    "pids_limit": 128,
+    "ulimit_nproc": "unlimited",
+    "ulimit_stack": "8192 KiB",
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "child_jvm_default_max_heap": "1 GiB",
+    "parallel_gc_threads": 2,
+    "conc_gc_threads": 1,
+    "failed_run_peak_pids": "not captured; original verifier container used --rm"
+  },
+  "calibration_trials": [
+    {
+      "pids_limit": 192,
+      "sampled_peak_pids": 191,
+      "sampled_memory": "1.849GiB",
+      "result": "EAGAIN creating NeoForge ProcessMinecraftJar Thread-65"
+    },
+    {
+      "pids_limit": 256,
+      "result": "same Thread-65 native-thread EAGAIN; exact peak not captured because streaming stats returned ANSI cursor updates",
+      "direct_samples": [
+        "58 PIDs / 1.299GiB",
+        "128 PIDs / 1.96GiB",
+        "127 PIDs / 1.735GiB"
+      ]
+    }
+  ],
+  "final": {
+    "memory": "4g",
+    "memory_plus_swap": "4g (0 additional swap)",
+    "cpu_quota": "2 CPUs",
+    "pids_limit": 320,
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "change": "only finite PID cgroup limit changed; all other isolation/resource policy is unchanged"
+  }
+}

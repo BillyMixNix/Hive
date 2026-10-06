@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Implement coverage percentage calculation methods in execution context and assessment\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Implement ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() with specified behavior\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\n      \"src/main/java/dev/atmcompanion/execution/ExecutionContext.java\",\n      \"src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java\"\n    ],\n    \"tests\": []\n  },\n  \"acceptance\": [\n    \"coveragePercent() returns correct integer percentage calculation\",\n    \"observedCoveragePercent() delegates to observation scan with -1 fallback\",\n    \"existing invariants remain unchanged\"\n  ],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\n      \"implements ExecutionContext.Scan.coveragePercent() with floor(100 * scannedPositions / totalPositions)\",\n      \"implements ExecutionAssessment.observedCoveragePercent() delegating to observation scan\"\n    ],\n    \"tests\": []\n  },\n  \"interface_contracts\": []\n}",
+  "input_tokens": 3884,
+  "output_tokens": 1016,
+  "raw_id": null
+}

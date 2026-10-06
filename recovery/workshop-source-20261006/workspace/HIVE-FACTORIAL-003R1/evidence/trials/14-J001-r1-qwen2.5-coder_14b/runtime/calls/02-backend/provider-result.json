@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Modified SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\",\n      \"operation\": \"replace\",\n      \"find\": \"return safe.length() <= MAX_LINE_CHARS ? safe : safe.substring(0, MAX_LINE_CHARS - 3) + \\\"...\\\";\",\n      \"replace\": \"int length = safe.length();\\nif (length <= MAX_LINE_CHARS) {\\n    return safe;\\n}\\n\\nint truncateIndex = MAX_LINE_CHARS - 3;\\nwhile (truncateIndex > 0 && Character.isHighSurrogate(safe.charAt(truncateIndex - 1))) {\\n    truncateIndex--;\\n}\\n\\nreturn safe.substring(0, truncateIndex) + \\\"...\\\";\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 5508,
+  "output_tokens": 199,
+  "raw_id": null
+}

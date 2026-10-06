@@ -1,0 +1,18 @@
+{
+  "summary": "Add map method to Observation with specified behavior",
+  "ui_goal": "no change needed",
+  "backend_goal": "Implement Observation.map(java.util.function.Function) method with exact mapper application and null rejection",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/Observation.java"],
+    "tests": []
+  },
+  "acceptance": ["Observation.map() applies mapper exactly once for available data, rejects null mapper/mapped results, preserves status/detail for unavailable observations"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Implementation matches method contract: mapper applied once for available data, null rejection, status/detail preservation for unavailable observations"],
+    "tests": []
+  },
+  "interface_contracts": []
+}

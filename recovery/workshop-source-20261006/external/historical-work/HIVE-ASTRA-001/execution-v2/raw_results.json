@@ -1,0 +1,2362 @@
+[
+  {
+    "task_id": "T001",
+    "condition": "hive",
+    "status": "ready",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "b387bbda14b1484da7834bd4b880c085",
+    "job_state": "completed",
+    "run_id": "7c6c5048fe4f",
+    "changed_files": [
+      "src/main/java/dev/atmcompanion/activity/ActivitySummary.java",
+      "src/test/java/dev/atmcompanion/activity/ActivitySummaryTest.java"
+    ],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 164.322,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.05s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.88s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.63s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 12.79s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 13.25s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.12s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 12.04s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.05s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.86s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 4.54s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.14s\nTotal runtime: 67.77s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nActivitySummaryCountAcceptanceTest > returnsExactTypeCountsIncludingZeroAndRejectsNull() PASSED\n\nBUILD SUCCESSFUL in 2m 44s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryCountAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "full_gate": {
+      "name": "full_gradle_check",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 121.925,
+        "stdout_tail": "LConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307) ~[?:?] {}\n\tat MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%2377!/:?] {}\n\t... 9 more\n[04:18:47] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes\n[04:18:47] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements\n[04:18:49] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld\n[04:18:49] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[04:18:50] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 6%\n[04:18:50] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 977 ms\n[04:18:50] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server\n[04:18:50] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler\n[04:18:50] [Server thread/INFO] [minecraft/GameTestServer]: 3 tests are now running at position -1257783, -59, -11821447!\n[04:18:51] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...\n[04:18:52] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[04:18:52] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 116 active ms, 1255 elapsed ms, 25 slices, 35 max slice ms, generation 1)\n[04:18:52] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions\n[04:18:52] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0252 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0252\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0027 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0027\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.068101 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.068101\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0033 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0033\n[04:18:52] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-6.5, -60.0, 5.5)\n[04:18:52] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.385503 definitionsMs=0.0938 chaptersMs=0.935706 questsTasksMs=4.636726 validationMs=1.405008 totalMs=7.456743\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0114 definitionsMs=0.0148 chaptersMs=0.0304 questsTasksMs=0.173001 validationMs=0.188801 totalMs=0.418402\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0122 definitionsMs=0.014101 chaptersMs=0.0268 questsTasksMs=0.229301 validationMs=0.132601 totalMs=0.415003\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.0101 definitionsMs=0.0126 chaptersMs=0.0204 questsTasksMs=0.152801 validationMs=0.203501 totalMs=0.399402\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.013 definitionsMs=0.016101 chaptersMs=0.0526 questsTasksMs=0.457202 validationMs=0.161601 totalMs=0.700504\n[04:18:52] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.0192 definitionsMs=0.0138 chaptersMs=0.0093 questsTasksMs=0.0318 validationMs=0.110601 totalMs=0.184701\n[04:18:53] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'large_ftb_book:0' (1 tests)...\n[04:18:53] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[04:18:53] [Server thread/INFO] [minecraft/PlayerList]: quest_scale[embedded] logged in with entity id 4 at (-8.5, -60.0, 6.5)\n[04:18:53] [Server thread/INFO] [minecraft/MinecraftServer]: quest_scale joined the game\n[04:18:53] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0141 definitionsMs=2.497914 chaptersMs=0.250801 questsTasksMs=74.552825 validationMs=0.236901 totalMs=77.552541\n[04:18:53] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=timed_out chapters=67/67 quests=3107/4793 tasks=6211/9583 dependencies=2722 readinessMs=0.0201 definitionsMs=5.989434 chaptersMs=2.387013 questsTasksMs=241.841977 validationMs=0.0 totalMs=250.238524\n[04:18:53] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.0199 definitionsMs=4.472425 chaptersMs=0.204001 questsTasksMs=119.206979 validationMs=4.516226 totalMs=128.419531\n[04:18:53] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.025101 definitionsMs=4.713326 chaptersMs=0.428203 questsTasksMs=74.516124 validationMs=2.802516 totalMs=82.48527\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.0185 definitionsMs=5.22853 chaptersMs=0.388202 questsTasksMs=150.219355 validationMs=3.36032 totalMs=159.214907\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.045701 definitionsMs=3.64112 chaptersMs=0.432903 questsTasksMs=102.037381 validationMs=2.367113 totalMs=108.524218\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0134 definitionsMs=2.199813 chaptersMs=0.099 questsTasksMs=3.392719 validationMs=0.248702 totalMs=5.953634\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0268 definitionsMs=2.261513 chaptersMs=0.085501 questsTasksMs=41.322735 validationMs=0.239301 totalMs=43.93585\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.0252 definitionsMs=7.279242 chaptersMs=0.423802 questsTasksMs=135.108269 validationMs=2.326814 totalMs=145.163327\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.014901 definitionsMs=1.85601 chaptersMs=0.135101 questsTasksMs=0.635803 validationMs=0.181001 totalMs=2.822816\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.0328 definitionsMs=2.965117 chaptersMs=0.219301 questsTasksMs=161.59152 validationMs=2.996817 totalMs=167.805555\n[04:18:54] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0172 definitionsMs=2.936316 chaptersMs=0.169501 questsTasksMs=7.611244 validationMs=0.203501 totalMs=10.937762\n[04:18:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4792/4792 tasks=0/0 dependencies=0 readinessMs=0.0201 definitionsMs=2.047712 chaptersMs=0.101101 questsTasksMs=4.019222 validationMs=0.126601 totalMs=6.314736\n[04:18:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4792/4792 tasks=9581/9581 dependencies=4193 readinessMs=0.0142 definitionsMs=2.429914 chaptersMs=0.620004 questsTasksMs=134.791667 validationMs=1.873611 totalMs=139.729396\n[04:18:57] [Server thread/INFO] [minecraft/GameTestServer]: [+++]\n[04:18:57] [Server thread/INFO] [minecraft/GameTestServer]: ========= 3 GAME TESTS COMPLETE IN 6.162 s ======================\n[04:18:57] [Server thread/INFO] [minecraft/GameTestServer]: All 3 required tests passed :)\n[04:18:57] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================\n[04:18:57] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server\n[04:18:57] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players\n[04:18:57] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\n[04:18:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\n[04:18:59] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n\nBUILD SUCCESSFUL in 2m 1s\n21 actionable tasks: 20 executed, 1 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "/work/candidate/src/gametest/java/dev/atmcompanion/tests/RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal\n        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));\n                                          ^\n1 warning\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryCountAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "verification": {
+      "passed": true,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": true,
+      "summary": "The diff adds exact per-type counts with zero fallback, rejects null with IllegalArgumentException, and does not mutate the summary. Changes are narrowly scoped, and deterministic verification passed.",
+      "issues": [],
+      "confidence": 0.99
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0fea1f8ac6e87bfd006abddb90e04081a2ae0fd28d4192280e",
+        "turn_id": "turn_0fea1f8ac6e87bfd006abddb9498c481a2a0a1e3f23d9f580f",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:03:46.466770+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 17.59,
+        "call_id": "7c6c5048fe4f:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0db25e38ebc72c19006abddba73c60819eafc328f1b661f3aa",
+        "turn_id": "turn_0db25e38ebc72c19006abddbaaaf20819eb33e9243372469f2",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:04:06.230751+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 14.219,
+        "call_id": "7c6c5048fe4f:call:0002"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_02daff0d6738df42006abddcb2646481a09c49ec697bc6a623",
+        "turn_id": "turn_02daff0d6738df42006abddcb680f881a0bc9ad94aedbae0d0",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:08:33.334245+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 14.804,
+        "call_id": "7c6c5048fe4f:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_02daff0d6738df42006abddcb2646481a09c49ec697bc6a623",
+        "turn_id": "turn_02daff0d6738df42006abddcc5a11081a0bcc60618dc7583ea",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:08:47.979130+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 14.687,
+        "call_id": "7c6c5048fe4f:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_02daff0d6738df42006abddcb2646481a09c49ec697bc6a623",
+        "turn_id": "turn_02daff0d6738df42006abddcd4954081a0b3abc272598806e0",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:09:14.821456+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 27.062,
+        "call_id": "7c6c5048fe4f:call:0005"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0cdc06cb2c537c37006abddf3f35f481a3bbe7fc9c6c1e3196",
+        "turn_id": "turn_0cdc06cb2c537c37006abddf42e3e481a38e6ac47d43d233f8",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:19:24.876834+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.661,
+        "call_id": "7c6c5048fe4f:call:0006"
+      }
+    ],
+    "wall_seconds": 972.254
+  },
+  {
+    "task_id": "T001",
+    "condition": "direct",
+    "trial_id": "3e4bb4090206",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\3e4bb4090206",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.275,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569118 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 4.899
+  },
+  {
+    "task_id": "T002",
+    "condition": "direct",
+    "trial_id": "b1fe236b1be6",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\b1fe236b1be6",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.435,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569305 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 5.193
+  },
+  {
+    "task_id": "T002",
+    "condition": "hive",
+    "status": "rejected",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "0004d1455cc24b2592a7e9bc41f3e05e",
+    "job_state": "completed",
+    "run_id": "85e7b3abc171",
+    "changed_files": [
+      "src/main/java/dev/atmcompanion/activity/ActivityDiffService.java",
+      "src/test/java/dev/atmcompanion/activity/ActivityDiffServiceTest.java"
+    ],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 57.647,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.82s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.09s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.38s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.63s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.34s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.06s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.10s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.86s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\nTotal runtime: 41.68s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+        "stderr_tail": "Last lines of /work/candidate/build/tmp/neoformruntime/20261001-043525_applyDevTransforms/console_output.txt:\n------------------------------------------------------------\nk\n - PROCESS_MINECRAFT_JAR\n - --input\n - /work/gradle-user-home/caches/neoformruntime/intermediate_results/copyUnpatchedClasses_225df56b09fa183ed417b3752b9a6127159074ce_output.jar\n - --output\n - ./output.jar\n - --no-mod-manifest\n - --access-transformer\n - ats/accesstransformer.cfg\n--------------------------------------------------------------------------------\n\nTask: PROCESS_MINECRAFT_JAR\nload access transformers [53ms]\nload input zip [543ms]\n[1.678s][warning][os,thread] Failed to start thread \"Unknown thread\" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.\n[1.679s][warning][os,thread] Failed to start the native thread for java.lang.Thread \"Thread-257\"\nException in thread \"main\" java.lang.RuntimeException: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat net.neoforged.installertools.ProcessMinecraftJar.process(ProcessMinecraftJar.java:2227)\n\tat net.neoforged.installertools.ConsoleTool.main(ConsoleTool.java:55)\nCaused by: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat java.base/java.lang.Thread.start0(Native Method)\n\tat java.base/java.lang.Thread.start(Thread.java:1526)\n\tat java.base/java.util.concurrent.CompletableFuture$ThreadPerTaskExecutor.execute(CompletableFuture.java:444)\n\tat java.base/java.util.concurrent.CompletableFuture.asyncRunStage(CompletableFuture.java:1818)\n\tat java.base/java.util.concurrent.CompletableFuture.runAsync(CompletableFuture.java:2018)\n\tat net.neoforged.installertools.ProcessMinecraftJar.lambda$processZip$8(ProcessMinecraftJar.java:41253)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\n\n------------------------------------------------------------\nnet.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for applyDevTransforms failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.lang.RuntimeException: Failed to execute tool\n\tat net.neoforged.neoform.runtime.actions.ExternalJavaToolAction.run(ExternalJavaToolAction.java:202)\n\tat net.neoforged.neoform.runtime.actions.ApplyDevTransformsAction.run(ApplyDevTransformsAction.java:68)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 57s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffValidationAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    },
+    "full_gate": null,
+    "verification": {
+      "passed": false,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": false,
+      "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+      "issues": [
+        "Verification failed during createMinecraftArtifacts because the JVM could not create a native thread. No acceptance tests ran or fresh JUnit reports were produced; Hive must complete deterministic verification before approval.",
+        "Deterministic verification failed."
+      ],
+      "confidence": 0.98
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_073a0f1eeb91ecbc006abddf91738881a38cbfac64a99f9b9c",
+        "turn_id": "turn_073a0f1eeb91ecbc006abddf95153081a38a989957343a0a19",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:20:56.277598+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 21.795,
+        "call_id": "85e7b3abc171:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_056e5b353b1b972c006abddfaf2e90819d99732b66578dfa82",
+        "turn_id": "turn_056e5b353b1b972c006abddfb4f878819da0e06e39233a9e27",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:21:25.646526+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 22.305,
+        "call_id": "85e7b3abc171:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_056e5b353b1b972c006abddfaf2e90819d99732b66578dfa82",
+        "turn_id": "turn_056e5b353b1b972c006abde05b809c819d9c882c25696654ad",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:24:08.029814+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 16.906,
+        "call_id": "85e7b3abc171:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_07d95d1e4428ae15006abde1694db0819eafd396ca61856592",
+        "turn_id": "turn_07d95d1e4428ae15006abde16c9cfc819ea20e0bdf7cf8f3f7",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:28:37.370641+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.823,
+        "call_id": "85e7b3abc171:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_07d95d1e4428ae15006abde1694db0819eafd396ca61856592",
+        "turn_id": "turn_07d95d1e4428ae15006abde176b82c819eb2df82f0c1382d56",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:28:47.654250+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.827,
+        "call_id": "85e7b3abc171:call:0005"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_07d95d1e4428ae15006abde1694db0819eafd396ca61856592",
+        "turn_id": "turn_07d95d1e4428ae15006abde181bccc819e8aa8bad940f31ea3",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:29:21.523566+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 33.859,
+        "call_id": "85e7b3abc171:call:0006"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0d75866d3517d7fb006abde3172fc88192831842e0bcc0cd54",
+        "turn_id": "turn_0d75866d3517d7fb006abde31cd7b48192be2d9c93df9e92ef",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:35:50.848211+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 14.671,
+        "call_id": "85e7b3abc171:call:0007"
+      }
+    ],
+    "wall_seconds": 927.648
+  },
+  {
+    "task_id": "T003",
+    "condition": "hive",
+    "status": "ready",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "8d7339c5060d4908a6636b5cca904bc8",
+    "job_state": "completed",
+    "run_id": "ff68bfb9a92b",
+    "changed_files": [
+      "src/main/java/dev/atmcompanion/activity/ActivityHistory.java",
+      "src/main/java/dev/atmcompanion/activity/ActivitySummary.java",
+      "src/test/java/dev/atmcompanion/activity/ActivityHistoryTest.java",
+      "src/test/java/dev/atmcompanion/activity/ActivitySummaryTest.java"
+    ],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 171.381,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.06s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.06s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.06s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.70s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 8.00s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 13.10s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 13.43s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.72s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 14.28s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.10s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 2.03s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 3.52s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 23.27s\nTotal runtime: 71.38s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nActivityHistorySummaryAcceptanceTest > historySummaryContainsPerTypeQuantitiesAndIsADetachedImmutableSnapshot() PASSED\n\nBUILD SUCCESSFUL in 2m 51s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistorySummaryAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "full_gate": {
+      "name": "full_gradle_check",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 120.984,
+        "stdout_tail": "RAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%2377!/:?] {}\n\t... 9 more\n[04:55:50] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes\n[04:55:50] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements\n[04:55:52] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld\n[04:55:52] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[04:55:53] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[04:55:53] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 762 ms\n[04:55:53] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server\n[04:55:53] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler\n[04:55:53] [Server thread/INFO] [minecraft/GameTestServer]: 3 tests are now running at position 846864, -59, 8664919!\n[04:55:54] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...\n[04:55:55] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[04:55:55] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 262 active ms, 1607 elapsed ms, 35 slices, 53 max slice ms, generation 1)\n[04:55:55] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions\n[04:55:55] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.040802 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.040802\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0031 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0031\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.103605 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.103605\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0026 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0026\n[04:55:55] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-4.5, -60.0, 5.5)\n[04:55:55] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.40002 definitionsMs=0.178508 chaptersMs=1.037151 questsTasksMs=6.210706 validationMs=1.43067 totalMs=9.257055\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0106 definitionsMs=0.015901 chaptersMs=0.030202 questsTasksMs=0.299114 validationMs=0.176309 totalMs=0.532126\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0107 definitionsMs=0.013401 chaptersMs=0.026101 questsTasksMs=0.219011 validationMs=0.123806 totalMs=0.393019\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.0091 definitionsMs=0.012701 chaptersMs=0.020201 questsTasksMs=0.120106 validationMs=0.234711 totalMs=0.396819\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0085 definitionsMs=0.014601 chaptersMs=0.044502 questsTasksMs=0.174108 validationMs=0.137207 totalMs=0.378918\n[04:55:55] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.0134 definitionsMs=0.013601 chaptersMs=0.0074 questsTasksMs=0.023001 validationMs=0.097805 totalMs=0.155207\n[04:55:56] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'large_ftb_book:0' (1 tests)...\n[04:55:56] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[04:55:56] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[04:55:56] [Server thread/INFO] [minecraft/PlayerList]: quest_scale[embedded] logged in with entity id 4 at (5.5, -60.0, -5.5)\n[04:55:56] [Server thread/INFO] [minecraft/MinecraftServer]: quest_scale joined the game\n[04:55:56] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0187 definitionsMs=2.886143 chaptersMs=0.271513 questsTasksMs=12.1963 validationMs=0.39792 totalMs=15.770576\n[04:55:56] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=timed_out chapters=67/67 quests=2723/4793 tasks=5445/9583 dependencies=2383 readinessMs=0.023501 definitionsMs=7.747181 chaptersMs=1.256462 questsTasksMs=259.148655 validationMs=0.0 totalMs=268.175799\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.026901 definitionsMs=4.838638 chaptersMs=0.326016 questsTasksMs=233.907813 validationMs=3.26526 totalMs=242.364628\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.031402 definitionsMs=3.114553 chaptersMs=0.302615 questsTasksMs=87.028483 validationMs=2.0312 totalMs=92.508253\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.014801 definitionsMs=2.473222 chaptersMs=0.398319 questsTasksMs=209.343004 validationMs=2.951345 totalMs=215.180691\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.086505 definitionsMs=2.825639 chaptersMs=0.302315 questsTasksMs=46.398583 validationMs=3.133554 totalMs=52.746596\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0138 definitionsMs=1.230861 chaptersMs=0.109705 questsTasksMs=2.84024 validationMs=0.186809 totalMs=4.381415\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.024402 definitionsMs=1.575877 chaptersMs=0.090205 questsTasksMs=3.926293 validationMs=0.142507 totalMs=5.759284\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.021201 definitionsMs=2.930644 chaptersMs=0.181509 questsTasksMs=50.172469 validationMs=1.873992 totalMs=55.179815\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.023001 definitionsMs=1.573377 chaptersMs=0.088505 questsTasksMs=0.507225 validationMs=0.115705 totalMs=2.307813\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.014301 definitionsMs=1.927795 chaptersMs=0.107405 questsTasksMs=37.124127 validationMs=1.61398 totalMs=40.787608\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.009701 definitionsMs=1.146156 chaptersMs=0.065503 questsTasksMs=5.221757 validationMs=0.165508 totalMs=6.608625\n[04:55:57] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4792/4792 tasks=0/0 dependencies=0 readinessMs=0.013801 definitionsMs=1.247662 chaptersMs=0.142607 questsTasksMs=4.389216 validationMs=0.134906 totalMs=5.928192\n[04:55:58] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4792/4792 tasks=9581/9581 dependencies=4193 readinessMs=0.0138 definitionsMs=1.841291 chaptersMs=0.527026 questsTasksMs=211.029586 validationMs=2.178207 totalMs=215.58991\n[04:55:59] [Server thread/INFO] [minecraft/GameTestServer]: [+++]\n[04:55:59] [Server thread/INFO] [minecraft/GameTestServer]: ========= 3 GAME TESTS COMPLETE IN 6.119 s ======================\n[04:55:59] [Server thread/INFO] [minecraft/GameTestServer]: All 3 required tests passed :)\n[04:55:59] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================\n[04:55:59] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server\n[04:55:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players\n[04:55:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\n[04:56:01] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\n[04:56:01] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n\nBUILD SUCCESSFUL in 2m\n21 actionable tasks: 20 executed, 1 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "/work/candidate/src/gametest/java/dev/atmcompanion/tests/RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal\n        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));\n                                          ^\n1 warning\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistorySummaryAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "verification": {
+      "passed": true,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": true,
+      "summary": "The diff satisfies the request: immutable quantities for every event type, null quantities contributing zero, preserved three-argument construction, and detached summaries of retained events. Changes are narrowly scoped, and deterministic verification passed.",
+      "issues": [],
+      "confidence": 0.98
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_01ef210f26eeeba2006abde361757481a0b18908a0757f73a4",
+        "turn_id": "turn_01ef210f26eeeba2006abde365df9881a0a88eac0f9646f582",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:37:13.623040+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 23.466,
+        "call_id": "ff68bfb9a92b:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0976a235d1f738f6006abde3818a5881a28a792034a5049a5c",
+        "turn_id": "turn_0976a235d1f738f6006abde385489481a28b03e6aecd59540b",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:37:44.908045+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 22.16,
+        "call_id": "ff68bfb9a92b:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0976a235d1f738f6006abde3818a5881a28a792034a5049a5c",
+        "turn_id": "turn_0976a235d1f738f6006abde41fdc8c81a296215c9c08d7fef0",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:40:20.689629+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 25.42,
+        "call_id": "ff68bfb9a92b:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0753b1d8b32b311a006abde531eff881a2a1c3c770f0bba38b",
+        "turn_id": "turn_0753b1d8b32b311a006abde535760081a28e00ef4cdfd4d078",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:44:45.122552+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.472,
+        "call_id": "ff68bfb9a92b:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0753b1d8b32b311a006abde531eff881a2a1c3c770f0bba38b",
+        "turn_id": "turn_0753b1d8b32b311a006abde53fab9081a292fb60bacbac9669",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:44:55.705951+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.017,
+        "call_id": "ff68bfb9a92b:call:0005"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0753b1d8b32b311a006abde531eff881a2a1c3c770f0bba38b",
+        "turn_id": "turn_0753b1d8b32b311a006abde5492ff081a2981ef1d3dbf4cc5a",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:45:53.816247+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 58.157,
+        "call_id": "ff68bfb9a92b:call:0006"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0dc1cd35c261c0e9006abde7eacc20819fa06b3c16321db01b",
+        "turn_id": "turn_0dc1cd35c261c0e9006abde7ee00cc819f95f6d4757e449cf9",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:56:24.347949+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.704,
+        "call_id": "ff68bfb9a92b:call:0007"
+      }
+    ],
+    "wall_seconds": 1187.752
+  },
+  {
+    "task_id": "T003",
+    "condition": "direct",
+    "trial_id": "b6d4b130bcce",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\b6d4b130bcce",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.333,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569234 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 5.013
+  },
+  {
+    "task_id": "T004",
+    "condition": "direct",
+    "trial_id": "b25d4e4ef002",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\b25d4e4ef002",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.293,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569160 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 5.01
+  },
+  {
+    "task_id": "T004",
+    "condition": "hive",
+    "status": "rejected",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "aca7da32345a4bae85da5d7f7b801ee2",
+    "job_state": "completed",
+    "run_id": "5f76f8f0ca08",
+    "changed_files": [],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 56.863,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.02s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.21s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 6.40s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 10.78s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.12s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.44s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 12.95s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.17s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.82s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\nTotal runtime: 41.07s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+        "stderr_tail": "Last lines of /work/candidate/build/tmp/neoformruntime/20261001-050826_applyDevTransforms/console_output.txt:\n------------------------------------------------------------\nk\n - PROCESS_MINECRAFT_JAR\n - --input\n - /work/gradle-user-home/caches/neoformruntime/intermediate_results/copyUnpatchedClasses_225df56b09fa183ed417b3752b9a6127159074ce_output.jar\n - --output\n - ./output.jar\n - --no-mod-manifest\n - --access-transformer\n - ats/accesstransformer.cfg\n--------------------------------------------------------------------------------\n\nTask: PROCESS_MINECRAFT_JAR\nload access transformers [42ms]\nload input zip [416ms]\n[1.253s][warning][os,thread] Failed to start thread \"Unknown thread\" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.\n[1.254s][warning][os,thread] Failed to start the native thread for java.lang.Thread \"Thread-257\"\nException in thread \"main\" java.lang.RuntimeException: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat net.neoforged.installertools.ProcessMinecraftJar.process(ProcessMinecraftJar.java:2227)\n\tat net.neoforged.installertools.ConsoleTool.main(ConsoleTool.java:55)\nCaused by: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat java.base/java.lang.Thread.start0(Native Method)\n\tat java.base/java.lang.Thread.start(Thread.java:1526)\n\tat java.base/java.util.concurrent.CompletableFuture$ThreadPerTaskExecutor.execute(CompletableFuture.java:444)\n\tat java.base/java.util.concurrent.CompletableFuture.asyncRunStage(CompletableFuture.java:1818)\n\tat java.base/java.util.concurrent.CompletableFuture.runAsync(CompletableFuture.java:2018)\n\tat net.neoforged.installertools.ProcessMinecraftJar.lambda$processZip$8(ProcessMinecraftJar.java:41253)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\n\n------------------------------------------------------------\nnet.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for applyDevTransforms failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.lang.RuntimeException: Failed to execute tool\n\tat net.neoforged.neoform.runtime.actions.ExternalJavaToolAction.run(ExternalJavaToolAction.java:202)\n\tat net.neoforged.neoform.runtime.actions.ApplyDevTransformsAction.run(ApplyDevTransformsAction.java:68)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 56s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryRecentLimitAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    },
+    "full_gate": null,
+    "verification": {
+      "passed": false,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": false,
+      "summary": "Cannot approve: the proposed diff is empty and deterministic verification did not pass.",
+      "issues": [
+        "No implementation was provided for ActivityHistory.recent(int limit), so the requested behavior cannot be reviewed.",
+        "Verification failed during Minecraft artifact preparation because Java could not create a native thread. No acceptance tests ran and no fresh JUnit reports were produced.",
+        "Deterministic verification failed.",
+        "One or more agents failed; partial proposals cannot be approved.",
+        "No valid scoped edits were produced."
+      ],
+      "confidence": 1.0
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0e9e1ac0c9e82590006abde83f0cdc819ebb5e11305859ab20",
+        "turn_id": "turn_0e9e1ac0c9e82590006abde8446aec819ea4be6d1526b23428",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:58:02.485984+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 26.328,
+        "call_id": "5f76f8f0ca08:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0ecb208193ea531a006abde860229081929f3c069ac6f8e824",
+        "turn_id": "turn_0ecb208193ea531a006abde863ca7c8192b532aba9bb2e937a",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T04:58:25.552436+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 16.214,
+        "call_id": "5f76f8f0ca08:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0ecb208193ea531a006abde860229081929f3c069ac6f8e824",
+        "turn_id": "turn_0ecb208193ea531a006abde8f919988192ada3e56900e84e7e",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:00:55.880707+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 16.512,
+        "call_id": "5f76f8f0ca08:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_065d361e72bddb57006abde998c388819da5aac60bc2d83333",
+        "turn_id": "turn_065d361e72bddb57006abde99c65e8819db078e3c775d62316",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:03:59.791153+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 38.442,
+        "call_id": "5f76f8f0ca08:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_065d361e72bddb57006abde998c388819da5aac60bc2d83333",
+        "turn_id": "turn_065d361e72bddb57006abdea47f518819d8d5d69e6caffab53",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:06:29.758607+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 16.567,
+        "call_id": "5f76f8f0ca08:call:0005"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0d8af71de50a178a006abdead49b54819f9e0cde3b61d3f7e4",
+        "turn_id": "turn_0d8af71de50a178a006abdead8c778819fa3fee04f75cf6c74",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:08:51.218474+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.296,
+        "call_id": "5f76f8f0ca08:call:0006"
+      }
+    ],
+    "wall_seconds": 687.079
+  },
+  {
+    "task_id": "T005",
+    "condition": "hive",
+    "status": "rejected",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "e912d5ab909640c6bb99a13537db2e6c",
+    "job_state": "completed",
+    "run_id": "0e6d948248a4",
+    "changed_files": [],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 166.726,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.36s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.37s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.62s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.78s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 3.98s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.54s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.05s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.85s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 4.17s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 23.61s\nTotal runtime: 68.94s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n\n> Task :compileTestJava\n\n> Task :compileTestJava FAILED\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n4 actionable tasks: 4 executed\n",
+        "stderr_tail": "/work/candidate/src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java:23: error: cannot find symbol\n        var diagnostics = report.diagnostics();\n                                ^\n  symbol:   method diagnostics()\n  location: variable report of type PlanningReport\n/work/candidate/src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java:43: error: cannot find symbol\n        var diagnostics = report.diagnostics();\n                                ^\n  symbol:   method diagnostics()\n  location: variable report of type PlanningReport\n2 errors\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':compileTestJava'.\n> Compilation failed; see the compiler output below.\n  /work/candidate/src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java:23: error: cannot find symbol\n          var diagnostics = report.diagnostics();\n                                  ^\n    symbol:   method diagnostics()\n    location: variable report of type PlanningReport\n  /work/candidate/src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java:43: error: cannot find symbol\n          var diagnostics = report.diagnostics();\n                                  ^\n    symbol:   method diagnostics()\n    location: variable report of type PlanningReport\n  2 errors\n\n* Try:\n> Check your code and dependencies to fix the compilation error(s)\n> Run with --scan to generate a Build Scan (powered by Develocity).\n\nBUILD FAILED in 2m 46s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningReportDiagnosticsAcceptanceTest",
+            "expected_cases": 2,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    },
+    "full_gate": null,
+    "verification": {
+      "passed": false,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": false,
+      "summary": "The requested method is missing, and deterministic verification failed.",
+      "issues": [
+        "The proposed diff is empty and does not implement PlanningReport.diagnostics().",
+        "Acceptance tests failed to compile because PlanningReport.diagnostics() does not exist; neither test executed.",
+        "Deterministic verification failed.",
+        "One or more agents failed; partial proposals cannot be approved.",
+        "No valid scoped edits were produced."
+      ],
+      "confidence": 1.0
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_009cf6a3b2c5a346006abdeb1c33b88192b7f1af2d87526da5",
+        "turn_id": "turn_009cf6a3b2c5a346006abdeb20bb9c8192870c65ef3bd84c8e",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:10:16.068091+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 26.906,
+        "call_id": "0e6d948248a4:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_089aa26fc30aae01006abdeb408e0881a0b9da3f5ec137fab0",
+        "turn_id": "turn_089aa26fc30aae01006abdeb44e9b081a09768fdbb3ddde932",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:10:37.253970+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 11.318,
+        "call_id": "0e6d948248a4:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_089aa26fc30aae01006abdeb408e0881a0b9da3f5ec137fab0",
+        "turn_id": "turn_089aa26fc30aae01006abdeb4ef80081a0a866cac0a4f2bf1a",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:10:46.623511+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 9.381,
+        "call_id": "0e6d948248a4:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0b91d5ea651cb7c4006abdeb5f16bc81a1b68be167386f1d35",
+        "turn_id": "turn_0b91d5ea651cb7c4006abdeb62da4881a1bdfe5a403ecc32ad",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:11:08.882039+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.406,
+        "call_id": "0e6d948248a4:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0b91d5ea651cb7c4006abdeb5f16bc81a1b68be167386f1d35",
+        "turn_id": "turn_0b91d5ea651cb7c4006abdeb6f3c6881a1b3298d08ad758d16",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:11:20.159551+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 11.418,
+        "call_id": "0e6d948248a4:call:0005"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0b91d5ea651cb7c4006abdeb5f16bc81a1b68be167386f1d35",
+        "turn_id": "turn_0b91d5ea651cb7c4006abdeb7da14481a19da13699236c60b5",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:11:32.616401+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.439,
+        "call_id": "0e6d948248a4:call:0006"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0b91d5ea651cb7c4006abdeb5f16bc81a1b68be167386f1d35",
+        "turn_id": "turn_0b91d5ea651cb7c4006abdeb86e31c81a1939e414040302346",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:11:44.165130+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.047,
+        "call_id": "0e6d948248a4:call:0007"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0d8e7007574a7b7b006abdec7d4a14819e81507d25981c1638",
+        "turn_id": "turn_0d8e7007574a7b7b006abdec81d938819e85f7cbe8357866f3",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:15:54.960159+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.527,
+        "call_id": "0e6d948248a4:call:0008"
+      }
+    ],
+    "wall_seconds": 376.992
+  },
+  {
+    "task_id": "T005",
+    "condition": "direct",
+    "trial_id": "d9cb618cf6ae",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\d9cb618cf6ae",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 0.998,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569345 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 4.674
+  },
+  {
+    "task_id": "T006",
+    "condition": "direct",
+    "trial_id": "76d26588e620",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\76d26588e620",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.238,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569147 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 5.084
+  },
+  {
+    "task_id": "T006",
+    "condition": "hive",
+    "status": "ready",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "20b25b8721944c7082cd7cfc6a61768e",
+    "job_state": "completed",
+    "run_id": "f8c99fa2fb5f",
+    "changed_files": [
+      "src/main/java/dev/atmcompanion/integration/quest/QuestOverview.java",
+      "src/test/java/dev/atmcompanion/integration/quest/QuestOverviewTest.java"
+    ],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 169.109,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.05s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.30s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.42s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.69s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.98s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.27s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.59s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.12s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.79s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 3.98s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.73s\nTotal runtime: 68.50s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nQuestOverviewCompletionPercentAcceptanceTest > usesAllQuestsRatherThanAvailableQuestsAndHandlesZero() PASSED\n\nBUILD SUCCESSFUL in 2m 48s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewCompletionPercentAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "full_gate": {
+      "name": "full_gradle_check",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 123.956,
+        "stdout_tail": "onImpl.java:307) ~[?:?] {}\n\tat MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%2377!/:?] {}\n\t... 9 more\n[05:32:11] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes\n[05:32:11] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements\n[05:32:13] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld\n[05:32:13] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[05:32:14] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 18%\n[05:32:14] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 971 ms\n[05:32:14] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server\n[05:32:14] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler\n[05:32:14] [Server thread/INFO] [minecraft/GameTestServer]: 3 tests are now running at position -3806809, -59, 14124325!\n[05:32:15] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...\n[05:32:15] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[05:32:16] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 201 active ms, 1408 elapsed ms, 28 slices, 52 max slice ms, generation 1)\n[05:32:16] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions\n[05:32:16] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[05:32:16] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.038902 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.038902\n[05:32:16] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0053 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0053\n[05:32:16] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.074504 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.074504\n[05:32:16] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0042 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0042\n[05:32:16] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (7.5, -60.0, -4.5)\n[05:32:16] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.473726 definitionsMs=0.085805 chaptersMs=0.950251 questsTasksMs=6.296043 validationMs=1.290571 totalMs=9.096396\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.015001 definitionsMs=0.018501 chaptersMs=0.034702 questsTasksMs=0.36952 validationMs=0.585432 totalMs=1.023156\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.018601 definitionsMs=0.019001 chaptersMs=0.040002 questsTasksMs=0.328718 validationMs=0.18481 totalMs=0.591132\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.014301 definitionsMs=0.016601 chaptersMs=0.026901 questsTasksMs=0.19131 validationMs=0.267815 totalMs=0.516928\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0103 definitionsMs=0.015001 chaptersMs=0.048803 questsTasksMs=0.178009 validationMs=0.146608 totalMs=0.398721\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.016901 definitionsMs=0.012701 chaptersMs=0.0099 questsTasksMs=0.028802 validationMs=0.086404 totalMs=0.154708\n[05:32:17] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'large_ftb_book:0' (1 tests)...\n[05:32:17] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[05:32:17] [Server thread/INFO] [minecraft/PlayerList]: quest_scale[embedded] logged in with entity id 4 at (-8.5, -60.0, 8.5)\n[05:32:17] [Server thread/INFO] [minecraft/MinecraftServer]: quest_scale joined the game\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.017801 definitionsMs=3.30158 chaptersMs=0.280315 questsTasksMs=15.521246 validationMs=0.296216 totalMs=19.417158\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.017801 definitionsMs=6.066031 chaptersMs=2.547338 questsTasksMs=225.394781 validationMs=3.331581 totalMs=237.357532\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.027902 definitionsMs=5.522101 chaptersMs=0.395121 questsTasksMs=78.97744 validationMs=2.083609 totalMs=87.006173\n[05:32:17] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.019601 definitionsMs=4.302824 chaptersMs=0.323717 questsTasksMs=55.423292 validationMs=1.927501 totalMs=61.996935\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.014701 definitionsMs=3.721794 chaptersMs=0.353518 questsTasksMs=123.533446 validationMs=2.386325 totalMs=130.009784\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.019401 definitionsMs=2.344723 chaptersMs=0.39162 questsTasksMs=93.637186 validationMs=2.385225 totalMs=98.778155\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.016001 definitionsMs=1.34467 chaptersMs=0.154908 questsTasksMs=9.626503 validationMs=0.157008 totalMs=11.29909\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.021301 definitionsMs=2.530632 chaptersMs=0.265514 questsTasksMs=11.383794 validationMs=0.157608 totalMs=14.358849\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.018601 definitionsMs=2.661539 chaptersMs=0.341718 questsTasksMs=117.542434 validationMs=3.996708 totalMs=124.561\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.013201 definitionsMs=1.600884 chaptersMs=0.178909 questsTasksMs=0.463524 validationMs=0.115706 totalMs=2.372224\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.014001 definitionsMs=2.11191 chaptersMs=0.269414 questsTasksMs=62.073339 validationMs=1.979304 totalMs=66.447968\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.017001 definitionsMs=2.019406 chaptersMs=0.273414 questsTasksMs=8.897264 validationMs=0.125707 totalMs=11.332792\n[05:32:18] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4792/4792 tasks=0/0 dependencies=0 readinessMs=0.0167 definitionsMs=1.32817 chaptersMs=0.142907 questsTasksMs=9.159078 validationMs=0.160309 totalMs=10.807164\n[05:32:19] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4792/4792 tasks=9581/9581 dependencies=4193 readinessMs=0.015601 definitionsMs=2.31242 chaptersMs=1.366672 questsTasksMs=188.224722 validationMs=2.667539 totalMs=194.586954\n[05:32:21] [Server thread/INFO] [minecraft/GameTestServer]: [+++]\n[05:32:21] [Server thread/INFO] [minecraft/GameTestServer]: ========= 3 GAME TESTS COMPLETE IN 7.129 s ======================\n[05:32:21] [Server thread/INFO] [minecraft/GameTestServer]: All 3 required tests passed :)\n[05:32:21] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================\n[05:32:22] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server\n[05:32:22] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players\n[05:32:22] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\n[05:32:23] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\n[05:32:23] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n\nBUILD SUCCESSFUL in 2m 3s\n21 actionable tasks: 20 executed, 1 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "/work/candidate/src/gametest/java/dev/atmcompanion/tests/RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal\n        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));\n                                          ^\n1 warning\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewCompletionPercentAcceptanceTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    "verification": {
+      "passed": true,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": true,
+      "summary": "The narrowly scoped diff correctly computes the floored percentage using total quests, returns zero for an empty total, and preserves counts and availability semantics. Long arithmetic avoids intermediate integer overflow. Deterministic verification passed.",
+      "issues": [],
+      "confidence": 0.99
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_020696c3487edb02006abdeccda59c81a1a2554ee095d46dd2",
+        "turn_id": "turn_020696c3487edb02006abdecd19a7481a1b14de70cb4473bad",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:17:24.306388+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 22.204,
+        "call_id": "f8c99fa2fb5f:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0a79b433a55d73c2006abdece94a90819faf01a8724778a356",
+        "turn_id": "turn_0a79b433a55d73c2006abdecec8698819f9b5fa233d3b697af",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:17:44.514376+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.791,
+        "call_id": "f8c99fa2fb5f:call:0002"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_09cec65a78f58d19006abdedf2726881a18a874f8938f5b0cc",
+        "turn_id": "turn_09cec65a78f58d19006abdedf546a481a1b95f4b5c2f617692",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:22:08.361837+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 12.963,
+        "call_id": "f8c99fa2fb5f:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_09cec65a78f58d19006abdedf2726881a18a874f8938f5b0cc",
+        "turn_id": "turn_09cec65a78f58d19006abdee02ce6481a1909cbd79fb47038f",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:22:27.800462+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 19.941,
+        "call_id": "f8c99fa2fb5f:call:0004"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0844ec4852b49f60006abdf072b094819e89d5b16299122d86",
+        "turn_id": "turn_0844ec4852b49f60006abdf076a650819e93ff07923c96c03c",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:32:47.081241+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 11.835,
+        "call_id": "f8c99fa2fb5f:call:0005"
+      }
+    ],
+    "wall_seconds": 957.532
+  },
+  {
+    "task_id": "T007",
+    "condition": "direct",
+    "trial_id": "7ce812aada94",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\7ce812aada94",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 1.364,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569341 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 5.189
+  },
+  {
+    "task_id": "T007",
+    "condition": "hive",
+    "status": "rejected",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "2185805949fc4180a0fb9e861f734b67",
+    "job_state": "completed",
+    "run_id": "fbb7d93d5b0d",
+    "changed_files": [
+      "src/main/java/dev/atmcompanion/activity/ActivityHistory.java",
+      "src/main/java/dev/atmcompanion/activity/ActivityWindow.java"
+    ],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 59.124,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.21s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.20s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.40s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.86s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.08s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.50s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.13s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.88s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\nTotal runtime: 43.35s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+        "stderr_tail": "Last lines of /work/candidate/build/tmp/neoformruntime/20261001-054517_applyDevTransforms/console_output.txt:\n------------------------------------------------------------\nk\n - PROCESS_MINECRAFT_JAR\n - --input\n - /work/gradle-user-home/caches/neoformruntime/intermediate_results/copyUnpatchedClasses_225df56b09fa183ed417b3752b9a6127159074ce_output.jar\n - --output\n - ./output.jar\n - --no-mod-manifest\n - --access-transformer\n - ats/accesstransformer.cfg\n--------------------------------------------------------------------------------\n\nTask: PROCESS_MINECRAFT_JAR\nload access transformers [38ms]\nload input zip [374ms]\n[1.908s][warning][os,thread] Failed to start thread \"Unknown thread\" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.\n[1.912s][warning][os,thread] Failed to start the native thread for java.lang.Thread \"Thread-257\"\nException in thread \"main\" java.lang.RuntimeException: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat net.neoforged.installertools.ProcessMinecraftJar.process(ProcessMinecraftJar.java:2227)\n\tat net.neoforged.installertools.ConsoleTool.main(ConsoleTool.java:55)\nCaused by: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat java.base/java.lang.Thread.start0(Native Method)\n\tat java.base/java.lang.Thread.start(Thread.java:1526)\n\tat java.base/java.util.concurrent.CompletableFuture$ThreadPerTaskExecutor.execute(CompletableFuture.java:444)\n\tat java.base/java.util.concurrent.CompletableFuture.asyncRunStage(CompletableFuture.java:1818)\n\tat java.base/java.util.concurrent.CompletableFuture.runAsync(CompletableFuture.java:2018)\n\tat net.neoforged.installertools.ProcessMinecraftJar.lambda$processZip$8(ProcessMinecraftJar.java:41253)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\n\n------------------------------------------------------------\nnet.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for applyDevTransforms failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.lang.RuntimeException: Failed to execute tool\n\tat net.neoforged.neoform.runtime.actions.ExternalJavaToolAction.run(ExternalJavaToolAction.java:202)\n\tat net.neoforged.neoform.runtime.actions.ApplyDevTransformsAction.run(ApplyDevTransformsAction.java:68)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 58s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityWindowAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    },
+    "full_gate": null,
+    "verification": {
+      "passed": false,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": false,
+      "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+      "issues": [
+        "Acceptance tests never ran: createMinecraftArtifacts failed because the JVM could not create a native thread under verifier resource limits. Hive must obtain passing deterministic verification before approval.",
+        "Deterministic verification failed.",
+        "One or more agents failed; partial proposals cannot be approved."
+      ],
+      "confidence": 0.98
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0c6298b944e4da5c006abdf0bd933c81a392965e48f81679e6",
+        "turn_id": "turn_0c6298b944e4da5c006abdf0c4d30081a396b371391fc8d2cf",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:34:18.754112+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 29.43,
+        "call_id": "fbb7d93d5b0d:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_01ee435ad7a0e159006abdf0e4331081a0b1e74296c7aee79b",
+        "turn_id": "turn_01ee435ad7a0e159006abdf0e7789c81a09eeb7242ab59ac72",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:34:41.176294+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 11.683,
+        "call_id": "fbb7d93d5b0d:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_01ee435ad7a0e159006abdf0e4331081a0b1e74296c7aee79b",
+        "turn_id": "turn_01ee435ad7a0e159006abdf0f3939c81a0952836b545cd87f9",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:34:51.545890+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.444,
+        "call_id": "fbb7d93d5b0d:call:0003"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_01ee435ad7a0e159006abdf0e4331081a0b1e74296c7aee79b",
+        "turn_id": "turn_01ee435ad7a0e159006abdf0fd279881a0b68ab2328802edf8",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:35:09.291069+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 18.57,
+        "call_id": "fbb7d93d5b0d:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0af4747c2e2f584e006abdf205bf3c819283d8bfa1aca6b279",
+        "turn_id": "turn_0af4747c2e2f584e006abdf210b38c819281bf4ca5345f0840",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:39:36.648356+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 17.604,
+        "call_id": "fbb7d93d5b0d:call:0005"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0af4747c2e2f584e006abdf205bf3c819283d8bfa1aca6b279",
+        "turn_id": "turn_0af4747c2e2f584e006abdf21a8f4c81929b0d5f83e60c3c32",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:39:49.252587+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.292,
+        "call_id": "fbb7d93d5b0d:call:0006"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0af4747c2e2f584e006abdf205bf3c819283d8bfa1aca6b279",
+        "turn_id": "turn_0af4747c2e2f584e006abdf22813848192a9dae8b235dc2236",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:40:03.532214+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.642,
+        "call_id": "fbb7d93d5b0d:call:0007"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0af4747c2e2f584e006abdf205bf3c819283d8bfa1aca6b279",
+        "turn_id": "turn_0af4747c2e2f584e006abdf235f198819283cf997f2c21860a",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:40:48.696216+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 45.85,
+        "call_id": "fbb7d93d5b0d:call:0008"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0af4747c2e2f584e006abdf205bf3c819283d8bfa1aca6b279",
+        "turn_id": "turn_0af4747c2e2f584e006abdf2e4abec819281402d2052dbbce1",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:43:18.465987+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 20.445,
+        "call_id": "fbb7d93d5b0d:call:0009"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0a5f47cd8bb7fdc4006abdf378106881a0b9534ec01797d476",
+        "turn_id": "turn_0a5f47cd8bb7fdc4006abdf37b3f0481a09c8670485ba13f5b",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:45:43.088410+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.93,
+        "call_id": "fbb7d93d5b0d:call:0010"
+      }
+    ],
+    "wall_seconds": 727.087
+  },
+  {
+    "task_id": "T008",
+    "condition": "hive",
+    "status": "rejected",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "00effc64ec084cee89a5ec6f642e68f0",
+    "job_state": "completed",
+    "run_id": "723add052512",
+    "changed_files": [],
+    "acceptance": {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 165.057,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.88s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.24s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 12.74s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 13.15s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.54s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 14.46s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.43s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.91s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 4.23s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.63s\nTotal runtime: 71.38s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n\n> Task :compileTestJava\n\n> Task :compileTestJava FAILED\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n4 actionable tasks: 4 executed\n",
+        "stderr_tail": "/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:35: error: cannot find symbol\n        var overview = QuestOverview.fromSnapshot(source, \"2026-09-30T12:00:00Z\");\n                                    ^\n  symbol:   method fromSnapshot(QuestSnapshot,String)\n  location: class QuestOverview\n/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:54: error: cannot find symbol\n        var locked = QuestOverview.fromSnapshot(snapshot(true), \"2026-09-30T12:00:00Z\");\n                                  ^\n  symbol:   method fromSnapshot(QuestSnapshot,String)\n  location: class QuestOverview\n2 errors\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':compileTestJava'.\n> Compilation failed; see the compiler output below.\n  /work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:35: error: cannot find symbol\n          var overview = QuestOverview.fromSnapshot(source, \"2026-09-30T12:00:00Z\");\n                                      ^\n    symbol:   method fromSnapshot(QuestSnapshot,String)\n    location: class QuestOverview\n  /work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:54: error: cannot find symbol\n          var locked = QuestOverview.fromSnapshot(snapshot(true), \"2026-09-30T12:00:00Z\");\n                                    ^\n    symbol:   method fromSnapshot(QuestSnapshot,String)\n    location: class QuestOverview\n  2 errors\n\n* Try:\n> Check your code and dependencies to fix the compilation error(s)\n> Run with --scan to generate a Build Scan (powered by Develocity).\n\nBUILD FAILED in 2m 44s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewSnapshotProjectionAcceptanceTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    },
+    "full_gate": null,
+    "verification": {
+      "passed": false,
+      "isolation": {
+        "backend": "docker",
+        "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+        "available": true,
+        "network": "none",
+        "rootfs": "readonly",
+        "source": "sanitized-readonly",
+        "workspace": "tmpfs",
+        "limits": {
+          "pids": 384,
+          "memory": "4g",
+          "memory_swap": "4g",
+          "swap_additional": "0 bytes",
+          "cpus": 2
+        },
+        "java_runtime": "pinned JDK 21 in verifier image",
+        "gradle_wrapper_version": "9.2.1",
+        "host_controlled_build_concurrency": {
+          "gradle_max_workers": 2,
+          "gradle_heap": "-Xmx768m",
+          "active_processor_count": 2
+        },
+        "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+        "inherited_host_environment": [],
+        "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+      }
+    },
+    "review": {
+      "approve": false,
+      "summary": "The requested factory method is missing, and deterministic verification failed.",
+      "issues": [
+        "The proposed diff is empty and does not implement QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp).",
+        "Acceptance tests failed to compile because QuestOverview.fromSnapshot(QuestSnapshot, String) could not be found; no acceptance tests ran.",
+        "Deterministic verification failed.",
+        "One or more agents failed; partial proposals cannot be approved.",
+        "No valid scoped edits were produced."
+      ],
+      "confidence": 1.0
+    },
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0f16171c26a453fb006abdf3c4fbf0819f96c566452dc404b6",
+        "turn_id": "turn_0f16171c26a453fb006abdf3cb4098819f9ce3975165aff03d",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:47:22.593093+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 36.086,
+        "call_id": "723add052512:call:0001"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0c80b3be638c7907006abdf3f1b1bc81a38b9c17f315eeff74",
+        "turn_id": "turn_0c80b3be638c7907006abdf3f4e9f081a3a2c91c26cce31994",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:47:41.578153+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.376,
+        "call_id": "723add052512:call:0002"
+      },
+      {
+        "role": "backend",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0c80b3be638c7907006abdf3f1b1bc81a38b9c17f315eeff74",
+        "turn_id": "turn_0c80b3be638c7907006abdf3febcec81a3ba004e23a84e5ab5",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:47:51.895672+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 10.103,
+        "call_id": "723add052512:call:0003"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_02e6a38496f3d314006abdf40f7b7481a29596ef630c0e46f3",
+        "turn_id": "turn_02e6a38496f3d314006abdf414a35481a2ab6169d5ce0f5ffa",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:48:13.425090+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 13.099,
+        "call_id": "723add052512:call:0004"
+      },
+      {
+        "role": "tests",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_02e6a38496f3d314006abdf40f7b7481a29596ef630c0e46f3",
+        "turn_id": "turn_02e6a38496f3d314006abdf42269e881a2ae58dd436e919fee",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:48:29.275324+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 16.842,
+        "call_id": "723add052512:call:0005"
+      },
+      {
+        "role": "reviewer",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": "sess_0985e7ff77a356ab006abdf519cbd081a2aead54b0bf23566c",
+        "turn_id": "turn_0985e7ff77a356ab006abdf51d083c81a2900c8bf3499674b8",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T05:52:41.039005+00:00",
+        "usage_source": "unavailable",
+        "status": "completed",
+        "wall_seconds": 14.292,
+        "call_id": "723add052512:call:0006"
+      }
+    ],
+    "wall_seconds": 366.728
+  },
+  {
+    "task_id": "T008",
+    "condition": "direct",
+    "trial_id": "dc33dff78392",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\external_candidates\\dc33dff78392",
+    "applied": false,
+    "model": {
+      "session_id": null,
+      "turn_id": null,
+      "turns": 0,
+      "usage": null,
+      "wall_seconds": 0.947,
+      "status": "invalid",
+      "error_type": "RuntimeError",
+      "error_message": "Agents API 400: {\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"string_above_max_length\",\n    \"message\": \"Invalid 'input[0].content[0].text': string too long. Expected a string with maximum length 1048576, but got a string with length 1569436 instead.\",\n    \"param\": \"input[0].content[0].text\"\n  }\n}"
+    },
+    "wall_seconds": 4.517
+  }
+]

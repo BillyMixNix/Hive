@@ -1,0 +1,11 @@
+--- a/src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java
++++ b/src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java
+@@ -8,7 +8,7 @@
+ public final class IngredientAllocation {
+     private IngredientAllocation() {}
+     public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {
+-        if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {
++        if (matchingSlots == null || counts == null || matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots == null || slots.stream().anyMatch(slot -> slot < 0 || slot >= 36)) || counts.values().stream().anyMatch(count -> count == null || count < 0)) {
+             throw new IllegalArgumentException("Crafting allocation bounds exceeded");
+         }
+         if (counts.values().stream().anyMatch(count -> count < 0)) throw new IllegalArgumentException("Negative stack count");

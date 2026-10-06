@@ -1,0 +1,90 @@
+--- study.py (original frozen harness)
++++ execute.py (pre-inference setup correction)
+@@ -76,20 +76,32 @@
+         'verifier_runtime_failure':infra,'transitions':reached,'furthest_transition':next((k for k,v in reversed(list(reached.items())) if v),'task'),
+         'software_frontier':next((k for k,v in reversed(list(reached.items())) if v and k not in ('semantic_review','human_review_eligibility')),'task')}
+ 
+-async def run_trial(cell,lock,ordinal):
++async def run_trial(cell,lock,ordinal,resume=None):
+     task=next(t for t in lock['tasks'] if t['id']==cell['task_id'])
+-    runid=uuid.uuid4().hex[:12];folder=HERE/'evidence/trials'/f'{ordinal:02d}-{task["id"]}-r{cell["replicate"]}-{cell["model"].replace(":","_")}'
+-    folder.mkdir(parents=True,exist_ok=False)
++    runid=resume['run_id'] if resume else uuid.uuid4().hex[:12]
++    folder=HERE/'evidence/trials'/f'{ordinal:02d}-{task["id"]}-r{cell["replicate"]}-{cell["model"].replace(":","_")}'
++    if not resume:folder.mkdir(parents=True,exist_ok=False)
+     start=time.monotonic();started=stamp();records=[];calls=[];reserved=0;actual=0;first=None;observations=0
+-    save(folder/'STARTED.json',{'run_id':runid,'ordinal':ordinal,**cell,'started_at':started,'freeze_sha256':sha(HERE/'FREEZE.json')})
+-    observer.OUT=folder/'runtime';observer.snapshot('pre-run')
+-    external=env.external_root.prepare_candidate(lock['baseline']['root'],RUNS/'external_candidates'/runid,SOURCE,RUNS)
++    if not resume:save(folder/'STARTED.json',{'run_id':runid,'ordinal':ordinal,**cell,'started_at':started,'freeze_sha256':sha(HERE/'FREEZE.json')})
++    else:save(folder/'SETUP-RESUMED.json',{'at':stamp(),'run_id':runid,'no_task_model_request_before_resume':True})
++    observer.OUT=folder/'runtime';observer.snapshot('pre-run-after-setup-amendment' if resume else 'pre-run')
++    if resume:
++        baseline=env.external_root.resolve_external_root(lock['baseline']['root'],SOURCE,RUNS)
++        candidate=(RUNS/'external_candidates'/runid).resolve(strict=True)
++        assert candidate.parent== (RUNS/'external_candidates').resolve(strict=True)
++        assert env.external_root.tree_sha256(candidate)==lock['baseline']['sha256']
++        external={'external_root_mode':'candidate_only','baseline_root':str(baseline),'baseline_revision':env.external_root._git_revision(baseline),
++            'baseline_sha256':lock['baseline']['sha256'],'candidate_root':str(candidate),'snapshot_excludes':sorted(env.external_root.EXCLUDED_DIRECTORIES),'promotion_allowed':False}
++    else:
++        external=env.external_root.prepare_candidate(lock['baseline']['root'],RUNS/'external_candidates'/runid,SOURCE,RUNS)
+     candidate=Path(external['candidate_root']);assert env.external_root.tree_sha256(candidate)==lock['baseline']['sha256']
+     profile=env.hive_jvm.inspect_gradle_project(candidate);assert profile==lock['verifier']['jvm_profile']
+     # Hidden acceptance is host-only storage outside the model-visible candidate.
+     hidden=(TASK_SOURCE/'hidden-tests'/task['test_filename']).read_text(encoding='utf-8')
+-    frozen=env.hive_jvm.freeze_junit_tests(candidate,[{'path':task['test_path'],'class_name':task['test_class'],'expected_cases':task['test_cases'],'source':hidden}],RUNS/runid,profile=profile)
+-    external['frozen_junit_tests']=frozen;save(folder/'candidate-metadata.json',external)
++    frozen=env.hive_jvm.freeze_junit_tests(candidate,[{'path':task['test_path'],'class_name':task['test_class'],'expected_cases':task['test_cases'],'source':hidden}])
++    external['jvm_profile']=profile
++    external['frozen_junit_tests']=env.hive_jvm.store_frozen_junit_tests(frozen,RUNS/runid)
++    save(folder/'candidate-metadata.json',external)
+     monitor=observer.Monitor();restore=observer.install(env.providers,monitor)
+     original_target=hive.targeted_verify;original_full=hive.verify_tree;counter=0;mutex=threading.Lock()
+     def record_verifier(kind,tree,role=None,paths=None):
+@@ -179,6 +191,10 @@
+         'planner_corrections':max(0,len(run['plan_attempts'])-1),'worker_structural_corrections':len(run['edit_repairs']),'worker_targeted_corrections':len(run['targeted_repairs']),
+         'observation_requests':observations,'candidate_disposition':run.get('candidate_disposition'),'promotion_authorization':'not_authorized','native_promotion_authorization':run.get('promotion_authorization'),
+         'applied':False,'evidence':str(folder),'candidate_identity':integrity}
++    if resume:
++        result['active_execution_wall_seconds']=result['wall_seconds']
++        result['setup_interruption_seconds']=(datetime.fromisoformat(started)-datetime.fromisoformat(resume['started_at'])).total_seconds()
++        result['started_at']=resume['started_at'];result['wall_seconds']+=result['setup_interruption_seconds']
+     save(folder/'result.json',result);return result
+ 
+ async def readiness(lock):
+@@ -203,21 +219,28 @@
+     save(HERE/'evidence/readiness-results.json',rows)
+ 
+ def main():
++    amendment=json.loads((HERE/'HARNESS-AMENDMENT-001.json').read_bytes())
++    assert sha(HERE/'execute.py')==amendment['corrected_executor_sha256']
+     lock=json.loads((HERE/'FREEZE.json').read_bytes());check(lock,full=True)
+-    assert not (HERE/'evidence/STUDY-STARTED.json').exists(),'Study cannot be restarted or repeated'
+-    asyncio.run(readiness(lock))
+-    check(lock)
+-    save(HERE/'evidence/STUDY-STARTED.json',{'at':stamp(),'freeze_sha256':sha(HERE/'FREEZE.json'),'trials':16})
++    assert not (HERE/'evidence/SETUP-RESUMED.json').exists(),'Setup continuation cannot be repeated'
++    stopped=json.loads((HERE/'evidence/STOPPED.json').read_bytes())
++    assert stopped['type']=='TypeError' and stopped['completed']==0
++    assert not list((HERE/'evidence/trials').glob('*/runtime/calls/*/attempt-*/wire-request.json'))
++    assert not list((HERE/'evidence/runs').glob('*/run.json'))
++    starts=list((HERE/'evidence/trials').glob('*/STARTED.json'));assert len(starts)==1
++    resume=json.loads(starts[0].read_bytes());assert resume['ordinal']==1
++    assert len(json.loads((HERE/'evidence/readiness-results.json').read_bytes()))==2
++    save(HERE/'evidence/SETUP-RESUMED.json',{'at':stamp(),'freeze_sha256':sha(HERE/'FREEZE.json'),'amendment_sha256':sha(HERE/'HARNESS-AMENDMENT-001.json'),'model_trials_before_resume':0,'same_run_id':resume['run_id']})
+     results=[]
+     try:
+         for ordinal,cell in enumerate(lock['order'],1):
+-            check(lock);event('trial_started',ordinal=ordinal,**cell)
+-            result=asyncio.run(run_trial(cell,lock,ordinal));results.append(result);save(HERE/'evidence/raw-results.json',results)
++            check(lock);event('trial_setup_resumed' if ordinal==1 else 'trial_started',ordinal=ordinal,**cell)
++            result=asyncio.run(run_trial(cell,lock,ordinal,resume=resume if ordinal==1 else None));results.append(result);save(HERE/'evidence/raw-results.json',results)
+             event('trial_finished',ordinal=ordinal,outcome=result['primary_outcome'],semantic_review=result['semantic_review'],wall_seconds=result['wall_seconds'])
+         check(lock,full=True);save(HERE/'evidence/COMPLETED.json',{'at':stamp(),'trials':len(results)})
+         event('completed',trials=len(results))
+     except BaseException as exc:
+-        save(HERE/'evidence/STOPPED.json',{'at':stamp(),'type':type(exc).__name__,'message':str(exc),'completed':len(results)})
++        save(HERE/'evidence/STOPPED-AFTER-SETUP-AMENDMENT.json',{'at':stamp(),'type':type(exc).__name__,'message':str(exc),'completed':len(results)})
+         event('stopped',type=type(exc).__name__,message=str(exc),completed=len(results));raise
+ 
+ if __name__=='__main__':main()

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "updatedAtUtc": "2026-09-23T04:49:02Z",
+  "sourceProvenance": "SOURCE-PROVENANCE.json",
+  "developmentAttempt": {
+    "log": "../m3-atm10-smoke.log",
+    "launchTarget": "forgeserverdev",
+    "outcome": "failed_before_world_and_smoke_test",
+    "misleadingBuildExit": "Gradle reported successful despite Minecraft mod-loading failure",
+    "cause": "Formations 1.0.4 calls FormationsDev.initDevTools when supermartijn642corelib is present and FMLEnvironment.production=false without a physical-side check; its Screen linkage fails on DEDICATED_SERVER",
+    "artifact": "mods/formations-1.0.4-neoforge-mc1.21.jar",
+    "diagnosis": "Local exact artifact javap -c -p and matching FormationsDev.java:40 stack",
+    "productionGametestLimitation": "Exact NeoForge GameTestHooks requires !FMLLoader.isProduction for both isGametestEnabled and isGametestServer",
+    "modsRemovedOrPatched": false
+  },
+  "productionInstallation": {
+    "installer": "neoforge-21.1.251-installer.jar",
+    "installerSha256": "f63d9011b89aa5db0f5cbe437bb21b2f8c2182ff0c6ac329b7bbf6c9b19bc741",
+    "command": "Java 21.0.7+6-LTS -Xmx1G -jar neoforge-21.1.251-installer.jar --installServer",
+    "workingDirectory": ".",
+    "log": "../m3-atm10-installer.log",
+    "exitCode": 0,
+    "successMarker": "The server installed successfully",
+    "launchArgs": "libraries/net/neoforged/neoforge/21.1.251/win_args.txt",
+    "launchArgsSha256": "ed6770c51ccff1ab5c2cde47297c1c471aa6c75a42e4d445f855d432cd1f4ea2",
+    "launchTarget": "forgeserver",
+    "minecraft": "1.21.1",
+    "neoforge": "21.1.251",
+    "fml": "4.0.44",
+    "eulaCreatedByInstaller": false,
+    "worldCreatedByInstaller": false,
+    "serverStartedByResearchAgent": false,
+    "officialScriptsEditedByResearchAgent": false,
+    "userInstanceTouched": false,
+    "runtimeVerifiedByInstallation": false
+  },
+  "handoff": {
+    "freePhysicalGiB": 7.26,
+    "javaProcessCount": 0,
+    "recommendedExploratoryHeap": "-Xms512m -Xmx4G",
+    "productionProbe": "Separate explicitly enabled test-only server-tick probe, not annotation GameTests",
+    "liveUserWorldAccess": false
+  }
+}

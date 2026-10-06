@@ -1,0 +1,250 @@
+......................................s................s................ [ 13%]
+..F..s.......................................s............s............. [ 26%]
+...............F........................................................ [ 39%]
+.......................FFFF............................................. [ 52%]
+..........................FFF........................................... [ 65%]
+...................................................F.........FFF....F..F [ 78%]
+..F...FFF...........FF.................................................. [ 91%]
+...................................s.............                        [100%]
+================================== FAILURES ===================================
+_____ test_external_candidate_isolated_end_to_end_with_persistent_backend _____
+tests\test_hive_external_root.py:219: in test_external_candidate_isolated_end_to_end_with_persistent_backend
+    assert run["status"] == "ready" and run["applied"] is False
+E   AssertionError: assert ('rejected' == 'ready'
+E     
+E     - ready
+E     + rejected)
+_ test_persistent_agent_java_candidate_uses_the_same_frozen_verifier_boundary _
+tests\test_hive_jvm_profile.py:899: in test_persistent_agent_java_candidate_uses_the_same_frozen_verifier_boundary
+    assert run["status"] == "ready" and run["applied"] is False
+E   AssertionError: assert ('rejected' == 'ready'
+E     
+E     - ready
+E     + rejected)
+____________ test_stale_source_is_rejected_before_write_or_backup _____________
+tests\test_hive_stale_apply.py:35: in test_stale_source_is_rejected_before_write_or_backup
+    hive.apply_run(source, runs, snapshots, "a" * 12)
+workshop\hive.py:2959: in apply_run
+    return _apply_run_locked(source_root, runs_root, snapshots_root, run_id, human_approved=human_approved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workshop\hive.py:2823: in _apply_run_locked
+    raise ValueError("Applying a self-edit requires explicit human approval")
+E   ValueError: Applying a self-edit requires explicit human approval
+______________________ test_stage_tampering_is_rejected _______________________
+tests\test_hive_stale_apply.py:50: in test_stage_tampering_is_rejected
+    hive.apply_run(source, runs, snapshots, "b" * 12)
+workshop\hive.py:2959: in apply_run
+    return _apply_run_locked(source_root, runs_root, snapshots_root, run_id, human_approved=human_approved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workshop\hive.py:2823: in _apply_run_locked
+    raise ValueError("Applying a self-edit requires explicit human approval")
+E   ValueError: Applying a self-edit requires explicit human approval
+______________ test_reverse_order_apply_rejects_older_candidate _______________
+tests\test_hive_stale_apply.py:63: in test_reverse_order_apply_rejects_older_candidate
+    hive.apply_run(source, runs, snapshots, "d" * 12)
+workshop\hive.py:2959: in apply_run
+    return _apply_run_locked(source_root, runs_root, snapshots_root, run_id, human_approved=human_approved)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workshop\hive.py:2823: in _apply_run_locked
+    raise ValueError("Applying a self-edit requires explicit human approval")
+E   ValueError: Applying a self-edit requires explicit human approval
+____________ test_legacy_ready_run_without_manifests_fails_closed _____________
+tests\test_hive_stale_apply.py:81: in test_legacy_ready_run_without_manifests_fails_closed
+    with pytest.raises(ValueError, match="stale-base protection"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'stale-base protection'
+E     Actual message: 'Applying a self-edit requires explicit human approval'
+___ test_rejected_outer_scope_reaches_one_planner_correction_before_worker ____
+tests\test_host_write_scope.py:106: in test_rejected_outer_scope_reaches_one_planner_correction_before_worker
+    assert result["status"] == "ready", result.get("errors")
+E   AssertionError: None
+E   assert 'rejected' == 'ready'
+E     
+E     - ready
+E     + rejected
+____ test_single_agent_contract_reaches_same_worker_and_verifier_boundary _____
+tests\test_host_write_scope.py:123: in test_single_agent_contract_reaches_same_worker_and_verifier_boundary
+    assert result["status"] == "ready"
+E   AssertionError: assert 'rejected' == 'ready'
+E     
+E     - ready
+E     + rejected
+_ test_scope_correction_can_deactivate_unauthorized_role_without_fake_contract _
+tests\test_host_write_scope.py:134: in test_scope_correction_can_deactivate_unauthorized_role_without_fake_contract
+    assert result["status"] == "ready", result.get("errors")
+E   AssertionError: None
+E   assert 'rejected' == 'ready'
+E     
+E     - ready
+E     + rejected
+____________ test_all_historically_invalid_outputs_remain_invalid _____________
+tests\test_ownership_representation.py:123: in test_all_historically_invalid_outputs_remain_invalid
+    result=json.loads(artifact.read_text())
+                      ^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\historical-replay.json'
+__ test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[1] __
+tests\test_planner_transition.py:30: in test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic
+    raw = (ARTIFACTS / f'planner-{attempt}.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\ordinal-03\\planner-1.response.txt'
+__ test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic[2] __
+tests\test_planner_transition.py:30: in test_preserved_planner_artifacts_remain_rejected_with_scope_diagnostic
+    raw = (ARTIFACTS / f'planner-{attempt}.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\ordinal-03\\planner-2.response.txt'
+___ test_valid_equivalent_historical_plan_passes_without_invented_contract ____
+tests\test_planner_transition.py:42: in test_valid_equivalent_historical_plan_passes_without_invented_contract
+    p = json.loads((ARTIFACTS / 'planner-1.response.txt').read_text())
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\ordinal-03\\planner-1.response.txt'
+_ test_both_scoped_schemas_exclude_unauthorized_paths_and_keep_global_schema __
+tests\test_planner_transition.py:62: in test_both_scoped_schemas_exclude_unauthorized_paths_and_keep_global_schema
+    raw = (ARTIFACTS / 'planner-1.response.txt').read_text()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\ordinal-03\\planner-1.response.txt'
+__________ test_live_duplicate_ownership_is_rejected_before_dispatch __________
+tests\test_planner_transition.py:104: in test_live_duplicate_ownership_is_rejected_before_dispatch
+    run = json.loads((ARTIFACTS.parent / 'live/01-J001-r1-qwen2.5-coder-14b-hive/run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\live\\01-J001-r1-qwen2.5-coder-14b-hive\\run.json'
+_______ test_correction_of_masked_scope_can_dispatch_only_valid_worker ________
+tests\test_planner_transition.py:135: in test_correction_of_masked_scope_can_dispatch_only_valid_worker
+    assert result['status'] == 'ready', result.get('errors')
+E   AssertionError: None
+E   assert 'rejected' == 'ready'
+E     
+E     - ready
+E     + rejected
+_ test_historical_critical_information_survives_actual_http_serialization[1] __
+tests\test_planning_input_fidelity.py:19: in test_historical_critical_information_survives_actual_http_serialization
+    saved = json.loads((FIXTURES / f'{attempt:02d}/request.json').read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\planner-input-fixtures\\01\\request.json'
+_ test_historical_critical_information_survives_actual_http_serialization[2] __
+tests\test_planning_input_fidelity.py:19: in test_historical_critical_information_survives_actual_http_serialization
+    saved = json.loads((FIXTURES / f'{attempt:02d}/request.json').read_text())
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\planner-input-fixtures\\02\\request.json'
+_______ test_correction_construction_still_matches_preserved_full_input _______
+tests\test_planning_input_fidelity.py:40: in test_correction_construction_still_matches_preserved_full_input
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\planner-input-fixtures\\run.json'
+_____ test_prior_overlap_outputs_still_rejected_after_transport_repair[0] _____
+tests\test_planning_input_fidelity.py:96: in test_prior_overlap_outputs_still_rejected_after_transport_repair
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\planner-input-fixtures\\run.json'
+_____ test_prior_overlap_outputs_still_rejected_after_transport_repair[1] _____
+tests\test_planning_input_fidelity.py:96: in test_prior_overlap_outputs_still_rejected_after_transport_repair
+    run = json.loads((FIXTURES / 'run.json').read_text())
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-REVIEWER-POLICY-001\\evidence\\planner-input-fixtures\\run.json'
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_gradle_cache_priming.py:118: symlinks unavailable on this platform
+SKIPPED [1] tests\test_hive_context_contract.py:261: symlink creation is unavailable on this host
+SKIPPED [1] tests\test_hive_external_root.py:310: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_external_snapshot_rejects0\\outside' -> 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_external_snapshot_rejects0\\external-repository\\linked-outside'
+SKIPPED [1] tests\test_hive_isolated_verifier.py:107: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_sanitized_copy_rejects_sy0\\secret.txt' -> 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_sanitized_copy_rejects_sy0\\source\\tests\\leak.py'
+SKIPPED [1] tests\test_hive_jvm_profile.py:119: directory symlinks are unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_runtime_output_exclusion_0' -> 'D:\\CodexTemp\\hive-reviewer-policy-001-f3bffcf1\\test_runtime_output_exclusion_0\\candidate\\run-gametest'
+SKIPPED [1] tests\test_v05_runtime.py:63: symlink creation is unavailable on this host
+21 failed, 526 passed, 6 skipped in 87.18s (0:01:27)

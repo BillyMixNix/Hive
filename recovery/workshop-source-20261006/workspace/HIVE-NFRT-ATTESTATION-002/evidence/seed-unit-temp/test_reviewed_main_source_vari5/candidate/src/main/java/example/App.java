@@ -1,0 +1,1 @@
+not valid Java; compilation still required

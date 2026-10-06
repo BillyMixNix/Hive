@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 2,
+  "timestamp": "2026-09-23T04:49:16.386792800Z",
+  "plan": {
+    "schemaVersion": 2,
+    "goal": "minecraft:diamond_pickaxe",
+    "quantity": 1,
+    "status": "materials_ready",
+    "ownedRequirements": [
+      {
+        "item": "minecraft:diamond",
+        "quantity": 3
+      },
+      {
+        "item": "minecraft:stick",
+        "quantity": 2
+      }
+    ],
+    "missingRequirements": [],
+    "selectedPath": [
+      {
+        "recipeId": "minecraft:diamond_pickaxe",
+        "output": "minecraft:diamond_pickaxe",
+        "outputQuantity": 1,
+        "crafts": 1,
+        "type": "minecraft:crafting",
+        "depth": 0,
+        "limitations": [
+          "Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified",
+          "Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+        ],
+        "ingredients": [
+          {
+            "position": 0,
+            "item": "minecraft:diamond",
+            "quantity": 1
+          },
+          {
+            "position": 1,
+            "item": "minecraft:diamond",
+            "quantity": 1
+          },
+          {
+            "position": 2,
+            "item": "minecraft:diamond",
+            "quantity": 1
+          },
+          {
+            "position": 4,
+            "item": "minecraft:stick",
+            "quantity": 1
+          },
+          {
+            "position": 7,
+            "item": "minecraft:stick",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "nextAction": {
+      "kind": "prepare_recipe",
+      "item": "minecraft:diamond_pickaxe",
+      "quantity": 1,
+      "recipeId": "minecraft:diamond_pickaxe",
+      "reason": "Check the output preview: one operation's inputs and a reachable 3x3 table were observed at minecraft:crafting_table at 4285639/-59/-4108. Overlapping crafting selection is unverified."
+    },
+    "alternativePaths": [],
+    "unsupportedSteps": [],
+    "metrics": {
+      "indexGeneration": 1,
+      "expandedNodes": 7,
+      "depth": 0,
+      "searchTruncated": false,
+      "indexComplete": false,
+      "planningNanos": 709400
+    },
+    "limitations": [
+      "Material planning only; crafting access, recipe unlocks, fuel, machines, energy, fluids, and execution are not verified.",
+      "Only main inventory slots 0..35; equipment, nested inventories and storage networks are not included.",
+      "Future outputs are hypothetical until every prerequisite is satisfied; they are never reported as currently owned.",
+      "Crafting remainders/byproducts are not credited. Route selection is bounded and may miss a better allocation.",
+      "Recipe knowledge has unknown or truncated outputs; no indexed route does not prove no route exists."
+    ],
+    "execution": {
+      "status": "observed_conditions_met",
+      "recipeId": "minecraft:diamond_pickaxe",
+      "operations": 1,
+      "station": "minecraft:crafting_table at 4285639/-59/-4108",
+      "inputs": [
+        {
+          "item": "minecraft:diamond",
+          "quantity": 3
+        },
+        {
+          "item": "minecraft:stick",
+          "quantity": 2
+        }
+      ],
+      "fuel": [],
+      "blockers": [],
+      "unverifiedConditions": [
+        "Snapshot feasibility only; modded claims, interaction hooks, line of sight and safe access are unverified.",
+        "Crafting output preview must be checked: overlapping crafting recipe selection is unverified.",
+        "Only one next operation; no whole-chain fuel scheduling, station output ownership or automatic action."
+      ],
+      "nextAction": {
+        "kind": "prepare_recipe",
+        "item": "minecraft:diamond_pickaxe",
+        "quantity": 1,
+        "recipeId": "minecraft:diamond_pickaxe",
+        "reason": "Check the output preview: one operation's inputs and a reachable 3x3 table were observed at minecraft:crafting_table at 4285639/-59/-4108. Overlapping crafting selection is unverified."
+      },
+      "observation": {
+        "schemaVersion": 1,
+        "timestamp": "2026-09-23T04:49:16.383794100Z",
+        "dimension": "minecraft:overworld",
+        "scan": {
+          "radius": 8,
+          "totalPositions": 4913,
+          "scannedPositions": 4913,
+          "loadedPositions": 4913,
+          "unloadedPositions": 0,
+          "discoveredStations": 1,
+          "recordsTruncated": false,
+          "budgetExceeded": false,
+          "deepInspections": 1,
+          "predicateChecks": 0
+        },
+        "stations": [
+          {
+            "blockId": "minecraft:crafting_table",
+            "kind": "crafting",
+            "x": 4285639,
+            "y": -59,
+            "z": -4108,
+            "distanceSquared": 0.25,
+            "withinReach": true,
+            "vanillaMayInteract": true,
+            "lockAllows": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "details": {
+              "status": "available",
+              "data": {
+                "stacks": [],
+                "lit": false,
+                "waterlogged": false,
+                "timers": {
+                  "status": "unavailable",
+                  "data": null,
+                  "detail": "Crafting table has no cooking timers"
+                },
+                "inputCompatible": {
+                  "status": "unavailable",
+                  "data": null,
+                  "detail": "No selected matching cooking input"
+                },
+                "outputCompatible": {
+                  "status": "unavailable",
+                  "data": null,
+                  "detail": "Output acceptance is not applicable or was not checked"
+                },
+                "fuelTicksPerItem": {
+                  "status": "unavailable",
+                  "data": null,
+                  "detail": "No selected furnace operation"
+                },
+                "freeCampfireSlots": 0,
+                "compatibleFuelSlots": []
+              },
+              "detail": "Observed from the running server"
+            }
+          }
+        ],
+        "operation": {
+          "status": "available",
+          "data": {
+            "recipeId": "minecraft:diamond_pickaxe",
+            "kind": "crafting",
+            "stationKind": "crafting",
+            "fits2x2": false,
+            "fits3x3": true,
+            "unlockAllowed": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "cookingTicks": {
+              "status": "unavailable",
+              "data": null,
+              "detail": "Not a cooking operation"
+            },
+            "uniqueCookingMatch": {
+              "status": "unavailable",
+              "data": null,
+              "detail": "Not applicable to crafting"
+            },
+            "playerInputMatches": {
+              "status": "unavailable",
+              "data": null,
+              "detail": "Not applicable to crafting; material allocation is assessed separately"
+            },
+            "selectedInputSlot": -1,
+            "selectedInputItem": null
+          },
+          "detail": "Observed from the running server"
+        },
+        "fuelSlots": [],
+        "limitations": [
+          "Nearby stations and their contents are observations, not player-owned material resources.",
+          "Vanilla distance, lock, spawn protection and world border do not establish modded claim permissions, line of sight or a safe path.",
+          "Modded interaction permissions are unverified; no interaction event or world mutation is performed.",
+          "Only exact vanilla workstation blocks and block-entity classes are inspected. Discovery is limited to the shown cube and loaded chunks.",
+          "The 10 ms budget is cooperative; one recipe predicate, fuel hook or vanilla serialization call cannot be interrupted.",
+          "Cooking timing snapshots whitelist numeric fields only; raw NBT, names, locks and attachments are never exported."
+        ]
+      }
+    }
+  },
+  "questContext": {
+    "status": "unavailable",
+    "data": null,
+    "detail": "Quest scan not requested; use /companion quests or /companion next"
+  },
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "item:minecraft:diamond_pickaxe",
+        "kind": "ITEM"
+      },
+      {
+        "id": "recipe:minecraft:diamond_pickaxe",
+        "kind": "RECIPE"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/0",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "tag:c:gems/diamond",
+        "kind": "TAG"
+      },
+      {
+        "id": "item:minecraft:diamond",
+        "kind": "ITEM"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/1",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/2",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/4",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "tag:c:rods/wooden",
+        "kind": "TAG"
+      },
+      {
+        "id": "item:minecraft:stick",
+        "kind": "ITEM"
+      },
+      {
+        "id": "requirement:minecraft:diamond_pickaxe/7",
+        "kind": "REQUIREMENT"
+      }
+    ],
+    "edges": [
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "PRODUCES",
+        "to": "item:minecraft:diamond_pickaxe",
+        "quantity": 1,
+        "detail": "fixed_recipe_output"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/0",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/0",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/0",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/1",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/1",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/1",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/2",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/2",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:gems/diamond",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/2",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:diamond",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/4",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/4",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:rods/wooden",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/4",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:stick",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:diamond_pickaxe",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:diamond_pickaxe/7",
+        "quantity": 1,
+        "detail": "tag; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/7",
+        "relation": "SATISFIED_BY",
+        "to": "tag:c:rods/wooden",
+        "quantity": 1,
+        "detail": "tag member, not every member"
+      },
+      {
+        "from": "requirement:minecraft:diamond_pickaxe/7",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:stick",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      }
+    ],
+    "truncated": false
+  },
+  "timings": {
+    "materialNanos": 796700,
+    "executionNanos": 2461800,
+    "questNanos": 1400,
+    "totalNanos": 3418700
+  }
+}

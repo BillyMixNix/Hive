@@ -1,0 +1,26 @@
+{
+  "request": "Add `RecipeSelection.bestOf(List<RecipeSelection> candidates)` returning\n`Optional<RecipeSelection>`. Select the minimum by the record's existing\n`compareTo` ordering, independent of input order; return `Optional.empty()`\nfor an empty list. Reject null list or null member with\n`IllegalArgumentException`. Do not mutate the supplied list.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.knowledge.RecipeSelectionBestOfAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.knowledge;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Optional;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass RecipeSelectionBestOfAcceptanceTest {\n    @Test void selectsNaturalMinimumWithoutMutatingInput() {\n        var high = new RecipeSelection(1, 0, \"z\");\n        var tie = new RecipeSelection(0, 4, \"b\");\n        var best = new RecipeSelection(0, 4, \"a\");\n        var candidates = new ArrayList<>(List.of(high, tie, best));\n        assertEquals(Optional.of(best), RecipeSelection.bestOf(candidates));\n        assertEquals(List.of(high, tie, best), candidates);\n        assertEquals(Optional.empty(), RecipeSelection.bestOf(List.of()));\n        assertThrows(IllegalArgumentException.class, () -> RecipeSelection.bestOf(null));\n        assertThrows(IllegalArgumentException.class, () -> RecipeSelection.bestOf(java.util.Arrays.asList(best, null)));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N006",
+    "replicate_index": 1,
+    "trial_id": "e5b45b525be7",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

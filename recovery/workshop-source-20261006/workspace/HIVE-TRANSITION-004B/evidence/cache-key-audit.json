@@ -1,0 +1,113 @@
+{
+  "all_keys_recomputed": true,
+  "keys": [
+    {
+      "node": "applyDevTransforms",
+      "components": [
+        "input",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args",
+        "access transformers data[neoForgeAccessTransformers]"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "binaryPatch",
+      "components": [
+        "clean",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args",
+        "data dependency[patch]"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "binaryWithNeoForge",
+      "components": [
+        "input",
+        "action implementation",
+        "injectSource[0].type",
+        "injectSource[0].cache-key"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "copyUnpatchedClasses",
+      "components": [
+        "patched",
+        "unpatched",
+        "action implementation"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "extractServer",
+      "components": [
+        "input",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "mergeMappings",
+      "components": [
+        "official",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args",
+        "data dependency[mappings]"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "merge",
+      "components": [
+        "server",
+        "client",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "rename",
+      "components": [
+        "input",
+        "versionManifest",
+        "mappings",
+        "external tool classpath[0]",
+        "command line arg",
+        "jvm args",
+        "data dependency[mappings]",
+        "additional listLibraries classpath[000]",
+        "additional listLibraries classpath[001]",
+        "additional listLibraries classpath[002]",
+        "additional listLibraries classpath[003]"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "stripClient",
+      "components": [
+        "input",
+        "action implementation",
+        "deny patterns[0]"
+      ],
+      "hash_matches": true
+    },
+    {
+      "node": "stripServer",
+      "components": [
+        "input",
+        "action implementation",
+        "deny patterns[0]"
+      ],
+      "hash_matches": true
+    }
+  ]
+}

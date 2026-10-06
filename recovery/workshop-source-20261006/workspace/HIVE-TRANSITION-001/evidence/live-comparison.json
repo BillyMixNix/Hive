@@ -1,0 +1,83 @@
+[
+  {
+    "revision": 1,
+    "run_id": "8aa64e4e455d",
+    "model_calls": 5,
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "roles_called": [
+      "planner",
+      "planner",
+      "backend",
+      "tests",
+      "reviewer"
+    ],
+    "planner_accepted": true,
+    "clean_valid_plan": false,
+    "workers_reached": true,
+    "valid_scoped_edit_produced": false,
+    "deterministic_executable_verification_reached": false,
+    "frozen_acceptance_reached": false,
+    "full_gradle_gate_reached": false,
+    "changed_files": [],
+    "applied": false,
+    "api_cost_usd": 0.0,
+    "wall_seconds": 550.348,
+    "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "stage_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "failure_summary": [
+      {
+        "role": "backend",
+        "stage": "edit_validation",
+        "exception_type": "WorkerProtocolError",
+        "exception_message": "plan_insufficient cannot request a file already in the current exact plan"
+      },
+      {
+        "role": "tests",
+        "stage": "edit_validation",
+        "exception_type": "WorkerProtocolError",
+        "exception_message": "plan_insufficient cannot request a file already in the current exact plan"
+      }
+    ]
+  },
+  {
+    "revision": 2,
+    "run_id": "75280298dd02",
+    "model_calls": 2,
+    "status": "failed",
+    "classification": "MODEL_TASK_FAILURE",
+    "roles_called": [
+      "planner",
+      "planner"
+    ],
+    "planner_accepted": false,
+    "clean_valid_plan": false,
+    "workers_reached": false,
+    "valid_scoped_edit_produced": false,
+    "deterministic_executable_verification_reached": false,
+    "frozen_acceptance_reached": false,
+    "full_gradle_gate_reached": false,
+    "changed_files": [],
+    "applied": false,
+    "api_cost_usd": 0.0,
+    "wall_seconds": 302.841,
+    "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "stage_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "failure_summary": [
+      {
+        "role": "planner",
+        "stage": "plan_validation",
+        "exception_type": "HostWriteScopeError",
+        "exception_message": "file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work"
+      },
+      {
+        "role": "run",
+        "stage": "agent_call",
+        "exception_type": "PlanValidationError",
+        "exception_message": "Planner correction budget exhausted; file 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java' is assigned to both backend and tests; keep exactly one owner and deactivate roles without authorized work"
+      }
+    ]
+  }
+]

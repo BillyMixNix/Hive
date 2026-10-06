@@ -1,0 +1,28 @@
+{
+  "summary": "Implement coverage percentage calculation methods in execution context and assessment",
+  "ui_goal": "no change needed",
+  "backend_goal": "Add coveragePercent() to ExecutionContext and observedCoveragePercent() to ExecutionAssessment with specified behavior",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": [
+      "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+      "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+    ],
+    "tests": []
+  },
+  "acceptance": [
+    "ExecutionContext.coveragePercent() returns floor(100*scannedPositions/totalPositions) with zero for zero totalPositions",
+    "ExecutionAssessment.observedCoveragePercent() delegates to observation's scan and returns -1 for no observation"
+  ],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": [
+      "Implement ExecutionContext.coveragePercent() with specified calculation",
+      "Implement ExecutionAssessment.observedCoveragePercent() with observation delegation and -1 fallback"
+    ],
+    "tests": []
+  },
+  "interface_contracts": [],
+  "provider_changes": []
+}

@@ -1,0 +1,185 @@
+{
+  "label": "negative-java-plus-access-transformer",
+  "at": "2026-10-06T03:02:27.265918+00:00",
+  "report": {
+    "passed": false,
+    "checks": [
+      {
+        "name": "isolated_verifier",
+        "passed": false,
+        "detail": "Isolated verifier failed: ValueError: NFRT source inventory changed"
+      }
+    ],
+    "diagnostics": [
+      {
+        "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643",
+        "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\verification-events.jsonl",
+        "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\stdout.log",
+        "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\stderr.log",
+        "last_observed_phase": "verification_returned",
+        "elapsed_ms": 10752.726
+      }
+    ]
+  },
+  "canonical": {
+    "top_level_keys": [
+      "checks",
+      "diagnostics",
+      "passed"
+    ],
+    "passed": false,
+    "checks": [
+      {
+        "name": "isolated_verifier",
+        "passed": false
+      }
+    ]
+  },
+  "seconds": 15.34267459998955,
+  "candidate_sha256": "0e37a7d226d86e8809ecbc91e735cb244ff5385fb1f0b326e01dcdc818d3531b",
+  "candidate_unchanged": true,
+  "origin_unchanged": true,
+  "frozen_tests_unchanged": true,
+  "frozen_test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+  "changed_files": [
+    "src/main/java/dev/atmcompanion/state/SnapshotService.java",
+    "src/main/resources/META-INF/accesstransformer.cfg"
+  ],
+  "native_invocation_evidence": [],
+  "recorder": {
+    "measurement_status": "MEASURED",
+    "measurement_errors": [],
+    "invocations_observed": 1,
+    "complete_outcome_records": 1,
+    "known_verification_seconds": 15.340157200000249,
+    "timing_complete": true,
+    "software_outcome": null,
+    "scoring_permitted": true
+  },
+  "records": [
+    {
+      "number": 1,
+      "verifier_kind": "targeted",
+      "outcome": "returned",
+      "host_elapsed_seconds": 15.340157200000249,
+      "started_at": "2026-10-06T03:02:11.914932+00:00",
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "isolated_verifier",
+            "passed": false,
+            "detail": "Isolated verifier failed: ValueError: NFRT source inventory changed"
+          }
+        ],
+        "diagnostics": [
+          {
+            "directory": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643",
+            "events": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\verification-events.jsonl",
+            "stdout": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\stdout.log",
+            "stderr": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\verification\\targeted-1e1cf6201643\\stderr.log",
+            "last_observed_phase": "verification_returned",
+            "elapsed_ms": 10752.726
+          }
+        ]
+      },
+      "finished_at": "2026-10-06T03:02:27.255108+00:00"
+    }
+  ],
+  "seed_copy_events": [],
+  "compile_events": [],
+  "preflight_events": [
+    {
+      "monotonic": 167845.8943995,
+      "wall_timestamp": "2026-10-06T03:02:14.873018+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "verification_requested",
+      "elapsed_ms": 1.004,
+      "clock_domain": "host",
+      "mode": "targeted",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-NFRT-ATTESTATION-002\\evidence\\real-controls\\negative-java-plus-access-transformer\\runs\\341cb885cba3\\stage"
+    },
+    {
+      "monotonic": 167845.8950056,
+      "wall_timestamp": "2026-10-06T03:02:14.873624+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "host_preflight_started",
+      "elapsed_ms": 1.61,
+      "clock_domain": "host"
+    },
+    {
+      "monotonic": 167846.1346925,
+      "wall_timestamp": "2026-10-06T03:02:15.113311+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "image_identified",
+      "elapsed_ms": 241.297,
+      "clock_domain": "host",
+      "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26"
+    },
+    {
+      "monotonic": 167846.138139,
+      "wall_timestamp": "2026-10-06T03:02:15.116757+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "source_staging_started",
+      "elapsed_ms": 244.744,
+      "clock_domain": "host",
+      "temporary_directory": "C:\\Users\\billy\\AppData\\Local\\Temp\\hive-verifier-input-h8ap4vzz"
+    },
+    {
+      "monotonic": 167847.1608131,
+      "wall_timestamp": "2026-10-06T03:02:16.139432+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "source_staging_complete",
+      "elapsed_ms": 1267.418,
+      "clock_domain": "host",
+      "source": "C:\\Users\\billy\\AppData\\Local\\Temp\\hive-verifier-input-h8ap4vzz\\source"
+    },
+    {
+      "monotonic": 167847.1625415,
+      "wall_timestamp": "2026-10-06T03:02:16.141159+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "approved_cache_validation_started",
+      "elapsed_ms": 1269.146,
+      "clock_domain": "host"
+    },
+    {
+      "monotonic": 167854.2763812,
+      "wall_timestamp": "2026-10-06T03:02:23.255001+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "approved_cache_validation_complete",
+      "elapsed_ms": 8382.986,
+      "clock_domain": "host",
+      "manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561"
+    },
+    {
+      "monotonic": 167854.2770992,
+      "wall_timestamp": "2026-10-06T03:02:23.255717+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "nfrt_seed_validation_started",
+      "elapsed_ms": 8383.704,
+      "clock_domain": "host"
+    },
+    {
+      "monotonic": 167856.6449373,
+      "wall_timestamp": "2026-10-06T03:02:25.623555+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "cleanup_complete",
+      "elapsed_ms": 10751.542,
+      "clock_domain": "host",
+      "temporary_directory": "C:\\Users\\billy\\AppData\\Local\\Temp\\hive-verifier-input-h8ap4vzz",
+      "removed": true
+    },
+    {
+      "monotonic": 167856.6456045,
+      "wall_timestamp": "2026-10-06T03:02:25.624222+00:00",
+      "run_id": "341cb885cba3",
+      "phase": "verification_returned",
+      "elapsed_ms": 10752.209,
+      "clock_domain": "host",
+      "passed": false
+    }
+  ],
+  "model_calls": 0,
+  "factorial_trial": false,
+  "promotion_authorization": "not_authorized"
+}

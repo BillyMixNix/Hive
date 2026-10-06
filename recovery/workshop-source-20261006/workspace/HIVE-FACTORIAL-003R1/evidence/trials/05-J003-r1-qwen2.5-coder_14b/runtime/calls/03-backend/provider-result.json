@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Implemented the `Observation.map` method in `Observation.java` as specified.\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/state/Observation.java\",\n      \"operation\": \"replace\",\n      \"find\": \"public static <T> Observation<T> notIntegrated(String reason) {\",\n      \"replace\": \"public static <T> Observation<T> notIntegrated(String reason) {\\n        return new Observation<>(CapabilityStatus.NOT_INTEGRATED, null, reason);\\n    }\\n\\n    public <U> Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {\\n        if (mapper == null || this.status != CapabilityStatus.AVAILABLE || this.data == null) {\\n            throw new IllegalArgumentException(\\\"Mapper cannot be null and observation must be available with non-null data\\\");\\n        }\\n        U mappedData = mapper.apply(this.data);\\n        if (mappedData == null) {\\n            throw new IllegalArgumentException(\\\"Mapped data cannot be null\\\");\\n        }\\n        return new Observation<>(this.status, mappedData, this.detail);\\n    }\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 7476,
+  "output_tokens": 266,
+  "raw_id": null
+}

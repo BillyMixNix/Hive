@@ -1,0 +1,11 @@
+# Optional attested NFRT seeds
+
+The verifier defaults to verified dependency reconstruction. To enable a reviewed dependency-only seed, the host operator supplies both `HIVE_NFRT_SEED_MANIFEST` (absolute JSON path) and `HIVE_NFRT_SEED_SHA256` (approved manifest digest). These are host configuration, never planner/worker fields. Configuring an unavailable or incompatible seed fails verification; unset both to use the original verified reconstruction policy.
+
+The `hive-nfrt-seed-v1` attestation binds the baseline, image/JDK, Gradle profile, downloaded-input manifest, sealed priming provenance/inventory, exact measured reconstruction inputs and complete source inventory. `independent_java_sources` is a reviewed list of existing main-source files whose edits do not participate in reconstruction. It is not automatically inferred from a Java suffix. All other source/config bytes and file membership must match. Build/config/resource/tool changes need a new review and attestation. The complete approved modules inventory is verified, including plugin/tool bytes.
+
+Only flat named NFRT key records and dependency outputs sealed in the priming inventory are allowed. Every file is checked for size/hash/type, key records are checked, and dependency JARs are checked for forbidden application namespaces. The operator must list all application/test package prefixes in `forbidden_packages`. Cached existence or NFRT's own key lookup is not attestation.
+
+The host mounts the approved seed and manifest read-only; the container validates again, copies bytes into a fresh private intermediate directory, and validates the result. NFRT may update only the private copy. No project output, compilation history, application/test classes, reports or prior acceptance decisions are reused. Downloaded-input validation, fresh project compilation, offline execution and all frozen gates remain in force.
+
+This mechanism does not claim that all Gradle builds or source-only edits have invariant reconstruction inputs. An attestation requires evidence for its particular build and allowed source scope. TRANSITION-004C's approved attestation and supporting measurements are outside production code; production contains no task name or application filename.

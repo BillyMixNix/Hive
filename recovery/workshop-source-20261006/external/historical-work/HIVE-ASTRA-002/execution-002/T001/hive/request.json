@@ -1,0 +1,24 @@
+{
+  "request": "Add `public int count(ActivityEvent.Type type)` to `ActivitySummary`. Return the count for exactly that type. Every enum value must return its count (including zero); a null type must throw `IllegalArgumentException`. Do not mutate the summary.",
+  "allow_cloud": true,
+  "agent_backend": "persistent",
+  "persistent_agent_model": "gpt-6-astra",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivitySummaryCountAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivitySummaryCountAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivitySummaryCountAcceptanceTest {\n    private ActivityEvent event(ActivityEvent.Type type, long quantity) {\n        return new ActivityEvent(1, \"2026-09-30T12:00:00Z\", type, List.of(\"minecraft:diamond\"),\n                quantity, ActivityEvent.Source.MANUAL);\n    }\n\n    @Test\n    void returnsExactTypeCountsIncludingZeroAndRejectsNull() {\n        var summary = ActivitySummary.from(List.of(\n                event(ActivityEvent.Type.ITEM_GAINED, 2),\n                event(ActivityEvent.Type.ITEM_GAINED, 1),\n                event(ActivityEvent.Type.ITEM_LOST, 4)));\n\n        assertEquals(2, summary.count(ActivityEvent.Type.ITEM_GAINED));\n        assertEquals(1, summary.count(ActivityEvent.Type.ITEM_LOST));\n        for (var type : ActivityEvent.Type.values()) {\n            int expected = type == ActivityEvent.Type.ITEM_GAINED ? 2\n                    : type == ActivityEvent.Type.ITEM_LOST ? 1 : 0;\n            assertEquals(expected, summary.count(type), \"count for \" + type);\n        }\n        assertThrows(IllegalArgumentException.class, () -> summary.count(null));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-ASTRA-002",
+    "condition_id": "hive",
+    "task_id": "T001",
+    "replicate_index": 1,
+    "trial_id": "454644fbd596",
+    "condition_spec_sha256": "4a408406e1f73d4a30edc2269255a82e99023a39dfd8f37101adb7663afa5c58"
+  }
+}

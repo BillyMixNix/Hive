@@ -1,0 +1,45 @@
+--- factorial/runner.py
++++ transition/diagnostic_runner.py
+@@ -17,9 +17,9 @@
+ import httpx
+ 
+ HERE = Path(__file__).resolve().parent
+-SOURCE_STUDY = HERE.parent / "HIVE-FACTORIAL-001"
++SOURCE_STUDY = Path('C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-001')
+ sys.path.insert(0, str(HERE))
+-import local_harness as prior  # noqa: E402
++import diagnostic_environment as prior  # noqa: E402
+ sys.path.insert(0, str(prior.WORKSHOP))
+ from factorial_runner_adapter import run_condition  # noqa: E402
+ 
+@@ -146,7 +146,7 @@
+     if prior.disk_free_bytes() < prior.MIN_FREE_BYTES:
+         raise StudyStop("less than eight GiB free")
+     return {
+-        "study": "HIVE-FACTORIAL-002", "status": "preregistered",
++        "study": "HIVE-TRANSITION-001", "status": "preregistered",
+         "parent_freeze_sha256": PARENT_LOCK_SHA256,
+         "apparatus_change": "Host exact-write-scope planning/correction and successor controller adapter only",
+         "reference_lock_sha256": prior.ASTRA_LOCK,
+@@ -306,7 +306,7 @@
+ 
+         metadata = {"max_tier": "local", "max_cost": 0.0, "cloud_spend": 0.0,
+                     "agent_calls": calls, "external_root": external,
+-                    "experiment": {"study_id": "HIVE-FACTORIAL-002", "condition_id": cell["controller"],
++                    "experiment": {"study_id": "HIVE-TRANSITION-001", "condition_id": cell["controller"],
+                                    "task_id": task["id"], "replicate_index": cell["replicate"],
+                                    "condition_spec_sha256": sha(LOCK_PATH)},
+                     "inference": {"temperature": hive.LOCAL_TEMPERATURE, "seed": None,
+--- factorial/local_harness.py
++++ transition/diagnostic_environment.py
+@@ -18,8 +18,8 @@
+ import httpx
+ 
+ HERE = Path(__file__).resolve().parent
+-WORKSHOP = HERE / "workshop"
+-ASTRA_002 = HERE.parent / "HIVE-ASTRA-002"
++WORKSHOP = HERE / "repaired-workshop"
++ASTRA_002 = Path('C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-002')
+ ASTRA_LOCK = "4a408406e1f73d4a30edc2269255a82e99023a39dfd8f37101adb7663afa5c58"
+ REFERENCE = ASTRA_002 / "FREEZE-002.json"
+ MODEL = "qwen2.5-coder:14b"

@@ -1,0 +1,60 @@
+[
+  {
+    "name": "compile",
+    "command": [
+      "java",
+      "com.sun.tools.javac.Main",
+      "--release",
+      "17",
+      "-encoding",
+      "UTF-8",
+      "-cp",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/dependencies/gson-2.10.1.jar:/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/dependencies/junit-platform-console-standalone-1.11.4.jar",
+      "-d",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/before/classes",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/GameSnapshot.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/Observation.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/Capability.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/CapabilityStatus.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline/src/test/java/dev/atmcompanion/state/SnapshotFixtures.java",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/probes/BoundLineSupplementalProbe.java"
+    ],
+    "cwd": "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline",
+    "exit_code": 0,
+    "seconds": 0.9516940690009505
+  },
+  {
+    "name": "existing-junit",
+    "command": [
+      "java",
+      "-jar",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/dependencies/junit-platform-console-standalone-1.11.4.jar",
+      "execute",
+      "--class-path",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/before/classes:/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/dependencies/gson-2.10.1.jar",
+      "--select-class",
+      "dev.atmcompanion.state.SnapshotFormatterTest",
+      "--disable-ansi-colors",
+      "--reports-dir",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/before/junit-reports",
+      "--fail-if-no-tests"
+    ],
+    "cwd": "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline",
+    "exit_code": 0,
+    "seconds": 0.6176502839989553
+  },
+  {
+    "name": "boundary-probes",
+    "command": [
+      "java",
+      "-cp",
+      "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/before/classes:/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-execution-evidence/dependencies/gson-2.10.1.jar",
+      "BoundLineSupplementalProbe"
+    ],
+    "cwd": "/workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-work/baseline",
+    "exit_code": 1,
+    "seconds": 0.12283018499874743
+  }
+]

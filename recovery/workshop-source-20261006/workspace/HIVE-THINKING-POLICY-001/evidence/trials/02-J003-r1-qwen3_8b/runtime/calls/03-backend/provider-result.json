@@ -1,0 +1,13 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Corrected implementation of Observation.map method with exact mapper application and null rejection\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/state/Observation.java\",\n      \"operation\": \"insert_after_anchor\",\n      \"anchor\": \"public static <T> Observation<T> notIntegrated(String reason) {\",\n      \"insert\": \"    public Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {\\n        Objects.requireNonNull(mapper, \\\"mapper\\\");\\n        if (status == CapabilityStatus.AVAILABLE && data != null) {\\n            return new Observation<>(status, mapper.apply(data), detail);\\n        } else {\\n            return new Observation<>(status, null, detail);\\n        }\\n    }\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 7228,
+  "output_tokens": 189,
+  "raw_id": null,
+  "thinking_policy": {
+    "requested": false,
+    "validation": "host-attested boolean control",
+    "provider_version": "0.34.0",
+    "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "template_sha256": "ae370d884f108d16e7cc8fd5259ebc5773a0afa6e078b11f4ed7e39a27e0dfc4"
+  }
+}

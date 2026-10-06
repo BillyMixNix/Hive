@@ -1,0 +1,16 @@
+Read-only archive inspection using Python zipfile: member paths, sizes, transport SHA-256.
+Safe extraction into new HIVE-ASTRA-J001-work/baseline; no original member content modified.
+sed -n '1,260p' HIVE-ASTRA-J001-work/baseline/src/main/java/dev/atmcompanion/state/SnapshotFormatter.java
+cat HIVE-ASTRA-J001-work/baseline/src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java
+cat HIVE-ASTRA-J001-work/baseline/build.gradle
+Read baseline/README.md and baseline/.gitignore from original ZIP.
+Read gradle/wrapper/gradle-wrapper.properties.
+Python pathlib checks: AGENTS.md absent, .git absent, frozen test class absent.
+Python shutil.which: java present; javac, gradle, docker absent.
+java -version: OpenJDK17.0.20 runtime.
+Python hashlib: original/final source hash and all276 per-file hashes; byte comparison of every extracted member.
+Limited conventional tree serializers and JSON manifests: results preserved separately; no authoritative baseline fingerprint established.
+
+Source edits: none.
+Compilation/test commands: none.
+Frozen gate: not run; entry point absent.

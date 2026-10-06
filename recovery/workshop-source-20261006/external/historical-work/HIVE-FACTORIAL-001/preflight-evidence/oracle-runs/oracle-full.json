@@ -1,0 +1,371 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 155.742,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.02s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.02s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 6.10s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 9.63s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 10.02s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 3.96s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 11.08s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 5.99s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.73s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 5.63s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.60s\nTotal runtime: 64.28s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nExecutionCoverageAcceptanceTest > scanCoverageUsesFloorAndCountsUnloadedPositions() PASSED\n\nExecutionCoverageAcceptanceTest > assessmentProjectsItsOwnScan() PASSED\n\nExecutionCoverageAcceptanceTest > assessmentReportsUnknownWithoutObservation() PASSED\n\nIngredientAllocationSlotAcceptanceTest > validAllocationAndInputsArePreserved() PASSED\n\nIngredientAllocationSlotAcceptanceTest > rejectsInvalidSlotIdentitiesAndNullCountsInInventory() PASSED\n\nIngredientAllocationSlotAcceptanceTest > rejectsInvalidSlotIdentitiesInAlternatives() PASSED\n\nObservationMapAcceptanceTest > availableValueMapsExactlyOnceWithoutLosingDetail() PASSED\n\nObservationMapAcceptanceTest > unknownStatesDoNotInvokeMapperOrGainData() PASSED\n\nObservationMapAcceptanceTest > nullMapperOrMappedValueIsRejected() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > truncationNeverSplitsAPair() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > asciiAndSanitizationStayCompatible() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > fullPairAtExactBoundRemainsIntact() PASSED\n\nBUILD SUCCESSFUL in 2m 35s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "full_gradle_check",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 114.997,
+        "stdout_tail": ".minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%2377!/:?] {}\n\t... 9 more\n[16:45:04] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes\n[16:45:04] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements\n[16:45:07] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld\n[16:45:07] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%\n[16:45:07] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 6%\n[16:45:08] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 8%\n[16:45:08] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 1315 ms\n[16:45:08] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server\n[16:45:08] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler\n[16:45:08] [Server thread/INFO] [minecraft/GameTestServer]: 3 tests are now running at position 6186761, -59, 1802605!\n[16:45:09] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...\n[16:45:09] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[16:45:09] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 130 active ms, 1151 elapsed ms, 23 slices, 60 max slice ms, generation 1)\n[16:45:09] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions\n[16:45:09] [Server thread/INFO] [minecraft/GameTestServer]: [   ]\n[16:45:09] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.031802 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.031802\n[16:45:09] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.003301 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.003301\n[16:45:09] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.054803 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.054803\n[16:45:09] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=unavailable chapters=0/0 quests=0/0 tasks=0/0 dependencies=0 readinessMs=0.0025 definitionsMs=0.0 chaptersMs=0.0 questsTasksMs=0.0 validationMs=0.0 totalMs=0.0025\n[16:45:10] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-9.5, -60.0, 10.5)\n[16:45:10] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.430321 definitionsMs=0.174908 chaptersMs=0.894942 questsTasksMs=4.786124 validationMs=1.223258 totalMs=7.509553\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.011901 definitionsMs=0.018301 chaptersMs=0.031701 questsTasksMs=0.184409 validationMs=0.253512 totalMs=0.499824\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0122 definitionsMs=0.015201 chaptersMs=0.029401 questsTasksMs=0.221311 validationMs=0.147507 totalMs=0.42562\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.010401 definitionsMs=0.0141 chaptersMs=0.023502 questsTasksMs=0.147506 validationMs=0.20951 totalMs=0.405019\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=1/1 quests=3/3 tasks=3/3 dependencies=3 readinessMs=0.0102 definitionsMs=0.015101 chaptersMs=0.047802 questsTasksMs=0.184309 validationMs=0.142207 totalMs=0.399619\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=1/1 quests=3/3 tasks=0/0 dependencies=0 readinessMs=0.013401 definitionsMs=0.0095 chaptersMs=0.0061 questsTasksMs=0.020901 validationMs=0.066403 totalMs=0.116305\n[16:45:10] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'large_ftb_book:0' (1 tests)...\n[16:45:10] [Server thread/INFO] [minecraft/GameTestServer]: [++ ]\n[16:45:10] [Server thread/INFO] [minecraft/PlayerList]: quest_scale[embedded] logged in with entity id 4 at (-2.5, -60.0, -7.5)\n[16:45:10] [Server thread/INFO] [minecraft/MinecraftServer]: quest_scale joined the game\n[16:45:10] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.0172 definitionsMs=5.087839 chaptersMs=0.806038 questsTasksMs=17.190706 validationMs=0.20001 totalMs=23.301793\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.065003 definitionsMs=4.430108 chaptersMs=1.27206 questsTasksMs=201.237894 validationMs=3.236649 totalMs=210.241714\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.021201 definitionsMs=4.183792 chaptersMs=0.269913 questsTasksMs=63.976844 validationMs=2.462213 totalMs=70.913963\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.019301 definitionsMs=2.543617 chaptersMs=0.250911 questsTasksMs=85.001011 validationMs=2.1617 totalMs=89.97654\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.026301 definitionsMs=3.947082 chaptersMs=0.365917 questsTasksMs=62.525777 validationMs=2.901033 totalMs=69.76611\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.020401 definitionsMs=2.272804 chaptersMs=0.309115 questsTasksMs=144.582352 validationMs=1.976791 totalMs=149.161463\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.015501 definitionsMs=1.30976 chaptersMs=0.104005 questsTasksMs=2.845431 validationMs=0.117505 totalMs=4.392202\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.013 definitionsMs=1.323061 chaptersMs=0.079804 questsTasksMs=2.794529 validationMs=0.145206 totalMs=4.3556\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.0156 definitionsMs=1.73598 chaptersMs=0.137207 questsTasksMs=33.124524 validationMs=2.088096 totalMs=37.101407\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.023901 definitionsMs=1.156153 chaptersMs=0.074204 questsTasksMs=0.461321 validationMs=0.099604 totalMs=1.815183\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4793/4793 tasks=9583/9583 dependencies=4194 readinessMs=0.014701 definitionsMs=1.611674 chaptersMs=0.117406 questsTasksMs=50.403519 validationMs=3.176946 totalMs=55.324246\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4793/4793 tasks=0/0 dependencies=0 readinessMs=0.015001 definitionsMs=1.841185 chaptersMs=0.104604 questsTasksMs=4.915327 validationMs=0.152107 totalMs=7.028224\n[16:45:11] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=summary outcome=available chapters=67/67 quests=4792/4792 tasks=0/0 dependencies=0 readinessMs=0.0143 definitionsMs=1.157054 chaptersMs=0.072803 questsTasksMs=4.825022 validationMs=0.118205 totalMs=6.187384\n[16:45:12] [Server thread/INFO] [de.at.in.qu.FtbQuestsAdapter$CollectionTiming/]: ATM Companion FTB observation mode=full outcome=available chapters=67/67 quests=4792/4792 tasks=9581/9581 dependencies=4193 readinessMs=0.015301 definitionsMs=1.95479 chaptersMs=0.464721 questsTasksMs=76.424617 validationMs=2.527116 totalMs=81.386545\n[16:45:14] [Server thread/INFO] [minecraft/GameTestServer]: [+++]\n[16:45:14] [Server thread/INFO] [minecraft/GameTestServer]: ========= 3 GAME TESTS COMPLETE IN 5.485 s ======================\n[16:45:14] [Server thread/INFO] [minecraft/GameTestServer]: All 3 required tests passed :)\n[16:45:14] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================\n[16:45:14] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server\n[16:45:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players\n[16:45:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved\n[16:45:15] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved\n[16:45:15] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n\nBUILD SUCCESSFUL in 1m 54s\n21 actionable tasks: 20 executed, 1 up-to-date\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "/work/candidate/src/gametest/java/dev/atmcompanion/tests/RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal\n        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));\n                                          ^\n1 warning\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "tests": 2,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "tests": 12,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "tests": 11,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "tests": 1,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "tests": 8,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "tests": 10,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "tests": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "tests": 6,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "tests": 4,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "tests": 5,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "tests": 7,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "source_immutability",
+      "passed": true,
+      "detail": "non-generated candidate source remained unchanged"
+    }
+  ],
+  "java_version": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest"
+      ]
+    },
+    {
+      "phase": "full_gradle_check",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "clean",
+        "build",
+        "runGameTestServer",
+        "runQuestTestServer",
+        "packTestJar"
+      ]
+    }
+  ],
+  "external_build_inputs_copy": {
+    "files": 3895,
+    "bytes": 914224273,
+    "manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "approved_cache_mount": "read-only",
+    "verification_copy": "private tmpfs"
+  },
+  "runtime_output_dirs": [
+    "run-gametest",
+    "run-questtest"
+  ],
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "swap_additional": "0 bytes",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    },
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": [],
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+  }
+}

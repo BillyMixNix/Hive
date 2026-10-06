@@ -1,0 +1,48 @@
+{
+  "milestone": "HIVE-EXTROOT-002E",
+  "run_id": "d0ed345e6f3a",
+  "approved_cache_run_id": "6992ee6447df",
+  "network": "none",
+  "old": {
+    "memory": "4g",
+    "memory_plus_swap": "4g (0 additional swap)",
+    "cpu_quota": "2 CPUs",
+    "pids_limit": 128,
+    "ulimit_nproc": "unlimited",
+    "ulimit_stack": "8192 KiB",
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "child_jvm_default_max_heap": "1 GiB",
+    "parallel_gc_threads": 2,
+    "conc_gc_threads": 1
+  },
+  "trials": [
+    {
+      "pids_limit": 192,
+      "sampled_peak_pids": 191,
+      "memory": "1.849GiB",
+      "outcome": "EAGAIN in ProcessMinecraftJar Thread-65"
+    },
+    {
+      "pids_limit": 256,
+      "outcome": "same EAGAIN; snapshots maxed at 128 PIDs/1.96GiB, exact transient peak not captured"
+    },
+    {
+      "pids_limit": 320,
+      "sampled_peak_pids": 279,
+      "memory": "2.417GiB",
+      "outcome": "EAGAIN in ProcessMinecraftJar Thread-193 during full-profile's fresh targeted stage"
+    }
+  ],
+  "final": {
+    "memory": "4g",
+    "memory_plus_swap": "4g (0 additional swap)",
+    "cpu_quota": "2 CPUs",
+    "pids_limit": 384,
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "change": "PID cgroup cap only"
+  }
+}

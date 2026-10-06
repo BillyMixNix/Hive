@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": true,
+      "detail": {
+        "returncode": 0,
+        "timed_out": false,
+        "wall_seconds": 158.257,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.02s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.59s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 6.69s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 11.36s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.48s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 3.80s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 11.79s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 5.93s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.69s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 3.90s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.84s\nTotal runtime: 64.78s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nExecutionCoverageAcceptanceTest > scanCoverageUsesFloorAndCountsUnloadedPositions() PASSED\n\nExecutionCoverageAcceptanceTest > assessmentProjectsItsOwnScan() PASSED\n\nExecutionCoverageAcceptanceTest > assessmentReportsUnknownWithoutObservation() PASSED\n\nIngredientAllocationSlotAcceptanceTest > validAllocationAndInputsArePreserved() PASSED\n\nIngredientAllocationSlotAcceptanceTest > rejectsInvalidSlotIdentitiesAndNullCountsInInventory() PASSED\n\nIngredientAllocationSlotAcceptanceTest > rejectsInvalidSlotIdentitiesInAlternatives() PASSED\n\nObservationMapAcceptanceTest > availableValueMapsExactlyOnceWithoutLosingDetail() PASSED\n\nObservationMapAcceptanceTest > unknownStatesDoNotInvokeMapperOrGainData() PASSED\n\nObservationMapAcceptanceTest > nullMapperOrMappedValueIsRejected() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > truncationNeverSplitsAPair() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > asciiAndSanitizationStayCompatible() PASSED\n\nSnapshotFormatterUnicodeAcceptanceTest > fullPairAtExactBoundRemainsIntact() PASSED\n\nBUILD SUCCESSFUL in 2m 37s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "stderr_tail": "",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+            "tests": 3,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "source_immutability",
+      "passed": true,
+      "detail": "non-generated candidate source remained unchanged"
+    }
+  ],
+  "java_version": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.knowledge.IngredientAllocationSlotAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.state.ObservationMapAcceptanceTest",
+        "--tests",
+        "dev.atmcompanion.execution.ExecutionCoverageAcceptanceTest"
+      ]
+    }
+  ],
+  "external_build_inputs_copy": {
+    "files": 3895,
+    "bytes": 914224273,
+    "manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "approved_cache_mount": "read-only",
+    "verification_copy": "private tmpfs"
+  },
+  "runtime_output_dirs": [
+    "run-gametest",
+    "run-questtest"
+  ],
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "swap_additional": "0 bytes",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m",
+      "active_processor_count": 2
+    },
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": [],
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+  }
+}

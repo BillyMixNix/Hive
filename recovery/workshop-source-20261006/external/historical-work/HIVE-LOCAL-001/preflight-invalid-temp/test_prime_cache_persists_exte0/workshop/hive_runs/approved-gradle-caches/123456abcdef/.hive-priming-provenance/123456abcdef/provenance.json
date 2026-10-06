@@ -1,0 +1,143 @@
+{
+  "artifact_manifest": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\workshop\\hive_runs\\approved-gradle-caches\\123456abcdef\\.hive-priming-provenance\\123456abcdef\\artifacts.manifest.json",
+  "artifact_manifest_sha256": "c1d415cecf52635857afb86d0c07bcf00df93caf883d3314b98d209970b3bd41",
+  "baseline_unchanged": true,
+  "cache_priming_succeeded": true,
+  "cache_was_empty_before_priming": true,
+  "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\workshop\\hive_runs\\external_candidates\\123456abcdef",
+  "candidate_sha256": "f9aca07eecf79f9b87dde0ede9084f627548470257d3b1d61801fbec5f2cd656",
+  "candidate_sha256_after": "f9aca07eecf79f9b87dde0ede9084f627548470257d3b1d61801fbec5f2cd656",
+  "candidate_unchanged": true,
+  "commands_executed": [
+    {
+      "argv": [
+        "java",
+        "GradleWrapperMain",
+        "--offline",
+        "check"
+      ],
+      "phase": "resolve_documented_gradle_graph",
+      "returncode": 0
+    }
+  ],
+  "container_command": [
+    "docker",
+    "run",
+    "--rm",
+    "--name",
+    "hive-prime-123456abcdef",
+    "--network",
+    "bridge",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges",
+    "--pids-limit",
+    "512",
+    "--memory",
+    "4g",
+    "--memory-swap",
+    "4g",
+    "--cpus",
+    "2",
+    "--tmpfs",
+    "/work:rw,nosuid,nodev,size=4g,mode=1777",
+    "--tmpfs",
+    "/tmp:rw,nosuid,nodev,size=512m,mode=1777",
+    "--mount",
+    "type=bind,source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/HIVE-LOCAL-001/workshop/UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001/test_prime_cache_persists_exte0/workshop/hive_runs/external_candidates/123456abcdef,target=/source,readonly",
+    "--mount",
+    "type=bind,source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/HIVE-LOCAL-001/workshop/UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001/test_prime_cache_persists_exte0/workshop/hive_runs/approved-gradle-caches/123456abcdef,target=/approved-gradle-cache",
+    "--env",
+    "JAVA_HOME=/opt/java/openjdk",
+    "--env",
+    "GRADLE_USER_HOME=/approved-gradle-cache",
+    "--env",
+    "HOME=/tmp/home",
+    "--env",
+    "TMPDIR=/tmp/tmp",
+    "--env",
+    "PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "--env",
+    "LANG=C.UTF-8",
+    "--env",
+    "CI=true",
+    "--entrypoint",
+    "python3",
+    "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "/opt/verifier/prime_runner.py",
+    "{\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"wrapper_jar_sha256\":\"c2f9868fbc4a2f0bc01c6d4362abc834a21489a871e03dba9b356de86790228a\",\"wrapper_properties_sha256\":\"43fa3e1f964976e10d38c557bd7235b8ed09b844c497d0098bf0f6034f341ad1\",\"full_tasks\":[\"check\"],\"verification_policy_sha256\":null,\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[]}"
+  ],
+  "container_image": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+  "container_image_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "documented_full_gate_tasks": [
+    "check"
+  ],
+  "elapsed_wall_seconds": 0.004,
+  "ended_utc": "2026-10-01T15:05:19Z",
+  "external_build_input_bytes": 29,
+  "external_build_input_count": 2,
+  "external_build_inputs_manifest": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\workshop\\hive_runs\\123456abcdef\\external-build-inputs.manifest.json",
+  "external_build_inputs_manifest_sha256": "7022bda2c0a6d604ce21df207747b7602d383c3c1bd2579484af25ce2006da74",
+  "external_build_inputs_provenance": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\workshop\\hive_runs\\123456abcdef\\external-build-inputs.provenance.json",
+  "full_gate_passed_during_priming": true,
+  "gradle_user_home": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\workshop\\hive_runs\\approved-gradle-caches\\123456abcdef",
+  "gradle_wrapper": {
+    "distribution": "gradle-9.2.1-bin.zip",
+    "distribution_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "version": "9.2.1",
+    "wrapper_jar_sha256": "c2f9868fbc4a2f0bc01c6d4362abc834a21489a871e03dba9b356de86790228a",
+    "wrapper_properties_sha256": "43fa3e1f964976e10d38c557bd7235b8ed09b844c497d0098bf0f6034f341ad1"
+  },
+  "java_version": "21.0.12.1",
+  "network_mode": "bridge",
+  "network_opt_in": true,
+  "new_artifact_bytes": 29,
+  "new_artifact_count": 2,
+  "operation": "explicit_gradle_dependency_cache_priming",
+  "priming_container_returncode": 0,
+  "priming_container_timed_out": false,
+  "priming_failure_classification": null,
+  "priming_output_facts": {
+    "diagnostic_lines": [],
+    "observed_urls": [
+      "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
+    ]
+  },
+  "priming_report": {
+    "cache_priming_succeeded": true,
+    "commands": [
+      {
+        "argv": [
+          "java",
+          "GradleWrapperMain",
+          "--offline",
+          "check"
+        ],
+        "phase": "resolve_documented_gradle_graph",
+        "returncode": 0
+      }
+    ],
+    "full_gate_tasks": [
+      "check"
+    ],
+    "gradle_wrapper_version": "9.2.1",
+    "java_version": "21.0.12.1",
+    "mode": "dependency_cache_priming",
+    "source_unchanged": true,
+    "task_outcome": {
+      "external_inputs_primed": true,
+      "full_gate_passed": true
+    }
+  },
+  "repository_origin_capture": "parsed from Gradle --info output where URLs were emitted; credentials/query removed",
+  "repository_origins_observed": [
+    "https://piston-meta.mojang.com"
+  ],
+  "repository_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\workshop\\UsersbillyAppDataLocalTemphive-local-001-freeze-pytest-20261001\\test_prime_cache_persists_exte0\\baseline",
+  "repository_sha256": "f9aca07eecf79f9b87dde0ede9084f627548470257d3b1d61801fbec5f2cd656",
+  "repository_sha256_after": "f9aca07eecf79f9b87dde0ede9084f627548470257d3b1d61801fbec5f2cd656",
+  "schema_version": 1,
+  "started_utc": "2026-10-01T15:05:19Z"
+}

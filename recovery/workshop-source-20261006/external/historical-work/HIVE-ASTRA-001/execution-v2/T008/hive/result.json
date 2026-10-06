@@ -1,0 +1,186 @@
+{
+  "task_id": "T008",
+  "condition": "hive",
+  "status": "rejected",
+  "applied": false,
+  "promotion_allowed": false,
+  "job_id": "00effc64ec084cee89a5ec6f642e68f0",
+  "job_state": "completed",
+  "run_id": "723add052512",
+  "changed_files": [],
+  "acceptance": {
+    "name": "frozen_junit_acceptance",
+    "passed": false,
+    "detail": {
+      "returncode": 1,
+      "timed_out": false,
+      "wall_seconds": 165.057,
+      "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.04s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.88s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.24s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 12.74s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 13.15s\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.54s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 14.46s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n ↳ Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.43s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.91s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n ↳ Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 4.23s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m✓\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 22.63s\nTotal runtime: 71.38s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n\n> Task :compileTestJava\n\n> Task :compileTestJava FAILED\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n4 actionable tasks: 4 executed\n",
+      "stderr_tail": "/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:35: error: cannot find symbol\n        var overview = QuestOverview.fromSnapshot(source, \"2026-09-30T12:00:00Z\");\n                                    ^\n  symbol:   method fromSnapshot(QuestSnapshot,String)\n  location: class QuestOverview\n/work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:54: error: cannot find symbol\n        var locked = QuestOverview.fromSnapshot(snapshot(true), \"2026-09-30T12:00:00Z\");\n                                  ^\n  symbol:   method fromSnapshot(QuestSnapshot,String)\n  location: class QuestOverview\n2 errors\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':compileTestJava'.\n> Compilation failed; see the compiler output below.\n  /work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:35: error: cannot find symbol\n          var overview = QuestOverview.fromSnapshot(source, \"2026-09-30T12:00:00Z\");\n                                      ^\n    symbol:   method fromSnapshot(QuestSnapshot,String)\n    location: class QuestOverview\n  /work/candidate/src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java:54: error: cannot find symbol\n          var locked = QuestOverview.fromSnapshot(snapshot(true), \"2026-09-30T12:00:00Z\");\n                                    ^\n    symbol:   method fromSnapshot(QuestSnapshot,String)\n    location: class QuestOverview\n  2 errors\n\n* Try:\n> Check your code and dependencies to fix the compilation error(s)\n> Run with --scan to generate a Build Scan (powered by Develocity).\n\nBUILD FAILED in 2m 44s\n",
+      "tests": [],
+      "acceptance_mismatches": [
+        {
+          "class_name": "dev.atmcompanion.integration.quest.QuestOverviewSnapshotProjectionAcceptanceTest",
+          "expected_cases": 1,
+          "observed_cases": 0,
+          "failures_errors_skipped": 0
+        }
+      ],
+      "report_error": "Gradle exited without fresh JUnit XML reports"
+    }
+  },
+  "full_gate": null,
+  "verification": {
+    "passed": false,
+    "isolation": {
+      "backend": "docker",
+      "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+      "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+      "available": true,
+      "network": "none",
+      "rootfs": "readonly",
+      "source": "sanitized-readonly",
+      "workspace": "tmpfs",
+      "limits": {
+        "pids": 384,
+        "memory": "4g",
+        "memory_swap": "4g",
+        "swap_additional": "0 bytes",
+        "cpus": 2
+      },
+      "java_runtime": "pinned JDK 21 in verifier image",
+      "gradle_wrapper_version": "9.2.1",
+      "host_controlled_build_concurrency": {
+        "gradle_max_workers": 2,
+        "gradle_heap": "-Xmx768m",
+        "active_processor_count": 2
+      },
+      "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+      "inherited_host_environment": [],
+      "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution"
+    }
+  },
+  "review": {
+    "approve": false,
+    "summary": "The requested factory method is missing, and deterministic verification failed.",
+    "issues": [
+      "The proposed diff is empty and does not implement QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp).",
+      "Acceptance tests failed to compile because QuestOverview.fromSnapshot(QuestSnapshot, String) could not be found; no acceptance tests ran.",
+      "Deterministic verification failed.",
+      "One or more agents failed; partial proposals cannot be approved.",
+      "No valid scoped edits were produced."
+    ],
+    "confidence": 1.0
+  },
+  "agent_calls": [
+    {
+      "role": "planner",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_0f16171c26a453fb006abdf3c4fbf0819f96c566452dc404b6",
+      "turn_id": "turn_0f16171c26a453fb006abdf3cb4098819f9ce3975165aff03d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:47:22.593093+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 36.086,
+      "call_id": "723add052512:call:0001"
+    },
+    {
+      "role": "backend",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_0c80b3be638c7907006abdf3f1b1bc81a38b9c17f315eeff74",
+      "turn_id": "turn_0c80b3be638c7907006abdf3f4e9f081a3a2c91c26cce31994",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:47:41.578153+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 10.376,
+      "call_id": "723add052512:call:0002"
+    },
+    {
+      "role": "backend",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_0c80b3be638c7907006abdf3f1b1bc81a38b9c17f315eeff74",
+      "turn_id": "turn_0c80b3be638c7907006abdf3febcec81a3ba004e23a84e5ab5",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:47:51.895672+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 10.103,
+      "call_id": "723add052512:call:0003"
+    },
+    {
+      "role": "tests",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_02e6a38496f3d314006abdf40f7b7481a29596ef630c0e46f3",
+      "turn_id": "turn_02e6a38496f3d314006abdf414a35481a2ab6169d5ce0f5ffa",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:48:13.425090+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 13.099,
+      "call_id": "723add052512:call:0004"
+    },
+    {
+      "role": "tests",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_02e6a38496f3d314006abdf40f7b7481a29596ef630c0e46f3",
+      "turn_id": "turn_02e6a38496f3d314006abdf42269e881a2ae58dd436e919fee",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:48:29.275324+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 16.842,
+      "call_id": "723add052512:call:0005"
+    },
+    {
+      "role": "reviewer",
+      "provider": "openai_agents",
+      "model": "gpt-6-astra",
+      "session_id": "sess_0985e7ff77a356ab006abdf519cbd081a2aead54b0bf23566c",
+      "turn_id": "turn_0985e7ff77a356ab006abdf51d083c81a2900c8bf3499674b8",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "cached_input_tokens": null,
+      "reasoning_tokens": null,
+      "usage_status": "unavailable",
+      "usage_observed_at": "2026-10-01T05:52:41.039005+00:00",
+      "usage_source": "unavailable",
+      "status": "completed",
+      "wall_seconds": 14.292,
+      "call_id": "723add052512:call:0006"
+    }
+  ],
+  "wall_seconds": 366.728
+}

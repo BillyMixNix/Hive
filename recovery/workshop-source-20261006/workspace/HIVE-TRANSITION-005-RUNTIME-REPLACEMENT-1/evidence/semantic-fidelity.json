@@ -1,0 +1,45 @@
+{
+  "exact_original_task_present": true,
+  "complete_owned_baseline_source_present": true,
+  "worker_prompt_sha256": "47443588cb4bd464bbccfd6a8702984c2054bb3f0bbbee4dcaf975577e35ee45",
+  "planner_local_acceptance": "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS.",
+  "requirements": {
+    "R1": {
+      "task_phrase": "preserve complete UTF-16 surrogate pairs",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "PRESENT_EXPLICITLY"
+    },
+    "R2": {
+      "task_phrase": "control-character",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "ABSENT"
+    },
+    "R3": {
+      "task_phrase": "section-sign sanitization",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "ABSENT"
+    },
+    "R4": {
+      "task_phrase": "the ... suffix",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "ABSENT"
+    },
+    "R5": {
+      "task_phrase": "unchanged behavior for ordinary ASCII lines",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "ABSENT"
+    },
+    "R6": {
+      "task_phrase": "never introduce an unpaired surrogate",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "PRESENT_EXPLICITLY"
+    },
+    "R7": {
+      "task_phrase": "return a string longer than the bound",
+      "worker_request": "PRESENT_EXPLICITLY",
+      "raw_planner": "PRESENT_EXPLICITLY"
+    }
+  },
+  "interpretation": "Planner omissions remain in local summary/criteria, but the host-authoritative original task reaches the worker independently. This is request-transport evidence, not evidence of worker compliance.",
+  "no_frozen_test_source_supplied_by_harness": true
+}

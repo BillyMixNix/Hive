@@ -1,0 +1,86 @@
+{
+  "label": "0027-periodic",
+  "started_at": "2026-10-06T07:39:56.361540+00:00",
+  "monotonic_start": 184507.3829421,
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-06T07:39:57.1686122Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 7056448,
+        "total_virtual_kib": 26862152,
+        "free_virtual_kib": 5276448,
+        "available_bytes": 7220670464,
+        "committed_bytes": 22104903680,
+        "commit_limit_bytes": 27506843648
+      },
+      "related_processes": [
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 20076,
+          "ParentProcessId": 18920,
+          "WorkingSetSize": 24305664,
+          "PrivatePageCount": 88395776,
+          "UserModeTime": 169531250,
+          "KernelModeTime": 182187500,
+          "CommandLine": "\"D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe\""
+        },
+        {
+          "Name": "com.docker.backend.exe",
+          "ProcessId": 1888,
+          "ParentProcessId": 20076,
+          "WorkingSetSize": 122077184,
+          "PrivatePageCount": 178528256,
+          "UserModeTime": 1815781250,
+          "KernelModeTime": 4809531250,
+          "CommandLine": "D:\\HiveRuntime\\DockerDesktop\\resources\\com.docker.backend.exe services"
+        },
+        {
+          "Name": "ollama.exe",
+          "ProcessId": 3116,
+          "ParentProcessId": 19664,
+          "WorkingSetSize": 24653824,
+          "PrivatePageCount": 79331328,
+          "UserModeTime": 835156250,
+          "KernelModeTime": 781875000,
+          "CommandLine": "\"C:\\Users\\billy\\AppData\\Local\\Programs\\Ollama\\ollama.exe\" serve"
+        },
+        {
+          "Name": "vmmemWSL",
+          "ProcessId": 26596,
+          "ParentProcessId": 11304,
+          "WorkingSetSize": 2723028992,
+          "PrivatePageCount": 3781185536,
+          "UserModeTime": 0,
+          "KernelModeTime": 16059218750,
+          "CommandLine": null
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 617, 5339\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": []
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "docker": {
+    "exit_code": 0,
+    "stdout": "{\"Command\":\"\\\"python3 /opt/verifier/runner.py jvm-full {\\\\\\\"version\\\\\\\":\\\\\\\"9.2.1\\\\\\\",\\\\\\\"distribution\\\\\\\":\\\\\\\"gradle-9.2.1-bin.zip\\\\\\\",\\\\\\\"distribution_sha256\\\\\\\":\\\\\\\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\\\\\\\",\\\\\\\"wrapper_jar_sha256\\\\\\\":\\\\\\\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\\\\\\\",\\\\\\\"wrapper_properties_sha256\\\\\\\":\\\\\\\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\\\\\\\",\\\\\\\"full_tasks\\\\\\\":[\\\\\\\"clean\\\\\\\",\\\\\\\"build\\\\\\\",\\\\\\\"runGameTestServer\\\\\\\",\\\\\\\"runQuestTestServer\\\\\\\",\\\\\\\"packTestJar\\\\\\\"],\\\\\\\"verification_policy_sha256\\\\\\\":\\\\\\\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\\\\\\\",\\\\\\\"external_build_inputs\\\\\\\":{\\\\\\\"kind\\\\\\\":\\\\\\\"neoformruntime\\\\\\\",\\\\\\\"cache_relative\\\\\\\":\\\\\\\"caches/neoformruntime\\\\\\\",\\\\\\\"input_directories\\\\\\\":[\\\\\\\"artifacts\\\\\\\",\\\\\\\"assets\\\\\\\"]},\\\\\\\"runtime_output_dirs\\\\\\\":[\\\\\\\"run-gametest\\\\\\\",\\\\\\\"run-questtest\\\\\\\"],\\\\\\\"frozen_tests\\\\\\\":[{\\\\\\\"path\\\\\\\":\\\\\\\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\\\\\\\",\\\\\\\"class_name\\\\\\\":\\\\\\\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\\\\\\\",\\\\\\\"expected_cases\\\\\\\":3,\\\\\\\"sha256\\\\\\\":\\\\\\\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\\\\\\\"}],\\\\\\\"targeted_timeout\\\\\\\":240,\\\\\\\"full_timeout\\\\\\\":600,\\\\\\\"external_build_inputs_manifest_sha256\\\\\\\":\\\\\\\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\\\\\\\",\\\\\\\"nfrt_seed_sha256\\\\\\\":\\\\\\\"9ec38a4912981e3e34e0ee4bbeb7c8dfa04a6d23beba3b49829a43e5b2a124a3\\\\\\\"}\\\"\",\"CreatedAt\":\"2026-10-06 00:37:09 -0700 PDT\",\"HealthStatus\":\"none\",\"ID\":\"88c82c467c195d1916c2e2887f7e4d10193cd861d10f4c9f6e79be66b12c9e88\",\"Image\":\"nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy\",\"Labels\":\"desktop.docker.io/mounts/0/Source=C:\\\\Users\\\\billy\\\\AppData\\\\Local\\\\Temp\\\\hive-verifier-input-w82n6hui\\\\source,desktop.docker.io/mounts/0/SourceKind=hostFile,desktop.docker.io/mounts/0/Target=/source,desktop.docker.io/mounts/1/Source=C:\\\\Users\\\\billy\\\\Documents\\\\Codex\\\\2026-10-05\\\\hive-transition-001-diagnose-and-repair\\\\HIVE-FACTORIAL-003R1\\\\repaired-workshop\\\\verification\\\\jvm_runner.py,desktop.docker.io/mounts/1/SourceKind=hostFile,desktop.docker.io/mounts/1/Target=/opt/verifier/jvm_runner.py,desktop.docker.io/mounts/2/Source=C:\\\\Users\\\\billy\\\\Documents\\\\Codex\\\\2026-10-05\\\\hive-transition-001-diagnose-and-repair\\\\HIVE-FACTORIAL-003R1\\\\repaired-workshop\\\\verification\\\\nfrt_seed.py,desktop.docker.io/mounts/2/SourceKind=hostFile,desktop.docker.io/mounts/2/Target=/opt/verifier/nfrt_seed.py,desktop.docker.io/mounts/3/Source=C:\\\\Users\\\\billy\\\\Documents\\\\Codex\\\\2026-09-13\\\\referenced-chatgpt-conversation-this-is-an\\\\work\\\\Nix-Workshop-v0.11.1-persistent-agents\\\\Nix_Workshop_v0_11_1\\\\hive_runs\\\\approved-gradle-caches\\\\e5a7c314b902\\\\caches\\\\neoformruntime\\\\intermediate_results,desktop.docker.io/mounts/3/SourceKind=hostFile,desktop.docker.io/mounts/3/Target=/approved-nfrt-intermediates,desktop.docker.io/mounts/4/Source=C:\\\\Users\\\\billy\\\\Documents\\\\Codex\\\\2026-10-05\\\\hive-transition-001-diagnose-and-repair\\\\HIVE-NFRT-ATTESTATION-002\\\\evidence\\\\approved-nfrt-seed-v2.json,desktop.docker.io/mounts/4/SourceKind=hostFile,desktop.docker.io/mounts/4/Target=/tmp/hive-nfrt-seed.json,desktop.docker.io/mounts/5/Source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/modules-2,desktop.docker.io/mounts/5/SourceKind=hostFile,desktop.docker.io/mounts/5/Target=/approved-gradle-cache/modules-2,desktop.docker.io/mounts/6/Source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/wrapper/dists/gradle-9.2.1-bin,desktop.docker.io/mounts/6/SourceKind=hostFile,desktop.docker.io/mounts/6/Target=/approved-gradle-cache/wrapper/dists/gradle-9.2.1-bin,desktop.docker.io/mounts/7/Source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/neoformruntime/assets,desktop.docker.io/mounts/7/SourceKind=hostFile,desktop.docker.io/mounts/7/Target=/approved-gradle-cache/neoformruntime/assets,desktop.docker.io/mounts/8/Source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/neoformruntime/artifacts,desktop.docker.io/mounts/8/SourceKind=hostFile,desktop.docker.io/mounts/8/Target=/approved-gradle-cache/neoformruntime/artifacts,desktop.docker.io/mounts/9/Source=C:/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/e5a7c314b902/external-build-inputs.manifest.json,desktop.docker.io/mounts/9/SourceKind=hostFile,desktop.docker.io/mounts/9/Target=/tmp/hive-external-build-inputs.manifest.json,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.version=22.04\",\"LocalVolumes\":\"0\",\"Mounts\":\"/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/modules-2,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-10-05/hive-transition-001-diagnose-and-repair/HIVE-FACTORIAL-003R1/repaired-workshop/verification/jvm_runner.py,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-10-05/hive-transition-001-diagnose-and-repair/HIVE-FACTORIAL-003R1/repaired-workshop/verification/nfrt_seed.py,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/e5a7c314b902/external-build-inputs.manifest.json,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-10-05/hive-transition-001-diagnose-and-repair/HIVE-NFRT-ATTESTATION-002/evidence/approved-nfrt-seed-v2.json,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/neoformruntime/artifacts,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/neoformruntime/assets,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/wrapper/dists/gradle-9.2.1-bin,/run/desktop/mnt/host/c/Users/billy/Documents/Codex/2026-09-13/referenced-chatgpt-conversation-this-is-an/work/Nix-Workshop-v0.11.1-persistent-agents/Nix_Workshop_v0_11_1/hive_runs/approved-gradle-caches/e5a7c314b902/caches/neoformruntime/intermediate_results,/run/desktop/mnt/host/c/Users/billy/AppData/Local/Temp/hive-verifier-input-w82n6hui/source\",\"Names\":\"hive-verify-ee10a23e906f\",\"Networks\":\"none\",\"Platform\":{\"architecture\":\"amd64\",\"os\":\"linux\"},\"Ports\":\"\",\"RunningFor\":\"2 minutes ago\",\"Size\":\"57.3kB (virtual 690MB)\",\"State\":\"running\",\"Status\":\"Up 2 minutes\"}\n",
+    "stderr": ""
+  },
+  "finished_at": "2026-10-06T07:39:58.176768+00:00"
+}

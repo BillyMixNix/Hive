@@ -1,0 +1,19 @@
+{
+  "summary": "Modify SnapshotFormatter.boundLine to preserve UTF-16 surrogate pairs during truncation",
+  "ui_goal": "no change needed",
+  "backend_goal": "Update SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs during truncation while maintaining existing sanitization and truncation behavior",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"],
+    "tests": []
+  },
+  "acceptance": ["Truncation preserves complete UTF-16 surrogate pairs without introducing unpaired surrogates", "Maintains existing control-character and section-sign sanitization", "Adds ... suffix for truncated lines", "Leaves ASCII lines unchanged"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Implements UTF-16 surrogate pair preservation in boundLine with truncation logic", "Maintains existing sanitization and truncation behavior"],
+    "tests": []
+  },
+  "interface_contracts": [],
+  "provider_changes": []
+}

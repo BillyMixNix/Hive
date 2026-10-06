@@ -1,0 +1,26 @@
+{
+  "request": "Add `QuestOverview.completionPercent()`. It is the integer percentage `floor(100 * completedQuests / questCount)`, using total quests as the denominator, not available quests. Return zero when `questCount` is zero. Do not change the stored counts or availability semantics.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/integration/quest/QuestOverviewCompletionPercentAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.integration.quest.QuestOverviewCompletionPercentAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.integration.quest;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass QuestOverviewCompletionPercentAcceptanceTest {\n    private QuestOverview overview(int total, int completed, int available, boolean locked) {\n        var options = java.util.stream.IntStream.range(0, Math.min(QuestOverview.MAX_OPTIONS, available))\n                .mapToObj(i -> new QuestOverview.Option(String.format(java.util.Locale.ROOT, \"%016X\", i + 1),\n                        \"0000000000000001\", \"Quest \" + i)).toList();\n        return new QuestOverview(1, \"2026-09-30T12:00:00Z\", OptionalQuestAccess.SUPPORTED_VERSION,\n                QuestSnapshot.TEAM_SCOPE, locked, 1, total, completed, available, options,\n                QuestSnapshot.AVAILABILITY_RULE, QuestOverview.OMITTED_DETAILS);\n    }\n\n    @Test\n    void usesAllQuestsRatherThanAvailableQuestsAndHandlesZero() {\n        assertEquals(30, overview(10, 3, 2, false).completionPercent());\n        assertEquals(0, overview(0, 0, 0, true).completionPercent());\n        assertEquals(99, overview(QuestSnapshot.MAX_QUESTS, QuestSnapshot.MAX_QUESTS - 1,\n                0, false).completionPercent());\n        assertEquals(100, overview(10, 10, 0, true).completionPercent());\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "T006",
+    "replicate_index": 1,
+    "trial_id": "23b7bf7850b4",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

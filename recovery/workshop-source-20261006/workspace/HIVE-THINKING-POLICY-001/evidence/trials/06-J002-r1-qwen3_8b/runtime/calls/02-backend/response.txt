@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "summary": "Validated input parameters in IngredientAllocation.canSatisfy to reject null/invalid values",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java",
+      "operation": "replace",
+      "find": "public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {",
+      "replace": "public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {\n        if (matchingSlots == null || counts == null) {\n            throw new IllegalArgumentException(\"Null input parameters\");\n        }\n        if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {\n            throw new IllegalArgumentException(\"Crafting allocation bounds exceeded\");\n        }\n        if (counts.values().stream().anyMatch(count -> count < 0)) {\n            throw new IllegalArgumentException(\"Negative stack count\");\n        }\n        if (matchingSlots.stream().anyMatch(slots -> slots == null || slots.contains(null))) {\n            throw new IllegalArgumentException(\"Null slot identity in matching-slot lists\");\n        }\n        if (counts.values().stream().anyMatch(count -> count == null)) {\n            throw new IllegalArgumentException(\"Null count value in counts map\");\n        }\n        if (matchingSlots.stream().anyMatch(slots -> slots.stream().anyMatch(slot -> slot < 0 || slot >= 36))) {\n            throw new IllegalArgumentException(\"Out-of-range slot identity in matching-slot lists\");\n        }\n        if (counts.values().stream().anyMatch(count -> count < 0)) {\n            throw new IllegalArgumentException(\"Negative stack count\");\n        }\n"
+    }
+  ],
+  "risks": []
+}

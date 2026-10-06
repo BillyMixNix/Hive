@@ -1,0 +1,76 @@
+{
+  "run_id": "45ad10e6dd49",
+  "classification": "MODEL_TASK_FAILURE",
+  "status": "rejected",
+  "exactly_one_trial": true,
+  "model_calls": [
+    "planner",
+    "backend",
+    "backend",
+    "reviewer"
+  ],
+  "planner_first_attempt_valid": true,
+  "planner_corrections": 0,
+  "first_request_equal_to_transition_002_except_format": true,
+  "ownership": {
+    "ui": [],
+    "backend": [
+      "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+    ],
+    "tests": []
+  },
+  "skipped_roles": {
+    "ui": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    },
+    "tests": {
+      "status": "skipped",
+      "reason": "no change needed",
+      "planned_files": []
+    }
+  },
+  "worker_source_grounding": {
+    "entire_owned_baseline_file_in_initial_prompt": true,
+    "entire_owned_baseline_file_in_correction_prompt": true,
+    "exact_original_ascii_requirement_in_planner_prompt": true,
+    "ascii_requirement_explicit_in_worker_prompt": false,
+    "note": "Complete source grounding does not prove complete semantic preservation of planner-derived acceptance."
+  },
+  "input_tokens": [
+    3834,
+    5512,
+    6007,
+    280
+  ],
+  "output_cap_slack": [
+    6406,
+    776,
+    281,
+    10472
+  ],
+  "temporary_scoped_edit_applied": true,
+  "targeted_verification_attempted": true,
+  "targeted_verification": {
+    "passed": false,
+    "checks": [
+      {
+        "name": "isolated_verifier",
+        "passed": false,
+        "detail": "Isolated verification timed out after 240s."
+      }
+    ]
+  },
+  "targeted_corrections": 1,
+  "identical_correction_rejected": true,
+  "final_error": "RepeatedFailedProposal: targeted correction repeated the exact effective proposal that failed deterministic verification",
+  "frozen_acceptance": "No result; reaching individual JUnit cases is not observable after verifier timeout.",
+  "full_gate_executed": false,
+  "final_changed_files": [],
+  "final_stage_file_restored_to_baseline": true,
+  "external_candidate_hash_matches_baseline": true,
+  "applied": false,
+  "furthest_verified_transition": "Executable scoped edit -> targeted deterministic verifier invocation (240-second timeout; no acceptance).",
+  "wall_seconds": 860.924
+}

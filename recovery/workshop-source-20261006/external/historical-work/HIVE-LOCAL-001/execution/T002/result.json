@@ -1,0 +1,66 @@
+{
+  "task_id": "T002",
+  "group": "replication",
+  "trial_id": "6b12f708253b",
+  "status": "rejected",
+  "classification": "VERIFIER_INFRA_FAILURE",
+  "applied": false,
+  "job_id": "1377a70dbe3e40b2b84faff3ab0e4ae4",
+  "run_id": "4cbf975ee5ca",
+  "changed_files": [],
+  "planner_outcome": "Harden the `ActivityDiffService.diff` method to reject null or negative item counts and preserve 64-bit arithmetic.",
+  "repairs": {
+    "structural": 1,
+    "targeted": 1,
+    "replans": 0
+  },
+  "model": {
+    "model_calls": 7,
+    "model_call_wall_seconds": 1570.261,
+    "reported_input_tokens": 33029,
+    "reported_output_tokens": 1757,
+    "prompt_sizes": [
+      {
+        "role": "planner",
+        "chars": 16785,
+        "sha256": "359906b2a4707074f23aa32d42af31cf6b692f8a08704cd96acd08a312ebf9e0"
+      },
+      {
+        "role": "planner",
+        "chars": 20194,
+        "sha256": "69b49a7c509dbac57c1302c7226f1e327e4001ca2fa7574ea1c0dd095ba8549a"
+      },
+      {
+        "role": "backend",
+        "chars": 25917,
+        "sha256": "aa0fd1664660399592164a8a38404991a00743a320ba044da586502062155fe0"
+      },
+      {
+        "role": "backend",
+        "chars": 28022,
+        "sha256": "685065150c75aa0505d1778394217555f8592948d939342a23b9b0d9372d0169"
+      },
+      {
+        "role": "tests",
+        "chars": 26196,
+        "sha256": "16d26944efbc13a53aa4d272dc9f7d348bce24d1c8c38e2611ac1ff30817ef51"
+      },
+      {
+        "role": "tests",
+        "chars": 29600,
+        "sha256": "968374ed4b04f6eebf46f1008b7e9516bfe72432f447a7b64d5d77dd5ad88325"
+      },
+      {
+        "role": "reviewer",
+        "chars": 1064,
+        "sha256": "8dc10dd4a311d2f78111b88528503e69e8d7272281fc97ec2f571469201b3be3"
+      }
+    ]
+  },
+  "integrity": {
+    "baseline_unchanged": true,
+    "candidate_unchanged": true
+  },
+  "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "wall_seconds": 2101.851
+}

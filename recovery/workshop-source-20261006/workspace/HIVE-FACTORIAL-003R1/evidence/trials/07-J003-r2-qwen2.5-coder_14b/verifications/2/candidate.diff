@@ -1,0 +1,25 @@
+--- a/src/main/java/dev/atmcompanion/state/Observation.java
++++ b/src/main/java/dev/atmcompanion/state/Observation.java
+@@ -18,6 +18,22 @@
+         return new Observation<>(CapabilityStatus.UNAVAILABLE, null, reason);
+     }
+     public static <T> Observation<T> notIntegrated(String reason) {
++    return new Observation<>(CapabilityStatus.NOT_INTEGRATED, null, reason);
++}
++
++    public <U> Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {
++        if (mapper == null) {
++            throw new IllegalArgumentException("Mapper cannot be null");
++        }
++        if (this.status != CapabilityStatus.AVAILABLE) {
++            return new Observation<>(this.status, null, this.detail);
++        }
++        U mappedData = mapper.apply(this.data);
++        if (mappedData == null) {
++            throw new IllegalArgumentException("Mapped result cannot be null");
++        }
++        return new Observation<>(CapabilityStatus.AVAILABLE, mappedData, this.detail);
++    }
+         return new Observation<>(CapabilityStatus.NOT_INTEGRATED, null, reason);
+     }
+ }

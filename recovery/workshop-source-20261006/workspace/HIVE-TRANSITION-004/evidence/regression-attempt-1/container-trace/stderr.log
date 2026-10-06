@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/opt/verifier/runner.py", line 73, in <module>
+    main()
+  File "/opt/verifier/runner.py", line 36, in main
+    shutil.copytree("/source", "/work", dirs_exist_ok=True)
+  File "/usr/lib/python3.10/shutil.py", line 559, in copytree
+    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+  File "/usr/lib/python3.10/shutil.py", line 513, in _copytree
+    raise Error(errors)
+shutil.Error: [('/source', '/work', '[Errno 1] Operation not permitted')]

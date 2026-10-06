@@ -1,0 +1,1063 @@
+[
+  {
+    "task_id": "T001",
+    "group": "replication",
+    "trial_id": "eee449c2a37c",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "e539133c14554e1fbbf6d0608b50ae76",
+    "run_id": "66e6c7425fa9",
+    "changed_files": [],
+    "planner_outcome": "Add a method to count ActivityEvent types in ActivitySummary.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1244.294,
+      "reported_input_tokens": 30714,
+      "reported_output_tokens": 1448,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16598,
+          "sha256": "fa7f929e8ccc4b19a12485335a2089dd0de7ca69a8275e2dfe50cd7756428609"
+        },
+        {
+          "role": "planner",
+          "chars": 19888,
+          "sha256": "80918dc7b5ef9fa19b1f6eefeb5991d68052eac1a295344e8b85642db9b67fb4"
+        },
+        {
+          "role": "backend",
+          "chars": 23819,
+          "sha256": "b08c03a873b7d51bf9541da1953f41dd651057c4352df8d6d8f45026f73cdd0b"
+        },
+        {
+          "role": "backend",
+          "chars": 26338,
+          "sha256": "42a9e4fb090466cd60bbbf4298d553ffe5975a928e885645dab1a9c596a3d7ff"
+        },
+        {
+          "role": "tests",
+          "chars": 24848,
+          "sha256": "25d081be70a762d4b2dc4d73ca265d0c76f90427932faabf7be2a879daaef04c"
+        },
+        {
+          "role": "tests",
+          "chars": 27842,
+          "sha256": "34c6f7d7364fcde361d406a18ff9b7a1707ec39a03bbe7504860ff7d18d328bb"
+        },
+        {
+          "role": "reviewer",
+          "chars": 877,
+          "sha256": "1e333261fb6023d7f5a83308912ac971d334ef9ca21765085527dae897efaa12"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1264.245
+  },
+  {
+    "task_id": "T002",
+    "group": "replication",
+    "trial_id": "6b12f708253b",
+    "status": "rejected",
+    "classification": "VERIFIER_INFRA_FAILURE",
+    "applied": false,
+    "job_id": "1377a70dbe3e40b2b84faff3ab0e4ae4",
+    "run_id": "4cbf975ee5ca",
+    "changed_files": [],
+    "planner_outcome": "Harden the `ActivityDiffService.diff` method to reject null or negative item counts and preserve 64-bit arithmetic.",
+    "repairs": {
+      "structural": 1,
+      "targeted": 1,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1570.261,
+      "reported_input_tokens": 33029,
+      "reported_output_tokens": 1757,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16785,
+          "sha256": "359906b2a4707074f23aa32d42af31cf6b692f8a08704cd96acd08a312ebf9e0"
+        },
+        {
+          "role": "planner",
+          "chars": 20194,
+          "sha256": "69b49a7c509dbac57c1302c7226f1e327e4001ca2fa7574ea1c0dd095ba8549a"
+        },
+        {
+          "role": "backend",
+          "chars": 25917,
+          "sha256": "aa0fd1664660399592164a8a38404991a00743a320ba044da586502062155fe0"
+        },
+        {
+          "role": "backend",
+          "chars": 28022,
+          "sha256": "685065150c75aa0505d1778394217555f8592948d939342a23b9b0d9372d0169"
+        },
+        {
+          "role": "tests",
+          "chars": 26196,
+          "sha256": "16d26944efbc13a53aa4d272dc9f7d348bce24d1c8c38e2611ac1ff30817ef51"
+        },
+        {
+          "role": "tests",
+          "chars": 29600,
+          "sha256": "968374ed4b04f6eebf46f1008b7e9516bfe72432f447a7b64d5d77dd5ad88325"
+        },
+        {
+          "role": "reviewer",
+          "chars": 1064,
+          "sha256": "8dc10dd4a311d2f78111b88528503e69e8d7272281fc97ec2f571469201b3be3"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2101.851
+  },
+  {
+    "task_id": "T003",
+    "group": "replication",
+    "trial_id": "9a26d861b454",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "288543faa60e45b98689e95e76e20c06",
+    "run_id": "cf894f9ad928",
+    "changed_files": [],
+    "planner_outcome": "Extend `ActivitySummary` with an immutable `Map<ActivityEvent.Type, Long> quantitiesByType` and add `ActivityHistory.summary()` method.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 2421.107,
+      "reported_input_tokens": 33524,
+      "reported_output_tokens": 2648,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16714,
+          "sha256": "92ea54ab53f5fc0aed341f9ab0d201cf0846ba76963308d702c8f19af28a809c"
+        },
+        {
+          "role": "planner",
+          "chars": 20446,
+          "sha256": "4f786c1c3ed4ffed082e41bc7256a8b9ef72a5755f3678722c0008e8ead44ec4"
+        },
+        {
+          "role": "backend",
+          "chars": 25918,
+          "sha256": "3adadc495be76a813215731540f8e59013cab3a1739188dd8669aa9a170acdd1"
+        },
+        {
+          "role": "backend",
+          "chars": 29647,
+          "sha256": "1fe084a1237a4885e545e7b7d81036fde6a24527914557364c055bcbc4332c37"
+        },
+        {
+          "role": "tests",
+          "chars": 26831,
+          "sha256": "c1253f221c2f3d6725bf0ce7143bc10ef48f1a9726ee858c87610d9091bc32fa"
+        },
+        {
+          "role": "tests",
+          "chars": 30458,
+          "sha256": "eac79c24a034cf9c51413241dddb2e39fa25614307507a3bb42a60e917d0cb43"
+        },
+        {
+          "role": "reviewer",
+          "chars": 993,
+          "sha256": "5e55260bbd178300c2b380066767f5b4a1f84979b342c0ac612dfae2ba32eab3"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2445.154
+  },
+  {
+    "task_id": "T004",
+    "group": "replication",
+    "trial_id": "d050c21d56ab",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "eb95e032ad5a46a48cb971227e5fcfa7",
+    "run_id": "24011d8e7829",
+    "changed_files": [],
+    "planner_outcome": "Add `ActivityHistory.recent(int limit)` method with validation and return immutable list.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1371.676,
+      "reported_input_tokens": 31191,
+      "reported_output_tokens": 1637,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16640,
+          "sha256": "f0f34852779de49953e2768a3d719ba9939dce93b4f5eb62bed6012b7c76ca15"
+        },
+        {
+          "role": "planner",
+          "chars": 19958,
+          "sha256": "1f9c5f08d56030b9533a4b2d5970703f5f0afc0839d1fb4543a3a4496a2a8136"
+        },
+        {
+          "role": "backend",
+          "chars": 24521,
+          "sha256": "6ecbb43ae58a6204dc4207c11b9badc94b5704aa2a1c1ccdf78cbeed70ad8668"
+        },
+        {
+          "role": "backend",
+          "chars": 27230,
+          "sha256": "5dbeb4eee50e86e93865eadf44f7482548a48f250b18f484bcdb364f6584b744"
+        },
+        {
+          "role": "tests",
+          "chars": 24879,
+          "sha256": "ba41b4cd94c86b4dd8202cf2a715a1a239d4b1d608de0b010ca46717cbb59527"
+        },
+        {
+          "role": "tests",
+          "chars": 27885,
+          "sha256": "88832df7671e17a9a6a6f23e527cd7f88858c9ba3877a8b4dcb5a132f30d2884"
+        },
+        {
+          "role": "reviewer",
+          "chars": 919,
+          "sha256": "8b0390800cab4f0b3c6edd87a4a83daf6729e56c9263ea07a89bf5cacc2a78a0"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1394.153
+  },
+  {
+    "task_id": "T005",
+    "group": "replication",
+    "trial_id": "1c2cee0c02a5",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "9e7e432322ea4ac1b23675e04d36a6e7",
+    "run_id": "14ac772333c2",
+    "changed_files": [],
+    "planner_outcome": "Add `PlanningReport.diagnostics()` method to provide diagnostic information.",
+    "repairs": {
+      "structural": 1,
+      "targeted": 1,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 9,
+      "model_call_wall_seconds": 1411.145,
+      "reported_input_tokens": 41152,
+      "reported_output_tokens": 1654,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16825,
+          "sha256": "5a2ddd1812399ff1c32c21e2fc42963837447bc32c4cb9c1133f2a33ec25c83c"
+        },
+        {
+          "role": "planner",
+          "chars": 20001,
+          "sha256": "253363dc740756be5bd9eff0d26b0a5700e92b5e8da5b8fce268f72948309dff"
+        },
+        {
+          "role": "backend",
+          "chars": 24266,
+          "sha256": "ffe5c90172c6db333e77de5b5137ba091ded4fd1774573d57bc1f195afaa242d"
+        },
+        {
+          "role": "backend",
+          "chars": 26980,
+          "sha256": "78bcd7ec0b1b2665e69a826528855c3f43be5096188132b7f385b3e9454df617"
+        },
+        {
+          "role": "tests",
+          "chars": 23808,
+          "sha256": "79deda64e6a3927d0cfb8fd258d516110009c2d733aa4d77499e779f730e5b9a"
+        },
+        {
+          "role": "tests",
+          "chars": 24567,
+          "sha256": "fd0c1584ee0f3df18885e5e2c63d3118db171b95ee6836792963607aa611f71b"
+        },
+        {
+          "role": "tests",
+          "chars": 24967,
+          "sha256": "a86ada07e765f2905304f5f707e1793c9cc3273357148b07e5da52350354f3ae"
+        },
+        {
+          "role": "tests",
+          "chars": 27579,
+          "sha256": "fe57b49c1755a5624a3e0037dff8ca65ca73f9f4e6eefcd63ba4e4c35d6edc60"
+        },
+        {
+          "role": "reviewer",
+          "chars": 1104,
+          "sha256": "58ebd3f9fe3cd13b32211b030b4ae8ea9475f84941f9eff11e72a2edea74369b"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1699.838
+  },
+  {
+    "task_id": "T006",
+    "group": "replication",
+    "trial_id": "23b7bf7850b4",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "b0910f76be3a435bac0bf508f8eb8668",
+    "run_id": "706713dcb846",
+    "changed_files": [],
+    "planner_outcome": "Add `QuestOverview.completionPercent()` method to calculate the percentage of completed quests.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1307.5,
+      "reported_input_tokens": 33018,
+      "reported_output_tokens": 1477,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16627,
+          "sha256": "558830859a0da46a080d8f67cf7f4310f9c77b1c006f258475dce39064e3c9aa"
+        },
+        {
+          "role": "planner",
+          "chars": 19871,
+          "sha256": "ee89c7b00ffc07be236a923bcacda70ac2ff57b712001f3f838feabf7f1c0462"
+        },
+        {
+          "role": "backend",
+          "chars": 25783,
+          "sha256": "6712278677d9b1effad1430f5ddbe72297d9740fbda1c9c95dfb29c3bcd4d0ef"
+        },
+        {
+          "role": "backend",
+          "chars": 28239,
+          "sha256": "f1919049e51f79c251044005d2199de65d73ed38e19308ecfe60c9754fb5c3dd"
+        },
+        {
+          "role": "tests",
+          "chars": 26969,
+          "sha256": "ae412ffdd6d3026d42b1bb33c2dc1a97236d79274f35dfabac2def413396f33e"
+        },
+        {
+          "role": "tests",
+          "chars": 29815,
+          "sha256": "45ed27e61af9e5eb759f04c4f4565d3294ab1090b02e8288291b7769ad05d36b"
+        },
+        {
+          "role": "reviewer",
+          "chars": 906,
+          "sha256": "e66e9d6a5af6f6d12c60ad988026cf3a479f5f98530e72eed67fbe83e168501e"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1328.863
+  },
+  {
+    "task_id": "T007",
+    "group": "replication",
+    "trial_id": "83bab41571f1",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "43fb9fdc95b24ff4b40c83764fa12693",
+    "run_id": "28a05cbd95b0",
+    "changed_files": [],
+    "planner_outcome": "Add immutable record `ActivityWindow` and method `ActivityHistory.between` with specified behavior and constraints.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 2409.476,
+      "reported_input_tokens": 32857,
+      "reported_output_tokens": 2802,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16821,
+          "sha256": "5f1ef64e3039576505c41454f7fb25b0f18430b4eb0cbbfe23299bc6e05e589d"
+        },
+        {
+          "role": "planner",
+          "chars": 20943,
+          "sha256": "228b09402b776bb77d83030164b963da8490878b53948a99a2a4be6ea61f8e4f"
+        },
+        {
+          "role": "backend",
+          "chars": 25663,
+          "sha256": "485b01ddf527dc52cafef6b2f64180dd33a0faec3c0f199bc06454d826964647"
+        },
+        {
+          "role": "backend",
+          "chars": 28903,
+          "sha256": "3661b6c69ff8c8e3bbcf02fc312e51acefec00d09593bd0b15a7ee6c813ce9de"
+        },
+        {
+          "role": "tests",
+          "chars": 25573,
+          "sha256": "4cba88d170fa467e6871908b74151ef66885284069a7129fe940f49f1105c078"
+        },
+        {
+          "role": "tests",
+          "chars": 29702,
+          "sha256": "d855f1d976150712b34182e89e74ae83fe275e04d492e9b26c19b0eac0795452"
+        },
+        {
+          "role": "reviewer",
+          "chars": 1100,
+          "sha256": "ddf6d90e80ccea28029a7e21da69853226db7d3febe27eff64daaae548fbb6b5"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2429.682
+  },
+  {
+    "task_id": "T008",
+    "group": "replication",
+    "trial_id": "917f3c2e3c22",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "67fd7f2612eb4679ba89b1554d313b9d",
+    "run_id": "828fce6fd6b0",
+    "changed_files": [],
+    "planner_outcome": "Add `QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp)` method in backend.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1149.056,
+      "reported_input_tokens": 32862,
+      "reported_output_tokens": 1321,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16916,
+          "sha256": "e2b359736fc040c88e394cd06ff3fc6c10e24d6d1fa129dbdfc452f0ea22795f"
+        },
+        {
+          "role": "planner",
+          "chars": 20280,
+          "sha256": "89c41e8c926e4bd46dc05a2a4d0677f537ce7260ea3a46205a979d80d11cf582"
+        },
+        {
+          "role": "backend",
+          "chars": 25877,
+          "sha256": "52ce664c66e7ecd96ed7c9f0bc15a52ec5b0046d634af1aa5b700b3c69b94f62"
+        },
+        {
+          "role": "backend",
+          "chars": 28267,
+          "sha256": "c67944de13b526f0d6af184867e58b74f0503b2d8442010729ad52c0bef4b2c8"
+        },
+        {
+          "role": "tests",
+          "chars": 27160,
+          "sha256": "4aaa577253cdece5c5c37fc24f3af65b98f10258ef51ab6dc9d7dc65a89b4d01"
+        },
+        {
+          "role": "tests",
+          "chars": 29893,
+          "sha256": "699c215f2feb84aa581e559dd833c622adf1d22fca1f49ab26c8581c966f57f8"
+        },
+        {
+          "role": "reviewer",
+          "chars": 1195,
+          "sha256": "8ed9fb35f47dd992a8832fe312aa7145aec24955424f04f0baa804b3a81bf3ac"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1168.377
+  },
+  {
+    "task_id": "N001",
+    "group": "novel",
+    "trial_id": "682ed8475062",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "3a9fc582d2fe482ba0f084f083a19387",
+    "run_id": "dc51b0130f2e",
+    "changed_files": [],
+    "planner_outcome": "Add `ActivityEvent.withSource(ActivityEvent.Source source)` method to preserve other fields and reject null source.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1414.108,
+      "reported_input_tokens": 33198,
+      "reported_output_tokens": 1628,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16574,
+          "sha256": "397e4befd41d912ff85a0ef80cfd10adb3ffaf5d291a0ba7fccf5fdc4d674b86"
+        },
+        {
+          "role": "planner",
+          "chars": 20072,
+          "sha256": "361d26e97ea81efe775f41bb220394215616e35e4673f44b11dcefc33b7f5a53"
+        },
+        {
+          "role": "backend",
+          "chars": 25858,
+          "sha256": "d1d35e0698fbf4433efb7d3f56f0082f46abe50548b6a042df1ce82c9eb69ade"
+        },
+        {
+          "role": "backend",
+          "chars": 28490,
+          "sha256": "8f9ef1d7a75297fd955e17574418e0aad320e594545b8fc51dacb3adc6c38893"
+        },
+        {
+          "role": "tests",
+          "chars": 26357,
+          "sha256": "503562f720108ed92d616f4baff046265ee177c2a4adc8ecd985368ba11dbbce"
+        },
+        {
+          "role": "tests",
+          "chars": 29550,
+          "sha256": "766d8c441642cb81d47e4a3d271395fdad0396eed8204b342214894f089655cf"
+        },
+        {
+          "role": "reviewer",
+          "chars": 853,
+          "sha256": "1474016f5971d1632c35f7e00b1803a780560f0c147120e3a6c3185118041876"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1433.759
+  },
+  {
+    "task_id": "N002",
+    "group": "novel",
+    "trial_id": "8a79b068a832",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "a386436e9a2e4149b5bee93bb9d52d4a",
+    "run_id": "aeabd7b29446",
+    "changed_files": [],
+    "planner_outcome": "Add `GameSnapshot.Inventory.totalCount(String itemId)` method to sum counts for a specific registry ID across all stacks.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1390.214,
+      "reported_input_tokens": 34115,
+      "reported_output_tokens": 1537,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16600,
+          "sha256": "660ac46ddd8674bb78e3bdf3d9e4247d4edf9e213cd9bf05546853bbe07bb7b3"
+        },
+        {
+          "role": "planner",
+          "chars": 19989,
+          "sha256": "f0c843757bd16a4afe581a0d4fc74855a9fe8daa4367b295cf63372993495d33"
+        },
+        {
+          "role": "backend",
+          "chars": 28886,
+          "sha256": "812d2c9b831e7635cde517ecd7e544a164b728c190290320e4479da53bcfe335"
+        },
+        {
+          "role": "backend",
+          "chars": 31521,
+          "sha256": "2b801c534f76570137734c8b7e32c5e88f556306037dacc1b5bda8325489290c"
+        },
+        {
+          "role": "tests",
+          "chars": 28468,
+          "sha256": "484c567765a366f4da7ea8dc003c6c36d7e1e0c79641f18f9816e3d1c8ef5d15"
+        },
+        {
+          "role": "tests",
+          "chars": 31452,
+          "sha256": "805556d7c4404646a8f4823f4dadbfa8cb9476afb358960771fbc0820ceef4f9"
+        },
+        {
+          "role": "reviewer",
+          "chars": 879,
+          "sha256": "8be40b2b251d2e4941520ad6dd61669e20e26317f2dd578353a159937f472e14"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1413.741
+  },
+  {
+    "task_id": "N003",
+    "group": "novel",
+    "trial_id": "b743ccbdbacd",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "5003d7554e0e4be7b839f62f77b22649",
+    "run_id": "deb6aef667c3",
+    "changed_files": [],
+    "planner_outcome": "Add `RecipeReport.candidatesForType(String recipeType)` method to filter and return candidates based on recipe type.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1544.26,
+      "reported_input_tokens": 32402,
+      "reported_output_tokens": 1764,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16634,
+          "sha256": "5cc70687471ce29c974ab8caa7580d78a7e6831dc824ab3a4de3cc441487617d"
+        },
+        {
+          "role": "planner",
+          "chars": 20062,
+          "sha256": "ef0ee633b41ec547269b0d177bea0e1085a2ee0d56d722d33987c1f569ea06eb"
+        },
+        {
+          "role": "backend",
+          "chars": 24445,
+          "sha256": "d91021172f1312e490a81c1725be03f5922e1c7471e40ea6c108edce4425b39b"
+        },
+        {
+          "role": "backend",
+          "chars": 27055,
+          "sha256": "931256436bcbae8dff6f48cc2b91e23977b13d7c44f06898a67f4eaa57f7f5d2"
+        },
+        {
+          "role": "tests",
+          "chars": 27141,
+          "sha256": "2468c48c8bfaec664164016903e84c9b36ae71a5ec9e4e1971eaaec190e3f9e4"
+        },
+        {
+          "role": "tests",
+          "chars": 30444,
+          "sha256": "937442d7d28539a0051986e232122346a101d6b3050ed1edabdd89d2910ee5f9"
+        },
+        {
+          "role": "reviewer",
+          "chars": 913,
+          "sha256": "0d411031d6e3353ff47d9736d63cde7effe9884e1c46be71c360d32c68496e45"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1569.22
+  },
+  {
+    "task_id": "N004",
+    "group": "novel",
+    "trial_id": "c38a539e0593",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "095cc94035174d52b7f904bfd639922e",
+    "run_id": "0d611557d1ee",
+    "changed_files": [],
+    "planner_outcome": "Add `ExecutionAssessment.blockingReasons()` method to return blockers and unverified conditions.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1310.051,
+      "reported_input_tokens": 31592,
+      "reported_output_tokens": 1548,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16650,
+          "sha256": "2347d462e214343f17c77d9fcf1d87106376948c27e5ee2d4d47815a5335b998"
+        },
+        {
+          "role": "planner",
+          "chars": 19853,
+          "sha256": "2b5ccf329f07160054cae431bf27365bcd3f45c25109427fe2f2d1c7b7e94d91"
+        },
+        {
+          "role": "backend",
+          "chars": 24788,
+          "sha256": "2927e8dcfca50ed296603142d0a6c5b4a4d73bc336d4cf08f8e03e2ee8d3d45b"
+        },
+        {
+          "role": "backend",
+          "chars": 27273,
+          "sha256": "17be081a453b171b273a92f575b7331f6877f7447897bc5faa60d601547c2030"
+        },
+        {
+          "role": "tests",
+          "chars": 25741,
+          "sha256": "356a3f36686a00e3faf4f22378a9d84fe8e71a8b380520f693d4da07aeca8d2a"
+        },
+        {
+          "role": "tests",
+          "chars": 28927,
+          "sha256": "d43399d390724b8e5ca814edd1705c81524f0f2d66f8db4e4ef6875f903c0a2d"
+        },
+        {
+          "role": "reviewer",
+          "chars": 929,
+          "sha256": "d05129c63ca495671514fac887658336643048c959e0518f0b8d95ab434e54fa"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1328.718
+  },
+  {
+    "task_id": "N005",
+    "group": "novel",
+    "trial_id": "a09b7aedd5d7",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "f02a3d40b2ab4b58a24ff2943c8066f1",
+    "run_id": "4dce34f716dd",
+    "changed_files": [],
+    "planner_outcome": "Add `IntegrationRegistry.inspectSelected(Set<String> capabilities)` method with validation and inspection logic.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 6,
+      "model_call_wall_seconds": 2044.081,
+      "reported_input_tokens": 29202,
+      "reported_output_tokens": 2198,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16796,
+          "sha256": "804ecd59848a02ef178510bb2a384c707b72852cee92a5b4e9f700166eb8a5c1"
+        },
+        {
+          "role": "backend",
+          "chars": 26152,
+          "sha256": "2ac1baa977372eac36f0cb635dc2900ca4bf58a8efa8c475832f40f8cb858fce"
+        },
+        {
+          "role": "backend",
+          "chars": 30175,
+          "sha256": "09c1f343f4827503cba45d808ddb29d0fb920565a693d50e24277e6e4b0c71e8"
+        },
+        {
+          "role": "tests",
+          "chars": 28888,
+          "sha256": "59918308ad7f86ecb156ede3307cf3eb5e96b0a85a64d14830524a4a4c5006a3"
+        },
+        {
+          "role": "tests",
+          "chars": 32942,
+          "sha256": "11876dd8f1d93a55bee695c83dc38d04a2b944123a32dc42501ffc5c72da912a"
+        },
+        {
+          "role": "reviewer",
+          "chars": 1075,
+          "sha256": "35665352f544b5410a32add5895d5e0ad50d990acf6d9f4528a2dc9b0b2941b3"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2065.245
+  },
+  {
+    "task_id": "N006",
+    "group": "novel",
+    "trial_id": "e5b45b525be7",
+    "status": "rejected",
+    "classification": "VERIFIER_INFRA_FAILURE",
+    "applied": false,
+    "job_id": "5bc96ae350e342c48de578e5cb87474e",
+    "run_id": "4786a88691de",
+    "changed_files": [],
+    "planner_outcome": "Add `RecipeSelection.bestOf(List<RecipeSelection> candidates)` method.",
+    "repairs": {
+      "structural": 1,
+      "targeted": 1,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1607.07,
+      "reported_input_tokens": 32601,
+      "reported_output_tokens": 1771,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16692,
+          "sha256": "798212aaa9710c9f43b55ff8516311aa3a8e8deda6127edd774fb4d0c4a738b9"
+        },
+        {
+          "role": "planner",
+          "chars": 20010,
+          "sha256": "37f1df85b2fe5f00d3c3c9bb190cef394e125205562741cefe34ac591cec1fe4"
+        },
+        {
+          "role": "backend",
+          "chars": 24052,
+          "sha256": "104fda51ea7b95babea7f5bc30cd6fb7478c61506c8f48106e78088653e31dfa"
+        },
+        {
+          "role": "backend",
+          "chars": 26423,
+          "sha256": "b34129d69f084a0cc16465c0121901bd0e5f2311e7d704b0a54c6b5c69905d6f"
+        },
+        {
+          "role": "tests",
+          "chars": 23998,
+          "sha256": "8e5edfe42cfa4505dee62b4f6e1ffef1bb749fd62e760a1b37131efcdb24fb9c"
+        },
+        {
+          "role": "tests",
+          "chars": 33230,
+          "sha256": "421cee4b9f4445ae91658178818241f7494d2b5320e02e22a3e2e8823fcd46e0"
+        },
+        {
+          "role": "reviewer",
+          "chars": 971,
+          "sha256": "e030725784729ff2c02c23d81e4f6196b991cb078e283cda0c1e0496d9047138"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2159.469
+  },
+  {
+    "task_id": "N007",
+    "group": "novel",
+    "trial_id": "470d6ada270d",
+    "status": "rejected",
+    "classification": "MODEL_TASK_FAILURE",
+    "applied": false,
+    "job_id": "07cf49e9b8204e4e9a5382cbd1b75226",
+    "run_id": "464da63a3152",
+    "changed_files": [],
+    "planner_outcome": "Add `ActivityHistory.uniqueRegistryIds()` method to return distinct registry IDs from retained events.",
+    "repairs": {
+      "structural": 2,
+      "targeted": 0,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1194.471,
+      "reported_input_tokens": 31634,
+      "reported_output_tokens": 1406,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16649,
+          "sha256": "a989b595fd63e4ad8c90ab76fd05b2286a478b011e72377a2fbc3e6b0d4bb077"
+        },
+        {
+          "role": "planner",
+          "chars": 20099,
+          "sha256": "e8b13ed4d9d2e1ac341ca22b8ed4aae302e33205e12ca25608343c784045fe88"
+        },
+        {
+          "role": "backend",
+          "chars": 24488,
+          "sha256": "c8d6edc18925a74bb57e2bed3da272e8c9b7a1f3ae6f4d7a697d33de5ac89114"
+        },
+        {
+          "role": "backend",
+          "chars": 27177,
+          "sha256": "28ebf43b948dd59153ddb9c00985b469798e10ae004bc34b5552bf64312911e1"
+        },
+        {
+          "role": "tests",
+          "chars": 24999,
+          "sha256": "ef58707126625855fda707ff44faa34f852b4e6de615c46c86334d804f832f52"
+        },
+        {
+          "role": "tests",
+          "chars": 27586,
+          "sha256": "3ce355b13f4fdbd155186a76a4423c75c41f115c415bf3c9f8844be998a9d6ff"
+        },
+        {
+          "role": "reviewer",
+          "chars": 928,
+          "sha256": "1a77ca07fb92e29c237a26ce31d8047c4077a5e17ec931c3b2456c6913bdd6ad"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 1219.017
+  },
+  {
+    "task_id": "N008",
+    "group": "novel",
+    "trial_id": "3abb2d71e428",
+    "status": "rejected",
+    "classification": "VERIFIER_INFRA_FAILURE",
+    "applied": false,
+    "job_id": "ca7fd784a945463b990add43f52f6d37",
+    "run_id": "1296e240abf7",
+    "changed_files": [],
+    "planner_outcome": "Add `PlanResult.withLimitations(List<String> limitations)` method to create an immutable copy of PlanResult with updated limitations.",
+    "repairs": {
+      "structural": 1,
+      "targeted": 1,
+      "replans": 0
+    },
+    "model": {
+      "model_calls": 7,
+      "model_call_wall_seconds": 1478.389,
+      "reported_input_tokens": 32251,
+      "reported_output_tokens": 1709,
+      "prompt_sizes": [
+        {
+          "role": "planner",
+          "chars": 16704,
+          "sha256": "ec1cb0aa632e3b5b29a08fcc0aa04fcbbd05a32881e648fa6498fcd6909b2a51"
+        },
+        {
+          "role": "planner",
+          "chars": 20122,
+          "sha256": "c61af6ef5ab46b6ea048fc0ef638b84888d14dd44d03c1dbbb43b7e4e36b31c7"
+        },
+        {
+          "role": "backend",
+          "chars": 27649,
+          "sha256": "db7ad87df9734da82f10dbaeee27aa4440bebc20dd183a33d67f1bdaabe8e37e"
+        },
+        {
+          "role": "backend",
+          "chars": 30199,
+          "sha256": "f0b65bde1566cd137131a96c1fbc106cf5272a93aaf4ef661d0a4e0bbac6cece"
+        },
+        {
+          "role": "tests",
+          "chars": 24099,
+          "sha256": "22e78bee2a16b25550ac64d94158cf338b91a274b74f66e64b262a2ce4228bf0"
+        },
+        {
+          "role": "tests",
+          "chars": 27121,
+          "sha256": "0159f111e54e3ba0a60b64ea0fb5d2235a8af8e133d4c2be66a0db39d840f4ad"
+        },
+        {
+          "role": "reviewer",
+          "chars": 983,
+          "sha256": "ba3af67249113fa9a156610abe2ed9d435c6907c2898cbeb50099cf57d763a32"
+        }
+      ]
+    },
+    "integrity": {
+      "baseline_unchanged": true,
+      "candidate_unchanged": true
+    },
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 2046.193
+  }
+]

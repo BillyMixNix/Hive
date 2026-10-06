@@ -1,0 +1,17 @@
+# Architectural semantics and repair boundary
+
+The old `tests/test_hive_scopes.py::test_executor_prompt_contains_plan_not_original_request` explicitly described a plan-only executor. It checked for the planner-design wording and absence of an `OVERALL USER REQUEST` heading. This supports an intentional architecture choice, rather than accidental normalization corruption. It does not establish permission for the planner to weaken user requirements.
+
+`workshop/hive.py::_planner_prompt` supplies the complete request and asks for narrow goals and acceptance. `_normalize_plan` checks structure, paths, ownership, role activity and interface obligations; it does not perform general natural-language entailment. `_intent_envelope` extracts only specific high-confidence UI/HTTP cross-layer obligations. For J001 its requirements array is empty.
+
+`_run_build_impl.run_worker` previously supplied `active_plan['summary']` as overall objective, the local goal and local acceptance. `_worker_prompt` rendered those fields, selected shared contracts and intent obligations. Global `plan['acceptance']` was not rendered. The model's omission could therefore eliminate the only transmission of a host requirement. Correction helpers reconstructed that same derived contract.
+
+The repair adds `original_task` to worker prompt helpers and passes the enclosing host `request`, never a planner field. All six construction/repair call sites in the worker closure pass it, including observation continuations, JSON repair, structural repair and targeted correction. Replanning reruns the same closure with the unchanged host request. Local goals, acceptance, ownership and source remain separately rendered.
+
+The original task applies to each worker's assigned portion and cannot expand exact write ownership. Local criteria specialize it and cannot weaken it; conflicts must be reported. Inactive workers remain skipped. This transport policy preserves cross-cutting requirements through single-worker and multi-worker decomposition without attempting automatic semantic extraction. It does not claim to detect every contradictory plan or guarantee model compliance.
+
+Correction transport is separate. `_reports` already parsed fresh runtime JUnit XML but discarded failure messages while counting cases. It now also records bounded emitted testcase names, exception types and failure `message` attributes. It does not read test source, emit stack traces, synthesize hints or change count-based acceptance. `_targeted_diagnostic` prioritizes structured results and failures, strips machine inventory lines from log excerpts, and emits valid bounded JSON with explicit omission markers. Full original reports remain in run evidence.
+
+The existing scope prompt test is updated to assert the new authorized information contract while retaining exact-file and local-criterion assertions. An initial new native-workshop correction test incorrectly assumed the external JVM full-gate skip policy also applied to native builds; its fixture was corrected to preserve the existing native behavior. Neither adjustment changed production gating.
+
+Remaining limits: planner criteria can still contradict the original task; the worker must recognize the conflict. Prompt transport is not an entailment checker. Large runtime diagnostics are explicitly bounded. General source relevance and long-task context capacity remain separate concerns. The provider still uses the prior measured context, with silent truncation disabled.

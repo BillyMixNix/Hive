@@ -1,0 +1,62 @@
+{
+  "ready": true,
+  "controls": [
+    {
+      "label": "readiness-baseline",
+      "ready": true,
+      "bounded_seconds": 202.621,
+      "host_seconds": 234.67258059998858,
+      "tests": [
+        {
+          "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+          "tests": 3,
+          "failures": 1,
+          "errors": 0,
+          "skipped": 0,
+          "failure_diagnostics": [
+            {
+              "test_name": "truncationNeverSplitsAPair()",
+              "type": "org.opentest4j.AssertionFailedError",
+              "message": "org.opentest4j.AssertionFailedError: expected: <true> but was: <false>",
+              "message_truncated": false
+            }
+          ]
+        }
+      ],
+      "report_sha256": "d36febf4590a97eac9b0397ca197c933f3dbda81f06d2a20abcde1fb93c005f1",
+      "seed_validated": true
+    },
+    {
+      "label": "readiness-preserved",
+      "ready": true,
+      "bounded_seconds": 207.068,
+      "host_seconds": 239.58030589998816,
+      "tests": [
+        {
+          "class_name": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+          "tests": 3,
+          "failures": 2,
+          "errors": 0,
+          "skipped": 0,
+          "failure_diagnostics": [
+            {
+              "test_name": "truncationNeverSplitsAPair()",
+              "type": "org.opentest4j.AssertionFailedError",
+              "message": "org.opentest4j.AssertionFailedError: expected: <true> but was: <false>",
+              "message_truncated": false
+            },
+            {
+              "test_name": "fullPairAtExactBoundRemainsIntact()",
+              "type": "org.opentest4j.AssertionFailedError",
+              "message": "org.opentest4j.AssertionFailedError: expected: <aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa😀> but was: <aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...>",
+              "message_truncated": false
+            }
+          ]
+        }
+      ],
+      "report_sha256": "739b7bdf323db6113c5fce0485e81c3ebec55e8ac177ccf546708da7017360c8",
+      "seed_validated": true
+    }
+  ],
+  "policy": "No model call if either control fails readiness. No retries or timeout changes."
+}

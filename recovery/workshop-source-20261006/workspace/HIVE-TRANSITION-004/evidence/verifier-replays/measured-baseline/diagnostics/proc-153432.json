@@ -1,0 +1,33 @@
+{
+  "kind": "read-only diagnostic exec, not gate execution",
+  "container": "hive-verify-263094c6b667",
+  "returncode": 0,
+  "elapsed_seconds": 0.5599845999968238,
+  "stdout": {
+    "processes": [
+      {
+        "pid": 1,
+        "cmdline": "python3 /opt/verifier/runner.py jvm-targeted {\"version\":\"9.2.1\",\"distribution\":\"gradle-9.2.1-bin.zip\",\"distribution_sha256\":\"72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f\",\"wrapper_jar_sha256\":\"7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172\",\"wrapper_properties_sha256\":\"e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e\",\"full_tasks\":[\"clean\",\"build\",\"runGameTestServer\",\"runQuestTestServer\",\"packTestJar\"],\"verification_policy_sha256\":\"708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e\",\"external_build_inputs\":{\"kind\":\"neoformruntime\",\"cache_relative\":\"caches/neoformruntime\",\"input_directories\":[\"artifacts\",\"assets\"]},\"runtime_output_dirs\":[\"run-gametest\",\"run-questtest\"],\"frozen_tests\":[{\"path\":\"src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java\",\"class_name\":\"dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest\",\"expected_cases\":3,\"sha256\":\"80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159\"}],\"targeted_timeout\":240,\"full_timeout\":600,\"external_build_inputs_manifest_sha256\":\"2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561\"} ",
+        "status": "Name:\tpython3\nUmask:\t0022\nState:\tD (disk sleep)\nTgid:\t1\nNgid:\t0\nPid:\t1\nPPid:\t0\nTracerPid:\t0\nUid:\t65532\t65532\t65532\t65532\nGid:\t65532\t65532\t65532\t65532\nFDSize:\t64\nGroups:\t65532 \nNStgid:\t1\nNSpid:\t1\nNSpgid:\t1\nNSsid:\t1\nKthread:\t0\nVmPeak:\t   33168 kB\nVmSize:\t   33168 kB\nVmLck:\t       0 kB\nVmPin:\t       0 kB\nVmHWM:\t   24680 kB\nVmRSS:\t   24680 kB\nRssAnon:\t   15028 kB\nRssFile:\t    9652 kB\nRssShmem:\t       0 kB\nVmData:\t   16072 kB\nVmStk:\t     132 kB\nVmExe:\t    2776 kB\nVmLib:\t    5156 kB\nVmPTE:\t     108 kB\nVmSwap:\t       0 kB\nHugetlbPages:\t       0 kB\nCoreDumping:\t0\nTHP_enabled:\t1\nuntag_mask:\t0xffffffffffffffff\nThreads:\t1\nSigQ:\t0/31395\nSigPnd:\t0000000000000000\nShdPnd:\t0000000000000000\nSigBlk:\t0000000000000000\nSigIgn:\t0000000001001000\nSigCgt:\t0000000000000002\nCapInh:\t0000000000000000\nCapPrm:\t0000000000000000\nCapEff:\t0000000000000000\nCapBnd:\t0000000000000000\nCapAmb:\t0000000000000000\nNoNewPrivs:\t1\nSeccomp:\t2\nSeccomp_filters:\t2\nSpeculation_Store_Bypass:\tthread vulnerable\nSpeculationIndirectBranch:\tconditional enabled\nCpus_allowed:\tff\nCpus_allowed_list:\t0-7\nMems_allowed:\t00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001\nMems_allowed_list:\t0\nvoluntary_ctxt_switches:\t231861\nnonvoluntary_ctxt_switches:\t99\n",
+        "stat": "1 (python3) D 0 1 1 0 -1 4194560 5564 0 18 0 621 1230 0 0 20 0 1 0 2400 33964032 6087 18446744073709551615 100320977010688 100320979850765 140724616446768 0 0 0 0 16781312 2 1 0 0 17 6 0 0 0 0 0 100320982222896 100320982506968 100321892876288 140724616448392 140724616449568 140724616449568 140724616450023 0\n",
+        "wchan": "p9_client_rpc",
+        "io": "rchar: 997148279\nwchar: 994825870\nsyscr: 12673\nsyscw: 5351\nread_bytes: 1016364838\nwrite_bytes: 0\ncancelled_write_bytes: 0\n",
+        "open_files": {
+          "0": "/dev/null",
+          "1": "pipe:[7529]",
+          "2": "pipe:[7530]",
+          "3": "/approved-gradle-cache/neoformruntime/assets/objects/eb/eb065c510ad0810a1096f04c2a6fe692c415bc88",
+          "4": "/work/gradle-user-home/caches/neoformruntime/assets/objects/eb/eb065c510ad0810a1096f04c2a6fe692c415bc88"
+        }
+      }
+    ],
+    "locks": "",
+    "tcp": "  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     \n",
+    "tcp6": "  sl  local_address                         remote_address                        st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode\n",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "cpu_stat": "usage_usec 18656050\nuser_usec 6298935\nsystem_usec 12357115\nnice_usec 0\nnr_periods 1171\nnr_throttled 1\nthrottled_usec 3709\nnr_bursts 0\nburst_usec 0\n",
+    "memory_current": "1056350208\n",
+    "pids_current": "2\n"
+  },
+  "stderr": ""
+}

@@ -1,0 +1,26 @@
+{
+  "request": "Harden `ActivityDiffService.diff`. Before calculating any deltas, reject every null or negative item count in either input map with `IllegalArgumentException`, including equal negative values that would otherwise cancel. Preserve 64-bit arithmetic: valid counts above `Integer.MAX_VALUE` must still produce the correct small delta. Missing keys continue to mean a known count of zero. Keep the existing maximum event-quantity rule.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityDiffValidationAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityDiffValidationAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.HashMap;\nimport java.util.List;\nimport java.util.Map;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityDiffValidationAcceptanceTest {\n    private static final String T = \"2026-09-30T12:00:00Z\";\n\n    @Test\n    void validatesAllValuesBeforeDiffAndPreservesLongPrecision() {\n        String id = \"minecraft:diamond\";\n        assertThrows(IllegalArgumentException.class,\n                () -> ActivityDiffService.diff(T, Map.of(id, -4L), Map.of(id, -4L)));\n\n        var nullValue = new HashMap<String, Long>();\n        nullValue.put(id, null);\n        assertThrows(IllegalArgumentException.class,\n                () -> ActivityDiffService.diff(T, nullValue, Map.of(id, 1L)));\n        assertThrows(IllegalArgumentException.class,\n                () -> ActivityDiffService.diff(T, Map.of(id, 1L), Map.of(id, -1L)));\n\n        var delta = ActivityDiffService.diff(T,\n                Map.of(id, 3_000_000_000L), Map.of(id, 3_000_000_007L));\n        assertEquals(1, delta.size());\n        assertEquals(ActivityEvent.Type.ITEM_GAINED, delta.getFirst().type());\n        assertEquals(7L, delta.getFirst().quantity());\n\n        var removed = ActivityDiffService.diff(T, Map.of(id, 7L), Map.of());\n        assertEquals(1, removed.size());\n        assertEquals(ActivityEvent.Type.ITEM_LOST, removed.getFirst().type());\n        assertEquals(7L, removed.getFirst().quantity());\n        var added = ActivityDiffService.diff(T, Map.of(), Map.of(id, 8L));\n        assertEquals(1, added.size());\n        assertEquals(ActivityEvent.Type.ITEM_GAINED, added.getFirst().type());\n        assertEquals(8L, added.getFirst().quantity());\n\n        assertThrows(IllegalArgumentException.class,\n                () -> ActivityDiffService.diff(T, Map.of(id, 0L),\n                        Map.of(id, ActivityEvent.MAX_QUANTITY + 1)));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "T002",
+    "replicate_index": 1,
+    "trial_id": "6b12f708253b",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "started_at": "2026-10-05T19:44:24.614693+00:00",
+  "host_memory": {
+    "exit_code": 0,
+    "data": {
+      "time_utc": "2026-10-05T19:44:26.4830532Z",
+      "host": {
+        "total_physical_kib": 16610356,
+        "free_physical_kib": 483784,
+        "total_virtual_kib": 35326448,
+        "free_virtual_kib": 442768,
+        "available_bytes": 490618880,
+        "committed_bytes": 35720962048,
+        "commit_limit_bytes": 36174282752
+      },
+      "related_processes": [
+        {
+          "ProcessName": "com.docker.backend",
+          "Id": 1888,
+          "WorkingSet64": 107372544,
+          "PrivateMemorySize64": 163917824,
+          "CPU": 466.4375
+        },
+        {
+          "ProcessName": "com.docker.backend",
+          "Id": 20076,
+          "WorkingSet64": 22798336,
+          "PrivateMemorySize64": 88248320,
+          "CPU": 25.28125
+        },
+        {
+          "ProcessName": "llama-server",
+          "Id": 4100,
+          "WorkingSet64": 7728332800,
+          "PrivateMemorySize64": 12345761792,
+          "CPU": 91.984375
+        },
+        {
+          "ProcessName": "ollama",
+          "Id": 3116,
+          "WorkingSet64": 35205120,
+          "PrivateMemorySize64": 87625728,
+          "CPU": 113.546875
+        }
+      ]
+    },
+    "stderr": ""
+  },
+  "gpu_memory": {
+    "command": [
+      "C:\\Windows\\system32\\nvidia-smi.EXE",
+      "--query-gpu=index,name,driver_version,memory.total,memory.used,memory.free",
+      "--format=csv,noheader,nounits"
+    ],
+    "units": "MiB as reported by nvidia-smi; dedicated GPU memory, not shared host RAM",
+    "exit_code": 0,
+    "stdout": "0, NVIDIA GeForce RTX 2060, 610.47, 6144, 5629, 327\n",
+    "stderr": ""
+  },
+  "/api/ps": {
+    "models": [
+      {
+        "name": "qwen2.5-coder:14b",
+        "model": "qwen2.5-coder:14b",
+        "size": 11613000169,
+        "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "14.8B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-10-05T12:49:24.6129089-07:00",
+        "size_vram": 4074294476,
+        "context_length": 12288
+      }
+    ]
+  },
+  "/api/version": {
+    "version": "0.34.0"
+  },
+  "finished_at": "2026-10-05T19:44:27.499342+00:00"
+}

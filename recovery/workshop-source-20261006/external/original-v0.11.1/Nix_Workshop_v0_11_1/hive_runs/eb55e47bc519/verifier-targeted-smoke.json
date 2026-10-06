@@ -1,0 +1,37 @@
+{
+  "baseline_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "candidate_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "checks": [
+    {
+      "detail": "PermissionError: [Errno 13] Permission denied: '/work/gradle-user-home/wrapper'",
+      "name": "jvm_profile",
+      "passed": false
+    }
+  ],
+  "executed_commands": [],
+  "expected_acceptance_cases": 1,
+  "expected_acceptance_class": "nix.workshop.smoke.VerifierSmokeTest",
+  "gradle_wrapper_version": "9.2.1",
+  "isolation": {
+    "available": true,
+    "backend": "docker",
+    "external_build_input_mounts": "read-only manifest-verified NeoForm Runtime assets and artifacts",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "gradle_wrapper_version": "9.2.1",
+    "image_id": "sha256:9aa10416e824c4ba61bc3793ec1e0a92d7931e5393f5ba0485f80f6660b10b73",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d",
+    "inherited_host_environment": [],
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "limits": {
+      "cpus": 2,
+      "memory": "4g",
+      "pids": 128
+    },
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs"
+  },
+  "passed": false,
+  "run_id": "eb55e47bc519"
+}

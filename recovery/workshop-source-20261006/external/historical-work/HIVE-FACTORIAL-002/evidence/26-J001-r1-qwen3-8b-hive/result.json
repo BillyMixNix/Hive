@@ -1,0 +1,48 @@
+{
+  "ordinal": 26,
+  "task_id": "J001",
+  "replicate": 1,
+  "model": "qwen3:8b",
+  "controller": "hive",
+  "run_id": "dcb16552e596",
+  "classification": "MODEL_TASK_FAILURE",
+  "applied": false,
+  "api_cost_usd": 0.0,
+  "electricity_cost_usd": null,
+  "status": "rejected",
+  "changed_files": [],
+  "model_calls": 4,
+  "input_tokens": 8169,
+  "output_tokens": 9579,
+  "model_seconds": 1307.124,
+  "structural_repairs": 1,
+  "targeted_corrections": 0,
+  "planner_corrections": 0,
+  "observation_requests": 0,
+  "full_verification": {
+    "passed": false,
+    "full_gate_skipped": true,
+    "checks": [
+      {
+        "name": "external_full_gate_prerequisite",
+        "passed": false,
+        "detail": "A worker or edit prerequisite failed; partial proposals are ineligible."
+      }
+    ]
+  },
+  "review": {
+    "approve": false,
+    "summary": "Proposal fails verification prerequisites and lacks implementation details",
+    "issues": [
+      "Deterministic verification failed with external prerequisite errors",
+      "No actual diff content provided for review",
+      "Unable to confirm UTF-16 surrogate pair preservation implementation",
+      "Deterministic verification failed.",
+      "One or more agents failed; partial proposals cannot be approved.",
+      "No valid scoped edits were produced."
+    ],
+    "confidence": 0.0
+  },
+  "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "wall_seconds": 1317.48
+}

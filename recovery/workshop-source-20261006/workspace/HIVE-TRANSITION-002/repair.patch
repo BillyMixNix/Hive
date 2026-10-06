@@ -1,0 +1,173 @@
+--- a/app.py
++++ b/app.py
+@@ -7,6 +7,7 @@
+ from fastapi.responses import FileResponse
+ from pydantic import BaseModel, Field
+ from workshop import db, memory, router, providers, hive, runtime, chat_context, chat_agent, feature_catalog, persistent_agent, external_root, hive_jvm, hive_verifier
++from workshop.hive_protocol import LOCAL_CONTEXT_WINDOW
+ 
+ ROOT=Path(__file__).resolve().parent
+ STATIC=ROOT/"static"
+@@ -684,6 +685,7 @@
+                 response_format=hive.response_schema_for_prompt(role, prompt),
+                 temperature=hive.LOCAL_TEMPERATURE,
+                 max_output_tokens=HIVE_LOCAL_OUTPUT_TOKEN_LIMITS.get(role, 6000),
++                context_window=LOCAL_CONTEXT_WINDOW,
+                 cancel_event=cancel_event,
+             )
+             db.add_ledger(
+--- a/workshop/hive_protocol.py
++++ b/workshop/hive_protocol.py
+@@ -6,6 +6,9 @@
+ from . import hive_edits
+ 
+ LOCAL_TEMPERATURE = 0.1
++# Measured worker input (5,548 tokens) plus the existing 6,000 output cap.
++# Oversized inputs fail through the provider's no-truncation policy.
++LOCAL_CONTEXT_WINDOW = 12288
+ 
+ 
+ def _object(properties, required=None):
+--- a/workshop/providers.py
++++ b/workshop/providers.py
+@@ -184,6 +184,10 @@
+                         raise OllamaRequestError(
+                             f"Invalid Ollama stream JSON: {exc}", retryable=True
+                         ) from exc
++                    if chunk.get("error"):
++                        raise OllamaRequestError(
++                            f"Ollama stream error: {chunk['error']}", retryable=False
++                        )
+                     content=(chunk.get("message") or {}).get("content","")
+                     if content:
+                         parts.append(content)
+@@ -221,7 +225,7 @@
+ 
+ async def ollama_chat(model, messages, instructions, image_data_url=None, *,
+                       response_format=None, temperature=None,
+-                      max_output_tokens=None, cancel_event=None,
++                      max_output_tokens=None, context_window=None, cancel_event=None,
+                       total_timeout=OLLAMA_TOTAL_GENERATION_TIMEOUT):
+     """Chat locally, optionally using a JSON schema or 'json' response format."""
+     global _last_ollama_error
+@@ -243,6 +247,15 @@
+         if value < 1:
+             raise ValueError("max_output_tokens must be at least 1")
+         options["num_predict"] = value
++    if context_window is not None:
++        if type(context_window) is not int or context_window < 1:
++            raise ValueError("context_window must be a positive integer")
++        if max_output_tokens is not None and options["num_predict"] >= context_window:
++            raise ValueError("context_window must exceed max_output_tokens")
++        options["num_ctx"] = context_window
++        # Structured agent prompts must reach the runtime intact or fail.
++        # Ollama's default can silently retain only a prompt prefix and tail.
++        body["truncate"] = False
+     if options:
+         body["options"] = options
+     last=None
+--- a/tests/test_hive_prompt_contract.py
++++ b/tests/test_hive_prompt_contract.py
+@@ -302,6 +302,7 @@
+     for options in observed[:2]:
+         assert options["temperature"] == 0.1
+         assert options["max_output_tokens"] == app.HIVE_LOCAL_OUTPUT_TOKEN_LIMITS["backend"]
++        assert options["context_window"] == app.LOCAL_CONTEXT_WINDOW == 12288
+         assert options["cancel_event"] is cancel_event
+         assert "plan_insufficient" in json.dumps(options["response_format"])
+         assert "insert_after_anchor" in json.dumps(options["response_format"])
+--- /dev/null
++++ b/tests/test_planning_input_fidelity.py
+@@ -0,0 +1,92 @@
++"""Preserved planner input and fail-closed local context transport; no Ollama."""
++import asyncio
++import json
++from pathlib import Path
++
++import httpx
++import pytest
++
++from workshop import hive, providers
++from workshop.hive_protocol import LOCAL_CONTEXT_WINDOW, response_schema_for_prompt
++from test_ollama_structured_output import mock_http, ollama_response, ChunkedStream
++from test_planner_transition import scoped
++
++FIXTURES = Path(__file__).resolve().parents[2] / 'evidence/planner-input-fixtures'
++
++
++@pytest.mark.parametrize('attempt', [1, 2])
++def test_historical_critical_information_survives_actual_http_serialization(mock_http, attempt):
++    saved = json.loads((FIXTURES / f'{attempt:02d}/request.json').read_text())
++    requests, _ = mock_http(lambda request: ollama_response('{}'))
++    asyncio.run(providers.ollama_chat(saved['model'], saved['messages'], saved['instructions'],
++                    **saved['options'], context_window=LOCAL_CONTEXT_WINDOW))
++    body = json.loads(requests[0].content)
++    assert body['messages'] == [{'role': 'system', 'content': saved['instructions']}] + saved['messages']
++    assert body['format'] == saved['options']['response_format']
++    assert body['options'] == {'temperature': 0.1, 'num_predict': 2048, 'num_ctx': 12288}
++    assert body['truncate'] is False
++    prompt = body['messages'][1]['content']
++    for fact in ('USER CHANGE REQUEST:', 'preserve complete UTF-16 surrogate pairs',
++                 'section-sign sanitization', 'ordinary ASCII', 'REPOSITORY MAP',
++                 'Each file must have exactly one worker owner', "exact goal 'no change needed'",
++                 'src/main/java/dev/atmcompanion/state/SnapshotFormatter.java'):
++        assert fact in prompt
++    if attempt == 2:
++        assert 'assigned to both backend and tests' in prompt
++        assert 'PREVIOUS PLAN REJECTED BEFORE WORKER EXECUTION:' in prompt
++
++
++def test_correction_construction_still_matches_preserved_full_input(scoped):
++    run = json.loads((FIXTURES / 'run.json').read_text())
++    raw = run['plan_attempts'][0]['raw']
++    with pytest.raises(hive.HostWriteScopeError) as failure:
++        hive._normalize_plan(hive._extract_json(raw))
++    correction = hive._plan_correction_prompt(run['request'], run['repository_map'], raw,
++        failure.value, run['repository_facts'], run['intent_envelope'], external_mode=True)
++    saved = json.loads((FIXTURES / '02/request.json').read_text())
++    assert str(correction) == saved['messages'][0]['content']
++    assert response_schema_for_prompt('planner', correction) == saved['options']['response_format']
++
++
++@pytest.mark.parametrize('context', [4096, 8192, 12288])
++def test_configured_window_propagates_without_mutating_messages(mock_http, context):
++    requests, _ = mock_http(lambda request: ollama_response())
++    messages = [{'role': 'user', 'content': 'Complete prompt \u2603'}]
++    asyncio.run(providers.ollama_chat('local', messages, 'System',
++                                    context_window=context, max_output_tokens=128))
++    body = json.loads(requests[0].content)
++    assert body['options']['num_ctx'] == context
++    assert body['truncate'] is False
++    assert body['messages'][1:] == messages
++
++
++@pytest.mark.parametrize('context', [0, -1, True, '8192', 8192.0, 128])
++def test_invalid_or_output_consumed_window_fails_before_send(mock_http, context):
++    requests, _ = mock_http(lambda request: ollama_response())
++    with pytest.raises(ValueError, match='context_window'):
++        asyncio.run(providers.ollama_chat('local', [], 'System',
++                                        context_window=context, max_output_tokens=128))
++    assert not requests
++
++
++@pytest.mark.parametrize('streamed', [False, True])
++def test_oversized_context_error_is_explicit_and_never_retried_or_accepted(mock_http, streamed):
++    # Shape and token counts reproduced by the local no-truncate sentinel probe.
++    error = {'error': 'request (5034 tokens) exceeds the available context size (4096 tokens)'}
++    if streamed:
++        response = httpx.Response(200, stream=ChunkedStream((json.dumps(error)+'\n').encode()))
++    else:
++        response = httpx.Response(400, json=error)
++    requests, _ = mock_http(lambda request: response)
++    with pytest.raises(providers.OllamaRequestError, match='exceeds the available context'):
++        asyncio.run(providers.ollama_chat('local', [{'role':'user','content':'full prompt'}],
++                    'System', context_window=4096, max_output_tokens=2048))
++    assert len(requests) == 1
++    assert json.loads(requests[0].content)['truncate'] is False
++
++
++@pytest.mark.parametrize('attempt', [0, 1])
++def test_prior_overlap_outputs_still_rejected_after_transport_repair(scoped, attempt):
++    run = json.loads((FIXTURES / 'run.json').read_text())
++    with pytest.raises(hive.HostWriteScopeError, match='assigned to both backend and tests'):
++        hive._normalize_plan(hive._extract_json(run['plan_attempts'][attempt]['raw']))

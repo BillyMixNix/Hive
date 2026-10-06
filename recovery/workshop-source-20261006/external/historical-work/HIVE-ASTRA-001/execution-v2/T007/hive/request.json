@@ -1,0 +1,24 @@
+{
+  "request": "Add immutable record `ActivityWindow(List<ActivityEvent> events, ActivitySummary summary)` and `ActivityHistory.between(Instant startInclusive, Instant endExclusive)`. Include retained events in `[startInclusive, endExclusive)` while preserving append order; the summary must describe exactly the returned events. Equal endpoints produce an empty window. Null endpoints or a start after the end must throw `IllegalArgumentException`. The query must not alter history.",
+  "allow_cloud": true,
+  "agent_backend": "persistent",
+  "persistent_agent_model": "gpt-6-astra",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityWindowAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityWindowAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.time.Instant;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityWindowAcceptanceTest {\n    private ActivityEvent event(String timestamp, String id, long quantity) {\n        return new ActivityEvent(1, timestamp, ActivityEvent.Type.ITEM_GAINED, List.of(id),\n                quantity, ActivityEvent.Source.MANUAL);\n    }\n\n    @Test\n    void returnsHalfOpenWindowWithMatchingSummaryWithoutMutatingHistory() {\n        var history = new ActivityHistory(8);\n        var before = event(\"2026-09-30T11:59:59Z\", \"minecraft:iron_ingot\", 2);\n        var start = event(\"2026-09-30T12:00:00Z\", \"minecraft:diamond\", 3);\n        var inside = event(\"2026-09-30T12:30:00Z\", \"minecraft:emerald\", 4);\n        var end = event(\"2026-10-01T00:00:00Z\", \"minecraft:gold_ingot\", 5);\n        history.append(before);\n        history.append(start);\n        history.append(inside);\n        history.append(end);\n\n        var window = history.between(Instant.parse(\"2026-09-30T12:00:00Z\"), Instant.parse(\"2026-10-01T00:00:00Z\"));\n        assertEquals(List.of(start, inside), window.events());\n        assertEquals(2, window.summary().eventCount());\n        assertEquals(7L, window.summary().totalQuantity());\n        assertThrows(UnsupportedOperationException.class, () -> window.events().clear());\n        assertEquals(4, history.size());\n\n        var empty = history.between(Instant.parse(\"2026-09-30T12:00:00Z\"), Instant.parse(\"2026-09-30T12:00:00Z\"));\n        assertTrue(empty.events().isEmpty());\n        assertEquals(0, empty.summary().eventCount());\n        assertThrows(IllegalArgumentException.class,\n                () -> history.between(Instant.parse(\"2026-10-01T00:00:00Z\"), Instant.parse(\"2026-09-30T12:00:00Z\")));\n        assertThrows(IllegalArgumentException.class, () -> history.between(null, Instant.now()));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-ASTRA-001-v2",
+    "condition_id": "hive",
+    "task_id": "T007",
+    "replicate_index": 1,
+    "trial_id": "b47e944710df",
+    "condition_spec_sha256": "2d33ce88af66ed3e1f0c1e73ce3a1de62ffe36cd355a21554cc7306fddb6d291"
+  }
+}

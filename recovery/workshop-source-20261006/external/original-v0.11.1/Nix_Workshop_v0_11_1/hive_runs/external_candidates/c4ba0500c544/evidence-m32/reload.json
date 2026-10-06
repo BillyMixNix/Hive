@@ -1,0 +1,117 @@
+{
+  "plan": {
+    "schemaVersion": 2,
+    "goal": "minecraft:debug_stick",
+    "quantity": 1,
+    "status": "materials_ready",
+    "ownedRequirements": [
+      {
+        "item": "minecraft:birch_planks",
+        "quantity": 1
+      }
+    ],
+    "missingRequirements": [],
+    "selectedPath": [
+      {
+        "recipeId": "atm_companion_tests:reload_fixture",
+        "output": "minecraft:debug_stick",
+        "outputQuantity": 1,
+        "crafts": 1,
+        "type": "minecraft:crafting",
+        "depth": 0,
+        "limitations": [
+          "Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified",
+          "Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+        ],
+        "ingredients": [
+          {
+            "position": 0,
+            "item": "minecraft:birch_planks",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "nextAction": {
+      "kind": "prepare_recipe",
+      "item": "minecraft:debug_stick",
+      "quantity": 1,
+      "recipeId": "atm_companion_tests:reload_fixture",
+      "reason": "The selected path's first material step has inputs reserved. Verify execution conditions before processing: Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified; Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+    },
+    "alternativePaths": [],
+    "unsupportedSteps": [],
+    "metrics": {
+      "indexGeneration": 15,
+      "expandedNodes": 3,
+      "depth": 0,
+      "searchTruncated": false,
+      "indexComplete": false,
+      "planningNanos": 612800
+    },
+    "limitations": [
+      "Material planning only; crafting access, recipe unlocks, fuel, machines, energy, fluids, and execution are not verified.",
+      "Only main inventory slots 0..35; equipment, nested inventories and storage networks are not included.",
+      "Future outputs are hypothetical until every prerequisite is satisfied; they are never reported as currently owned.",
+      "Crafting remainders/byproducts are not credited. Route selection is bounded and may miss a better allocation.",
+      "Recipe knowledge has unknown or truncated outputs; no indexed route does not prove no route exists."
+    ],
+    "execution": {
+      "status": "unknown",
+      "recipeId": "",
+      "operations": 0,
+      "station": "",
+      "inputs": [],
+      "fuel": [],
+      "blockers": [],
+      "unverifiedConditions": [
+        "Execution has not been observed"
+      ],
+      "nextAction": null,
+      "observation": null
+    }
+  },
+  "beforeGeneration": 14,
+  "newRecipe": {
+    "id": "atm_companion_tests:reload_fixture",
+    "type": "minecraft:crafting",
+    "serializer": "minecraft:crafting_shapeless",
+    "output": {
+      "item": "minecraft:debug_stick",
+      "count": 1,
+      "fixed": true,
+      "hasNonDefaultComponents": false
+    },
+    "ingredients": [
+      {
+        "position": 0,
+        "count": 1,
+        "kind": "tag",
+        "sourceItems": [],
+        "sourceTags": [
+          "atm_companion_tests:reload_material"
+        ],
+        "alternatives": [
+          "minecraft:birch_planks"
+        ],
+        "alternativesComplete": true,
+        "detail": "One item from this OR set; original item/tag identities retained"
+      }
+    ],
+    "kind": "crafting",
+    "dependencySupported": true,
+    "limitations": [
+      "Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified",
+      "Input containers/remainders are not credited; dependencies conservatively consume ingredients"
+    ],
+    "execution": {
+      "kind": "crafting",
+      "fits2x2": true,
+      "fits3x3": true,
+      "width": 0,
+      "height": 0,
+      "cookingTicks": 0
+    }
+  },
+  "afterGeneration": 15
+}

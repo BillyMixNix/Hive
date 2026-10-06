@@ -1,0 +1,724 @@
+[
+  {
+    "name": "complete",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "1d3d9a7855c9f0f4d1a9fe8e7f2ef132e24966f2167be99d9cf326bfc2383669",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "omitted_ascii",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "ad701d81ed9d134caa81885d9fb3315444666575e38ee738d750a3c97b860dc6",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "omitted_sanitization",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "e78f64fd1b5b09996a92c90d77189e01030649cfb3e43e9930e291d938e665c4",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "omitted_bound",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "0395036b6eae5e9ee2074736507392f8ce6998dc16cbd13f58bf489dfccc2231",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "omitted_suffix",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep unchanged behavior for ordinary ASCII lines.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "f8b9b5b6a56e73102aa1f8dc7a3681622679c2c0de8929fb5f9c08f4f074bec6",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "weakened_surrogate",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Try to preserve some surrogate pairs."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Try to preserve some surrogate pairs."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "36349821cf5d7783c8d7b6a162c993511a55f7626ff6f05ae57ba7ffe811c1b9",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "distributed",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Keep ordinary ASCII behavior unchanged while implementing truncation",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Keep ordinary ASCII behavior unchanged while implementing truncation",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+          "Keep existing control-character sanitization.",
+          "Keep existing section-sign sanitization.",
+          "Keep the ... suffix when truncation is necessary.",
+          "Truncation must never introduce an unpaired surrogate.",
+          "The returned string must never exceed the bound."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "53e046da1abeab2d1510fbee27cef762bec2f243107799765f991d962c3b32c8",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "paraphrase",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Leave plain ASCII output unchanged; retain cleaning of controls and section signs; keep complete UTF-16 pairs, never create lone surrogates, include ellipsis on truncation, and keep the whole result within the limit."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Leave plain ASCII output unchanged; retain cleaning of controls and section signs; keep complete UTF-16 pairs, never create lone surrogates, include ellipsis on truncation, and keep the whole result within the limit."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "367c18e835639a9a3aff462cfde1da5e13bf4673c212ac631d16ecbe0781cc88",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "contradictory",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Change ordinary ASCII output and remove all sanitization."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Change ordinary ASCII output and remove all sanitization."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "1183cdfc224428018a403550592f70a78e8ea800489261439a1928fbe7791c79",
+    "semantic_loss_detected": false
+  },
+  {
+    "name": "local_with_global",
+    "accepted": true,
+    "plan": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+        "Keep existing control-character sanitization.",
+        "Keep existing section-sign sanitization.",
+        "Keep the ... suffix when truncation is necessary.",
+        "Keep unchanged behavior for ordinary ASCII lines.",
+        "Truncation must never introduce an unpaired surrogate.",
+        "The returned string must never exceed the bound."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Implement pair-safe truncation."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "normalized": {
+      "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+      "ui_goal": "no change needed",
+      "backend_goal": "Implement the bounded formatting change",
+      "tests_goal": "no change needed",
+      "worker_files": {
+        "ui": [],
+        "backend": [
+          "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+        ],
+        "tests": []
+      },
+      "acceptance": [
+        "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+        "Keep existing control-character sanitization.",
+        "Keep existing section-sign sanitization.",
+        "Keep the ... suffix when truncation is necessary.",
+        "Keep unchanged behavior for ordinary ASCII lines.",
+        "Truncation must never introduce an unpaired surrogate.",
+        "The returned string must never exceed the bound."
+      ],
+      "worker_acceptance": {
+        "ui": [],
+        "backend": [
+          "Implement pair-safe truncation."
+        ],
+        "tests": []
+      },
+      "interface_contracts": [],
+      "provider_changes": [],
+      "_intent_envelope": {
+        "version": 1,
+        "requirements": []
+      }
+    },
+    "warnings": [],
+    "prompt_sha256": "7dc1623c8e177f9fd5ef448fb35761ef72f8ce50f727ac93a1f8bb67fd949291",
+    "semantic_loss_detected": false
+  }
+]

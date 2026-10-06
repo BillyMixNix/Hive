@@ -1,0 +1,247 @@
+[
+  {
+    "case": "baseline",
+    "kind": "unchanged",
+    "paths": [],
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "diagnostic_only": true,
+    "current_policy_compatible": true
+  },
+  {
+    "case": "A-main",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/ATMCompanion.java"
+    ],
+    "candidate_sha256": "5b6827f7d90bd6e8674ed1843bac83559812b70023d8a6e300e72cff40bf7fbe",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/ATMCompanion.java"
+    }
+  },
+  {
+    "case": "B-J001",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+    ],
+    "candidate_sha256": "d7460b18d7052ebbf661cb0cd66aa1cecb95ed3c47eb6cc83d5f06ea75642556",
+    "diagnostic_only": true,
+    "current_policy_compatible": true
+  },
+  {
+    "case": "C-J002",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+    ],
+    "candidate_sha256": "67361e464f043026cc391b638c6ec6d9619d851c0329aacecb57bdfbd3e07a1c",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+    }
+  },
+  {
+    "case": "D-J003",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/state/Observation.java"
+    ],
+    "candidate_sha256": "ece5852654d7dad4df4203246b53d7cdde07841fcda0ed2bbef46f32b2ecc74b",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/state/Observation.java"
+    }
+  },
+  {
+    "case": "E-J004",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+      "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+    ],
+    "candidate_sha256": "3c7c486074b1a377e5ba95541c1c6ac2595e6c87fb3231b5edafbf6b355ad045",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+    }
+  },
+  {
+    "case": "F-unrelated",
+    "kind": "comment",
+    "paths": [
+      "src/main/java/dev/atmcompanion/state/SnapshotService.java"
+    ],
+    "candidate_sha256": "1e0739fab8595d7425fda4ba2ac456ea150f38d3c6dbfd7df7ccde0c57e7cfa7",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/state/SnapshotService.java"
+    }
+  },
+  {
+    "case": "G-package-addition",
+    "kind": "java_add",
+    "paths": [
+      "src/main/java/qualification/independence/Probe.java"
+    ],
+    "candidate_sha256": "07b8d68c5dff46da967d124fafd11965aef9c17bff95a45dd2ff033bd03bd1e4",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT source inventory changed"
+    }
+  },
+  {
+    "case": "H-test",
+    "kind": "comment",
+    "paths": [
+      "src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"
+    ],
+    "candidate_sha256": "d8f25a9edb7cc0b9ca0a780208dc959a2312541012db85f0153dd13bde12e2aa",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"
+    }
+  },
+  {
+    "case": "I-resource",
+    "kind": "resource",
+    "paths": [
+      "src/main/resources/assets/qualification/probe.txt"
+    ],
+    "candidate_sha256": "2e308fad5c551f5af364a1e93e4d6a5c344db777c03d29b34fb79e0b1e14d44f",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT source inventory changed"
+    }
+  },
+  {
+    "case": "J-build-comment",
+    "kind": "comment",
+    "paths": [
+      "build.gradle"
+    ],
+    "candidate_sha256": "15a52c65bcf9042859306d03e471afa505ff9d4bbbe81dedecf696ed2e56b935",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: build.gradle"
+    }
+  },
+  {
+    "case": "J2-binary-option",
+    "kind": "binary_option",
+    "paths": [
+      "build.gradle"
+    ],
+    "candidate_sha256": "29f4b97ce228701b6568095369e086c674747665431f484022068de340d5af82",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: build.gradle"
+    }
+  },
+  {
+    "case": "K-property",
+    "kind": "property",
+    "paths": [
+      "gradle.properties"
+    ],
+    "candidate_sha256": "97eec7e477908562db017480e1a2718092f1dbac51dcb6f6ff67945a0473dc73",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: gradle.properties"
+    }
+  },
+  {
+    "case": "L-access-transformer",
+    "kind": "at",
+    "paths": [
+      "src/main/resources/META-INF/accesstransformer.cfg"
+    ],
+    "candidate_sha256": "9644ca85830124a3bade4668118617233e786dd50112364f52d681d1f70bd88c",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT source inventory changed"
+    }
+  },
+  {
+    "case": "M-interface-injection",
+    "kind": "ii",
+    "paths": [
+      "build.gradle",
+      "diagnostic/interface-injection.json"
+    ],
+    "candidate_sha256": "3befa7847553703d7cba1d612857ba93c2e71421741a3edfb011e64b5227f656",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT source inventory changed"
+    }
+  },
+  {
+    "case": "N-parchment",
+    "kind": "parchment",
+    "paths": [
+      "build.gradle",
+      "diagnostic/parchment.zip"
+    ],
+    "candidate_sha256": "0165e612c649eb1688aa394462f8dd506ec27988b78d2a7435367437c53c0d67",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT source inventory changed"
+    }
+  },
+  {
+    "case": "O-dependency",
+    "kind": "dependency",
+    "paths": [
+      "build.gradle"
+    ],
+    "candidate_sha256": "b1e826ffc3c2d949be16de8582723c6e0fcd31f9d162cac4527b50f6ed620e7c",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: build.gradle"
+    }
+  },
+  {
+    "case": "P-neoforge",
+    "kind": "neoforge",
+    "paths": [
+      "gradle.properties"
+    ],
+    "candidate_sha256": "3f81fa0873d1bca08ccef4488cf9c0267ddd7b4081a71f8e1230df9ec9f01cd2",
+    "diagnostic_only": true,
+    "current_policy_compatible": false,
+    "current_policy_error": {
+      "type": "ValueError",
+      "message": "NFRT reconstruction input changed: gradle.properties"
+    }
+  }
+]

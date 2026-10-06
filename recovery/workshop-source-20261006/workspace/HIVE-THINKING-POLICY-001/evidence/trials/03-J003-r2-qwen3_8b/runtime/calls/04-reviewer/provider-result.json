@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"approve\": false,\n  \"summary\": \"Missing handling of non-AVAILABLE status and null mapper results\",\n  \"issues\": [\n    \"The implementation does not nullify data for non-AVAILABLE status as required, violating the requirement to preserve null data for unavailable observations\",\n    \"No validation for null mapper results - the method could return null data if mapper.apply() returns null, which should be rejected\",\n    \"Test suite failed to execute with missing JUnit reports, preventing verification of semantic fulfillment\"\n  ],\n  \"confidence\": 0.6\n}",
+  "input_tokens": 1760,
+  "output_tokens": 830,
+  "raw_id": null
+}

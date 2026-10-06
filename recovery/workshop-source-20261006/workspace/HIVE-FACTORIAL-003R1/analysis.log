@@ -1,0 +1,75 @@
+{
+  "completed": true,
+  "trials_observed": 16,
+  "successes": 2,
+  "primary_outcomes": {
+    "VERIFIED SOFTWARE SUCCESS": 2,
+    "FROZEN_ACCEPTANCE_FAILURE": 5,
+    "LOCAL_RUNTIME_FAILURE": 6,
+    "PLANNER_FAILURE": 2,
+    "EDIT_PREFLIGHT_FAILURE": 1
+  },
+  "reviews": {
+    "approved": 2,
+    "rejected": 12,
+    "not_run": 2
+  },
+  "transitions": {
+    "task": 16,
+    "planner_call": 16,
+    "valid_plan": 14,
+    "ownership_valid": 14,
+    "worker": 14,
+    "worker_response": 9,
+    "executable_edit": 8,
+    "targeted_verification": 8,
+    "worker_correction": 6,
+    "revised_edit": 3,
+    "frozen_acceptance": 2,
+    "full_gate": 2,
+    "full_gate_passed": 2,
+    "semantic_review": 14,
+    "human_review_eligibility": 0
+  },
+  "usage": {
+    "model_calls": 54,
+    "provider_attempts": 54,
+    "input_tokens_known": 210095,
+    "output_tokens_known": 29216,
+    "model_seconds": 16506.108138199983,
+    "verification_seconds": 2464.2432551000093,
+    "wall_seconds": 19317.999521399994,
+    "planner_corrections": 2,
+    "worker_structural_corrections": 1,
+    "worker_targeted_corrections": 6,
+    "observation_requests": 0,
+    "usage_complete": false,
+    "successes_per_model_call": 0.037037037037037035,
+    "successes_per_trial_hour": 0.3727093994398344,
+    "active_execution_seconds": 19317.999521399994,
+    "setup_interruption_seconds": 0,
+    "all_attempt_token_accounting_complete": false,
+    "usage_interpretation": "Known completed logical-call token counts; not full attempted-generation totals when any attempt lacks final accounting."
+  },
+  "statistics": {
+    "descriptive_only_until_complete": false,
+    "confidence_level": 0.95,
+    "interval_method": "Two-sided Clopper-Pearson exact binomial",
+    "interval": [
+      0.015513603815413946,
+      0.3834762368492636
+    ],
+    "fisher_exact_two_sided_p": 0.4838709677419355,
+    "table": [
+      [
+        0,
+        16
+      ],
+      [
+        2,
+        14
+      ]
+    ],
+    "absolute_rate_difference": 0.125
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "run_id": "272595f790fd",
+  "result": {
+    "ordinal": 1,
+    "task_id": "J001",
+    "replicate": 1,
+    "model": "qwen2.5-coder:14b",
+    "controller": "hive",
+    "run_id": "272595f790fd",
+    "classification": "LOCAL_RUNTIME_FAILURE",
+    "applied": false,
+    "api_cost_usd": 0.0,
+    "electricity_cost_usd": null,
+    "status": "failed",
+    "changed_files": [],
+    "model_calls": 1,
+    "input_tokens": null,
+    "output_tokens": null,
+    "model_seconds": 913.553,
+    "structural_repairs": 0,
+    "targeted_corrections": 0,
+    "planner_corrections": 0,
+    "observation_requests": 0,
+    "full_verification": null,
+    "review": null,
+    "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "wall_seconds": 931.663
+  },
+  "calls": [
+    {
+      "call": "01",
+      "role": "planner",
+      "correction": false,
+      "original_task_exactly_present": true,
+      "schema_valid": null,
+      "schema_errors": [],
+      "http_status": 500,
+      "provider_errors": [
+        "llama-server reported out-of-memory during startup: ggml_backend_cpu_buffer_type_alloc_buffer: failed to allocate buffer of size 5843582976\nalloc_tensor_range: failed to allocate CUDA_Host buffer of size 5843582976\nerror loading model: unable to allocate CUDA_Host buffer"
+      ],
+      "generated_response_present": false,
+      "num_ctx": 12288,
+      "truncate": false,
+      "output_cap": 2048,
+      "terminal": null,
+      "task_sha256": "c48982936e87f8147bf1c4581cf10903cb091b49b2b8d2576988ab5cb5c13ebc",
+      "prompt_sha256": "f7e3140bdc4986604e00cd2c4ae6a6bde9ca62196d929a564eb8e5889a168437",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planner_content_identical_to_transition_003": true
+    },
+    {
+      "call": "02",
+      "role": "planner",
+      "correction": false,
+      "original_task_exactly_present": true,
+      "schema_valid": null,
+      "schema_errors": [],
+      "http_status": null,
+      "provider_errors": [],
+      "generated_response_present": false,
+      "num_ctx": 12288,
+      "truncate": false,
+      "output_cap": 2048,
+      "terminal": null,
+      "task_sha256": "c48982936e87f8147bf1c4581cf10903cb091b49b2b8d2576988ab5cb5c13ebc",
+      "prompt_sha256": "f7e3140bdc4986604e00cd2c4ae6a6bde9ca62196d929a564eb8e5889a168437",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "planner_content_identical_to_transition_003": true
+    }
+  ],
+  "verifications": [],
+  "errors": [
+    {
+      "role": "run",
+      "stage": "agent_call",
+      "exception_type": "OllamaRequestError",
+      "exception_message": "Ollama chat failed at http://127.0.0.1:11434: chat attempt 2/2: OllamaRequestError: Ollama generation exceeded the 900-second total limit"
+    }
+  ],
+  "http_attempts": 2,
+  "successful_model_responses": 0,
+  "planner_first_attempt_valid": null,
+  "initial_worker_task_complete": null,
+  "initial_differs_from_transition_003": null,
+  "correction_materially_different": null,
+  "repeated_proposal_rejected": false,
+  "frozen_acceptance_reached": false,
+  "full_gate": null,
+  "full_gate_passed": false,
+  "promoted": false
+}

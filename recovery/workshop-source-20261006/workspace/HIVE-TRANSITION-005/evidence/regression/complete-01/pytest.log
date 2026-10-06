@@ -1,0 +1,49 @@
+......................................s................s................ [ 14%]
+.....s.......................................s............s............. [ 28%]
+........................................................................ [ 42%]
+......................F................................................. [ 56%]
+........................................................................ [ 71%]
+........................................................................ [ 85%]
+............................................F...............s........... [ 99%]
+..                                                                       [100%]
+================================== FAILURES ===================================
+___________ test_executor_prompt_contains_plan_not_original_request ___________
+tests\test_hive_scopes.py:107: in test_executor_prompt_contains_plan_not_original_request
+    assert "A read-only planner already made the design" in prompt
+E   AssertionError: assert 'A read-only planner already made the design' in 'You are the BACKEND AGENT in Nix Workshop Hive Build Mode.\n\nYou are the enactment agent. A read-only planner assign...bility and exact files listed in this block.\nIf another feature appears in read-only context, ignore it completely.\n'
+_ test_real_targeted_correction_dispatch_preserves_task_and_runtime_diagnostic _
+tests\test_semantic_fidelity.py:71: in test_real_targeted_correction_dispatch_preserves_task_and_runtime_diagnostic
+    result=asyncio.run(hive.run_build(root,tmp_path/'runs',TASK,'local',call))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+workshop\hive.py:2798: in run_build
+    return await _run_build_impl(
+workshop\hive.py:2667: in _run_build_impl
+    verification = await asyncio.to_thread(verify_tree, stage)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\threads.py:26: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_semantic_fidelity.py:62: in <lambda>
+    monkeypatch.setattr(hive,'verify_tree',lambda *args: pytest.fail('failed targeted check must skip full gate'))
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: failed targeted check must skip full gate
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_gradle_cache_priming.py:118: symlinks unavailable on this platform
+SKIPPED [1] tests\test_hive_context_contract.py:261: symlink creation is unavailable on this host
+SKIPPED [1] tests\test_hive_external_root.py:310: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_external_snapshot_rejects0\\outside' -> 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_external_snapshot_rejects0\\external-repository\\linked-outside'
+SKIPPED [1] tests\test_hive_isolated_verifier.py:107: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_sanitized_copy_rejects_sy0\\secret.txt' -> 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_sanitized_copy_rejects_sy0\\source\\tests\\leak.py'
+SKIPPED [1] tests\test_hive_jvm_profile.py:119: directory symlinks are unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_runtime_output_exclusion_0' -> 'D:\\CodexTemp\\hive-transition-005-bc702b1f\\test_runtime_output_exclusion_0\\candidate\\run-gametest'
+SKIPPED [1] tests\test_v05_runtime.py:63: symlink creation is unavailable on this host
+2 failed, 498 passed, 6 skipped in 121.94s (0:02:01)

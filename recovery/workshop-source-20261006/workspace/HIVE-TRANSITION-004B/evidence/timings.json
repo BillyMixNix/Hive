@@ -1,0 +1,126 @@
+[
+  {
+    "case": "baseline",
+    "result": {
+      "case": "baseline",
+      "model_calls": 0,
+      "verification": true,
+      "diagnostic_only": true,
+      "promoted": false,
+      "timeout_seconds": 240,
+      "timed_out": true,
+      "gate_passed": false,
+      "outer_elapsed_seconds": 240.048,
+      "cleanup": {
+        "removal_returncode": 0,
+        "removal_stdout": "hive-004b-ef58c3f97a05\n",
+        "removal_stderr": "",
+        "inspect_returncode": 1,
+        "inspect_stdout": "[]\n",
+        "inspect_stderr": "error: no such object: hive-004b-ef58c3f97a05\n",
+        "container_absent": true
+      }
+    },
+    "launch_to_container_s": 1.063,
+    "native_input_copy_s": 72.9,
+    "seed_copy_s": 2.999,
+    "before_gradle_s": 89.312,
+    "gradle_s": null,
+    "gradle_exposure_to_timeout_s": 150.73,
+    "nfrt_reported_runtime_s": [
+      6.98
+    ],
+    "cached_nodes": [
+      "stripClient",
+      "mergeMappings",
+      "extractServer",
+      "stripServer",
+      "merge",
+      "rename",
+      "binaryPatch",
+      "copyUnpatchedClasses",
+      "applyDevTransforms",
+      "binaryWithNeoForge"
+    ],
+    "cache_hits": [
+      "Shared read-only dependency cache is an incubating feature.",
+      " \u267b Used cache of stripClient in 0.00s",
+      " \u267b Used cache of mergeMappings in 0.00s",
+      " \u267b Used cache of extractServer in 0.00s",
+      " \u267b Used cache of stripServer in 0.00s",
+      " \u267b Used cache of merge in 0.00s",
+      " \u267b Used cache of rename in 0.01s",
+      " \u267b Used cache of binaryPatch in 0.00s",
+      " \u267b Used cache of copyUnpatchedClasses in 0.00s",
+      " \u267b Used cache of applyDevTransforms in 0.00s",
+      " \u267b Used cache of binaryWithNeoForge in 0.00s"
+    ],
+    "tasks": [
+      "> Task :createMinecraftArtifacts",
+      "> Task :compileJava"
+    ],
+    "gate_checks": null
+  },
+  {
+    "case": "preserved",
+    "result": {
+      "case": "preserved",
+      "model_calls": 0,
+      "verification": true,
+      "diagnostic_only": true,
+      "promoted": false,
+      "timeout_seconds": 240,
+      "timed_out": true,
+      "gate_passed": false,
+      "outer_elapsed_seconds": 240.043,
+      "cleanup": {
+        "removal_returncode": 0,
+        "removal_stdout": "hive-004b-cc5c297a21bc\n",
+        "removal_stderr": "",
+        "inspect_returncode": 1,
+        "inspect_stdout": "[]\n",
+        "inspect_stderr": "error: no such object: hive-004b-cc5c297a21bc\n",
+        "container_absent": true
+      }
+    },
+    "launch_to_container_s": 1.251,
+    "native_input_copy_s": 75.023,
+    "seed_copy_s": 3.525,
+    "before_gradle_s": 92.014,
+    "gradle_s": null,
+    "gradle_exposure_to_timeout_s": 148.026,
+    "nfrt_reported_runtime_s": [
+      7.51
+    ],
+    "cached_nodes": [
+      "stripClient",
+      "mergeMappings",
+      "extractServer",
+      "stripServer",
+      "merge",
+      "rename",
+      "binaryPatch",
+      "copyUnpatchedClasses",
+      "applyDevTransforms",
+      "binaryWithNeoForge"
+    ],
+    "cache_hits": [
+      "Shared read-only dependency cache is an incubating feature.",
+      " \u267b Used cache of stripClient in 0.00s",
+      " \u267b Used cache of mergeMappings in 0.00s",
+      " \u267b Used cache of extractServer in 0.00s",
+      " \u267b Used cache of stripServer in 0.00s",
+      " \u267b Used cache of merge in 0.00s",
+      " \u267b Used cache of rename in 0.00s",
+      " \u267b Used cache of binaryPatch in 0.00s",
+      " \u267b Used cache of copyUnpatchedClasses in 0.00s",
+      " \u267b Used cache of applyDevTransforms in 0.00s",
+      " \u267b Used cache of binaryWithNeoForge in 0.00s"
+    ],
+    "tasks": [
+      "> Task :createMinecraftArtifacts",
+      "> Task :compileJava"
+    ],
+    "gate_checks": null
+  }
+]

@@ -1,0 +1,57 @@
+{
+  "study": "HIVE-MODEL-RUNTIME-READINESS-001",
+  "model": "qwen2.5-coder:14b",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "options": {
+    "temperature": 0.1,
+    "num_predict": 2048,
+    "num_ctx": 12288
+  },
+  "stream": true,
+  "truncate": false,
+  "system": "You are the bounded planner agent inside Nix Workshop Hive Build Mode. Follow the role contract exactly.",
+  "prompt": "This is a non-task model-runtime readiness check. Return exactly one complete JSON object with status equal to ready and marker equal to runtime-check. No software task, code, file operation, or tool use is requested.",
+  "format": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "ready"
+        ]
+      },
+      "marker": {
+        "type": "string",
+        "enum": [
+          "runtime-check"
+        ]
+      }
+    },
+    "required": [
+      "status",
+      "marker"
+    ],
+    "additionalProperties": false
+  },
+  "provider_file_sha256": "0a59e4d70857b26ebf3efed6b37dfd1a5a42f488c315c7499094340eef4ef641",
+  "output_role_selection": "T005 failed planner call: existing 2048 output cap; not the 6000 worker cap",
+  "normal_total_timeout_seconds": 900,
+  "normal_read_timeout_seconds": 900,
+  "existing_max_http_attempts": 2,
+  "stop_sequences": "not supplied in request, unchanged; model parameters captured separately",
+  "unspecified_options": "keep_alive, seed, num_gpu, num_batch, top_p etc remain unspecified as in T005",
+  "intentional_non_task_changes": [
+    "user prompt",
+    "diagnostic JSON response schema"
+  ],
+  "environment_observed": {
+    "OLLAMA_BASE_URL": null,
+    "OLLAMA_CONTEXT_LENGTH": null,
+    "OLLAMA_NUM_PARALLEL": null,
+    "OLLAMA_MAX_LOADED_MODELS": null,
+    "OLLAMA_KEEP_ALIVE": null,
+    "OLLAMA_GPU_OVERHEAD": null,
+    "CUDA_VISIBLE_DEVICES": null
+  },
+  "environment_limit": "Client-process variables only; inherited environment of the already-running server is not exposed by the API. No environment settings changed."
+}

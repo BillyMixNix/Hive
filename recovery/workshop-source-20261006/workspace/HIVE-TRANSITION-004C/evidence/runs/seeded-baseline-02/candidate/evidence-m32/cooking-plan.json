@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 2,
+  "timestamp": "2026-09-23T06:33:23.233807900Z",
+  "plan": {
+    "schemaVersion": 2,
+    "goal": "minecraft:stone",
+    "quantity": 1,
+    "status": "materials_ready",
+    "ownedRequirements": [
+      {
+        "item": "minecraft:cobblestone",
+        "quantity": 1
+      }
+    ],
+    "missingRequirements": [],
+    "selectedPath": [
+      {
+        "recipeId": "minecraft:stone",
+        "output": "minecraft:stone",
+        "outputQuantity": 1,
+        "crafts": 1,
+        "type": "minecraft:smelting",
+        "depth": 0,
+        "limitations": [
+          "Materials only: no crafting access, recipe-unlock, dimension or execution capability has been verified",
+          "Input containers/remainders are not credited; dependencies conservatively consume ingredients",
+          "Cooking device, fuel/heat, processing time, power and current machine state are unknown"
+        ],
+        "ingredients": [
+          {
+            "position": 0,
+            "item": "minecraft:cobblestone",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "nextAction": {
+      "kind": "prepare_recipe",
+      "item": "minecraft:stone",
+      "quantity": 1,
+      "recipeId": "minecraft:stone",
+      "reason": "One operation's input, output space and heat/fuel were observed at minecraft:furnace at 2320791/-59/3041074. Full-path materials remain reserved; future operations need fresh checks."
+    },
+    "alternativePaths": [],
+    "unsupportedSteps": [],
+    "metrics": {
+      "indexGeneration": 1,
+      "expandedNodes": 3,
+      "depth": 0,
+      "searchTruncated": false,
+      "indexComplete": false,
+      "planningNanos": 17340600
+    },
+    "limitations": [
+      "Material planning only; crafting access, recipe unlocks, fuel, machines, energy, fluids, and execution are not verified.",
+      "Only main inventory slots 0..35; equipment, nested inventories and storage networks are not included.",
+      "Future outputs are hypothetical until every prerequisite is satisfied; they are never reported as currently owned.",
+      "Crafting remainders/byproducts are not credited. Route selection is bounded and may miss a better allocation.",
+      "Recipe knowledge has unknown or truncated outputs; no indexed route does not prove no route exists."
+    ],
+    "execution": {
+      "status": "observed_conditions_met",
+      "recipeId": "minecraft:stone",
+      "operations": 1,
+      "station": "minecraft:furnace at 2320791/-59/3041074",
+      "inputs": [
+        {
+          "item": "minecraft:cobblestone",
+          "quantity": 1
+        }
+      ],
+      "fuel": [
+        {
+          "source": "player",
+          "slot": 1,
+          "item": "minecraft:coal",
+          "count": 1,
+          "burnTicks": 1600
+        }
+      ],
+      "blockers": [],
+      "unverifiedConditions": [
+        "Snapshot feasibility only; modded claims, interaction hooks, line of sight and safe access are unverified.",
+        "Crafting output preview must be checked: overlapping crafting recipe selection is unverified.",
+        "Only one next operation; no whole-chain fuel scheduling, station output ownership or automatic action."
+      ],
+      "nextAction": {
+        "kind": "prepare_recipe",
+        "item": "minecraft:stone",
+        "quantity": 1,
+        "recipeId": "minecraft:stone",
+        "reason": "One operation's input, output space and heat/fuel were observed at minecraft:furnace at 2320791/-59/3041074. Full-path materials remain reserved; future operations need fresh checks."
+      },
+      "observation": {
+        "schemaVersion": 1,
+        "timestamp": "2026-09-23T06:33:23.196276700Z",
+        "dimension": "minecraft:overworld",
+        "scan": {
+          "radius": 8,
+          "totalPositions": 4913,
+          "scannedPositions": 4913,
+          "loadedPositions": 4913,
+          "unloadedPositions": 0,
+          "discoveredStations": 1,
+          "recordsTruncated": false,
+          "budgetExceeded": false,
+          "deepInspections": 1,
+          "predicateChecks": 71
+        },
+        "stations": [
+          {
+            "blockId": "minecraft:furnace",
+            "kind": "furnace",
+            "x": 2320791,
+            "y": -59,
+            "z": 3041074,
+            "distanceSquared": 4.25,
+            "withinReach": true,
+            "vanillaMayInteract": true,
+            "lockAllows": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "details": {
+              "status": "available",
+              "data": {
+                "stacks": [
+                  {
+                    "slot": 0,
+                    "item": null,
+                    "count": 0,
+                    "hasComponents": false
+                  },
+                  {
+                    "slot": 1,
+                    "item": null,
+                    "count": 0,
+                    "hasComponents": false
+                  },
+                  {
+                    "slot": 2,
+                    "item": null,
+                    "count": 0,
+                    "hasComponents": false
+                  }
+                ],
+                "lit": false,
+                "waterlogged": false,
+                "timers": {
+                  "status": "available",
+                  "data": {
+                    "remainingBurnTicks": 0,
+                    "cookingProgress": 0,
+                    "cookingTotalTime": 0,
+                    "slotProgress": [],
+                    "slotTotalTimes": []
+                  },
+                  "detail": "Observed from the running server"
+                },
+                "inputCompatible": {
+                  "status": "available",
+                  "data": true,
+                  "detail": "Observed from the running server"
+                },
+                "outputCompatible": {
+                  "status": "available",
+                  "data": true,
+                  "detail": "Observed from the running server"
+                },
+                "fuelTicksPerItem": {
+                  "status": "available",
+                  "data": 0,
+                  "detail": "Observed from the running server"
+                },
+                "freeCampfireSlots": 0,
+                "compatibleFuelSlots": [
+                  0,
+                  1
+                ]
+              },
+              "detail": "Observed from the running server"
+            }
+          }
+        ],
+        "operation": {
+          "status": "available",
+          "data": {
+            "recipeId": "minecraft:stone",
+            "kind": "cooking",
+            "stationKind": "furnace",
+            "fits2x2": false,
+            "fits3x3": false,
+            "unlockAllowed": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "cookingTicks": {
+              "status": "available",
+              "data": 200,
+              "detail": "Observed from the running server"
+            },
+            "uniqueCookingMatch": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "playerInputMatches": {
+              "status": "available",
+              "data": true,
+              "detail": "Observed from the running server"
+            },
+            "selectedInputSlot": 0,
+            "selectedInputItem": "minecraft:cobblestone"
+          },
+          "detail": "Observed from the running server"
+        },
+        "fuelSlots": [
+          {
+            "slot": 0,
+            "item": "minecraft:cobblestone",
+            "count": 1,
+            "availableAfterReservation": 0,
+            "burnTicksPerItem": {
+              "status": "available",
+              "data": 0,
+              "detail": "Observed from the running server"
+            },
+            "hasComponents": false
+          },
+          {
+            "slot": 1,
+            "item": "minecraft:coal",
+            "count": 1,
+            "availableAfterReservation": 1,
+            "burnTicksPerItem": {
+              "status": "available",
+              "data": 1600,
+              "detail": "Observed from the running server"
+            },
+            "hasComponents": false
+          }
+        ],
+        "limitations": [
+          "Nearby stations and their contents are observations, not player-owned material resources.",
+          "Vanilla distance, lock, spawn protection and world border do not establish modded claim permissions, line of sight or a safe path.",
+          "Modded interaction permissions are unverified; no interaction event or world mutation is performed.",
+          "Only exact vanilla workstation blocks and block-entity classes are inspected. Discovery is limited to the shown cube and loaded chunks.",
+          "The 10 ms budget is cooperative; one recipe predicate, fuel hook or vanilla serialization call cannot be interrupted.",
+          "Cooking timing snapshots whitelist numeric fields only; raw NBT, names, locks and attachments are never exported."
+        ]
+      }
+    }
+  },
+  "questContext": {
+    "status": "unavailable",
+    "data": null,
+    "detail": "Quest scan not requested; use /companion quests or /companion next"
+  },
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "item:minecraft:stone",
+        "kind": "ITEM"
+      },
+      {
+        "id": "recipe:minecraft:stone",
+        "kind": "RECIPE"
+      },
+      {
+        "id": "requirement:minecraft:stone/0",
+        "kind": "REQUIREMENT"
+      },
+      {
+        "id": "item:minecraft:cobblestone",
+        "kind": "ITEM"
+      },
+      {
+        "id": "capability:processing_execution",
+        "kind": "CAPABILITY"
+      },
+      {
+        "id": "capability:quest_details",
+        "kind": "CAPABILITY"
+      }
+    ],
+    "edges": [
+      {
+        "from": "recipe:minecraft:stone",
+        "relation": "PRODUCES",
+        "to": "item:minecraft:stone",
+        "quantity": 1,
+        "detail": "fixed_recipe_output"
+      },
+      {
+        "from": "recipe:minecraft:stone",
+        "relation": "REQUIRES",
+        "to": "requirement:minecraft:stone/0",
+        "quantity": 1,
+        "detail": "exact; alternatives are OR choices"
+      },
+      {
+        "from": "requirement:minecraft:stone/0",
+        "relation": "SATISFIED_BY",
+        "to": "item:minecraft:cobblestone",
+        "quantity": 1,
+        "detail": "one allowed alternative"
+      },
+      {
+        "from": "recipe:minecraft:stone",
+        "relation": "REQUIRES",
+        "to": "capability:processing_execution",
+        "quantity": 1,
+        "detail": "unobserved device/fuel/execution conditions"
+      },
+      {
+        "from": "item:minecraft:stone",
+        "relation": "OBSERVATION_UNAVAILABLE",
+        "to": "capability:quest_details",
+        "quantity": 0,
+        "detail": "Quest scan not requested; use /companion quests or /companion next"
+      }
+    ],
+    "truncated": false
+  },
+  "timings": {
+    "materialNanos": 28190900,
+    "executionNanos": 39883300,
+    "questNanos": 17500,
+    "totalNanos": 77010900
+  }
+}

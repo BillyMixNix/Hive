@@ -1,0 +1,1 @@
+class SnapshotFormatter { static int value() { return 1; } }

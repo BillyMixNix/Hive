@@ -1,0 +1,64 @@
+[
+  {
+    "task_id": "T001",
+    "condition": "direct",
+    "trial_id": "b23236964328",
+    "status": "model_failed",
+    "candidate_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-002\\workshop\\hive_runs\\external_candidates\\b23236964328",
+    "applied": false,
+    "model": {
+      "session_id": "sess_06c763e8845094d5006abe09f39bd081a3bc4d99f65a78a7b6",
+      "turn_id": "turn_06c763e8845094d5006abe09f979b881a3935c8929730f9c83",
+      "turns": 1,
+      "usage": null,
+      "wall_seconds": 11.906,
+      "status": "invalid",
+      "turn_status": "failed",
+      "error_type": "RuntimeError",
+      "error_message": "Direct Astra turn failed"
+    },
+    "wall_seconds": 15.643,
+    "outcome_class": "MODEL_TASK_FAILURE"
+  },
+  {
+    "task_id": "T001",
+    "condition": "hive",
+    "status": "failed",
+    "applied": false,
+    "promotion_allowed": false,
+    "job_id": "a0447b26d21c4400a1e8359793357a73",
+    "job_state": "failed",
+    "run_id": "7ead867c94cd",
+    "changed_files": [],
+    "acceptance": null,
+    "full_gate": null,
+    "verification": {
+      "passed": null,
+      "isolation": null
+    },
+    "review": null,
+    "agent_calls": [
+      {
+        "role": "planner",
+        "provider": "openai_agents",
+        "model": "gpt-6-astra",
+        "session_id": null,
+        "turn_id": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "reasoning_tokens": null,
+        "usage_status": "unavailable",
+        "usage_observed_at": "2026-10-01T07:21:47.067163+00:00",
+        "usage_source": "unavailable",
+        "status": "failed",
+        "error_type": "ConnectError",
+        "wall_seconds": 0.55,
+        "call_id": "7ead867c94cd:call:0001"
+      }
+    ],
+    "wall_seconds": 10.913,
+    "outcome_class": "INVALID"
+  }
+]

@@ -1,0 +1,49 @@
+Checking sealed baseline, verifier and approved offline caches
+Preflight passed. Starting one local-only J001 diagnostic.
+{
+  "ordinal": 1,
+  "task_id": "J001",
+  "replicate": 1,
+  "model": "qwen2.5-coder:14b",
+  "controller": "hive",
+  "run_id": "8aa64e4e455d",
+  "classification": "MODEL_TASK_FAILURE",
+  "applied": false,
+  "api_cost_usd": 0.0,
+  "electricity_cost_usd": null,
+  "status": "rejected",
+  "changed_files": [],
+  "model_calls": 5,
+  "input_tokens": 10248,
+  "output_tokens": 1227,
+  "model_seconds": 533.819,
+  "structural_repairs": 0,
+  "targeted_corrections": 0,
+  "planner_corrections": 1,
+  "observation_requests": 0,
+  "full_verification": {
+    "passed": false,
+    "full_gate_skipped": true,
+    "checks": [
+      {
+        "name": "external_full_gate_prerequisite",
+        "passed": false,
+        "detail": "A worker or edit prerequisite failed; partial proposals are ineligible."
+      }
+    ]
+  },
+  "review": {
+    "approve": false,
+    "summary": "The proposed diff does not match the request, and deterministic verification failed.",
+    "issues": [
+      "The proposed diff is not provided.",
+      "Deterministic verification failed due to a worker or edit prerequisite failure.",
+      "Deterministic verification failed.",
+      "One or more agents failed; partial proposals cannot be approved.",
+      "No valid scoped edits were produced."
+    ],
+    "confidence": 0.0
+  },
+  "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "wall_seconds": 550.348
+}

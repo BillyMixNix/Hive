@@ -1,0 +1,603 @@
+{
+  "baseline_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+  "results": [
+    {
+      "case": "baseline",
+      "kind": "unchanged",
+      "paths": [],
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "diagnostic_only": true,
+      "current_policy_compatible": true,
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "A-main",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/ATMCompanion.java"
+      ],
+      "candidate_sha256": "5b6827f7d90bd6e8674ed1843bac83559812b70023d8a6e300e72cff40bf7fbe",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/ATMCompanion.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "B-J001",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+      ],
+      "candidate_sha256": "d7460b18d7052ebbf661cb0cd66aa1cecb95ed3c47eb6cc83d5f06ea75642556",
+      "diagnostic_only": true,
+      "current_policy_compatible": true,
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "C-J002",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+      ],
+      "candidate_sha256": "67361e464f043026cc391b638c6ec6d9619d851c0329aacecb57bdfbd3e07a1c",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "D-J003",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/state/Observation.java"
+      ],
+      "candidate_sha256": "ece5852654d7dad4df4203246b53d7cdde07841fcda0ed2bbef46f32b2ecc74b",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/state/Observation.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "E-J004",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+        "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+      ],
+      "candidate_sha256": "3c7c486074b1a377e5ba95541c1c6ac2595e6c87fb3231b5edafbf6b355ad045",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "F-unrelated",
+      "kind": "comment",
+      "paths": [
+        "src/main/java/dev/atmcompanion/state/SnapshotService.java"
+      ],
+      "candidate_sha256": "1e0739fab8595d7425fda4ba2ac456ea150f38d3c6dbfd7df7ccde0c57e7cfa7",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/main/java/dev/atmcompanion/state/SnapshotService.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "G-package-addition",
+      "kind": "java_add",
+      "paths": [
+        "src/main/java/qualification/independence/Probe.java"
+      ],
+      "candidate_sha256": "07b8d68c5dff46da967d124fafd11965aef9c17bff95a45dd2ff033bd03bd1e4",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT source inventory changed"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": true,
+      "variation_class": "SAFE_INDEPENDENT_VARIATION",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "H-test",
+      "kind": "comment",
+      "paths": [
+        "src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"
+      ],
+      "candidate_sha256": "d8f25a9edb7cc0b9ca0a780208dc959a2312541012db85f0153dd13bde12e2aa",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: src/test/java/dev/atmcompanion/activity/ActivityCommandServiceResetTest.java"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "I-resource",
+      "kind": "resource",
+      "paths": [
+        "src/main/resources/assets/qualification/probe.txt"
+      ],
+      "candidate_sha256": "2e308fad5c551f5af364a1e93e4d6a5c344db777c03d29b34fb79e0b1e14d44f",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT source inventory changed"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "J-build-comment",
+      "kind": "comment",
+      "paths": [
+        "build.gradle"
+      ],
+      "candidate_sha256": "15a52c65bcf9042859306d03e471afa505ff9d4bbbe81dedecf696ed2e56b935",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: build.gradle"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "J2-binary-option",
+      "kind": "binary_option",
+      "paths": [
+        "build.gradle"
+      ],
+      "candidate_sha256": "29f4b97ce228701b6568095369e086c674747665431f484022068de340d5af82",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: build.gradle"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "c5d3c7f388ff21c5879873fcf29e124b9121a6ed0a04cfc42bca107ceb08225c",
+      "same_reconstruction_inputs_as_baseline": false,
+      "changed_input_sections": [
+        "inputProperties"
+      ],
+      "ten_node_keys": null,
+      "key_evidence": "Not executed; changed/unknown inputs cannot be authorized from old keys.",
+      "expected_reuse_safe": false,
+      "proposed_reuse_allowed": false,
+      "variation_class": "RECONSTRUCTION_RELEVANT",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "K-property",
+      "kind": "property",
+      "paths": [
+        "gradle.properties"
+      ],
+      "candidate_sha256": "97eec7e477908562db017480e1a2718092f1dbac51dcb6f6ff67945a0473dc73",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: gradle.properties"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "L-access-transformer",
+      "kind": "at",
+      "paths": [
+        "src/main/resources/META-INF/accesstransformer.cfg"
+      ],
+      "candidate_sha256": "9644ca85830124a3bade4668118617233e786dd50112364f52d681d1f70bd88c",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT source inventory changed"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d5c0d046b46d2e5892221a8fc3ccce06abf0c5eb0b197a17b77b5cb0ad46adea",
+      "same_reconstruction_inputs_as_baseline": false,
+      "changed_input_sections": [
+        "inputFiles",
+        "optionalInputs"
+      ],
+      "ten_node_keys": null,
+      "key_evidence": "Not executed; changed/unknown inputs cannot be authorized from old keys.",
+      "expected_reuse_safe": false,
+      "proposed_reuse_allowed": false,
+      "variation_class": "RECONSTRUCTION_RELEVANT",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "M-interface-injection",
+      "kind": "ii",
+      "paths": [
+        "build.gradle",
+        "diagnostic/interface-injection.json"
+      ],
+      "candidate_sha256": "3befa7847553703d7cba1d612857ba93c2e71421741a3edfb011e64b5227f656",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT source inventory changed"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "44431b7e1f965b4cb8c3fade9f85d7637293dce7782fc82875f15c2fd835aca4",
+      "same_reconstruction_inputs_as_baseline": false,
+      "changed_input_sections": [
+        "inputFiles",
+        "optionalInputs"
+      ],
+      "ten_node_keys": null,
+      "key_evidence": "Not executed; changed/unknown inputs cannot be authorized from old keys.",
+      "expected_reuse_safe": false,
+      "proposed_reuse_allowed": false,
+      "variation_class": "RECONSTRUCTION_RELEVANT",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "N-parchment",
+      "kind": "parchment",
+      "paths": [
+        "build.gradle",
+        "diagnostic/parchment.zip"
+      ],
+      "candidate_sha256": "0165e612c649eb1688aa394462f8dd506ec27988b78d2a7435367437c53c0d67",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT source inventory changed"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "8af5ae8b3fdb5060005c0db8ef6f587a69e237b75a1bbf931eeaaa9673995fb0",
+      "same_reconstruction_inputs_as_baseline": false,
+      "changed_input_sections": [
+        "inputProperties",
+        "inputFiles",
+        "optionalInputs"
+      ],
+      "ten_node_keys": null,
+      "key_evidence": "Not executed; changed/unknown inputs cannot be authorized from old keys.",
+      "expected_reuse_safe": false,
+      "proposed_reuse_allowed": false,
+      "variation_class": "RECONSTRUCTION_RELEVANT",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "O-dependency",
+      "kind": "dependency",
+      "paths": [
+        "build.gradle"
+      ],
+      "candidate_sha256": "b1e826ffc3c2d949be16de8582723c6e0fcd31f9d162cac4527b50f6ed620e7c",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: build.gradle"
+      },
+      "gradle_returncode": 0,
+      "timed_out": false,
+      "measured_input_identity": "d39e8dabf989f0e15c1a4dff9d0bc66837f5253f36aab2b8f841aa2575f95c40",
+      "same_reconstruction_inputs_as_baseline": true,
+      "changed_input_sections": [],
+      "ten_node_keys": {
+        "applyDevTransforms": "1fb7697597d32e00b3f4c6820036207e18dd35a1",
+        "binaryPatch": "0397ce4e987718eba98aa47e8cfe282ddcbbb61d",
+        "binaryWithNeoForge": "15c9a101cab2c4626123fc498aae4071050aa518",
+        "copyUnpatchedClasses": "225df56b09fa183ed417b3752b9a6127159074ce",
+        "extractServer": "3708c41639d60b56739a2bf9df29858932d3099a",
+        "merge": "8503fda02cff83cf4896f8b254e4fde2d657ec61",
+        "mergeMappings": "2100ae7c755bb34ac4545c9eeec4a90c42ad48c4",
+        "rename": "1a893e034a07f18b78686946288be2d24ab3fcfb",
+        "stripClient": "2d7e78755d8b28f5d42c07f6d2b44b7f333acb44",
+        "stripServer": "8bb3d3745bd6f4ac9d34d27c8a1809cf14c56fdd"
+      },
+      "key_evidence": "Expected identical by unchanged measured determinants and pinned implementation; freshly observed hits are recorded separately in real controls.",
+      "expected_reuse_safe": true,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    },
+    {
+      "case": "P-neoforge",
+      "kind": "neoforge",
+      "paths": [
+        "gradle.properties"
+      ],
+      "candidate_sha256": "3f81fa0873d1bca08ccef4488cf9c0267ddd7b4081a71f8e1230df9ec9f01cd2",
+      "diagnostic_only": true,
+      "current_policy_compatible": false,
+      "current_policy_error": {
+        "type": "ValueError",
+        "message": "NFRT reconstruction input changed: gradle.properties"
+      },
+      "gradle_returncode": 1,
+      "timed_out": false,
+      "measured_input_identity": null,
+      "same_reconstruction_inputs_as_baseline": null,
+      "changed_input_sections": [],
+      "ten_node_keys": null,
+      "key_evidence": "Not executed; changed/unknown inputs cannot be authorized from old keys.",
+      "expected_reuse_safe": null,
+      "proposed_reuse_allowed": false,
+      "variation_class": "CONSERVATIVELY_UNKNOWN",
+      "scope_note": "Only the reviewed main Java class is proposed for generalized authorization; unchanged data in other probe categories is not broad authorization."
+    }
+  ]
+}

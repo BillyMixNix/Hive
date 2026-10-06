@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"approve\": true,\n  \"summary\": \"The changes in `SnapshotFormatter.boundLine` ensure that complete UTF-16 surrogate pairs are preserved when truncating a line to `MAX_LINE_CHARS`. The existing control-character and section-sign sanitization, as well as the `...` suffix when truncation is necessary, are maintained. The behavior for ordinary ASCII lines remains unchanged, and truncation never introduces an unpaired surrogate or returns a string longer than the bound.\",\n  \"issues\": [],\n  \"confidence\": 1\n}",
+  "input_tokens": 1615,
+  "output_tokens": 112,
+  "raw_id": null
+}

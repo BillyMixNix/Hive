@@ -1,0 +1,212 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :clean
+
+> Task :createMinecraftArtifacts
+Loaded 145 artifacts from [USERPROFILE]\Documents\Codex\2026-09-22\atm10-ai-companion-autonomous-build-mega\ATM-Companion\build\tmp\createMinecraftArtifacts\nfrt_artifact_manifest.properties
+*** Started working on downloadJson
+ DONE  Completed downloadJson in 0.04s
+*** Started working on downloadServer
+*** Started working on downloadClientMappings
+*** Started working on downloadClient
+ DONE  Completed downloadClient in 0.06s
+ DONE  Completed downloadClientMappings in 0.06s
+ DONE  Completed downloadServer in 0.06s
+*** Started working on mergeMappings
+ REUSE Used cache of mergeMappings in 0.01s
+*** Started working on stripClient
+ REUSE Used cache of stripClient in 0.00s
+*** Started working on extractServer
+ REUSE Used cache of extractServer in 0.00s
+*** Started working on stripServer
+ REUSE Used cache of stripServer in 0.00s
+*** Started working on merge
+ REUSE Used cache of merge in 0.00s
+*** Started working on rename
+ REUSE Used cache of rename in 0.00s
+*** Started working on decompile
+ REUSE Used cache of decompile in 0.00s
+*** Started working on inject
+ REUSE Used cache of inject in 0.00s
+*** Started working on patch
+ REUSE Used cache of patch in 0.00s
+*** Started working on applyNeoforgePatches
+ REUSE Used cache of applyNeoforgePatches in 0.00s
+*** Started working on transformSources
+ REUSE Used cache of transformSources in 0.00s
+*** Started working on recompile
+ REUSE Used cache of recompile in 0.00s
+*** Started working on sourcesWithNeoForge
+ REUSE Used cache of sourcesWithNeoForge in 0.00s
+*** Started working on compiledWithNeoForge
+ REUSE Used cache of compiledWithNeoForge in 0.00s
+*** Started working on sourcesAndCompiledWithNeoForge
+ REUSE Used cache of sourcesAndCompiledWithNeoForge in 0.00s
+Total runtime: 3.26s
+
+
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+
+> Task :test
+
+IntegrationRegistryTest > absentModDoesNotConstructOrLoadItsAdapter() PASSED
+
+IntegrationRegistryTest > unsupportedAdapterIsNotAskedForState() PASSED
+
+IntegrationRegistryTest > absentCapabilityIsUnknownRatherThanAvailable() PASSED
+
+IntegrationRegistryTest > runtimeAndLinkageFailuresDoNotHideHealthyIntegrations() PASSED
+
+IntegrationRegistryTest > registrationsAreBoundedAndDuplicateCapabilitiesAreRejected() PASSED
+
+IntegrationRegistryTest > failureInsideCapabilityInspectionIsContainedAndLogged() PASSED
+
+IngredientAllocationTest > inputBoundsAndNegativeCountsAreRejected() PASSED
+
+IngredientAllocationTest > allocationDoesNotMutateCallerInventory() PASSED
+
+IngredientAllocationTest > missingEmptyAndUnknownSlotsAreHandledWithoutInventingInventory() PASSED
+
+IngredientAllocationTest > overlappingAlternativesNeedReallocationRatherThanGreedyConsumption() PASSED
+
+IngredientAllocationTest > allThreeSlotThreeRequirementCasesMatchAnIndependentExhaustiveOracle() PASSED
+
+IngredientAllocationTest > onePhysicalItemCannotSatisfyTwoIngredientPositions() PASSED
+
+RecipeReportTest > tagAlternativesRemainAChoiceRatherThanFixedIndependentRequirements() PASSED
+
+RecipeReportTest > unsupportedMachineRequirementsCannotBecomeKnownMissingItems() PASSED
+
+RecipeReportTest > truncatedAlternativesAndRecipeResultsRetainTheirUncertaintyFlags() PASSED
+
+GameSnapshotTest > advancementCountsMustDescribeTheScannedDefinitions() PASSED
+
+GameSnapshotTest > collectionsAreDefensiveCopies() PASSED
+
+GameSnapshotTest > inventoryModAndAdvancementCollectionsAreBounded() PASSED
+
+GameSnapshotTest > registryIdMustRemainNamespacedAndOccupiedStackMustHavePositiveCount() PASSED
+
+GameSnapshotTest > nonfiniteValuesCannotProduceInvalidJsonNumbers() PASSED
+
+GameSnapshotTest > capabilityCannotContradictUnderlyingObservation() PASSED
+
+ObservationTest > observedEmptyInventoryRemainsKnownAndEmpty() PASSED
+
+ObservationTest > unavailableIsNotAnObservedEmptyCollection() PASSED
+
+ObservationTest > notIntegratedIsSeparateFromUnavailable() PASSED
+
+ObservationTest > contradictoryObservationStatesAreRejected() PASSED
+
+SnapshotFormatterTest > fullInventoryIsSummarizedWithStrictChatBounds() PASSED
+
+SnapshotFormatterTest > locationNumbersHaveStableFormattingAcrossHostLocales() PASSED
+
+SnapshotFormatterTest > inspectedEmptyInventoryIsClearlyDifferentFromUnavailable() PASSED
+
+SnapshotFormatterTest > chatTextCannotInjectNewLinesOrMinecraftFormatting() PASSED
+
+SnapshotFormatterTest > unknownInventoryAndProgressionAreNeverFormattedAsKnownZero() PASSED
+
+SnapshotJsonTest > emptyInventoryAndInspectedEmptyEquipmentRoundTripAsAvailable() PASSED
+
+SnapshotJsonTest > deserializationCannotBypassObservationOrCapabilityInvariants() PASSED
+
+SnapshotJsonTest > nonIntegratedStatusAndCompletedVsIncompleteAdvancementsArePreserved() PASSED
+
+SnapshotJsonTest > populatedSnapshotRoundTripsWithoutChangingRegistryIds() PASSED
+
+SnapshotJsonTest > serializationAndDeserializationEnforceUtf8ByteLimit() PASSED
+
+SnapshotJsonTest > malformedMissingAndUnsupportedSchemaDataCannotBecomeSnapshots() PASSED
+
+SnapshotJsonTest > unavailableInventorySerializesAsNullRatherThanEmptyKnownInventory() PASSED
+
+> Task :check
+> Task :build
+> Task :compileGametestJava
+> Task :processGametestResources
+> Task :gametestClasses
+
+> Task :downloadAssets
+Loaded 145 artifacts from [USERPROFILE]\Documents\Codex\2026-09-22\atm10-ai-companion-autonomous-build-mega\ATM-Companion\build\tmp\downloadAssets\nfrt_artifact_manifest.properties
+Downloading asset index 17
+Using Minecraft asset root: [USERPROFILE]\.gradle\caches\neoformruntime\assets
+  DL    https://piston-meta.mojang.com/v1/packages/76d7a97b9e0778fda3b14e474f012450ca0de1bb/17.json
+
+> Task :writeGameTestServerLegacyClasspath
+> Task :prepareGameTestServerRun
+
+> Task :runGameTestServer
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[07:07:17] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.44, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.251, --fml.neoFormVersion, 20240808.144430]
+[07:07:17] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[07:07:17] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Microsoft; OS Windows 11 arch amd64 version 10.0
+[07:07:17] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[07:07:17] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/[USERPROFILE]/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[07:07:18] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[07:07:18] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		ATM Companion 0.1.0 (atm_companion)
+		ATM Companion Runtime Tests 0.1.0 (atm_companion_tests)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.251 (neoforge)
+[07:07:21] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[07:07:26] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[07:07:36] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[07:07:36] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[07:07:36] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[07:07:36] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[07:07:36] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[07:07:37] [modloading-worker-0/INFO] [de.at.ATMCompanion/]: ATM Companion M1 initialized: explicit server snapshots, no external AI/network client
+[07:07:37] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.251, for MC 1.21.1
+[07:07:37] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[07:07:37] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/[USERPROFILE]/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[07:07:37] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/[USERPROFILE]/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[07:07:37] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [atm_companion_tests]
+[07:07:41] [main/INFO] [minecraft/RecipeManager]: Loaded 1293 recipes
+[07:07:41] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[07:07:44] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[07:07:44] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[07:07:45] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 6%
+[07:07:45] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 797 ms
+[07:07:45] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[07:07:45] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[07:07:45] [Server thread/INFO] [minecraft/GameTestServer]: 8 tests are now running at position 14475007, -59, 7902635!
+[07:07:47] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (8 tests)...
+[07:07:47] [Server thread/INFO] [minecraft/GameTestServer]: [        ]
+[07:07:47] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 3 at (-3.5, -60.0, -1.5)
+[07:07:48] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[07:07:48] [Server thread/INFO] [minecraft/GameTestServer]: [++++    ]
+[07:07:49] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++]
+[07:07:49] [Server thread/INFO] [minecraft/GameTestServer]: ========= 8 GAME TESTS COMPLETE IN 4.397 s ======================
+[07:07:49] [Server thread/INFO] [minecraft/GameTestServer]: All 8 required tests passed :)
+[07:07:49] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[07:07:49] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[07:07:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[07:07:49] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: test-mock-player lost connection: Server closed
+[07:07:49] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player left the game
+[07:07:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[07:07:51] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[07:07:53] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[07:07:53] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+BUILD SUCCESSFUL in 1m 15s
+13 actionable tasks: 13 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html

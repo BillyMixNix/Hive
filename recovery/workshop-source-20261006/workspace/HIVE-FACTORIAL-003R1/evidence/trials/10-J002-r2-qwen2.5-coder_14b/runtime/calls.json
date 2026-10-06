@@ -1,0 +1,154 @@
+[
+  {
+    "number": 1,
+    "role": "planner",
+    "model": "qwen2.5-coder:14b",
+    "started_at": "2026-10-06T06:16:38.050288+00:00",
+    "monotonic_start": 179509.0716807,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 2048,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 1,
+        "role": "planner",
+        "started_at": "2026-10-06T06:16:38.532085+00:00",
+        "monotonic_start": 179509.5534813,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "c3be3dd2d0f18fd3e34e0e6b743beba0a5b4df13ea822677d1ca6d64499f5b81",
+        "request_bytes": 28089,
+        "resource_label": "call-01-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:17:34.256075+00:00",
+        "headers_elapsed_seconds": 55.72400329998345,
+        "first_stream_bytes_at": "2026-10-06T06:17:34.259747+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:19:25.304049+00:00",
+        "elapsed_seconds": 166.7719673999818
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 3819,
+    "output_tokens": 203,
+    "ended_at": "2026-10-06T06:19:25.309379+00:00",
+    "elapsed_seconds": 167.2590984000126
+  },
+  {
+    "number": 2,
+    "role": "backend",
+    "model": "qwen2.5-coder:14b",
+    "started_at": "2026-10-06T06:19:27.938216+00:00",
+    "monotonic_start": 179678.9596092,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 6000,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 2,
+        "role": "backend",
+        "started_at": "2026-10-06T06:19:28.390726+00:00",
+        "monotonic_start": 179679.4121205,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "90081fa69bc0ff0257bb1ba15ce1c6f6608aa34ac45d711b54228a1bd1744996",
+        "request_bytes": 29529,
+        "resource_label": "call-02-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:19:45.654872+00:00",
+        "headers_elapsed_seconds": 17.264150500006508,
+        "first_stream_bytes_at": "2026-10-06T06:19:45.658249+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:22:04.332966+00:00",
+        "elapsed_seconds": 155.942246599996
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 5204,
+    "output_tokens": 202,
+    "ended_at": "2026-10-06T06:22:04.339183+00:00",
+    "elapsed_seconds": 156.40097439999226
+  },
+  {
+    "number": 3,
+    "role": "backend",
+    "model": "qwen2.5-coder:14b",
+    "started_at": "2026-10-06T06:25:08.969590+00:00",
+    "monotonic_start": 180019.9909833,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 6000,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 3,
+        "role": "backend",
+        "started_at": "2026-10-06T06:25:09.397221+00:00",
+        "monotonic_start": 180020.4186168,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "3c98004139718700f6700e6ae7f1b4d5d18719be96207971741fb8f083d7ca65",
+        "request_bytes": 36732,
+        "resource_label": "call-03-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:25:34.952540+00:00",
+        "headers_elapsed_seconds": 25.555318700004136,
+        "first_stream_bytes_at": "2026-10-06T06:25:34.956972+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:28:43.897060+00:00",
+        "elapsed_seconds": 214.49984240002232
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 7596,
+    "output_tokens": 202,
+    "ended_at": "2026-10-06T06:28:43.904492+00:00",
+    "elapsed_seconds": 214.93490699998802
+  },
+  {
+    "number": 4,
+    "role": "reviewer",
+    "model": "qwen2.5-coder:14b",
+    "started_at": "2026-10-06T06:28:44.173631+00:00",
+    "monotonic_start": 180235.1950222,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 1536,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 4,
+        "role": "reviewer",
+        "started_at": "2026-10-06T06:28:44.598682+00:00",
+        "monotonic_start": 180235.6200794,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "7bd9f649c380f8bc76e2003cec37b45a4f613b476b037260796320ff8ec7eba2",
+        "request_bytes": 8142,
+        "resource_label": "call-04-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:28:52.290086+00:00",
+        "headers_elapsed_seconds": 7.691400500014424,
+        "first_stream_bytes_at": "2026-10-06T06:28:52.293084+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:29:36.437697+00:00",
+        "elapsed_seconds": 51.83901779999724
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 1873,
+    "output_tokens": 112,
+    "ended_at": "2026-10-06T06:29:36.443933+00:00",
+    "elapsed_seconds": 52.27030860001105
+  }
+]

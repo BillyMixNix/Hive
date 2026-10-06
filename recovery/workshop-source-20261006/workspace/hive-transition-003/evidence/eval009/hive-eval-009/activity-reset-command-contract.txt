@@ -1,0 +1,19 @@
+HIVE-EVAL-009B — Activity Reset Command Wiring
+
+Objective
+Expose the accepted ActivityCommandService.reset operation as `/companion activity reset`.
+
+Allowed edit path
+- src/main/java/dev/atmcompanion/command/CompanionCommands.java
+
+Contract
+- Preserve `/companion activity` behavior.
+- Make the existing `activity` literal a branch containing the existing execution and a `reset` literal.
+- The reset execution must obtain the invoking player, call `ACTIVITY_SERVICE.reset(player.getGameProfile().getName())`, send the returned line, and return 1.
+- Add only the smallest private command handler required.
+- Do not alter other commands, activity tracking behavior, tests, or domain classes.
+- Keep the added/deleted line count at or below 30.
+
+Acceptance
+- Full Gradle suite passes.
+- Promotion remains manual.

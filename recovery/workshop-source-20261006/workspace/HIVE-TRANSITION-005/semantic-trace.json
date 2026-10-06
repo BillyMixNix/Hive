@@ -1,0 +1,130 @@
+{
+  "run_id": "45ad10e6dd49",
+  "assessment": "manual semantic analysis, not a keyword checker",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Preserve complete UTF-16 surrogate pairs during truncation to MAX_LINE_CHARS.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "PARTIAL",
+        "worker_acceptance": "PRESENT_EXPLICITLY",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PRESENT_EXPLICITLY",
+        "correction_prompt": "PRESENT_EXPLICITLY"
+      },
+      "assessment_note": "Goal alone says handle pairs correctly; acceptance adds truncation semantics."
+    },
+    {
+      "id": "R2",
+      "requirement": "Keep existing control-character sanitization.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "ABSENT",
+        "worker_acceptance": "PRESENT_EXPLICITLY",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PRESENT_EXPLICITLY",
+        "correction_prompt": "PRESENT_EXPLICITLY"
+      },
+      "assessment_note": "Explicit in backend acceptance and both worker contracts."
+    },
+    {
+      "id": "R3",
+      "requirement": "Keep existing section-sign sanitization.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "ABSENT",
+        "worker_acceptance": "PRESENT_EXPLICITLY",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PRESENT_EXPLICITLY",
+        "correction_prompt": "PRESENT_EXPLICITLY"
+      },
+      "assessment_note": "Explicit in backend acceptance and both worker contracts."
+    },
+    {
+      "id": "R4",
+      "requirement": "Keep the ... suffix when truncation is necessary.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "ABSENT",
+        "worker_acceptance": "PRESENT_EXPLICITLY",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PRESENT_EXPLICITLY",
+        "correction_prompt": "PRESENT_EXPLICITLY"
+      },
+      "assessment_note": "Explicit in backend acceptance and both worker contracts."
+    },
+    {
+      "id": "R5",
+      "requirement": "Keep unchanged behavior for ordinary ASCII lines.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "ABSENT",
+        "normalized_plan": "ABSENT",
+        "worker_goal": "ABSENT",
+        "worker_acceptance": "ABSENT",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "ABSENT",
+        "correction_prompt": "ABSENT"
+      },
+      "assessment_note": "No ASCII compatibility statement/equivalent survives planner output or worker prompt. ASCII source examples are not a compatibility obligation."
+    },
+    {
+      "id": "R6",
+      "requirement": "Truncation must never introduce an unpaired surrogate.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "PARTIAL",
+        "worker_acceptance": "PRESENT_EQUIVALENTLY",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PRESENT_EQUIVALENTLY",
+        "correction_prompt": "PRESENT_EQUIVALENTLY"
+      },
+      "assessment_note": "Preserve complete pairs during truncation is equivalent to not introducing a broken pair. Explicit no-unpaired wording remains only in global acceptance, which is not rendered."
+    },
+    {
+      "id": "R7",
+      "requirement": "The returned string must never exceed the bound.",
+      "stages": {
+        "original_task": "PRESENT_EXPLICITLY",
+        "planner_request": "PRESENT_EXPLICITLY",
+        "raw_planner_response": "PRESENT_EXPLICITLY",
+        "normalized_plan": "PRESENT_EXPLICITLY",
+        "worker_goal": "ABSENT",
+        "worker_acceptance": "PARTIAL",
+        "interface_contract": "ABSENT",
+        "initial_worker_prompt": "PARTIAL",
+        "correction_prompt": "PARTIAL"
+      },
+      "assessment_note": "Global acceptance explicitly prohibits exceeding MAX_LINE_CHARS; worker criteria only names truncation to MAX_LINE_CHARS, leaving suffix-inclusive bound less explicit."
+    }
+  ],
+  "stages": [
+    "original_task",
+    "planner_request",
+    "raw_planner_response",
+    "normalized_plan",
+    "worker_goal",
+    "worker_acceptance",
+    "interface_contract",
+    "initial_worker_prompt",
+    "correction_prompt"
+  ],
+  "artifacts": "evidence/reconstruction"
+}

@@ -1,0 +1,42 @@
+.............................F........s................s................ [ 14%]
+.....s.......................................s............s............. [ 29%]
+........................................................................ [ 43%]
+........................................................................ [ 58%]
+........................................................................ [ 73%]
+...................................................F.................... [ 87%]
+.............................................s.............              [100%]
+================================== FAILURES ===================================
+___________ test_real_full_compilation_and_invalid_source_rejection ___________
+tests\test_fresh_compilation_policy.py:53: in test_real_full_compilation_and_invalid_source_rejection
+    assert cp.returncode==0,cp.stderr
+E   AssertionError: Traceback (most recent call last):
+E       File "/probe-test.py", line 4, in <module>
+E         p=pathlib.Path('/work/probe');p.mkdir()
+E       File "/usr/lib/python3.10/pathlib.py", line 1175, in mkdir
+E         self._accessor.mkdir(self, mode)
+E     PermissionError: [Errno 13] Permission denied: '/work/probe'
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['D:\\HiveRuntime\\DockerDesktop\\resources\\bin\\docker.EXE', 'run', '--rm', '--name', 'hive-fu...175, in mkdir\n    self._accessor.mkdir(self, mode)\nPermissionError: [Errno 13] Permission denied: \'/work/probe\'\n').returncode
+____________ test_all_historically_invalid_outputs_remain_invalid _____________
+tests\test_ownership_representation.py:123: in test_all_historically_invalid_outputs_remain_invalid
+    result=json.loads(artifact.read_text())
+                      ^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py:537: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-004C\\evidence\\historical-replay.json'
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_gradle_cache_priming.py:118: symlinks unavailable on this platform
+SKIPPED [1] tests\test_hive_context_contract.py:261: symlink creation is unavailable on this host
+SKIPPED [1] tests\test_hive_external_root.py:310: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_external_snapshot_rejects0\\outside' -> 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_external_snapshot_rejects0\\external-repository\\linked-outside'
+SKIPPED [1] tests\test_hive_isolated_verifier.py:107: symlink creation is unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_sanitized_copy_rejects_sy0\\secret.txt' -> 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_sanitized_copy_rejects_sy0\\source\\tests\\leak.py'
+SKIPPED [1] tests\test_hive_jvm_profile.py:119: directory symlinks are unavailable on this platform: [WinError 1314] A required privilege is not held by the client: 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_runtime_output_exclusion_0' -> 'D:\\CodexTemp\\hive-transition-004c-0fc545a4\\test_runtime_output_exclusion_0\\candidate\\run-gametest'
+SKIPPED [1] tests\test_v05_runtime.py:63: symlink creation is unavailable on this host
+2 failed, 483 passed, 6 skipped in 76.20s (0:01:16)

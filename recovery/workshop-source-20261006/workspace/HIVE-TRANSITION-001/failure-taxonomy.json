@@ -1,0 +1,2359 @@
+{
+  "study": "HIVE-TRANSITION-001",
+  "source_study": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002",
+  "source_lock_sha256": "58e88643602fcceae5ae375ee043c011e1411ec9f7d0dda91ca75d221d22e45b",
+  "counts": {
+    "planner_missing_contract_masks_host_scope_violation": 8,
+    "planner_inactive_role_representation_mismatch": 6,
+    "worker_edit_anchor_mismatch": 2
+  },
+  "counts_note": "Primary categories count each trial once; independent boundary violations can overlap.",
+  "trials": [
+    {
+      "ordinal": 3,
+      "task": "J001",
+      "replicate": 2,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "cace24ea0b5e",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\03-J001-r2-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "f433d419c1f1e0471ec52cff4265304a2c93b1934eed59069816ff7217503820",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.",
+            "tests_goal": "Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java"
+              ]
+            },
+            "acceptance": [
+              "SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation."
+              ],
+              "tests": [
+                "SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation."
+              ]
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly during truncation.",
+            "tests_goal": "Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java"
+              ]
+            },
+            "acceptance": [
+              "SnapshotFormatter correctly preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "SnapshotFormatter.boundLine handles UTF-16 surrogate pairs correctly during truncation."
+              ],
+              "tests": [
+                "SnapshotFormatterTest includes tests for preserving complete UTF-16 surrogate pairs during truncation."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "SnapshotFormatter.boundLine",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "SnapshotFormatter.boundLine truncates lines to MAX_LINE_CHARS while preserving complete UTF-16 surrogate pairs and does not introduce unpaired surrogates."
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18180,
+          "input_tokens": 3785,
+          "output_tokens": 240,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T22:37:38.1511279-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21557,
+          "input_tokens": 2050,
+          "output_tokens": 308,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T22:39:28.7017948-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 4,
+      "task": "J001",
+      "replicate": 2,
+      "model": "qwen3:8b",
+      "run_id": "a11a613abe9f",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\04-J001-r2-qwen3-8b-hive\\run.json",
+      "run_sha256": "01bac96ecf7efe90028258e141811fe684d80f31a9ee7afb3282829e6a31115a",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter.boundLine to handle UTF-16 surrogate pairs correctly",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Update SnapshotFormatter.java to preserve complete UTF-16 surrogate pairs during line truncation",
+            "tests_goal": "No test changes required",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/com/example/snapshot/SnapshotFormatter.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Preserve complete UTF-16 surrogate pairs during truncation",
+              "Maintain existing sanitization logic",
+              "Add '...' suffix for truncated lines",
+              "Ensure no unpaired surrogates in output",
+              "String length remains within MAX_LINE_CHARS bound"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Modified boundLine method handles surrogate pairs correctly",
+                "Sanitization logic remains unchanged",
+                "Truncation adds '...' suffix as before"
+              ],
+              "tests": []
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.backend proposes 'src/main/java/com/example/snapshot/SnapshotFormatter.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify boundLine to preserve UTF-16 surrogate pairs during truncation",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Update SnapshotFormatter.java's boundLine method to preserve complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS, while maintaining existing sanitization, ... suffix on truncation, and ensuring no unpaired surrogates or strings longer than the bound",
+            "tests_goal": "No test changes required",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/com/example/snapshot/SnapshotFormatter.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Truncated lines maintain complete UTF-16 surrogate pairs",
+              "Existing sanitization logic remains unchanged",
+              "Truncated lines include ... suffix when exceeding MAX_LINE_CHARS",
+              "No unpaired surrogates in output",
+              "Strings longer than MAX_LINE_CHARS are properly truncated"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "boundLine method now preserves UTF-16 surrogate pairs during truncation"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [
+              {
+                "name": "boundLine",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Method boundLine truncates lines while preserving UTF-16 surrogate pairs and adding '...' suffix"
+              }
+            ],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.backend proposes 'src/main/java/com/example/snapshot/SnapshotFormatter.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "PlanValidationError",
+          "exception_message": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18180,
+          "input_tokens": 3787,
+          "output_tokens": 803,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T22:42:16.7523181-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21804,
+          "input_tokens": 2050,
+          "output_tokens": 1511,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T22:45:18.1499705-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 6,
+      "task": "J004",
+      "replicate": 1,
+      "model": "qwen3:8b",
+      "run_id": "e66097b0d1c2",
+      "earliest_failed_transition": "edit execution preflight",
+      "category": "worker_edit_anchor_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\06-J004-r1-qwen3-8b-hive\\run.json",
+      "run_sha256": "380de39ae1abba54421a919804dbb0bcadcbe18883fac77d8d122ec5a3ed5423",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "accepted",
+          "recorded_failure": null,
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Implementing scan.coveragePercent() and observedCoveragePercent() methods",
+            "ui_goal": "no change needed",
+            "backend_goal": "src/main/java/dev/atmcompanion/execution/ExecutionContext.java, src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java",
+            "tests_goal": "no change needed",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "ExecutionContext.scan.coveragePercent() returns floor(100 * scannedPositions / totalPositions) with zero if totalPositions is zero",
+              "ExecutionAssessment.observedCoveragePercent() delegates to observation's scan with -1 if no observation"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Added scan.coveragePercent() method to ExecutionContext",
+                "Added observedCoveragePercent() method to ExecutionAssessment"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "accepted"
+        }
+      ],
+      "worker_calls": 2,
+      "model_calls": 5,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "backend",
+          "stage": "edit_validation",
+          "exception_type": "StructuralEditError",
+          "exception_message": "src/main/java/dev/atmcompanion/execution/ExecutionContext.java: anchor must occur exactly once, found 0"
+        }
+      ],
+      "full_verification": {
+        "passed": false,
+        "full_gate_skipped": true,
+        "checks": [
+          {
+            "name": "external_full_gate_prerequisite",
+            "passed": false,
+            "detail": "A worker or edit prerequisite failed; partial proposals are ineligible."
+          }
+        ]
+      },
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18398,
+          "input_tokens": 3835,
+          "output_tokens": 729,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T22:54:10.0038989-07:00"
+          }
+        },
+        {
+          "role": "backend",
+          "prompt_bytes": 31231,
+          "input_tokens": 2050,
+          "output_tokens": 1272,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T22:56:53.1752886-07:00"
+          }
+        },
+        {
+          "role": "backend",
+          "prompt_bytes": 33646,
+          "input_tokens": 2050,
+          "output_tokens": 787,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T22:58:27.9716816-07:00"
+          }
+        },
+        {
+          "role": "reviewer",
+          "prompt_bytes": 2234,
+          "input_tokens": 313,
+          "output_tokens": 1536,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:00:55.3505274-07:00"
+          }
+        },
+        {
+          "role": "reviewer",
+          "prompt_bytes": 1899,
+          "input_tokens": 247,
+          "output_tokens": 667,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:01:52.0563256-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 8,
+      "task": "J004",
+      "replicate": 1,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "be5c4b76eeac",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\08-J004-r1-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "d81e04f92377cb5d4e8e9c443491beb5e2f20e3b7c0bef30f6866b6c875949af",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add coverage percentage methods to ExecutionContext and ExecutionAssessment.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement coverage percentage methods in ExecutionContext and ExecutionAssessment.",
+            "tests_goal": "Add regression tests for the new coverage percentage methods.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java",
+                "src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java"
+              ]
+            },
+            "acceptance": [
+              "ExecutionContext.Scan.coveragePercent() returns the correct integer floor of 100 * scannedPositions / totalPositions, with zero when totalPositions is zero.",
+              "ExecutionAssessment.observedCoveragePercent() delegates to its observation's scan and returns -1 when the assessment has no observation."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Ensure ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are implemented correctly and maintain existing invariants."
+              ],
+              "tests": [
+                "Ensure regression tests cover the new coverage percentage methods in ExecutionContext and ExecutionAssessment."
+              ]
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add coverage percentage methods to ExecutionContext and ExecutionAssessment.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement coverage percentage methods in ExecutionContext and ExecutionAssessment.",
+            "tests_goal": "Add regression tests for the new coverage percentage methods.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java",
+                "src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java"
+              ]
+            },
+            "acceptance": [
+              "ExecutionContext.Scan.coveragePercent() returns the correct integer floor of 100 * scannedPositions / totalPositions, with zero when totalPositions is zero.",
+              "ExecutionAssessment.observedCoveragePercent() delegates to its observation's scan and returns -1 when the assessment has no observation."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Ensure ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are implemented correctly and maintain existing invariants."
+              ],
+              "tests": [
+                "Ensure regression tests cover the new coverage percentage methods in ExecutionContext and ExecutionAssessment."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "coverage_methods",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "ExecutionContext.Scan.coveragePercent() returns an integer and ExecutionAssessment.observedCoveragePercent() returns an integer or -1"
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18398,
+          "input_tokens": 3833,
+          "output_tokens": 288,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:07:46.1978335-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 22077,
+          "input_tokens": 2050,
+          "output_tokens": 347,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:09:50.6252798-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 9,
+      "task": "J003",
+      "replicate": 1,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "dbf0e6b7b221",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\09-J003-r1-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "ea4ea4b72ab28302e8435b1823ea42304d03b58e41344ca78f6feb94857ae6ce",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add `Observation.map` method to `Observation.java`.",
+            "ui_goal": "No changes needed.",
+            "backend_goal": "Implement the `Observation.map` method in `Observation.java`.",
+            "tests_goal": "Write regression tests for the `Observation.map` method.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "The `Observation.map` method correctly applies the mapper to available data, preserves status and detail, and handles null mapper or null mapped result appropriately."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "The `Observation.map` method is implemented as specified, preserving status and detail and handling null cases correctly."
+              ],
+              "tests": [
+                "Regression tests cover the `Observation.map` method, ensuring it behaves as expected for various scenarios."
+              ]
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add `Observation.map` method to `Observation.java`.",
+            "ui_goal": "No changes needed.",
+            "backend_goal": "Implement the `Observation.map` method in `Observation.java`.",
+            "tests_goal": "Write regression tests for the `Observation.map` method.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "The `Observation.map` method correctly applies the mapper to available data, preserves status and detail, and handles null mapper or null mapped result appropriately."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "The `Observation.map` method is implemented as specified, preserving status and detail and handling null cases correctly."
+              ],
+              "tests": [
+                "Regression tests cover the `Observation.map` method, ensuring it behaves as expected for various scenarios."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "ObservationMapMethod",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Observation.map(java.util.function.Function<? super T, ? extends U>) returns Observation<U> with correct behavior as specified."
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18212,
+          "input_tokens": 3792,
+          "output_tokens": 234,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:12:17.4299471-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21505,
+          "input_tokens": 2050,
+          "output_tokens": 295,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:14:05.9337217-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 12,
+      "task": "J003",
+      "replicate": 1,
+      "model": "qwen3:8b",
+      "run_id": "5e231107ad2d",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\12-J003-r1-qwen3-8b-hive\\run.json",
+      "run_sha256": "88c7eb1c76044c2fefe61379770281ddfd44a42b394f92d0189b1c2f5699f9d4",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add Observation.map method to preserve status/detail and apply mapper once for available/integrated observations",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Modify src/main/java/dev/atmcompanion/state/Observation.java to add map method",
+            "tests_goal": "No test changes required",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Observation.map(Function) method added to Observation.java",
+              "Mapper applied exactly once for available/integrated observations",
+              "Null mapper or null result causes rejection",
+              "Unavailable/not-integrated observations preserve status/detail with null data"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Observation.map(Function<? super T, ? extends U>) method added with correct implementation",
+                "Mapper applied only when observation is available and integrated",
+                "Null mapper or null result returns rejected observation",
+                "Unavailable/not-integrated observations return with null data but preserved status/detail"
+              ],
+              "tests": []
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "accepted"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.backend proposes 'Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add `map` method to `Observation` class with interface contract",
+            "ui_goal": "No changes required",
+            "backend_goal": "Implement `map` method in `Observation` class",
+            "tests_goal": "No changes required",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "Observation.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Observation.map(Function) returns new Observation<U> with transformed data",
+              "Mapper is applied only when data is available",
+              "Null mapper or null result returns error observation",
+              "Unavailable observations retain status/detail without mapper invocation"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Observation class has `map(Function<T, U> mapper)` method",
+                "Mapper is applied exactly once for available data",
+                "Null mapper returns error observation",
+                "Null result returns error observation",
+                "Unavailable observations retain status/detail without mapper"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [
+              {
+                "name": "ObservationMappingContract",
+                "owner": "backend",
+                "consumer_roles": [
+                  "ui",
+                  "tests"
+                ],
+                "contract": "GET /api/observations/{id} returns Observation with mapped data when mapper is applied"
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.backend proposes 'Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.backend proposes 'Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.backend proposes 'Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18212,
+          "input_tokens": 3794,
+          "output_tokens": 1095,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:28:26.5351543-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 22041,
+          "input_tokens": 2050,
+          "output_tokens": 1016,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:30:20.8252759-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 14,
+      "task": "J003",
+      "replicate": 2,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "9140b61fa309",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\14-J003-r2-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "f84552c73c8a87b140ad76e070d63373ddb2a8dff03f8957b849d58bf41fb4c7",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add `Observation.map` method to `Observation.java`.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement `Observation.map` method in `Observation.java`.",
+            "tests_goal": "Add regression tests for `Observation.map` method.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "The `Observation.map` method correctly applies the mapper to available data, preserves status and detail, and handles null mapper or null mapped result appropriately. Regression tests cover the new method behavior."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "The `Observation.map` method is implemented as specified, preserving status and detail and handling null cases correctly."
+              ],
+              "tests": [
+                "Regression tests for `Observation.map` method are added and pass successfully."
+              ]
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add `Observation.map` method to `Observation.java`.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement `Observation.map` method in `Observation.java`.",
+            "tests_goal": "Add regression tests for `Observation.map` method.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "The `Observation.map` method correctly applies the mapper to available data, preserves status and detail, and handles null mapper or null mapped result appropriately. Regression tests cover the new method behavior."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "The `Observation.map` method is implemented as specified, preserving status and detail and handling null cases correctly."
+              ],
+              "tests": [
+                "Regression tests for `Observation.map` method are added and pass successfully."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "ObservationMapMethod",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Observation.map(java.util.function.Function<? super T, ? extends U>) returns Observation<U> with the specified behavior."
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18212,
+          "input_tokens": 3792,
+          "output_tokens": 237,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:35:32.442366-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21521,
+          "input_tokens": 2050,
+          "output_tokens": 297,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-04T23:37:17.8154904-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 16,
+      "task": "J003",
+      "replicate": 2,
+      "model": "qwen3:8b",
+      "run_id": "6c6a1636f8f2",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\16-J003-r2-qwen3-8b-hive\\run.json",
+      "run_sha256": "c19ce0a93071769e10d79b3ec88f3c08e11475a4d68d0b5a215361e5600edd92",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs files; no change needed must have no files",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Implement Observation.map method",
+            "ui_goal": "UI agent needs to use the new map method for data transformation",
+            "backend_goal": "Add Observation.map method to src/main/java/dev/atmcompanion/state/Observation.java",
+            "tests_goal": "Write tests for Observation.map method",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "Observation.map applies mapper exactly once for available/integrated observations",
+              "Null mapper or null result is rejected",
+              "Unavailable/not-integrated observations preserve status/detail with null data"
+            ],
+            "worker_acceptance": {
+              "ui": [
+                "UI agent can transform observation data using map method"
+              ],
+              "backend": [
+                "Observation.map method is implemented in Observation.java"
+              ],
+              "tests": [
+                "ObservationTest verifies map method behavior for all cases"
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "Observation.map",
+                "owner": "backend",
+                "consumer_roles": [
+                  "ui"
+                ],
+                "contract": "Observation<U> map(Function<T, U> mapper)"
+              }
+            ]
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs files; no change needed must have no files",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.backend proposes 'src/main/java/com/example/Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']; worker_files.tests proposes 'src/test/java/com/example/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Corrected plan to add Observation.map method",
+            "ui_goal": "no change needed",
+            "backend_goal": "Add the Observation.map method to Observation.java",
+            "tests_goal": "Write unit tests for Observation.map",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/com/example/Observation.java"
+              ],
+              "tests": [
+                "src/test/java/com/example/ObservationTest.java"
+              ]
+            },
+            "acceptance": [
+              "Observation.map method exists in Observation.java",
+              "Unit tests for Observation.map pass",
+              "No UI changes required"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Observation.map method implemented"
+              ],
+              "tests": [
+                "Observation.map tests pass"
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "Observation.map",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Function that takes a Function<T, R> and returns Observation<R>"
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.backend proposes 'src/main/java/com/example/Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']; worker_files.tests proposes 'src/test/java/com/example/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.backend proposes 'src/main/java/com/example/Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']; worker_files.tests proposes 'src/test/java/com/example/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.backend proposes 'src/main/java/com/example/Observation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']; worker_files.tests proposes 'src/test/java/com/example/ObservationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/Observation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18212,
+          "input_tokens": 3794,
+          "output_tokens": 817,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:46:53.5749166-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21803,
+          "input_tokens": 2050,
+          "output_tokens": 1009,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-04T23:48:48.4671844-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 19,
+      "task": "J002",
+      "replicate": 2,
+      "model": "qwen3:8b",
+      "run_id": "b35db6c70d35",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\19-J002-r2-qwen3-8b-hive\\run.json",
+      "run_sha256": "b088993421a0d86dc2f61cedc0e2bbf3dd63884788d7777452fe1e5d36427207",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Updating IngredientAllocation.canSatisfy to enforce input validation",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Modify src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java to add validation in canSatisfy() method",
+            "tests_goal": "No test changes required",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Validation throws IllegalArgumentException for null inputs",
+              "Validation rejects negative slot identities",
+              "Validation rejects slot identities >= 36",
+              "Validation rejects null count values in matching-slot lists",
+              "Validation rejects invalid count values in counts map",
+              "Existing allocation behavior remains unchanged",
+              "Input parameters are not mutated"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Validation throws IllegalArgumentException for null inputs",
+                "Validation rejects negative slot identities",
+                "Validation rejects slot identities >= 36",
+                "Validation rejects null count values in matching-slot lists",
+                "Validation rejects invalid count values in counts map",
+                "Existing allocation behavior remains unchanged",
+                "Input parameters are not mutated"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "accepted"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify IngredientAllocation.canSatisfy to validate inputs and throw exceptions for invalid cases",
+            "ui_goal": "Implement input validation in backend method",
+            "backend_goal": "Add parameter validation to reject null, negative, and out-of-range values",
+            "tests_goal": "Verify validation logic with test cases",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "Reject null inputs with IllegalArgumentException",
+              "Reject negative slot identities with IllegalArgumentException",
+              "Reject slot identities >=36 with IllegalArgumentException",
+              "Reject null count values with IllegalArgumentException"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Validate all parameters in canSatisfy method",
+                "Throw exceptions for invalid input cases"
+              ],
+              "tests": [
+                "Create test cases for all validation scenarios"
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "IngredientValidation",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Validate input parameters for IngredientAllocation.canSatisfy method"
+              }
+            ]
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "PlanValidationError",
+          "exception_message": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18110,
+          "input_tokens": 3772,
+          "output_tokens": 748,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:05:46.6491059-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 22145,
+          "input_tokens": 2050,
+          "output_tokens": 2028,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:10:08.6712676-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 20,
+      "task": "J002",
+      "replicate": 2,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "a3754f78f834",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\20-J002-r2-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "e247eba6131c32b6a6dd6ce351c2b9b5e7b4ccfa1b0f20f01f07a3c9f08df07a",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Update `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "tests_goal": "Add tests to verify the validation in `IngredientAllocation.canSatisfy`.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              ],
+              "tests": [
+                "Tests cover all validation cases in `IngredientAllocation.canSatisfy`."
+              ]
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Update `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "tests_goal": "Add tests to verify the validation in `IngredientAllocation.canSatisfy`.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              ],
+              "tests": [
+                "Tests cover all validation cases in `IngredientAllocation.canSatisfy`."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "IngredientAllocationValidation",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "Method `canSatisfy` in `IngredientAllocation` validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              }
+            ],
+            "provider_changes": []
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18110,
+          "input_tokens": 3770,
+          "output_tokens": 240,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T00:13:13.6716319-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21478,
+          "input_tokens": 2050,
+          "output_tokens": 301,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T00:14:59.9517309-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 21,
+      "task": "J004",
+      "replicate": 2,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "aa76bec28cb3",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\21-J004-r2-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "3d6f3f98072ce60ec3178cf01647e7ef40d530375cee16bee7f1b9fe6aa054ab",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add coverage percentage methods to ExecutionContext and ExecutionAssessment.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement coverage percentage methods in ExecutionContext and ExecutionAssessment.",
+            "tests_goal": "Add tests for the new coverage percentage methods.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java",
+                "src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java"
+              ]
+            },
+            "acceptance": [
+              "ExecutionContext.Scan.coveragePercent() returns the correct integer floor of 100 * scannedPositions / totalPositions, with zero when totalPositions is zero.",
+              "ExecutionAssessment.observedCoveragePercent() delegates to its observation's scan and returns -1 when the assessment has no observation."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Ensure ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are implemented correctly and maintain existing invariants."
+              ],
+              "tests": [
+                "Ensure tests cover the new coverage percentage methods in ExecutionContext and ExecutionAssessment."
+              ]
+            },
+            "interface_contracts": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Add coverage percentage methods to ExecutionContext and ExecutionAssessment.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Implement coverage percentage methods in ExecutionContext and ExecutionAssessment.",
+            "tests_goal": "Add tests for the new coverage percentage methods.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java",
+                "src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java"
+              ]
+            },
+            "acceptance": [
+              "ExecutionContext.Scan.coveragePercent() returns the correct integer floor of 100 * scannedPositions / totalPositions, with zero when totalPositions is zero.",
+              "ExecutionAssessment.observedCoveragePercent() delegates to its observation's scan and returns -1 when the assessment has no observation."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Ensure ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are implemented correctly and maintain existing invariants."
+              ],
+              "tests": [
+                "Ensure tests cover the new coverage percentage methods in ExecutionContext and ExecutionAssessment."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "coverage_methods",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "ExecutionContext.Scan.coveragePercent() returns an integer and ExecutionAssessment.observedCoveragePercent() returns an integer or -1"
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionContextTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/dev/atmcompanion/execution/ExecutionAssessmentTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18398,
+          "input_tokens": 3833,
+          "output_tokens": 286,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T00:17:50.9190564-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 22055,
+          "input_tokens": 2050,
+          "output_tokens": 345,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T00:19:54.0507505-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 24,
+      "task": "J004",
+      "replicate": 2,
+      "model": "qwen3:8b",
+      "run_id": "921471f64dd7",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\24-J004-r2-qwen3-8b-hive\\run.json",
+      "run_sha256": "e57f591597394887db608ab5d8f8199b441e08a24aeb63c3f2d99e14a618523e",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Implement scan.coveragePercent() in ExecutionContext and observedCoveragePercent() in ExecutionAssessment as specified",
+            "ui_goal": "no change",
+            "backend_goal": "Implement scan.coveragePercent() in ExecutionContext.java and observedCoveragePercent() in ExecutionAssessment.java",
+            "tests_goal": "no change",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/execution/ExecutionContext.java",
+                "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "ExecutionContext.scan.coveragePercent() returns floor(100 * scannedPositions / totalPositions) with zero if totalPositions is zero",
+              "ExecutionAssessment.observedCoveragePercent() delegates to observation's scan and returns -1 if no observation"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Implement scan.coveragePercent() in ExecutionContext.java",
+                "Implement observedCoveragePercent() in ExecutionAssessment.java"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; tests: active goal needs own acceptance criteria; no change needed must have none; tests: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "accepted"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.ui proposes 'src/main/java/com/example/ui/ExecutionDashboard.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionContext.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionAssessment.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/com/example/test/ExecutionTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Implement coverage percentage calculation in Java files with interface contracts",
+            "ui_goal": "Display coverage percentage metrics to users",
+            "backend_goal": "Calculate and provide coverage percentage data",
+            "tests_goal": "Validate coverage percentage calculations",
+            "worker_files": {
+              "ui": [
+                "src/main/java/com/example/ui/ExecutionDashboard.java"
+              ],
+              "backend": [
+                "src/main/java/com/example/backend/ExecutionContext.java",
+                "src/main/java/com/example/backend/ExecutionAssessment.java"
+              ],
+              "tests": [
+                "src/test/java/com/example/test/ExecutionTest.java"
+              ]
+            },
+            "acceptance": [
+              "Coverage percentage calculation implemented in ExecutionContext.java",
+              "Observed coverage percentage delegation in ExecutionAssessment.java",
+              "Interface contracts defined for method interactions"
+            ],
+            "worker_acceptance": {
+              "ui": [
+                "Displays calculated coverage percentages to users"
+              ],
+              "backend": [
+                "Implements coverage percentage calculation logic",
+                "Provides observed coverage percentage data"
+              ],
+              "tests": [
+                "Validates coverage percentage calculation accuracy"
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "coverage_percent_endpoint",
+                "owner": "backend",
+                "consumer_roles": [
+                  "ui",
+                  "tests"
+                ],
+                "contract": "GET /api/coverage-percent\n\nReturns:\n- 200 OK with coverage percentage as JSON\n- 404 Not Found if no coverage data available"
+              },
+              {
+                "name": "observed_coverage_endpoint",
+                "owner": "backend",
+                "consumer_roles": [
+                  "ui",
+                  "tests"
+                ],
+                "contract": "GET /api/observed-coverage\n\nReturns:\n- 200 OK with observed coverage percentage as JSON\n- 404 Not Found if no observation data available"
+              }
+            ]
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.ui proposes 'src/main/java/com/example/ui/ExecutionDashboard.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionContext.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionAssessment.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/com/example/test/ExecutionTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.ui proposes 'src/main/java/com/example/ui/ExecutionDashboard.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionContext.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionAssessment.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/com/example/test/ExecutionTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.ui proposes 'src/main/java/com/example/ui/ExecutionDashboard.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionContext.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.backend proposes 'src/main/java/com/example/backend/ExecutionAssessment.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']; worker_files.tests proposes 'src/test/java/com/example/test/ExecutionTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/execution/ExecutionContext.java', 'src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18398,
+          "input_tokens": 3835,
+          "output_tokens": 638,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:32:51.525072-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 22135,
+          "input_tokens": 2050,
+          "output_tokens": 1552,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:35:55.8233353-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 26,
+      "task": "J001",
+      "replicate": 1,
+      "model": "qwen3:8b",
+      "run_id": "dcb16552e596",
+      "earliest_failed_transition": "edit execution preflight",
+      "category": "worker_edit_anchor_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\26-J001-r1-qwen3-8b-hive\\run.json",
+      "run_sha256": "d9b497fb21c7da50476a9a1f7ec9ab00930ee54de794e5263882f82ed3179239",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "accepted",
+          "recorded_failure": null,
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter.boundLine to handle UTF-16 surrogate pairs during truncation",
+            "ui_goal": "no change needed",
+            "backend_goal": "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+            "tests_goal": "no change needed",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+              ],
+              "tests": []
+            },
+            "acceptance": [
+              "Preserve complete UTF-16 surrogate pairs during truncation",
+              "No unpaired surrogates in output",
+              "String length does not exceed MAX_LINE_CHARS",
+              "Maintain existing sanitization and ... suffix for truncation"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "Modified boundLine method handles surrogate pairs correctly",
+                "Truncation respects MAX_LINE_CHARS without splitting surrogates"
+              ],
+              "tests": []
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "accepted"
+        }
+      ],
+      "worker_calls": 2,
+      "model_calls": 4,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "backend",
+          "stage": "edit_validation",
+          "exception_type": "StructuralEditError",
+          "exception_message": "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java: find text must occur exactly once, found 0"
+        }
+      ],
+      "full_verification": {
+        "passed": false,
+        "full_gate_skipped": true,
+        "checks": [
+          {
+            "name": "external_full_gate_prerequisite",
+            "passed": false,
+            "detail": "A worker or edit prerequisite failed; partial proposals are ineligible."
+          }
+        ]
+      },
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18180,
+          "input_tokens": 3787,
+          "output_tokens": 1797,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:45:26.1957532-07:00"
+          }
+        },
+        {
+          "role": "backend",
+          "prompt_bytes": 25091,
+          "input_tokens": 2050,
+          "output_tokens": 2186,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T00:50:09.2982107-07:00"
+          }
+        },
+        {
+          "role": "backend",
+          "prompt_bytes": 28210,
+          "input_tokens": 2050,
+          "output_tokens": 5174,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T01:01:59.837348-07:00"
+          }
+        },
+        {
+          "role": "reviewer",
+          "prompt_bytes": 2087,
+          "input_tokens": 282,
+          "output_tokens": 422,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T01:02:34.4123203-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 27,
+      "task": "J001",
+      "replicate": 1,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "ce99ccc67fe6",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\27-J001-r1-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "08bcc40c797408ee246ca854530afe8d4a45a69bdcd490e03011cb50cba850a4",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly.",
+            "tests_goal": "Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java"
+              ]
+            },
+            "acceptance": [
+              "SnapshotFormatter correctly truncates lines without introducing unpaired surrogates and maintains existing behavior for ASCII lines and control-character/section-sign sanitization."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "SnapshotFormatter.boundLine preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound."
+              ],
+              "tests": [
+                "SnapshotFormatterTest includes tests for handling UTF-16 surrogate pairs, control-character/section-sign sanitization, and ordinary ASCII lines."
+              ]
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify SnapshotFormatter to preserve complete UTF-16 surrogate pairs when truncating lines.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify SnapshotFormatter to handle UTF-16 surrogate pairs correctly.",
+            "tests_goal": "Add tests to verify the correct handling of UTF-16 surrogate pairs in SnapshotFormatter.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java"
+              ]
+            },
+            "acceptance": [
+              "SnapshotFormatter correctly truncates lines without introducing unpaired surrogates and maintains existing behavior for ASCII lines and control-character/section-sign sanitization."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "SnapshotFormatter.boundLine preserves complete UTF-16 surrogate pairs when truncating lines to MAX_LINE_CHARS without introducing unpaired surrogates or exceeding the bound."
+              ],
+              "tests": [
+                "SnapshotFormatterTest includes tests for handling UTF-16 surrogate pairs, control-character/section-sign sanitization, and ordinary ASCII lines."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "SnapshotFormatter.boundLine",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "boundLine method in SnapshotFormatter correctly handles UTF-16 surrogate pairs, control-character/section-sign sanitization, and ordinary ASCII lines without introducing unpaired surrogates or exceeding the bound."
+              }
+            ],
+            "provider_changes": []
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/state/SnapshotFormatterTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/state/SnapshotFormatter.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18180,
+          "input_tokens": 3785,
+          "output_tokens": 266,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T01:06:01.9474738-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21700,
+          "input_tokens": 2050,
+          "output_tokens": 342,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T01:08:03.6371082-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 30,
+      "task": "J002",
+      "replicate": 1,
+      "model": "qwen3:8b",
+      "run_id": "a8ffcf83b9fc",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_inactive_role_representation_mismatch",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\30-J002-r1-qwen3-8b-hive\\run.json",
+      "run_sha256": "0b095dfa413f111bec98d8d015f67a49b907b42035d5071a2de051e3cdaa551e",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Modify IngredientAllocation.canSatisfy to enforce input validation",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Update IngredientAllocation.java to add validation for canSatisfy method",
+            "tests_goal": "Update IngredientAllocationTest.java to cover new validation scenarios",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "canSatisfy now throws IllegalArgumentException for null inputs",
+              "Negative slot identities in matching-slot lists are rejected",
+              "Slot identities >=36 in matching-slot lists are rejected",
+              "Invalid slot identities in counts map are rejected",
+              "Null count values in counts map are rejected",
+              "Existing canSatisfy behavior remains unchanged",
+              "No caller inputs are mutated"
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs own acceptance criteria; no change needed must have none; ui: active goal needs files; no change needed must have no files; multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "ui: active goal needs files; no change needed must have no files",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Update IngredientAllocation validation logic and test cases",
+            "ui_goal": "No UI changes required",
+            "backend_goal": "Update IngredientAllocation.java to enforce minimum 200g of each ingredient in the canSatisfy method",
+            "tests_goal": "Update test cases to verify the new validation logic",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/com/example/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/com/example/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "UI: No changes required",
+              "Backend: canSatisfy method enforces minimum 200g of each ingredient",
+              "Tests: Verify validation logic with edge cases"
+            ],
+            "worker_acceptance": {
+              "ui": [
+                "No UI changes required"
+              ],
+              "backend": [
+                "canSatisfy method now enforces minimum 200g of each ingredient"
+              ],
+              "tests": [
+                "Test cases verify validation logic with edge cases"
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "validateIngredientAllocation",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "POST /api/validateIngredientAllocation with request body containing the inputs to check, returns a boolean indicating validity"
+              }
+            ]
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "ui: active goal needs files; no change needed must have no files",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.backend proposes 'src/main/java/com/example/IngredientAllocation.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']; worker_files.tests proposes 'src/test/java/com/example/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "PlanValidationError",
+          "exception_message": "ui: active goal needs files; no change needed must have no files"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; ui: active goal needs files; no change needed must have no files"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18110,
+          "input_tokens": 3772,
+          "output_tokens": 838,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T01:38:11.0469877-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21853,
+          "input_tokens": 2050,
+          "output_tokens": 1670,
+          "runtime": {
+            "context_length": 4096,
+            "size": 5974377100,
+            "size_vram": 4211186072,
+            "expires_at": "2026-10-05T01:41:37.690427-07:00"
+          }
+        }
+      ]
+    },
+    {
+      "ordinal": 32,
+      "task": "J002",
+      "replicate": 1,
+      "model": "qwen2.5-coder:14b",
+      "run_id": "a34bf14e197f",
+      "earliest_failed_transition": "plan validation",
+      "category": "planner_missing_contract_masks_host_scope_violation",
+      "run_artifact": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\32-J002-r1-qwen2.5-coder-14b-hive\\run.json",
+      "run_sha256": "6036c87546262c74e7a35e59c6b29416388a037bee0948bca4ee23a65ee77755",
+      "attempts": [
+        {
+          "attempt": 1,
+          "recorded_status": "rejected",
+          "recorded_failure": "multi-role plan requires at least one interface contract",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Update `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "tests_goal": "Add tests to verify the validation in `IngredientAllocation.canSatisfy`.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              ],
+              "tests": [
+                "Added tests to verify that `IngredientAllocation.canSatisfy` throws `IllegalArgumentException` for null, negative, or out-of-range slot identities and null count values."
+              ]
+            },
+            "interface_contracts": [],
+            "provider_changes": []
+          },
+          "normalizer": "rejected",
+          "error_type": "PlanValidationError",
+          "error": "multi-role plan requires at least one interface contract",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        },
+        {
+          "attempt": 2,
+          "recorded_status": "rejected",
+          "recorded_failure": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']",
+          "parser": "accepted",
+          "parsed": {
+            "summary": "Update `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "ui_goal": "No changes needed for UI.",
+            "backend_goal": "Modify `IngredientAllocation.canSatisfy` to validate slot identities and counts.",
+            "tests_goal": "Add tests to verify the validation in `IngredientAllocation.canSatisfy`.",
+            "worker_files": {
+              "ui": [],
+              "backend": [
+                "src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"
+              ],
+              "tests": [
+                "src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java"
+              ]
+            },
+            "acceptance": [
+              "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+            ],
+            "worker_acceptance": {
+              "ui": [],
+              "backend": [
+                "`IngredientAllocation.canSatisfy` correctly validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              ],
+              "tests": [
+                "Added tests to verify that `IngredientAllocation.canSatisfy` throws `IllegalArgumentException` for null, negative, or out-of-range slot identities and null count values."
+              ]
+            },
+            "interface_contracts": [
+              {
+                "name": "IngredientAllocationValidation",
+                "owner": "backend",
+                "consumer_roles": [
+                  "tests"
+                ],
+                "contract": "`IngredientAllocation.canSatisfy` validates slot identities and counts and throws `IllegalArgumentException` for invalid inputs."
+              }
+            ],
+            "provider_changes": []
+          },
+          "normalizer": "accepted",
+          "independent_host_scope_check": "rejected",
+          "host_scope_error": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "worker_calls": 0,
+      "model_calls": 2,
+      "changed_files": [],
+      "terminal_errors": [
+        {
+          "role": "planner",
+          "stage": "plan_validation",
+          "exception_type": "HostWriteScopeError",
+          "exception_message": "worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        },
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "PlanValidationError",
+          "exception_message": "Planner correction budget exhausted; worker_files.tests proposes 'src/test/java/dev/atmcompanion/knowledge/IngredientAllocationTest.java' outside host-authorized task write files ['src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java']"
+        }
+      ],
+      "full_verification": null,
+      "candidate_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+      "telemetry": [
+        {
+          "role": "planner",
+          "prompt_bytes": 18110,
+          "input_tokens": 3770,
+          "output_tokens": 258,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T02:08:35.7052756-07:00"
+          }
+        },
+        {
+          "role": "planner",
+          "prompt_bytes": 21577,
+          "input_tokens": 2050,
+          "output_tokens": 314,
+          "runtime": {
+            "context_length": 4096,
+            "size": 9953733507,
+            "size_vram": 4256620871,
+            "expires_at": "2026-10-05T02:10:33.7682207-07:00"
+          }
+        }
+      ]
+    }
+  ]
+}

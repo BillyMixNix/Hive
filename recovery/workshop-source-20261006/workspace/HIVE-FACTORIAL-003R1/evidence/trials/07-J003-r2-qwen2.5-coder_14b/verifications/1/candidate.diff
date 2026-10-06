@@ -1,0 +1,12 @@
+--- a/src/main/java/dev/atmcompanion/state/Observation.java
++++ b/src/main/java/dev/atmcompanion/state/Observation.java
+@@ -17,7 +17,8 @@
+     public static <T> Observation<T> unavailable(String reason) {
+         return new Observation<>(CapabilityStatus.UNAVAILABLE, null, reason);
+     }
+-    public static <T> Observation<T> notIntegrated(String reason) {
++    public static <T> Observation<T> notIntegrated(String reason) {    public <U> Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {
++
+         return new Observation<>(CapabilityStatus.NOT_INTEGRATED, null, reason);
+     }
+ }

@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-NFRT-ATTESTATION-002\audit_final.py", line 95, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-NFRT-ATTESTATION-002\audit_final.py", line 27, in main
+    before=(ORIGINAL/p).read_text(encoding='utf-8').splitlines(True) if (ORIGINAL/p).is_file() else []
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py", line 633, in read_text
+    return f.read()
+           ~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x8a in position 98: invalid start byte

@@ -1,0 +1,54 @@
+{
+  "trial": "HIVE-ASTRA-J001",
+  "primary_classification": "BLOCKED",
+  "reason": "Sealed verifier not available on this host; no frozen acceptance execution.",
+  "baseline_verified": true,
+  "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "final_tree_sha256": "ecb294b3b7b9a0bd87e365e9f30d2b07ca083f65734abe0a433f1b69b700d4a6",
+  "original_authorized_file_sha256": "5322a76cc496bdef8c6c5fb3d70ccd11004b076d6246cb7202874ca261255b98",
+  "final_authorized_file_sha256": "618f6bcae2c6f18d1b4e1b9751817b90640adb57d4079165d0af0dbb8e472ecb",
+  "authorized_file": "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+  "changed_repository_files": [
+    "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+  ],
+  "added_repository_files": [],
+  "all_original_repository_files_compared": 276,
+  "git_metadata_supplied": false,
+  "scope_verification": "Every archive member compared byte-for-byte; only authorized file changed.",
+  "implementation_attempts": 1,
+  "materially_distinct_approaches": 1,
+  "local_validation_cycles": 2,
+  "executed_test_suite_invocations": 4,
+  "local_compile_invocations": 2,
+  "blocked_gradle_launches": 2,
+  "sealed_verification_runs": 0,
+  "sealed_gate": {
+    "image": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "required_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "inspection": {
+      "command": [
+        "docker",
+        "image",
+        "inspect",
+        "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+        "--format",
+        "{{.Id}}"
+      ],
+      "result": "NOT EXECUTABLE",
+      "error": "[Errno 2] No such file or directory: 'docker'"
+    },
+    "frozen_test_source_inspected": false,
+    "result": "NOT RUN"
+  },
+  "supplemental_results": {
+    "before_existing_junit": "5/5 PASS",
+    "before_boundary_probe": "FAIL: pair intersects cutoff emits unpaired high surrogate",
+    "after_existing_junit": "5/5 PASS",
+    "after_boundary_probe": "10698 cases PASS"
+  },
+  "decomposition": {
+    "implementation": "Not decomposed; primary agent made sole source edit",
+    "support": "Read-only hash helper during prior preflight; supplemental test helper working from original baseline and public task only"
+  },
+  "other_candidates_inspected": false
+}

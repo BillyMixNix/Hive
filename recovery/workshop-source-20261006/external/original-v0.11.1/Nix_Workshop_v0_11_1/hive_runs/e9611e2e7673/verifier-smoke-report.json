@@ -1,0 +1,137 @@
+{
+  "run_id": "e9611e2e7673",
+  "passed": false,
+  "java_version_inside_container": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "nix.workshop.smoke.VerifierSmokeTest"
+      ]
+    }
+  ],
+  "targeted_junit": {
+    "passed": false,
+    "returncode": 1,
+    "wall_seconds": 6.996,
+    "observed": {
+      "classes": 0,
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "rows": []
+    },
+    "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\nThe read-only dependency cache is disabled because of a configuration problem:\nRead-only cache is configured but the directory layout isn't expected. You must have a pre-populated modules-2 directory at /approved-gradle-cache/modules-2/modules-2 . For more instructions on how to do this, please refer to https://docs.gradle.org/9.2.1/userguide/dependency_resolution.html#sub:shared-readonly-cache in the Gradle documentation.\n",
+    "stderr_tail": "\nFAILURE: Build failed with an exception.\n\n* Where:\nBuild file '/work/candidate/build.gradle' line: 3\n\n* What went wrong:\nPlugin [id: 'net.neoforged.moddev', version: '2.0.147'] was not found in any of the following sources:\n\n- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)\n- Included Builds (No included builds contain this plugin)\n- Plugin Repositories (could not resolve plugin artifact 'net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:2.0.147')\n  Searched in the following repositories:\n    Gradle Central Plugin Repository\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 6s\n"
+  },
+  "full_gradle": {
+    "passed": null,
+    "returncode": null,
+    "timed_out": null,
+    "wall_seconds": null,
+    "observed": {
+      "classes": 0,
+      "tests": 0,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "rows": []
+    },
+    "stdout_tail": "",
+    "stderr_tail": ""
+  },
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21",
+    "image_id": "sha256:2e88933d107e1097986bd44a949f9b1f8499103847f70fc316a69b3b3d8d9ea8",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 128,
+      "memory": "4g",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": []
+  },
+  "baseline_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "baseline_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "candidate_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "candidate_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "baseline_unchanged": true,
+  "candidate_unchanged": true,
+  "wrapper_policy_unchanged": true,
+  "protected_verifier_hashes_unchanged": true,
+  "protected_verifier_hashes_before": {
+    "verification\\Dockerfile": "041772b8ab2e4ee0a20af92dbc4bc93722b666a4328aec65aec5ef23af7e4037",
+    "verification\\runner.py": "42388a81dc448eb32d82b101aa68da1d46c8f707e376ff6fbc2e056f0dfe73ce",
+    "verification\\jvm_runner.py": "0c0d63c888712d5672411d65221532358b924ee299bfb9cea639639861096e9f",
+    "workshop\\hive_verifier.py": "29f5ca335c3e47929c0d2e844726a32e4d03fab11811ef113e7abbd6eee6ded3",
+    "workshop\\hive_jvm.py": "40b0db2047ee3db830c3acf3b626b863f2e1d81a6e2b7eb0a39cd876a9119519",
+    "requirements.txt": "cdb8ef78499f8acb513bc9401409c824a6566511948906386b26a1f4d6945b61"
+  },
+  "protected_verifier_hashes_after": {
+    "verification\\Dockerfile": "041772b8ab2e4ee0a20af92dbc4bc93722b666a4328aec65aec5ef23af7e4037",
+    "verification\\runner.py": "42388a81dc448eb32d82b101aa68da1d46c8f707e376ff6fbc2e056f0dfe73ce",
+    "verification\\jvm_runner.py": "0c0d63c888712d5672411d65221532358b924ee299bfb9cea639639861096e9f",
+    "workshop\\hive_verifier.py": "29f5ca335c3e47929c0d2e844726a32e4d03fab11811ef113e7abbd6eee6ded3",
+    "workshop\\hive_jvm.py": "40b0db2047ee3db830c3acf3b626b863f2e1d81a6e2b7eb0a39cd876a9119519",
+    "requirements.txt": "cdb8ef78499f8acb513bc9401409c824a6566511948906386b26a1f4d6945b61"
+  },
+  "image_id_before": "sha256:2e88933d107e1097986bd44a949f9b1f8499103847f70fc316a69b3b3d8d9ea8",
+  "image_id_after": "sha256:2e88933d107e1097986bd44a949f9b1f8499103847f70fc316a69b3b3d8d9ea8",
+  "image_unchanged": true,
+  "elapsed_wall_seconds": 37.187,
+  "failure_checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 6.996,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\nThe read-only dependency cache is disabled because of a configuration problem:\nRead-only cache is configured but the directory layout isn't expected. You must have a pre-populated modules-2 directory at /approved-gradle-cache/modules-2/modules-2 . For more instructions on how to do this, please refer to https://docs.gradle.org/9.2.1/userguide/dependency_resolution.html#sub:shared-readonly-cache in the Gradle documentation.\n",
+        "stderr_tail": "\nFAILURE: Build failed with an exception.\n\n* Where:\nBuild file '/work/candidate/build.gradle' line: 3\n\n* What went wrong:\nPlugin [id: 'net.neoforged.moddev', version: '2.0.147'] was not found in any of the following sources:\n\n- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)\n- Included Builds (No included builds contain this plugin)\n- Plugin Repositories (could not resolve plugin artifact 'net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:2.0.147')\n  Searched in the following repositories:\n    Gradle Central Plugin Repository\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 6s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    }
+  ],
+  "runtime_stderr": null
+}

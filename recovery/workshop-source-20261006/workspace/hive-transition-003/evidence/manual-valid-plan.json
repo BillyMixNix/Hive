@@ -1,0 +1,24 @@
+{
+  "summary": "Preserve complete surrogate pairs in bounded lines",
+  "ui_goal": "no change needed",
+  "backend_goal": "Modify SnapshotFormatter.boundLine within the requested behavior constraints",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": [
+      "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+    ],
+    "tests": []
+  },
+  "acceptance": [
+    "Preserve surrogate pairs, sanitization, ellipsis, ASCII behavior, and the maximum line bound"
+  ],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": [
+      "Implement the requested bounded-line behavior in the authorized file"
+    ],
+    "tests": []
+  },
+  "interface_contracts": []
+}

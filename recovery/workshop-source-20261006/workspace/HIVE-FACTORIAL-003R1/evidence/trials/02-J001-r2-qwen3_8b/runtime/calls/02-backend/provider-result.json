@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Updated boundLine to preserve UTF-16 surrogate pairs during truncation\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/state/SnapshotFormatter.java\",\n      \"operation\": \"replace\",\n      \"find\": \"return safe.length() <= MAX_LINE_CHARS ? safe : safe.substring(0, MAX_LINE_CHARS - 3) + \\\"...\\\";\",\n      \"replace\": \"int maxLength = MAX_LINE_CHARS;\\n        int endIndex = safe.length();\\n        while (endIndex > 0) {\\n            int codePoint = safe.codePointAt(endIndex - 1);\\n            if (Character.isSurrogate(codePoint)) {\\n                endIndex -= Character.isHighSurrogate(codePoint) ? 1 : 2;\\n            } else {\\n                endIndex--;\\n            }\\n            if (endIndex <= 0 || safe.length() - endIndex <= maxLength) {\\n                break;\\n            }\\n        }\\n        String truncated = safe.substring(0, endIndex);\\n        return truncated.length() < maxLength ? truncated : truncated + \\\"...\\\";\"\n    }\n  ],\n  \"risks\": [\n    \"Modified code may require additional testing for edge cases with surrogate pairs\",\n    \"Assumes Java 8+ for codePointAt method availability\"\n  ]\n}",
+  "input_tokens": 5608,
+  "output_tokens": 961,
+  "raw_id": null
+}

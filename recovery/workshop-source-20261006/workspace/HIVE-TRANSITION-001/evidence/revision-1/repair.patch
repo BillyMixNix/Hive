@@ -1,0 +1,98 @@
+--- a/workshop/hive.py
++++ b/workshop/hive.py
+@@ -554,6 +554,11 @@
+             for contract in interface_contracts
+         ):
+             issues.append("multi-role plan requires an interface contract linking two active roles")
++    # Report the outer boundary even when another plan issue would otherwise
++    # hide it and consume the only correction on an unauthorized assignment.
++    scope_issues = _host_write_scope_issues(worker_files)
++    if scope_issues:
++        raise HostWriteScopeError(scope_issues + issues)
+     if issues:
+         raise PlanValidationError(issues)
+     normalized = dict(plan)
+@@ -600,23 +605,47 @@
+         + ("\n".join(f"- {path}" for path in allowed) or "- none")
+         + "\nEvery worker_files entry must be one of these paths. Do not assign a test file "
+         "just to create regression coverage when that file is not authorized. "
+-        "Host-owned frozen acceptance/verification does not grant worker write authority.\n"
++        "Host-owned frozen acceptance/verification does not grant worker write authority. "
++        "For a role with no authorized work, use the exact goal 'no change needed', "
++        "worker_files [], and worker_acceptance []; do not invent work for that role.\n"
+     )
++
++
++def _host_write_scope_issues(worker_files: dict) -> list[str]:
++    """Check normalized paths without suppressing other planner diagnostics."""
++    allowed = _HOST_WRITE_SCOPE.get()
++    if allowed is None:
++        return []
++    return [
++        f"worker_files.{role} proposes {path!r} outside host-authorized task write files "
++        f"{list(allowed)!r}"
++        for role, paths in worker_files.items()
++        for path in paths if path not in allowed
++    ]
+ 
+ 
+ def _validate_host_write_scope(plan: dict) -> None:
+     """Reject outer-scope expansion while retaining the planner correction path."""
+-    allowed = _HOST_WRITE_SCOPE.get()
+-    if allowed is None:
+-        return
+-    issues = [
+-        f"worker_files.{role} proposes {path!r} outside host-authorized task write files "
+-        f"{list(allowed)!r}"
+-        for role, paths in plan["worker_files"].items()
+-        for path in paths if path not in allowed
+-    ]
++    issues = _host_write_scope_issues(plan["worker_files"])
+     if issues:
+         raise HostWriteScopeError(issues)
++
++
++def _planner_response_schema() -> dict:
++    """Carry host authority into generation; validators remain authoritative."""
++    schema = agent_response_schema("planner")
++    allowed = _HOST_WRITE_SCOPE.get()
++    if allowed is not None:
++        for role, patterns in _active_agent_scopes().items():
++            paths = [path for path in allowed if _match_scope(path, patterns)]
++            fields = schema["properties"]["worker_files"]["properties"]
++            field = copy.deepcopy(fields[role])
++            fields[role] = field
++            if paths:
++                field["items"] = {"type": "string", "enum": paths}
++            else:
++                field["maxItems"] = 0
++    return schema
+ 
+ RUNTIME_EXCLUDES = {
+     ".pytest_cache", "__pycache__", "data", "media", "reports",
+@@ -1448,7 +1477,7 @@
+     else:
+         role_guidance = role_constraints(scopes)
+         repository_guidance = "For a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui."
+-    return f"""You are the PLANNER agent for Nix Workshop Hive Build Mode.
++    text = f"""You are the PLANNER agent for Nix Workshop Hive Build Mode.
+ 
+ REPOSITORY MAP (read-only structural information; it is not authorization):
+ {repository_map or "[repository map unavailable]"}
+@@ -1496,6 +1525,7 @@
+ provider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.
+ Check each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.
+ """
++    return AgentPrompt(text, _planner_response_schema())
+ 
+ 
+ def _plan_correction_prompt(request: str, repository_map: str, raw: str, error: Exception, repository_facts_text: str = "", intent_envelope: dict | None = None, *, external_mode: bool = False) -> str:
+@@ -1542,7 +1572,7 @@
+             "contract": "Concise interface name and response shape",
+         }
+     contract_schema = json.dumps(INTERFACE_CONTRACT_SCHEMA, ensure_ascii=False, indent=2)
+-    correction_schema = agent_response_schema("planner")
++    correction_schema = _planner_response_schema()
+     # The normal planner schema permits an empty contract list because single-role
+     # plans are legal. Once a rejected plan is known to be multi-role, strengthen
+     # only the correction-call schema so Ollama is explicitly constrained to emit

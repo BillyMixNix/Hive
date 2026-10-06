@@ -1,0 +1,11 @@
+# Execution notes
+
+No model generation precedes the verifier-only diagnosis. Prior source/evidence is read-only; setup copies the final TRANSITION-003 source, prior fixtures and preserved applied edit into this study.
+
+Initial diagnostic harness setup exposed two local script mistakes before any verifier launched: the frozen test was referenced under FACTORIAL-002 rather than its preserved TRANSITION-003 artifact path, and `copy_candidate_tree` was passed the source as its authorized destination root. Both were corrected only in the new harness. The empty `observed-baseline` directory is the second failed setup, not a verification measurement. Completed measurements use the `measured-*` prefix.
+
+The first focused pytest invocation used the workspace root instead of the copied repository and failed module import. Subsequent focused tests found old assertions expecting the removal command to be last and expecting no instrumentation mount. Those assertions were updated to require post-removal inspection and exactly one additional fixed read-only runner mount. Existing isolation requirements remain. The focused suite then passed **40 tests, 2 symlink-related skips** before verifier-only measurements began.
+
+The three initial measurements run sequentially, with no concurrent build or model calls. Source stays fixed throughout the batch. One small read-only /proc sample during baseline setup is explicitly recorded with its observation duration; ordinary inspect/top/stats samples are part of the instrumentation. No cache priming, timeout increase, candidate fix or acceptance change is performed.
+
+The first full regression attempt is preserved under `evidence/regression-attempt-1`: 451 passed, 6 skipped, two failures. One historical fixture directory had not been copied; it was restored from the immutable prior copy. A new real-container teardown test initially exercised the legacy non-JVM Python runner, which failed `copystat(/source, /work)` with EPERM before it could spawn its test child. That pre-existing generic Python path is unrelated to the measured JVM timeout and was not repaired. The lifecycle test now substitutes a synthetic sleeping parent/child entrypoint only within the test, retains the real Docker launch/timeout/removal adapter, and records the substituted command explicitly. Production has no gate-substitution option.

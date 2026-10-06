@@ -1,0 +1,18 @@
+{
+  "summary": "Add input validation to IngredientAllocation.canSatisfy to reject null/invalid parameters",
+  "ui_goal": "no change needed",
+  "backend_goal": "Implement input validation in IngredientAllocation.canSatisfy to reject null/invalid parameters",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"],
+    "tests": []
+  },
+  "acceptance": ["Validation rejects null/invalid parameters with IllegalArgumentException"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Implementation preserves existing behavior while adding validation for null/invalid parameters"],
+    "tests": []
+  },
+  "interface_contracts": []
+}

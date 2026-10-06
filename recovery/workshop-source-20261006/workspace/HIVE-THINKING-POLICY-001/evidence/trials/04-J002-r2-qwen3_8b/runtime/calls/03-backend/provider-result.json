@@ -1,0 +1,13 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Added input validation to IngredientAllocation.canSatisfy to reject null/invalid parameters\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java\",\n      \"operation\": \"replace\",\n      \"find\": \"public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {\",\n      \"replace\": \"public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {\\n        if (matchingSlots == null || counts == null) {\\n            throw new IllegalArgumentException(\\\"Null parameters are not allowed\\\");\\n        }\\n        if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {\\n            throw new IllegalArgumentException(\\\"Crafting allocation bounds exceeded\\\");\\n        }\\n        if (counts.values().stream().anyMatch(count -> count < 0)) {\\n            throw new IllegalArgumentException(\\\"Negative stack count\\\");\\n        }\\n        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {\\n            int slot = entry.getKey();\\n            int count = entry.getValue();\\n            if (slot == null || slot < 0 || slot >= 36) {\\n                throw new IllegalArgumentException(\\\"Slot identity must be between 0 and 35\\\");\\n            }\\n            if (count == null || count < 0) {\\n                throw new IllegalArgumentException(\\\"Count must be non-negative\\\");\\n            }\\n        }\\n        Map<Integer, java.util.ArrayList<Integer>> assigned = new HashMap<>();\\n        for (int requirement = 0; requirement < matchingSlots.size(); requirement++) {\\n            if (!assign(requirement, matchingSlots, counts, assigned, new boolean[matchingSlots.size()])) return false;\\n        }\\n        return true;\\n    }\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 7697,
+  "output_tokens": 437,
+  "raw_id": null,
+  "thinking_policy": {
+    "requested": false,
+    "validation": "host-attested boolean control",
+    "provider_version": "0.34.0",
+    "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "template_sha256": "ae370d884f108d16e7cc8fd5259ebc5773a0afa6e078b11f4ed7e39a27e0dfc4"
+  }
+}

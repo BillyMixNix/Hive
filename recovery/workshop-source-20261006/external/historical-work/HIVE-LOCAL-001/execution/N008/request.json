@@ -1,0 +1,26 @@
+{
+  "request": "Add `PlanResult.withLimitations(List<String> limitations)`. Return a new\nPlanResult with only its limitations replaced by an immutable defensive copy.\nPreserve every other component, including the execution assessment, selected\naction, alternatives, and metrics. Reject null with `IllegalArgumentException`;\nthe original result must remain unchanged.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/planning/PlanResultLimitationsAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.planning.PlanResultLimitationsAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.planning;\n\nimport dev.atmcompanion.execution.ExecutionAssessment;\nimport org.junit.jupiter.api.Test;\nimport java.util.ArrayList;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass PlanResultLimitationsAcceptanceTest {\n    @Test void changesOnlyLimitationsAndDefensivelyCopiesThem() {\n        var execution = ExecutionAssessment.unavailable(\"not observed\");\n        var action = new PlanResult.Action(\"gather\", \"minecraft:stone\", 2, \"recipe\", \"needed\");\n        var metrics = new PlanResult.Metrics(7, 9, 2, false, true, 10);\n        var plan = new PlanResult(2, \"minecraft:stone\", 2, \"ready\", List.of(), List.of(), List.of(),\n                action, List.of(), List.of(), metrics, List.of(\"old\"), execution);\n        var input = new ArrayList<>(List.of(\"new\", \"limited\"));\n        var changed = plan.withLimitations(input);\n        input.add(\"later\");\n        assertNotSame(plan, changed);\n        assertEquals(List.of(\"new\", \"limited\"), changed.limitations());\n        assertEquals(List.of(\"old\"), plan.limitations());\n        assertEquals(plan.goal(), changed.goal());\n        assertEquals(plan.quantity(), changed.quantity());\n        assertEquals(plan.status(), changed.status());\n        assertEquals(plan.selectedPath(), changed.selectedPath());\n        assertEquals(action, changed.nextAction());\n        assertEquals(plan.alternativePaths(), changed.alternativePaths());\n        assertSame(metrics, changed.metrics());\n        assertSame(execution, changed.execution());\n        assertThrows(UnsupportedOperationException.class, () -> changed.limitations().add(\"mutate\"));\n        assertThrows(IllegalArgumentException.class, () -> plan.withLimitations(null));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N008",
+    "replicate_index": 1,
+    "trial_id": "3abb2d71e428",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

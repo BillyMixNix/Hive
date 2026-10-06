@@ -1,0 +1,52 @@
+[
+  {
+    "role": "planner",
+    "model": "qwen2.5-coder:14b",
+    "provider": "ollama",
+    "prompt_sha256": "7ea130b272dc13aa728dabf58309babc66fc399f77826a779079ba74a9c41958",
+    "prompt_bytes": 18413,
+    "started_at": "2026-10-05T19:56:21.197497+00:00",
+    "status": "completed",
+    "input_tokens": 3834,
+    "output_tokens": 209,
+    "response_sha256": "c32e9ceae635f4a1b5417e759890bc8d70b6d569b596b9452bdc66bdd2f2ab1f",
+    "runtime": {
+      "context_length": 12288,
+      "size": 11613000169,
+      "size_vram": 4074294476,
+      "expires_at": "2026-10-05T13:16:03.3061621-07:00"
+    },
+    "wall_seconds": 882.857
+  },
+  {
+    "role": "backend",
+    "model": "qwen2.5-coder:14b",
+    "provider": "ollama",
+    "prompt_sha256": "47443588cb4bd464bbccfd6a8702984c2054bb3f0bbbee4dcaf975577e35ee45",
+    "prompt_bytes": 26204,
+    "started_at": "2026-10-05T20:11:07.783208+00:00",
+    "status": "completed",
+    "input_tokens": 5606,
+    "output_tokens": 208,
+    "response_sha256": "b3d1692a8c2d5841e86422bf88e9993c3943c97b477d586134755a6493542658",
+    "runtime": {
+      "context_length": 12288,
+      "size": 11613000169,
+      "size_vram": 4074294476,
+      "expires_at": "2026-10-05T13:26:27.0385393-07:00"
+    },
+    "wall_seconds": 619.758
+  },
+  {
+    "role": "reviewer",
+    "model": "qwen2.5-coder:14b",
+    "provider": "ollama",
+    "prompt_sha256": "d79b365f64db7b9d67d8b0a81798512663726728ecd795ce60b4846f2fdb7ece",
+    "prompt_bytes": 22672,
+    "started_at": "2026-10-05T20:31:40.061512+00:00",
+    "status": "failed",
+    "error_type": "OllamaRequestError",
+    "error_message": "Ollama chat failed at http://127.0.0.1:11434: chat attempt 2/2: OllamaRequestError: HTTP 500: {\"error\":\"llama-server process has terminated: exit status 1: ggml_backend_cpu_buffer_type_alloc_buffer: failed to allocate buffer of size 5843582976\\nalloc_tensor_range: failed to allocate CUDA_Host buffer of size 5843582976\\nerror loading model: unable to allocate CUDA_Host buffer\"}",
+    "wall_seconds": 65.825
+  }
+]

@@ -1,0 +1,367 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Task :createMinecraftArtifacts
+Loaded 145 artifacts from C:\Users\billy\Documents\Codex\2026-09-22\atm10-ai-companion-autonomous-build-mega\local-model-trial\runs\20260924-073647\ATM-Companion\build\tmp\createMinecraftArtifacts\nfrt_artifact_manifest.properties
+*** Started working on downloadJson
+ DONE  Completed downloadJson in 0.03s
+*** Started working on downloadServer
+*** Started working on downloadClient
+*** Started working on downloadClientMappings
+ DONE  Completed downloadClient in 0.05s
+ DONE  Completed downloadClientMappings in 0.05s
+ DONE  Completed downloadServer in 0.05s
+*** Started working on mergeMappings
+ REUSE Used cache of mergeMappings in 0.00s
+*** Started working on stripClient
+ REUSE Used cache of stripClient in 0.00s
+*** Started working on extractServer
+ REUSE Used cache of extractServer in 0.00s
+*** Started working on stripServer
+ REUSE Used cache of stripServer in 0.00s
+*** Started working on merge
+ REUSE Used cache of merge in 0.00s
+*** Started working on rename
+ REUSE Used cache of rename in 0.00s
+*** Started working on decompile
+ REUSE Used cache of decompile in 0.00s
+*** Started working on inject
+ REUSE Used cache of inject in 0.00s
+*** Started working on patch
+ REUSE Used cache of patch in 0.00s
+*** Started working on applyNeoforgePatches
+ REUSE Used cache of applyNeoforgePatches in 0.00s
+*** Started working on transformSources
+ REUSE Used cache of transformSources in 0.00s
+*** Started working on recompile
+ REUSE Used cache of recompile in 0.00s
+*** Started working on sourcesWithNeoForge
+ REUSE Used cache of sourcesWithNeoForge in 0.00s
+*** Started working on compiledWithNeoForge
+ REUSE Used cache of compiledWithNeoForge in 0.00s
+*** Started working on sourcesAndCompiledWithNeoForge
+ REUSE Used cache of sourcesAndCompiledWithNeoForge in 0.00s
+Performing periodic cache maintenance on C:\Users\billy\.gradle\caches\neoformruntime
+Cleaning intermediate results cache in C:\Users\billy\.gradle\caches\neoformruntime\intermediate_results
+ Maximum age: 744h
+ Maximum cache size: 10 GiB
+ 35 files found
+ 212 MiB overall size
+ 0 expired keys found
+Total runtime: 3.07s
+
+
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+
+> Task :test
+
+ActivityCommandServiceResetTest > resetForgetsOnlyTheNamedPlayersActivityAndReturnsBoundedConfirmation() PASSED
+
+ActivityCommandServiceResetTest > resetRejectsBlankPlayerIdentity() PASSED
+
+ActivityContextTest > keepsNewestAndReturnsChronological() PASSED
+
+ActivityContextTest > rejectsNull() PASSED
+
+ActivityContextTest > immutableAndBounds() PASSED
+
+ActivityDiffServiceTest > unchangedAndKnownEmptyProduceNoEvents() PASSED
+
+ActivityDiffServiceTest > increaseAndDecreaseUsePositiveDeltas() PASSED
+
+ActivityDiffServiceTest > outputIsImmutableAndInputMapsAreNotRetained() PASSED
+
+ActivityDiffServiceTest > unknownAndMalformedInputsAreRejected() PASSED
+
+ActivityEventTest > rejectsInvalidBoundsAndPreservesUnknownQuantity() PASSED
+
+ActivityEventTest > validatesAndCopiesTheEvent() PASSED
+
+ActivityEventTest > gsonRoundTripRunsConstructorValidation() PASSED
+
+ActivityHistoryTest > boundedAndOrdered() PASSED
+
+ActivityHistoryTest > rejectsInvalid() PASSED
+
+ActivityHistoryTest > immutableAndClear() PASSED
+
+ActivitySummaryTest > countsAllTypes() PASSED
+
+ActivitySummaryTest > rejectsNull() PASSED
+
+ActivitySummaryTest > emptyAndImmutable() PASSED
+
+ActivityTrackerTest > successfulObservationAdvancesBaselineAndForgetResetsIt() PASSED
+
+ActivityTrackerTest > firstObservationIsBaselineAndSecondProducesDiff() PASSED
+
+ActivityTrackerTest > copiesInputAndRejectsNullsAndOverflow() PASSED
+
+ExecutionAssessorTest > tableAccessChecksAndPartialNegativeObservationsStayDistinct() PASSED
+
+ExecutionAssessorTest > occupiedInputAndBlockedOutputNeverBecomePlayerOwnedMaterials() PASSED
+
+ExecutionAssessorTest > campfireRequiresLitDryAndFreeSlotWithoutAssumingDroppedOutputOwnership() PASSED
+
+ExecutionAssessorTest > cookingRequiresOneObservedMatchingInputAndUniqueRecipe() PASSED
+
+ExecutionAssessorTest > availableStationBeatsEarlierBlockedOrUninspectedCandidates() PASSED
+
+ExecutionAssessorTest > oneUnreservedCompatibleFuelItemCanCompleteOneOperation() PASSED
+
+ExecutionAssessorTest > fuelQueuesAreNotInventedFromManyShortBurnItems() PASSED
+
+ExecutionAssessorTest > inventoryCraftingNeedsAnObservedFitAndUnlockButNoNearbyTable() PASSED
+
+ExecutionAssessorTest > existingHeatAccountsForTheNextVanillaTickBeforeCooking() PASSED
+
+ExecutionAssessorTest > missingProvenanceIsUnknownWhileAValidatedInventoryShortageIsBlocked() PASSED
+
+ExecutionAssessorTest > ownedGoalAndUnavailableOrTruncatedInputsNeverRequestACraft() PASSED
+
+ExecutionAssessorTest > ExistingFuelIsBoundedToOneIgnitionAndUnknownBurnTimesStayUnknown() PASSED
+
+ExecutionContextTest > publishedNestedObservationsAreDetachedImmutableCopies() PASSED
+
+ExecutionContextTest > absenceIsCompleteOnlyWithinAFullyInspectedLoadedScope() PASSED
+
+ExecutionContextTest > reservedFuelIsKnownPresentButUnavailableForDoubleSpending() PASSED
+
+ExecutionContextTest > unknownStationContentsCannotBecomeKnownEmptyThroughSerialization() PASSED
+
+ExecutionContextTest > malformedScanAndCookingFactsAreRejectedInsteadOfLookingReady() PASSED
+
+OperationInputsTest > selectedInputSubsetsMatchAnIndependentFeasibilityOracle() PASSED
+
+OperationInputsTest > malformedOrIncompleteProvenanceCannotAuthorizeAnOperation() PASSED
+
+OperationInputsTest > oversizedSingleOperationRemainsExplicitlyUnresolved() PASSED
+
+OperationInputsTest > overlappingSlotsBacktrackWithoutDoubleCountingTheOnlyExactItem() PASSED
+
+OperationInputsTest > oneOperationCanUseAnyActuallyAllocatedBatchMemberButNotAnUnselectedTagMember() PASSED
+
+IntegrationRegistryTest > absentModDoesNotConstructOrLoadItsAdapter() PASSED
+
+IntegrationRegistryTest > unsupportedAdapterIsNotAskedForState() PASSED
+
+IntegrationRegistryTest > absentCapabilityIsUnknownRatherThanAvailable() PASSED
+
+IntegrationRegistryTest > runtimeAndLinkageFailuresDoNotHideHealthyIntegrations() PASSED
+
+IntegrationRegistryTest > registrationsAreBoundedAndDuplicateCapabilitiesAreRejected() PASSED
+
+IntegrationRegistryTest > failureInsideCapabilityInspectionIsContainedAndLogged() PASSED
+
+OptionalQuestAccessTest > absentModNeverLoadsAdapterAndNeverClaimsKnownEmptyQuests() PASSED
+
+OptionalQuestAccessTest > knownEmptyQuestFileRemainsDistinctFromUnavailable() PASSED
+
+OptionalQuestAccessTest > readinessNeverCollectsSnapshotAndRechecksEveryPlayer() PASSED
+
+OptionalQuestAccessTest > runtimeLinkageAndQuestGraphStackOverflowFailuresDegradeToUnknown() PASSED
+
+OptionalQuestAccessTest > readinessForAbsentOrUnsupportedVersionDoesNotLinkOptionalCode() PASSED
+
+OptionalQuestAccessTest > readinessErrorsAndNullResultsCannotBecomeAvailable() PASSED
+
+OptionalQuestAccessTest > nullAdapterResponseAndFactoryFailureCannotBecomeAvailable() PASSED
+
+OptionalQuestAccessTest > supportedAdapterIsCachedAndReceivesEachInvokingPlayer() PASSED
+
+OptionalQuestAccessTest > unsupportedVersionNeverLoadsVersionSpecificClasses() PASSED
+
+OptionalQuestAccessTest > summaryGateDoesNotLoadFullSnapshotFactoryOrUnsupportedApi() PASSED
+
+OptionalQuestAccessTest > failedOrNullSummaryNeverBecomesKnownEmptyData() PASSED
+
+QuestIdsTest > formatterPreservesFtbUnsignedFixedWidthCodesAcrossSignedBoundaries() PASSED
+
+QuestOverviewTest > optionsMustHaveUniqueSortedIdsAndDeclaredProjectionSemantics() PASSED
+
+QuestOverviewTest > contradictoryCountsLocksAndOptionCoverageAreRejected() PASSED
+
+QuestOverviewTest > summaryIsImmutableRoundTripsAndExplicitlyOmitsDetailedFacts() PASSED
+
+QuestSnapshotTest > contradictingAvailabilityCannotBeSerializedAsFact() PASSED
+
+QuestSnapshotTest > identifierValidationKeepsExactAsciiAndFullStringSemantics() PASSED
+
+QuestSnapshotTest > availabilityUsesExplicitTeamAndFtbFlagsWithoutGuessingDependencyOperators() PASSED
+
+QuestSnapshotTest > identifiersTextCountsAndCollectionBoundsRejectMalformedData() PASSED
+
+QuestSnapshotTest > configuredItemReferenceDoesNotPretendToBeAnExactTaskRequirement() PASSED
+
+QuestSnapshotTest > hiddenContainingChapterPreventsDerivedAvailabilityEvenWhenQuestFlagIsVisible() PASSED
+
+QuestSnapshotTest > lockedTeamCannotExposeAvailableQuests() PASSED
+
+QuestSnapshotTest > collectionCopiesAreImmutableAndSnapshotRoundTrips() PASSED
+
+IngredientAllocationTest > inputBoundsAndNegativeCountsAreRejected() PASSED
+
+IngredientAllocationTest > allocationDoesNotMutateCallerInventory() PASSED
+
+IngredientAllocationTest > missingEmptyAndUnknownSlotsAreHandledWithoutInventingInventory() PASSED
+
+IngredientAllocationTest > overlappingAlternativesNeedReallocationRatherThanGreedyConsumption() PASSED
+
+IngredientAllocationTest > allThreeSlotThreeRequirementCasesMatchAnIndependentExhaustiveOracle() PASSED
+
+IngredientAllocationTest > onePhysicalItemCannotSatisfyTwoIngredientPositions() PASSED
+
+NormalizedRecipeTest > dynamicAndComponentOutputsRemainUnsupportedEvenWhenTheyHaveAPreview() PASSED
+
+NormalizedRecipeTest > executionMetadataPreservesShapeAndTimingAndRejectsContradictoryKinds() PASSED
+
+NormalizedRecipeTest > countsAndRequirementListsAreBounded() PASSED
+
+NormalizedRecipeTest > customIncompleteAndEmptyTagRequirementsCannotBecomeSupportedDependencies() PASSED
+
+NormalizedRecipeTest > sourcesAndResolvedAlternativesRemainSeparateImmutableCanonicalSets() PASSED
+
+NormalizedRecipeTest > legacyMaterialRecipesDoNotInventExecutionMetadata() PASSED
+
+RecipeIndexTest > outputLookupFindsAllRoutesInDeterministicRecipeIdOrder() PASSED
+
+RecipeIndexTest > duplicateIdsAndInconsistentMetadataAreRejected() PASSED
+
+RecipeIndexTest > nonfixedPreviewCannotBeMadeCompleteByOptimisticStatistics() PASSED
+
+RecipeIndexTest > omittedInspectedRecipeCannotBeReportedAsCompleteCoverage() PASSED
+
+RecipeIndexTest > mapsRoutesAndSourceListsAreImmutableCopies() PASSED
+
+RecipeIndexTest > routeLimitsAreExplicitAndDoNotSilentlyClaimCompletePerOutputCoverage() PASSED
+
+RecipeIndexTest > unsupportedEarlierPreviewsCannotDisplaceKnownMaterialRouteFromOutputLimit() PASSED
+
+RecipeIndexTest > completeStaticCoverageDoesNotClaimUnsupportedRecipeSemantics() PASSED
+
+RecipeIndexTest > globalAlternativeBoundPreventsManyIndividuallyLegalRecipesFromEscapingMemoryLimits() PASSED
+
+RecipeIndexTest > partialBuildAndUnknownOutputsCannotBecomeACompleteIndex() PASSED
+
+RecipeReportTest > tagAlternativesRemainAChoiceRatherThanFixedIndependentRequirements() PASSED
+
+RecipeReportTest > unsupportedMachineRequirementsCannotBecomeKnownMissingItems() PASSED
+
+RecipeReportTest > truncatedAlternativesAndRecipeResultsRetainTheirUncertaintyFlags() PASSED
+
+RetainedIngredientBudgetTest > identityRejectionDoesNotPartiallySpendAlternativeCapacity() PASSED
+
+RetainedIngredientBudgetTest > unsupportedWholeRecipeCannotSpendAlternativesOnOtherwiseSupportedInput() PASSED
+
+RetainedIngredientBudgetTest > cheapKnownRecipesPrecedeWideAndOpaqueRecipesWithoutNamespacePreference() PASSED
+
+RetainedIngredientBudgetTest > rejectingAnAlternativeSetNeverTurnsItsTruncatedPrefixIntoKnownRequirement() PASSED
+
+RetainedIngredientBudgetTest > repeatedIncompleteExpansionsDoNotStarveLaterExactMaterials() PASSED
+
+DeterministicPlannerTest > futureBatchSurplusNeverAppearsAsCurrentlyOwnedEvenWithMissingRawInputs() PASSED
+
+DeterministicPlannerTest > constrainedExactRequirementDoesNotLoseItsItemToAnOverlappingTag() PASSED
+
+DeterministicPlannerTest > missingRouteInPartialIndexRetainsExplicitKnowledgeUncertainty() PASSED
+
+DeterministicPlannerTest > outputBatchingUsesCeilingAndReusesHypotheticalSurplusAcrossSiblings() PASSED
+
+DeterministicPlannerTest > groupedTagDemandCanManufactureDifferentAlternativesFromDifferentOwnedInputs() PASSED
+
+DeterministicPlannerTest > broadEarlierRootRouteCannotStarveALaterReadyRouteOfTheGlobalNodeBudget() PASSED
+
+DeterministicPlannerTest > nodeAndDepthLimitsAreReportedAndBoundExpansion() PASSED
+
+DeterministicPlannerTest > groupedTagDemandCanUseMultipleDifferentValidAlternatives() PASSED
+
+DeterministicPlannerTest > malformedGoalCountsAndInventoryFactsAreRejected() PASSED
+
+DeterministicPlannerTest > prerequisiteRecipeIsSuggestedBeforeItsDependentGoalRecipe() PASSED
+
+DeterministicPlannerTest > unsupportedMachineNeverBecomesARecipePreparationAction() PASSED
+
+DeterministicPlannerTest > recipeAndAlternativeSearchCapsAreNeverSilent() PASSED
+
+DeterministicPlannerTest > threeOverlappingTagRequirementsMatchAnIndependentAllocationOracle() PASSED
+
+DeterministicPlannerTest > cyclesTerminateWithoutPretendingHypotheticalOutputsExist() PASSED
+
+DeterministicPlannerTest > partialOwnershipReducesProductionDemandBeforeOutputBatchRounding() PASSED
+
+DeterministicPlannerTest > planDoesNotMutateInputAndDeterministicFactsIgnoreInsertionOrder() PASSED
+
+DeterministicPlannerTest > unresolvedOpaquePrerequisiteIsInspectedBeforeRecommendingMaterialSpending() PASSED
+
+DeterministicPlannerTest > hugeIngredientMultiplicationCannotOverflowIntoReadyOrNegativeResources() PASSED
+
+DeterministicPlannerTest > alreadyOwnedGoalDoesNotInventRequiredCraftsOrInspectUnneededRecipes() PASSED
+
+DeterministicPlannerTest > routeWithObservedInputsWinsOverRouteWithMissingInputs() PASSED
+
+DeterministicPlannerTest > acyclicAlternativeCanEscapeACyclicRecipeRoute() PASSED
+
+DeterministicPlannerTest > sharedInventoryAcrossSiblingBranchesCountsTenIronOnlyOnce() PASSED
+
+PlanningOutputTest > publishedPlanHasVersionedStructuredFactsAndBoundedChat() PASSED
+
+PlanningOutputTest > graphDistinguishesOmittedQuestDetailsFromAnObservedEmptyQuestBook() PASSED
+
+PlanningOutputTest > debugJsonRejectsBothAsciiCharacterOverflowAndMultibyteByteOverflow() PASSED
+
+PlanningOutputTest > boundedGraphKeepsOnlyEdgesWhoseEndpointsExistAndMarksOmission() PASSED
+
+PlanningOutputTest > goalPersistsOnlyBoundedRegistryIdentityAndQuantity() PASSED
+
+GameSnapshotTest > advancementCountsMustDescribeTheScannedDefinitions() PASSED
+
+GameSnapshotTest > collectionsAreDefensiveCopies() PASSED
+
+GameSnapshotTest > inventoryModAndAdvancementCollectionsAreBounded() PASSED
+
+GameSnapshotTest > registryIdMustRemainNamespacedAndOccupiedStackMustHavePositiveCount() PASSED
+
+GameSnapshotTest > nonfiniteValuesCannotProduceInvalidJsonNumbers() PASSED
+
+GameSnapshotTest > capabilityCannotContradictUnderlyingObservation() PASSED
+
+ObservationTest > observedEmptyInventoryRemainsKnownAndEmpty() PASSED
+
+ObservationTest > unavailableIsNotAnObservedEmptyCollection() PASSED
+
+ObservationTest > notIntegratedIsSeparateFromUnavailable() PASSED
+
+ObservationTest > contradictoryObservationStatesAreRejected() PASSED
+
+SnapshotFormatterTest > fullInventoryIsSummarizedWithStrictChatBounds() PASSED
+
+SnapshotFormatterTest > locationNumbersHaveStableFormattingAcrossHostLocales() PASSED
+
+SnapshotFormatterTest > inspectedEmptyInventoryIsClearlyDifferentFromUnavailable() PASSED
+
+SnapshotFormatterTest > chatTextCannotInjectNewLinesOrMinecraftFormatting() PASSED
+
+SnapshotFormatterTest > unknownInventoryAndProgressionAreNeverFormattedAsKnownZero() PASSED
+
+SnapshotJsonTest > emptyInventoryAndInspectedEmptyEquipmentRoundTripAsAvailable() PASSED
+
+SnapshotJsonTest > deserializationCannotBypassObservationOrCapabilityInvariants() PASSED
+
+SnapshotJsonTest > nonIntegratedStatusAndCompletedVsIncompleteAdvancementsArePreserved() PASSED
+
+SnapshotJsonTest > populatedSnapshotRoundTripsWithoutChangingRegistryIds() PASSED
+
+SnapshotJsonTest > serializationAndDeserializationEnforceUtf8ByteLimit() PASSED
+
+SnapshotJsonTest > malformedMissingAndUnsupportedSchemaDataCannotBecomeSnapshots() PASSED
+
+SnapshotJsonTest > unavailableInventorySerializesAsNullRatherThanEmptyKnownInventory() PASSED
+
+BUILD SUCCESSFUL in 29s
+5 actionable tasks: 5 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html

@@ -1,0 +1,374 @@
+{
+  "synthetic": true,
+  "provider_calls": 0,
+  "real_verifier_calls": 0,
+  "method": "Real hive.run_build with synthetic provider responses and mocked verifier decisions; private scratch sources only. No production code edits or apply calls.",
+  "results": [
+    {
+      "case": "approve",
+      "status": "ready",
+      "review": {
+        "approve": true,
+        "summary": "reviewed",
+        "issues": [],
+        "confidence": 1.0
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "2cda84381b85"
+    },
+    {
+      "case": "semantic_veto",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "Semantic objection",
+        "issues": [
+          "Uncovered behavior"
+        ],
+        "confidence": 0.9
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "7765b5c9f707"
+    },
+    {
+      "case": "unsupported_veto",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "No explanation",
+        "issues": [],
+        "confidence": 0
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "ab7ddc14ba8d"
+    },
+    {
+      "case": "approve_with_issue_and_zero_confidence",
+      "status": "ready",
+      "review": {
+        "approve": true,
+        "summary": "Contradictory",
+        "issues": [
+          "Major issue"
+        ],
+        "confidence": 0
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "020b42bef469"
+    },
+    {
+      "case": "string_false",
+      "status": "ready",
+      "review": {
+        "approve": "false",
+        "summary": "Wrong type",
+        "issues": [],
+        "confidence": 1
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "f224c74d98ae"
+    },
+    {
+      "case": "missing_approve",
+      "status": "rejected",
+      "review": {
+        "summary": "Missing required field",
+        "issues": [],
+        "confidence": 1
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "fc8bde04e44b"
+    },
+    {
+      "case": "scalar_json",
+      "status": "failed",
+      "review": true,
+      "errors": [
+        {
+          "role": "run",
+          "stage": "agent_call",
+          "exception_type": "AttributeError",
+          "exception_message": "'bool' object has no attribute 'get'"
+        }
+      ],
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "ccb2baea58c8"
+    },
+    {
+      "case": "invalid_then_repaired",
+      "status": "ready",
+      "review": {
+        "approve": true,
+        "summary": "reviewed",
+        "issues": [],
+        "confidence": 1.0
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 2,
+      "run_id": "0a82104af62a"
+    },
+    {
+      "case": "invalid_twice",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "Reviewer response was not valid JSON.",
+        "issues": [
+          "Malformed agent JSON; no safe repair available",
+          "One or more agents failed; partial proposals cannot be approved."
+        ],
+        "confidence": 0.0
+      },
+      "errors": [
+        {
+          "role": "reviewer",
+          "stage": "json_parse",
+          "exception_type": "ValueError",
+          "exception_message": "Malformed agent JSON; no safe repair available",
+          "raw_excerpt": "not json",
+          "raw_output_excerpt": "not json",
+          "repair_attempted": true,
+          "initial_exception_type": "ValueError",
+          "initial_exception_message": "Malformed agent JSON; no safe repair available",
+          "repair_raw_excerpt": "still not json"
+        }
+      ],
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 2,
+      "run_id": "9d2c05060f45"
+    },
+    {
+      "case": "unavailable",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "Reviewer call failed.",
+        "issues": [
+          "SYNTHETIC provider unavailable",
+          "One or more agents failed; partial proposals cannot be approved."
+        ],
+        "confidence": 0.0
+      },
+      "errors": [
+        {
+          "role": "reviewer",
+          "stage": "review",
+          "exception_type": "RuntimeError",
+          "exception_message": "SYNTHETIC provider unavailable"
+        }
+      ],
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "8183aceb0696"
+    },
+    {
+      "case": "verification_failed",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "reviewed",
+        "issues": [
+          "Deterministic verification failed."
+        ],
+        "confidence": 1.0
+      },
+      "errors": null,
+      "verification": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": false
+          }
+        ]
+      },
+      "changed_files": [
+        "app.py"
+      ],
+      "review_calls": 1,
+      "run_id": "010d2260297c"
+    },
+    {
+      "case": "no_edit",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "reviewed",
+        "issues": [
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "errors": null,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [],
+      "review_calls": 1,
+      "run_id": "6b64ac14846d"
+    },
+    {
+      "case": "worker_error",
+      "status": "rejected",
+      "review": {
+        "approve": false,
+        "summary": "reviewed",
+        "issues": [
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "errors": [
+        {
+          "role": "backend",
+          "stage": "agent_call",
+          "exception_type": "RuntimeError",
+          "exception_message": "SYNTHETIC worker error"
+        }
+      ],
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "SYNTHETIC",
+            "passed": true
+          }
+        ]
+      },
+      "changed_files": [],
+      "review_calls": 1,
+      "run_id": "35eaaa9badfa"
+    }
+  ]
+}

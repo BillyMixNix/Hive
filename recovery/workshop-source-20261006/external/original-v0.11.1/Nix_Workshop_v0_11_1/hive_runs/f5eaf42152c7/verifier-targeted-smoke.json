@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "acceptance_mismatches": [
+          {
+            "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+            "expected_cases": 1,
+            "failures_errors_skipped": 0,
+            "observed_cases": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports",
+        "returncode": 1,
+        "stderr_tail": "Last lines of /work/candidate/build/tmp/neoformruntime/20260930-180113_applyDevTransforms/console_output.txt:\n------------------------------------------------------------\nk\n - PROCESS_MINECRAFT_JAR\n - --input\n - /work/gradle-user-home/caches/neoformruntime/intermediate_results/copyUnpatchedClasses_225df56b09fa183ed417b3752b9a6127159074ce_output.jar\n - --output\n - ./output.jar\n - --no-mod-manifest\n - --access-transformer\n - ats/accesstransformer.cfg\n--------------------------------------------------------------------------------\n\nTask: PROCESS_MINECRAFT_JAR\nload access transformers [60ms]\nload input zip [479ms]\n[1.203s][warning][os,thread] Failed to start thread \"Unknown thread\" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.\n[1.207s][warning][os,thread] Failed to start the native thread for java.lang.Thread \"Thread-129\"\nException in thread \"main\" java.lang.RuntimeException: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat net.neoforged.installertools.ProcessMinecraftJar.process(ProcessMinecraftJar.java:2227)\n\tat net.neoforged.installertools.ConsoleTool.main(ConsoleTool.java:55)\nCaused by: java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached\n\tat java.base/java.lang.Thread.start0(Native Method)\n\tat java.base/java.lang.Thread.start(Thread.java:1526)\n\tat java.base/java.util.concurrent.CompletableFuture$ThreadPerTaskExecutor.execute(CompletableFuture.java:444)\n\tat java.base/java.util.concurrent.CompletableFuture.asyncRunStage(CompletableFuture.java:1818)\n\tat java.base/java.util.concurrent.CompletableFuture.runAsync(CompletableFuture.java:2018)\n\tat net.neoforged.installertools.ProcessMinecraftJar.lambda$processZip$8(ProcessMinecraftJar.java:41253)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\n\n------------------------------------------------------------\nnet.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for applyDevTransforms failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.lang.RuntimeException: Failed to execute tool\n\tat net.neoforged.neoform.runtime.actions.ExternalJavaToolAction.run(ExternalJavaToolAction.java:202)\n\tat net.neoforged.neoform.runtime.actions.ApplyDevTransformsAction.run(ApplyDevTransformsAction.java:68)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 57s\n",
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.03s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.05s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 2.32s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 6.40s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 11.13s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 12.35s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 5.14s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 13.16s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n \u21b3 Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.15s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.77s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\nTotal runtime: 42.08s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+        "tests": [],
+        "timed_out": false,
+        "wall_seconds": 58.295
+      },
+      "name": "frozen_junit_acceptance",
+      "passed": false
+    }
+  ],
+  "executed_commands": [
+    {
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "nix.workshop.smoke.VerifierSmokeTest"
+      ],
+      "phase": "targeted_junit"
+    }
+  ],
+  "external_build_inputs_copy": {
+    "approved_cache_mount": "read-only",
+    "bytes": 914224273,
+    "files": 3895,
+    "manifest_sha256": "84af216473d2c2e7d3a4e2c26afc120bb923ee958606df87ca24681d3a769d07",
+    "verification_copy": "private tmpfs"
+  },
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "gradle_wrapper_version": "9.2.1",
+  "isolation": {
+    "available": true,
+    "backend": "docker",
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "active_processor_count": 2,
+      "gradle_heap": "-Xmx768m",
+      "gradle_max_workers": 2
+    },
+    "image_id": "sha256:557b2fc0a326efa6796bf65dca420fecd7061bac59ad2d631112285e4576b8c9",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "inherited_host_environment": [],
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "limits": {
+      "cpus": 2,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "pids": 256,
+      "swap_additional": "0 bytes"
+    },
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs"
+  },
+  "java_version": "21.0.12.1",
+  "passed": false
+}

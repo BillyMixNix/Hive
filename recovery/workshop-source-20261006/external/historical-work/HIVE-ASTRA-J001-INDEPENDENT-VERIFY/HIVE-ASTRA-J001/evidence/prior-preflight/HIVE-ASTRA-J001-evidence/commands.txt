@@ -1,0 +1,14 @@
+Read-only discovery commands performed before any source edit:
+cat /workspace/scratch/16caa51509c1/upload/FREEZE.json
+cat /workspace/scratch/16caa51509c1/upload/TASKS.md
+rg --files /workspace/scratch/16caa51509c1 -g SnapshotFormatter.java -g AGENTS.md -g gradlew -g '*.zip' -g '!research-upstream/**' -g '!HyruleBridge-001/**'
+rg --files --hidden /workspace -g SnapshotFormatter.java -g '!**/.git/**'
+
+Metadata hashes were computed with Python hashlib.sha256 over attachment bytes.
+The declared baseline path was checked with pathlib.Path.exists().
+The final reproducible combined check:
+python3 /workspace/scratch/16caa51509c1/HIVE-ASTRA-J001-evidence/check_prerequisites.py
+
+Source edits: none.
+Build commands: none.
+Test/frozen gate commands: none; unavailable.

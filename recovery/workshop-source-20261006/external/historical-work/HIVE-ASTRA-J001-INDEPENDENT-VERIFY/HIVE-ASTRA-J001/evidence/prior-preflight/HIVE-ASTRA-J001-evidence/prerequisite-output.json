@@ -1,0 +1,55 @@
+{
+  "trial": "HIVE-ASTRA-J001",
+  "classification": "BLOCKED",
+  "reason": "Frozen baseline repository and executable verifier were not supplied. Metadata only.",
+  "platform": "Linux",
+  "attachments": {
+    "FREEZE.json": {
+      "bytes": 11251,
+      "sha256": "b53aed4c35736e5da6b717c0289c41a9bf85e8cb4d2f9c81cf489da1e0d81d70"
+    },
+    "TASKS.md": {
+      "bytes": 2501,
+      "sha256": "c69bf8913cd5ef5bd76ced1f9dc1aa2a269a946eb33b7e979b3faae5c964aced"
+    }
+  },
+  "tasks_hash_matches_freeze": true,
+  "baseline": {
+    "expected_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "declared_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+    "declared_path_accessible": false,
+    "actual_sha256": null,
+    "verification": "NOT POSSIBLE: source absent"
+  },
+  "authorized_file": "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java",
+  "original_authorized_file_sha256": null,
+  "final_authorized_file_sha256": null,
+  "source_path_search": {
+    "command": [
+      "rg",
+      "--files",
+      "--hidden",
+      "/workspace",
+      "-g",
+      "SnapshotFormatter.java",
+      "-g",
+      "!**/.git/**"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "frozen_gate": {
+    "test_class": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+    "test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+    "test_cases": 3,
+    "test_source_inspected": false,
+    "result": "NOT RUN: repository/verifier unavailable"
+  },
+  "repository_files_modified_by_agent": [],
+  "git_scope_check": "Unavailable: target repository absent",
+  "implementation_attempts": 0,
+  "executable_validation_runs": 0,
+  "decomposition_used": false,
+  "other_candidates_inspected": false
+}

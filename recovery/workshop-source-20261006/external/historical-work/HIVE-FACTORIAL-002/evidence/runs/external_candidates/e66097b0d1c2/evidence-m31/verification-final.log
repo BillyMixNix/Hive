@@ -1,0 +1,408 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :clean
+
+> Task :createMinecraftArtifacts
+Loaded 145 artifacts from <WORKSPACE>\ATM-Companion\build\tmp\createMinecraftArtifacts\nfrt_artifact_manifest.properties
+*** Started working on downloadJson
+ DONE  Completed downloadJson in 0.12s
+*** Started working on downloadClient
+*** Started working on downloadServer
+*** Started working on downloadClientMappings
+ DONE  Completed downloadClient in 0.16s
+ DONE  Completed downloadClientMappings in 0.16s
+ DONE  Completed downloadServer in 0.16s
+*** Started working on mergeMappings
+ REUSE Used cache of mergeMappings in 0.02s
+*** Started working on stripClient
+ REUSE Used cache of stripClient in 0.00s
+*** Started working on extractServer
+ REUSE Used cache of extractServer in 0.00s
+*** Started working on stripServer
+ REUSE Used cache of stripServer in 0.01s
+*** Started working on merge
+ REUSE Used cache of merge in 0.00s
+*** Started working on rename
+ REUSE Used cache of rename in 0.00s
+*** Started working on decompile
+ REUSE Used cache of decompile in 0.01s
+*** Started working on inject
+ REUSE Used cache of inject in 0.00s
+*** Started working on patch
+ REUSE Used cache of patch in 0.00s
+*** Started working on applyNeoforgePatches
+ REUSE Used cache of applyNeoforgePatches in 0.01s
+*** Started working on transformSources
+ REUSE Used cache of transformSources in 0.00s
+*** Started working on recompile
+ REUSE Used cache of recompile in 0.01s
+*** Started working on sourcesWithNeoForge
+ REUSE Used cache of sourcesWithNeoForge in 0.00s
+*** Started working on compiledWithNeoForge
+ REUSE Used cache of compiledWithNeoForge in 0.01s
+*** Started working on sourcesAndCompiledWithNeoForge
+ REUSE Used cache of sourcesAndCompiledWithNeoForge in 0.00s
+Total runtime: 6.97s
+
+
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+> Task :compilePacktestJava
+> Task :processPacktestResources
+> Task :packtestClasses
+> Task :packTestJar
+> Task :compileTestJava FROM-CACHE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test FROM-CACHE
+> Task :check UP-TO-DATE
+> Task :build
+
+> Task :compileGametestJava
+<WORKSPACE>\ATM-Companion\src\gametest\java\dev\atmcompanion\tests\RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal
+        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));
+                                          ^
+1 warning
+
+> Task :processGametestResources
+> Task :gametestClasses
+
+> Task :downloadAssets
+Loaded 145 artifacts from <WORKSPACE>\ATM-Companion\build\tmp\downloadAssets\nfrt_artifact_manifest.properties
+Downloading asset index 17
+Using Minecraft asset root: <USER_HOME>\.gradle\caches\neoformruntime\assets
+  DL    https://piston-meta.mojang.com/v1/packages/76d7a97b9e0778fda3b14e474f012450ca0de1bb/17.json
+
+> Task :writeGameTestServerLegacyClasspath
+> Task :prepareGameTestServerRun
+
+> Task :runGameTestServer
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[22:27:44] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.44, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.251, --fml.neoFormVersion, 20240808.144430]
+[22:27:44] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[22:27:44] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Microsoft; OS Windows 11 arch amd64 version 10.0
+[22:27:45] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[22:27:45] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/<USER_HOME>/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[22:27:46] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[22:27:46] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		ATM Companion 0.3.1 (atm_companion)
+		ATM Companion Runtime Tests 0.1.0 (atm_companion_tests)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.251 (neoforge)
+[22:27:51] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[22:27:58] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[22:28:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:28:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:28:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[22:28:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[22:28:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:28:14] [modloading-worker-0/INFO] [de.at.ATMCompanion/]: ATM Companion M3 initialized: staged recipe knowledge, material planning, nearby vanilla stations and one-operation observations; no AI/network client
+[22:28:14] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.251, for MC 1.21.1
+[22:28:15] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[22:28:16] [main/WARN] [ne.ne.ne.co.CommonHooks/WP]: The following mods have version differences that were not resolved:
+atm_companion (version 0.3.0 -> 0.3.1)
+Things may not work well.
+[22:28:16] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<WORKSPACE>/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[22:28:16] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<WORKSPACE>/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[22:28:16] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [atm_companion_tests]
+[22:28:19] [main/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[22:28:19] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[22:28:21] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[22:28:21] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[22:28:21] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 371 ms
+[22:28:21] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[22:28:21] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[22:28:21] [Server thread/INFO] [minecraft/GameTestServer]: 26 tests are now running at position 14177080, -59, -12923456!
+[22:28:23] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_execution:0' (7 tests)...
+[22:28:23] [Server thread/INFO] [minecraft/GameTestServer]: [                          ]
+[22:28:23] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 123 active ms, 1832 elapsed ms, 29 slices, 5 max slice ms, generation 1)
+[22:28:23] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1294 definitions
+[22:28:23] [Server thread/INFO] [minecraft/GameTestServer]: [+                         ]
+[22:28:24] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 600/600 recipe definitions across 1 output items (0 unknown/nonfixed outputs, 0 unsupported dependencies, 600 retained alternatives, 1200 retained identities, 19 active ms, 22 elapsed ms, 1805 slices, 3 max slice ms, generation 80001)
+[22:28:24] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 600/600 recipe definitions across 1 output items (0 unknown/nonfixed outputs, 0 unsupported dependencies, 600 retained alternatives, 1200 retained identities, 13 active ms, 13 elapsed ms, 10 slices, 2 max slice ms, generation 80002)
+[22:28:24] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (13 tests)...
+[22:28:24] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++                   ]
+[22:28:24] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 8 at (8.5, -60.0, 10.5)
+[22:28:24] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[22:28:25] [Server thread/WARN] [de.at.pl.GoalSavedData/]: ATM Companion goals: ignored 1 malformed entries; source entries=4, limit=4096
+[22:28:25] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++ +++++++           ]
+[22:28:26] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 4001/4001 recipe definitions across 2 output items (0 unknown/nonfixed outputs, 876 unsupported dependencies, 199941 retained alternatives, 399946 retained identities, 522 active ms, 522 elapsed ms, 111 slices, 14 max slice ms, generation 70001)
+[22:28:26] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 4001/4001 recipe definitions across 2 output items (0 unknown/nonfixed outputs, 876 unsupported dependencies, 199941 retained alternatives, 399946 retained identities, 327 active ms, 327 elapsed ms, 76 slices, 17 max slice ms, generation 70002)
+[22:28:26] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++ +++++++ +++       ]
+[22:28:26] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 26 at (1.5, -60.0, -2.5)
+[22:28:26] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[22:28:26] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_hotfix_late_tables:0' (1 tests)...
+[22:28:26] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++      ]
+[22:28:26] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 27 at (7.5, -60.0, 8.5)
+[22:28:26] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[22:28:26] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 2: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:26] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:26] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 3 after 20 stable server ticks (1294 definitions, attempt 1/8)
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 44 active ms, 158 elapsed ms, 19 slices, 5 max slice ms, generation 3)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 3 with 1294 definitions
+[22:28:27] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 3: definition table replaced (1294 -> 1295 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 4 after 20 stable server ticks (1295 definitions, attempt 1/8)
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1295/1295 recipe definitions across 843 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6182 retained alternatives, 10325 retained identities, 37 active ms, 81 elapsed ms, 19 slices, 5 max slice ms, generation 4)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 4 with 1295 definitions
+[22:28:27] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 4: definition table replaced (1295 -> 1295 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 5 after 20 stable server ticks (1295 definitions, attempt 1/8)
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1295/1295 recipe definitions across 843 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6182 retained alternatives, 10325 retained identities, 31 active ms, 62 elapsed ms, 19 slices, 5 max slice ms, generation 5)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 5 with 1295 definitions
+[22:28:27] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 6: definition table replaced (1295 -> 1295 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 7 after 20 stable server ticks (1295 definitions, attempt 1/8)
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++_     ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1295/1295 recipe definitions across 843 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6182 retained alternatives, 10325 retained identities, 33 active ms, 63 elapsed ms, 19 slices, 5 max slice ms, generation 7)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 7 with 1295 definitions
+[22:28:27] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_station_caps:0' (1 tests)...
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 29 active ms, 29 elapsed ms, 19 slices, 3 max slice ms, generation 8)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 8 with 1294 definitions
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++     ]
+[22:28:27] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_recipe_replacement:0' (1 tests)...
+[22:28:27] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++    ]
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 35 active ms, 36 elapsed ms, 19 slices, 5 max slice ms, generation 9)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 9 with 1294 definitions
+[22:28:27] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 9: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 45 active ms, 45 elapsed ms, 19 slices, 8 max slice ms, generation 11)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 11 with 1294 definitions
+[22:28:27] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 12: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:27] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 41 active ms, 42 elapsed ms, 20 slices, 7 max slice ms, generation 13)
+[22:28:27] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 13 with 1294 definitions
+[22:28:27] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm2_reload:0' (1 tests)...
+[22:28:28] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++   ]
+[22:28:28] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++   ]
+[22:28:28] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++   ]
+[22:28:28] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++   ]
+[22:28:28] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++   ]
+[22:28:29] [Server thread/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[22:28:29] [Server thread/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[22:28:31] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++_  ]
+[22:28:31] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 77 active ms, 123 elapsed ms, 21 slices, 18 max slice ms, generation 14)
+[22:28:31] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 14 with 1294 definitions
+[22:28:31] [Server thread/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[22:28:31] [Server thread/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++_  ]
+[22:28:33] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 40 active ms, 81 elapsed ms, 19 slices, 5 max slice ms, generation 15)
+[22:28:33] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 15 with 1294 definitions
+[22:28:33] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_hotfix_continuous_wait:0' (1 tests)...
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++  ]
+[22:28:33] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 16: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:33] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:34] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++_ ]
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion recipe index generation 16 stopped waiting after 1200 server ticks (1294 definitions, 1201 observed source changes, 0 automatic attempts)
+[22:28:35] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm3_hotfix_churn_cap:0' (1 tests)...
+[22:28:35] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 36 active ms, 36 elapsed ms, 19 slices, 5 max slice ms, generation 17)
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 17 with 1294 definitions
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++ ]
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 18: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 0/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 19 after 20 stable server ticks (1294 definitions, attempt 1/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 19: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 1/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 20 after 20 stable server ticks (1294 definitions, attempt 2/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 20: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 2/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 21 after 20 stable server ticks (1294 definitions, attempt 3/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 21: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 3/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 22 after 20 stable server ticks (1294 definitions, attempt 4/8)
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 22: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 4/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 23 after 20 stable server ticks (1294 definitions, attempt 5/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 23: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 5/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 24 after 20 stable server ticks (1294 definitions, attempt 6/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 24: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 6/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 25 after 20 stable server ticks (1294 definitions, attempt 7/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion invalidated recipe index generation 25: definition table replaced (1294 -> 1294 definitions); waiting 20 unchanged server ticks before automatic rebuild, attempts 7/8
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion automatically restarting recipe index as generation 26 after 20 stable server ticks (1294 definitions, attempt 8/8)
+[22:28:35] [Server thread/WARN] [de.at.kn.RuntimeKnowledge/]: ATM Companion recipe index generation 26 stopped automatic recovery: definition table replaced (1294 -> 1294 definitions, 8 automatic attempts)
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++_]
+[22:28:35] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 29 active ms, 29 elapsed ms, 19 slices, 5 max slice ms, generation 27)
+[22:28:35] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 27 with 1294 definitions
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++++]
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: ========= 26 GAME TESTS COMPLETE IN 13.65 s ======================
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: All 26 required tests passed :)
+[22:28:35] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[22:28:35] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[22:28:35] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[22:28:35] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: test-mock-player lost connection: Server closed
+[22:28:35] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player left the game
+[22:28:35] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: test-mock-player lost connection: Server closed
+[22:28:35] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player left the game
+[22:28:35] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[22:28:36] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[22:28:38] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[22:28:38] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+> Task :compileQuesttestJava
+> Task :writeQuestTestServerLegacyClasspath
+> Task :prepareQuestTestServerRun
+> Task :processQuesttestResources
+> Task :questtestClasses
+
+> Task :runQuestTestServer
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[22:29:02] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.44, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.251, --fml.neoFormVersion, 20240808.144430]
+[22:29:02] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[22:29:02] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Microsoft; OS Windows 11 arch amd64 version 10.0
+[22:29:02] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[22:29:02] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/<USER_HOME>/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[22:29:05] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[22:29:05] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Architectury 13.0.11 (architectury)
+		ATM Companion 0.3.1 (atm_companion)
+		ATM Companion FTB Integration Tests 0.3.1 (atm_companion_questtests)
+		FTB Library 2101.1.36 (ftblibrary)
+		FTB Quests 2101.1.36 (ftbquests)
+		FTB Teams 2101.1.11 (ftbteams)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.251 (neoforge)
+[22:29:15] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[22:29:20] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[22:29:42] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:29:42] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:29:42] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[22:29:42] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[22:29:42] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[22:29:43] [modloading-worker-0/INFO] [de.at.ATMCompanion/]: ATM Companion M3 initialized: staged recipe knowledge, material planning, nearby vanilla stations and one-operation observations; no AI/network client
+[22:29:43] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.251, for MC 1.21.1
+[22:29:45] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[22:29:45] [main/WARN] [ne.ne.ne.co.CommonHooks/WP]: The following mods have version differences that were not resolved:
+atm_companion (version 0.3.0 -> 0.3.1)
+atm_companion_questtests (version 0.3.0 -> 0.3.1)
+Things may not work well.
+[22:29:45] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<WORKSPACE>/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[22:29:45] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<WORKSPACE>/ATM-Companion/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[22:29:45] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [atm_companion_questtests]
+[22:30:06] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes
+[22:30:07] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[22:30:09] [Server thread/INFO] [FTB Teams/]: loaded team data: 7 known players, 11 teams total
+[22:30:10] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[22:30:10] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[22:30:11] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 549 ms
+[22:30:11] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[22:30:11] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[22:30:11] [Server thread/INFO] [FTB Quests/]: Loading quests from <WORKSPACE>\ATM-Companion\run-questtest\config\ftbquests\quests
+[22:30:11] [Server thread/INFO] [FTB Quests/]: loaded translation tables for 1 language(s)
+[22:30:11] [Server thread/INFO] [FTB Quests/]: Loaded 1 chapter groups, 5 chapters, 15 quests, 0 reward tables
+[22:30:11] [Server thread/INFO] [minecraft/GameTestServer]: 2 tests are now running at position -1131915, -59, 2529313!
+[22:30:13] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...
+[22:30:13] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[22:30:13] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 185 active ms, 2246 elapsed ms, 38 slices, 15 max slice ms, generation 1)
+[22:30:13] [Server thread/INFO] [de.at.kn.RuntimeKnowledge/]: ATM Companion published recipe index generation 1 with 1298 definitions
+[22:30:13] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[22:30:13] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[22:30:13] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[22:30:14] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[22:30:15] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-4.5, -60.0, 5.5)
+[22:30:15] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game
+[22:30:16] [Server thread/INFO] [minecraft/GameTestServer]: [++]
+[22:30:16] [Server thread/INFO] [minecraft/GameTestServer]: ========= 2 GAME TESTS COMPLETE IN 4.908 s ======================
+[22:30:16] [Server thread/INFO] [minecraft/GameTestServer]: All 2 required tests passed :)
+[22:30:16] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[22:30:16] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[22:30:16] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[22:30:16] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[22:30:17] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[22:30:19] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[22:30:19] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+[Incubating] Problems report is available at: file:///<WORKSPACE>/ATM-Companion/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 4m 2s
+21 actionable tasks: 19 executed, 2 from cache
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html

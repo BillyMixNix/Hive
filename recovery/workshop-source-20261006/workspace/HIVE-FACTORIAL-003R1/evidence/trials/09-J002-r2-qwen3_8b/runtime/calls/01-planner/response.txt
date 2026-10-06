@@ -1,0 +1,18 @@
+{
+  "summary": "Validate input parameters in IngredientAllocation.canSatisfy to reject null/invalid values",
+  "ui_goal": "no change needed",
+  "backend_goal": "Update IngredientAllocation.canSatisfy to validate input parameters",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"],
+    "tests": []
+  },
+  "acceptance": ["Validation rejects null/invalid inputs while preserving existing behavior"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Rejects null/invalid inputs in canSatisfy with IllegalArgumentException", "Preserves existing allocation behavior"],
+    "tests": []
+  },
+  "interface_contracts": []
+}

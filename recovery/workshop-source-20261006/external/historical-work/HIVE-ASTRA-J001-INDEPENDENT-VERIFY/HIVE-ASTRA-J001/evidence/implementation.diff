@@ -1,0 +1,14 @@
+--- a/src/main/java/dev/atmcompanion/state/SnapshotFormatter.java
++++ b/src/main/java/dev/atmcompanion/state/SnapshotFormatter.java
+@@ -37,7 +37,10 @@
+     }
+     public static String boundLine(String line) {
+         String safe = line.replaceAll("[\\p{Cntrl}\\u00a7]", "?");
+-        return safe.length() <= MAX_LINE_CHARS ? safe : safe.substring(0, MAX_LINE_CHARS - 3) + "...";
++        if (safe.length() <= MAX_LINE_CHARS) return safe;
++        int end = MAX_LINE_CHARS - 3;
++        if (Character.isHighSurrogate(safe.charAt(end - 1)) && Character.isLowSurrogate(safe.charAt(end))) end--;
++        return safe.substring(0, end) + "...";
+     }
+     private static String itemText(GameSnapshot.Item item) {
+         return item == null ? "empty" : item.count() + " x " + item.item();

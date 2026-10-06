@@ -1,0 +1,26 @@
+{
+  "request": "Add `GameSnapshot.Inventory.totalCount(String itemId)`. Sum counts for exactly\nthe requested registry ID across all stacks using 64-bit arithmetic. Return\nzero when absent. Reject null with `IllegalArgumentException`; do not mutate\nthe inventory.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.state.InventoryTotalCountAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.state;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass InventoryTotalCountAcceptanceTest {\n    @Test void sumsExactIdentityWithoutIntOverflow() {\n        var inventory = new GameSnapshot.Inventory(List.of(\n                new GameSnapshot.Item(\"minecraft:stone\", 2_000_000_000, 0, false),\n                new GameSnapshot.Item(\"minecraft:dirt\", 5, 1, false),\n                new GameSnapshot.Item(\"minecraft:stone\", 2_000_000_000, 2, false)), 64, false);\n        assertEquals(4_000_000_000L, inventory.totalCount(\"minecraft:stone\"));\n        assertEquals(5L, inventory.totalCount(\"minecraft:dirt\"));\n        assertEquals(0L, inventory.totalCount(\"minecraft:glass\"));\n        assertEquals(3, inventory.stacks().size());\n        assertThrows(IllegalArgumentException.class, () -> inventory.totalCount(null));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N002",
+    "replicate_index": 1,
+    "trial_id": "8a79b068a832",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

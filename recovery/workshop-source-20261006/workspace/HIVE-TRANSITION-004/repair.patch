@@ -1,0 +1,607 @@
+--- a/workshop/hive.py
++++ b/workshop/hive.py
+@@ -1378,6 +1378,7 @@
+     The final full verification remains authoritative.
+     """
+     checks = []
++    diagnostics = []
+     files = sorted(dict.fromkeys(str(path).replace("\\", "/") for path in changed_files))
+ 
+     for rel in files:
+@@ -1454,6 +1455,8 @@
+         if test_files:
+             isolated = hive_verifier.targeted_verify_isolated(tree, test_files)
+             checks.extend(isolated.get("checks", []))
++            if isolated.get("diagnostics"):
++                diagnostics.append(isolated["diagnostics"])
+ 
+     if _EXTERNAL_ROOT_MODE.get() and any(
+         Path(rel).suffix.casefold() in {".java", ".gradle", ".kts", ".properties"} for rel in files
+@@ -1468,8 +1471,11 @@
+             ),
+         )
+         checks.extend(isolated.get("checks", []))
+-
+-    return {"passed": all(check["passed"] for check in checks), "checks": checks}
++        if isolated.get("diagnostics"):
++            diagnostics.append(isolated["diagnostics"])
++
++    return {"passed": all(check["passed"] for check in checks), "checks": checks,
++            **({"diagnostics": diagnostics} if diagnostics else {})}
+ 
+ def make_diff(source_root: Path, stage_root: Path, paths: list[str]) -> str:
+     pieces = []
+--- a/workshop/hive_verifier.py
++++ b/workshop/hive_verifier.py
+@@ -82,7 +82,7 @@
+     }
+ 
+ 
+-def run_isolated(
++def _run_isolated(
+     tree: Path,
+     mode: str,
+     selected_files: list[str] | None = None,
+@@ -92,6 +92,7 @@
+     frozen_junit_tests: list[dict] | None = None,
+     expected_jvm_profile: dict | None = None,
+     expected_external_baseline_sha256: str | None = None,
++    trace=None,
+ ) -> dict:
+     """Execute fixed verification commands in a disposable, networkless container.
+ 
+@@ -102,6 +103,7 @@
+     if mode not in {"full", "targeted"}:
+         return _failed(f"unsupported verifier mode: {mode}")
+     jvm_profile = None
++    trace.event("host_preflight_started")
+     modules_cache = wrapper_cache = None
+     native_assets_cache = native_artifacts_cache = None
+     native_manifest_path = None
+@@ -145,16 +147,19 @@
+     if inspected.returncode != 0:
+         return _failed(f"Verifier image is unavailable: {_bounded(inspected.stderr or inspected.stdout, 2000)}", image=image)
+     image_id = (inspected.stdout or "").strip()
++    trace.event("image_identified", image_id=image_id)
+ 
+     parent = Path(tempfile.mkdtemp(prefix="hive-verifier-input-"))
+     sanitized = parent / "source"
+     container_name = f"hive-verify-{uuid.uuid4().hex[:12]}"
+     try:
++        trace.event("source_staging_started", temporary_directory=str(parent))
+         if jvm_profile is not None:
+             from .hive_jvm import copy_external_verification_input
+             copy_external_verification_input(Path(tree), sanitized, frozen_junit_tests or [])
+         else:
+             _copy_verification_input(Path(tree), sanitized)
++        trace.event("source_staging_complete", source=str(sanitized))
+         mount_source = str(sanitized.resolve())
+         if "," in mount_source:
+             return _failed("Verifier source path contains a comma and cannot be mounted safely.", image=image)
+@@ -172,6 +177,7 @@
+             wrapper_mount = str(wrapper_cache.resolve(strict=True)).replace("\\", "/")
+             native_assets_mount = native_artifacts_mount = None
+             if jvm_profile.get("external_build_inputs") is not None:
++                trace.event("approved_cache_validation_started")
+                 try:
+                     native_assets_cache, native_artifacts_cache = hive_jvm.external_build_input_locations(
+                         jvm_profile,
+@@ -193,6 +199,7 @@
+                 if len(manifest_bytes) > 32_000_000:
+                     return _failed("External build-input manifest exceeds its verification bound.", image=image)
+                 native_manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
++                trace.event("approved_cache_validation_complete", manifest_sha256=native_manifest_sha256)
+             if ("," in modules_mount or "," in wrapper_mount
+                     or (native_assets_mount is not None and "," in native_assets_mount)
+                     or (native_artifacts_mount is not None and "," in native_artifacts_mount)
+@@ -225,6 +232,15 @@
+             "--env", "PYTHONDONTWRITEBYTECODE=1",
+         ]
+         if jvm_profile is not None:
++            # Host-reviewed observability overlay; pinned runtime image and all
++            # gate commands/assertions remain fixed. Candidate files cannot
++            # select or supply this module.
++            runner_source = Path(__file__).resolve().parents[1] / "verification" / "jvm_runner.py"
++            command.extend([
++                "--mount", f"type=bind,source={str(runner_source)},target=/opt/verifier/jvm_runner.py,readonly",
++                "--env", f"HIVE_VERIFICATION_RUN_ID={trace.run_id}",
++            ])
++            trace.event("verifier_instrumentation_identified", runner_sha256=hashlib.sha256(runner_source.read_bytes()).hexdigest())
+             command.extend([
+                 "--mount", f"type=bind,source={modules_mount},target=/approved-gradle-cache/modules-2,readonly",
+                 "--mount", f"type=bind,source={wrapper_mount},target=/approved-gradle-cache/wrapper/dists/{Path(jvm_profile['distribution']).stem},readonly",
+@@ -245,9 +261,17 @@
+         ]
+         )
+         try:
+-            result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
++            result = trace.capture(command, timeout=timeout, docker=docker, container=container_name)
+         except subprocess.TimeoutExpired:
+-            subprocess.run([docker, "rm", "-f", container_name], capture_output=True, text=True, timeout=10)
++            trace.event("termination_requested", container=container_name)
++            removed = subprocess.run([docker, "rm", "-f", container_name], capture_output=True, text=True, timeout=10)
++            trace.event("termination_result", container=container_name, returncode=removed.returncode,
++                        stdout=_bounded(removed.stdout), stderr=_bounded(removed.stderr))
++            state = subprocess.run([docker, "inspect", "--format", "{{json .State}}", container_name],
++                                   capture_output=True, text=True, timeout=3)
++            trace.event("container_after_termination", container=container_name, returncode=state.returncode,
++                        stdout=_bounded(state.stdout), stderr=_bounded(state.stderr),
++                        absence_confirmed=state.returncode != 0 and "no such" in (state.stderr or "").lower())
+             if jvm_profile is not None and native_assets_cache is not None:
+                 try:
+                     hive_jvm.external_build_input_locations(
+@@ -310,6 +334,29 @@
+         return _failed(f"Isolated verifier failed: {type(exc).__name__}: {exc}", image=image)
+     finally:
+         shutil.rmtree(parent, ignore_errors=True)
++        trace.event("cleanup_complete", temporary_directory=str(parent), removed=not parent.exists())
++
++
++def run_isolated(tree: Path, mode: str, selected_files: list[str] | None = None,
++                 timeout: int = 150, *, external_root: bool = False,
++                 frozen_junit_tests: list[dict] | None = None, expected_jvm_profile: dict | None = None,
++                 expected_external_baseline_sha256: str | None = None,
++                 diagnostics_dir: Path | None = None) -> dict:
++    from .verifier_trace import VerificationTrace
++    try:
++        trace = VerificationTrace(tree, mode, diagnostics_dir)
++    except Exception as exc:
++        return _failed(f"Cannot preserve verifier diagnostics: {type(exc).__name__}: {exc}")
++    try:
++        report = _run_isolated(tree, mode, selected_files, timeout, external_root=external_root,
++                 frozen_junit_tests=frozen_junit_tests, expected_jvm_profile=expected_jvm_profile,
++                 expected_external_baseline_sha256=expected_external_baseline_sha256, trace=trace)
++    except Exception as exc:
++        report = _failed(f"Isolated verifier failed: {type(exc).__name__}: {exc}")
++    trace.event("verification_returned", passed=bool(report.get("passed")))
++    report["diagnostics"] = trace.summary()
++    trace.save("result.json", report)
++    return report
+ 
+ 
+ def targeted_verify_isolated(tree: Path, test_files: list[str], *, external_root: bool = False,
+--- /dev/null
++++ b/workshop/verifier_trace.py
+@@ -0,0 +1,117 @@
++"""Durable verifier diagnostics. Events/output never grant acceptance."""
++from __future__ import annotations
++import datetime
++import json
++import os
++import subprocess
++import threading
++import time
++import uuid
++from pathlib import Path
++
++EVENT_PREFIX = "HIVE_VERIFIER_EVENT "
++
++
++class VerificationTrace:
++    def __init__(self, tree: Path, mode: str, root: Path | None = None):
++        self.started = time.monotonic()
++        self.run_id = Path(tree).parent.name
++        self.root = Path(root) if root is not None else Path(tree).parent / "verification" / f"{mode}-{uuid.uuid4().hex[:12]}"
++        self.root.mkdir(parents=True, exist_ok=False)
++        self.lock = threading.Lock()
++        self.last_phase = None
++        self.last_verifier_phase = None
++        self.event("verification_requested", mode=mode, source=str(tree))
++
++    def event(self, phase, **fields):
++        with self.lock:
++            now = time.monotonic()
++            row = {"monotonic": now, "wall_timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
++                   "run_id": self.run_id, "phase": phase, "elapsed_ms": round((now-self.started)*1000, 3),
++                   "clock_domain": "host", **fields}
++            if phase not in {"process_output", "process_state", "diagnostic_error"}:
++                self.last_phase = phase
++                if fields.get("origin") == "container": self.last_verifier_phase = phase
++            with (self.root / "verification-events.jsonl").open("a", encoding="utf-8") as f:
++                f.write(json.dumps(row, ensure_ascii=False)+"\n")
++
++    def save(self, name, value):
++        (self.root / name).write_text(json.dumps(value, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
++
++    def state(self, docker, container, stop):
++        rows = []
++        # Read-only bounded samples, taken before the verification deadline.
++        for args in (["inspect", "--format", "{{json .State}}", container],
++                     ["top", container, "-eo", "pid,ppid,stat,etime,time,wchan:24,args"],
++                     ["stats", "--no-stream", "--format", "{{json .}}", container]):
++            if stop.is_set(): break
++            try:
++                cp = subprocess.run([docker, *args], capture_output=True, text=True, timeout=2)
++                rows.append({"argv": [docker,*args], "returncode": cp.returncode,
++                             "stdout": cp.stdout[-32000:], "stderr": cp.stderr[-4000:]})
++            except Exception as exc:
++                rows.append({"argv": [docker,*args], "error": f"{type(exc).__name__}: {exc}"})
++        self.event("process_state", container=container, samples=rows)
++
++    def capture(self, command, *, timeout, docker, container):
++        stdout_path, stderr_path = self.root/"stdout.log", self.root/"stderr.log"
++        self.save("invocation.json", {"argv":command, "cwd":str(Path.cwd()), "timeout_seconds":timeout,
++                  "container":container, "host_environment":"Inherited by Docker CLI; not collected. Only explicit --env entries enter container."})
++        stop = threading.Event()
++        def observe():
++            try:
++                with stderr_path.open("r", encoding="utf-8", errors="replace") as stream:
++                    pending = ""
++                    while True:
++                        chunk = stream.read(65536)
++                        pending += chunk
++                        while "\n" in pending:
++                            line, pending = pending.split("\n", 1)
++                            if not line.startswith(EVENT_PREFIX): continue
++                            try:
++                                source = json.loads(line[len(EVENT_PREFIX):])
++                                phase = source.pop("phase")
++                                self.event(phase, container=container, origin="container", source_event=source)
++                            except (ValueError, KeyError, TypeError):
++                                self.event("diagnostic_error", detail="Malformed container diagnostic event")
++                        if stop.is_set() and not chunk: break
++                        if not chunk: stop.wait(.05)
++            except Exception as exc:
++                self.event("diagnostic_error", detail=str(exc))
++        def sample():
++            # No delayed samples may hold up deadline enforcement/termination.
++            if timeout < 10: return
++            for due in (min(120, timeout*.5), max(0, timeout-15)):
++                delay=max(0, launched+due-time.monotonic())
++                if stop.wait(delay): return
++                self.state(docker, container, stop)
++        self.event("verifier_launch_requested", container=container, timeout_seconds=timeout)
++        launched = time.monotonic()
++        with stdout_path.open("wb") as out, stderr_path.open("wb") as err:
++            reader=threading.Thread(target=observe, daemon=True)
++            sampler=threading.Thread(target=sample, daemon=True)
++            reader.start(); sampler.start()
++            try:
++                cp=subprocess.run(command, stdout=out, stderr=err, timeout=timeout)
++                # Also supports injected deterministic process runners in tests.
++                for value, handle in ((getattr(cp,'stdout',None),out),(getattr(cp,'stderr',None),err)):
++                    if value: handle.write(value.encode() if isinstance(value,str) else value)
++                self.event("verifier_process_exit", container=container, returncode=cp.returncode)
++            except subprocess.TimeoutExpired as exc:
++                for value, handle in ((exc.stdout,out),(exc.stderr,err)):
++                    if value and handle.tell()==0: handle.write(value.encode() if isinstance(value,str) else value)
++                out.flush(); err.flush()
++                self.event("timeout_fired", container=container, timeout_seconds=timeout,
++                           last_observed_phase=self.last_verifier_phase or self.last_phase)
++                raise
++            finally:
++                out.flush(); err.flush(); stop.set(); reader.join(timeout=2); sampler.join(timeout=3)
++        return subprocess.CompletedProcess(command, cp.returncode,
++                    stdout_path.read_text(encoding="utf-8",errors="replace"),
++                    stderr_path.read_text(encoding="utf-8",errors="replace"))
++
++    def summary(self):
++        return {"directory":str(self.root), "events":str(self.root/"verification-events.jsonl"),
++                "stdout":str(self.root/"stdout.log"), "stderr":str(self.root/"stderr.log"),
++                "last_observed_phase":self.last_verifier_phase or self.last_phase,
++                "elapsed_ms":round((time.monotonic()-self.started)*1000,3)}
+--- a/verification/jvm_runner.py
++++ b/verification/jvm_runner.py
+@@ -3,11 +3,13 @@
+ from __future__ import annotations
+ 
+ import hashlib
++import datetime
+ import json
+ import os
+ import re
+ import shutil
+ import subprocess
++import sys
+ import threading
+ import time
+ import xml.etree.ElementTree as ET
+@@ -37,24 +39,64 @@
+ RUNTIME_DIRS = {".git", ".gradle", "build", "target", "__pycache__", ".pytest_cache", "node_modules"}
+ APPROVED_RUNTIME_OUTPUT_DIRS = {"run-gametest", "run-questtest"}
+ 
++_TRACE_START = time.monotonic()
++_TRACE_LOCK = threading.Lock()
++_TRACE_OUTPUT_BYTES = 0
++_TRACE_OUTPUT_LIMIT = 2_000_000
++
++
++def _event(phase, **fields):
++    """Diagnostic-only stderr stream; stdout remains the final gate report."""
++    if not os.environ.get("HIVE_VERIFICATION_RUN_ID"):
++        return
++    try:
++        with _TRACE_LOCK:
++            now = time.monotonic()
++            row = {"monotonic": now, "wall_timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
++                   "run_id": os.environ["HIVE_VERIFICATION_RUN_ID"], "phase": phase,
++                   "pid": os.getpid(), "elapsed_ms": round((now-_TRACE_START)*1000,3),
++                   "clock_domain": "container", **fields}
++            print("HIVE_VERIFIER_EVENT "+json.dumps(row,ensure_ascii=False), file=sys.stderr, flush=True)
++    except Exception:
++        # Observability may not change a gate's decision or block pipe drains.
++        pass
++
++
++def _observe_output(label, chunk, pid):
++    global _TRACE_OUTPUT_BYTES
++    if not os.environ.get("HIVE_VERIFICATION_RUN_ID"): return
++    old = _TRACE_OUTPUT_BYTES
++    _TRACE_OUTPUT_BYTES += len(chunk)
++    if old < _TRACE_OUTPUT_LIMIT:
++        text = chunk[:_TRACE_OUTPUT_LIMIT-old].decode("utf-8",errors="replace")
++        _event("process_output", stream=label, child_pid=pid, text=text)
++        for line in text.splitlines():
++            if line.startswith("> Task ") or line.startswith("> Configure ") or "Daemon" in line:
++                _event("gradle_output_marker", child_pid=pid, marker=line[:1000])
++    if old < _TRACE_OUTPUT_LIMIT <= _TRACE_OUTPUT_BYTES:
++        _event("output_diagnostic_limit", retained_bytes=_TRACE_OUTPUT_LIMIT)
++
+ 
+ def _bounded_process(argv, *, cwd: Path, env: dict, timeout: int, process_factory=None,
+                      max_log_bytes: int = MAX_LOG_BYTES, output_observer=None):
+     """Run an argv-only command while retaining a bounded tail of each stream."""
+     process_factory = process_factory or subprocess.Popen
+     started = time.monotonic()
++    _event("process_launch_requested", argv=list(argv), cwd=str(cwd), timeout_seconds=timeout)
+     process = process_factory(
+         argv, cwd=str(cwd), env=env, shell=False,
+         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+     )
++    _event("process_launched", child_pid=getattr(process,"pid",None))
+     streams = {"stdout": deque(), "stderr": deque()}
+     sizes = {"stdout": 0, "stderr": 0}
+ 
+     def drain(label, stream):
+         while True:
+-            chunk = stream.read(4096)
++            chunk = getattr(stream, "read1", stream.read)(4096)
+             if not chunk:
+                 return
++            _observe_output(label, chunk, getattr(process,"pid",None))
+             if output_observer is not None:
+                 try:
+                     output_observer(label, chunk)
+@@ -82,10 +124,13 @@
+         return_code = process.wait(timeout=timeout)
+     except subprocess.TimeoutExpired:
+         timed_out = True
++        _event("inner_timeout_fired", child_pid=getattr(process,"pid",None), timeout_seconds=timeout)
+         process.kill()
+         return_code = process.wait()
+     for reader in readers:
+         reader.join(timeout=5)
++    _event("process_exit", child_pid=getattr(process,"pid",None), returncode=return_code, timed_out=timed_out,
++           readers_finished=all(not r.is_alive() for r in readers))
+     def tail(label):
+         return b"".join(streams[label]).decode("utf-8", errors="replace")
+     return {
+@@ -452,8 +497,12 @@
+     gradle_home = Path(work_root) / "gradle-user-home"
+     approved_cache = Path(approved_cache_root)
+     try:
++        _event("container_verifier_started", mode=config.get("mode"))
++        _event("project_materialization_started")
+         shutil.copytree(source, project, symlinks=False)
++        _event("project_available", project=str(project))
+         frozen_classes = _validate_frozen_tests(project, config.get("frozen_tests", []))
++        _event("frozen_tests_validated", classes=frozen_classes)
+         full_tasks = config.get("full_tasks", ["check"])
+         if (not isinstance(full_tasks, list) or not 1 <= len(full_tasks) <= 64
+                 or any(not isinstance(task, str) or not GRADLE_TASK_RE.fullmatch(task)
+@@ -461,16 +510,20 @@
+             raise ValueError("pinned Gradle regression gate contains an invalid task identifier")
+         runtime_output_dirs = _validated_runtime_output_dirs(config.get("runtime_output_dirs", []))
+         distribution_name = config["distribution"].removesuffix(".zip")
++        _event("wrapper_copy_started")
+         _copy_wrapper_distribution(approved_cache / "wrapper" / "dists" / distribution_name,
+                                    gradle_home, config["version"])
++        _event("wrapper_copy_complete", gradle_version=config["version"])
+         (gradle_home / "caches").mkdir(parents=True, exist_ok=True)
+         external_copy = None
+         external_spec = config.get("external_build_inputs")
+         if external_spec is not None:
++            _event("external_inputs_copy_started")
+             external_copy = _copy_external_build_inputs(
+                 gradle_home, approved_cache, external_spec, EXTERNAL_INPUT_MANIFEST,
+                 config.get("external_build_inputs_manifest_sha256"),
+             )
++            _event("external_inputs_copy_complete", details=external_copy)
+         (Path(work_root) / "home").mkdir(parents=True, exist_ok=True)
+         (Path(work_root) / "tmp").mkdir(parents=True, exist_ok=True)
+         env = {
+@@ -485,21 +538,25 @@
+             "LANG": "C.UTF-8",
+             "CI": "true",
+         }
++        _event("java_detection_started", environment=env)
+         java = process_runner([f"{JAVA_HOME}/bin/java", "-version"], cwd=project, env=env, timeout=15)
+         version_output = java.get("stderr", "") + java.get("stdout", "")
+         match = GRADLE_VERSION_RE.search(version_output)
+         if java.get("returncode") != 0 or java.get("timed_out") or not match:
+             raise ValueError("pinned Java 21 runtime is missing or unsupported")
+         java_version = match.group(1)
++        _event("java_detected", version=java_version)
+         report = {"passed": False, "checks": checks, "java_version": java_version,
+                   "gradle_wrapper_version": config["version"], "full_gate_tasks": full_tasks,
+                   "executed_commands": []}
+         if external_copy is not None:
+             report["external_build_inputs_copy"] = external_copy
+ 
++        _event("source_hashing_started")
+         runtime_before = _runtime_output_manifest(project, runtime_output_dirs)
+         source_before = _source_digest(project, runtime_output_dirs)
+         _clear_build_outputs(project)
++        _event("source_hashing_complete")
+         targeted_argv = [
+             f"{JAVA_HOME}/bin/java", "-Djava.io.tmpdir=/work/tmp", "-classpath",
+             "gradle/wrapper/gradle-wrapper.jar", "org.gradle.wrapper.GradleWrapperMain",
+@@ -510,8 +567,11 @@
+         for class_name in frozen_classes:
+             targeted_argv.extend(["--tests", class_name])
+         report["executed_commands"].append({"phase": "targeted_junit", "argv": targeted_argv})
++        _event("gradle_invoked", gate="targeted_junit", argv=targeted_argv)
+         targeted = process_runner(targeted_argv, cwd=project, env=env, timeout=int(config.get("targeted_timeout", 240)))
++        _event("gradle_returned", gate="targeted_junit", returncode=targeted.get("returncode"), timed_out=targeted.get("timed_out"))
+         targeted_reports, report_error = _reports(project)
++        _event("junit_reports_collected", reports=targeted_reports, error=report_error)
+         targeted_check = _result_check("frozen_junit_acceptance", targeted, targeted_reports)
+         for item in config.get("frozen_tests", []):
+             matches = [row for row in targeted_reports if row["class_name"] == item["class_name"]]
+@@ -557,7 +617,9 @@
+             "--rerun-tasks", "--no-build-cache", "-Dorg.gradle.jvmargs=-Xmx768m", *full_tasks,
+         ]
+         report["executed_commands"].append({"phase": "full_gradle_check", "argv": full_argv})
++        _event("gradle_invoked", gate="full_gradle_check", argv=full_argv)
+         full = process_runner(full_argv, cwd=project, env=env, timeout=int(config.get("full_timeout", 600)))
++        _event("gradle_returned", gate="full_gradle_check", returncode=full.get("returncode"), timed_out=full.get("timed_out"))
+         full_reports, full_error = _reports(project)
+         full_check = _result_check("full_gradle_check", full, full_reports)
+         if any(row["failures"] or row["errors"] for row in full_reports):
+@@ -590,4 +652,3 @@
+                        "detail": f"{type(exc).__name__}: {exc}"})
+     return {"passed": False, "checks": checks, "gradle_wrapper_version": config.get("version"),
+             "executed_commands": []}
+-
+--- a/tests/test_hive_isolated_verifier.py
++++ b/tests/test_hive_isolated_verifier.py
+@@ -80,7 +80,8 @@
+ 
+     run_command = commands[1]
+     name = run_command[run_command.index("--name") + 1]
+-    assert commands[-1] == ["/usr/bin/docker", "rm", "-f", name]
++    assert commands[-2] == ["/usr/bin/docker", "rm", "-f", name]
++    assert commands[-1] == ["/usr/bin/docker", "inspect", "--format", "{{json .State}}", name]
+     assert result["passed"] is False
+ 
+ 
+--- a/tests/test_hive_jvm_profile.py
++++ b/tests/test_hive_jvm_profile.py
+@@ -589,12 +589,14 @@
+         "gradle_max_workers": 2, "gradle_heap": "-Xmx768m", "active_processor_count": 2,
+     }
+     mounts = [command[index + 1] for index, value in enumerate(command[:-1]) if value == "--mount"]
+-    assert len(mounts) == 3
++    assert len(mounts) == 4
++    assert sum('target=/opt/verifier/jvm_runner.py,readonly' in m for m in mounts)==1
+     assert all(item.endswith(",readonly") for item in mounts)
+     modules_mount = next(item for item in mounts if "target=/approved-gradle-cache/modules-2" in item)
+     assert modules_mount.endswith("target=/approved-gradle-cache/modules-2,readonly")
+     assert "modules-2/modules-2" not in " ".join(command)
+     assert all("modules-2" in item or "wrapper/dists/gradle-9.2.1-bin" in item or "target=/source" in item
++               or "target=/opt/verifier/jvm_runner.py,readonly" in item
+                for item in mounts)
+     env_args = [command[index + 1] for index, value in enumerate(command[:-1]) if value == "--env"]
+     assert "GRADLE_RO_DEP_CACHE=/approved-gradle-cache" in env_args
+@@ -636,7 +638,8 @@
+     assert result["passed"] is True
+     assert command[command.index("--network") + 1] == "none"
+     mounts = [command[index + 1] for index, value in enumerate(command[:-1]) if value == "--mount"]
+-    assert len(mounts) == 6
++    assert len(mounts) == 7
++    assert sum('target=/opt/verifier/jvm_runner.py,readonly' in m for m in mounts)==1
+     assert all(item.endswith(",readonly") for item in mounts)
+     assert any(f"source={str(assets_parent).replace(chr(92), '/')},target=/approved-gradle-cache/neoformruntime/assets,readonly" in item
+                for item in mounts)
+--- /dev/null
++++ b/tests/test_verifier_observability.py
+@@ -0,0 +1,99 @@
++import json
++import subprocess
++import sys
++import shutil
++from pathlib import Path
++import pytest
++from workshop import hive_verifier
++from workshop.verifier_trace import VerificationTrace
++from test_hive_isolated_verifier import Result,source_tree
++
++
++@pytest.mark.parametrize('code',[0,7])
++def test_real_process_success_failure_capture_and_exit(tmp_path,code):
++    trace=VerificationTrace(tmp_path/'candidate','targeted',tmp_path/'trace')
++    command=[sys.executable,'-u','-c',f"import sys; print('out'); print('err',file=sys.stderr); sys.exit({code})"]
++    cp=trace.capture(command,timeout=5,docker='unused',container='synthetic')
++    assert cp.returncode==code and cp.stdout.strip()=='out' and cp.stderr.strip()=='err'
++    events=[json.loads(x) for x in (trace.root/'verification-events.jsonl').read_text().splitlines()]
++    assert events[-1]['phase']=='verifier_process_exit' and events[-1]['returncode']==code
++    assert all(a['monotonic']<=b['monotonic'] for a,b in zip(events,events[1:]))
++
++
++def test_real_timeout_retains_partial_both_streams_and_phase(tmp_path):
++    trace=VerificationTrace(tmp_path/'candidate','targeted',tmp_path/'trace')
++    script="import sys,time; print('partial stdout',flush=True); print('partial stderr',file=sys.stderr,flush=True); time.sleep(15)"
++    with pytest.raises(subprocess.TimeoutExpired):
++        trace.capture([sys.executable,'-u','-c',script],timeout=.5,docker='unused',container='synthetic')
++    assert 'partial stdout' in (trace.root/'stdout.log').read_text()
++    assert 'partial stderr' in (trace.root/'stderr.log').read_text()
++    events=[json.loads(x) for x in (trace.root/'verification-events.jsonl').read_text().splitlines()]
++    assert events[-1]['phase']=='timeout_fired'
++
++
++def test_timeout_partial_pass_json_cannot_pass_cleanup_and_termination(tmp_path,monkeypatch):
++    root=source_tree(tmp_path)
++    commands=[]
++    children={'container':True,'gradle':True,'test_jvm':True}
++    temporary=[]
++    def fake_run(argv,**kwargs):
++        commands.append(argv)
++        if argv[1:3]==['image','inspect']:return Result(stdout='sha256:fixed')
++        if argv[1]=='run':
++            temporary.append(Path(argv[argv.index('--mount')+1].split('source=')[1].split(',target=')[0]).parent)
++            raise subprocess.TimeoutExpired(argv,240,output=b'{"passed":true,"checks":[]}',stderr=b'partial error')
++        if argv[1:3]==['rm','-f']:
++            children.clear();return Result(stdout='removed')
++        if argv[1]=='inspect':return Result(returncode=1,stderr='Error: No such object')
++        raise AssertionError(argv)
++    monkeypatch.setattr(hive_verifier.shutil,'which',lambda _: '/usr/bin/docker')
++    monkeypatch.setattr(hive_verifier.subprocess,'run',fake_run)
++    report=hive_verifier.run_isolated(root,'full',diagnostics_dir=tmp_path/'trace')
++    assert not report['passed'] and not children and all(not p.exists() for p in temporary)
++    assert (tmp_path/'trace/stdout.log').read_text()=='{"passed":true,"checks":[]}'
++    assert (tmp_path/'trace/stderr.log').read_text()=='partial error'
++    events=[json.loads(x) for x in (tmp_path/'trace/verification-events.jsonl').read_text().splitlines()]
++    phases=[e['phase'] for e in events]
++    assert phases.index('timeout_fired')<phases.index('termination_requested')<phases.index('termination_result')<phases.index('cleanup_complete')
++    assert next(e for e in events if e['phase']=='container_after_termination')['absence_confirmed']
++    assert 'timed out' in report['checks'][0]['detail']
++
++
++def test_container_events_retain_source_clock_and_host_order(tmp_path):
++    trace=VerificationTrace(tmp_path/'candidate','targeted',tmp_path/'trace')
++    event={'phase':'project_available','monotonic':12,'elapsed_ms':5,'wall_timestamp':'example','pid':1}
++    script=f"import sys; print({'HIVE_VERIFIER_EVENT '+json.dumps(event)!r},file=sys.stderr,flush=True)"
++    trace.capture([sys.executable,'-u','-c',script],timeout=5,docker='unused',container='synthetic')
++    events=[json.loads(x) for x in (trace.root/'verification-events.jsonl').read_text().splitlines()]
++    row=next(e for e in events if e['phase']=='project_available')
++    assert row['source_event']['monotonic']==12 and row['clock_domain']=='host'
++    assert trace.summary()['last_observed_phase']=='project_available'
++
++
++def test_real_container_timeout_removes_descendant_tree(tmp_path,monkeypatch):
++    """Real container teardown; synthetic sleeping processes, no model/J001 test."""
++    docker=shutil.which('docker')
++    if not docker:pytest.skip('Docker unavailable for container teardown integration test')
++    try:
++        cp=subprocess.run([docker,'image','inspect',hive_verifier.DEFAULT_IMAGE],capture_output=True,timeout=8)
++    except (OSError,subprocess.TimeoutExpired):pytest.skip('Pinned verifier image unavailable')
++    if cp.returncode:pytest.skip('Pinned verifier image unavailable')
++    root=source_tree(tmp_path)
++    # Only this synthetic test substitutes the container program. Production
++    # gate entrypoints/commands have no substitution option. This isolates
++    # lifecycle behavior from an unrelated legacy Python /work copystat error.
++    script="import subprocess,sys,time,os; child=subprocess.Popen([sys.executable,'-u','-c','import time; time.sleep(120)']); print('parent',os.getpid(),'child',child.pid,flush=True); time.sleep(120)"
++    real_run=subprocess.run
++    def synthetic_program(argv,**kwargs):
++        if len(argv)>1 and argv[1]=='run':
++            argv=[*argv[:-3],'--entrypoint','python3',argv[-3],'-u','-c',script]
++            (tmp_path/'synthetic-command.json').write_text(json.dumps(argv))
++        return real_run(argv,**kwargs)
++    monkeypatch.setattr(hive_verifier.subprocess,'run',synthetic_program)
++    report=hive_verifier.run_isolated(root,'targeted',['tests/test_ok.py'],timeout=20,diagnostics_dir=tmp_path/'real-trace')
++    assert not report['passed'] and 'timed out' in report['checks'][0]['detail']
++    events=[json.loads(x) for x in (tmp_path/'real-trace/verification-events.jsonl').read_text().splitlines()]
++    sampled='\n'.join(s.get('stdout','') for e in events if e['phase']=='process_state' for s in e['samples'])
++    assert 'time.sleep(120)' in sampled, 'actual descendant must be observed before teardown'
++    assert next(e for e in events if e['phase']=='container_after_termination')['absence_confirmed']
++    assert next(e for e in events if e['phase']=='cleanup_complete')['removed']

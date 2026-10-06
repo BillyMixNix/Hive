@@ -1,0 +1,1 @@
+package other.packagepath; class New {}

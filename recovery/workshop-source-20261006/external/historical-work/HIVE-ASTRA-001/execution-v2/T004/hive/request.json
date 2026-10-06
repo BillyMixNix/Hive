@@ -1,0 +1,24 @@
+{
+  "request": "Add `ActivityHistory.recent(int limit)`. Accept only limits from 1 through the configured capacity. Return at most the newest `limit` retained events in their existing chronological order, as an immutable detached list. Leave the existing no-argument method and history state unchanged.",
+  "allow_cloud": true,
+  "agent_backend": "persistent",
+  "persistent_agent_model": "gpt-6-astra",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityHistoryRecentLimitAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityHistoryRecentLimitAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityHistoryRecentLimitAcceptanceTest {\n    private ActivityEvent event(String path) {\n        return new ActivityEvent(1, \"2026-09-30T12:00:00Z\", ActivityEvent.Type.ITEM_GAINED,\n                List.of(path), 1L, ActivityEvent.Source.MANUAL);\n    }\n\n    @Test\n    void returnsNewestBoundedSliceInOrderWithoutChangingHistory() {\n        var history = new ActivityHistory(3);\n        history.append(event(\"minecraft:a\"));\n        history.append(event(\"minecraft:b\"));\n        history.append(event(\"minecraft:c\"));\n        history.append(event(\"minecraft:d\"));\n\n        var expected = List.of(event(\"minecraft:c\"), event(\"minecraft:d\"));\n        var result = history.recent(2);\n        assertEquals(expected, result);\n        assertEquals(List.of(event(\"minecraft:b\"), event(\"minecraft:c\"), event(\"minecraft:d\")), history.recent());\n        assertEquals(3, history.size());\n        assertThrows(UnsupportedOperationException.class, () -> result.clear());\n        assertThrows(IllegalArgumentException.class, () -> history.recent(0));\n        assertThrows(IllegalArgumentException.class, () -> history.recent(4));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-ASTRA-001-v2",
+    "condition_id": "hive",
+    "task_id": "T004",
+    "replicate_index": 1,
+    "trial_id": "c6d959de8f8e",
+    "condition_spec_sha256": "2d33ce88af66ed3e1f0c1e73ce3a1de62ffe36cd355a21554cc7306fddb6d291"
+  }
+}

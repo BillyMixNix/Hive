@@ -1,0 +1,396 @@
+You are the PLANNER agent for Nix Workshop Hive Build Mode.
+
+REPOSITORY MAP (read-only structural information; it is not authorization):
+REPOSITORY MAP
+(read-only structure; this is not worker authorization)
+ADVERSARIAL-REVIEW.md
+ARCHITECTURE.md
+build.gradle
+docs/
+  M3-RUNTIME-RESEARCH.md
+  M3.1-REAL-PLAYTEST.md
+  M3.1-STARTUP-RECIPE-RESEARCH.md
+  M3.2-QUEST-RESEARCH.md
+  M3.2-REAL-PLAYTEST.md
+evidence-m2/
+  ftb-quests-fixture.json
+  junit/
+    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml
+    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml
+    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml
+    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml
+    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml
+    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml
+    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml
+    TEST-dev.atmcompanion.state.GameSnapshotTest.xml
+    TEST-dev.atmcompanion.state.ObservationTest.xml
+    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml
+    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml
+  live-snapshot.json
+  m2-budget-regression.json
+  m2-index.json
+  m2-live-plan.json
+  m2-reload.json
+  README.md
+  real-server-player-snapshot.json
+evidence-m3/
+  atm10-production-smoke.json
+  cooking-plan.json
+  crafting-plan.json
+  ftb-quests-fixture.json
+  index-budget-regression.json
+  junit/
+    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml
+    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml
+    TEST-dev.atmcompanion.execution.OperationInputsTest.xml
+    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml
+    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml
+    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml
+    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml
+    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml
+    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml
+    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml
+    TEST-dev.atmcompanion.state.GameSnapshotTest.xml
+    TEST-dev.atmcompanion.state.ObservationTest.xml
+    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml
+    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml
+  live-snapshot.json
+  real-server-player-snapshot.json
+  reload.json
+  runtime-index.json
+  runtime-preparation.json
+  source-provenance.json
+  suite-summary.json
+  tested-jar-sha256.txt
+evidence-m31/
+  cooking-plan.json
+  crafting-plan.json
+  ftb-quests-fixture.json
+  index-budget-regression.json
+  junit/
+    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml
+    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml
+    TEST-dev.atmcompanion.execution.OperationInputsTest.xml
+    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml
+    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml
+    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml
+    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml
+    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml
+    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml
+    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml
+    TEST-dev.atmcompanion.state.GameSnapshotTest.xml
+    TEST-dev.atmcompanion.state.ObservationTest.xml
+    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml
+    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml
+  live-snapshot.json
+  real-server-player-snapshot.json
+  reload.json
+  runtime-index.json
+  suite-summary.json
+evidence-m32/
+  cooking-plan.json
+  crafting-plan.json
+  ftb-large-book.json
+  ftb-quests-fixture.json
+  index-budget-regression.json
+  junit/
+    TEST-dev.atmcompanion.execution.ExecutionAssessorTest.xml
+    TEST-dev.atmcompanion.execution.ExecutionContextTest.xml
+    TEST-dev.atmcompanion.execution.OperationInputsTest.xml
+    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml
+    TEST-dev.atmcompanion.integration.quest.OptionalQuestAccessTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestIdsTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestOverviewTest.xml
+    TEST-dev.atmcompanion.integration.quest.QuestSnapshotTest.xml
+    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml
+    TEST-dev.atmcompanion.knowledge.NormalizedRecipeTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeIndexTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml
+    TEST-dev.atmcompanion.knowledge.RetainedIngredientBudgetTest.xml
+    TEST-dev.atmcompanion.planning.DeterministicPlannerTest.xml
+    TEST-dev.atmcompanion.planning.PlanningOutputTest.xml
+    TEST-dev.atmcompanion.state.GameSnapshotTest.xml
+    TEST-dev.atmcompanion.state.ObservationTest.xml
+    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml
+    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml
+  live-snapshot.json
+  official-pack-source-provenance.json
+  quest-production-baseline.json
+  quest-production-optimized.json
+  real-server-player-snapshot.json
+  reload.json
+  runtime-index.json
+  suite-summary.json
+evidence/
+  command-export.json
+  junit/
+    TEST-dev.atmcompanion.integration.IntegrationRegistryTest.xml
+    TEST-dev.atmcompanion.knowledge.IngredientAllocationTest.xml
+    TEST-dev.atmcompanion.knowledge.RecipeReportTest.xml
+    TEST-dev.atmcompanion.state.GameSnapshotTest.xml
+    TEST-dev.atmcompanion.state.ObservationTest.xml
+    TEST-dev.atmcompanion.state.SnapshotFormatterTest.xml
+    TEST-dev.atmcompanion.state.SnapshotJsonTest.xml
+  live-snapshot.json
+  README.md
+  real-server-player-snapshot.json
+gradle.properties
+gradle/
+  wrapper/
+    gradle-wrapper.properties
+    LICENSE.txt
+gradlew.bat
+M2-ADVERSARIAL-REVIEW.md
+M2-ARCHITECTURE.md
+M2-RESEARCH.md
+M3-ADVERSARIAL-REVIEW.md
+M3-ARCHITECTURE.md
+M3.1-ADVERSARIAL-REVIEW.md
+M3.2-ADVERSARIAL-REVIEW.md
+PLAYTEST-M2.md
+README.md
+RESEARCH.md
+settings.gradle
+src/
+  gametest/
+    java/
+      dev/
+        atmcompanion/
+          tests/
+            CompanionGameTests.java
+            CompanionTestMod.java
+            M2GameTests.java
+            M3GameTests.java
+            RecipeBudgetGameTests.java
+            RuntimeKnowledgeRecoveryGameTests.java
+    resources/
+      META-INF/
+        neoforge.mods.toml
+  main/
+    java/
+      dev/
+        atmcompanion/
+          activity/
+            ActivityCommandService.java
+            ActivityContext.java
+            ActivityDiffService.java
+            ActivityEvent.java
+            ActivityHistory.java
+            ActivitySummary.java
+            ActivityTracker.java
+            LiveActivityService.java
+          ai/
+            AIContext.java
+          ATMCompanion.java
+          command/
+            CompanionCommands.java
+          execution/
+            ExecutionAssessment.java
+            ExecutionAssessor.java
+            ExecutionContext.java
+            OperationInputs.java
+            StationService.java
+          integration/
+            Integration.java
+            IntegrationRegistry.java
+            quest/
+              FtbQuestsAdapter.java
+              OptionalQuestAccess.java
+              QuestIds.java
+              QuestOverview.java
+              QuestService.java
+              QuestSnapshot.java
+          knowledge/
+            IngredientAllocation.java
+            NormalizedRecipe.java
+            RecipeIndex.java
+            RecipeIndexBuilder.java
+            RecipeReport.java
+            RecipeSelection.java
+            RecipeService.java
+            RetainedIngredientBudget.java
+            RuntimeKnowledge.java
+          planning/
+            BoundedJson.java
+            DeterministicPlanner.java
+            Goal.java
+            GoalSavedData.java
+            KnowledgeGraph.java
+            PlanFormatter.java
+            PlanningReport.java
+            PlanningService.java
+            PlanResult.java
+          state/
+            Capability.java
+            CapabilityStatus.java
+            GameSnapshot.java
+            Observation.java
+            SnapshotFormatter.java
+            SnapshotJson.java
+            SnapshotService.java
+    resources/
+      META-INF/
+        neoforge.mods.toml
+  packtest/
+    java/
+      dev/
+        atmcompanion/
+          packtests/
+            CompanionPackGameTests.java
+            CompanionPackTestMod.java
+            ProductionPackProbe.java
+            QuestProductionProbe.java
+    resources/
+      META-INF/
+        neoforge.mods.toml
+  questtest/
+    java/
+      dev/
+        atmcompanion/
+          questtests/
+            CompanionQuestTestMod.java
+            FtbQuestGameTests.java
+            LargeFtbQuestGameTests.java
+    resources/
+      META-INF/
+        neoforge.mods.toml
+  test/
+    java/
+      dev/
+        atmcompanion/
+          activity/
+            ActivityCommandServiceResetTest.java
+            ActivityContextTest.java
+            ActivityDiffServiceTest.java
+            ActivityEventTest.java
+            ActivityHistoryTest.java
+            ActivitySummaryTest.java
+            ActivityTrackerTest.java
+          execution/
+            ExecutionAssessorTest.java
+            ExecutionContextTest.java
+            OperationInputsTest.java
+          integration/
+            IntegrationRegistryTest.java
+            quest/
+              OptionalQuestAccessTest.java
+              QuestFixtures.java
+              QuestIdsTest.java
+              QuestOverviewTest.java
+              QuestSnapshotTest.java
+          knowledge/
+            IngredientAllocationTest.java
+            NormalizedRecipeTest.java
+            RecipeFixtures.java
+            RecipeIndexTest.java
+            RecipeReportTest.java
+            RetainedIngredientBudgetTest.java
+          planning/
+            DeterministicPlannerTest.java
+            PlanningOutputTest.java
+          state/
+            GameSnapshotTest.java
+            ObservationTest.java
+            SnapshotFixtures.java
+            SnapshotFormatterTest.java
+            SnapshotJsonTest.java
+THIRD-PARTY-NOTICES.md
+tools/
+  collect-m2-evidence.py
+    functions: sanitized
+  collect-m3-evidence.py
+    functions: sanitized
+  collect-m31-evidence.py
+    functions: sanitized
+  collect-m32-evidence.py
+    functions: sanitized
+  generate-test-structure.py
+    functions: string, tag
+  package-m3-release.py
+  package-m31-release.py
+  package-m32-release.py
+  package-release.py
+VERIFICATION-M3-0.3.0.md
+VERIFICATION-M3.1-0.3.1.md
+VERIFICATION.md
+
+REPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):
+REPOSITORY-DERIVED IMPLEMENTATION FACTS
+(deterministic read-only evidence; not write authorization)
+web_framework: unknown; do not assume a web framework
+local_route_examples: none detected
+existing_http_interfaces: none detected
+
+USER CHANGE REQUEST:
+In `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.
+
+Write scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.
+
+IMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):
+{
+  "version": 1,
+  "requirements": []
+}
+For each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.
+
+HOST-AUTHORIZED TASK WRITE FILES (exact paths; this is a hard outer boundary):
+- src/main/java/dev/atmcompanion/state/SnapshotFormatter.java
+Every worker_files entry must be one of these paths. Do not assign a test file just to create regression coverage when that file is not authorized. Host-owned frozen acceptance/verification does not grant worker write authority. For a role with no authorized work, use the exact goal 'no change needed', worker_files [], and worker_acceptance []; do not invent work for that role. Each file must have exactly one worker owner; never assign it to multiple roles.
+
+
+TRUE ROLE / WRITE CONSTRAINTS (enforced by the existing exact-file validator):
+- ui: frontend and presentation changes only; never implement backend behavior or tests.
+- backend: application and service behavior only; never implement frontend display or tests.
+- tests: regression tests only; never implement application or UI source.
+- External mode has no repository-wide role prefixes. Each worker may write ONLY the exact relative paths assigned to it by the validated plan.
+- The host rejects absolute paths, traversal, hidden/reserved paths, cross-role overlap, and edits outside exact ownership.
+Patterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.
+Give each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.
+Use repository-specific paths shown in the map; do not assume app.py, static/index.html, or any framework.
+Assign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.
+When roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.
+If two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.
+Another worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.
+Keep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.
+Do not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.
+Each active role needs nonempty worker_acceptance; a no-change role gets an empty list.
+Read-only integration context may cross roles; it never changes write ownership.
+Workers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.
+
+Return JSON only:
+{
+  "summary": "one sentence",
+  "ui_goal": "bounded task for UI agent",
+  "backend_goal": "bounded task for backend agent",
+  "tests_goal": "bounded task for test agent",
+   "worker_files": {
+     "ui": ["exact/relative/file.html"],
+     "backend": ["exact/relative/file.py"],
+     "tests": ["exact/relative/test_file.py"]
+   },
+   "interface_contracts": [
+     {"name":"endpoint-name","owner":"backend","consumer_roles":["ui","tests"],"contract":"HTTP method/path and concise response shape"}
+   ],
+   "provider_changes": [
+     {"requirement_id":"R1","method":"GET","path":"/api/example","response_fields":[{"name":"field","type":"boolean"}]}
+   ],
+   "acceptance": ["overall feature acceptance criterion"],
+  "worker_acceptance": {
+    "ui": ["only the assigned UI behavior"],
+    "backend": ["only the assigned backend behavior and response compatibility"],
+    "tests": ["only the assigned regression coverage"]
+  }
+}
+
+Do not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. Assign exact repository-relative files shown in this repository map. The host permits each active worker to write only its planner-approved exact files; no worker may expand its assignment. Do not assume Workshop filenames or frameworks. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.
+provider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.
+Check each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.

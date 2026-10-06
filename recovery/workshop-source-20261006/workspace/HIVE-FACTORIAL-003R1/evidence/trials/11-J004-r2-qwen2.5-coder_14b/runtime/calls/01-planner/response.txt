@@ -1,0 +1,18 @@
+{
+  "summary": "Add coverage percentage methods to ExecutionContext and ExecutionAssessment.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Implement coverage percentage methods in ExecutionContext and ExecutionAssessment.",
+  "tests_goal": "Add tests for the new coverage percentage methods.",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/execution/ExecutionContext.java", "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"],
+    "tests": ["src/main/java/dev/atmcompanion/execution/ExecutionContext.java", "src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java"]
+  },
+  "acceptance": ["ExecutionContext.Scan.coveragePercent() returns the integer floor of 100 * scannedPositions / totalPositions, with zero when totalPositions is zero. ExecutionAssessment.observedCoveragePercent() delegates to its observation's scan and returns -1 when the assessment has no observation. All current assessment and scan invariants are preserved."],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are implemented correctly and preserve all current assessment and scan invariants."],
+    "tests": ["Tests for ExecutionContext.Scan.coveragePercent() and ExecutionAssessment.observedCoveragePercent() are added and pass."]
+  },
+  "interface_contracts": []
+}

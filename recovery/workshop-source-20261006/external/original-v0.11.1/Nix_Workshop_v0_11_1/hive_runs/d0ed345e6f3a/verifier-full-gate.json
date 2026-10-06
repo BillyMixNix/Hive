@@ -1,0 +1,319 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "returncode": 0,
+        "stderr_tail": "",
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadJson\u001b[23;0m in 0.04s\n\u001b[1m*** Started working on \u001b[4mdownloadClientMappings\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mdownloadServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClient\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadClientMappings\u001b[23;0m in 0.05s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mdownloadServer\u001b[23;0m in 0.05s\n\u001b[1m*** Started working on \u001b[4mstripClient\u001b[23;0m\u001b[23;0m\n\u001b[1m*** Started working on \u001b[4mmergeMappings\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n\u001b[1m*** Started working on \u001b[4mextractServer\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mextractServer\u001b[23;0m in 3.16s\n\u001b[1m*** Started working on \u001b[4mstripServer\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripServer\u001b[23;0m in 7.83s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mstripClient\u001b[23;0m in 13.01s\n\u001b[1m*** Started working on \u001b[4mmerge\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:mergetool:2.0.3:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmergeMappings\u001b[23;0m in 13.48s\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mmerge\u001b[23;0m in 4.33s\n\u001b[1m*** Started working on \u001b[4mrename\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged:AutoRenamingTool:2.0.3:all\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mrename\u001b[23;0m in 14.04s\n\u001b[1m*** Started working on \u001b[4mbinaryPatch\u001b[23;0m\u001b[23;0m\n  \u001b[33mWARNING: \u001b[23;0mnet.neoforged.installertools:binarypatcher:2.1.2:fatjar is not present in the artifact manifest\n \u21b3 Running external tool net.neoforged.installertools:binarypatcher:2.1.2:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mbinaryPatch\u001b[23;0m in 6.09s\n\u001b[1m*** Started working on \u001b[4mcopyUnpatchedClasses\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mcopyUnpatchedClasses\u001b[23;0m in 1.98s\n\u001b[1m*** Started working on \u001b[4mapplyDevTransforms\u001b[23;0m\u001b[23;0m\n \u21b3 Running external tool net.neoforged.installertools:installertools:4.0.12:fatjar\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mapplyDevTransforms\u001b[23;0m in 3.25s\n\u001b[1m*** Started working on \u001b[4mbinaryWithNeoForge\u001b[23;0m\u001b[23;0m\n \u001b[1m\u001b[92m\u2713\u001b[23;0m Completed \u001b[4mbinaryWithNeoForge\u001b[23;0m in 23.32s\nTotal runtime: 70.23s\n\n\n> Task :compileJava\n> Task :processResources\n> Task :classes\n> Task :compileTestJava\n> Task :processTestResources NO-SOURCE\n> Task :testClasses\n\n> Task :test\n\nVerifierSmokeTest > frozenAcceptanceExecutes() PASSED\n\nBUILD SUCCESSFUL in 2m 50s\n5 actionable tasks: 5 executed\nConsider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html\n",
+        "tests": [
+          {
+            "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 1
+          }
+        ],
+        "timed_out": false,
+        "wall_seconds": 171.041
+      },
+      "name": "frozen_junit_acceptance",
+      "passed": true
+    },
+    {
+      "detail": {
+        "returncode": 1,
+        "stderr_tail": "/work/candidate/src/gametest/java/dev/atmcompanion/tests/RuntimeKnowledgeRecoveryGameTests.java:51: warning: [removal] makeMockServerPlayerInLevel() in GameTestHelper has been deprecated and marked for removal\n        postLateReplacement(helper, helper.makeMockServerPlayerInLevel(), changed(original, replacedId, Items.DIRT, false));\n                                          ^\n1 warning\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':runGameTestServer'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 1m 13s\n",
+        "stdout_tail": "t TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:728) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading,pl:accesstransformer:B}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:267) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading,pl:accesstransformer:B}\n\tat java.base/java.lang.Thread.run(Thread.java:1583) [?:?] {}\nCaused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: Could not initialize class oshi.software.os.linux.LinuxOperatingSystem [in thread \"main\"]\n\tat MC-BOOTSTRAP/com.github.oshi@6.4.10/oshi.hardware.platform.linux.LinuxGlobalMemory.<clinit>(LinuxGlobalMemory.java:28) ~[oshi-core-6.4.10.jar%2368!/:6.4.10] {}\n\tat MC-BOOTSTRAP/com.github.oshi@6.4.10/oshi.hardware.platform.linux.LinuxHardwareAbstractionLayer.createMemory(LinuxHardwareAbstractionLayer.java:38) ~[oshi-core-6.4.10.jar%2368!/:6.4.10] {}\n\tat MC-BOOTSTRAP/com.github.oshi@6.4.10/oshi.util.Memoizer$1.get(Memoizer.java:61) ~[oshi-core-6.4.10.jar%2368!/:6.4.10] {}\n\tat MC-BOOTSTRAP/com.github.oshi@6.4.10/oshi.hardware.common.AbstractHardwareAbstractionLayer.getMemory(AbstractHardwareAbstractionLayer.java:60) ~[oshi-core-6.4.10.jar%2368!/:6.4.10] {}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.lambda$putHardware$6(SystemReport.java:81) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.ignoreErrors(SystemReport.java:87) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.putHardware(SystemReport.java:81) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.lambda$new$2(SystemReport.java:56) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.ignoreErrors(SystemReport.java:87) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.SystemReport.<init>(SystemReport.java:56) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.CrashReport.<init>(CrashReport.java:32) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.CrashReport.preload(CrashReport.java:206) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.server.Main.main(Main.java:115) ~[neoforge-21.1.251.jar:?] {re:classloading}\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}\n\tat MC-BOOTSTRAP/fml_loader@4.0.44/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.44.jar:4.0] {}\n\tat MC-BOOTSTRAP/fml_loader@4.0.44/net.neoforged.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:128) ~[loader-4.0.44.jar:4.0] {}\n\tat MC-BOOTSTRAP/fml_loader@4.0.44/net.neoforged.fml.loading.targets.NeoForgeServerDevLaunchHandler.runService(NeoForgeServerDevLaunchHandler.java:23) ~[loader-4.0.44.jar:4.0] {}\n\tat MC-BOOTSTRAP/fml_loader@4.0.44/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.44.jar:4.0] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-11.0.5.jar:?] {}\n\tat MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.5/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-11.0.5.jar:?] {}\n\tat cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) ~[bootstraplauncher-2.0.2.jar:?] {}\n\tat cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) ~[bootstraplauncher-2.0.2.jar:?] {}\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}\n\tat net.neoforged.devlaunch.Main.main(Main.java:57) ~[?:?] {}\n[18:28:55] [Server thread/FATAL] [ne.ne.ne.co.NeoForgeMod/]: Preparing crash report with UUID a0639319-c4c9-4cd5-8343-911772441e58\n[18:28:55] [Server thread/ERROR] [minecraft/MinecraftServer]: This crash report has been saved to: /work/candidate/run-gametest/crash-reports/crash-2026-09-30_18.28.55-server.txt\n[18:28:55] [Server thread/FATAL] [ne.ne.ne.co.NeoForgeMod/]: Preparing crash report with UUID 0d6c5575-6af2-479c-9ed3-962540ff727d\n[18:28:55] [Server thread/ERROR] [minecraft/GameTestServer]: Game test server crashed\n---- Minecraft Crash Report ----\n// Sorry :(\n\nTime: 2026-09-30 18:28:55\nDescription: Exception in server tick loop\n\njava.lang.IllegalStateException: Missing test structure: atm_companion_tests:empty\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.StructureUtils.lambda$prepareTestStructure$0(StructureUtils.java:114) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat java.base/java.util.Optional.orElseThrow(Optional.java:403) ~[?:?] {}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.StructureUtils.prepareTestStructure(StructureUtils.java:114) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestInfo.prepareTestStructure(GameTestInfo.java:265) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading,pl:accesstransformer:B}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.StructureGridSpawner.spawnStructure(StructureGridSpawner.java:58) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestRunner.spawn(GameTestRunner.java:221) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197) ~[?:?] {}\n\tat java.base/java.util.AbstractList$RandomAccessSpliterator.forEachRemaining(AbstractList.java:722) ~[?:?] {}\n\tat java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?] {}\n\tat java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?] {}\n\tat java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575) ~[?:?] {}\n\tat java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260) ~[?:?] {}\n\tat java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616) ~[?:?] {}\n\tat java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622) ~[?:?] {}\n\tat java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627) ~[?:?] {}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestRunner.createStructuresForBatch(GameTestRunner.java:216) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestRunner.runBatch(GameTestRunner.java:149) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestRunner.start(GameTestRunner.java:117) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestServer.startTests(GameTestServer.java:246) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.gametest.framework.GameTestServer.tickServer(GameTestServer.java:171) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:707) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading,pl:accesstransformer:B}\n\tat TRANSFORMER/minecraft@1.21.1/net.minecraft.server.MinecraftServer.lambda$spin$2(MinecraftServer.java:267) ~[neoforge-21.1.251.jar%23126!/:?] {re:classloading,pl:accesstransformer:B}\n\tat java.base/java.lang.Thread.run(Thread.java:1583) [?:?] {}\n\n\nA detailed walkthrough of the error, its code path and all known details is as follows:\n---------------------------------------------------------------------------------------\n\n-- System Details --\nDetails:\n\tMinecraft Version: 1.21.1\n\tMinecraft Version ID: 1.21.1\n\tOperating System: Linux (amd64) version 6.18.33.2-microsoft-standard-WSL2\n\tJava Version: 21.0.12.1, Eclipse Adoptium\n\tJava VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Eclipse Adoptium\n\tMemory: 156604656 bytes (149 MiB) / 513802240 bytes (490 MiB) up to 2147483648 bytes (2048 MiB)\n\tCPUs: 2\n\tGraphics card #0 name: unknown\n\tGraphics card #0 vendor: unknown\n\tGraphics card #0 VRAM (MiB): 0.00\n\tGraphics card #0 deviceId: unknown\n\tGraphics card #0 versionInfo: unknown\n\tSpace in storage for jna.tmpdir (MiB): <path not set>\n\tSpace in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>\n\tSpace in storage for io.netty.native.workdir (MiB): <path not set>\n\tSpace in storage for java.io.tmpdir (MiB): available: 127.78, total: 128.00\n\tSpace in storage for workdir (MiB): available: 2849.97, total: 4096.00\n\tJVM Flags: 1 total; -Xmx2G\n\tServer Running: true\n\tPlayer Count: 0 / 1; []\n\tActive Data Packs: bundle, trade_rebalance, vanilla, mod_data, mod/atm_companion, mod/atm_companion_tests, mod/neoforge\n\tAvailable Data Packs: bundle, trade_rebalance, vanilla, mod/atm_companion, mod/atm_companion_tests, mod/neoforge, mod_data\n\tEnabled Feature Flags: minecraft:bundle, minecraft:vanilla, minecraft:trade_rebalance\n\tWorld Generation: Stable\n\tWorld Seed: 0\n\tType: Game test server\n\tModLauncher: 11.0.5+main.901c6ea8\n\tModLauncher launch target: forgeserverdev\n\tModLauncher services: \n\t\tsponge-mixin-0.15.2+mixin.0.8.7.jar mixin PLUGINSERVICE \n\t\tloader-4.0.44.jar slf4jfixer PLUGINSERVICE \n\t\tloader-4.0.44.jar runtime_enum_extender PLUGINSERVICE \n\t\tat-modlauncher-10.0.1.jar accesstransformer PLUGINSERVICE \n\t\tloader-4.0.44.jar runtimedistcleaner PLUGINSERVICE \n\t\tmodlauncher-11.0.5.jar mixin TRANSFORMATIONSERVICE \n\t\tmodlauncher-11.0.5.jar fml TRANSFORMATIONSERVICE \n\tFML Language Providers: \n\t\tjavafml@4.0\n\t\tlowcodefml@4.0\n\t\tminecraft@4.0\n\tMod List: \n\t\tmain                                              |ATM Companion                 |atm_companion                 |0.3.2               |Manifest: NOSIGNATURE\n\t\tgametest                                          |ATM Companion Runtime Tests   |atm_companion_tests           |0.1.0               |Manifest: NOSIGNATURE\n\t\tneoforge-21.1.251.jar                             |Minecraft                     |minecraft                     |1.21.1              |Manifest: NOSIGNATURE\n\t\tneoforge-21.1.251.jar                             |NeoForge                      |neoforge                      |21.1.251            |Manifest: NOSIGNATURE\n\tCrash Report UUID: 0d6c5575-6af2-479c-9ed3-962540ff727d\n\tFML: 4.0.44\n\tNeoForge: 21.1.251\n\n> Task :runGameTestServer FAILED\n\n[Incubating] Problems report is available at: file:///work/candidate/build/reports/problems/problems-report.html\n16 actionable tasks: 15 executed, 1 up-to-date\n",
+        "tests": [
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityCommandServiceResetTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 2
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityContextTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityDiffServiceTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 4
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityEventTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityHistoryTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivitySummaryTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.activity.ActivityTrackerTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionAssessorTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 12
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.ExecutionContextTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 5
+          },
+          {
+            "class_name": "dev.atmcompanion.execution.OperationInputsTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 5
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.IntegrationRegistryTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 6
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.OptionalQuestAccessTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 11
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestIdsTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 1
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestOverviewTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.integration.quest.QuestSnapshotTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 8
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.IngredientAllocationTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 6
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.NormalizedRecipeTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 6
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeIndexTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 10
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RecipeReportTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 3
+          },
+          {
+            "class_name": "dev.atmcompanion.knowledge.RetainedIngredientBudgetTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 5
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.DeterministicPlannerTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 22
+          },
+          {
+            "class_name": "dev.atmcompanion.planning.PlanningOutputTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 5
+          },
+          {
+            "class_name": "dev.atmcompanion.state.GameSnapshotTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 6
+          },
+          {
+            "class_name": "dev.atmcompanion.state.ObservationTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 4
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotFormatterTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 5
+          },
+          {
+            "class_name": "dev.atmcompanion.state.SnapshotJsonTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 7
+          },
+          {
+            "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "tests": 1
+          }
+        ],
+        "timed_out": false,
+        "wall_seconds": 73.74
+      },
+      "name": "full_gradle_check",
+      "passed": false
+    },
+    {
+      "detail": "Gradle full verification mutated non-generated candidate source",
+      "name": "source_immutability",
+      "passed": false
+    }
+  ],
+  "executed_commands": [
+    {
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "nix.workshop.smoke.VerifierSmokeTest"
+      ],
+      "phase": "targeted_junit"
+    },
+    {
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "clean",
+        "build",
+        "runGameTestServer",
+        "runQuestTestServer",
+        "packTestJar"
+      ],
+      "phase": "full_gradle_check"
+    }
+  ],
+  "external_build_inputs_copy": {
+    "approved_cache_mount": "read-only",
+    "bytes": 914224273,
+    "files": 3895,
+    "manifest_sha256": "84af216473d2c2e7d3a4e2c26afc120bb923ee958606df87ca24681d3a769d07",
+    "verification_copy": "private tmpfs"
+  },
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "gradle_wrapper_version": "9.2.1",
+  "isolation": {
+    "available": true,
+    "backend": "docker",
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "active_processor_count": 2,
+      "gradle_heap": "-Xmx768m",
+      "gradle_max_workers": 2
+    },
+    "image_id": "sha256:557b2fc0a326efa6796bf65dca420fecd7061bac59ad2d631112285e4576b8c9",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "inherited_host_environment": [],
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "limits": {
+      "cpus": 2,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "pids": 384,
+      "swap_additional": "0 bytes"
+    },
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs"
+  },
+  "java_version": "21.0.12.1",
+  "passed": false
+}

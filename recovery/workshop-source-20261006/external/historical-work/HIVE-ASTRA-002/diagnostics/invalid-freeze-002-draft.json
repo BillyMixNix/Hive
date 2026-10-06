@@ -1,0 +1,956 @@
+{
+  "benchmark": "HIVE-ASTRA-002",
+  "schema_version": 1,
+  "status": "proposed_not_executed",
+  "relationship_to_001": {
+    "freeze_v2_lock_sha256": "2d33ce88af66ed3e1f0c1e73ce3a1de62ffe36cd355a21554cc7306fddb6d291",
+    "raw_results_sha256": "566015430f8004d30d5109617e394d05f2b257867e1d9a0f1c71112e2640ef0f",
+    "event_log_sha256": "e31fbede41dfc1a3b2cd714ee7e9e142a136bc5db2ae07e66d3483830ca3572a",
+    "historical_results_preserved": true,
+    "direct_001_trials_are_apparatus_invalid_not_model_failures": true
+  },
+  "workshop": {
+    "version": "0.11.1",
+    "source_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-002\\workshop",
+    "source_manifest": [
+      {
+        "path": "CHANGELOG-v0.10.0.md",
+        "sha256": "5e50eb131d1d0fbc2b2f4c2b8a2e2830a5d6afa2b80a2a42461ed7e4aad72b79",
+        "size": 848
+      },
+      {
+        "path": "CHANGELOG-v0.10.1.md",
+        "sha256": "d5f4cda0eedba01b73c33f74cd4a80b8429bd9d6c0871525a4012f79f029b3a0",
+        "size": 999
+      },
+      {
+        "path": "CHANGELOG-v0.10.2.md",
+        "sha256": "2b3679c7c32c8b38cfdaecb70a4f4e58464320e39f7c6870fee4c98ca26cce8f",
+        "size": 839
+      },
+      {
+        "path": "CHANGELOG-v0.10.3.md",
+        "sha256": "8116e13d5d808f62f9c08ea76b2df7ab31c181b0cc6a055564bb3572d8a433a8",
+        "size": 1140
+      },
+      {
+        "path": "CHANGELOG-v0.10.4.md",
+        "sha256": "e4abebfc7c01c3f5336f0b59b296f4f5c1385f29a7b8453fd91191048d6a0976",
+        "size": 1299
+      },
+      {
+        "path": "CHANGELOG-v0.10.5.md",
+        "sha256": "01916e33594172d0bce7ee69fa60ea9d1f92e6e58114700f27ca1c20cd7d65d7",
+        "size": 1384
+      },
+      {
+        "path": "CHANGELOG-v0.11.0.md",
+        "sha256": "1222948dd30eda350967860595a74f7f28c4fb11fd44cd61542ec3725a55dea4",
+        "size": 1824
+      },
+      {
+        "path": "CHANGELOG-v0.11.1.md",
+        "sha256": "4b595af0ede5fc60383e3a5358d1c9cb05df6895b6c217beadd7d51f4a99b80e",
+        "size": 728
+      },
+      {
+        "path": "CHANGELOG-v0.5.md",
+        "sha256": "c35a55299841c790c325cecbb433a90e2e255bda4d14e7e50daf4932185f6778",
+        "size": 928
+      },
+      {
+        "path": "CHANGELOG-v0.6.1.md",
+        "sha256": "eb52236d210760ae3bfc0774964f9b0111917fc254495acbd23112ebaac35f11",
+        "size": 214
+      },
+      {
+        "path": "CHANGELOG-v0.6.2.md",
+        "sha256": "357a2564f789638765a5c24564376d1a4e778596725dbdfa2c8a84d22bdeeb53",
+        "size": 649
+      },
+      {
+        "path": "CHANGELOG-v0.6.3.md",
+        "sha256": "9662af9e916e490a99ac2f7963fe67b9dfb9f996128e8ff522d664b68174ff6d",
+        "size": 159
+      },
+      {
+        "path": "CHANGELOG-v0.6.4.md",
+        "sha256": "d29385d72611b65ba5bffd7b783fed4da5d2adaeb368236c48f322838a2992ad",
+        "size": 232
+      },
+      {
+        "path": "CHANGELOG-v0.6.5.md",
+        "sha256": "81d6d49e1984a71aa584bffd3cbe43866d10c13c76eb13f82b10a7c1ddaeca05",
+        "size": 291
+      },
+      {
+        "path": "CHANGELOG-v0.6.6.md",
+        "sha256": "01f0d1122ac159a9f4883d0b74e0531939976156594f996ac63587d13e22ef42",
+        "size": 443
+      },
+      {
+        "path": "CHANGELOG-v0.6.7.md",
+        "sha256": "4ac903b5fa5ee301f42ee548722f7e7db67d4485b88b6fcf302d9a2857581c57",
+        "size": 398
+      },
+      {
+        "path": "CHANGELOG-v0.6.8.md",
+        "sha256": "afee292d7cfa63e9e371f0341b6a7637fc924dd76ee0860ab638223b49c7ad5b",
+        "size": 454
+      },
+      {
+        "path": "CHANGELOG-v0.6.9.md",
+        "sha256": "fdfb3dbb0b6eeb6e2f4c181e7fad4a75cf392054304369eb95c1d6e2296fdd08",
+        "size": 366
+      },
+      {
+        "path": "CHANGELOG-v0.6.md",
+        "sha256": "1f14a49e6577000c2abff759a4549dc96e84fa539bac0e6cc8b3a951b1f25c41",
+        "size": 849
+      },
+      {
+        "path": "CHANGELOG-v0.7.0.md",
+        "sha256": "17f0830c2fc4db3f82fcc3705aeeb2c96cb599ac4a2c688c6a73a0d8359af231",
+        "size": 730
+      },
+      {
+        "path": "CHANGELOG-v0.7.1.md",
+        "sha256": "479c1a77c8fba8945daf01bf67d7166721268825367f8a58a02debb420f8ca38",
+        "size": 1781
+      },
+      {
+        "path": "CHANGELOG-v0.7.2.md",
+        "sha256": "30b51e95dee6256c3ccfb6e75793a0ad5ce15eac62fa38641117e8e895f2263e",
+        "size": 2013
+      },
+      {
+        "path": "CHANGELOG-v0.7.3.md",
+        "sha256": "e0f95b31191dd10b0eee5b17e4430fe18fb6c8e9bbb3a32e1a110c99c51a1841",
+        "size": 3381
+      },
+      {
+        "path": "CHANGELOG-v0.7.4.md",
+        "sha256": "de2f2f22fc5038a3069460354a0c10219e4f876f3bd0f2e650d2f4aa7eabdf73",
+        "size": 1621
+      },
+      {
+        "path": "CHANGELOG-v0.7.5.md",
+        "sha256": "5f7bf0314292e4a553e556a033ced3c648015c42aabc4b31397a9ee12472de58",
+        "size": 1436
+      },
+      {
+        "path": "CHANGELOG-v0.7.6.md",
+        "sha256": "05f843083ab119511aa895450359c762e303d9623aea5754929b60bd8857df5c",
+        "size": 1222
+      },
+      {
+        "path": "CHANGELOG-v0.7.7.md",
+        "sha256": "2e612cba580b0bc515ef1137637f9cd1a526a78b6196102ab0a74c1e3d623b12",
+        "size": 837
+      },
+      {
+        "path": "CHANGELOG-v0.7.8.md",
+        "sha256": "ec4f28baf07940ebfa39203c635c946fd4626a10a0ed5e9879afaed3333e1457",
+        "size": 881
+      },
+      {
+        "path": "CHANGELOG-v0.7.9.md",
+        "sha256": "af879ce9437659bc947cd75580858c2410ed4f86ef4aab323e1b61fe50836913",
+        "size": 740
+      },
+      {
+        "path": "CHANGELOG-v0.8.0.md",
+        "sha256": "634aab4d01b78def5bd2e4362b2b206440ff66cab270dc6fddbfe985dd164d0c",
+        "size": 757
+      },
+      {
+        "path": "CHANGELOG-v0.8.1.md",
+        "sha256": "d28a6ce6de8607da9aa06135de0084b5cdff0bbc87f92940dbbc59c0e8619274",
+        "size": 972
+      },
+      {
+        "path": "CHANGELOG-v0.9.0.md",
+        "sha256": "0f4d61d561542e47ba6a205fb6ec5c954e38a96f59660e42846db9a749358521",
+        "size": 764
+      },
+      {
+        "path": "CHANGELOG-v0.9.1.md",
+        "sha256": "66c616b895b3e427fa575c301c88de0be38fae398a89068fbceb4c0abf5c14cd",
+        "size": 784
+      },
+      {
+        "path": "FEATURES.md",
+        "sha256": "cbd7d0dcc1803081ea60b947dc405b68b3c29aa942eb2e90e2de28d9ba2fbce8",
+        "size": 7468
+      },
+      {
+        "path": "PERSISTENT-AGENT-BACKEND.md",
+        "sha256": "84fec3f9da47fa9acdce8b714456e7390aa73a669c5a649f046b86333724674a",
+        "size": 1464
+      },
+      {
+        "path": "README.md",
+        "sha256": "aede6e187178cb9188d30b90370e411dc45fb31755f382a946be460031011bbc",
+        "size": 22974
+      },
+      {
+        "path": "TEST_RESULTS.txt",
+        "sha256": "b08efae842f26078a3d9e2614e6715a06f52683f7bfa77b1835c71bbf418f51c",
+        "size": 1698
+      },
+      {
+        "path": "app.py",
+        "sha256": "0311df889ec461fa3939382110b9ca79e0e0de54d3ae47b0b61c22dc860d3556",
+        "size": 57460
+      },
+      {
+        "path": "build_verifier.bat",
+        "sha256": "a8964e2909d0a2a215e072ecdbe2238094184f517b94ba705cffdf522d22ee1e",
+        "size": 209
+      },
+      {
+        "path": "build_verifier.sh",
+        "sha256": "e8df2cd16e4ebb7ccdc15f2888f5d1c8f96ecd81d95432aba8b31072c488653e",
+        "size": 199
+      },
+      {
+        "path": "package_release.py",
+        "sha256": "c90afdfbdeefe5ea998c13a69101bace1b0aee41ca7e8b841aa1d129801ae2ef",
+        "size": 1144
+      },
+      {
+        "path": "pytest.ini",
+        "sha256": "c809c969ec7e11b9ff37784e9c6fcc0b7c5148d168e18b05aed797e03fbd6ead",
+        "size": 27
+      },
+      {
+        "path": "requirements.txt",
+        "sha256": "cdb8ef78499f8acb513bc9401409c824a6566511948906386b26a1f4d6945b61",
+        "size": 102
+      },
+      {
+        "path": "setup_windows.bat",
+        "sha256": "9b549ab5c2e6e21a9da82aaffe405ba3fc8c4cdce4dcf391e65af4f0269481b8",
+        "size": 451
+      },
+      {
+        "path": "start_windows.bat",
+        "sha256": "43abcee1af854ce1409390a7ca613a6eefa20800199800a7636d9f18bdf574e8",
+        "size": 230
+      },
+      {
+        "path": "static/index.html",
+        "sha256": "356bfff81dd12ecf423891aa028c32e4f889a27a478a3aacb3ecd7d35e69470c",
+        "size": 38076
+      },
+      {
+        "path": "tests/conftest.py",
+        "sha256": "97304fb4e33a75000aff132eb68dd861eafd970f8d73385e4de14297b4654f23",
+        "size": 880
+      },
+      {
+        "path": "tests/test_agent_usage_telemetry.py",
+        "sha256": "0abc22621da50ccc1d474d1349632f803e8fe8df7901615a3a22552390ff9505",
+        "size": 5441
+      },
+      {
+        "path": "tests/test_chat_awareness.py",
+        "sha256": "c9a526f64d4e81da6c6776bd02d5d814ea26d0fcd5dbc90d91e896b020b97569",
+        "size": 4342
+      },
+      {
+        "path": "tests/test_chat_observation_loop.py",
+        "sha256": "c668d708ca146a183507873c9d3bc9526df55c031f5afe4b1d784038392c7e0c",
+        "size": 4625
+      },
+      {
+        "path": "tests/test_cloud_gate.py",
+        "sha256": "3942914bfca9b0063b85c87968f6004b48657ce56dd178e5aca7ee96081cf5e9",
+        "size": 2235
+      },
+      {
+        "path": "tests/test_code_agent.py",
+        "sha256": "4b3ff71a405cf4a2aad2528add33d5d68d0d96a6cff9a6994407a2a67b4cb691",
+        "size": 819
+      },
+      {
+        "path": "tests/test_experiment_apparatus.py",
+        "sha256": "1f270f43a15be6fdcd6d29e809bcbbae5135eaeba1c8e88fdcf8ad3d0c77f3ce",
+        "size": 379
+      },
+      {
+        "path": "tests/test_feature_catalog.py",
+        "sha256": "85cc946281b816278d737b638a9e24332d9e90b5e023cca6b4213892b868d616",
+        "size": 4789
+      },
+      {
+        "path": "tests/test_frontend_js.py",
+        "sha256": "6b0ec2aa949c3996d8fb1c67f036dd560506e813f5413b43a949155413e77ae5",
+        "size": 1087
+      },
+      {
+        "path": "tests/test_gradle_cache_priming.py",
+        "sha256": "955588a3517b3ed3f4b750e45a8d224e413d92e22a3c70ed81a2f04fc9def99f",
+        "size": 17777
+      },
+      {
+        "path": "tests/test_hive_coding_path.py",
+        "sha256": "33ee1fc635b3a3086640763a3f7a1ebba2d0f4607544dad4bc5047c547e6cdb3",
+        "size": 6421
+      },
+      {
+        "path": "tests/test_hive_context_contract.py",
+        "sha256": "e06ec142792493c6ac9e8663498686636c45c920bd026a9d82cc8ebb433abf5d",
+        "size": 12323
+      },
+      {
+        "path": "tests/test_hive_endpoints.py",
+        "sha256": "c4ff89932e067c69682acaca6c2a8169540b6bee17fc24834d841a9d490f0281",
+        "size": 758
+      },
+      {
+        "path": "tests/test_hive_escalation_gates.py",
+        "sha256": "05ca3746ac6606b98805856e9c9b046a2b0e9c661e7e9fc172f6e0d276a1bb38",
+        "size": 13525
+      },
+      {
+        "path": "tests/test_hive_external_root.py",
+        "sha256": "ae6f39100d0cef95b071ac63c6ecb1595e3cd1b088dd3f1b05f66de4f4a8481c",
+        "size": 17219
+      },
+      {
+        "path": "tests/test_hive_feature_id.py",
+        "sha256": "91de0df59a7148264adc622e6b12d1aed437ef99d24040b4c8efe87acdb19fc1",
+        "size": 8447
+      },
+      {
+        "path": "tests/test_hive_intent_coverage.py",
+        "sha256": "973fa4c84729bb0914c2cf53661fd03b94515fe57026b5fb4891e1f877f4e452",
+        "size": 21091
+      },
+      {
+        "path": "tests/test_hive_isolated_verifier.py",
+        "sha256": "599f0c8f80638453b1df9745102646137ae4aff021d9cd97ea22b47726125322",
+        "size": 4637
+      },
+      {
+        "path": "tests/test_hive_job_endpoint.py",
+        "sha256": "ea7829b901c41c722ae608a5a90de419cda41a007d4c2e15a094397f79aec664",
+        "size": 1483
+      },
+      {
+        "path": "tests/test_hive_jvm_profile.py",
+        "sha256": "163c62f08981d9ec15db3c0315ea57cd9c3e38db6b869da3d4c29410f3437dc7",
+        "size": 43931
+      },
+      {
+        "path": "tests/test_hive_live_boundary_regressions.py",
+        "sha256": "aff9e175d6e1881b805776183d19ddd6814935c50265cc4a347a42d9a54fdcd5",
+        "size": 6023
+      },
+      {
+        "path": "tests/test_hive_observation_loop.py",
+        "sha256": "b61f8f97581d11cf958cae21993249fb9af9efb63796876f70be4236cd78ff97",
+        "size": 23785
+      },
+      {
+        "path": "tests/test_hive_prompt_contract.py",
+        "sha256": "ec2c8ffd1a64cf93c058222bf2f2eda6217d67e6b7ed5885e5ee7f5d265fd320",
+        "size": 19084
+      },
+      {
+        "path": "tests/test_hive_provenance.py",
+        "sha256": "1c3d0ab879e10727302e1b6ee45f9e729afc99a7020efd54a6eb58edba5ead33",
+        "size": 2242
+      },
+      {
+        "path": "tests/test_hive_replanning.py",
+        "sha256": "45069f11eb5b24a9110940502a24d34c29052431be7b8a28aa0ec4c44d5b5596",
+        "size": 15429
+      },
+      {
+        "path": "tests/test_hive_responsibilities.py",
+        "sha256": "0596af04b76cc3c40724332df87a989a83999f9ca027d8324f86c99f83e87cd5",
+        "size": 14547
+      },
+      {
+        "path": "tests/test_hive_scopes.py",
+        "sha256": "df83ba3cb3dadb7e30c05404987793f7971ecffe69e3c9b5ea0c4cfeba2b97d6",
+        "size": 4385
+      },
+      {
+        "path": "tests/test_hive_stale_apply.py",
+        "sha256": "09be07b7576d3ec928efcf72ecc8ae7171b6c449a3fba115204c6f90d34decdd",
+        "size": 3440
+      },
+      {
+        "path": "tests/test_hive_structural_edits.py",
+        "sha256": "905347c85bc138b462b80131c020dc768899fd4bfb63ca6fc5b2c9f52963cfa6",
+        "size": 14116
+      },
+      {
+        "path": "tests/test_hive_structural_repair.py",
+        "sha256": "8decaf798adeda288bba2532068efdc1671fb673fd9a532f0f2f2101bbe01702",
+        "size": 13932
+      },
+      {
+        "path": "tests/test_hive_ui_retrieval.py",
+        "sha256": "882e8e1afad429e05f16b7ebd54c5d3e12374c29076f1162c00b771003ef7d80",
+        "size": 5047
+      },
+      {
+        "path": "tests/test_insert_after_anchor.py",
+        "sha256": "5dcb1684566d2f350c1440d4dfe84450bb230b1bf4b430d13161f019352d32db",
+        "size": 894
+      },
+      {
+        "path": "tests/test_job_health.py",
+        "sha256": "777f477157c03267616224a6e984108602d1cfe0d0b794cc4064963dac71254b",
+        "size": 322
+      },
+      {
+        "path": "tests/test_local_model_selector.py",
+        "sha256": "6b2290ad5d44ae33bc3e5b7f0fdb3883c3dade95b7b093069708c22dd840f049",
+        "size": 511
+      },
+      {
+        "path": "tests/test_ollama_discovery.py",
+        "sha256": "c9c9950f5e2e604d25e98f21dad34f2b8c9cbdbbf5f07e9913b84d030f504543",
+        "size": 457
+      },
+      {
+        "path": "tests/test_ollama_proxy_hardening.py",
+        "sha256": "e8d2a6f0392bb8130f9ea8295fe36dd6f73dbcae4e639dc5e3fcfed7e6f44d97",
+        "size": 496
+      },
+      {
+        "path": "tests/test_ollama_structured_output.py",
+        "sha256": "54c312ef84cd949befbca18c17ad4b87650c37a7c93e3f7bdd58a47bb531c808",
+        "size": 11035
+      },
+      {
+        "path": "tests/test_ollama_ui.py",
+        "sha256": "cfc1bcbeabee28995875d685f321e66e5c6aec607ffce4ff82a89c2a57b2a2ea",
+        "size": 326
+      },
+      {
+        "path": "tests/test_output_cap.py",
+        "sha256": "b966d0782facf291d03d9634b0a9faf190d8d7cc6413e893885d923bc59395e0",
+        "size": 1019
+      },
+      {
+        "path": "tests/test_output_cap_forwarding.py",
+        "sha256": "1c4fb9cb087c6890a5a22c1a91e966209b1c95b2c55317bb4d5f79f26ec52d07",
+        "size": 1776
+      },
+      {
+        "path": "tests/test_paths.py",
+        "sha256": "6a94a62d522b728b345f4ff1486f96f0742d2d7929592ba7f1d6ddabfbafd698",
+        "size": 732
+      },
+      {
+        "path": "tests/test_persistent_agent_backend.py",
+        "sha256": "102c9ac64007734756f0be6eba8f8db199358e30a340919d22b081bec45f1458",
+        "size": 8344
+      },
+      {
+        "path": "tests/test_provider_failure_diagnostics.py",
+        "sha256": "2488ba4464fb5ee6fbf6bfb3d4526aa256fe27af91e7dae5af64764b7b959e60",
+        "size": 1645
+      },
+      {
+        "path": "tests/test_provider_preflight.py",
+        "sha256": "b0906696a63e7a7322cb75f2958f8419d0731b8619e3543fda3b53659d4d42fc",
+        "size": 2057
+      },
+      {
+        "path": "tests/test_regressions.py",
+        "sha256": "d74b1e0e308c0bf2ca6a0a06cae7b44443d842b96035d1e4fe216a5d16e5d2b8",
+        "size": 331
+      },
+      {
+        "path": "tests/test_release_archive.py",
+        "sha256": "252a925375dcd662cb41df05913e5c750d7bfb9bbc704068b30bad84fd8cce4c",
+        "size": 1124
+      },
+      {
+        "path": "tests/test_repository_facts.py",
+        "sha256": "08fecb4315a0542af2d797a1b990fda28d1e7cac1c082c4bbc3627512ae20ac7",
+        "size": 7266
+      },
+      {
+        "path": "tests/test_router.py",
+        "sha256": "0caf3a850d0dd82875c692fcb1e52fd06dac7ae16b8e78fbd07934f421bd6bdd",
+        "size": 372
+      },
+      {
+        "path": "tests/test_v05_runtime.py",
+        "sha256": "13fef7ce07a8ae8e14f17a11e189dff925550a56759a5b9bc7fa0413e8ed14e6",
+        "size": 2824
+      },
+      {
+        "path": "tests/test_verifier_image_recipe.py",
+        "sha256": "c4189884e49c4d967c08c54d292698064b51227070a918aba8b04e9f0c8b15e5",
+        "size": 974
+      },
+      {
+        "path": "tests/test_worker_failure_reporting.py",
+        "sha256": "d8f49d9918f4ea0672b15cf7159b036bee6abef87dc932c643228a4f25065758",
+        "size": 3315
+      },
+      {
+        "path": "verification/Dockerfile",
+        "sha256": "37db0b3652dd1c7d1dc1cea644b6ecd18ff1ea0ae02f93fed79dc043c1b97439",
+        "size": 880
+      },
+      {
+        "path": "verification/Dockerfile.extroot-002d",
+        "sha256": "ac65090b213c41ad8a925ce405bec6437641128d168f8d2b0291b14144a48f66",
+        "size": 334
+      },
+      {
+        "path": "verification/GRADLE-CACHE-PRIMING.md",
+        "sha256": "004f026552bafc95bc20c4d7526ab193926dcfb36989db15cd7771758b5f61a9",
+        "size": 3909
+      },
+      {
+        "path": "verification/jvm_runner.py",
+        "sha256": "2cc72a2db19cf83f09945c3ea500c9f905db8efbef1bb0d6e0b0eec0c85412ea",
+        "size": 30091
+      },
+      {
+        "path": "verification/prime_gradle_cache.py",
+        "sha256": "e4af5d372b9341840c2886a24947f5f91a37f6febc33faf113cb609b393cca82",
+        "size": 29936
+      },
+      {
+        "path": "verification/prime_runner.py",
+        "sha256": "08fe34c6f12df6f95b9af4f096494c73ab75c33f6f0cac67ee83c9f156158b43",
+        "size": 13770
+      },
+      {
+        "path": "verification/runner.py",
+        "sha256": "42388a81dc448eb32d82b101aa68da1d46c8f707e376ff6fbc2e056f0dfe73ce",
+        "size": 3186
+      },
+      {
+        "path": "workshop/__init__.py",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size": 0
+      },
+      {
+        "path": "workshop/chat_agent.py",
+        "sha256": "761e7f34d3faa8e5515b4d96b79ea5a54b193c35a1be8dd38c300a414e00264a",
+        "size": 7556
+      },
+      {
+        "path": "workshop/chat_context.py",
+        "sha256": "e1f95b891632007990bab8da0ceec8e71a4ffe61f4fe77c39a8eb39ec4f2191a",
+        "size": 5046
+      },
+      {
+        "path": "workshop/db.py",
+        "sha256": "99ab9200d86bce39c8be2c7341edc5095a5bce9ac44dc27a13f109cf6b0781ab",
+        "size": 5350
+      },
+      {
+        "path": "workshop/external_root.py",
+        "sha256": "acb6562b8bda340c3ed37ad2058303b8aea77922ce06c2fdbc17bcc054a19bdc",
+        "size": 14713
+      },
+      {
+        "path": "workshop/feature_catalog.py",
+        "sha256": "3256b445d6edf05a29cc322a66946b77510b5a810116c93f3fc9e5a1a9d73cc7",
+        "size": 6519
+      },
+      {
+        "path": "workshop/hive.py",
+        "sha256": "48b61f2020835064a70831bd0d1d8aed395deb38b00f5f545b73726102673a3b",
+        "size": 142802
+      },
+      {
+        "path": "workshop/hive_context.py",
+        "sha256": "1d2222ecc7f8724ad953611680734856679fbe5413c0988207ca1f9d1cb16d58",
+        "size": 49937
+      },
+      {
+        "path": "workshop/hive_edits.py",
+        "sha256": "91c72cab6d768aab39b714422a2592d184684e73bc4685e48b84b83b6765da0c",
+        "size": 13850
+      },
+      {
+        "path": "workshop/hive_html.py",
+        "sha256": "fb29e1f3d461640adbfa2d47f5c752a55470661feb44accc91358ac1f518a110",
+        "size": 4560
+      },
+      {
+        "path": "workshop/hive_js.cjs",
+        "sha256": "70aee57e785cdcc177b946d77f8367d7dd487704ab4721be96e8e4fe566c0b20",
+        "size": 2960
+      },
+      {
+        "path": "workshop/hive_jvm.py",
+        "sha256": "f3a31f7412eb243e405631d564894e8a8895c3645283dfc90e5dfc4fe1dd4532",
+        "size": 31794
+      },
+      {
+        "path": "workshop/hive_protocol.py",
+        "sha256": "afa7c64d9763dcfc814efb50702f1faa6ea865d43595e7ac14d2aa0d22ab0744",
+        "size": 15377
+      },
+      {
+        "path": "workshop/hive_verifier.py",
+        "sha256": "ae643820ec7f733363505671e3aa5a615f0178f1257d7297b5411c9d0329f8a8",
+        "size": 17981
+      },
+      {
+        "path": "workshop/memory.py",
+        "sha256": "e3c02b23f3f95886c10fe5a7bff863ccc52807bca58e92c64a3ddc965ccb60bd",
+        "size": 1103
+      },
+      {
+        "path": "workshop/persistent_agent.py",
+        "sha256": "420dbf67a8f4224bf743a5d06396d22ab7df6fa41df041821fa1e869d087c3dc",
+        "size": 10983
+      },
+      {
+        "path": "workshop/providers.py",
+        "sha256": "650295deabf4ea5b35620fc57a575db3b6ed570fcc971a5de7a670479d23a9d3",
+        "size": 12212
+      },
+      {
+        "path": "workshop/repository_facts.py",
+        "sha256": "73201080c9a75ecfbda6fbde46dc5dc46e5c46f05d0c6f77e5f3d2348295a30d",
+        "size": 12360
+      },
+      {
+        "path": "workshop/router.py",
+        "sha256": "08a1ada71e80d59005d85349df8649f236438bc9520596fa2eca2b951e8c22d0",
+        "size": 1283
+      },
+      {
+        "path": "workshop/runtime.py",
+        "sha256": "3b47a53502fb3f7a16331869e5ab4faa5a03a486a7f0779278a9811276f3ad19",
+        "size": 6762
+      },
+      {
+        "path": "workshop/vendor/LICENSE-acorn.txt",
+        "sha256": "5c62bd8c51439d975d0e214e452237e091c3da608df23eab18613b0f6023bf8f",
+        "size": 1097
+      },
+      {
+        "path": "workshop/vendor/NOTICE.md",
+        "sha256": "a0a28f028b15177d8f4f48fb0cc93324539ab7c2b9b1de9ee4d9f7d075b1c795",
+        "size": 598
+      },
+      {
+        "path": "workshop/vendor/acorn.cjs",
+        "sha256": "fdb08546776ec6228b03e8d02b40d4ab3255bae5f401adba7ff5dad927ac5c9c",
+        "size": 241575
+      }
+    ],
+    "fingerprint_excludes_secrets_runtime_caches": true
+  },
+  "control_apparatus": {
+    "files": {
+      "APPARATUS-POLICY.md": "236f10dd454890e1acc95683b08450f9d706bbe9a9d0f950bb4823914d4f2c54",
+      "direct_context.py": "7f433ff6110d016d44c4e951fbd8f8937693681fed05dca5e2f15339958d84f7",
+      "control_request.py": "31da56479f3df4f7f4eea2b111f296667ee24439705bb508bbea4e4101905e28",
+      "outcomes.py": "21dfd41ff771d289ca321effcba45e68953a3765f537774f15218df5d6e35102",
+      "executor.py": "4fa2ad2612aa78831130561c02ec45f38ae67742327fa687f89818ab0fde5248",
+      "diagnose_verifier.py": "c621e98091625b187d68de7e55fe8fd7395aa097e8806625549ed712bb7587e2",
+      "validate_novel_tests.py": "4d81ef72de63e913fa01b801623fe1b76c8deba57972dba877befe7494957e74",
+      "make_freeze.py": "472d13a4186d2408c1eb86d737f8638f26fcf4b7cf89c3184c15f98815521f51",
+      "test_direct_context.py": "7864859122930b5d193af232231c7bad0bf306b08396677c7c055f0513a37fa8",
+      "test_control_request.py": "5ecc8711ffcd82adb1873b8aabb1bceee1c5b705bebfd9c76c5d30ce813f1c12",
+      "test_outcomes.py": "2dbf1dfef590c84ea462b06a48962dce4208f1a897e575389c88453eaf2fae13",
+      "test_freeze_apparatus.py": "79d5967c76a662be979e386422a016fb6c1462c7ffadb9694a009efe130c4c95"
+    },
+    "context_policy": "deterministic-path-symbol-lexical-v1",
+    "context_char_budget": 320000,
+    "individual_input_text_field_max_chars": 400000,
+    "frozen_acceptance_in_model_context": false,
+    "provider_validation_only_request": "unavailable_without_model_turn"
+  },
+  "task_groups": {
+    "replication": {
+      "task_spec_path": "TASKS.md",
+      "task_spec_sha256": "263ac0547b41703d95dff0a92a677177782c29c616c1fca9614d5bb2ad969243",
+      "tasks": [
+        {
+          "id": "T001",
+          "request": "Add `public int count(ActivityEvent.Type type)` to `ActivitySummary`. Return the count for exactly that type. Every enum value must return its count (including zero); a null type must throw `IllegalArgumentException`. Do not mutate the summary.",
+          "request_sha256": "051af2f3a340c619cd06c4700014026ff82cd32b5584d50c781dd5c79457cd2f",
+          "test_path": "frozen-tests/ActivitySummaryCountAcceptanceTest.java",
+          "test_sha256": "cd34270fc94519ac04fe1bbcec912c9c97b9a470dde5d3977d84d402c7038380",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivitySummaryCountAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T002",
+          "request": "Harden `ActivityDiffService.diff`. Before calculating any deltas, reject every null or negative item count in either input map with `IllegalArgumentException`, including equal negative values that would otherwise cancel. Preserve 64-bit arithmetic: valid counts above `Integer.MAX_VALUE` must still produce the correct small delta. Missing keys continue to mean a known count of zero. Keep the existing maximum event-quantity rule.",
+          "request_sha256": "febb535f123ee185948826cf3c3b30396e575b92f5a89168cc12913cf03c5c69",
+          "test_path": "frozen-tests/ActivityDiffValidationAcceptanceTest.java",
+          "test_sha256": "04345786ba9de7a8bab780e769c98cc538228411de9fe44df280aaaeb28904b7",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityDiffValidationAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T003",
+          "request": "Extend `ActivitySummary` with an immutable `Map<ActivityEvent.Type, Long> quantitiesByType`, initialized for every enum value; a null event quantity contributes zero. Preserve the existing three-argument constructor. Add `ActivityHistory.summary()` that returns a summary of the currently retained events. It must be a snapshot: later appends do not change it.",
+          "request_sha256": "d99e34e32084bd68eed48c47799f7adb5c34146d4765cbe56e29aade89906976",
+          "test_path": "frozen-tests/ActivityHistorySummaryAcceptanceTest.java",
+          "test_sha256": "70f73e8b45c0f844e86c8ca61c047fe7fcc4569ffbd1e2d4c0d84c862933cd01",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityHistorySummaryAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T004",
+          "request": "Add `ActivityHistory.recent(int limit)`. Accept only limits from 1 through the configured capacity. Return at most the newest `limit` retained events in their existing chronological order, as an immutable detached list. Leave the existing no-argument method and history state unchanged.",
+          "request_sha256": "30b2f4500cf04e458388944d8f58307a7141c36aff591fe94144117a4ca6c736",
+          "test_path": "frozen-tests/ActivityHistoryRecentLimitAcceptanceTest.java",
+          "test_sha256": "c42aaba1a1ab822836bf3cc0506aa327c68c5120034c2b4f2823f2bca7a43396",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityHistoryRecentLimitAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T005",
+          "request": "Add `PlanningReport.diagnostics()` as a deterministic, immutable projection. Start with `plan.limitations()` in encounter order, remove duplicates while preserving first occurrence, then append (when applicable): `Planning search was truncated.`, `Recipe index is incomplete.`, `Quest context unavailable (<STATUS>): <detail>`, and `Knowledge graph is truncated; some nodes or edges were omitted.` Return at most 16 entries. Do not claim unavailable information is known.",
+          "request_sha256": "2617ec1cbb7f91fe80197c01c6b487935d0c52bd44752447cbd492c004beab0f",
+          "test_path": "frozen-tests/PlanningReportDiagnosticsAcceptanceTest.java",
+          "test_sha256": "dd9daa490231394df678ae1336366dd6505d82538fb28914912c062ceca99edc",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T006",
+          "request": "Add `QuestOverview.completionPercent()`. It is the integer percentage `floor(100 * completedQuests / questCount)`, using total quests as the denominator, not available quests. Return zero when `questCount` is zero. Do not change the stored counts or availability semantics.",
+          "request_sha256": "9bba2214d3ccbaff7079280455810ba8ac6a60b8e38ba94cf4a7bcb45168617a",
+          "test_path": "frozen-tests/QuestOverviewCompletionPercentAcceptanceTest.java",
+          "test_sha256": "a701e8bd7696c94598351337c09f9e947bb0cd05de665c5581a6af60a633b6b7",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/integration/quest/QuestOverviewCompletionPercentAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T007",
+          "request": "Add immutable record `ActivityWindow(List<ActivityEvent> events, ActivitySummary summary)` and `ActivityHistory.between(Instant startInclusive, Instant endExclusive)`. Include retained events in `[startInclusive, endExclusive)` while preserving append order; the summary must describe exactly the returned events. Equal endpoints produce an empty window. Null endpoints or a start after the end must throw `IllegalArgumentException`. The query must not alter history.",
+          "request_sha256": "debb5330a6f0fe4e77b7dadbc8a38895681b6099654dffed8bedb85649f8b604",
+          "test_path": "frozen-tests/ActivityWindowAcceptanceTest.java",
+          "test_sha256": "4e5c65fabe849d9e6dafe4412268027da1f0861439a9504dc86836b469e40f6b",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityWindowAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "T008",
+          "request": "Add `QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp)`. Preserve the source version, team scope, lock flag, and declared availability rule. Count all observed chapters, all observed quests, and completed quests from the snapshot; use the snapshot's validated available-ID list for the available count. Build options from the first `MAX_OPTIONS` available IDs in their existing sorted order, resolving each ID to its quest title and chapter ID. Preserve the fixed omitted-details text. Do not infer dependencies, availability, or task details.",
+          "request_sha256": "6284769de3d0d36f40d1ba8b18011f3b42cfcbbbb877e5b5c428883946b604bb",
+          "test_path": "frozen-tests/QuestOverviewSnapshotProjectionAcceptanceTest.java",
+          "test_sha256": "24c6ac371e5b1c331b0497d3db156cc6a3bd8ec095c9d9e4ca1f00133c223553",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/integration/quest/QuestOverviewSnapshotProjectionAcceptanceTest.java",
+          "expected_cases": 1
+        }
+      ]
+    },
+    "novel": {
+      "task_spec_path": "NOVEL-TASKS.md",
+      "task_spec_sha256": "559ef5dc1e710f99e35341ed720e0c13cef3282999ebb86d87145e55efaf67dc",
+      "tasks": [
+        {
+          "id": "N001",
+          "request": "Add `ActivityEvent.withSource(ActivityEvent.Source source)`. Return a new event\nwith only `source` changed. Preserve every other field and do not mutate the\noriginal. Reject a null source with `IllegalArgumentException`.",
+          "request_sha256": "c19f5d1f492af1d63ab7b58df0958fcc234a98bb1892db671031888529e23e44",
+          "test_path": "novel-frozen-tests/ActivityEventWithSourceAcceptanceTest.java",
+          "test_sha256": "8e93dc3357aa3e1ba588c082679a2f3eab44cfbad829e1528ed2f1fc663cf521",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityEventWithSourceAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N002",
+          "request": "Add `GameSnapshot.Inventory.totalCount(String itemId)`. Sum counts for exactly\nthe requested registry ID across all stacks using 64-bit arithmetic. Return\nzero when absent. Reject null with `IllegalArgumentException`; do not mutate\nthe inventory.",
+          "request_sha256": "6da1d4f017ae41d727d9c065c81b73cde8ad1b15799d69792598a51bf0851b93",
+          "test_path": "novel-frozen-tests/InventoryTotalCountAcceptanceTest.java",
+          "test_sha256": "b7d7c7c90d3fc0529f68abeb57f8923552434d8b1e9c860e0ed498db6f90b77c",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/state/InventoryTotalCountAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N003",
+          "request": "Add `RecipeReport.candidatesForType(String recipeType)`. Return candidates whose\n`recipeType` equals the argument, retaining encounter order in an immutable\ndetached list. Return an empty list when none match. Reject null with\n`IllegalArgumentException`; do not change the report.",
+          "request_sha256": "d4a55345f3a7ce632f2b73bc4cd97d9f6d9ece0101a3fc9fd6d7528c4c3fc770",
+          "test_path": "novel-frozen-tests/RecipeCandidatesForTypeAcceptanceTest.java",
+          "test_sha256": "9eabf339e8498c699bb23c7e5467ea25ed16032b64470a2417b3553ae13591f0",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/knowledge/RecipeCandidatesForTypeAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N004",
+          "request": "Add `ExecutionAssessment.blockingReasons()`. Return blockers followed by\nunverified conditions, preserving first occurrence order while removing exact\nduplicates. The result must be immutable, including for the empty case.\nDo not infer readiness from a missing observation or change stored lists.",
+          "request_sha256": "873d8fa784ae1047a0a08b184739d32d13c11fdbbd2d9285488d94ab93f7024b",
+          "test_path": "novel-frozen-tests/ExecutionBlockingReasonsAcceptanceTest.java",
+          "test_sha256": "ed10006dcde438e6689fff82dba64b4b7d2279a8eebad070afcc6413600bc713",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N005",
+          "request": "Add `IntegrationRegistry.inspectSelected(Set<String> capabilities)`. Inspect\nexactly the named registered capabilities using the existing failure and\nunavailable semantics. Do not invoke a mod predicate or adapter factory for\nan unselected registration. Reject null, a null member, or any unknown name\nwith `IllegalArgumentException` before inspecting anything. Return an\nimmutable map; leave registrations and `inspect()` behavior unchanged.",
+          "request_sha256": "a0673bc607be376518e9f892891c5efe833d4bf2f89b926c36e02d1538966781",
+          "test_path": "novel-frozen-tests/IntegrationSelectedAcceptanceTest.java",
+          "test_sha256": "a7711e3626ef8b528b16f0e02bae4c84db8249752d99e31a13d438e576df2180",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/integration/IntegrationSelectedAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N006",
+          "request": "Add `RecipeSelection.bestOf(List<RecipeSelection> candidates)` returning\n`Optional<RecipeSelection>`. Select the minimum by the record's existing\n`compareTo` ordering, independent of input order; return `Optional.empty()`\nfor an empty list. Reject null list or null member with\n`IllegalArgumentException`. Do not mutate the supplied list.",
+          "request_sha256": "8efbc75a3a83570c6b3701ad08505e65761aa0a8ea8102cb6915fbf1b2bb7bc0",
+          "test_path": "novel-frozen-tests/RecipeSelectionBestOfAcceptanceTest.java",
+          "test_sha256": "d8ddc9e4935edff239453705d1d6ee91e47c5bd61f38e16f88b144242cfd4166",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/knowledge/RecipeSelectionBestOfAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N007",
+          "request": "Add `ActivityHistory.uniqueRegistryIds()`. Return distinct registry IDs from\nthe *currently retained* events, sorted lexicographically in an immutable\ndetached list. An empty history returns an empty list. Evicted events must\nnot contribute, and calling the method must not change history state.",
+          "request_sha256": "f0140edf491e5933714b0b1ccb8024df52d384f3f63eb212381609f94fddebd4",
+          "test_path": "novel-frozen-tests/ActivityUniqueIdsAcceptanceTest.java",
+          "test_sha256": "7601a06b16a8cf1902918b735e1c82d60bf4189c7a96714703ce3d2f17df0ebe",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/activity/ActivityUniqueIdsAcceptanceTest.java",
+          "expected_cases": 1
+        },
+        {
+          "id": "N008",
+          "request": "Add `PlanResult.withLimitations(List<String> limitations)`. Return a new\nPlanResult with only its limitations replaced by an immutable defensive copy.\nPreserve every other component, including the execution assessment, selected\naction, alternatives, and metrics. Reject null with `IllegalArgumentException`;\nthe original result must remain unchanged.",
+          "request_sha256": "f226abd87d4a03346c4a7dd4469716a808e339155e57987e386bf2bbdcadb986",
+          "test_path": "novel-frozen-tests/PlanResultLimitationsAcceptanceTest.java",
+          "test_sha256": "2a23b88087f071e68997568472eb28ed1ed797c88003c3af4ca0b1467f2dc804",
+          "baseline_test_path": "src/test/java/dev/atmcompanion/planning/PlanResultLimitationsAcceptanceTest.java",
+          "expected_cases": 1
+        }
+      ]
+    }
+  },
+  "novel_acceptance_red_gate": {
+    "report_path": "diagnostics/novel-test-red-gate/report.json",
+    "report_sha256": "0846c0ce1dd0e4cc30487a8bdf5b17f437f5b688a7ea194cb899dc68f50d66ac",
+    "expected_state": "fails on missing task APIs before implementation; not a pass"
+  },
+  "paired_evaluation": {
+    "within_pair_order_seed_hex": "bf42a21793d50c68e419cc07f2a5d1e0",
+    "within_pair_order_algorithm": "sha256(seed_bytes || ASCII task_id)[0] & 1; 1=direct-first",
+    "within_pair_order": {
+      "T001": "direct-first",
+      "T002": "hive-first",
+      "T003": "hive-first",
+      "T004": "hive-first",
+      "T005": "hive-first",
+      "T006": "direct-first",
+      "T007": "hive-first",
+      "T008": "hive-first",
+      "N001": "direct-first",
+      "N002": "hive-first",
+      "N003": "hive-first",
+      "N004": "hive-first",
+      "N005": "direct-first",
+      "N006": "hive-first",
+      "N007": "hive-first",
+      "N008": "hive-first"
+    },
+    "same_verifier_and_baseline_for_both_conditions": true,
+    "direct_model_turns": 1,
+    "direct_repairs": 0,
+    "hive_repair_limits": "unchanged copied Workshop policy",
+    "promotion": false
+  },
+  "provider": {
+    "provider_family": "OpenAI Agents API",
+    "model": "gpt-6-astra",
+    "persistent_sessions": true,
+    "agent_environment": "none",
+    "multi_agent": false,
+    "agent_turn_timeout_seconds": 900,
+    "usage_policy": "Record provider-reported turn usage when present; absent usage stays null; do not treat missing usage or an unrelated Hive budget counter as zero cost. Agents turn usage is best-effort and is not a billed-cost receipt.",
+    "model_calls_before_freeze": 0,
+    "002_provider_usage_before_freeze": "unknown_not_queried",
+    "future_execution_requires_separate_authorization_and_provider_cap": true
+  },
+  "baseline": {
+    "root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+    "tree_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "candidate_policy": "Each task-condition receives a fresh independent disposable copy. No candidate is promoted or applied."
+  },
+  "verifier": {
+    "image": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "java_version": "21.0.12.1",
+    "gradle_wrapper_version": "9.2.1",
+    "gradle_distribution_sha256": "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f",
+    "wrapper_jar_sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172",
+    "wrapper_properties_sha256": "e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e",
+    "network": "none",
+    "root_filesystem": "read-only",
+    "approved_caches": "read-only",
+    "workspace": "bounded tmpfs",
+    "limits": {
+      "pids": 448,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "cpus": 2,
+      "gradle_max_workers": 2,
+      "gradle_heap": "-Xmx768m"
+    },
+    "resource_change_from_001": "host-controlled PID cap 384 -> 448 only",
+    "stress": [
+      {
+        "path": "diagnostics/candidate-448-01.json",
+        "sha256": "5f98120e62104cb5c55827b924855d6a270cd3d5e6c37d8cde52fc539d4d073d",
+        "wall_seconds": 397.091,
+        "sampled_pids_peak": 389,
+        "frozen_junit_cases": 1,
+        "full_junit_cases": 152
+      },
+      {
+        "path": "diagnostics/candidate-448-02.json",
+        "sha256": "43e7b24ee66aefef4f39d9ddf6f111f42a19d58accc6a55011d18980a9aa880f",
+        "wall_seconds": 392.74,
+        "sampled_pids_peak": 370,
+        "frozen_junit_cases": 1,
+        "full_junit_cases": 152
+      },
+      {
+        "path": "diagnostics/candidate-448-03.json",
+        "sha256": "9418905ee0deabcff7a07a4f6c08aede011febc481c69650e16207aea7b39e18",
+        "wall_seconds": 389.892,
+        "sampled_pids_peak": 377,
+        "frozen_junit_cases": 1,
+        "full_junit_cases": 152
+      }
+    ]
+  },
+  "approved_cache": {
+    "run_id": "e5a7c314b902",
+    "gradle_artifact_manifest_sha256": "83759b6046e4290e6388ea95b2013f12edf500d4f86f39cc3401dd646117c2f9",
+    "gradle_priming_provenance_sha256": "259c05807ca37790a151a51fe1d125a0978720942dac963462943f9d0d35ba49",
+    "external_build_inputs_manifest_sha256": "2135a0b94c2ff740e6fc8a441285a1e04088d31bf930628c124c26a6ea55a561",
+    "external_build_inputs_provenance_sha256": "0805a46b429c299d752928cc68b2306f642e34e2bc1c0ff6dfc50236984df5c4",
+    "frozen_junit_manifest_sha256": "8918b7de6ffda2ef40c03a29abca5c2c6b13aa0bf615039828929775bf2be92e"
+  },
+  "outcome_classes": [
+    "VERIFIED_SUCCESS",
+    "MODEL_TASK_FAILURE",
+    "VERIFIER_INFRA_FAILURE",
+    "PROVIDER_INFRA_FAILURE",
+    "HARNESS_FAILURE",
+    "FALSE_ACCEPTANCE",
+    "INVALID"
+  ],
+  "integrity_and_execution": {
+    "no_002_model_calls_or_results": true,
+    "external_root_promotion_prohibited": true,
+    "sealed_verifier_network": "none",
+    "source_and_caches_read_only": true,
+    "private_tmpfs_stage": true,
+    "preflight_before_each_pair": true,
+    "executor_requires_separate_exact_lock_authorization": true
+  }
+}

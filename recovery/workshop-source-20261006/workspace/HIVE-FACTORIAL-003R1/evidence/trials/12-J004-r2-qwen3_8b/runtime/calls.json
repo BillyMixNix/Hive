@@ -1,0 +1,121 @@
+[
+  {
+    "number": 1,
+    "role": "planner",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:37:46.625491+00:00",
+    "monotonic_start": 180777.6468887,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 2048,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 1,
+        "role": "planner",
+        "started_at": "2026-10-06T06:37:47.260901+00:00",
+        "monotonic_start": 180778.282301,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "9f17cf5a6e6ba8369ac90dc4796c2112e0f390979f1265718ab339c8a1bc5972",
+        "request_bytes": 21055,
+        "resource_label": "call-01-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:38:34.406696+00:00",
+        "headers_elapsed_seconds": 47.145794699987164,
+        "first_stream_bytes_at": "2026-10-06T06:38:34.410382+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:42:34.017412+00:00",
+        "elapsed_seconds": 286.75651229999494
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 3884,
+    "output_tokens": 967,
+    "ended_at": "2026-10-06T06:42:34.023239+00:00",
+    "elapsed_seconds": 287.39775120001286
+  },
+  {
+    "number": 2,
+    "role": "backend",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:42:35.811855+00:00",
+    "monotonic_start": 181066.8332475,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 6000,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 2,
+        "role": "backend",
+        "started_at": "2026-10-06T06:42:36.250576+00:00",
+        "monotonic_start": 181067.2719751,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "e5e4f1cfbab17edbaadf32086ad2feeeb2e5d9356fc89ad3094533991252bc24",
+        "request_bytes": 36890,
+        "resource_label": "call-02-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:42:50.852123+00:00",
+        "headers_elapsed_seconds": 14.601546199992299,
+        "first_stream_bytes_at": "2026-10-06T06:42:50.855270+00:00",
+        "stream_error": {
+          "type": "CancelledError",
+          "message": ""
+        },
+        "ended_at": "2026-10-06T06:57:35.827110+00:00",
+        "elapsed_seconds": 899.576537099987
+      }
+    ],
+    "status": "failed",
+    "error": {
+      "type": "OllamaRequestError",
+      "message": "Ollama chat failed at http://127.0.0.1:11434: chat attempt 1/2: OllamaRequestError: Ollama generation exceeded the 900-second total limit"
+    },
+    "ended_at": "2026-10-06T06:57:35.829590+00:00",
+    "elapsed_seconds": 900.0177399999811
+  },
+  {
+    "number": 3,
+    "role": "reviewer",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T06:57:36.173172+00:00",
+    "monotonic_start": 181967.1945666,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 1536,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 3,
+        "role": "reviewer",
+        "started_at": "2026-10-06T06:57:36.814359+00:00",
+        "monotonic_start": 181967.8357559,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "8d86b249932c9339526e330383d198d21f94d0f42b7e27b4a8ea21fbcb84c6ce",
+        "request_bytes": 3977,
+        "resource_label": "call-03-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T06:57:39.273197+00:00",
+        "headers_elapsed_seconds": 2.4588865999830887,
+        "first_stream_bytes_at": "2026-10-06T06:57:39.277395+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T06:58:38.768550+00:00",
+        "elapsed_seconds": 61.95419109999784
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 821,
+    "output_tokens": 473,
+    "ended_at": "2026-10-06T06:58:38.774921+00:00",
+    "elapsed_seconds": 62.60175299999537
+  }
+]

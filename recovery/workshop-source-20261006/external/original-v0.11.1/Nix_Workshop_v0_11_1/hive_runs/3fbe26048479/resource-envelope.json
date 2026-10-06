@@ -1,0 +1,36 @@
+{
+  "milestone": "HIVE-EXTROOT-002E",
+  "run_id": "3fbe26048479",
+  "approved_cache_run_id": "6992ee6447df",
+  "network": "none",
+  "old": {
+    "docker_memory": "4g",
+    "docker_memory_plus_swap": "4g (0 additional swap)",
+    "docker_cpu_quota": "2 CPUs",
+    "docker_pids_limit": 128,
+    "ulimit_nproc": "unlimited",
+    "ulimit_stack": "8192 KiB",
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "child_jvm_default_max_heap": "1 GiB",
+    "parallel_gc_threads": 2,
+    "conc_gc_threads": 1,
+    "failed_run_peak_pids": "not captured; failed container used --rm"
+  },
+  "new": {
+    "docker_memory": "4g",
+    "docker_memory_plus_swap": "4g (0 additional swap)",
+    "docker_cpu_quota": "2 CPUs",
+    "docker_pids_limit": 192,
+    "gradle_max_workers": 2,
+    "gradle_jvm_args": "-Xmx768m",
+    "effective_java_processors": 2,
+    "policy": "only the finite cgroup PID cap changed; network, CPU, memory, heap, Gradle worker count, caches, and verification semantics are unchanged"
+  },
+  "diagnosis": {
+    "classification": "native PID/thread exhaustion is the leading supported cause",
+    "evidence": "pthread_create returned EAGAIN while a NeoForm child JVM initialized; pids.max was 128; no OOM-kill or heap-exhaustion evidence appears in the preserved report",
+    "uncertainty": "the failed container was removed and did not preserve its exact peak PID count"
+  }
+}

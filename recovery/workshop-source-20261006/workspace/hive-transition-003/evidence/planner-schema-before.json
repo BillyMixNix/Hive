@@ -1,0 +1,228 @@
+{
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ui_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "backend_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tests_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "worker_files": {
+      "type": "object",
+      "properties": {
+        "ui": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+            ]
+          },
+          "maxItems": 20
+        },
+        "backend": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+            ]
+          },
+          "maxItems": 20
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+            ]
+          },
+          "maxItems": 20
+        }
+      },
+      "required": [
+        "ui",
+        "backend",
+        "tests"
+      ],
+      "additionalProperties": false
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "worker_acceptance": {
+      "type": "object",
+      "properties": {
+        "ui": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 12
+        },
+        "backend": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 12
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 12
+        }
+      },
+      "required": [
+        "ui",
+        "backend",
+        "tests"
+      ],
+      "additionalProperties": false
+    },
+    "interface_contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "enum": [
+              "ui",
+              "backend",
+              "tests"
+            ]
+          },
+          "consumer_roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ui",
+                "backend",
+                "tests"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 3
+          },
+          "contract": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "owner",
+          "consumer_roles",
+          "contract"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 8
+    },
+    "provider_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "requirement_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE",
+              "OPTIONS",
+              "HEAD"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "response_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "boolean",
+                    "string",
+                    "integer",
+                    "number",
+                    "array",
+                    "object",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 24
+          }
+        },
+        "required": [
+          "requirement_id",
+          "method",
+          "path",
+          "response_fields"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 8
+    }
+  },
+  "required": [
+    "summary",
+    "ui_goal",
+    "backend_goal",
+    "tests_goal",
+    "worker_files",
+    "acceptance",
+    "worker_acceptance",
+    "interface_contracts"
+  ],
+  "additionalProperties": false
+}

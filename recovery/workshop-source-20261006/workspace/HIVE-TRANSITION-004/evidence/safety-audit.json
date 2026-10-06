@@ -1,0 +1,20 @@
+{
+  "hive_only_changed_function": "targeted_verify (diagnostic metadata retention)",
+  "jvm_gate_algorithm_identical_after_removing_event_emission": true,
+  "changed_jvm_existing_functions": [
+    "_bounded_process (diagnostic streaming/read1)",
+    "run_jvm_profile (events only)"
+  ],
+  "frozen_assertions_selectors_case_counts_and_source_checks_unchanged": true,
+  "unchanged_files": {
+    "workshop/providers.py": "0a59e4d70857b26ebf3efed6b37dfd1a5a42f488c315c7499094340eef4ef641",
+    "workshop/hive_protocol.py": "27d65f9f82be607456675b72e0f2c1a62d89fe19c89950a924c3356a6cfee08d",
+    "workshop/hive_jvm.py": "f3a31f7412eb243e405631d564894e8a8895c3645283dfc90e5dfc4fe1dd4532",
+    "workshop/external_root.py": "acb6562b8bda340c3ed37ad2058303b8aea77922ce06c2fdbc17bcc054a19bdc",
+    "app.py": "210f610c1dc95aefe3320fe4cb7e6957563646914f22e54125ad9e7b8bed40ea",
+    "verification/runner.py": "42388a81dc448eb32d82b101aa68da1d46c8f707e376ff6fbc2e056f0dfe73ce"
+  },
+  "targeted_timeout": 240,
+  "behavioral_runtime_repair": "none",
+  "candidate_edits_in_repair": false
+}

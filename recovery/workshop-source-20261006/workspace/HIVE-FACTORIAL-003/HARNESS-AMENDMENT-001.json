@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-06T01:19:21.042570+00:00",
+  "reason": "Experiment setup used the wrong frozen-test staging API signature before the first task model call.",
+  "user_steering": "Continue",
+  "original_freeze_sha256": "005584acfe5936b4bf55f3f9958d2ed1b7c24c7a6d0b356f1e88fdbfda0e7561",
+  "original_executor_sha256": "e2b1fb117d1dc7a01ef77ba2a22127e71c350d65448f6e0f51b54abe01ab4095",
+  "corrected_executor_sha256": "c2d675ecbb000e62084de8960e8f1a312d34a7821e99cfcf1335fbf519cee9fa",
+  "patch_sha256": "c2c5b60046c8bdcc9e45d26cd5fd8f374430df78e4a2e9a3e01a9c8d9e306fd8",
+  "setup_validation_sha256": "2702649f50a833fcabac4b385a12ae509b5cc99f3a09faa1b25e57e2222b8572",
+  "production_source_tree_hash": "433d575ac0dfebab27e43d46c75a9e73ad66adb69dda196ba3455ed64ea9cd4b",
+  "production_changes": 0,
+  "task_model_calls_before_amendment": 0,
+  "readiness_repeated": false,
+  "model_trial_replacements": 0,
+  "first_cell_run_id": "236362654866",
+  "first_candidate_reused_only_after_baseline_identity_check": true,
+  "changes": [
+    "Use existing freeze_junit_tests(candidate,specs), then store_frozen_junit_tests(frozen,run_dir), exactly as historical harness",
+    "Carry existing jvm_profile in external metadata, exactly as historical harness",
+    "Continue the same pre-inference first cell and existing fresh candidate; retain original STARTED/STOPPED evidence; no repeat of readiness",
+    "Verify this separate executor hash at launch; original freeze and original harness remain unchanged"
+  ],
+  "unchanged": [
+    "Hive source",
+    "provider configuration",
+    "prompts and schemas",
+    "model identities",
+    "order",
+    "retry/correction budgets",
+    "verification gates",
+    "baseline/tests/attestation",
+    "promotion policy"
+  ],
+  "limitation": "Setup interruption is disclosed; first trial wall time includes the pre-inference interruption separately from active execution. This is a measurement-harness correction, not a controller repair or rerun of an observed model outcome."
+}

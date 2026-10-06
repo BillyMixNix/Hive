@@ -1,0 +1,251 @@
+--- original/tests/test_nfrt_source_policy.py
++++ repaired/tests/test_nfrt_source_policy.py
+@@ -0,0 +1,113 @@
++"""Source-class authorization, with no benchmark identifiers in policy predicates."""
++import copy,zipfile
++import pytest
++from verification import nfrt_seed as seed
++from test_nfrt_seed import setup_seed,write
++
++@pytest.fixture
++def reviewed(setup_seed,monkeypatch):
++    s=setup_seed;doc=s['doc'];doc['schema']='hive-nfrt-seed-v2';del doc['independent_java_sources']
++    doc['independent_source_policy']={'kind':'reviewed-main-java-v1','roots':['src/main/java'],
++        'review_sha256':'a'*64,'dependency_model_sha256':'b'*64}
++    doc['reconstruction_inputs']={'project':'$PROJECT','taskClass':'net.neoforged.nfrtgradle.CreateMinecraftArtifacts_Decorated',
++        'graph':[{'path':':createMinecraftArtifacts','dependencies':[]}],
++        'inputProperties':{'dependency':'immutable'},'inputFiles':[{'path':'/approved/tool.jar','sha256':'c'*64}],
++        'javaSourceSets':[{'name':'main','javaRoots':['$PROJECT/src/main/java']}],
++        'optionalInputs':{'accessTransformers':[],'validatedAccessTransformers':[],'interfaceInjection':[],'parchment':[]}}
++    def pin():
++        s['expected']=write(s['manifest'],doc);monkeypatch.setenv('HIVE_NFRT_SEED_SHA256',s['expected'])
++    s['pin']=pin;pin();assert s['call']();return s
++
++@pytest.mark.parametrize('mutation',['existing','unrelated','multiple','new_package','removed','invalid_java'])
++def test_reviewed_main_source_variation_is_compatible(reviewed,mutation):
++    s=reviewed
++    if mutation in ('existing','multiple'):s['app'].write_text('package example; class App { int changed; }')
++    if mutation in ('unrelated','multiple','new_package'):
++        p=s['tree']/'src/main/java/other/packagepath/New.java';p.parent.mkdir(parents=True);p.write_text('package other.packagepath; class New {}')
++    if mutation=='removed':s['app'].unlink()
++    if mutation=='invalid_java':s['app'].write_text('not valid Java; compilation still required')
++    assert s['call']()
++
++@pytest.mark.parametrize('path',[
++    'build.gradle','gradle.properties','settings.gradle','gradle/libs.versions.toml',
++    'src/main/resources/META-INF/accesstransformer.cfg','src/main/resources/META-INF/interface-injection.json',
++    'mappings/official.tsrg','parchment/data.zip','src/main/resources/assets/ordinary.json',
++    'src/test/java/example/AppTest.java','src/gametest/java/New.java','buildSrc/src/main/java/Plugin.java',
++    'src/main/java/config.json','src/main/java/build.gradle','src/main/java-other/New.java'])
++def test_nonqualifying_source_config_and_unknown_inputs_fail_closed(reviewed,path):
++    p=reviewed['tree']/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('changed input')
++    with pytest.raises(ValueError,match='NFRT (source inventory|reconstruction input) changed'):reviewed['call']()
++
++@pytest.mark.parametrize('identity',['NeoForge','ModDevGradle','NFRT','Java','Gradle','mappings','dependency'])
++def test_attested_tool_and_artifact_identity_cannot_change(reviewed,identity):
++    # Module/download inventories bind actual bytes, regardless of displayed version.
++    reviewed['module'].write_bytes(('different '+identity+' bytes').encode())
++    with pytest.raises(ValueError,match='tool/dependency hash mismatch'):reviewed['call']()
++
++@pytest.mark.parametrize('field,value',[
++    ('image_id','different-Java-image'),('profile',{'version':'9','neoForge':'changed'}),
++    ('profile',{'version':'9','modDevGradle':'changed'}),('profile',{'version':'9','neoformRuntime':'changed'}),
++    ('downloaded_manifest_sha256','different-downloads')])
++def test_profile_image_and_download_identity_rejected(reviewed,field,value):
++    with pytest.raises(ValueError,match='identity mismatch'):reviewed['call'](**{field:value})
++
++@pytest.mark.parametrize('section',['inputFiles','inputProperties','optionalInputs'])
++def test_java_named_reconstruction_input_is_not_independent(reviewed,section):
++    s=reviewed;file={'path':'$PROJECT/src/main/java/example/App.java','sha256':'c'*64}
++    m=s['doc']['reconstruction_inputs']
++    if section=='inputFiles':m[section].append(file)
++    elif section=='inputProperties':m[section]['data']=file
++    else:m[section]['accessTransformers']=[file]
++    s['pin']()
++    with pytest.raises(ValueError,match='overlaps independent source root'):s['call']()
++
++@pytest.mark.parametrize('mutation',['no_review','no_model','wrong_root','unsafe_root','empty_roots','duplicate_root','mixed_policy',
++    'compilation_prerequisite','no_optional_inputs','wrong_task','wrong_project','no_main'])
++def test_missing_or_contradictory_independence_evidence_rejected(reviewed,mutation):
++    s=reviewed;p=s['doc']['independent_source_policy'];m=s['doc']['reconstruction_inputs']
++    if mutation=='no_review':p.pop('review_sha256')
++    if mutation=='no_model':p.pop('dependency_model_sha256')
++    if mutation=='wrong_root':p['roots']=['src/test/java']
++    if mutation=='unsafe_root':p['roots']=['src/../buildSrc']
++    if mutation=='empty_roots':p['roots']=[]
++    if mutation=='duplicate_root':p['roots']*=2
++    if mutation=='mixed_policy':s['doc']['independent_java_sources']=['src/main/java/example/App.java']
++    if mutation=='compilation_prerequisite':m['graph'][0]['dependencies']=[':compileJava']
++    if mutation=='no_optional_inputs':m.pop('optionalInputs')
++    if mutation=='wrong_task':m['taskClass']='other.Task'
++    if mutation=='wrong_project':m['project']='/unreviewed'
++    if mutation=='no_main':m['javaSourceSets']=[]
++    s['pin']()
++    with pytest.raises(ValueError):s['call']()
++
++@pytest.mark.parametrize('mutation',['corrupt','missing','extra','wrong_attestation'])
++def test_v2_seed_integrity_still_required(reviewed,monkeypatch,mutation):
++    s=reviewed;p=next(s['native'].glob('*.jar'))
++    if mutation=='corrupt':p.write_bytes(b'bad')
++    if mutation=='missing':p.unlink()
++    if mutation=='extra':(s['native']/'unmanifested.txt').write_text('extra')
++    if mutation=='wrong_attestation':monkeypatch.setenv('HIVE_NFRT_SEED_SHA256','0'*64)
++    with pytest.raises(ValueError):s['call']()
++
++@pytest.mark.parametrize('entry',['example/App.class','example/AppTest.class','example/generated/Output.class'])
++def test_v2_rejects_candidate_classes_even_in_rehashed_seed(reviewed,tmp_path,entry):
++    s=reviewed;p=next(s['native'].glob('*.jar'))
++    with zipfile.ZipFile(p,'w') as z:z.writestr(entry,b'candidate output')
++    row=next(r for r in s['doc']['entries'] if r['path']==p.name);row.update(size=p.stat().st_size,sha256=seed.digest(p));s['pin']()
++    with pytest.raises(ValueError,match='candidate'):seed.private_copy(s['native'],tmp_path/'private',s['manifest'],s['expected'])
++
++@pytest.mark.parametrize('entry',['build/classes/App.class','build/tests/Test.class','TEST-output.xml','result.json','.gradle/history.bin','candidate.java'])
++def test_v2_cannot_seed_build_outputs_reports_or_history(reviewed,entry):
++    s=reviewed;s['doc']['entries'].append({'path':entry,'size':0,'sha256':'0'*64});s['pin']()
++    with pytest.raises(ValueError):seed.load_attestation(s['manifest'],s['expected'])
++
++def test_v2_private_copy_keeps_approved_seed_immutable(reviewed,tmp_path):
++    s=reviewed;before={p.name:p.read_bytes() for p in s['native'].iterdir()}
++    dst=tmp_path/'private';assert seed.private_copy(s['native'],dst,s['manifest'],s['expected'])['private_copy']
++    next(dst.glob('*.jar')).write_bytes(b'private runtime update')
++    assert before=={p.name:p.read_bytes() for p in s['native'].iterdir()}
++
++def test_v1_cannot_silently_acquire_v2_policy(setup_seed,monkeypatch):
++    s=setup_seed;s['doc']['independent_source_policy']={'kind':'reviewed-main-java-v1','roots':['src/main/java']}
++    monkeypatch.setenv('HIVE_NFRT_SEED_SHA256',write(s['manifest'],s['doc']))
++    with pytest.raises(ValueError,match='ambiguous'):s['call']()
+--- original/tests/test_semantic_fidelity.py
++++ repaired/tests/test_semantic_fidelity.py
+@@ -152,10 +152,17 @@
+     assert json.loads(missing)['checks'][0]['detail']['report_error']=='Gradle exited without fresh JUnit XML reports'
+ 
+ def test_scope_context_ownership_verifier_policy_files_unchanged():
+-    import hashlib
++    import ast,hashlib
+     root=Path(__file__).resolve().parents[1]
+     old=root.parent.parent/'HIVE-TRANSITION-004C/repaired-workshop'
+     if not old.exists():pytest.skip('historical comparison available only in experiment workspace')
+     for name in ['workshop/providers.py','workshop/hive_protocol.py','workshop/hive_verifier.py',
+-                 'workshop/external_root.py','workshop/hive_jvm.py','verification/nfrt_seed.py']:
++                 'workshop/external_root.py','workshop/hive_jvm.py']:
+         assert hashlib.sha256((root/name).read_bytes()).digest()==hashlib.sha256((old/name).read_bytes()).digest()
++    # Source compatibility is intentionally generalized by NFRT-ATTESTATION-002.
++    # Seed byte/type/key/namespace integrity and private copying must not change.
++    def functions(path):
++        return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(path.read_text()).body if isinstance(n,ast.FunctionDef)}
++    current=functions(root/'verification/nfrt_seed.py');previous=functions(old/'verification/nfrt_seed.py')
++    for name in ('ordinary','digest','relative','verify_seed','private_copy'):
++        assert current[name]==previous[name]
+--- original/verification/NFRT-SEED-POLICY.md
++++ repaired/verification/NFRT-SEED-POLICY.md
+@@ -9,3 +9,11 @@
+ The host mounts the approved seed and manifest read-only; the container validates again, copies bytes into a fresh private intermediate directory, and validates the result. NFRT may update only the private copy. No project output, compilation history, application/test classes, reports or prior acceptance decisions are reused. Downloaded-input validation, fresh project compilation, offline execution and all frozen gates remain in force.
+ 
+ This mechanism does not claim that all Gradle builds or source-only edits have invariant reconstruction inputs. An attestation requires evidence for its particular build and allowed source scope. TRANSITION-004C's approved attestation and supporting measurements are outside production code; production contains no task name or application filename.
++
++## Reviewed source-class attestation (v2)
++
++`hive-nfrt-seed-v2` replaces the file list with a host-pinned `independent_source_policy` of kind `reviewed-main-java-v1`. It permits regular `.java` contents and membership to vary only within explicitly reviewed roots of the measured **main** Java source set. Every other source/config file and its membership remains fixed. Test sources, resources, build scripts, properties, mappings, transform/injection data, dependency coordinates and unknown additions remain invalidations. The v1 format retains its original semantics; mixed policies are rejected.
++
++Approval requires pinned implementation/build review demonstrating that reconstruction does not consume the variable source class, in addition to measured input equality. The manifest contains normalized `$PROJECT` reconstruction inputs, the main source roots, a reconstruction task graph without compilation prerequisites, all optional input collections and SHA-256 references to the sealed review/dependency model. The host pins the entire manifest. Input collections overlapping a claimed independent root are rejected, including a Java-named file selected as access-transformer data. Equal declared inputs alone do not authorize a new build with undeclared source reads.
++
++The measured source roots are evidence, not an automatic `src/main/java/**` exemption for arbitrary projects. Fixed build/plugin/tool bytes and the reviewed absent source dependency justify this particular attestation. A different build, tool, option, resource or dependency identity requires a fresh compatibility review. All seed/provenance/module/download hashes, image/JDK and wrapper/profile checks remain in force. Source compatibility says nothing about candidate correctness: main/test compilation and acceptance run fresh, with unchanged rerun/no-build-cache flags and deadlines.
+--- original/verification/nfrt_seed.py
++++ repaired/verification/nfrt_seed.py
+@@ -44,7 +44,7 @@
+     if path.stat().st_size>32_000_000:
+         raise ValueError('NFRT attestation too large')
+     doc=json.loads(path.read_bytes())
+-    if doc.get('schema')!='hive-nfrt-seed-v1' or doc.get('kind')!='dependency-intermediates':
++    if doc.get('schema') not in ('hive-nfrt-seed-v1','hive-nfrt-seed-v2') or doc.get('kind')!='dependency-intermediates':
+         raise ValueError('unsupported NFRT attestation')
+     entries=doc.get('entries',[])
+     if not 1<=len(entries)<=10000 or sum(r['size'] for r in entries)>1_000_000_000:
+@@ -107,6 +107,51 @@
+         raise
+     return {'files':len(doc['entries']),'bytes':sum(r['size'] for r in doc['entries']),
+             'attestation_sha256':expected,'private_copy':True}
++
++
++def independent_source_roots(doc):
++    """Validate a host-reviewed source class, never infer one from a suffix alone.
++
++    The pinned build/plugin review establishes that main sources are compiled
++    downstream of reconstruction. All nonqualifying bytes remain inventory-bound.
++    The measured snapshot checks below reject contradictory independence claims;
++    they do not replace the host's review of undeclared inputs/build behavior.
++    """
++    policy=doc.get('independent_source_policy')
++    if (not isinstance(policy,dict) or policy.get('kind')!='reviewed-main-java-v1'
++            or 'independent_java_sources' in doc):
++        raise ValueError('invalid NFRT independent source policy')
++    roots=policy.get('roots')
++    if (not isinstance(roots,list) or not roots or any(not isinstance(r,str) for r in roots)
++            or len(set(roots))!=len(roots)
++            or any(not relative(r).startswith('src/') for r in roots)):
++        raise ValueError('invalid NFRT independent source roots')
++    for name in ('review_sha256','dependency_model_sha256'):
++        if not isinstance(policy.get(name),str) or not SHA.fullmatch(policy[name]):
++            raise ValueError('missing NFRT source independence review')
++    measured=doc.get('reconstruction_inputs',{})
++    main=[s for s in measured.get('javaSourceSets',[]) if s.get('name')=='main']
++    if (measured.get('project')!='$PROJECT' or len(main)!=1
++            or set(main[0].get('javaRoots',[]))!={'$PROJECT/'+r for r in roots}
++            or measured.get('graph')!=[{'path':':createMinecraftArtifacts','dependencies':[]}]
++            or measured.get('taskClass')!='net.neoforged.nfrtgradle.CreateMinecraftArtifacts_Decorated'
++            or not measured.get('inputProperties') or not measured.get('inputFiles')
++            or set(measured.get('optionalInputs',{}))!={'accessTransformers','validatedAccessTransformers','interfaceInjection','parchment'}):
++        raise ValueError('missing or incompatible NFRT source independence evidence')
++    def strings(value):
++        if isinstance(value,str):yield value
++        elif isinstance(value,dict):
++            for v in value.values():yield from strings(v)
++        elif isinstance(value,list):
++            for v in value:yield from strings(v)
++    # Include nested artifact/optional inputs, not just Gradle's inputFiles.
++    for name in ('inputProperties','inputFiles','optionalInputs'):
++        for path in strings(measured[name]):
++            if path.startswith('$PROJECT/'):
++                rel=relative(path[len('$PROJECT/'):])
++                if any(rel==r or rel.startswith(r+'/') or r.startswith(rel+'/') for r in roots):
++                    raise ValueError('NFRT reconstruction input overlaps independent source root')
++    return tuple(roots)
+ 
+ 
+ def configured_seed(tree, cache, profile, baseline_sha256, image_id, downloaded_manifest_sha256):
+@@ -155,18 +200,29 @@
+     from workshop import external_root
+     source_rows=doc['source_inventory']
+     fixed={relative(r['path']):r['sha256'] for r in source_rows}
+-    mutable=doc['independent_java_sources']
+-    if (not mutable or len(set(mutable))!=len(mutable) or
+-            any(p not in fixed or not p.startswith('src/main/java/') or not p.endswith('.java') for p in mutable)):
+-        raise ValueError('invalid independently attested source scope')
++    if len(fixed)!=len(source_rows):
++        raise ValueError('duplicate NFRT source inventory path')
++    if doc['schema']=='hive-nfrt-seed-v1':
++        if 'independent_source_policy' in doc:
++            raise ValueError('ambiguous NFRT source policy')
++        mutable=doc['independent_java_sources']
++        if (not mutable or len(set(mutable))!=len(mutable) or
++                any(p not in fixed or not p.startswith('src/main/java/') or not p.endswith('.java') for p in mutable)):
++            raise ValueError('invalid independently attested source scope')
++        independent=lambda p:p in mutable
++    else:
++        roots=independent_source_roots(doc)
++        independent=lambda p:p.endswith('.java') and any(p.startswith(r+'/') for r in roots)
+     measured=doc.get('reconstruction_inputs')
+     if not isinstance(measured,dict) or not measured.get('inputProperties') or not measured.get('inputFiles'):
+         raise ValueError('missing measured reconstruction compatibility evidence')
+     current=external_root._inventory(Path(tree))
+-    if {r.as_posix() for _,r,_ in current}!=set(fixed):
++    paths={r.as_posix() for _,r,_ in current}
++    if (paths!=set(fixed) if doc['schema']=='hive-nfrt-seed-v1' else
++            {p for p in paths if not independent(p)}!={p for p in fixed if not independent(p)}):
+         raise ValueError('NFRT source inventory changed')
+     for p,rel,info in current:
+-        if rel.as_posix() not in mutable and external_root._file_digest(p,Path(tree).resolve(),info)!=fixed[rel.as_posix()]:
++        if not independent(rel.as_posix()) and external_root._file_digest(p,Path(tree).resolve(),info)!=fixed[rel.as_posix()]:
+             raise ValueError(f'NFRT reconstruction input changed: {rel.as_posix()}')
+     source=cache/PREFIX.rstrip('/')
+     verify_seed(source,doc)

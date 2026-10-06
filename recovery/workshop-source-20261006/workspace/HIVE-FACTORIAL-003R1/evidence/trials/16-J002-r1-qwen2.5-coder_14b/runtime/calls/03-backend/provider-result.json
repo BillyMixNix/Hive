@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Updated IngredientAllocation.canSatisfy to validate slot identity and count values.\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java\",\n      \"operation\": \"replace\",\n      \"find\": \"if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {\",\n      \"replace\": \"if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.stream().anyMatch(slot -> slot < 0 || slot >= 36)) || counts.values().stream().anyMatch(count -> count == null || count < 0)) {\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 7587,
+  "output_tokens": 188,
+  "raw_id": null
+}

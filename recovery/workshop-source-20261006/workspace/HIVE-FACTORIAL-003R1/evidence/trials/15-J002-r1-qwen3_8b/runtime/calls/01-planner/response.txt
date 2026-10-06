@@ -1,0 +1,19 @@
+{
+  "summary": "Validate input parameters in IngredientAllocation.canSatisfy to reject null, negative, or out-of-range slot identities and null count values.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Update IngredientAllocation.canSatisfy to validate input parameters and throw IllegalArgumentException for invalid cases",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java"],
+    "tests": []
+  },
+  "acceptance": ["Validation rejects null/invalid inputs without mutating caller data"],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["Implementation matches interface contract without input mutation"],
+    "tests": []
+  },
+  "interface_contracts": [],
+  "provider_changes": []
+}

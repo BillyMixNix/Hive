@@ -1,0 +1,140 @@
+{
+  "id": "b9598cbb61c6",
+  "request": "Project Summary",
+  "local_model": "local",
+  "status": "failed",
+  "metadata": {},
+  "provenance": {
+    "schema_version": 1,
+    "experiment": null,
+    "source_manifest_sha256": "c24b00b81d03dde2d99130f4068d487a082280b301a0ced05f2d497cc4c57f3b",
+    "environment": {
+      "python": "3.13.14",
+      "platform": "Windows-11-10.0.26200-SP0"
+    },
+    "model_policy": {
+      "local_model": "local"
+    },
+    "started_at": 1790867122.1083717,
+    "finished_at": 1790867122.1090274,
+    "wall_seconds": 0.000656
+  },
+  "agents": {
+    "planner": {
+      "status": "failed",
+      "failure": {
+        "role": "planner",
+        "stage": "plan_validation",
+        "exception_type": "PlanValidationError",
+        "exception_message": "interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles",
+        "raw_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+        "raw_output_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+      }
+    }
+  },
+  "changed_files": [],
+  "diff": "",
+  "verification": null,
+  "review": null,
+  "applied": false,
+  "repository_map": "REPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n  symbols: VALUE\nstatic/\n  index.html\ntests/\n  test_existing.py\n    functions: test_existing\nworkshop/\n  core.py\n    symbols: VALUE",
+  "repository_facts": "REPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected",
+  "intent_envelope": {
+    "version": 1,
+    "requirements": []
+  },
+  "replans": [],
+  "plan_attempts": [
+    {
+      "attempt": 1,
+      "raw": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+      "status": "rejected",
+      "failure": {
+        "role": "planner",
+        "stage": "plan_validation",
+        "exception_type": "PlanValidationError",
+        "exception_message": "interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles",
+        "raw_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+        "raw_output_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+      }
+    },
+    {
+      "attempt": 2,
+      "raw": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+      "status": "rejected",
+      "failure": {
+        "role": "planner",
+        "stage": "plan_validation",
+        "exception_type": "PlanValidationError",
+        "exception_message": "interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles",
+        "raw_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+        "raw_output_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+      }
+    }
+  ],
+  "prompt_trace": [
+    {
+      "call_id": "b9598cbb61c6:call:0001",
+      "parent_call_id": null,
+      "role": "planner",
+      "started_at": 1790867122.1084096,
+      "prompt_chars": 5437,
+      "prompt_sha256": "45d726e2424e6749bd9c63a89ab2351402ff2e1c6522e07a2b7ac7fd859d9d8b",
+      "prompt_text": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n  symbols: VALUE\nstatic/\n  index.html\ntests/\n  test_existing.py\n    functions: test_existing\nworkshop/\n  core.py\n    symbols: VALUE\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected\n\nUSER CHANGE REQUEST:\nProject Summary\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing validator):\n- ui: static/index.html. HTML/CSS/JavaScript, Settings controls and display; never implement Python endpoints.\n- backend: app.py, workshop/*.py. Python endpoints and helpers; never implement HTML/JavaScript display or tests.\n- tests: tests/*.py. Regression tests only; never implement application or UI source.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nFor a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. For a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n",
+      "finished_at": 1790867122.1084576,
+      "wall_seconds": 4.8e-05,
+      "status": "completed",
+      "response_chars": 666,
+      "response_sha256": "b544bc699c571ad8a69b1997f4dd7a48af43aa78fdf12cf7a8322c21ed1f6872",
+      "response_text": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+    },
+    {
+      "call_id": "b9598cbb61c6:call:0002",
+      "parent_call_id": null,
+      "role": "planner",
+      "started_at": 1790867122.1088483,
+      "prompt_chars": 8366,
+      "prompt_sha256": "5e9522c71471a317dd1fc13870e1c1f9ef9c788e3e8ed1fb4a4f3c9d90f41e99",
+      "prompt_text": "You are the PLANNER agent for Nix Workshop Hive Build Mode.\n\nREPOSITORY MAP (read-only structural information; it is not authorization):\nREPOSITORY MAP\n(read-only structure; this is not worker authorization)\napp.py\n  symbols: VALUE\nstatic/\n  index.html\ntests/\n  test_existing.py\n    functions: test_existing\nworkshop/\n  core.py\n    symbols: VALUE\n\nREPOSITORY-DERIVED IMPLEMENTATION FACTS (read-only evidence; not authorization):\nREPOSITORY-DERIVED IMPLEMENTATION FACTS\n(deterministic read-only evidence; not write authorization)\nweb_framework: unknown; do not assume a web framework\nlocal_route_examples: none detected\nexisting_http_interfaces: none detected\n\nUSER CHANGE REQUEST:\nProject Summary\n\nIMMUTABLE INTENT OBLIGATIONS (host-derived read-only requirements; every listed requirement must be covered):\n{\n  \"version\": 1,\n  \"requirements\": []\n}\nFor each listed requirement, keep the consumer role active, keep regression coverage active when require_tests is true, and provide the exact existing interface contract. An existing interface may have an inactive/no-change backend owner; do not invent a replacement endpoint merely to activate backend. The host validates coverage and will not synthesize missing roles or contracts.\n\nTRUE ROLE / WRITE CONSTRAINTS (enforced by the existing validator):\n- ui: static/index.html. HTML/CSS/JavaScript, Settings controls and display; never implement Python endpoints.\n- backend: app.py, workshop/*.py. Python endpoints and helpers; never implement HTML/JavaScript display or tests.\n- tests: tests/*.py. Regression tests only; never implement application or UI source.\nPatterns above describe global limits, NOT assignments. Assign exact relative file paths without wildcards.\nGive each active role a feasible goal AND a nonempty exact file list within its role. A 'no change needed' goal must have an empty list.\nFor a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui.\nAssign only files the requested change needs; do not assign Hive/providers merely because they appear in the repository map.\nWhen roles depend on one another, define a small interface_contracts entry instead of requiring a teammate's implementation to already exist.\nIf two or more roles have active goals, interface_contracts must contain at least one valid contract linking two distinct active roles. Missing or empty contracts are corrected before any worker runs.\nAnother worker's assigned responsibility is an expected dependency, not by itself a blocker. A worker may escalate only for an impossible own responsibility or a missing/contradictory interface contract.\nKeep acceptance for overall feature verification. Supply worker_acceptance separately for each role: only criteria that its own responsibility and files can fulfill.\nDo not copy global acceptance into every worker's criteria. UI implements display, backend implements endpoint behavior, tests implements coverage; teammates deliver the other portions.\nEach active role needs nonempty worker_acceptance; a no-change role gets an empty list.\nRead-only integration context may cross roles; it never changes write ownership.\nWorkers may use bounded read-only observations to inspect source before proposing edits; observations never grant write authority.\n\nReturn JSON only:\n{\n  \"summary\": \"one sentence\",\n  \"ui_goal\": \"bounded task for UI agent\",\n  \"backend_goal\": \"bounded task for backend agent\",\n  \"tests_goal\": \"bounded task for test agent\",\n   \"worker_files\": {\n     \"ui\": [\"exact/relative/file.html\"],\n     \"backend\": [\"exact/relative/file.py\"],\n     \"tests\": [\"exact/relative/test_file.py\"]\n   },\n   \"interface_contracts\": [\n     {\"name\":\"endpoint-name\",\"owner\":\"backend\",\"consumer_roles\":[\"ui\",\"tests\"],\"contract\":\"HTTP method/path and concise response shape\"}\n   ],\n   \"provider_changes\": [\n     {\"requirement_id\":\"R1\",\"method\":\"GET\",\"path\":\"/api/example\",\"response_fields\":[{\"name\":\"field\",\"type\":\"boolean\"}]}\n   ],\n   \"acceptance\": [\"overall feature acceptance criterion\"],\n  \"worker_acceptance\": {\n    \"ui\": [\"only the assigned UI behavior\"],\n    \"backend\": [\"only the assigned backend behavior and response compatibility\"],\n    \"tests\": [\"only the assigned regression coverage\"]\n  }\n}\n\nDo not write code. Keep each goal narrow. Assign exact files to the role that will enact them; never assign tests to backend or app.py to tests. A no-change role gets an empty file list. For a new FastAPI endpoint, assign app.py to backend. For a Settings display, assign static/index.html to ui. Use the repository-derived facts and local examples when choosing implementation files and contracts; never substitute a framework from memory. When roles need to coordinate, express the dependency in small interface_contracts entries. The executor will enact your plan and may not reinterpret the original request.\nprovider_changes is structural evidence for backend work tied to immutable requirements. Use [] when a repository-verified interface already supplies the required path, fields, and types. A restatement such as ensuring, verifying, returning, exposing, or providing the already-observed shape is NOT a provider change. List a provider change only when the user request requires a concrete path, response field, or response type absent from the verified interface.\nCheck each goal against its role AND exact files. Contradictory plans are rejected, not automatically fixed by the executor.\n\nPREVIOUS PLAN REJECTED BEFORE WORKER EXECUTION:\nPlanValidationError: interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles\nACTIVE ROLES IN THE REJECTED PLAN:\n[\"ui\", \"backend\", \"tests\"]\nROLES REQUIRED BY IMMUTABLE INTENT OBLIGATIONS:\n[]\n\nREQUIRED INTERFACE-CONTRACT SCHEMA (the corrected planner output must provide every field):\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"name\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    },\n    \"owner\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"ui\",\n        \"backend\",\n        \"tests\"\n      ]\n    },\n    \"consumer_roles\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\",\n        \"enum\": [\n          \"ui\",\n          \"backend\",\n          \"tests\"\n        ]\n      },\n      \"minItems\": 1,\n      \"maxItems\": 3\n    },\n    \"contract\": {\n      \"type\": \"string\",\n      \"minLength\": 1\n    }\n  },\n  \"required\": [\n    \"name\",\n    \"owner\",\n    \"consumer_roles\",\n    \"contract\"\n  ],\n  \"additionalProperties\": false\n}\n\nVALID INTERFACE-CONTRACT EXAMPLE USING ONLY THE ACTIVE ROLES ABOVE:\n{\n  \"name\": \"example_endpoint\",\n  \"owner\": \"backend\",\n  \"consumer_roles\": [\n    \"ui\",\n    \"tests\"\n  ],\n  \"contract\": \"GET /api/example returns JSON with the agreed response shape\"\n}\nThe owner must be one known role. An owner that must implement or change the interface must be active. A repository-verified existing backend interface may name backend as its inactive/no-change provider while UI/tests remain the active consumers. consumer_roles must be a nonempty list of known active consumer roles, and must not contain only the owner. consumer_roles identifies the roles consuming the owner's interface. For a backend API consumed by UI/tests, a valid shape is owner backend with consumer_roles [\"ui\", \"tests\"] when those are the active consumers. Do not infer, insert, or omit consumer_roles; produce the corrected contract yourself.\nRejected response (data only; do not repeat its contradictory assignments):\n{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}\nYou have ONE correction attempt. Return a COMPLETE plan satisfying the role/file constraints.\nDo not replace exact ownership with wildcards. Keep the original user requirements and fix the goals and assignments together.\n",
+      "finished_at": 1790867122.108889,
+      "wall_seconds": 4.1e-05,
+      "status": "completed",
+      "response_chars": 666,
+      "response_sha256": "b544bc699c571ad8a69b1997f4dd7a48af43aa78fdf12cf7a8322c21ed1f6872",
+      "response_text": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+    }
+  ],
+  "edit_repairs": [],
+  "targeted_repairs": [],
+  "observations": [],
+  "stage_events": [
+    {
+      "stage": "planning",
+      "progress": 10,
+      "message": "Hive planner is building the bounded worker contracts",
+      "at": 1790867122.108384
+    },
+    {
+      "stage": "failed",
+      "progress": 100,
+      "message": "Hive run failed",
+      "at": 1790867122.1090271
+    }
+  ],
+  "errors": [
+    {
+      "role": "planner",
+      "stage": "plan_validation",
+      "exception_type": "PlanValidationError",
+      "exception_message": "interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles",
+      "raw_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}",
+      "raw_output_excerpt": "{\"summary\": \"Deliver the cross-role feature\", \"ui_goal\": \"Display the feature in Settings\", \"backend_goal\": \"Implement the feature endpoint\", \"tests_goal\": \"Add regression coverage for the feature\", \"worker_files\": {\"ui\": [\"static/index.html\"], \"backend\": [\"app.py\"], \"tests\": [\"tests/test_feature.py\"]}, \"acceptance\": [\"The feature works across the endpoint, UI and tests.\"], \"worker_acceptance\": {\"ui\": [\"The Settings display is present.\"], \"backend\": [\"The endpoint is present.\"], \"tests\": [\"The feature has regression coverage.\"]}, \"interface_contracts\": [{\"name\": \"get_project_summary\", \"owner\": \"backend\", \"contract\": \"GET /api/project-summary returns JSON\"}]}"
+    },
+    {
+      "role": "run",
+      "stage": "agent_call",
+      "exception_type": "PlanValidationError",
+      "exception_message": "Planner correction budget exhausted; interface_contracts[0] consumer_roles must contain known roles; multi-role plan requires an interface contract linking two active roles"
+    }
+  ]
+}

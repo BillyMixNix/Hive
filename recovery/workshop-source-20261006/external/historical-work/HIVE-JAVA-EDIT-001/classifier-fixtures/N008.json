@@ -1,0 +1,21 @@
+{
+  "source_run_sha256": "df413b25a2a060754abe26aec95fcec63b1ac044042dd534c051493f46c4849c",
+  "expected_reclassification": "MODEL_TASK_FAILURE",
+  "run": {
+    "status": "rejected",
+    "errors": [{
+      "role": "tests",
+      "stage": "verify",
+      "exception_type": "TargetedVerificationError",
+      "exception_message": "targeted verification failed",
+      "targeted_verification": {"checks": [{
+        "name": "frozen_junit_acceptance",
+        "passed": false,
+        "detail": {
+          "stdout_tail": "Shared read-only dependency cache is an incubating feature.\n> Task :compileTestJava FAILED",
+          "stderr_tail": "/work/candidate/src/test/java/dev/atmcompanion/planning/PlanResultTest.java:14: error: no suitable constructor found for PlanResult(List<String>)\nPlanResult initialPlanResult = new PlanResult(Collections.singletonList(\"initialLimitation\"));\n> Compilation failed"
+        }
+      }]}
+    }]
+  }
+}

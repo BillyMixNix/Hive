@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Implement coverage percentage calculation methods in execution context and assessment\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Add coveragePercent() to ExecutionContext and observedCoveragePercent() to ExecutionAssessment with specified behavior\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\n      \"src/main/java/dev/atmcompanion/execution/ExecutionContext.java\",\n      \"src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java\"\n    ],\n    \"tests\": []\n  },\n  \"acceptance\": [\n    \"ExecutionContext.coveragePercent() returns floor(100*scannedPositions/totalPositions) with zero for zero totalPositions\",\n    \"ExecutionAssessment.observedCoveragePercent() delegates to observation's scan and returns -1 for no observation\"\n  ],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\n      \"Implement ExecutionContext.coveragePercent() with specified calculation\",\n      \"Implement ExecutionAssessment.observedCoveragePercent() with observation delegation and -1 fallback\"\n    ],\n    \"tests\": []\n  },\n  \"interface_contracts\": [],\n  \"provider_changes\": []\n}",
+  "input_tokens": 3884,
+  "output_tokens": 912,
+  "raw_id": null
+}

@@ -1,0 +1,48 @@
+{
+  "prior_sealed_files_unchanged": 10114,
+  "baseline_cache_image_validated": true,
+  "attestation_unchanged": true,
+  "tested_source_unchanged": true,
+  "verifier_functions_identical_except_runtime_diagnostic_collection": [
+    "_install_fresh_compilation_policy",
+    "_event",
+    "_observe_output",
+    "_bounded_process",
+    "_validated_runtime_output_dirs",
+    "_validate_runtime_output_roots",
+    "_runtime_output_manifest",
+    "_changed_preexisting_runtime_files",
+    "_source_digest",
+    "_copy_wrapper_distribution",
+    "_copy_external_build_inputs",
+    "_clear_build_outputs",
+    "_validate_frozen_tests",
+    "_result_check",
+    "_network_attempt_failure",
+    "run_jvm_profile"
+  ],
+  "scope_ownership_edit_and_targeted_verification_functions_identical": true,
+  "context_provider_verifier_isolation_code_identical": true,
+  "containers": [
+    {
+      "container": "hive-verify-74b2490f712b",
+      "absent": true,
+      "timeout": 240,
+      "readonly_mounts": true
+    },
+    {
+      "container": "hive-verify-17392f9d7a2b",
+      "absent": true,
+      "timeout": 240,
+      "readonly_mounts": true
+    }
+  ],
+  "production_and_test_files_changed": [
+    "tests/test_hive_scopes.py",
+    "tests/test_semantic_fidelity.py",
+    "verification/jvm_runner.py",
+    "workshop/hive.py"
+  ],
+  "live_trials": 1,
+  "model_calls": 1
+}

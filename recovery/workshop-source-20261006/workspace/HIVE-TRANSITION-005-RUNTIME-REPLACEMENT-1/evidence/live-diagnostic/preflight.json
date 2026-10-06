@@ -1,0 +1,66 @@
+{
+  "at": "2026-10-05T19:56:04.989597+00:00",
+  "approved": {
+    "baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+    "verifier_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "approved_cache_run_id": "e5a7c314b902",
+    "approved_cache_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\e5a7c314b902",
+    "jvm_profile": {
+      "version": "9.2.1",
+      "distribution": "gradle-9.2.1-bin.zip",
+      "distribution_sha256": "72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f",
+      "wrapper_jar_sha256": "7d3a4ac4de1c32b59bc6a4eb8ecb8e612ccd0cf1ae1e99f66902da64df296172",
+      "wrapper_properties_sha256": "e0ffcfa51500d79f1746a4e55a1cfff6431f332f51b357d3eee599fa0683140e",
+      "full_tasks": [
+        "clean",
+        "build",
+        "runGameTestServer",
+        "runQuestTestServer",
+        "packTestJar"
+      ],
+      "verification_policy_sha256": "708fbd97fb0f8e49f8568b29064f590a8bce57fbedf0e376e2da87e54f7b480e",
+      "external_build_inputs": {
+        "kind": "neoformruntime",
+        "cache_relative": "caches/neoformruntime",
+        "input_directories": [
+          "artifacts",
+          "assets"
+        ]
+      },
+      "runtime_output_dirs": [
+        "run-gametest",
+        "run-questtest"
+      ]
+    }
+  },
+  "task": {
+    "id": "J001",
+    "request": "In `SnapshotFormatter.boundLine`, preserve complete UTF-16 surrogate pairs when truncating a line to `MAX_LINE_CHARS`. Keep the existing control-character and section-sign sanitization, the `...` suffix when truncation is necessary, and unchanged behavior for ordinary ASCII lines. Truncation must never introduce an unpaired surrogate or return a string longer than the bound.\n\nWrite scope: `src/main/java/dev/atmcompanion/state/SnapshotFormatter.java`.",
+    "request_sha256": "c48982936e87f8147bf1c4581cf10903cb091b49b2b8d2576988ab5cb5c13ebc",
+    "files": [
+      "src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"
+    ],
+    "test_filename": "SnapshotFormatterUnicodeAcceptanceTest.java",
+    "test_path": "src/test/java/dev/atmcompanion/state/SnapshotFormatterUnicodeAcceptanceTest.java",
+    "test_class": "dev.atmcompanion.state.SnapshotFormatterUnicodeAcceptanceTest",
+    "test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+    "test_cases": 3
+  },
+  "model": {
+    "name": "qwen2.5-coder:14b",
+    "digest": "9ec8897f747e246e970bc5cfdda85d22f1123dc2e3d34978a010a75968716849",
+    "bytes": 8988124298,
+    "quantization": "Q4_K_M",
+    "parameter_size": "14.8B",
+    "native_context_length": 32768
+  },
+  "source_files_equal": 153,
+  "final_T005_tested_source_equal": true,
+  "test_identity_verified": true,
+  "seed_attestation_verified": true,
+  "seed_entries": 22,
+  "seed_bytes": 163178447,
+  "regression_evidence_sha256": "1e7cc45b695b5f252c5cac874c486fbe88fe694216964fa91049c335912c7e2d",
+  "verifier_readiness_sha256": "2a6b0ed5e933bc83a215a3accb680236796b7d7ef83da5dcc245b09b88a0ef12",
+  "readiness_model_sha256": "fc9f0057c365513a91592ca1a5cb20cd82717bca270d8d1f9d44dd1376dc3e15"
+}

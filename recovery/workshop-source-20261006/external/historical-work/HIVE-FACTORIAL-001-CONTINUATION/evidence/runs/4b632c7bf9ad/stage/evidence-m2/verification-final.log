@@ -1,0 +1,419 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :clean
+
+> Task :createMinecraftArtifacts
+Loaded 145 artifacts from <PROJECT>\build\tmp\createMinecraftArtifacts\nfrt_artifact_manifest.properties
+*** Started working on downloadJson
+ DONE  Completed downloadJson in 0.05s
+*** Started working on downloadClient
+*** Started working on downloadClientMappings
+*** Started working on downloadServer
+ DONE  Completed downloadClientMappings in 0.07s
+ DONE  Completed downloadClient in 0.07s
+ DONE  Completed downloadServer in 0.07s
+*** Started working on mergeMappings
+ REUSE Used cache of mergeMappings in 0.01s
+*** Started working on stripClient
+ REUSE Used cache of stripClient in 0.01s
+*** Started working on extractServer
+ REUSE Used cache of extractServer in 0.00s
+*** Started working on stripServer
+ REUSE Used cache of stripServer in 0.00s
+*** Started working on merge
+ REUSE Used cache of merge in 0.00s
+*** Started working on rename
+ REUSE Used cache of rename in 0.00s
+*** Started working on decompile
+ REUSE Used cache of decompile in 0.00s
+*** Started working on inject
+ REUSE Used cache of inject in 0.00s
+*** Started working on patch
+ REUSE Used cache of patch in 0.01s
+*** Started working on applyNeoforgePatches
+ REUSE Used cache of applyNeoforgePatches in 0.00s
+*** Started working on transformSources
+ REUSE Used cache of transformSources in 0.00s
+*** Started working on recompile
+ REUSE Used cache of recompile in 0.01s
+*** Started working on sourcesWithNeoForge
+ REUSE Used cache of sourcesWithNeoForge in 0.00s
+*** Started working on compiledWithNeoForge
+ REUSE Used cache of compiledWithNeoForge in 0.00s
+*** Started working on sourcesAndCompiledWithNeoForge
+ REUSE Used cache of sourcesAndCompiledWithNeoForge in 0.00s
+Total runtime: 4.27s
+
+
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :jarJar NO-SOURCE
+> Task :jar
+> Task :assemble
+> Task :compileTestJava
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+
+> Task :test
+
+IntegrationRegistryTest > absentModDoesNotConstructOrLoadItsAdapter() PASSED
+
+IntegrationRegistryTest > unsupportedAdapterIsNotAskedForState() PASSED
+
+IntegrationRegistryTest > absentCapabilityIsUnknownRatherThanAvailable() PASSED
+
+IntegrationRegistryTest > runtimeAndLinkageFailuresDoNotHideHealthyIntegrations() PASSED
+
+IntegrationRegistryTest > registrationsAreBoundedAndDuplicateCapabilitiesAreRejected() PASSED
+
+IntegrationRegistryTest > failureInsideCapabilityInspectionIsContainedAndLogged() PASSED
+
+OptionalQuestAccessTest > absentModNeverLoadsAdapterAndNeverClaimsKnownEmptyQuests() PASSED
+
+OptionalQuestAccessTest > knownEmptyQuestFileRemainsDistinctFromUnavailable() PASSED
+
+OptionalQuestAccessTest > runtimeLinkageAndQuestGraphStackOverflowFailuresDegradeToUnknown() PASSED
+
+OptionalQuestAccessTest > nullAdapterResponseAndFactoryFailureCannotBecomeAvailable() PASSED
+
+OptionalQuestAccessTest > supportedAdapterIsCachedAndReceivesEachInvokingPlayer() PASSED
+
+OptionalQuestAccessTest > unsupportedVersionNeverLoadsVersionSpecificClasses() PASSED
+
+QuestSnapshotTest > contradictingAvailabilityCannotBeSerializedAsFact() PASSED
+
+QuestSnapshotTest > availabilityUsesExplicitTeamAndFtbFlagsWithoutGuessingDependencyOperators() PASSED
+
+QuestSnapshotTest > identifiersTextCountsAndCollectionBoundsRejectMalformedData() PASSED
+
+QuestSnapshotTest > configuredItemReferenceDoesNotPretendToBeAnExactTaskRequirement() PASSED
+
+QuestSnapshotTest > hiddenContainingChapterPreventsDerivedAvailabilityEvenWhenQuestFlagIsVisible() PASSED
+
+QuestSnapshotTest > lockedTeamCannotExposeAvailableQuests() PASSED
+
+QuestSnapshotTest > collectionCopiesAreImmutableAndSnapshotRoundTrips() PASSED
+
+IngredientAllocationTest > inputBoundsAndNegativeCountsAreRejected() PASSED
+
+IngredientAllocationTest > allocationDoesNotMutateCallerInventory() PASSED
+
+IngredientAllocationTest > missingEmptyAndUnknownSlotsAreHandledWithoutInventingInventory() PASSED
+
+IngredientAllocationTest > overlappingAlternativesNeedReallocationRatherThanGreedyConsumption() PASSED
+
+IngredientAllocationTest > allThreeSlotThreeRequirementCasesMatchAnIndependentExhaustiveOracle() PASSED
+
+IngredientAllocationTest > onePhysicalItemCannotSatisfyTwoIngredientPositions() PASSED
+
+NormalizedRecipeTest > dynamicAndComponentOutputsRemainUnsupportedEvenWhenTheyHaveAPreview() PASSED
+
+NormalizedRecipeTest > countsAndRequirementListsAreBounded() PASSED
+
+NormalizedRecipeTest > customIncompleteAndEmptyTagRequirementsCannotBecomeSupportedDependencies() PASSED
+
+NormalizedRecipeTest > sourcesAndResolvedAlternativesRemainSeparateImmutableCanonicalSets() PASSED
+
+RecipeIndexTest > outputLookupFindsAllRoutesInDeterministicRecipeIdOrder() PASSED
+
+RecipeIndexTest > duplicateIdsAndInconsistentMetadataAreRejected() PASSED
+
+RecipeIndexTest > nonfixedPreviewCannotBeMadeCompleteByOptimisticStatistics() PASSED
+
+RecipeIndexTest > omittedInspectedRecipeCannotBeReportedAsCompleteCoverage() PASSED
+
+RecipeIndexTest > mapsRoutesAndSourceListsAreImmutableCopies() PASSED
+
+RecipeIndexTest > routeLimitsAreExplicitAndDoNotSilentlyClaimCompletePerOutputCoverage() PASSED
+
+RecipeIndexTest > unsupportedEarlierPreviewsCannotDisplaceKnownMaterialRouteFromOutputLimit() PASSED
+
+RecipeIndexTest > completeStaticCoverageDoesNotClaimUnsupportedRecipeSemantics() PASSED
+
+RecipeIndexTest > globalAlternativeBoundPreventsManyIndividuallyLegalRecipesFromEscapingMemoryLimits() PASSED
+
+RecipeIndexTest > partialBuildAndUnknownOutputsCannotBecomeACompleteIndex() PASSED
+
+RecipeReportTest > tagAlternativesRemainAChoiceRatherThanFixedIndependentRequirements() PASSED
+
+RecipeReportTest > unsupportedMachineRequirementsCannotBecomeKnownMissingItems() PASSED
+
+RecipeReportTest > truncatedAlternativesAndRecipeResultsRetainTheirUncertaintyFlags() PASSED
+
+RetainedIngredientBudgetTest > identityRejectionDoesNotPartiallySpendAlternativeCapacity() PASSED
+
+RetainedIngredientBudgetTest > unsupportedWholeRecipeCannotSpendAlternativesOnOtherwiseSupportedInput() PASSED
+
+RetainedIngredientBudgetTest > cheapKnownRecipesPrecedeWideAndOpaqueRecipesWithoutNamespacePreference() PASSED
+
+RetainedIngredientBudgetTest > rejectingAnAlternativeSetNeverTurnsItsTruncatedPrefixIntoKnownRequirement() PASSED
+
+RetainedIngredientBudgetTest > repeatedIncompleteExpansionsDoNotStarveLaterExactMaterials() PASSED
+
+DeterministicPlannerTest > futureBatchSurplusNeverAppearsAsCurrentlyOwnedEvenWithMissingRawInputs() PASSED
+
+DeterministicPlannerTest > constrainedExactRequirementDoesNotLoseItsItemToAnOverlappingTag() PASSED
+
+DeterministicPlannerTest > missingRouteInPartialIndexRetainsExplicitKnowledgeUncertainty() PASSED
+
+DeterministicPlannerTest > outputBatchingUsesCeilingAndReusesHypotheticalSurplusAcrossSiblings() PASSED
+
+DeterministicPlannerTest > nodeAndDepthLimitsAreReportedAndBoundExpansion() PASSED
+
+DeterministicPlannerTest > groupedTagDemandCanUseMultipleDifferentValidAlternatives() PASSED
+
+DeterministicPlannerTest > malformedGoalCountsAndInventoryFactsAreRejected() PASSED
+
+DeterministicPlannerTest > prerequisiteRecipeIsSuggestedBeforeItsDependentGoalRecipe() PASSED
+
+DeterministicPlannerTest > unsupportedMachineNeverBecomesARecipePreparationAction() PASSED
+
+DeterministicPlannerTest > recipeAndAlternativeSearchCapsAreNeverSilent() PASSED
+
+DeterministicPlannerTest > threeOverlappingTagRequirementsMatchAnIndependentAllocationOracle() PASSED
+
+DeterministicPlannerTest > cyclesTerminateWithoutPretendingHypotheticalOutputsExist() PASSED
+
+DeterministicPlannerTest > partialOwnershipReducesProductionDemandBeforeOutputBatchRounding() PASSED
+
+DeterministicPlannerTest > planDoesNotMutateInputAndDeterministicFactsIgnoreInsertionOrder() PASSED
+
+DeterministicPlannerTest > unresolvedOpaquePrerequisiteIsInspectedBeforeRecommendingMaterialSpending() PASSED
+
+DeterministicPlannerTest > hugeIngredientMultiplicationCannotOverflowIntoReadyOrNegativeResources() PASSED
+
+DeterministicPlannerTest > alreadyOwnedGoalDoesNotInventRequiredCraftsOrInspectUnneededRecipes() PASSED
+
+DeterministicPlannerTest > routeWithObservedInputsWinsOverRouteWithMissingInputs() PASSED
+
+DeterministicPlannerTest > acyclicAlternativeCanEscapeACyclicRecipeRoute() PASSED
+
+DeterministicPlannerTest > sharedInventoryAcrossSiblingBranchesCountsTenIronOnlyOnce() PASSED
+
+PlanningOutputTest > publishedPlanHasVersionedStructuredFactsAndBoundedChat() PASSED
+
+PlanningOutputTest > debugJsonRejectsBothAsciiCharacterOverflowAndMultibyteByteOverflow() PASSED
+
+PlanningOutputTest > boundedGraphKeepsOnlyEdgesWhoseEndpointsExistAndMarksOmission() PASSED
+
+PlanningOutputTest > goalPersistsOnlyBoundedRegistryIdentityAndQuantity() PASSED
+
+GameSnapshotTest > advancementCountsMustDescribeTheScannedDefinitions() PASSED
+
+GameSnapshotTest > collectionsAreDefensiveCopies() PASSED
+
+GameSnapshotTest > inventoryModAndAdvancementCollectionsAreBounded() PASSED
+
+GameSnapshotTest > registryIdMustRemainNamespacedAndOccupiedStackMustHavePositiveCount() PASSED
+
+GameSnapshotTest > nonfiniteValuesCannotProduceInvalidJsonNumbers() PASSED
+
+GameSnapshotTest > capabilityCannotContradictUnderlyingObservation() PASSED
+
+ObservationTest > observedEmptyInventoryRemainsKnownAndEmpty() PASSED
+
+ObservationTest > unavailableIsNotAnObservedEmptyCollection() PASSED
+
+ObservationTest > notIntegratedIsSeparateFromUnavailable() PASSED
+
+ObservationTest > contradictoryObservationStatesAreRejected() PASSED
+
+SnapshotFormatterTest > fullInventoryIsSummarizedWithStrictChatBounds() PASSED
+
+SnapshotFormatterTest > locationNumbersHaveStableFormattingAcrossHostLocales() PASSED
+
+SnapshotFormatterTest > inspectedEmptyInventoryIsClearlyDifferentFromUnavailable() PASSED
+
+SnapshotFormatterTest > chatTextCannotInjectNewLinesOrMinecraftFormatting() PASSED
+
+SnapshotFormatterTest > unknownInventoryAndProgressionAreNeverFormattedAsKnownZero() PASSED
+
+SnapshotJsonTest > emptyInventoryAndInspectedEmptyEquipmentRoundTripAsAvailable() PASSED
+
+SnapshotJsonTest > deserializationCannotBypassObservationOrCapabilityInvariants() PASSED
+
+SnapshotJsonTest > nonIntegratedStatusAndCompletedVsIncompleteAdvancementsArePreserved() PASSED
+
+SnapshotJsonTest > populatedSnapshotRoundTripsWithoutChangingRegistryIds() PASSED
+
+SnapshotJsonTest > serializationAndDeserializationEnforceUtf8ByteLimit() PASSED
+
+SnapshotJsonTest > malformedMissingAndUnsupportedSchemaDataCannotBecomeSnapshots() PASSED
+
+SnapshotJsonTest > unavailableInventorySerializesAsNullRatherThanEmptyKnownInventory() PASSED
+
+> Task :check
+> Task :build
+> Task :compileGametestJava
+> Task :processGametestResources
+> Task :gametestClasses
+
+> Task :downloadAssets
+Loaded 145 artifacts from <PROJECT>\build\tmp\downloadAssets\nfrt_artifact_manifest.properties
+Downloading asset index 17
+Using Minecraft asset root: <USER_HOME>\.gradle\caches\neoformruntime\assets
+  DL    https://piston-meta.mojang.com/v1/packages/76d7a97b9e0778fda3b14e474f012450ca0de1bb/17.json
+
+> Task :writeGameTestServerLegacyClasspath
+> Task :prepareGameTestServerRun
+
+> Task :runGameTestServer
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[10:05:21] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.44, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.251, --fml.neoFormVersion, 20240808.144430]
+[10:05:21] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[10:05:21] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Microsoft; OS Windows 11 arch amd64 version 10.0
+[10:05:21] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[10:05:21] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/<USER_HOME>/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[10:05:22] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[10:05:22] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		ATM Companion 0.2.1 (atm_companion)
+		ATM Companion Runtime Tests 0.1.0 (atm_companion_tests)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.251 (neoforge)
+[10:05:24] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[10:05:30] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[10:05:44] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:05:44] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:05:44] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[10:05:44] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[10:05:44] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:05:45] [modloading-worker-0/INFO] [de.at.ATMCompanion/]: ATM Companion M2 initialized: server state, reload-aware knowledge, optional quests, deterministic material plans; no AI/network client
+[10:05:45] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.251, for MC 1.21.1
+[10:05:46] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[10:05:47] [main/WARN] [ne.ne.ne.co.CommonHooks/WP]: The following mods have version differences that were not resolved:
+atm_companion (version 0.2.0 -> 0.2.1)
+Things may not work well.
+[10:05:47] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<PROJECT>/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[10:05:47] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<PROJECT>/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[10:05:47] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [atm_companion_tests]
+[10:05:50] [main/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[10:05:51] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[10:05:53] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:05:53] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[10:05:54] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 379 ms
+[10:05:54] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[10:05:54] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[10:05:54] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 163 ms, generation 1)
+[10:05:54] [Server thread/INFO] [minecraft/GameTestServer]: 14 tests are now running at position 1010265, -59, 5025248!
+[10:05:55] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (13 tests)...
+[10:05:55] [Server thread/INFO] [minecraft/GameTestServer]: [              ]
+[10:05:56] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 8 at (-7.5, -60.0, 3.5)
+[10:05:56] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[10:05:56] [Server thread/INFO] [minecraft/PlayerList]: test-mock-player[embedded] logged in with entity id 9 at (-8.5, -60.0, 8.5)
+[10:05:56] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player joined the game
+[10:05:56] [Server thread/WARN] [de.at.pl.GoalSavedData/]: ATM Companion goals: ignored 1 malformed entries; source entries=4, limit=4096
+[10:05:58] [Server thread/WARN] [minecraft/MinecraftServer]: Can't keep up! Is the server overloaded? Running 2820ms or 56 ticks behind
+[10:05:59] [Server thread/INFO] [minecraft/GameTestServer]: [+++++   +++++ ]
+[10:05:59] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 4001/4001 recipe definitions across 2 output items (0 unknown/nonfixed outputs, 876 unsupported dependencies, 199941 retained alternatives, 399946 retained identities, 600 ms, generation 70001)
+[10:06:00] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 4001/4001 recipe definitions across 2 output items (0 unknown/nonfixed outputs, 876 unsupported dependencies, 199941 retained alternatives, 399946 retained identities, 455 ms, generation 70002)
+[10:06:00] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'm2_reload:0' (1 tests)...
+[10:06:00] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++ ]
+[10:06:01] [Server thread/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[10:06:01] [Server thread/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[10:06:02] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 47 ms, generation 2)
+[10:06:03] [Server thread/INFO] [minecraft/RecipeManager]: Loaded 1294 recipes
+[10:06:03] [Server thread/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[10:06:04] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1294/1294 recipe definitions across 842 output items (291 unknown/nonfixed outputs, 371 unsupported dependencies, 6181 retained alternatives, 10323 retained identities, 40 ms, generation 3)
+[10:06:04] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++]
+[10:06:04] [Server thread/INFO] [minecraft/GameTestServer]: ========= 14 GAME TESTS COMPLETE IN 10.19 s ======================
+[10:06:04] [Server thread/INFO] [minecraft/GameTestServer]: All 14 required tests passed :)
+[10:06:04] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[10:06:04] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[10:06:04] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[10:06:04] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: test-mock-player lost connection: Server closed
+[10:06:04] [Server thread/INFO] [minecraft/MinecraftServer]: test-mock-player left the game
+[10:06:04] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[10:06:05] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[10:06:08] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[10:06:08] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+> Task :compileQuesttestJava
+> Task :writeQuestTestServerLegacyClasspath
+> Task :prepareQuestTestServerRun
+> Task :processQuesttestResources
+> Task :questtestClasses
+
+> Task :runQuestTestServer
+WARN StatusConsoleListener Advanced terminal features are not available in this environment
+[10:06:14] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserverdev, --gameDir, ., --fml.fmlVersion, 4.0.44, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.251, --fml.neoFormVersion, 20240808.144430]
+[10:06:14] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[10:06:14] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.7 by Microsoft; OS Windows 11 arch amd64 version 10.0
+[10:06:15] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserverdev
+[10:06:15] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/<USER_HOME>/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2394!/ Service=ModLauncher Env=SERVER
+[10:06:16] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[10:06:16] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Architectury 13.0.11 (architectury)
+		ATM Companion 0.2.1 (atm_companion)
+		ATM Companion FTB Integration Tests 0.2.1 (atm_companion_questtests)
+		FTB Library 2101.1.36 (ftblibrary)
+		FTB Quests 2101.1.36 (ftbquests)
+		FTB Teams 2101.1.11 (ftbteams)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.251 (neoforge)
+[10:06:19] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserverdev' with arguments [--gameDir, .]
+[10:06:21] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[10:06:35] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:06:35] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:06:35] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[10:06:35] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[10:06:35] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[10:06:35] [modloading-worker-0/INFO] [de.at.ATMCompanion/]: ATM Companion M2 initialized: server state, reload-aware knowledge, optional quests, deterministic material plans; no AI/network client
+[10:06:35] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.251, for MC 1.21.1
+[10:06:37] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[10:06:37] [main/WARN] [ne.ne.ne.co.CommonHooks/WP]: The following mods have version differences that were not resolved:
+atm_companion (version 0.2.0 -> 0.2.1)
+atm_companion_questtests (version 0.2.0 -> 0.2.1)
+Things may not work well.
+[10:06:37] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<PROJECT>/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/assets/.mcassetsroot' uses unexpected schema
+[10:06:37] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/<PROJECT>/build/moddev/artifacts/neoforge-21.1.251.jar%23126!/data/.mcassetsroot' uses unexpected schema
+[10:06:37] [main/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: [atm_companion_questtests]
+[10:06:39] [main/INFO] [minecraft/RecipeManager]: Loaded 1298 recipes
+[10:06:40] [main/INFO] [minecraft/AdvancementTree]: Loaded 1400 advancements
+[10:06:40] [Server thread/INFO] [FTB Teams/]: loaded team data: 4 known players, 5 teams total
+[10:06:41] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:06:41] [worldgen/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[10:06:41] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 232 ms
+[10:06:41] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[10:06:41] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[10:06:41] [Server thread/INFO] [FTB Quests/]: Loading quests from <PROJECT>\run-questtest\config\ftbquests\quests
+[10:06:41] [Server thread/INFO] [FTB Quests/]: loaded translation tables for 1 language(s)
+[10:06:41] [Server thread/INFO] [FTB Quests/]: Loaded 1 chapter groups, 2 chapters, 6 quests, 0 reward tables
+[10:06:41] [Server thread/INFO] [de.at.kn.RecipeIndexBuilder/]: ATM Companion indexed 1298/1298 recipe definitions across 846 output items (291 unknown/nonfixed outputs, 369 unsupported dependencies, 6304 retained alternatives, 10493 retained identities, 109 ms, generation 1)
+[10:06:41] [Server thread/INFO] [minecraft/GameTestServer]: 2 tests are now running at position 5592359, -59, -13072049!
+[10:06:42] [Server thread/INFO] [minecraft/GameTestRunner]: Running test batch 'defaultBatch:0' (2 tests)...
+[10:06:42] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[10:06:42] [Server thread/INFO] [minecraft/GameTestServer]: [  ]
+[10:06:43] [Server thread/INFO] [minecraft/PlayerList]: quest_fixture[embedded] logged in with entity id 3 at (-9.5, -60.0, -7.5)
+[10:06:43] [Server thread/INFO] [minecraft/MinecraftServer]: quest_fixture joined the game
+[10:06:43] [Server thread/INFO] [minecraft/GameTestServer]: [+ ]
+[10:06:43] [Server thread/INFO] [minecraft/GameTestServer]: [++]
+[10:06:43] [Server thread/INFO] [minecraft/GameTestServer]: ========= 2 GAME TESTS COMPLETE IN 1.736 s ======================
+[10:06:43] [Server thread/INFO] [minecraft/GameTestServer]: All 2 required tests passed :)
+[10:06:43] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[10:06:43] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[10:06:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[10:06:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[10:06:44] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:overworld
+[10:06:45] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_nether
+[10:06:45] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[Test Level]'/minecraft:the_end
+[10:06:46] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[10:06:46] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[10:06:46] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[10:06:46] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[10:06:46] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+BUILD SUCCESSFUL in 2m 22s
+18 actionable tasks: 18 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.1/userguide/configuration_cache_enabling.html

@@ -1,0 +1,19 @@
+{
+  "summary": "Modify SnapshotFormatter.boundLine to preserve complete UTF-16 surrogate pairs when truncating a line to MAX_LINE_CHARS.",
+  "ui_goal": "no change needed",
+  "backend_goal": "Modify SnapshotFormatter.boundLine to handle UTF-16 surrogate pairs correctly.",
+  "tests_goal": "no change needed",
+  "worker_files": {
+    "ui": [],
+    "backend": ["src/main/java/dev/atmcompanion/state/SnapshotFormatter.java"],
+    "tests": []
+  },
+  "acceptance": ["SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."],
+  "worker_acceptance": {
+    "ui": [],
+    "backend": ["SnapshotFormatter.boundLine correctly handles UTF-16 surrogate pairs without introducing unpaired surrogates or exceeding MAX_LINE_CHARS."],
+    "tests": []
+  },
+  "interface_contracts": [],
+  "provider_changes": []
+}

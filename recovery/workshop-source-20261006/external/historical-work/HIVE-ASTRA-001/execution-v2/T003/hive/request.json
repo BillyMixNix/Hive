@@ -1,0 +1,24 @@
+{
+  "request": "Extend `ActivitySummary` with an immutable `Map<ActivityEvent.Type, Long> quantitiesByType`, initialized for every enum value; a null event quantity contributes zero. Preserve the existing three-argument constructor. Add `ActivityHistory.summary()` that returns a summary of the currently retained events. It must be a snapshot: later appends do not change it.",
+  "allow_cloud": true,
+  "agent_backend": "persistent",
+  "persistent_agent_model": "gpt-6-astra",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/activity/ActivityHistorySummaryAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.activity.ActivityHistorySummaryAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.activity;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport java.util.Map;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ActivityHistorySummaryAcceptanceTest {\n    private ActivityEvent event(ActivityEvent.Type type, Long quantity, String id) {\n        return new ActivityEvent(1, \"2026-09-30T12:00:00Z\", type, List.of(id),\n                quantity, ActivityEvent.Source.MANUAL);\n    }\n\n    @Test\n    void historySummaryContainsPerTypeQuantitiesAndIsADetachedImmutableSnapshot() {\n        var history = new ActivityHistory(4);\n        history.append(event(ActivityEvent.Type.ITEM_GAINED, 3L, \"minecraft:diamond\"));\n        history.append(event(ActivityEvent.Type.ITEM_LOST, 1L, \"minecraft:iron_ingot\"));\n        history.append(event(ActivityEvent.Type.DIMENSION_CHANGED, null, \"minecraft:stone\"));\n\n        var summary = history.summary();\n        assertEquals(3, summary.eventCount());\n        assertEquals(4L, summary.totalQuantity());\n        assertEquals(3L, summary.quantitiesByType().get(ActivityEvent.Type.ITEM_GAINED));\n        assertEquals(1L, summary.quantitiesByType().get(ActivityEvent.Type.ITEM_LOST));\n        assertEquals(0L, summary.quantitiesByType().get(ActivityEvent.Type.DIMENSION_CHANGED));\n        for (var type : ActivityEvent.Type.values()) {\n            assertNotNull(summary.counts().get(type));\n            assertNotNull(summary.quantitiesByType().get(type));\n        }\n        assertThrows(UnsupportedOperationException.class, () -> summary.quantitiesByType().clear());\n\n        history.append(event(ActivityEvent.Type.ITEM_GAINED, 8L, \"minecraft:emerald\"));\n        assertEquals(3, summary.eventCount());\n        assertEquals(4L, summary.totalQuantity());\n\n        var legacyConstructor = new ActivitySummary(0, 0L, Map.of());\n        assertTrue(legacyConstructor.counts().isEmpty());\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-ASTRA-001-v2",
+    "condition_id": "hive",
+    "task_id": "T003",
+    "replicate_index": 1,
+    "trial_id": "5b359c3bbdbb",
+    "condition_spec_sha256": "2d33ce88af66ed3e1f0c1e73ce3a1de62ffe36cd355a21554cc7306fddb6d291"
+  }
+}

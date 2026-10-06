@@ -1,0 +1,26 @@
+{
+  "request": "Add `ExecutionAssessment.blockingReasons()`. Return blockers followed by\nunverified conditions, preserving first occurrence order while removing exact\nduplicates. The result must be immutable, including for the empty case.\nDo not infer readiness from a missing observation or change stored lists.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/execution/ExecutionBlockingReasonsAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.execution.ExecutionBlockingReasonsAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.execution;\n\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass ExecutionBlockingReasonsAcceptanceTest {\n    @Test void mergesDistinctEvidenceInFirstOccurrenceOrder() {\n        var assessment = new ExecutionAssessment(\"unknown\", \"\", 0, \"\", List.of(), List.of(),\n                List.of(\"locked\", \"no station\", \"locked\"), List.of(\"no station\", \"recipe unverified\"), null, null);\n        var reasons = assessment.blockingReasons();\n        assertEquals(List.of(\"locked\", \"no station\", \"recipe unverified\"), reasons);\n        assertThrows(UnsupportedOperationException.class, () -> reasons.add(\"changed\"));\n        assertEquals(List.of(\"locked\", \"no station\", \"locked\"), assessment.blockers());\n        var empty = ExecutionAssessment.unnecessary().blockingReasons();\n        assertTrue(empty.isEmpty());\n        assertThrows(UnsupportedOperationException.class, () -> empty.add(\"changed\"));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N004",
+    "replicate_index": 1,
+    "trial_id": "c38a539e0593",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

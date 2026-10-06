@@ -1,0 +1,36 @@
+{"at": "2026-10-06T01:19:47.974029+00:00", "monotonic": 161698.9954233, "event": "trial_setup_resumed", "ordinal": 1, "task_id": "J001", "replicate": 2, "model": "qwen2.5-coder:14b", "controller": "hive", "historical_ordinal": 3}
+{"at": "2026-10-06T01:20:02.688078+00:00", "monotonic": 161713.709469, "event": "model_call_started", "ordinal": 1, "run_id": "236362654866", "role": "planner", "call": 1}
+Model call 1: planner; unchanged provider/context settings.
+Model call 1: completed after 225.192s; HTTP attempts 2.
+{"at": "2026-10-06T01:23:47.890058+00:00", "monotonic": 161938.9114593, "event": "model_call_finished", "ordinal": 1, "role": "planner", "status": "completed", "seconds": 225.19952439999906}
+{"at": "2026-10-06T01:23:50.199521+00:00", "monotonic": 161941.2209079, "event": "model_call_started", "ordinal": 1, "run_id": "236362654866", "role": "backend", "call": 2}
+Model call 2: backend; unchanged provider/context settings.
+Model call 2: completed after 164.071s; HTTP attempts 1.
+{"at": "2026-10-06T01:26:34.278623+00:00", "monotonic": 162105.300022, "event": "model_call_finished", "ordinal": 1, "role": "backend", "status": "completed", "seconds": 164.07626979998895}
+{"at": "2026-10-06T01:26:35.168042+00:00", "monotonic": 162106.1894319, "event": "model_call_started", "ordinal": 1, "run_id": "236362654866", "role": "reviewer", "call": 3}
+Model call 3: reviewer; unchanged provider/context settings.
+Model call 3: completed after 35.691s; HTTP attempts 1.
+{"at": "2026-10-06T01:27:10.867714+00:00", "monotonic": 162141.8891158, "event": "model_call_finished", "ordinal": 1, "role": "reviewer", "status": "completed", "seconds": 35.696865299978526}
+{"at": "2026-10-06T01:27:19.719577+00:00", "monotonic": 162150.7409731, "event": "stopped", "type": "KeyError", "message": "'host_elapsed_seconds'", "completed": 0}
+Traceback (most recent call last):
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\execute.py", line 246, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\execute.py", line 238, in main
+    result=asyncio.run(run_trial(cell,lock,ordinal,resume=resume if ordinal==1 else None));results.append(result);save(HERE/'evidence/raw-results.json',results)
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\billy\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\execute.py", line 190, in run_trial
+    'model_seconds':sum(c['elapsed_seconds'] for c in observed),'verification_seconds':sum(v['host_elapsed_seconds'] for v in records),
+                                                                                       ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\billy\Documents\Codex\2026-10-05\hive-transition-001-diagnose-and-repair\HIVE-FACTORIAL-003\execute.py", line 190, in <genexpr>
+    'model_seconds':sum(c['elapsed_seconds'] for c in observed),'verification_seconds':sum(v['host_elapsed_seconds'] for v in records),
+                                                                                           ~^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'host_elapsed_seconds'

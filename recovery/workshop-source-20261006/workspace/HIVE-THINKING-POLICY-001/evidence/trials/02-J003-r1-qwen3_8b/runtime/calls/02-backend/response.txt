@@ -1,0 +1,13 @@
+{
+  "status": "implemented",
+  "summary": "Added map method to Observation class with specified constraints",
+  "edits": [
+    {
+      "path": "src/main/java/dev/atmcompanion/state/Observation.java",
+      "operation": "insert_after_anchor",
+      "anchor": "public static <T> Observation<T> notIntegrated(String reason) {",
+      "insert": "    public Observation<U> map(java.util.function.Function<? super T, ? extends U> mapper) {\n        Objects.requireNonNull(mapper, \"mapper\");\n        if (status == CapabilityStatus.AVAILABLE && data != null) {\n            return new Observation<>(status, mapper.apply(data), detail);\n        } else {\n            return new Observation<>(status, null, detail);\n        }\n    }"
+    }
+  ],
+  "risks": []
+}

@@ -1,0 +1,142 @@
+{
+  "expected_junit_observed_and_passed": true,
+  "full_gate": {
+    "checks": [
+      {
+        "name": "frozen_junit_acceptance",
+        "passed": false,
+        "report_error": "Gradle exited without fresh JUnit XML reports",
+        "returncode": 1,
+        "tests": [],
+        "wall_seconds": 60.186
+      }
+    ],
+    "container_samples": {
+      "memory_peak": "2.417GiB",
+      "memory_peak_bytes": 2595233988,
+      "pids_peak": 279,
+      "samples": 56,
+      "stats_failures": 0
+    },
+    "executed_commands": [
+      {
+        "argv": [
+          "/opt/java/openjdk/bin/java",
+          "-Djava.io.tmpdir=/work/tmp",
+          "-classpath",
+          "gradle/wrapper/gradle-wrapper.jar",
+          "org.gradle.wrapper.GradleWrapperMain",
+          "--no-daemon",
+          "--offline",
+          "--console=plain",
+          "--max-workers=2",
+          "--rerun-tasks",
+          "--no-build-cache",
+          "-Dorg.gradle.jvmargs=-Xmx768m",
+          "test",
+          "--tests",
+          "nix.workshop.smoke.VerifierSmokeTest"
+        ],
+        "phase": "targeted_junit"
+      }
+    ],
+    "isolation": {
+      "available": true,
+      "backend": "docker",
+      "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution",
+      "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+      "gradle_wrapper_version": "9.2.1",
+      "host_controlled_build_concurrency": {
+        "active_processor_count": 2,
+        "gradle_heap": "-Xmx768m",
+        "gradle_max_workers": 2
+      },
+      "image_id": "sha256:557b2fc0a326efa6796bf65dca420fecd7061bac59ad2d631112285e4576b8c9",
+      "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+      "inherited_host_environment": [],
+      "java_runtime": "pinned JDK 21 in verifier image",
+      "limits": {
+        "cpus": 2,
+        "memory": "4g",
+        "memory_swap": "4g",
+        "pids": 320,
+        "swap_additional": "0 bytes"
+      },
+      "network": "none",
+      "rootfs": "readonly",
+      "source": "sanitized-readonly",
+      "workspace": "tmpfs"
+    },
+    "passed": false
+  },
+  "gradle_version": "9.2.1",
+  "java_version": "21.0.12.1",
+  "run_id": "b0af146c5aed",
+  "targeted_command": [
+    {
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "nix.workshop.smoke.VerifierSmokeTest"
+      ],
+      "phase": "targeted_junit"
+    }
+  ],
+  "targeted_container_samples": {
+    "memory_peak": "2.473GiB",
+    "memory_peak_bytes": 2655363530,
+    "pids_peak": 145,
+    "samples": 112,
+    "stats_failures": 0
+  },
+  "targeted_isolation": {
+    "available": true,
+    "backend": "docker",
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "active_processor_count": 2,
+      "gradle_heap": "-Xmx768m",
+      "gradle_max_workers": 2
+    },
+    "image_id": "sha256:557b2fc0a326efa6796bf65dca420fecd7061bac59ad2d631112285e4576b8c9",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "inherited_host_environment": [],
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "limits": {
+      "cpus": 2,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "pids": 320,
+      "swap_additional": "0 bytes"
+    },
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs"
+  },
+  "targeted_passed": true,
+  "targeted_tests": [
+    {
+      "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 1
+    }
+  ],
+  "targeted_wall_seconds": 172.194
+}

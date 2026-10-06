@@ -1,0 +1,93 @@
+{
+  "baseline_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "baseline_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "candidate_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "candidate_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+  "expected_cases": 1,
+  "expected_test": "nix.workshop.smoke.VerifierSmokeTest",
+  "external_input_manifest_sha256": "3dd551a1471aabec56553b3a5e3e8bbc0b6483d57297ebb10453be7eac24c290",
+  "image_id": "sha256:6d035212845f3132c755153d1081cd9c40d62f7294c9d76fed3a85b5f52dcc11",
+  "mode": "offline_targeted_frozen_junit",
+  "run_id": "84ae95e05045",
+  "verified_native_input_roots": [
+    "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\84ae95e05045\\caches\\neoformruntime\\assets",
+    "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\84ae95e05045\\caches\\neoformruntime\\artifacts"
+  ],
+  "verifier_report": {
+    "checks": [
+      {
+        "detail": {
+          "acceptance_mismatches": [
+            {
+              "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+              "expected_cases": 1,
+              "failures_errors_skipped": 0,
+              "observed_cases": 0
+            }
+          ],
+          "report_error": "Gradle exited without fresh JUnit XML reports",
+          "returncode": 1,
+          "stderr_tail": "net.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for downloadJson failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.lang.RuntimeException: java.nio.file.FileSystemException: /work/gradle-user-home/caches/neoformruntime/artifacts/minecraft_1.21.1_version_manifest.json: Read-only file system\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.download(ArtifactManager.java:295)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.getVersionManifest(ArtifactManager.java:182)\n\tat net.neoforged.neoform.runtime.actions.DownloadVersionManifestAction.run(DownloadVersionManifestAction.java:20)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\nCaused by: java.nio.file.FileSystemException: /work/gradle-user-home/caches/neoformruntime/artifacts/minecraft_1.21.1_version_manifest.json: Read-only file system\n\tat java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:100)\n\tat java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)\n\tat java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)\n\tat java.base/sun.nio.fs.UnixFileAttributeViews$Basic.setTimes(UnixFileAttributeViews.java:142)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.download(ArtifactManager.java:284)\n\t... 7 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 17s\n",
+          "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\nTotal runtime: 1.36s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+          "tests": [],
+          "timed_out": false,
+          "wall_seconds": 17.531
+        },
+        "name": "frozen_junit_acceptance",
+        "passed": false
+      }
+    ],
+    "executed_commands": [
+      {
+        "argv": [
+          "/opt/java/openjdk/bin/java",
+          "-Djava.io.tmpdir=/work/tmp",
+          "-classpath",
+          "gradle/wrapper/gradle-wrapper.jar",
+          "org.gradle.wrapper.GradleWrapperMain",
+          "--no-daemon",
+          "--offline",
+          "--console=plain",
+          "--max-workers=2",
+          "--rerun-tasks",
+          "--no-build-cache",
+          "-Dorg.gradle.jvmargs=-Xmx768m",
+          "test",
+          "--tests",
+          "nix.workshop.smoke.VerifierSmokeTest"
+        ],
+        "phase": "targeted_junit"
+      }
+    ],
+    "full_gate_tasks": [
+      "clean",
+      "build",
+      "runGameTestServer",
+      "runQuestTestServer",
+      "packTestJar"
+    ],
+    "gradle_wrapper_version": "9.2.1",
+    "isolation": {
+      "available": true,
+      "backend": "docker",
+      "external_build_input_mounts": "read-only manifest-verified NeoForm Runtime assets and artifacts",
+      "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+      "gradle_wrapper_version": "9.2.1",
+      "image_id": "sha256:6d035212845f3132c755153d1081cd9c40d62f7294c9d76fed3a85b5f52dcc11",
+      "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-mountfix",
+      "inherited_host_environment": [],
+      "java_runtime": "pinned JDK 21 in verifier image",
+      "limits": {
+        "cpus": 2,
+        "memory": "4g",
+        "pids": 128
+      },
+      "network": "none",
+      "rootfs": "readonly",
+      "source": "sanitized-readonly",
+      "workspace": "tmpfs"
+    },
+    "java_version": "21.0.12.1",
+    "passed": false
+  }
+}

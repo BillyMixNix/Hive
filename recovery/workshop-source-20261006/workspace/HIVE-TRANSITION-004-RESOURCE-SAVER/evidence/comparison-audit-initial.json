@@ -1,0 +1,16 @@
+{
+  "passed": false,
+  "checks": {
+    "same_verifier_command_except_isolated_identity_paths": true,
+    "same_production_source_manifest": false,
+    "same_approved_environment": true,
+    "same_baseline_bytes_in_cold_warm_pair": true,
+    "all_timeouts_remain_failed": true,
+    "all_prior_files_unchanged": true,
+    "original_resource_saver_wake_mapped_to_correct_container": true,
+    "no_new_calls_or_edits": true
+  },
+  "cold_minus_warm_baseline_startup_seconds": 25.377035,
+  "cold_minus_warm_baseline_pre_gradle_seconds": 47.781096,
+  "warning": "Retrospective same-baseline pair, not randomized. Only observed VM wake interval is directly localized to wake; later copy differences are confounded by host/cache state."
+}

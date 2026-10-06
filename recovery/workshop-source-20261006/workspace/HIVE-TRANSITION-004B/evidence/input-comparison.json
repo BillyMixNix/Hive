@@ -1,0 +1,62 @@
+{
+  "identical": true,
+  "normalization": "Only /work/baseline or /work/preserved replaced by <project>.",
+  "artifact_manifest_entries": 131,
+  "artifact_files_hashed": 131,
+  "application_source_in_declared_reconstruction_inputs": false,
+  "graph": [
+    {
+      "path": ":createMinecraftArtifacts",
+      "dependencies": []
+    },
+    {
+      "path": ":compileJava",
+      "dependencies": [
+        ":createMinecraftArtifacts"
+      ]
+    },
+    {
+      "path": ":processResources",
+      "dependencies": []
+    },
+    {
+      "path": ":classes",
+      "dependencies": [
+        ":compileJava",
+        ":processResources"
+      ]
+    },
+    {
+      "path": ":compileTestJava",
+      "dependencies": [
+        ":classes",
+        ":compileJava"
+      ]
+    },
+    {
+      "path": ":processTestResources",
+      "dependencies": []
+    },
+    {
+      "path": ":testClasses",
+      "dependencies": [
+        ":compileTestJava",
+        ":processTestResources"
+      ]
+    },
+    {
+      "path": ":test",
+      "dependencies": [
+        ":classes",
+        ":compileJava",
+        ":compileTestJava",
+        ":testClasses"
+      ]
+    }
+  ],
+  "native_cache_enabled": true,
+  "output_files": [
+    "<project>/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar",
+    "<project>/build/moddev/artifacts/neoforge-21.1.251.jar"
+  ]
+}

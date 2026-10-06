@@ -1,0 +1,93 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "frozen_junit_acceptance",
+      "passed": false,
+      "detail": {
+        "returncode": 1,
+        "timed_out": false,
+        "wall_seconds": 22.603,
+        "stdout_tail": "\nWelcome to Gradle 9.2.1!\n\nHere are the highlights of this release:\n - Windows ARM support\n - Improved publishing APIs\n - Better guidance for dependency verification failures\n\nFor more details see https://docs.gradle.org/9.2.1/release-notes.html\n\nTo honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n\n> Task :createMinecraftArtifacts\nLoaded 131 artifacts from /work/candidate/build/tmp/createMinecraftArtifacts/nfrt_artifact_manifest.properties\n\u001b[1m*** Started working on \u001b[4mdownloadJson\u001b[23;0m\u001b[23;0m\n  \u2193 https://piston-meta.mojang.com/mc/game/version_manifest_v2.json\nTotal runtime: 6.25s\n\n\n> Task :createMinecraftArtifacts FAILED\n1 actionable task: 1 executed\n",
+        "stderr_tail": "net.neoforged.neoform.runtime.graph.NodeExecutionException: Node action for downloadJson failed\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:613)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.lambda$getWaitCondition$5(NeoFormEngine.java:559)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)\n\tat java.base/java.util.concurrent.ThreadPerTaskExecutor$TaskRunner.run(ThreadPerTaskExecutor.java:314)\n\tat java.base/java.lang.VirtualThread.run(VirtualThread.java:329)\nCaused by: java.net.ConnectException\n\tat java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:955)\n\tat java.net.http/jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133)\n\tat net.neoforged.neoform.runtime.downloads.DownloadManager.download(DownloadManager.java:95)\n\tat net.neoforged.neoform.runtime.downloads.DownloadManager.download(DownloadManager.java:52)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.getLauncherManifest(ArtifactManager.java:205)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.lambda$getVersionManifest$3(ArtifactManager.java:183)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.download(ArtifactManager.java:291)\n\tat net.neoforged.neoform.runtime.artifacts.ArtifactManager.getVersionManifest(ArtifactManager.java:182)\n\tat net.neoforged.neoform.runtime.actions.DownloadVersionManifestAction.run(DownloadVersionManifestAction.java:20)\n\tat net.neoforged.neoform.runtime.engine.NeoFormEngine.runNode(NeoFormEngine.java:602)\n\t... 4 more\nCaused by: java.net.ConnectException\n\tat java.net.http/jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1065)\n\tat java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:227)\n\tat java.net.http/jdk.internal.net.http.AsyncSSLConnection.connectAsync(AsyncSSLConnection.java:56)\n\tat java.net.http/jdk.internal.net.http.Http2Connection.createAsync(Http2Connection.java:529)\n\tat java.net.http/jdk.internal.net.http.Http2ClientImpl.getConnectionFor(Http2ClientImpl.java:140)\n\tat java.net.http/jdk.internal.net.http.ExchangeImpl.get(ExchangeImpl.java:98)\n\tat java.net.http/jdk.internal.net.http.Exchange.establishExchange(Exchange.java:391)\n\tat java.net.http/jdk.internal.net.http.Exchange.responseAsyncImpl0(Exchange.java:584)\n\tat java.net.http/jdk.internal.net.http.Exchange.responseAsyncImpl(Exchange.java:428)\n\tat java.net.http/jdk.internal.net.http.Exchange.responseAsync(Exchange.java:420)\n\tat java.net.http/jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:435)\n\tat java.net.http/jdk.internal.net.http.MultiExchange.lambda$responseAsyncImpl$7(MultiExchange.java:477)\n\tat java.base/java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934)\n\tat java.base/java.util.concurrent.CompletableFuture.uniHandleStage(CompletableFuture.java:950)\n\tat java.base/java.util.concurrent.CompletableFuture.handle(CompletableFuture.java:2372)\n\tat java.net.http/jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:467)\n\tat java.net.http/jdk.internal.net.http.MultiExchange.lambda$responseAsync0$2(MultiExchange.java:355)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773)\n\tat java.net.http/jdk.internal.net.http.HttpClientImpl$DelegatingExecutor.execute(HttpClientImpl.java:177)\n\tat java.base/java.util.concurrent.CompletableFuture.completeAsync(CompletableFuture.java:2719)\n\tat java.net.http/jdk.internal.net.http.MultiExchange.responseAsync(MultiExchange.java:308)\n\tat java.net.http/jdk.internal.net.http.HttpClientImpl.sendAsync(HttpClientImpl.java:1053)\n\tat java.net.http/jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:933)\n\t... 13 more\nCaused by: java.nio.channels.UnresolvedAddressException\n\tat java.base/sun.nio.ch.Net.checkAddress(Net.java:147)\n\tat java.base/sun.nio.ch.Net.checkAddress(Net.java:155)\n\tat java.base/sun.nio.ch.SocketChannelImpl.checkRemote(SocketChannelImpl.java:842)\n\tat java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:865)\n\tat java.net.http/jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$1(PlainHttpConnection.java:210)\n\tat java.base/java.security.AccessController.doPrivileged(AccessController.java:571)\n\tat java.net.http/jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:212)\n\t... 36 more\n\nFAILURE: Build failed with an exception.\n\n* What went wrong:\nExecution failed for task ':createMinecraftArtifacts'.\n> Process 'command '/opt/java/openjdk/bin/java'' finished with non-zero exit value 1\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 22s\n",
+        "tests": [],
+        "acceptance_mismatches": [
+          {
+            "class_name": "nix.workshop.smoke.VerifierSmokeTest",
+            "expected_cases": 1,
+            "observed_cases": 0,
+            "failures_errors_skipped": 0
+          }
+        ],
+        "report_error": "Gradle exited without fresh JUnit XML reports"
+      }
+    }
+  ],
+  "java_version": "21.0.12.1",
+  "gradle_wrapper_version": "9.2.1",
+  "full_gate_tasks": [
+    "clean",
+    "build",
+    "runGameTestServer",
+    "runQuestTestServer",
+    "packTestJar"
+  ],
+  "executed_commands": [
+    {
+      "phase": "targeted_junit",
+      "argv": [
+        "/opt/java/openjdk/bin/java",
+        "-Djava.io.tmpdir=/work/tmp",
+        "-classpath",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "org.gradle.wrapper.GradleWrapperMain",
+        "--no-daemon",
+        "--offline",
+        "--console=plain",
+        "--max-workers=2",
+        "--rerun-tasks",
+        "--no-build-cache",
+        "-Dorg.gradle.jvmargs=-Xmx768m",
+        "test",
+        "--tests",
+        "nix.workshop.smoke.VerifierSmokeTest"
+      ]
+    }
+  ],
+  "isolation": {
+    "backend": "docker",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21",
+    "image_id": "sha256:aafc68e8276bcbfac96b6d177387cb9b58a25747afb657a8b7d7d22f2f7c8d71",
+    "available": true,
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs",
+    "limits": {
+      "pids": 128,
+      "memory": "4g",
+      "cpus": 2
+    },
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "gradle_wrapper_version": "9.2.1",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "inherited_host_environment": []
+  },
+  "acceptance_gate": {
+    "expected_class": "nix.workshop.smoke.VerifierSmokeTest",
+    "expected_cases": 1,
+    "observed_rows": [],
+    "passed_only_if_observed_exactly_once_without_failures_errors_or_skips": false
+  },
+  "integrity": {
+    "baseline_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+    "baseline_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+    "candidate_sha256_before": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+    "candidate_sha256_after": "31ae0fbcc17f90d41025ff4f6a8e4f4671f6793952f724148ebbe76a169e2134",
+    "baseline_unchanged": true,
+    "candidate_unchanged": true,
+    "cache_root": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\e66c171009e3",
+    "modules_cache": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\e66c171009e3\\caches\\modules-2",
+    "wrapper_cache": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\approved-gradle-caches\\e66c171009e3\\wrapper\\dists\\gradle-9.2.1-bin"
+  }
+}

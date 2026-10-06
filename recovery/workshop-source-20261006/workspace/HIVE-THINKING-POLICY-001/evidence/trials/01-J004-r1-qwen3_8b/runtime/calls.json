@@ -1,0 +1,174 @@
+[
+  {
+    "number": 1,
+    "role": "planner",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T14:56:46.372566+00:00",
+    "monotonic_start": 210717.3939623,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 2048,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 1,
+        "role": "planner",
+        "started_at": "2026-10-06T14:56:46.832497+00:00",
+        "monotonic_start": 210717.8538959,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "9f17cf5a6e6ba8369ac90dc4796c2112e0f390979f1265718ab339c8a1bc5972",
+        "request_bytes": 21055,
+        "resource_label": "call-01-attempt-01",
+        "http_status": 500,
+        "headers_at": "2026-10-06T14:57:18.893455+00:00",
+        "headers_elapsed_seconds": 32.06095989997266,
+        "first_stream_bytes_at": "2026-10-06T14:57:18.907962+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T14:57:18.908373+00:00",
+        "elapsed_seconds": 32.07587749999948
+      },
+      {
+        "attempt": 2,
+        "call": 1,
+        "role": "planner",
+        "started_at": "2026-10-06T14:57:19.525357+00:00",
+        "monotonic_start": 210750.546758,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "9f17cf5a6e6ba8369ac90dc4796c2112e0f390979f1265718ab339c8a1bc5972",
+        "request_bytes": 21055,
+        "resource_label": "call-01-attempt-02",
+        "http_status": 200,
+        "headers_at": "2026-10-06T14:57:49.199131+00:00",
+        "headers_elapsed_seconds": 29.6737905999762,
+        "first_stream_bytes_at": "2026-10-06T14:57:49.203556+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T15:01:47.499904+00:00",
+        "elapsed_seconds": 267.9745464999869
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 3884,
+    "output_tokens": 912,
+    "ended_at": "2026-10-06T15:01:47.506487+00:00",
+    "elapsed_seconds": 301.1339270999888
+  },
+  {
+    "number": 2,
+    "role": "backend",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T15:01:49.429349+00:00",
+    "monotonic_start": 211020.450744,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 6000,
+      "context_window": 12288,
+      "total_timeout": 900.0,
+      "think": false
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 2,
+        "role": "backend",
+        "started_at": "2026-10-06T15:01:50.371710+00:00",
+        "monotonic_start": 211021.3931082,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "6c12faa88009f82f6c3ad5679611cc1447dcb0f6914a2d33f405d6c78fda390d",
+        "request_bytes": 36982,
+        "resource_label": "call-02-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T15:02:06.039222+00:00",
+        "headers_elapsed_seconds": 15.667513499996858,
+        "first_stream_bytes_at": "2026-10-06T15:02:06.042842+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T15:03:30.286694+00:00",
+        "elapsed_seconds": 99.9149832999974
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 6687,
+    "output_tokens": 247,
+    "ended_at": "2026-10-06T15:03:30.294078+00:00",
+    "elapsed_seconds": 100.86473279999336
+  },
+  {
+    "number": 3,
+    "role": "backend",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T15:05:57.531964+00:00",
+    "monotonic_start": 211268.5533576,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 6000,
+      "context_window": 12288,
+      "total_timeout": 900.0,
+      "think": false
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 3,
+        "role": "backend",
+        "started_at": "2026-10-06T15:05:58.468428+00:00",
+        "monotonic_start": 211269.4898216,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "c7935d6c84b0b5a1de9efc238270b746533ecea55d9b3fe1588a0c08f0a3625e",
+        "request_bytes": 43897,
+        "resource_label": "call-03-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T15:06:13.246035+00:00",
+        "headers_elapsed_seconds": 14.777611199999228,
+        "first_stream_bytes_at": "2026-10-06T15:06:13.249516+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T15:07:58.250266+00:00",
+        "elapsed_seconds": 119.78184449998662
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 8950,
+    "output_tokens": 252,
+    "ended_at": "2026-10-06T15:07:58.257065+00:00",
+    "elapsed_seconds": 120.7251069000049
+  },
+  {
+    "number": 4,
+    "role": "reviewer",
+    "model": "qwen3:8b",
+    "started_at": "2026-10-06T15:07:58.536889+00:00",
+    "monotonic_start": 211389.5582842,
+    "provider_settings": {
+      "temperature": 0.1,
+      "max_output_tokens": 1536,
+      "context_window": 12288,
+      "total_timeout": 900.0
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "call": 4,
+        "role": "reviewer",
+        "started_at": "2026-10-06T15:07:59.037385+00:00",
+        "monotonic_start": 211390.0587791,
+        "endpoint": "http://127.0.0.1:11434/api/chat",
+        "request_sha256": "7ed0289d849783d9b2b46d8d8823f0fa1cd6582bada23e8fb1d769d6b36e0372",
+        "request_bytes": 9149,
+        "resource_label": "call-04-attempt-01",
+        "http_status": 200,
+        "headers_at": "2026-10-06T15:08:02.910537+00:00",
+        "headers_elapsed_seconds": 3.8731568999937735,
+        "first_stream_bytes_at": "2026-10-06T15:08:02.913886+00:00",
+        "stream_complete": true,
+        "ended_at": "2026-10-06T15:09:22.285778+00:00",
+        "elapsed_seconds": 83.2483958999801
+      }
+    ],
+    "status": "completed",
+    "input_tokens": 1968,
+    "output_tokens": 477,
+    "ended_at": "2026-10-06T15:09:22.294187+00:00",
+    "elapsed_seconds": 83.75730200001271
+  }
+]

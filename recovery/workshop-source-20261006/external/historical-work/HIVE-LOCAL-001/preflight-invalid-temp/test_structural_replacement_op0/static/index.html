@@ -1,0 +1,671 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nix Workshop</title>
+<style>
+:root{--bg:#0b0d12;--panel:#11151d;--panel2:#171c26;--line:#242b38;--text:#edf1f7;--muted:#95a0b4;--accent:#8ce3c6;--accent2:#89a7ff;--danger:#ff8585}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;height:100vh;overflow:hidden}
+button,input,textarea,select{font:inherit}.app{display:grid;grid-template-columns:250px 1fr;height:100vh}
+.sidebar{background:#0e1118;border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:12px}
+.brand{font-weight:800;font-size:20px;letter-spacing:-.5px}.brand span{color:var(--accent)}
+.small{font-size:12px;color:var(--muted)}.nav{display:grid;gap:6px}.nav button,.chat-item{width:100%;text-align:left;background:transparent;color:var(--text);border:1px solid transparent;border-radius:10px;padding:9px 10px;cursor:pointer}
+.nav button:hover,.nav button.active,.chat-item:hover{background:var(--panel2);border-color:var(--line)}
+.chats{overflow:auto;flex:1;border-top:1px solid var(--line);padding-top:10px}.chat-item{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;height:100vh;overflow:hidden}.top{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:0 16px;background:rgba(11,13,18,.95)}
+.pill,select,input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px}
+.spacer{flex:1}.status{font-size:12px;color:var(--muted)}
+.view{display:none;flex:1 1 auto;min-height:0;overflow:hidden}.view.active{display:flex}
+.chatview{flex-direction:column;min-height:0;overflow:hidden}.messages{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:22px max(18px,calc((100% - 900px)/2));scrollbar-gutter:stable}
+.msg{max-width:820px;margin:0 auto 18px}.who{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}.bubble{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 15px}.user .bubble{background:#151b27}.meta{font-size:11px;color:var(--muted);margin-top:5px}
+.composer{flex:0 0 auto;border-top:1px solid var(--line);padding:12px max(16px,calc((100% - 900px)/2));background:#0e1118}.composebox{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:10px}
+textarea{width:100%;min-height:78px;resize:vertical;background:transparent;color:var(--text);border:0;outline:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:8px 12px;cursor:pointer}.btn.primary{background:var(--accent);color:#07100d;border:0;font-weight:750}.btn.danger{color:var(--danger)}
+.workspace{padding:22px;overflow:auto;display:block!important}.view.workspace:not(.active){display:none!important}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h3{margin:0 0 8px}.wide{grid-column:1/-1}.codegrid{display:grid;grid-template-columns:240px 1fr;gap:12px;height:calc(100vh - 140px)}.files{overflow:auto;border:1px solid var(--line);border-radius:12px;padding:8px}.editor{display:flex;flex-direction:column;gap:8px}.editor textarea{flex:1;background:#090b10;border:1px solid var(--line);border-radius:12px;padding:12px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;min-height:350px}.terminal{background:#05070a;border:1px solid var(--line);border-radius:12px;padding:12px;min-height:120px;white-space:pre-wrap;font-family:ui-monospace,monospace;color:#c9f8d8;overflow:auto}
+.mem{display:flex;gap:8px;justify-content:space-between;border-bottom:1px solid var(--line);padding:10px 0}.preview{max-width:100%;border-radius:12px;border:1px solid var(--line);margin-top:12px}
+.notice{padding:10px;border-radius:10px;background:#201d13;border:1px solid #4a4021;color:#ead89d}.drop{font-size:12px;color:var(--muted)}
+@media(max-width:760px){.app{grid-template-columns:1fr}.sidebar{display:none}.top{overflow:auto}.codegrid{grid-template-columns:1fr;height:auto}.files{max-height:160px}.workspace{padding:14px}.messages{padding:15px}.composer{padding:10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div><div class="brand">Nix <span>Workshop</span></div><div class="small">one workspace · any model</div></div>
+  <button class="btn primary" onclick="newChat()">+ New chat</button>
+  <div class="nav">
+    <button data-view="chat" class="active">◈ Chat</button>
+    <button data-view="memory">◇ Memory</button>
+    <button data-view="image">▧ Image Studio</button>
+    <button data-view="video">▷ Video Studio</button>
+    <button data-view="code">⌘ Code Lab</button>
+    <button data-view="hive">⬡ Hive Build</button>
+    <button data-view="ops">◫ Ops Cockpit</button>
+    <button data-view="settings">⚙ Settings</button>
+  </div>
+  <div class="small">Chats</div>
+  <div id="chatlist" class="chats"></div>
+</aside>
+<main class="main">
+<header class="top">
+  <select id="mode"><option value="auto">AUTO · cheapest capable</option><option value="local">LOCAL only</option><option value="manual">MANUAL</option></select>
+  <select id="model">
+    <option value="gpt-5.6-luna">Luna · $</option>
+    <option value="gpt-5.6-terra">Terra · $$</option>
+    <option value="gpt-5.6-sol">Sol · $$$</option>
+    <option value="gpt-6-astra">Astra · $$$$$</option>
+  </select>
+  <select id="effort"><option>none</option><option>low</option><option selected>medium</option><option>high</option><option>xhigh</option><option>max</option></select>
+  <label class="pill"><input type="checkbox" id="web"> web</label>
+  <div class="spacer"></div><div id="status" class="status">checking…</div>
+</header>
+
+<section id="view-chat" class="view chatview active">
+  <div id="messages" class="messages"></div>
+  <div class="composer"><div class="composebox">
+    <textarea id="prompt" placeholder="Build, research, reason, code…"></textarea>
+    <div class="row"><input type="file" id="chatimage" accept="image/*"><span id="imagehint" class="drop"></span><div class="spacer"></div><button id="send" class="btn primary">Send</button></div>
+  </div></div>
+</section>
+
+<section id="view-memory" class="view workspace">
+ <div class="cards">
+  <div class="card wide"><h3>Local memory</h3><p class="small">Pinned here, retrieved locally, and injected no matter which model you switch to.</p>
+   <div class="row"><input id="memtext" style="flex:1" placeholder="Remember a durable fact, preference, project constraint…"><input id="memtags" placeholder="tags"><button class="btn primary" onclick="addMemory()">Pin</button></div>
+  </div>
+  <div class="card wide" id="memlist"></div>
+ </div>
+</section>
+
+<section id="view-image" class="view workspace">
+ <div class="cards">
+  <div class="card"><h3>Image Studio</h3><textarea id="imageprompt" placeholder="Describe the image…"></textarea>
+   <div class="row"><select id="imagemodel"><option>gpt-image-2.5-flare</option><option>gpt-image-2.5-sunburst</option></select><select id="imagequality"><option>low</option><option>medium</option><option>high</option></select><button class="btn primary" onclick="makeImage()">Generate</button></div>
+  </div>
+  <div class="card"><h3>Output</h3><div id="imageout" class="small">No image yet.</div></div>
+ </div>
+</section>
+
+<section id="view-video" class="view workspace">
+ <div class="cards">
+  <div class="card wide"><div class="notice"><b>Temporary adapter:</b> OpenAI currently marks its Sora API deprecated and schedules shutdown for September 24, 2026. Workshop isolates video behind a provider adapter so it can be replaced.</div></div>
+  <div class="card"><h3>Video Studio</h3><textarea id="videoprompt" placeholder="Describe the clip…"></textarea>
+   <div class="row"><select id="videoseconds"><option>4</option><option>8</option><option>12</option></select><button class="btn primary" onclick="makeVideo()">Create job</button></div>
+  </div>
+  <div class="card"><h3>Job</h3><div id="videoout" class="small">No video job yet.</div></div>
+ </div>
+</section>
+
+<section id="view-code" class="view workspace">
+ <div class="codegrid">
+   <div class="files"><div class="row"><button class="btn" onclick="newFile()">+ file</button><button class="btn" onclick="loadFiles()">↻</button></div><div id="filelist"></div></div>
+   <div class="editor"><div class="row"><input id="filepath" style="flex:1" value="main.py"><button class="btn" onclick="saveFile()">Save</button><button class="btn primary" onclick="runFile()">Run Python</button><button class="btn" onclick="aiCodeFile()">AI Build</button></div><textarea id="code">print("Welcome to Nix Workshop.")</textarea><div id="terminal" class="terminal">Ready.</div></div>
+ </div>
+</section>
+
+
+
+<section id="view-hive" class="view workspace">
+ <div class="cards">
+  <div class="card wide">
+   <h3>Hive Build Mode</h3>
+   <p class="small">Workshop can now propose changes to Workshop through bounded agents. Agents stage exact edits; deterministic verification and a read-only reviewer must pass before you can apply anything.</p>
+   <textarea id="hiverequest" placeholder="Describe a change, or enter Build NW-F002 to preview a catalog feature."></textarea>
+   <div class="row">
+    <select id="hivemodel"></select>
+    <select id="hivetier">
+      <option value="local">LOCAL only</option>
+      <option value="luna">up to Luna</option>
+      <option value="terra">up to Terra</option>
+      <option value="sol">up to Sol</option>
+      <option value="astra">up to Astra</option>
+    </select>
+    <label class="pill"><input id="hivecloud" type="checkbox"> allow cloud escalation</label>
+    <button id="hiverun" class="btn primary" onclick="runHiveBuild()">Plan + Run Agents</button>
+   </div>
+  </div>
+
+  <div class="card">
+   <h3>Bounded agents</h3>
+   <div id="hiveagents" class="small">Loading…</div>
+  </div>
+  <div class="card">
+   <h3>Verification</h3>
+   <div id="hiveverify" class="small">No run yet.</div>
+  </div>
+  <div class="card wide">
+   <h3>Plan / Review</h3>
+   <div id="hivereview" class="small">No run yet.</div>
+  </div>
+  <div class="card wide">
+   <h3>Proposed diff</h3>
+   <div id="hivediff" class="terminal">No staged changes.</div>
+   <div class="row" style="margin-top:10px">
+    <button id="hiveapply" class="btn primary" onclick="applyHiveRun()" disabled>Approve + Apply</button>
+    <button id="hiverollback" class="btn danger" onclick="rollbackHiveRun()" disabled>Rollback applied run</button>
+    <span id="hivestatus" class="small"></span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="view-ops" class="view workspace">
+ <div class="cards">
+  <div class="card wide"><h3>Audited Operations Cockpit</h3><p class="small">Approved diagnostics only. Medium/high-risk actions require explicit approval. Every action is logged.</p>
+   <div id="opsbuttons" class="row"></div>
+  </div>
+  <div class="card"><h3>Preflight</h3><div id="preflight" class="small">Loading…</div></div>
+  <div class="card"><h3>Client Cleanup Workflow</h3><div id="workflow" class="small">Loading…</div></div>
+  <div class="card"><h3>Snapshots</h3><div class="row"><select id="snapshotlist"></select><button class="btn" onclick="restoreSnapshot()">Restore</button><button class="btn" onclick="snapshotNow()">Create snapshot</button></div></div>
+  <div class="card"><h3>Built-in Tests</h3><button class="btn" onclick="runTests()">Run pytest</button><div class="small">Personal Lab only.</div></div>
+  <div class="card wide"><h3>Action output</h3><div id="opsout" class="terminal">Ready.</div></div>
+  <div class="card wide"><h3>Run ledger</h3><div id="ledger" class="small">—</div></div>
+ </div>
+</section>
+
+<section id="view-settings" class="view workspace">
+ <div class="cards">
+  <div class="card"><h3>OpenAI</h3><p class="small">Key is kept in server memory only; Workshop does not write it to disk.</p><input id="apikey" type="password" style="width:100%" placeholder="sk-…"><br><br><button class="btn primary" onclick="setKey()">Use for this session</button></div>
+  <div class="card"><h3>Local model</h3>
+<div class="row">
+  <input id="ollamaendpoint" style="flex:1" value="http://127.0.0.1:11434">
+  <button class="btn" onclick="saveOllamaEndpoint()">Connect</button>
+  <button class="btn" onclick="refreshStatus()">Refresh</button>
+</div>
+<select id="localmodel" style="width:100%;margin-top:8px"></select>
+<div class="row" style="margin-top:8px"><input id="localmodelcustom" style="flex:1" placeholder="optional custom Ollama tag"><button class="btn" onclick="useCustomLocalModel()">Use custom</button></div>
+<p class="small">Discovery can fail even when a model is usable. If you know the exact Ollama tag, enter it above and use custom.</p>
+<p id="localmodels" class="small"></p>
+<p id="ollamaerror" class="small"></p>
+</div>
+  <div class="card"><h3>Spend telemetry</h3><div id="usage">—</div></div>
+
+<div class="card"><h3>Project Summary</h3><div id="boundary-probe-073">—</div><button class="btn" onclick="boundaryProbe073()">Refresh</button></div>
+
+
+  <div class="card"><h3>Safety mode</h3>
+<select id="safetymode" onchange="setSafetyMode()">
+<option value="personal">Personal Lab — full Code Lab</option>
+<option value="client">Client Cleanup — approved diagnostics only</option>
+<option value="demo">Locked Demo — chat/memory/files only</option>
+</select>
+<p class="small">Mode applies to the local server session.</p></div>
+<div class="card"><h3>Cloud budget gate</h3>
+<div class="row">
+<input id="budgetmax" type="number" min="0" step="0.01" value="0.25" title="Maximum estimated cloud spend per task">
+<input id="budgetout" type="number" min="128" step="128" value="4000" title="Maximum output tokens used for admission estimate">
+<label class="pill"><input id="askcloud" type="checkbox" checked> ask before cloud</label>
+<button class="btn" onclick="saveBudget()">Save</button>
+</div>
+<p class="small">AUTO can stay local. Cloud escalation can require approval.</p></div>
+<div class="card"><h3>Architecture</h3><p class="small">UI + memory + tools are model-independent. AUTO currently uses local-first and falls back to Luna. The next routing layer is Hive node decomposition and selective escalation.</p></div>
+ </div>
+</section>
+</main>
+</div>
+<script>
+let currentChat=null, imageData=null;
+const $=id=>document.getElementById(id);
+async function api(url,opt={}){let r=await fetch(url,{headers:{'Content-Type':'application/json',...(opt.headers||{})},...opt});let j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.detail||JSON.stringify(j));return j}
+function escapeHtml(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$('view-'+b.dataset.view).classList.add('active');if(b.dataset.view==='memory')loadMemory();if(b.dataset.view==='code')loadFiles();if(b.dataset.view==='settings')refreshStatus();if(b.dataset.view==='ops')loadOps();if(b.dataset.view==='hive')loadHiveCapabilities()});
+function populateLocalModels(models){
+  let select=$('localmodel');
+  let hiveSelect=$('hivemodel');
+  if(!select)return;
+  let previous=select.value;
+  select.replaceChildren();
+  (models||[]).forEach(name=>{
+    let o=document.createElement('option');
+    o.value=name;
+    o.textContent=name;
+    select.appendChild(o);
+  });
+  if(models?.includes(previous))select.value=previous;
+  else if(models?.includes('qwen2.5-coder:14b'))select.value='qwen2.5-coder:14b';
+  else if(models?.length)select.value=models[0];
+
+  if(hiveSelect){
+    let hp=hiveSelect.value;
+    hiveSelect.replaceChildren();
+    (models||[]).forEach(name=>{
+      let o=document.createElement('option');
+      o.value=name;o.textContent=name;hiveSelect.appendChild(o);
+    });
+    if(models?.includes(hp))hiveSelect.value=hp;
+    else if(models?.includes('qwen2.5-coder:14b'))hiveSelect.value='qwen2.5-coder:14b';
+    else if(models?.length)hiveSelect.value=models[0];
+  }
+}
+function getLocalModel(){
+  let custom=$('localmodelcustom')?.value.trim();
+  return custom || $('localmodel')?.value || 'qwen2.5-coder:14b';
+}
+function useCustomLocalModel(){
+  let custom=$('localmodelcustom').value.trim();
+  if(!custom)return;
+  let select=$('localmodel');
+  if(!Array.from(select.options).some(o=>o.value===custom)){
+    let o=document.createElement('option');o.value=custom;o.textContent=custom+' · custom';select.appendChild(o);
+  }
+  select.value=custom;
+}
+
+async function saveOllamaEndpoint(){
+  let url=$('ollamaendpoint').value.trim();
+  if(!url)return;
+  try{
+    let j=await api('/api/config/ollama-endpoint',{
+      method:'POST',
+      body:JSON.stringify({url})
+    });
+    $('localmodels').textContent=j.models?.length?'Detected: '+j.models.join(', '):'No Ollama models detected.';
+    $('ollamaerror').textContent=j.error?('Discovery detail: '+j.error):'';
+    populateLocalModels(j.models||[]);
+    if(j.ok && j.models?.length){
+      $('status').textContent=`LOCAL ✓ · ${($('status').textContent.includes('OPENAI ✓'))?'OPENAI ✓':'OPENAI —'}`;
+    }
+  }catch(e){
+    $('ollamaerror').textContent='Connection error: '+e.message;
+  }
+}
+async function refreshStatus(){
+  let s=await api('/api/status');
+  $('status').textContent=`${s.ollama?'LOCAL ✓':'LOCAL —'} · ${s.openai?'OPENAI ✓':'OPENAI —'}`;
+  $('localmodels').textContent=s.ollama_models?.length?'Detected: '+s.ollama_models.join(', '):'No Ollama models detected.';
+  if($('ollamaendpoint')) $('ollamaendpoint').value=s.ollama_endpoint||'http://127.0.0.1:11434';
+  if($('ollamaerror')) $('ollamaerror').textContent=s.ollama_error?('Discovery detail: '+s.ollama_error):'';
+  populateLocalModels(s.ollama_models||[]);
+  if($('safetymode')) $('safetymode').value=s.safety_mode||'personal';
+  if($('budgetmax')) $('budgetmax').value=s.budget?.max_task_cost??0.25;
+  if($('budgetout')) $('budgetout').value=s.budget?.max_output_tokens??4000;
+  if($('askcloud')) $('askcloud').checked=!!s.budget?.ask_before_cloud;
+  let usage=$('usage');usage.replaceChildren();
+  [
+    `Calls: ${s.usage.calls}`,
+    `Input tokens: ${s.usage.input_tokens}`,
+    `Output tokens: ${s.usage.output_tokens}`,
+    `Estimated text spend: $${Number(s.usage.estimated_cost).toFixed(5)}`
+  ].forEach(x=>{let d=document.createElement('div');d.textContent=x;usage.appendChild(d)});
+}
+
+async function boundaryProbe073(){
+  let s=await api('/api/project/summary');
+  $('boundary-probe-073').textContent=`Workspace files: ${s.workspace_files}, Python files: ${s.python_files}, Total bytes: ${s.total_bytes}`;
+}
+
+
+function buildMessageNode(role,text,model){
+  let wrap=document.createElement('div');
+  wrap.className='msg '+role;
+  let who=document.createElement('div');
+  who.className='who';
+  who.textContent=role+(model?' · '+model:'');
+  let bubble=document.createElement('div');
+  bubble.className='bubble';
+  bubble.textContent=text||'';
+  wrap.append(who,bubble);
+  return wrap;
+}
+async function loadChats(){
+  let c=await api('/api/chats');
+  if(!c.length){
+    let n=await api('/api/chats',{method:'POST'});
+    c=[n];
+  }
+  let list=$('chatlist');
+  list.replaceChildren();
+  c.forEach(x=>{
+    let b=document.createElement('button');
+    b.className='chat-item';
+    b.textContent=x.title;
+    b.addEventListener('click',()=>openChat(x.id));
+    list.appendChild(b);
+  });
+  if(!currentChat)openChat(c[0].id);
+}
+async function newChat(){
+  let c=await api('/api/chats',{method:'POST'});
+  currentChat=c.id;
+  await loadChats();
+  await openChat(c.id);
+}
+function isNearChatBottom(){
+  let box=$('messages');
+  return box.scrollHeight-box.scrollTop-box.clientHeight<120;
+}
+function scrollChatToBottom(force=false){
+  let box=$('messages');
+  if(force||isNearChatBottom()) box.scrollTop=box.scrollHeight;
+}
+async function openChat(id){
+  currentChat=id;
+  let m=await api(`/api/chats/${id}/messages`);
+  let box=$('messages');
+  box.replaceChildren();
+  m.forEach(msg=>box.appendChild(buildMessageNode(msg.role,msg.content,msg.model)));
+  box.scrollTop=box.scrollHeight;
+}
+$('send').onclick=sendChat;
+$('prompt').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}});
+$('chatimage').onchange=()=>{let f=$('chatimage').files[0];if(!f){imageData=null;return}let rd=new FileReader();rd.onload=()=>{imageData=rd.result;$('imagehint').textContent='image attached'};rd.readAsDataURL(f)}
+async function sendChat(){
+  let text=$('prompt').value.trim();
+  if(!text||!currentChat)return;
+  $('prompt').value='';
+
+  let messages=$('messages');
+  let followChat=isNearChatBottom();
+  messages.appendChild(buildMessageNode('user',text));
+
+  let thinking=buildMessageNode('assistant','Working…');
+  thinking.id='thinking';
+  thinking.querySelector('.who').textContent='router';
+  messages.appendChild(thinking);
+  if(followChat) scrollChatToBottom(true);
+  $('send').disabled=true;
+
+  let payload={
+    chat_id:currentChat,
+    text,
+    mode:$('mode').value,
+    model:$('model').value,
+    local_model:getLocalModel(),
+    effort:$('effort').value,
+    web:$('web').checked,
+    image_data_url:imageData,
+    allow_cloud:false
+  };
+
+  try{
+    let j;
+    try{
+      j=await api('/api/chat',{method:'POST',body:JSON.stringify(payload)});
+    }catch(e){
+      if(e.message.includes('Cloud escalation requires approval')){
+        if(!confirm(e.message+'\\n\\nApprove this cloud call?')){
+          throw Error('Cloud escalation cancelled.');
+        }
+        payload.allow_cloud=true;
+        j=await api('/api/chat',{method:'POST',body:JSON.stringify(payload)});
+      }else{
+        throw e;
+      }
+    }
+
+    followChat=followChat&&isNearChatBottom();
+    $('thinking')?.remove();
+    messages.appendChild(buildMessageNode('assistant',j.text,j.model));
+
+    let meta=document.createElement('div');
+    meta.className='msg';
+    let line=document.createElement('div');
+    line.className='meta';
+    line.textContent=`${j.route_reason} · ${j.provider} · ~$${Number(j.estimated_cost).toFixed(6)}`;
+    meta.appendChild(line);
+    messages.appendChild(meta);
+
+    if(j.budget_warning){
+      let warn=document.createElement('div');
+      warn.className='notice';
+      warn.textContent=j.budget_warning;
+      messages.appendChild(warn);
+    }
+
+    imageData=null;
+    $('chatimage').value='';
+    $('imagehint').textContent='';
+    await loadChats();
+    await refreshStatus();
+  }catch(e){
+    followChat=followChat&&isNearChatBottom();
+    $('thinking')?.remove();
+    messages.appendChild(buildMessageNode('assistant','ERROR: '+e.message));
+  }finally{
+    $('send').disabled=false;
+    if(followChat) scrollChatToBottom(true);
+  }
+}
+async function loadMemory(){
+  let rows=await api('/api/memory');
+  let box=$('memlist');
+  box.replaceChildren();
+  if(!rows.length){
+    let d=document.createElement('div');
+    d.className='small';
+    d.textContent='No pinned memory yet.';
+    box.appendChild(d);
+    return;
+  }
+  rows.forEach(x=>{
+    let row=document.createElement('div');
+    row.className='mem';
+    let left=document.createElement('div');
+    left.textContent=x.text;
+    let tags=document.createElement('div');
+    tags.className='small';
+    tags.textContent=x.tags||'';
+    left.appendChild(tags);
+    let del=document.createElement('button');
+    del.className='btn danger';
+    del.textContent='delete';
+    del.addEventListener('click',()=>delMemory(x.id));
+    row.append(left,del);
+    box.appendChild(row);
+  });
+}
+async function addMemory(){if(!$('memtext').value.trim())return;await api('/api/memory',{method:'POST',body:JSON.stringify({text:$('memtext').value,tags:$('memtags').value})});$('memtext').value='';$('memtags').value='';loadMemory()}
+async function delMemory(id){await api('/api/memory/'+id,{method:'DELETE'});loadMemory()}
+async function setKey(){try{await api('/api/config/openai-key',{method:'POST',body:JSON.stringify({key:$('apikey').value})});$('apikey').value='';refreshStatus();alert('Key loaded into Workshop memory for this server session.')}catch(e){alert(e.message)}}
+async function makeImage(){let out=$('imageout');out.textContent='Generating…';try{let j=await api('/api/image',{method:'POST',body:JSON.stringify({prompt:$('imageprompt').value,quality:$('imagequality').value,size:'1024x1024',model:$('imagemodel').value})});out.replaceChildren();let a=document.createElement('a');a.textContent='Open image';a.target='_blank';a.rel='noopener';a.href=j.url;let img=document.createElement('img');img.className='preview';img.src=j.url;out.append(a,document.createElement('br'),img)}catch(e){out.textContent='ERROR: '+e.message}}
+function renderVideoJob(j){let out=$('videoout');out.replaceChildren();let p=document.createElement('div');p.textContent='Job '+String(j.id||'unknown')+' · '+String(j.status||'submitted');out.appendChild(p);if(j.id){let b=document.createElement('button');b.className='btn';b.textContent='Refresh status';b.addEventListener('click',()=>pollVideo(String(j.id)));out.appendChild(b)}}
+async function makeVideo(){let out=$('videoout');out.textContent='Creating job…';try{let j=await api('/api/video',{method:'POST',body:JSON.stringify({prompt:$('videoprompt').value,seconds:Number($('videoseconds').value),size:'1280x720',model:'sora-2'})});renderVideoJob(j)}catch(e){out.textContent='ERROR: '+e.message}}
+async function pollVideo(id){try{let j=await api('/api/video/'+encodeURIComponent(id));renderVideoJob({...j,id})}catch(e){$('videoout').textContent='ERROR: '+e.message}}
+async function loadFiles(){
+  let rows=await api('/api/files');
+  let box=$('filelist');
+  box.replaceChildren();
+  rows.forEach(x=>{
+    let b=document.createElement('button');
+    b.className='chat-item';
+    b.textContent=x.path;
+    b.addEventListener('click',()=>openFile(x.path));
+    box.appendChild(b);
+  });
+}
+async function openFile(p){p=decodeURIComponent(p);let j=await api('/api/file?path='+encodeURIComponent(p));$('filepath').value=p;$('code').value=j.content}
+function newFile(){$('filepath').value='untitled.py';$('code').value=''}
+async function saveFile(){try{await api('/api/file',{method:'POST',body:JSON.stringify({path:$('filepath').value,content:$('code').value})});$('terminal').textContent='Saved '+$('filepath').value;loadFiles()}catch(e){$('terminal').textContent='ERROR: '+e.message}}
+async function runFile(){await saveFile();$('terminal').textContent='Running…';try{let j=await api('/api/code/run',{method:'POST',body:JSON.stringify({path:$('filepath').value,timeout:20})});$('terminal').textContent=`exit ${j.returncode}\n\n${j.stdout||''}${j.stderr?'\n[stderr]\n'+j.stderr:''}`}catch(e){$('terminal').textContent='ERROR: '+e.message}}
+async function aiCodeFile(){let request=prompt('What should the AI build?');if(!request)return;$('terminal').textContent='Qwen is planning…';try{let j=await api('/api/code/agent',{method:'POST',body:JSON.stringify({request,path:$('filepath').value,run:true})});$('code').value=j.content;$('terminal').textContent=`AI wrote ${j.path}\nexit ${j.returncode}\n\n${j.stdout||''}${j.stderr?'\n[stderr]\n'+j.stderr:''}`;loadFiles()}catch(e){$('terminal').textContent='ERROR: '+e.message}}
+
+
+
+let currentHiveRun=null;
+async function loadHiveCapabilities(){
+  try{
+    let c=await api('/api/hive/capabilities');
+    populateLocalModels(c.models||[]);
+    let box=$('hiveagents');
+    box.replaceChildren();
+    c.agents.forEach(a=>{
+      let d=document.createElement('div');
+      d.textContent=a.id+(a.write_scope.length?' → '+a.write_scope.join(', '):' → read-only');
+      box.appendChild(d);
+    });
+  }catch(e){
+    $('hiveagents').textContent='ERROR: '+e.message;
+  }
+}
+function renderHiveRun(run){
+  currentHiveRun=run;
+  $('hivestatus').textContent=`run ${run.id} · ${run.status}`;
+
+  let review=$('hivereview');
+  review.replaceChildren();
+  if(run.plan){
+    let p=document.createElement('pre');
+    p.style.whiteSpace='pre-wrap';
+    p.textContent='PLAN\n'+JSON.stringify(run.plan,null,2);
+    review.appendChild(p);
+  }
+  if(run.review){
+    let p=document.createElement('pre');
+    p.style.whiteSpace='pre-wrap';
+    p.textContent='REVIEW\n'+JSON.stringify(run.review,null,2);
+    review.appendChild(p);
+  }
+  if(run.errors?.length){
+    let p=document.createElement('pre');
+    p.textContent='ERRORS\n'+run.errors.map(error=>typeof error==='string'?error:JSON.stringify(error,null,2)).join('\n');
+    review.appendChild(p);
+  }
+
+  $('hivediff').textContent=run.diff||'No valid staged changes were produced.';
+
+  let verify=$('hiveverify');
+  verify.replaceChildren();
+  (run.verification?.checks||[]).forEach(c=>{
+    let d=document.createElement('div');
+    d.textContent=`${c.passed?'✓':'✗'} ${c.name}`;
+    d.title=c.detail||'';
+    verify.appendChild(d);
+  });
+  if(!run.verification)verify.textContent='No verification result.';
+
+  $('hiveapply').disabled=!(run.status==='ready' && run.verification?.passed && run.review?.approve);
+  $('hiverollback').disabled=!run.applied;
+}
+async function runHiveBuild(){
+  let request=$('hiverequest').value.trim();
+  if(!request){alert('Describe the change you want Workshop to build.');return}
+  let featureId=null;
+  let featureSpecSha256=null;
+  const featureCommand=request.match(/^build\s+(NW-F\d{3})$/i);
+  if(featureCommand){
+    try{
+      const preview=await api('/api/hive/features/'+encodeURIComponent(featureCommand[1]));
+      const feature=preview.feature;
+      if(!preview.buildable){
+        $('hivestatus').textContent=preview.reason||`Feature ${feature.id} is not ready to build.`;
+        return;
+      }
+      const bulletList=items=>Array.isArray(items)&&items.length?items.map(item=>'• '+item).join('\n'):'(none)';
+      const details=[
+        `Feature ${feature.id} — ${feature.title}`,
+        `Status: ${feature.status}`,
+        '',
+        'Objective:', feature.objective,
+        '',
+        'Scope:', bulletList(feature.scope),
+        '',
+        'Dependencies:', feature.dependencies||'(none)',
+        '',
+        'Acceptance criteria:', bulletList(feature.acceptance_criteria),
+        '',
+        'Constraints:', bulletList(feature.constraints),
+        '',
+        'Start a Hive Build from this exact catalog specification?'
+      ].join('\n');
+      if(!confirm(details))return;
+      featureId=feature.id;
+      featureSpecSha256=preview.spec_sha256;
+      request=`Build ${feature.id}`;
+    }catch(e){
+      $('hivestatus').textContent='FEATURE LOOKUP FAILED: '+e.message;
+      return;
+    }
+  }
+  let allowCloud=$('hivecloud').checked;
+  let tier=$('hivetier').value;
+  if(allowCloud && tier!=='local'){
+    if(!confirm(`Allow Hive agents to escalate to cloud models up to ${tier.toUpperCase()} under the current Workshop budget cap?`))return;
+  }
+  $('hiverun').disabled=true;
+  $('hivestatus').textContent='Planning and running bounded agents…';
+  $('hivediff').textContent='Agents are working. Local models can take a while.';
+  try{
+    const buildRequest={
+        request,
+        local_model:$('hivemodel').value||getLocalModel(),
+        allow_cloud:allowCloud,
+        max_tier:tier
+    };
+    if(featureId){
+      buildRequest.feature_id=featureId;
+      buildRequest.feature_spec_sha256=featureSpecSha256;
+    }
+    let queued=await api('/api/hive/build',{
+      method:'POST',
+      body:JSON.stringify(buildRequest)
+    });
+    let job=await api('/api/jobs/'+encodeURIComponent(queued.job_id));
+    while(!['completed','failed','cancelled'].includes(job.state)){
+      await new Promise(resolve=>setTimeout(resolve,1000));
+      job=await api('/api/jobs/'+encodeURIComponent(queued.job_id));
+      $('hivestatus').textContent=`${job.message||('Hive job '+job.state)} · ${job.progress}%`;
+    }
+    if(['completed','failed'].includes(job.state) && job.result){
+      renderHiveRun(job.result);
+      if(job.result.status==='failed')$('hivestatus').textContent='Job completed · build failed';
+    }else{
+      $('hivestatus').textContent=`Hive job ${job.state}`;
+      $('hivediff').textContent=job.error||'No build result was produced.';
+    }
+    loadLedger();
+  }catch(e){
+    $('hivestatus').textContent='ERROR: '+e.message;
+  }finally{
+    $('hiverun').disabled=false;
+  }
+}
+async function applyHiveRun(){
+  if(!currentHiveRun)return;
+  if(!confirm('Apply this verified self-edit to the running Workshop source? A self-snapshot is created first, and post-apply tests must pass. You will normally restart Workshop afterward.'))return;
+  $('hiveapply').disabled=true;
+  try{
+    let run=await api('/api/hive/apply',{
+      method:'POST',
+      body:JSON.stringify({run_id:currentHiveRun.id,approved:true})
+    });
+    renderHiveRun(run);
+    $('hivestatus').textContent=`Applied ${run.id}. Restart Workshop to load backend changes.`;
+    $('hiverollback').disabled=false;
+    loadLedger();
+  }catch(e){
+    $('hivestatus').textContent='APPLY BLOCKED: '+e.message;
+  }
+}
+async function rollbackHiveRun(){
+  if(!currentHiveRun)return;
+  if(!confirm('Rollback the files changed by this Hive run?'))return;
+  try{
+    let j=await api('/api/hive/rollback',{
+      method:'POST',
+      body:JSON.stringify({run_id:currentHiveRun.id,approved:true})
+    });
+    $('hivestatus').textContent='Rolled back: '+j.restored.join(', ');
+    loadLedger();
+  }catch(e){
+    $('hivestatus').textContent='ROLLBACK ERROR: '+e.message;
+  }
+}
+
+async function loadOps(){await Promise.all([loadLedger(),loadPreflight(),loadActions(),loadSnapshots(),loadWorkflow()])}
+async function loadPreflight(){try{let p=await api('/api/preflight');let el=$('preflight');el.replaceChildren();Object.entries(p).forEach(([k,v])=>{if(k==='ollama_models')return;let d=document.createElement('div');d.textContent=`${k}: ${v}`;el.appendChild(d)})}catch(e){$('preflight').textContent='ERROR: '+e.message}}
+async function loadActions(){try{let j=await api('/api/actions');let box=$('opsbuttons');box.replaceChildren();j.actions.forEach(a=>{let b=document.createElement('button');b.className='btn';b.textContent=`${a.name.replaceAll('_',' ')} · ${a.risk}`;b.title=a.description;b.addEventListener('click',()=>runAction(a.name,a.risk!=='low'));box.appendChild(b)});let rep=document.createElement('button');rep.className='btn';rep.textContent='Client report';rep.addEventListener('click',()=>window.open('/api/report/client','_blank'));box.appendChild(rep)}catch(e){$('opsbuttons').textContent='ERROR: '+e.message}}
+async function loadSnapshots(){try{let rows=await api('/api/workspace/snapshots');let sel=$('snapshotlist');sel.replaceChildren();rows.forEach(r=>{let o=document.createElement('option');o.value=r.id;o.textContent=r.id;sel.appendChild(o)});if(!rows.length){let o=document.createElement('option');o.textContent='No snapshots';sel.appendChild(o)}}catch(e){}}
+async function restoreSnapshot(){let sid=$('snapshotlist').value;if(!sid||sid==='No snapshots')return;if(!confirm('Restore snapshot '+sid+'? Workshop will first create a safety snapshot.'))return;try{let j=await api('/api/workspace/restore',{method:'POST',body:JSON.stringify({snapshot:sid,approved:true})});$('opsout').textContent=`Restored ${j.restored}\nBackup before restore: ${j.pre_restore_backup}`;await loadSnapshots();await loadLedger();await loadFiles()}catch(e){$('opsout').textContent='ERROR: '+e.message}}
+async function runTests(){try{$('opsout').textContent='Running pytest…';let j=await api('/api/ops/run-tests',{method:'POST'});$('opsout').textContent=`pytest rc=${j.returncode}\n\n${j.stdout||''}${j.stderr?'\n[stderr]\n'+j.stderr:''}`;loadLedger()}catch(e){$('opsout').textContent='ERROR: '+e.message}}
+async function loadWorkflow(){try{let j=await api('/api/cleanup/workflow');let box=$('workflow');box.replaceChildren();j.stages.forEach(s=>{let d=document.createElement('div');d.textContent=`${s.name} — ${s.status}`;box.appendChild(d)});let p=document.createElement('p');p.textContent=j.principle;p.className='small';box.appendChild(p)}catch(e){$('workflow').textContent='ERROR: '+e.message}}
+async function saveBudget(){try{let j=await api('/api/config/budget',{method:'POST',body:JSON.stringify({max_task_cost:Number($('budgetmax').value),max_output_tokens:Number($('budgetout').value),ask_before_cloud:$('askcloud').checked})});alert(`Budget saved: $${j.max_task_cost.toFixed(2)} per task`)}catch(e){alert(e.message)}}
+
+async function setSafetyMode(){try{let j=await api('/api/config/safety-mode',{method:'POST',body:JSON.stringify({mode:$('safetymode').value})});await refreshStatus();alert('Safety mode: '+j.mode)}catch(e){alert(e.message)}}
+async function runAction(action,needApproval=false){let approved=true;if(needApproval)approved=confirm('This diagnostic is medium risk because it inspects running process paths. Run it?');if(!approved)return;$('opsout').textContent='Running '+action+'…';try{let j=await api('/api/actions/run',{method:'POST',body:JSON.stringify({action,approved,reason:'technician initiated from Ops Cockpit'})});$('opsout').textContent=`${action} [${j.risk}] rc=${j.returncode}\n\n${j.stdout||''}${j.stderr?'\n[stderr]\n'+j.stderr:''}`;loadLedger()}catch(e){$('opsout').textContent='ERROR: '+e.message}}
+async function loadLedger(){try{let rows=await api('/api/ledger');let box=$('ledger');box.replaceChildren();if(!rows.length){box.textContent='No actions recorded.';return}rows.slice(0,80).forEach(r=>{let d=document.createElement('div');d.className='mem';let left=document.createElement('div');left.textContent=`${r.action} · ${r.risk} · approved=${!!r.approved}`;let sm=document.createElement('div');sm.className='small';sm.textContent=`${r.created_at} — ${r.why||''}`;left.appendChild(sm);d.appendChild(left);box.appendChild(d)})}catch(e){$('ledger').textContent='ERROR: '+e.message}}
+async function snapshotNow(){try{let j=await api('/api/workspace/snapshot',{method:'POST'});$('opsout').textContent='Workspace snapshot created: '+j.snapshot;loadLedger()}catch(e){$('opsout').textContent='ERROR: '+e.message}}
+
+refreshStatus();loadChats();
+</script>
+</body></html>

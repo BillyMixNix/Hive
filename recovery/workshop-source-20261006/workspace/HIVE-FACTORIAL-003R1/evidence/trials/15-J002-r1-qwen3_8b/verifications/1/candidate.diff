@@ -1,0 +1,29 @@
+--- a/src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java
++++ b/src/main/java/dev/atmcompanion/knowledge/IngredientAllocation.java
+@@ -8,10 +8,25 @@
+ public final class IngredientAllocation {
+     private IngredientAllocation() {}
+     public static boolean canSatisfy(List<List<Integer>> matchingSlots, Map<Integer, Integer> counts) {
++        if (matchingSlots == null || counts == null) {
++            throw new IllegalArgumentException("Matching slots or counts map is null");
++        }
+         if (matchingSlots.size() > 9 || counts.size() > 36 || matchingSlots.stream().anyMatch(slots -> slots.size() > 36)) {
+             throw new IllegalArgumentException("Crafting allocation bounds exceeded");
+         }
+-        if (counts.values().stream().anyMatch(count -> count < 0)) throw new IllegalArgumentException("Negative stack count");
++        for (List<Integer> slots : matchingSlots) {
++            if (slots == null) {
++                throw new IllegalArgumentException("Matching slots list is null");
++            }
++            for (int slot : slots) {
++                if (slot < 0 || slot >= 36) {
++                    throw new IllegalArgumentException("Slot " + slot + " is out of range");
++                }
++            }
++        }
++        if (counts.values().stream().anyMatch(count -> count == null || count < 0)) {
++            throw new IllegalArgumentException("Count value is null or negative");
++        }
+         Map<Integer, java.util.ArrayList<Integer>> assigned = new HashMap<>();
+         for (int requirement = 0; requirement < matchingSlots.size(); requirement++) {
+             if (!assign(requirement, matchingSlots, counts, assigned, new boolean[matchingSlots.size()])) return false;

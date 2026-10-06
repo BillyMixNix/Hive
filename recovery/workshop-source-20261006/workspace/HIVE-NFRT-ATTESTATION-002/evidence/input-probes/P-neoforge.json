@@ -1,0 +1,31 @@
+{
+  "case": "P-neoforge",
+  "result": {
+    "returncode": 1,
+    "stdout": "To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.\nDaemon will be stopped at the end of the build \nShared read-only dependency cache is an incubating feature.\n\n> Configure project :\nCreating Minecraft artifacts without recompilation.\n",
+    "stderr": "\nFAILURE: Build failed with an exception.\n\n* Where:\nInitialization script '/probe/inputs.gradle' line: 28\n\n* What went wrong:\nError while evaluating property 'artifactManifestEntries' of task ':createMinecraftArtifacts'.\n> Could not resolve all artifacts for configuration ':neoFormRuntimeDependenciesNeoForgeClasses'.\n   > Could not resolve net.neoforged:neoforge:21.1.252.\n     Required by:\n         root project 'ATM-Companion'\n      > No cached version of net.neoforged:neoforge:21.1.252 available for offline mode.\n      > No cached version of net.neoforged:neoforge:21.1.252 available for offline mode.\n      > No cached version of net.neoforged:neoforge:21.1.252 available for offline mode.\n      > No cached version of net.neoforged:neoforge:21.1.252 available for offline mode.\n\n* Try:\n> Run with --stacktrace option to get the stack trace.\n> Run with --info or --debug option to get more log output.\n> Run with --scan to generate a Build Scan (powered by Develocity).\n> Get more help at https://help.gradle.org.\n\nBUILD FAILED in 8s\n",
+    "timed_out": false,
+    "wall_seconds": 9.035
+  },
+  "argv": [
+    "/opt/java/openjdk/bin/java",
+    "-Djava.io.tmpdir=/work/tmp",
+    "-classpath",
+    "gradle/wrapper/gradle-wrapper.jar",
+    "org.gradle.wrapper.GradleWrapperMain",
+    "--no-daemon",
+    "--offline",
+    "--console=plain",
+    "--max-workers=2",
+    "--rerun-tasks",
+    "--no-build-cache",
+    "-Dorg.gradle.jvmargs=-Xmx768m",
+    "--dry-run",
+    "-I",
+    "/probe/inputs.gradle",
+    "createMinecraftArtifacts"
+  ],
+  "diagnostic_only": true,
+  "verification": false,
+  "snapshot": null
+}

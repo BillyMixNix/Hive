@@ -1,0 +1,26 @@
+{
+  "request": "Add `RecipeReport.candidatesForType(String recipeType)`. Return candidates whose\n`recipeType` equals the argument, retaining encounter order in an immutable\ndetached list. Return an empty list when none match. Reject null with\n`IllegalArgumentException`; do not change the report.",
+  "local_model": "qwen2.5-coder:14b",
+  "allow_cloud": false,
+  "max_tier": "local",
+  "max_cost": 0.0,
+  "agent_backend": "classic",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/knowledge/RecipeCandidatesForTypeAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.knowledge.RecipeCandidatesForTypeAcceptanceTest",
+      "expected_cases": 1,
+      "source": "package dev.atmcompanion.knowledge;\n\nimport dev.atmcompanion.state.Observation;\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass RecipeCandidatesForTypeAcceptanceTest {\n    @Test void keepsExactEncounterOrderAndReturnsImmutableList() {\n        var first = new RecipeReport.Candidate(\"first\", \"smelting\", 1, \"supported\", List.of(), Observation.unavailable(\"not checked\"));\n        var middle = new RecipeReport.Candidate(\"middle\", \"crafting\", 1, \"supported\", List.of(), Observation.unavailable(\"not checked\"));\n        var last = new RecipeReport.Candidate(\"last\", \"smelting\", 1, \"unknown\", List.of(), Observation.unavailable(\"not checked\"));\n        var report = new RecipeReport(\"minecraft:iron_ingot\", 3, false, List.of(first, middle, last), false, 0);\n        var selected = report.candidatesForType(\"smelting\");\n        assertEquals(List.of(first, last), selected);\n        assertThrows(UnsupportedOperationException.class, () -> selected.clear());\n        assertTrue(report.candidatesForType(\"blasting\").isEmpty());\n        assertEquals(3, report.recipes().size());\n        assertThrows(IllegalArgumentException.class, () -> report.candidatesForType(null));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-LOCAL-001",
+    "condition_id": "hive_local",
+    "task_id": "N003",
+    "replicate_index": 1,
+    "trial_id": "b743ccbdbacd",
+    "condition_spec_sha256": "1173ddc3b3810fe36d5527a2e9ce75ea0c5b34c7ce6d06b693d298e3715750f9"
+  }
+}

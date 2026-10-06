@@ -1,0 +1,6 @@
+FROM nix-workshop-verifier:0.11.1-jvm21-extroot-002d-mountfix
+
+# Reuse the already-built, pinned JDK/Python verifier environment. This
+# networkless overlay updates only the host-reviewed fixed Gradle runners.
+COPY verification/jvm_runner.py /opt/verifier/jvm_runner.py
+COPY verification/prime_runner.py /opt/verifier/prime_runner.py

@@ -1,0 +1,3306 @@
+{
+  "summary": {
+    "records": 49,
+    "completed_reviews": 48,
+    "review_unavailable": 1,
+    "independently_blocked_vetoes_still_blocked": 41,
+    "independently_blocked_approvals_still_blocked": 3,
+    "model_calls": 0,
+    "apply_calls": 0,
+    "historical_records_changed": 0,
+    "external_policy_note": "The ordinary-Workshop projection is explicitly hypothetical; actual external diagnostic eligibility is false."
+  },
+  "records": [
+    {
+      "id": "7c6c5048fe4f",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T001\\hive\\run.json",
+      "source_sha256": "5679bffab033076c75e7d5d6424bd95e211d325e81e1e9650335889c799c4c02",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "ready",
+      "original_deterministic_eligibility": true,
+      "original_independent_blockers": [],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The diff adds exact per-type counts with zero fallback, rejects null with IllegalArgumentException, and does not mutate the summary. Changes are narrowly scoped, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "original_host_review": {
+        "approve": true,
+        "summary": "The diff adds exact per-type counts with zero fallback, rejects null with IllegalArgumentException, and does not mutate the summary. Changes are narrowly scoped, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": true,
+        "ready": true,
+        "promotion_authorization": "not_authorized",
+        "promotion_blockers": [],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "No additional model-review obstacle; external restriction and explicit authorization still apply.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "85e7b3abc171",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T002\\hive\\run.json",
+      "source_sha256": "3e26470b2237554b1dc27d2728a5260e4cae6449b40dcd8c7e578259728c118e",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+        "issues": [
+          "Verification failed during createMinecraftArtifacts because the JVM could not create a native thread. No acceptance tests ran or fresh JUnit reports were produced; Hive must complete deterministic verification before approval."
+        ],
+        "confidence": 0.98
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+        "issues": [
+          "Verification failed during createMinecraftArtifacts because the JVM could not create a native thread. No acceptance tests ran or fresh JUnit reports were produced; Hive must complete deterministic verification before approval.",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.98
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "ff68bfb9a92b",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T003\\hive\\run.json",
+      "source_sha256": "ebb58aa4e2564919254b63c08e20f258af817d72e1b974a2969e4a79384ff710",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "ready",
+      "original_deterministic_eligibility": true,
+      "original_independent_blockers": [],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The diff satisfies the request: immutable quantities for every event type, null quantities contributing zero, preserved three-argument construction, and detached summaries of retained events. Changes are narrowly scoped, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.98
+      },
+      "original_host_review": {
+        "approve": true,
+        "summary": "The diff satisfies the request: immutable quantities for every event type, null quantities contributing zero, preserved three-argument construction, and detached summaries of retained events. Changes are narrowly scoped, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.98
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": true,
+        "ready": true,
+        "promotion_authorization": "not_authorized",
+        "promotion_blockers": [],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "No additional model-review obstacle; external restriction and explicit authorization still apply.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "5f76f8f0ca08",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T004\\hive\\run.json",
+      "source_sha256": "59b84857f0c82fda04716dd4c60c18324ec6049ba648eb7b981ce16679521310",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "Cannot approve: the proposed diff is empty and deterministic verification did not pass.",
+        "issues": [
+          "No implementation was provided for ActivityHistory.recent(int limit), so the requested behavior cannot be reviewed.",
+          "Verification failed during Minecraft artifact preparation because Java could not create a native thread. No acceptance tests ran and no fresh JUnit reports were produced."
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "Cannot approve: the proposed diff is empty and deterministic verification did not pass.",
+        "issues": [
+          "No implementation was provided for ActivityHistory.recent(int limit), so the requested behavior cannot be reviewed.",
+          "Verification failed during Minecraft artifact preparation because Java could not create a native thread. No acceptance tests ran and no fresh JUnit reports were produced.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "0e6d948248a4",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T005\\hive\\run.json",
+      "source_sha256": "1cc704fa82db66291635fdd727b01ee4f2acb59b9c5f015a98d91f38efa2b49b",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The requested method is missing, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is empty and does not implement PlanningReport.diagnostics().",
+          "Acceptance tests failed to compile because PlanningReport.diagnostics() does not exist; neither test executed."
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The requested method is missing, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is empty and does not implement PlanningReport.diagnostics().",
+          "Acceptance tests failed to compile because PlanningReport.diagnostics() does not exist; neither test executed.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "f8c99fa2fb5f",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T006\\hive\\run.json",
+      "source_sha256": "58b062e8095a5f312e4a938feedf1788b1a693d22f2a76a5070d7895daa77794",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "ready",
+      "original_deterministic_eligibility": true,
+      "original_independent_blockers": [],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The narrowly scoped diff correctly computes the floored percentage using total quests, returns zero for an empty total, and preserves counts and availability semantics. Long arithmetic avoids intermediate integer overflow. Deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "original_host_review": {
+        "approve": true,
+        "summary": "The narrowly scoped diff correctly computes the floored percentage using total quests, returns zero for an empty total, and preserves counts and availability semantics. Long arithmetic avoids intermediate integer overflow. Deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": true,
+        "ready": true,
+        "promotion_authorization": "not_authorized",
+        "promotion_blockers": [],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "No additional model-review obstacle; external restriction and explicit authorization still apply.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "fbb7d93d5b0d",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T007\\hive\\run.json",
+      "source_sha256": "dd1bf7572b03d36f25d0cdd8e3ea24ee8864c55ddcfd5b1278466b9e77e7b7a7",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+        "issues": [
+          "Acceptance tests never ran: createMinecraftArtifacts failed because the JVM could not create a native thread under verifier resource limits. Hive must obtain passing deterministic verification before approval."
+        ],
+        "confidence": 0.98
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The diff appears narrowly scoped and consistent with the request, but deterministic verification did not pass.",
+        "issues": [
+          "Acceptance tests never ran: createMinecraftArtifacts failed because the JVM could not create a native thread under verifier resource limits. Hive must obtain passing deterministic verification before approval.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved."
+        ],
+        "confidence": 0.98
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "723add052512",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-ASTRA-001\\execution-v2\\T008\\hive\\run.json",
+      "source_sha256": "db51c577a9306c637d4dc3a841f07b8c822bffadad20c3eba683cc660d303c8d",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The requested factory method is missing, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is empty and does not implement QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp).",
+          "Acceptance tests failed to compile because QuestOverview.fromSnapshot(QuestSnapshot, String) could not be found; no acceptance tests ran."
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The requested factory method is missing, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is empty and does not implement QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp).",
+          "Acceptance tests failed to compile because QuestOverview.fromSnapshot(QuestSnapshot, String) could not be found; no acceptance tests ran.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "e66097b0d1c2",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\06-J004-r1-qwen3-8b-hive\\run.json",
+      "source_sha256": "380de39ae1abba54421a919804dbb0bcadcbe18883fac77d8d122ec5a3ed5423",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The code meets all requirements with no issues detected.",
+        "issues": [],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The code meets all requirements with no issues detected.",
+        "issues": [
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "dcb16552e596",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-FACTORIAL-002\\evidence\\26-J001-r1-qwen3-8b-hive\\run.json",
+      "source_sha256": "d9b497fb21c7da50476a9a1f7ec9ab00930ee54de794e5263882f82ed3179239",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "Proposal fails verification prerequisites and lacks implementation details",
+        "issues": [
+          "Deterministic verification failed with external prerequisite errors",
+          "No actual diff content provided for review",
+          "Unable to confirm UTF-16 surrogate pair preservation implementation"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "Proposal fails verification prerequisites and lacks implementation details",
+        "issues": [
+          "Deterministic verification failed with external prerequisite errors",
+          "No actual diff content provided for review",
+          "Unable to confirm UTF-16 surrogate pair preservation implementation",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "5a0bf30f8521",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-JAVA-EDIT-001\\pilot-four-evidence\\T001\\run.json",
+      "source_sha256": "621256a3ed8a20979060670d8b3cb71142e95b7c93d26737af960ab0462f442c",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "465ffd86ae8d",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-JAVA-EDIT-001\\pilot-four-evidence\\T002\\run.json",
+      "source_sha256": "b355c7a27753af30df81ebaad93667036f38d44342561532a0e35c91c8709f2b",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "ddfaae6c1dae",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-JAVA-EDIT-001\\pilot-four-evidence\\T003\\run.json",
+      "source_sha256": "e934177e2cb90a9e3ce24e36c199e8df01c83b4dad457c6ce9f44fa0e2af11fd",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "35d641a16742",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-JAVA-EDIT-001\\pilot-four-evidence\\T004\\run.json",
+      "source_sha256": "e467680cfe55ea165a98c82275474f7804dc11ce4d5e327306994fe47d152609",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite error."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite error.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "dc51b0130f2e",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N001\\run.json",
+      "source_sha256": "6c480bbf4dbebaead35778bd624637e19729701bb9fb5b103c0f2a8c4ff0062b",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "aeabd7b29446",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N002\\run.json",
+      "source_sha256": "86dea30b4272f14b110fe85107463b9f554e559f6c5457224fde3e0eb848d4b0",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff did not pass deterministic verification and does not match the request.",
+        "issues": [
+          "Deterministic verification failed",
+          "Diff does not match the request"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff did not pass deterministic verification and does not match the request.",
+        "issues": [
+          "Deterministic verification failed",
+          "Diff does not match the request",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "deb6aef667c3",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N003\\run.json",
+      "source_sha256": "51e69d8850fedf3614b6a95d0b932dcb98a8dcef9cffc150e955723558496ba8",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff did not pass deterministic verification and is therefore ineligible for approval.",
+        "issues": [
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff did not pass deterministic verification and is therefore ineligible for approval.",
+        "issues": [
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "0d611557d1ee",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N004\\run.json",
+      "source_sha256": "2f1d67397715d0d9a6344eac53f989d4cf98cfe551a728ba9b56a34eac19c3ab",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not add the `ExecutionAssessment.blockingReasons()` method as requested.",
+          "Deterministic verification failed due to an external full gate prerequisite."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not add the `ExecutionAssessment.blockingReasons()` method as requested.",
+          "Deterministic verification failed due to an external full gate prerequisite.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "4dce34f716dd",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N005\\run.json",
+      "source_sha256": "4828be312aee2b6c33d7a5e3dafc2a7f0b78650172b451eeae46e893845a8707",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "4786a88691de",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N006\\run.json",
+      "source_sha256": "eb02b4ba1c19ccfdd0ab5fb259856869ab368c24ba24ee63fe18038c5be2b0a9",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "464da63a3152",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N007\\run.json",
+      "source_sha256": "1b565054214f2dcdcc805814745099ba949437a8636797122c1b2e32f5ba5d28",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "1296e240abf7",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\N008\\run.json",
+      "source_sha256": "df413b25a2a060754abe26aec95fcec63b1ac044042dd534c051493f46c4849c",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the implementation of `PlanResult.withLimitations(List<String> limitations)`.",
+          "Deterministic verification failed with the message: 'A worker or edit prerequisite failed; partial proposals are ineligible.'"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the implementation of `PlanResult.withLimitations(List<String> limitations)`.",
+          "Deterministic verification failed with the message: 'A worker or edit prerequisite failed; partial proposals are ineligible.'",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "66e6c7425fa9",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T001\\run.json",
+      "source_sha256": "460273d77a1840c05a48c46195066a2cb4209b618d05736859d3eac3e4bc64e4",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "4cbf975ee5ca",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T002\\run.json",
+      "source_sha256": "06633759ea899e212fafa9e5f49c82fb89b90a5d5746d7237dbde0a66f26bfb9",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "cf894f9ad928",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T003\\run.json",
+      "source_sha256": "bdeb3b66d66a4271b0437c494cc4a7d7342924d69ef9ce5c3b106e5c489956a4",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "24011d8e7829",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T004\\run.json",
+      "source_sha256": "6e4234e7c827b9d5f1f79abf91addbde3efac59e95f085114b8e8957a16e1d8d",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed with an external full gate prerequisite.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "14ac772333c2",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T005\\run.json",
+      "source_sha256": "6edfbdda2825b044902a7256b79bc85a4519fca8551fd3f456650570ba9fe00f",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the required changes to `PlanningReport.diagnostics()`.",
+          "Deterministic verification failed due to an external full gate prerequisite."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the required changes to `PlanningReport.diagnostics()`.",
+          "Deterministic verification failed due to an external full gate prerequisite.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "706713dcb846",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T006\\run.json",
+      "source_sha256": "ab0631e922eb3cdf68998f3d10a117a19f99ff40f0c505710ebaa27fba7bbdb8",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the requested changes to add `QuestOverview.completionPercent()` method.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the requested changes to add `QuestOverview.completionPercent()` method.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "28a05cbd95b0",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T007\\run.json",
+      "source_sha256": "14a582f221ec5fc8e2b6e7e3ef3e8c4f934c6ddd05c417c07698081472687125",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "828fce6fd6b0",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\HIVE-LOCAL-001\\execution\\T008\\run.json",
+      "source_sha256": "4b534e1df830c048bc208fb386c4a9576707b2ef0863bc38d428f676fc1e7233",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the implementation of `QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp)` as requested.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request and deterministic verification failed.",
+        "issues": [
+          "The proposed diff does not include the implementation of `QuestOverview.fromSnapshot(QuestSnapshot snapshot, String timestamp)` as requested.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "c391de6f3eaf",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix-Workshop-v0.11.1-persistent-agents\\Nix_Workshop_v0_11_1\\hive_runs\\c391de6f3eaf\\run.json",
+      "source_sha256": "d5bb0c56ff87f4e26fe8a84e625f289897f060fce17876081d2bf46c2bb0c329",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "ready",
+      "original_deterministic_eligibility": true,
+      "original_independent_blockers": [],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The diff adds the requested public static method with the exact output format using PlanResult values. It changes only PlanFormatter.java, preserves existing behavior, adds no dependencies, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "original_host_review": {
+        "approve": true,
+        "summary": "The diff adds the requested public static method with the exact output format using PlanResult values. It changes only PlanFormatter.java, preserves existing behavior, adds no dependencies, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 0.99
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "verified_review_approved",
+        "deterministic_eligibility": true,
+        "human_review_eligible": true,
+        "ready": true,
+        "promotion_authorization": "not_authorized",
+        "promotion_blockers": [],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "No additional model-review obstacle; external restriction and explicit authorization still apply.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "801b972128ee",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_4_2_source2\\Nix_Workshop_v0_4_2\\hive_runs\\801b972128ee\\run.json",
+      "source_sha256": "7558c02dfb30894b043f86df935e20542e5ba950ff370354d510cbe5504ac0d2",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request specifies that the changes should only be made to app.py and tests, but the diff includes changes to test_worker_failure_reporting.py. Additionally, the request specifies that the endpoint should be added using insert_after_anchor, but the diff does not include this.",
+        "issues": [
+          "Changes are not limited to app.py and tests",
+          "Endpoint is not added using insert_after_anchor",
+          "Indentation error in the diff"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request specifies that the changes should only be made to app.py and tests, but the diff includes changes to test_worker_failure_reporting.py. Additionally, the request specifies that the endpoint should be added using insert_after_anchor, but the diff does not include this.",
+        "issues": [
+          "Changes are not limited to app.py and tests",
+          "Endpoint is not added using insert_after_anchor",
+          "Indentation error in the diff",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "a12214d93ad3",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_4_2_source2\\Nix_Workshop_v0_4_2\\hive_runs\\a12214d93ad3\\run.json",
+      "source_sha256": "1b91b351c2055db31a66acdd92c8169fe69577ab18f97823ddb68a5ab8bafbee",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The proposed diff meets all the requirements and passes the deterministic verification checks.",
+        "issues": [],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff meets all the requirements and passes the deterministic verification checks.",
+        "issues": [
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "96e5cd28a4df",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_6_6_run\\Nix_Workshop_v0_6_6\\hive_runs\\96e5cd28a4df\\run.json",
+      "source_sha256": "2d5879bb7c99a962bbbbe01cc3d56a381b22a4d527631ffdbeb76d0bbe6b8f80",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the required modifications to app.py to add the /api/context/preview endpoint. Additionally, the deterministic verification failed due to a 404 error when accessing the endpoint.",
+        "issues": [
+          "Missing modifications to app.py",
+          "Endpoint returns 404 instead of 200"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the required modifications to app.py to add the /api/context/preview endpoint. Additionally, the deterministic verification failed due to a 404 error when accessing the endpoint.",
+        "issues": [
+          "Missing modifications to app.py",
+          "Endpoint returns 404 instead of 200",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "9adaba0967ce",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_6_7_run\\Nix_Workshop_v0_6_7\\hive_runs\\9adaba0967ce\\run.json",
+      "source_sha256": "6896152a63b09999c4b35cda370f0f16bff9e24af84a26675032c7fe60a7686c",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff introduces an IndentationError in app.py, which prevents the application from compiling and running the test suite.",
+        "issues": [
+          "IndentationError in app.py"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff introduces an IndentationError in app.py, which prevents the application from compiling and running the test suite.",
+        "issues": [
+          "IndentationError in app.py",
+          "Deterministic verification failed.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "2860452e9caf",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_6_8_run\\Nix_Workshop_v0_6_8\\hive_runs\\2860452e9caf\\run.json",
+      "source_sha256": "39062cbfe6c83df288429d183210d88098356ef8a6c6f301079ec744a7ae6ff0",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The endpoint path is incorrect, and the test is not testing the correct endpoint.",
+        "issues": [
+          "The endpoint path in the diff is '/api/endpoint' instead of '/api/context/preview'.",
+          "The test is not testing the '/api/context/preview' endpoint.",
+          "The test is expecting keys that do not match the keys specified in the request."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The endpoint path is incorrect, and the test is not testing the correct endpoint.",
+        "issues": [
+          "The endpoint path in the diff is '/api/endpoint' instead of '/api/context/preview'.",
+          "The test is not testing the '/api/context/preview' endpoint.",
+          "The test is expecting keys that do not match the keys specified in the request.",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "6cf6a981c0f6",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_6_9_run\\Nix_Workshop_v0_6_9\\hive_runs\\6cf6a981c0f6\\run.json",
+      "source_sha256": "846ff5b9c63302be09492b83e82f5deef56dbb5958c3d0a86f3d4e48b5c255aa",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff only includes modifications to the test file, but does not include the necessary changes to app.py to add the new endpoint. Additionally, the test file contains a NameError because the 'client' variable is not defined.",
+        "issues": [
+          "app.py is not modified to add the new endpoint",
+          "tests/test_app.py contains a NameError due to undefined 'client' variable"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff only includes modifications to the test file, but does not include the necessary changes to app.py to add the new endpoint. Additionally, the test file contains a NameError because the 'client' variable is not defined.",
+        "issues": [
+          "app.py is not modified to add the new endpoint",
+          "tests/test_app.py contains a NameError due to undefined 'client' variable",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "68634751129b",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_0_live\\Nix_Workshop_v0_7_0\\hive_runs\\68634751129b\\run.json",
+      "source_sha256": "5f0163b840795386e8dca4606a5d7cf25965fc82003f32ee9d0b71ffc222eeeb",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request asks for an additional endpoint and UI integration, but the diff only includes changes to the HTML and JavaScript files without adding the required backend logic.",
+        "issues": [
+          "Backend logic for the new endpoint is missing",
+          "UI integration logic is incomplete"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request asks for an additional endpoint and UI integration, but the diff only includes changes to the HTML and JavaScript files without adding the required backend logic.",
+        "issues": [
+          "Backend logic for the new endpoint is missing",
+          "UI integration logic is incomplete",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "813b8f112c63",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_1_project_summary_replay\\Nix_Workshop_v0_7_1\\hive_runs\\813b8f112c63\\run.json",
+      "source_sha256": "36adce1ba2c28f4c1047740521b3f6cae24b77897878c07213d19714f976fe07",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request specifies adding a new GET /api/project/summary endpoint, updating the UI to display the summary in the Settings panel with a refresh control, and adding endpoint and UI regression tests. The provided diff does not include any of these changes.",
+        "issues": [
+          "The diff does not include the required changes for the new endpoint, UI updates, or tests."
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request specifies adding a new GET /api/project/summary endpoint, updating the UI to display the summary in the Settings panel with a refresh control, and adding endpoint and UI regression tests. The provided diff does not include any of these changes.",
+        "issues": [
+          "The diff does not include the required changes for the new endpoint, UI updates, or tests.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "10aa42800bb5",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_2_project_summary_replay\\Nix_Workshop_v0_7_2\\hive_runs\\10aa42800bb5\\run.json",
+      "source_sha256": "2d867fdbb41d7c4f0604930bc80e4e4474a0838973959bf4b5b0792203013b29",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff contains indentation errors in the test files, which caused the verification to fail.",
+        "issues": [
+          "IndentationError in test_hive_endpoints.py and test_hive_ui_retrieval.py"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff contains indentation errors in the test files, which caused the verification to fail.",
+        "issues": [
+          "IndentationError in test_hive_endpoints.py and test_hive_ui_retrieval.py",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "0d713899908d",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_4_source\\Nix_Workshop_v0_7_4\\hive_runs\\0d713899908d\\run.json",
+      "source_sha256": "18f973d8e4bcbcacba5fa394fac47d3dd4d8f7f672f8bfd3c8280ee8ad291965",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff introduces a new backend endpoint and frontend display for project summary, but it contains errors that prevent the tests from passing. Specifically, the FastAPI object does not have a 'route' attribute, and the tests are not implemented.",
+        "issues": [
+          "AttributeError: 'FastAPI' object has no attribute 'route'. Did you mean: 'router'?",
+          "Tests for the new backend endpoint and frontend display are not implemented."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff introduces a new backend endpoint and frontend display for project summary, but it contains errors that prevent the tests from passing. Specifically, the FastAPI object does not have a 'route' attribute, and the tests are not implemented.",
+        "issues": [
+          "AttributeError: 'FastAPI' object has no attribute 'route'. Did you mean: 'router'?",
+          "Tests for the new backend endpoint and frontend display are not implemented.",
+          "Deterministic verification failed."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "5d6eee8ea24e",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_4_source\\Nix_Workshop_v0_7_4\\hive_runs\\5d6eee8ea24e\\run.json",
+      "source_sha256": "99989dfc899ab3a37b1f19476b6479a468d813ffc8da4468fea216601126246b",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": true,
+        "summary": "The proposed diff matches the request, stays narrowly scoped, and deterministic verification passed.",
+        "issues": [],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff matches the request, stays narrowly scoped, and deterministic verification passed.",
+        "issues": [
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "approved",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "approved",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "9028a64c5adb",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_4_source\\Nix_Workshop_v0_7_4\\hive_runs\\9028a64c5adb\\run.json",
+      "source_sha256": "804e33a7649f9f40816aa33610c3c63a82ca5629795395e62fd88ee774a0b84e",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, and add regression tests. The diff appears to only include deterministic verification checks.",
+        "issues": [
+          "The diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, and add regression tests."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, and add regression tests. The diff appears to only include deterministic verification checks.",
+        "issues": [
+          "The diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, and add regression tests.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "f52a2afdea53",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_4_source\\Nix_Workshop_v0_7_8_archive_verify_final3\\Nix_Workshop_v0_7_8\\hive_runs\\f52a2afdea53\\run.json",
+      "source_sha256": "2f6bbab2bab645a800b70a3cb1654723f9fde73624f276be44a846aa2b259df6",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request was to add a Project Summary to Settings, but the diff does not include any changes to the Settings or add a Project Summary.",
+        "issues": [
+          "Diff does not match the request"
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request was to add a Project Summary to Settings, but the diff does not include any changes to the Settings or add a Project Summary.",
+        "issues": [
+          "Diff does not match the request",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "195211d71768",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_4_source\\Nix_Workshop_v0_7_9_live\\Nix_Workshop_v0_7_9\\hive_runs\\195211d71768\\run.json",
+      "source_sha256": "47a07d63584a4ddcf534ad292c23f3e681f76dc4b50b5223ad584936b54758eb",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request was to add a Project Summary to Settings, but the diff does not include any changes to the Settings or add a Project Summary.",
+        "issues": [
+          "Diff does not match the request"
+        ],
+        "confidence": 1.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request. The request was to add a Project Summary to Settings, but the diff does not include any changes to the Settings or add a Project Summary.",
+        "issues": [
+          "Diff does not match the request",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 1.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "9292cd525989",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-09-13\\referenced-chatgpt-conversation-this-is-an\\work\\Nix_Workshop_v0_7_7_archive_verify_final\\Nix_Workshop_v0_7_7\\hive_runs\\9292cd525989\\run.json",
+      "source_sha256": "71d1a464a62e45a11c5826f277c9ab48748162b119f157d97cb9387c052fb1c0",
+      "provenance": "LEGACY_REVIEW_WITHOUT_CALL_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, display the information in the existing Settings UI, and add regression tests for the endpoint and frontend behavior.",
+        "issues": [
+          "The diff does not include the requested changes."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not include the requested changes to add a Project Summary section to Settings, create a backend endpoint, display the information in the existing Settings UI, and add regression tests for the endpoint and frontend behavior.",
+        "issues": [
+          "The diff does not include the requested changes.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "blocked_by_policy",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "no_changed_files",
+          "controller_errors",
+          "missing_base_manifest",
+          "missing_staged_manifest",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "8aa64e4e455d",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-001\\evidence\\live\\01-J001-r1-qwen2.5-coder-14b-hive\\run.json",
+      "source_sha256": "a860c8b9ddfde5887e3ddde731f31c399ce714b8062d59ed02729a57f44f7a3f",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure."
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff does not match the request, and deterministic verification failed.",
+        "issues": [
+          "The proposed diff is not provided.",
+          "Deterministic verification failed due to a worker or edit prerequisite failure.",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "45ad10e6dd49",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\hive-transition-003\\evidence\\live-diagnostic\\01-J001-r1-qwen2.5-coder-14b-hive\\run.json",
+      "source_sha256": "201e43fe43ed20ee998b1ae110a8338a7bb8cdb6b0a205b27d2da0fe92730ede",
+      "provenance": "REVIEW_WITH_PROVIDER_TELEMETRY",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": false,
+      "original_independent_blockers": [
+        "verification_not_passed",
+        "prior_errors",
+        "no_changed_files"
+      ],
+      "original_raw_model_review": {
+        "approve": false,
+        "summary": "The proposed diff has not been provided, and the deterministic verification failed due to a worker or edit prerequisite.",
+        "issues": [
+          "No diff provided",
+          "Deterministic verification failed"
+        ],
+        "confidence": 0.0
+      },
+      "original_host_review": {
+        "approve": false,
+        "summary": "The proposed diff has not been provided, and the deterministic verification failed due to a worker or edit prerequisite.",
+        "issues": [
+          "No diff provided",
+          "Deterministic verification failed",
+          "Deterministic verification failed.",
+          "One or more agents failed; partial proposals cannot be approved.",
+          "No valid scoped edits were produced."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "rejected",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "external_candidate_only",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "failed",
+        "review_disposition": "rejected",
+        "candidate_disposition": "verification_failed",
+        "deterministic_eligibility": false,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "verification_failed",
+          "no_changed_files",
+          "controller_errors",
+          "semantic_review_rejected"
+        ],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Host blockers separated from raw model judgment; candidate remains blocked.",
+      "promoted": false,
+      "verification_unchanged": true
+    },
+    {
+      "id": "4574db69cea0",
+      "source": "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HIVE-TRANSITION-005-RUNTIME-REPLACEMENT-1\\evidence\\live-diagnostic\\01-J001-r1-qwen2.5-coder-14b-hive\\run.json",
+      "source_sha256": "b981b8ebff4befb3028e822dc5309c41ff90c9e7ae621691af9d784975ce640c",
+      "provenance": "REVIEW_ATTEMPT_WITHOUT_DECISION",
+      "original_status": "rejected",
+      "original_deterministic_eligibility": true,
+      "original_independent_blockers": [],
+      "original_raw_model_review": null,
+      "original_host_review": {
+        "approve": false,
+        "summary": "Reviewer call failed.",
+        "issues": [
+          "Ollama chat failed at http://127.0.0.1:11434: chat attempt 2/2: OllamaRequestError: HTTP 500: {\"error\":\"llama-server process has terminated: exit status 1: ggml_backend_cpu_buffer_type_alloc_buffer: failed to allocate buffer of size 5843582976\\nalloc_tensor_range: failed to allocate CUDA_Host buffer of size 5843582976\\nerror loading model: unable to allocate CUDA_Host buffer\"}",
+          "One or more agents failed; partial proposals cannot be approved."
+        ],
+        "confidence": 0.0
+      },
+      "new_review_disposition": "unavailable",
+      "counterfactual_with_original_external_restriction": {
+        "verification_status": "passed",
+        "review_disposition": "unavailable",
+        "candidate_disposition": "verified_review_unavailable",
+        "deterministic_eligibility": true,
+        "human_review_eligible": false,
+        "ready": false,
+        "promotion_authorization": "blocked",
+        "promotion_blockers": [
+          "external_candidate_only"
+        ],
+        "promotion_eligible": false
+      },
+      "ordinary_workshop_policy_projection": {
+        "verification_status": "passed",
+        "review_disposition": "unavailable",
+        "candidate_disposition": "verified_review_unavailable",
+        "deterministic_eligibility": true,
+        "human_review_eligible": true,
+        "ready": true,
+        "promotion_authorization": "not_authorized",
+        "promotion_blockers": [],
+        "promotion_eligible": false
+      },
+      "meaningful_change": "Verified facts preserved; unavailable review is no longer a semantic veto; external promotion remains forbidden.",
+      "promoted": false,
+      "verification_unchanged": true
+    }
+  ]
+}

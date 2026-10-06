@@ -1,0 +1,54 @@
+[
+  {
+    "step": "nfrt-preflight",
+    "command": [
+      "C:\\Users\\billy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-B",
+      "-u",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\nfrt_preflight.py"
+    ],
+    "exit_code": 0,
+    "finished_at": "2026-10-06T01:56:08.580881+00:00"
+  },
+  {
+    "step": "final-unit-tests",
+    "command": [
+      "C:\\Users\\billy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\test_recorder.py",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\test_cell_harness.py",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\test_orchestration.py",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001/evidence/final-unit-temp",
+      "--junitxml=C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001/evidence/final-unit-tests.xml"
+    ],
+    "exit_code": 0,
+    "finished_at": "2026-10-06T01:56:44.248852+00:00"
+  },
+  {
+    "step": "real-scripted-cell",
+    "command": [
+      "C:\\Users\\billy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-B",
+      "-u",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\run_dry_cell.py"
+    ],
+    "exit_code": 0,
+    "finished_at": "2026-10-06T01:59:16.174677+00:00"
+  },
+  {
+    "step": "final-audit",
+    "command": [
+      "C:\\Users\\billy\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+      "-B",
+      "-u",
+      "C:\\Users\\billy\\Documents\\Codex\\2026-10-05\\hive-transition-001-diagnose-and-repair\\HARNESS-QUALIFICATION-001\\audit_after.py"
+    ],
+    "exit_code": 0,
+    "finished_at": "2026-10-06T01:59:52.435560+00:00"
+  }
+]

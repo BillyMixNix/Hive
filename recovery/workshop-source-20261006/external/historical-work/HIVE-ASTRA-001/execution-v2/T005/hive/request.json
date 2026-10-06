@@ -1,0 +1,24 @@
+{
+  "request": "Add `PlanningReport.diagnostics()` as a deterministic, immutable projection. Start with `plan.limitations()` in encounter order, remove duplicates while preserving first occurrence, then append (when applicable): `Planning search was truncated.`, `Recipe index is incomplete.`, `Quest context unavailable (<STATUS>): <detail>`, and `Knowledge graph is truncated; some nodes or edges were omitted.` Return at most 16 entries. Do not claim unavailable information is known.",
+  "allow_cloud": true,
+  "agent_backend": "persistent",
+  "persistent_agent_model": "gpt-6-astra",
+  "external_source_root": "C:/Users/billy/Documents/Codex/2026-09-22/atm10-ai-companion-autonomous-build-mega/local-model-trial/runs/20260924-181046/baseline",
+  "allow_external_root": true,
+  "frozen_junit_tests": [
+    {
+      "path": "src/test/java/dev/atmcompanion/planning/PlanningReportDiagnosticsAcceptanceTest.java",
+      "class_name": "dev.atmcompanion.planning.PlanningReportDiagnosticsAcceptanceTest",
+      "expected_cases": 2,
+      "source": "package dev.atmcompanion.planning;\n\nimport dev.atmcompanion.state.Observation;\nimport org.junit.jupiter.api.Test;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\nclass PlanningReportDiagnosticsAcceptanceTest {\n    private PlanResult plan(List<String> limitations, boolean searchTruncated, boolean indexComplete) {\n        var metrics = new PlanResult.Metrics(1, 20, 3, searchTruncated, indexComplete, 50L);\n        var action = new PlanResult.Action(\"inspect_step\", \"minecraft:iron_ingot\", 1, \"recipe:iron\", \"inspect\");\n        return new PlanResult(2, \"minecraft:iron_ingot\", 1, \"ready\", List.of(), List.of(), List.of(),\n                action, List.of(), List.of(), metrics, limitations);\n    }\n\n    @Test\n    void composesDeduplicatesBoundsAndPreservesUnknownsInStableOrder() {\n        var report = new PlanningReport(1, \"2026-09-30T12:00:00Z\",\n                plan(List.of(\"Plan caveat\", \"Shared caveat\", \"Plan caveat\"), true, false),\n                Observation.unavailable(\"FTB probe unavailable\"),\n                new KnowledgeGraph(List.of(), List.of(), true));\n\n        var diagnostics = report.diagnostics();\n        assertEquals(List.of(\n                \"Plan caveat\",\n                \"Shared caveat\",\n                \"Planning search was truncated.\",\n                \"Recipe index is incomplete.\",\n                \"Quest context unavailable (UNAVAILABLE): FTB probe unavailable\",\n                \"Knowledge graph is truncated; some nodes or edges were omitted.\"\n        ), diagnostics);\n        assertThrows(UnsupportedOperationException.class, () -> diagnostics.add(\"mutate\"));\n    }\n\n    @Test\n    void capsAtSixteenAfterStableDeDuplicationAndAddsNoFalseCaveats() {\n        var limitations = java.util.stream.IntStream.range(0, 20).mapToObj(i -> \"limit-\" + i).toList();\n        var report = new PlanningReport(1, \"2026-09-30T12:00:00Z\",\n                plan(limitations, false, true),\n                Observation.available(new PlanningReport.QuestContext(\"team\", 0, 0, 0, 0, List.of(), \"id\")),\n                new KnowledgeGraph(List.of(), List.of(), false));\n\n        var diagnostics = report.diagnostics();\n        assertEquals(16, diagnostics.size());\n        assertEquals(\"limit-0\", diagnostics.getFirst());\n        assertEquals(\"limit-15\", diagnostics.getLast());\n        assertFalse(diagnostics.stream().anyMatch(x -> x.startsWith(\"Quest context unavailable\")));\n    }\n}\n"
+    }
+  ],
+  "experiment": {
+    "study_id": "HIVE-ASTRA-001-v2",
+    "condition_id": "hive",
+    "task_id": "T005",
+    "replicate_index": 1,
+    "trial_id": "56bbdca0a075",
+    "condition_spec_sha256": "2d33ce88af66ed3e1f0c1e73ce3a1de62ffe36cd355a21554cc7306fddb6d291"
+  }
+}

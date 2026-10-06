@@ -1,0 +1,13 @@
+{
+  "text": "{\n  \"status\": \"implemented\",\n  \"summary\": \"Implemented coverage percentage calculation methods in execution context and assessment\",\n  \"edits\": [\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/execution/ExecutionContext.java\",\n      \"operation\": \"insert_after_anchor\",\n      \"anchor\": \"public record Scan(int radius, int totalPositions, int scannedPositions, int loadedPositions,\",\n      \"insert\": \"    public int coveragePercent() {\\n        if (totalPositions == 0) return 0;\\n        return (int) (100 * scannedPositions / totalPositions);\\n    }\"\n    },\n    {\n      \"path\": \"src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java\",\n      \"operation\": \"insert_after_anchor\",\n      \"anchor\": \"public record ExecutionAssessment(String status, String recipeId, long operations, String station,\",\n      \"insert\": \"    public int observedCoveragePercent() {\\n        if (observation == null) return -1;\\n        return observation.scan().coveragePercent();\\n    }\"\n    }\n  ],\n  \"risks\": []\n}",
+  "input_tokens": 6709,
+  "output_tokens": 240,
+  "raw_id": null,
+  "thinking_policy": {
+    "requested": false,
+    "validation": "host-attested boolean control",
+    "provider_version": "0.34.0",
+    "model_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+    "template_sha256": "ae370d884f108d16e7cc8fd5259ebc5773a0afa6e078b11f4ed7e39a27e0dfc4"
+  }
+}

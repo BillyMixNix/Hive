@@ -1,0 +1,6 @@
+{
+  "text": "{\n  \"summary\": \"Implement coverage percentage calculation methods in execution context and assessment\",\n  \"ui_goal\": \"no change needed\",\n  \"backend_goal\": \"Add coveragePercent() to ExecutionContext and observedCoveragePercent() to ExecutionAssessment with specified behavior\",\n  \"tests_goal\": \"no change needed\",\n  \"worker_files\": {\n    \"ui\": [],\n    \"backend\": [\n      \"src/main/java/dev/atmcompanion/execution/ExecutionContext.java\",\n      \"src/main/java/dev/atmcompanion/execution/ExecutionAssessment.java\"\n    ],\n    \"tests\": []\n  },\n  \"acceptance\": [\n    \"coveragePercent() returns floor(100 * scannedPositions/totalPositions) with zero for zero division\",\n    \"observedCoveragePercent() delegates to observation's scan or returns -1 when unobserved\"\n  ],\n  \"worker_acceptance\": {\n    \"ui\": [],\n    \"backend\": [\n      \"implements coveragePercent() with exact mathematical behavior\",\n      \"implements observedCoveragePercent() with observation delegation and -1 fallback\"\n    ],\n    \"tests\": []\n  },\n  \"interface_contracts\": [],\n  \"provider_changes\": []\n}",
+  "input_tokens": 3884,
+  "output_tokens": 1346,
+  "raw_id": null
+}
