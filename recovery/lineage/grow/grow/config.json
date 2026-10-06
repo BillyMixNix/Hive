@@ -1,0 +1,35 @@
+{
+  "experiment_id": "GROW-0",
+  "benchmark_bundle_id": "grow0-provenance-trigger-v1+grow0-provenance-transfer-v1",
+  "mutable_paths": [
+    "grow/workshop/repair_packet.py"
+  ],
+  "immutable_paths": [
+    "grow/kernel/evaluator.py",
+    "grow/kernel/promotion.py",
+    "grow/kernel/trigger_case.json",
+    "grow/kernel/hidden_transfer.json",
+    "grow/config.json"
+  ],
+  "kernel": {
+    "trigger_path": "grow/kernel/trigger_case.json",
+    "hidden_transfer_path": "grow/kernel/hidden_transfer.json",
+    "evaluator_path": "grow/kernel/evaluator.py",
+    "promotion_path": "grow/kernel/promotion.py"
+  },
+  "lineage": {
+    "ledger_path": "grow/state/lineage.jsonl",
+    "lesson_ledger_path": "grow/state/rejection_lessons.jsonl",
+    "snapshot_dir": "grow/state/generations"
+  },
+  "model": {
+    "identity": "qwen2.5-coder:7b",
+    "digest": "REQUIRE_LOCAL_DIGEST_BEFORE_REAL_RUN",
+    "temperature": 0.0,
+    "seed": 42,
+    "context_tokens": 8192,
+    "max_output_tokens": 2048,
+    "max_calls_per_case": 4,
+    "safety_profile": "hive-default"
+  }
+}
