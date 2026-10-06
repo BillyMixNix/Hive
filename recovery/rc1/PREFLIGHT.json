@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "classification": "PARTIAL",
+  "clean_checkout_commit": "c0e66e1133376d24f9d89e95fdc44a753ab39ef4",
+  "clean_checkout_kind": "detached sparse Git worktree at the RC1 commit",
+  "anchor_commit": "edadbd8da46f3fd5ace479b7292012665d80096f",
+  "canonical_runtime_git_tree": "e00351c726a857c9e6d69b79aa1c6ca55bb1707e",
+  "source_manifest_sha256": "35617f3e24887b013bcc0e237c2f51276dee20983c4b2004f1298dfaeb531f55",
+  "historical_corpus_git_tree_at_anchor_and_rc1": "214a81054c99ec4a12db04f60d17bb25ec9011bb",
+  "baseline_git_tree_at_anchor_and_rc1": "517e5cb3a523f944c68833b196bd511cbcd0fc07",
+  "frozen_baseline_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388",
+  "frozen_j001_test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+  "environment": {
+    "os": "Windows, PowerShell host with Linux Docker daemon",
+    "python": "3.13.14",
+    "pytest": "9.1.1",
+    "jsonschema": "4.26.0 (installed outside repository after initial collection failure)",
+    "fastapi": "0.141.1",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.4",
+    "node": "22.18.0",
+    "docker": "29.7.2",
+    "verifier_image_sha256": "b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "java_gradle": "pinned container JDK 21 and frozen Gradle wrapper 9.2.1; no host Gradle required",
+    "approved_cache": "host-local historical approved Gradle/NFRT cache; not present in Git corpus"
+  },
+  "checks": [
+    {
+      "name": "python_parse",
+      "command": "python -B -c \"import ast,pathlib; files=list(pathlib.Path('hive_canonical').rglob('*.py')); [ast.parse(p.read_bytes(),filename=str(p)) for p in files]; print('parsed',len(files),'Python files')\"",
+      "result": "PASS",
+      "files": 31
+    },
+    {
+      "name": "source_provenance",
+      "command": "python -B -c \"import sys,json,pathlib; sys.path.insert(0,'recovery/rc1'); import manifest; a,b=manifest.build(pathlib.Path('.')); x=json.loads(pathlib.Path('recovery/rc1/SOURCE_MANIFEST.json').read_text()); print(len(a['files']),a==x)\"",
+      "result": "PASS",
+      "runtime_files": 40,
+      "byte_preserved_source_files": 34
+    },
+    {
+      "name": "recovery_authority_tests",
+      "command": "python -B -m pytest -q tests/recovery --basetemp C:/Users/billy/Documents/Codex/2026-10-06/rc1-clean-test-temp --tb=short",
+      "result": "PASS_WITH_SKIP",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 1,
+      "elapsed_seconds": 2.41,
+      "skip_reason": "Windows symlink privilege unavailable"
+    },
+    {
+      "name": "archived_workshop_tests",
+      "working_directory": "recovery/workshop-source-20261006/workspace/HIVE-FACTORIAL-003R1/repaired-workshop",
+      "command": "python -B -m pytest -q tests --basetemp C:/Users/billy/Documents/Codex/2026-10-06/rc1-clean-legacy-temp --tb=short",
+      "result": "FAIL",
+      "passed": 602,
+      "failed": 11,
+      "skipped": 8,
+      "elapsed_seconds": 67.0,
+      "failure_class": "TEST_INCOMPATIBILITY",
+      "failure_detail": "All 11 failures are FileNotFoundError for historical replay fixtures under HIVE-FACTORIAL-003R1/evidence; that selected freeze has no such files at the paths hardcoded by three archived test modules. Analogous historical evidence exists elsewhere in the corpus. No archived test or fixture was changed."
+    },
+    {
+      "name": "java_frozen_baseline_targeted",
+      "command": "python -B recovery/rc1/java_preflight.py",
+      "result": "EXPECTED_HISTORICAL_FAILURE",
+      "verification_passed": false,
+      "elapsed_seconds": 196.057,
+      "last_observed_phase": "junit_reports_collected",
+      "failing_gate": "frozen_junit_acceptance",
+      "gradle_returncode": 1,
+      "timed_out": false,
+      "note": "Real unchanged J001 baseline reached frozen JUnit under the unchanged 240-second targeted limit. The bounded command summary did not retain fresh case counts; historical baseline record reports 3 cases, 1 failure and is not rescored."
+    },
+    {
+      "name": "historical_archive_identity",
+      "command": "git rev-parse HEAD:recovery/workshop-source-20261006; git rev-parse edadbd8da46f3fd5ace479b7292012665d80096f:recovery/workshop-source-20261006",
+      "result": "PASS",
+      "matching_git_tree": "214a81054c99ec4a12db04f60d17bb25ec9011bb"
+    }
+  ],
+  "live_model_calls": 0,
+  "historical_experiment_reruns": 0,
+  "promotion_attempts": 0,
+  "unresolved": [
+    "11 archived tests require historical fixtures absent at their selected-tree paths",
+    "approved Gradle/NFRT cache and Docker image are host-local, so a new machine cannot independently reproduce the Java gate from Git alone",
+    "complete original promotion bundle consumer and its tests were not recovered",
+    "generic Gradle build-script changes need a separate verifier-forgery qualification before RC1 can call their results authoritative",
+    "source manifest is checked at preflight, not attested on every runtime call"
+  ]
+}
