@@ -1,0 +1,46 @@
+name: Hive portable verifier reconstruction
+run-name: Model-free J001 reconstruction at ${{ github.sha }}
+
+on:
+  push:
+    branches: [remote/hive-verifier-reconstruction]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-portable-verifier-reconstruction
+  cancel-in-progress: false
+
+jobs:
+  baseline:
+    # A push runs only with this deliberate one-run operator marker.
+    # Ordinary source/evidence commits do not execute the experiment.
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[portable-verifier-once]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify acquisition and reconstruction boundaries
+        run: python3 -I -S -B portable_verifier/entrypoint.py --test
+      - name: Reconstruct and attempt one unchanged J001 baseline
+        env:
+          HIVE_EXPECTED_COMMIT: ${{ github.sha }}
+        run: >-
+          python3 -I -S -B portable_verifier/entrypoint.py functional-baseline
+          --expected-commit "$HIVE_EXPECTED_COMMIT"
+          --root "$RUNNER_TEMP/hive-portable-apparatus"
+          --evidence "$RUNNER_TEMP/hive-portable-evidence"
+      - name: Preserve metadata only; no third-party payloads or raw logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hive-portable-verifier-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-portable-evidence/manifest.json
+          retention-days: 30
+          if-no-files-found: error

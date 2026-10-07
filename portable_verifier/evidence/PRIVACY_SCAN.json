@@ -1,0 +1,135 @@
+{
+  "scope": "new reconstruction files only; historical evidence unchanged",
+  "scanned_files": [
+    {
+      "path": ".github/workflows/hive-portable-verifier.yml",
+      "sha256": "746999f0833144dd42a7afea547e851432b93c37e9fad41b2b112fccd2980c0c"
+    },
+    {
+      "path": "HIVE_PORTABLE_VERIFIER_RECONSTRUCTION.md",
+      "sha256": "945d0c7c5847b9fb01f6c27d266d5862970ee20f9852af1db78b09bda32c6f3d"
+    },
+    {
+      "path": "portable_verifier/Dockerfile",
+      "sha256": "bacb5ee3474d31c40706b86ea43656251263329cd76c1710e2dde52d3a081c9f"
+    },
+    {
+      "path": "portable_verifier/__init__.py",
+      "sha256": "7a3bb93ea802d479f4cf813f88201a23c156a7525941d4723fad67e0e40758d2"
+    },
+    {
+      "path": "portable_verifier/acquire.py",
+      "sha256": "fa5106e01d15fcfb9a6669d7100f098c3129873f0fb45ea96b7f32ad97ce578d"
+    },
+    {
+      "path": "portable_verifier/bootstrap.py",
+      "sha256": "bb43d327ad527afe9dbc68dd673d1c802217540c4a59db50e97a5abb34ec9739"
+    },
+    {
+      "path": "portable_verifier/entrypoint.py",
+      "sha256": "e65f702449c3201cfe7e990c543983f6f07a8cfebf3e2cfeb34854c34304fa6c"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "sha256": "98982ffba8bd575d6a04cc53391ff4a62e1378cb9478b41bab73fd967528e9ed"
+    },
+    {
+      "path": "portable_verifier/evidence/UPSTREAM_PINS.json",
+      "sha256": "1fe9a6e33e6cc21ec7e2337ed91377ce6b1d0f5b91d44b14e07f09cad718c2a8"
+    },
+    {
+      "path": "portable_verifier/prime_inputs.py",
+      "sha256": "c05d7beda87700a5eb1d9987add5fe341221313ca48280658ee5a5201a2dc82f"
+    },
+    {
+      "path": "tests/portable_verifier/test_boundaries.py",
+      "sha256": "1aaeaa794107a1c8ebed889087e6c436b6be93d6f30dfbf07db65c551017e9c3"
+    }
+  ],
+  "findings": [
+    {
+      "path": "portable_verifier/bootstrap.py",
+      "line": 132,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/acquire.py",
+      "line": 25,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1174,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1177,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1183,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1186,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1192,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1195,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1471,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1474,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1480,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
+      "line": 1483,
+      "kind": "personal_host"
+    },
+    {
+      "path": "portable_verifier/evidence/UPSTREAM_PINS.json",
+      "line": 6,
+      "kind": "personal_host"
+    },
+    {
+      "path": "tests/portable_verifier/test_boundaries.py",
+      "line": 15,
+      "kind": "private_path"
+    },
+    {
+      "path": "tests/portable_verifier/test_boundaries.py",
+      "line": 18,
+      "kind": "personal_host"
+    },
+    {
+      "path": "HIVE_PORTABLE_VERIFIER_RECONSTRUCTION.md",
+      "line": 26,
+      "kind": "personal_host"
+    }
+  ],
+  "model_calls": 0,
+  "third_party_binary_payloads": false,
+  "review": "All pattern findings manually reviewed: version numbers, public artifact names, or deliberately invalid test URLs/paths. No real credentials, private paths, email addresses, IP addresses or host identifiers in new files.",
+  "secret_or_privacy_findings": 0
+}
