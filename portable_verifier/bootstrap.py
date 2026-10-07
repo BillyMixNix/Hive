@@ -202,6 +202,23 @@ def functional_baseline(downloads, work, c, evidence):
         p.chmod(0o777 if p.is_dir() else 0o666)
     cache.chmod(0o777)
     (cache / 'wrapper').chmod(0o777)
+    # On Linux, chmod alone does not authorize utimensat with explicit times.
+    # NFRT sets Last-Modified timestamps even on byte-verified cached inputs.
+    # This fixed maintenance process sees ONLY the fresh cache, no candidate or
+    # frozen tests. CAP_CHOWN is absent from priming and acceptance containers.
+    ownership_script = (
+        'import os,stat; from pathlib import Path; root=Path("/owned-cache"); '
+        'paths=[root,*root.rglob("*")]; '
+        'assert all(not p.is_symlink() and (p.is_file() or p.is_dir()) for p in paths); '
+        '[os.chown(p,65532,65532,follow_symlinks=False) for p in paths]'
+    )
+    command(['docker', 'run', '--rm', '--network=none', '--read-only', '--user=0:0',
+             '--cap-drop=ALL', '--cap-add=CHOWN', '--security-opt=no-new-privileges',
+             '--mount', f'type=bind,source={cache},target=/owned-cache',
+             '--entrypoint=python3', image, '-I', '-S', '-c', ownership_script], timeout=60)
+    evidence['cache_ownership'] = {'uid': 65532, 'gid': 65532, 'scope': 'fresh run-owned cache only',
+                                   'phase': 'fixed maintenance; no candidate execution',
+                                   'priming_caps': 'ALL_DROPPED', 'verifier_caps': 'ALL_DROPPED'}
     profile_file = work / 'profile.json'
     profile_file.write_text(json.dumps(profile))
     cmd = ['docker', 'run', '--rm', '--network=bridge', '--read-only', '--cap-drop=ALL',
