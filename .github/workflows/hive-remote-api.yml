@@ -1,0 +1,54 @@
+name: Hive remote API infrastructure
+run-name: Hive API ${{ inputs.mode }} at 205bd9c
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Model-free infrastructure; smoke is blocked pending a total cost policy
+        type: choice
+        default: preflight
+        options: [preflight, prepare, smoke]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-remote-api-infrastructure
+  cancel-in-progress: false
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: hive-api-infrastructure
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          # The reviewed portable reconstruction includes the unchanged API provider.
+          ref: 205bd9cd5e16fff7a1e0786134fac41c44d0f564
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Inventory or prepare without credentials
+        if: inputs.mode != 'smoke'
+        env:
+          HIVE_MODE: ${{ inputs.mode }}
+        run: >-
+          python3 -B -m hive_remote.runner "$HIVE_MODE"
+          --expected-commit 205bd9cd5e16fff7a1e0786134fac41c44d0f564
+          --output-root "$RUNNER_TEMP/hive-remote-evidence"
+      - name: Block paid smoke before credentials or API requests
+        if: inputs.mode == 'smoke'
+        shell: bash
+        run: |
+          echo 'BLOCKED: the required input-token count request has no verified charge ceiling.' >&2
+          echo 'A generation-only $0.01 reservation cannot guarantee the approved $0.01 total.' >&2
+          exit 2
+      - name: Preserve evidence even on blocked qualification
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hive-remote-api-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-remote-evidence/
+          retention-days: 30
+          if-no-files-found: warn
