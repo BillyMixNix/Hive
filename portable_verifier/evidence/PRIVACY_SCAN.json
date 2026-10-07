@@ -1,135 +1,218 @@
 {
-  "scope": "new reconstruction files only; historical evidence unchanged",
+  "checks": [
+    "credential_prefix",
+    "private_key",
+    "private_path",
+    "email",
+    "bearer",
+    "assigned_credential",
+    "host_identifier",
+    "credential_bearing_url",
+    "environment_credential_values",
+    "ipv4_host_metadata",
+    "binary_payloads"
+  ],
+  "findings": [
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "private_path",
+      "line": 16,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "private_path",
+      "line": 18,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "email",
+      "line": 16,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "email",
+      "line": 28,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "bearer",
+      "line": 16,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "credential_bearing_url",
+      "line": 16,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "credential_bearing_url",
+      "line": 28,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    },
+    {
+      "disposition": "DELIBERATE_INVALID_TEST_FIXTURE",
+      "kind": "credential_bearing_url",
+      "line": 29,
+      "path": "tests/portable_verifier/test_boundaries.py"
+    }
+  ],
+  "ipv4_like_matches": {
+    "occurrences": 154,
+    "reviewed_as": "Pinned public release identifiers Temurin 21.0.12.1, DiffPatch 2.0.0.36, and Quack 0.4.10.101"
+  },
+  "model_calls": 0,
+  "review": "Sensitive patterns occur only in deliberately invalid redaction/security test fixtures. New evidence contains relative artifact/runtime paths, generic documented bootstrap paths, public upstream URLs and nonpersonal apparatus fingerprints. Exact experimental results and failed run manifests retained unchanged.",
   "scanned_files": [
     {
+      "bytes": 1778,
       "path": ".github/workflows/hive-portable-verifier.yml",
       "sha256": "746999f0833144dd42a7afea547e851432b93c37e9fad41b2b112fccd2980c0c"
     },
     {
+      "bytes": 8533,
+      "path": "HIVE_PORTABLE_VERIFIER_QUALIFICATION.md",
+      "sha256": "a5dcb7b151b7291215c1d90351a0962ac3cf9dcdf451347ba07c0aab620780ec"
+    },
+    {
+      "bytes": 13068,
       "path": "HIVE_PORTABLE_VERIFIER_RECONSTRUCTION.md",
-      "sha256": "945d0c7c5847b9fb01f6c27d266d5862970ee20f9852af1db78b09bda32c6f3d"
+      "sha256": "4841e12399c5368a0deb32386f9a10dcdb4b43ae6f41be1421d49301d3f84457"
     },
     {
+      "bytes": 4942,
+      "path": "HIVE_PORTABLE_VERIFIER_REPRODUCE.md",
+      "sha256": "440dd26ffbfa70acddaffe541897f0fd1629dee4b9dadfa0ca72887bdfda9c52"
+    },
+    {
+      "bytes": 654,
       "path": "portable_verifier/Dockerfile",
-      "sha256": "bacb5ee3474d31c40706b86ea43656251263329cd76c1710e2dde52d3a081c9f"
+      "sha256": "22ce5567db077b953527c54271e177a4df86eb369a4e5d0e3bee4b039a15ad99"
     },
     {
+      "bytes": 83,
       "path": "portable_verifier/__init__.py",
       "sha256": "7a3bb93ea802d479f4cf813f88201a23c156a7525941d4723fad67e0e40758d2"
     },
     {
+      "bytes": 8781,
       "path": "portable_verifier/acquire.py",
       "sha256": "fa5106e01d15fcfb9a6669d7100f098c3129873f0fb45ea96b7f32ad97ce578d"
     },
     {
+      "bytes": 21208,
       "path": "portable_verifier/bootstrap.py",
-      "sha256": "bb43d327ad527afe9dbc68dd673d1c802217540c4a59db50e97a5abb34ec9739"
+      "sha256": "a371e222567a3aa6e5220c8e61bc5637280771a77f07bc44c6b0c9af5e7cbf58"
     },
     {
+      "bytes": 645,
       "path": "portable_verifier/entrypoint.py",
       "sha256": "e65f702449c3201cfe7e990c543983f6f07a8cfebf3e2cfeb34854c34304fa6c"
     },
     {
+      "bytes": 1135,
+      "path": "portable_verifier/evidence/ACQUISITION_SUMMARY.json",
+      "sha256": "de8567df5d3ee38d09e4c72d220452c3e1ed03686d267c47d8051086dc34a961"
+    },
+    {
+      "bytes": 2780574,
+      "path": "portable_verifier/evidence/ARTIFACT_CLASSIFICATION.json",
+      "sha256": "f816435adcb9009079d39155b850b984ba999c3c853a56f40b0102e51c8f3e6a"
+    },
+    {
+      "bytes": 5409,
+      "path": "portable_verifier/evidence/INDEX.json",
+      "sha256": "f5c428ef6dd260728a58e6e6e1890f576f28c177d93471d2044a634ce40e7e68"
+    },
+    {
+      "bytes": 14434,
+      "path": "portable_verifier/evidence/LOCAL_PREFLIGHT.json",
+      "sha256": "e70e5c5d6b90bc9b62e038c3ac9250a8f8b9dbf8c8d1d95e23d1251ab45d5f17"
+    },
+    {
+      "bytes": 207700,
       "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
       "sha256": "98982ffba8bd575d6a04cc53391ff4a62e1378cb9478b41bab73fd967528e9ed"
     },
     {
+      "bytes": 1889643,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_001.json",
+      "sha256": "a8a2f878b4f26bfde2149f7b017599cceceea1b4f39d4eb68fb21b7f283421f5"
+    },
+    {
+      "bytes": 2472,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_001_SUMMARY.json",
+      "sha256": "e383beccc715d118834050c9068328828950e3c5e6bdca45f75f20e337a4c650"
+    },
+    {
+      "bytes": 1898978,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_002.json",
+      "sha256": "562e52b539040a8e557a6efa68f90791fd3c1be9394c0debe6c9c968346b6013"
+    },
+    {
+      "bytes": 11773,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_002_SUMMARY.json",
+      "sha256": "882ae32274e4ed90c102b25ec76f56c27e6333f04b1cbb80c027a022abd14212"
+    },
+    {
+      "bytes": 3125653,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_003.json",
+      "sha256": "e0ec1afa9c9f6612015e80edb2dd56d9165f398e1d659a23627409181455cac4"
+    },
+    {
+      "bytes": 2788,
+      "path": "portable_verifier/evidence/REMOTE_ATTEMPT_003_SUMMARY.json",
+      "sha256": "09f7138de315f8b688ca206a49cc51bc12f99958edb6124ccefd4da80c6a1612"
+    },
+    {
+      "bytes": 2997,
+      "path": "portable_verifier/evidence/REMOTE_SUCCESS_SUMMARY.json",
+      "sha256": "de7c737331df912e4e9153e7537e182e954653d7770667f21bdb35f725a48c45"
+    },
+    {
+      "bytes": 3146211,
+      "path": "portable_verifier/evidence/REPRODUCIBILITY_MANIFEST.json",
+      "sha256": "13e68b42c395d12ae76630efc3952140586d7f365051bd9958df80d92bce091e"
+    },
+    {
+      "bytes": 858,
       "path": "portable_verifier/evidence/UPSTREAM_PINS.json",
       "sha256": "1fe9a6e33e6cc21ec7e2337ed91377ce6b1d0f5b91d44b14e07f09cad718c2a8"
     },
     {
+      "bytes": 2317,
       "path": "portable_verifier/prime_inputs.py",
-      "sha256": "c05d7beda87700a5eb1d9987add5fe341221313ca48280658ee5a5201a2dc82f"
+      "sha256": "80e4605da6bdb22724da4df81ebc3d6d18ec15bd2c3a5c1ceee422d062443a11"
     },
     {
+      "bytes": 1482,
+      "path": "portable_verifier/redact.py",
+      "sha256": "09d41e60ff26aaceb167228eb4a12fa3b1197c08cabc5575464c89d4c5987cd2"
+    },
+    {
+      "bytes": 296,
+      "path": "portable_verifier/resolve_inputs.gradle",
+      "sha256": "2ada312be9f66cb6e9e9f9174b4f1388f7f6e9090f6ce0b25ef0c1395a565702"
+    },
+    {
+      "bytes": 6146,
       "path": "tests/portable_verifier/test_boundaries.py",
-      "sha256": "1aaeaa794107a1c8ebed889087e6c436b6be93d6f30dfbf07db65c551017e9c3"
+      "sha256": "c81f9805a00b92fd830ad253b2d9b702ef518d0cde8997491d28ff86b8239746"
     }
   ],
-  "findings": [
-    {
-      "path": "portable_verifier/bootstrap.py",
-      "line": 132,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/acquire.py",
-      "line": 25,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1174,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1177,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1183,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1186,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1192,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1195,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1471,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1474,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1480,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/MAVEN_ACQUISITION.json",
-      "line": 1483,
-      "kind": "personal_host"
-    },
-    {
-      "path": "portable_verifier/evidence/UPSTREAM_PINS.json",
-      "line": 6,
-      "kind": "personal_host"
-    },
-    {
-      "path": "tests/portable_verifier/test_boundaries.py",
-      "line": 15,
-      "kind": "private_path"
-    },
-    {
-      "path": "tests/portable_verifier/test_boundaries.py",
-      "line": 18,
-      "kind": "personal_host"
-    },
-    {
-      "path": "HIVE_PORTABLE_VERIFIER_RECONSTRUCTION.md",
-      "line": 26,
-      "kind": "personal_host"
-    }
-  ],
-  "model_calls": 0,
+  "schema": 2,
+  "scope": "All reconstruction-branch additions/changes against published API qualification anchor; historical files unchanged. This report excluded from its own hash list.",
+  "secret_or_privacy_findings": 0,
+  "source_authority": "f93a6c2f79d25d24bdea1b171cd82a6b1f336667",
   "third_party_binary_payloads": false,
-  "review": "All pattern findings manually reviewed: version numbers, public artifact names, or deliberately invalid test URLs/paths. No real credentials, private paths, email addresses, IP addresses or host identifiers in new files.",
-  "secret_or_privacy_findings": 0
+  "validation": {
+    "boundary_tests_passed": 8,
+    "protected_experiment_source_changes": 0,
+    "raw_run_manifest_hashes_verified": 4
+  }
 }

@@ -1,0 +1,70 @@
+{
+  "classification": "UNAVAILABLE",
+  "blocker": "J001_BASELINE_NOT_REPRODUCED",
+  "baseline_result": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 0,
+    "timed_out": false
+  },
+  "baseline_matches_host_bound": false,
+  "targeted_elapsed_seconds": 44.033,
+  "image": {
+    "base_manifest": "sha256:de572b33eae61a53675a87bbd02b5e365df7b6b2b06c9276124e965cec08c452",
+    "classification": "DIFFERENT_ENVIRONMENT",
+    "container_python": "3.13.14",
+    "historical_exact_classification": "MISSING_PROVENANCE",
+    "historical_image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26",
+    "image_id": "sha256:08dd0781a00a6714c91a88afa73685a19120d20012cdad08e8b99fab966067e2",
+    "java_version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "matches_historical": false
+  },
+  "isolation": {
+    "available": true,
+    "backend": "docker",
+    "external_build_input_mounts": "read-only manifest-verified inputs copied into private tmpfs for execution",
+    "gradle_cache_mounts": "read-only wrapper distribution and modules-2 dependency cache",
+    "gradle_wrapper_version": "9.2.1",
+    "host_controlled_build_concurrency": {
+      "active_processor_count": 2,
+      "gradle_heap": "-Xmx768m",
+      "gradle_max_workers": 2
+    },
+    "image_id": "sha256:08dd0781a00a6714c91a88afa73685a19120d20012cdad08e8b99fab966067e2",
+    "image_ref": "nix-workshop-verifier:0.11.1-jvm21-extroot-002d-tmpfscopy",
+    "inherited_host_environment": [],
+    "java_runtime": "pinned JDK 21 in verifier image",
+    "limits": {
+      "cpus": 2,
+      "memory": "4g",
+      "memory_swap": "4g",
+      "pids": 448,
+      "swap_additional": "0 bytes"
+    },
+    "network": "none",
+    "rootfs": "readonly",
+    "source": "sanitized-readonly",
+    "workspace": "tmpfs"
+  },
+  "cache_ownership": {
+    "gid": 65532,
+    "phase": "fixed maintenance; no candidate execution",
+    "priming_caps": "ALL_DROPPED",
+    "scope": "fresh run-owned cache only",
+    "uid": 65532,
+    "verifier_caps": "ALL_DROPPED"
+  },
+  "git_commit": "4f6557f3af6f8543334611c12ba3ede954ef747a",
+  "model_calls": 0,
+  "host_local_payloads_used": false,
+  "started_utc": "2026-10-07T18:16:23.191215+00:00",
+  "ended_utc": "2026-10-07T18:19:38.850209+00:00",
+  "workflow_run_id": 37665497216,
+  "artifact_id": 11503695558,
+  "artifact_zip_sha256": "00ccfbf1b383bc1447dc1e379540e2a77c23facc105631cf403ead462ced0abd",
+  "raw_manifest_sha256": "e0ec1afa9c9f6612015e80edb2dd56d9165f398e1d659a23627409181455cac4",
+  "nfrt_byte_identical_files": 22,
+  "historical_gradle_metadata_matches": 207,
+  "priming_succeeded": true
+}

@@ -5,8 +5,12 @@ This is a separate, model-free apparatus. Its source authority is public commit
 authorization is reused. The controller, provider, prompts, frozen task, baseline,
 acceptance test, Gradle policy and isolated verifier source remain unchanged.
 
-**A reconstruction recipe is not a successful baseline result.** Consult the
-run's `manifest.json` for `classification` and `baseline_matches_host_bound`.
+**The clean hosted J001 baseline was reproduced on 2026-10-07.** See
+[the qualification report](HIVE_PORTABLE_VERIFIER_QUALIFICATION.md),
+[exact bootstrap instructions](HIVE_PORTABLE_VERIFIER_REPRODUCE.md), and
+[preserved manifest](portable_verifier/evidence/REPRODUCIBILITY_MANIFEST.json).
+The apparatus is FUNCTIONALLY_RECONSTRUCTED, not EXACTLY_REPRODUCED.
+Consult the run's `manifest.json` for `classification` and `baseline_matches_host_bound`.
 Only an actual isolated result of **3 cases, 1 failure, 0 errors, 0 skipped,
 no timeout** qualifies this narrow baseline comparison. A passing baseline is
 an integrity failure. A missing dependency, network attempt during verification,
@@ -26,23 +30,26 @@ No existing host payload or host cache is an input.
 | Temurin 21.0.12.1+1 upstream Linux x64 archive | INDEPENDENTLY_REACQUIRABLE | Official release archive SHA-256 `ce79869e1307ed8ee1e2baa86a412b1eb5b75d10a01006d788a6f968bcfaee94`. Embedded historical JDK files were not separately sealed; same release does not prove their byte identity. |
 | Gradle 9.2.1 ZIP | INDEPENDENTLY_REACQUIRABLE | SHA-256 `72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f`. |
 | 314 selected wrapper files | REPRODUCIBLE_FROM_PINNED_INPUTS | ZIP extraction plus two explicitly empty marker files; all 314 historical size/hash records verified. |
-| 420 Maven/plugin module files | INDEPENDENTLY_REACQUIRABLE once each acquisition record verifies | Versioned upstream Maven, plugin, Minecraft-library and NeoForged `mojang-meta` endpoints. Every file has a sealed size/SHA-256; unverified downloads fail closed. |
-| 215 generated Gradle module metadata/lock files | UNRESOLVED for exact bytes | Regenerate with Gradle 9.2.1 and unchanged project on the new apparatus. Inventory and compare every generated file; timestamps, repository metadata and lock state may differ. Never transfer or relabel the old tables. |
-| 3,894 non-launcher NFRT downloaded inputs | INDEPENDENTLY_REACQUIRABLE once each acquisition record verifies | Exact Minecraft client/server/mappings, version JSON, asset index, asset objects and binarypatcher. Content-addressed URLs where available; versioned URLs always checked against sealed SHA-256. |
+| 420 Maven/plugin module files | INDEPENDENTLY_REACQUIRABLE | All 420 independently acquired and hash-matched on the clean runner. Versioned upstream Maven, plugin, Minecraft-library and NeoForged `mojang-meta` endpoints; unverified downloads fail closed. |
+| 215 generated Gradle module metadata/lock files | 210 REPRODUCIBLE_FROM_PINNED_INPUTS; five UNRESOLVED for exact historical bytes | 210 historical hashes matched. Four generated indexes/lock files differ; the DevLaunch descriptor was absent and unnecessary for this J001 execution. Full cache byte identity remains unproven. |
+| 3,894 non-launcher NFRT downloaded inputs | INDEPENDENTLY_REACQUIRABLE | All independently acquired with exact historical hashes: Minecraft client/server/mappings, version JSON, asset index, asset objects and binarypatcher. Content-addressed URLs where available; versioned URLs checked against sealed SHA-256. |
 | Previously URL-less binarypatcher 2.1.2 fat JAR | INDEPENDENTLY_REACQUIRABLE | NeoForged Maven URL in `acquire.py`; 624,217 bytes, SHA-256 `9d73d565b775c8ec9da83da6d2a25454c7aad95eba22f64def9261f214cc49ba`. Independently fetched and matched. |
 | Historical global launcher manifest | TRANSFER_REQUIRED for its exact sealed bytes unless an independent historical origin is recovered | Recorded mutable URL now returns different bytes. Old SHA-256 `28b1e1e5d90851ce48ab935fe5644739364e262a8e8813e28e3d036aaec536ef`; current observation `845dfb7f8b28ce06bf0752b597ef2d4d65df973e4b59d8d6ff429ad2d3adde04`. Exact mode stops. |
 | Functional launcher discovery index | REPRODUCIBLE_FROM_PINNED_INPUTS | Derive a 1.21.1-only index from the byte-verified version metadata and its recorded content-addressed URL. Record a NEW digest. This is explicitly different from the historical global index. |
-| 22 NFRT intermediate files / ten nodes | UNRESOLVED until measured reconstruction | Run unchanged pinned tools on independently acquired inputs. Compare all 22 size/hash records. The functional experiment uses the unchanged verifier's existing no-seed reconstruction path, not a fabricated or reauthorized historical attestation. |
+| 22 NFRT intermediate files / ten nodes | REPRODUCIBLE_FROM_PINNED_INPUTS | All 22 reconstructed with matching historical hashes. The functional experiment uses the unchanged verifier's existing no-seed reconstruction path, not a fabricated or reauthorized historical attestation. |
 | Historical Windows Python installation and installed packages | MISSING_PROVENANCE for independent exact reconstruction | Host executable/DLL/stdlib/package inventories exist; original installer/wheel acquisition chain is not recovered. Windows path/startup/import-tail policy is not portable to Linux. |
-| New container CPython 3.13.14 and OS libraries | INDEPENDENTLY_REACQUIRABLE subject to registry pull | Official Python amd64 OCI manifest `sha256:de572b33eae61a53675a87bbd02b5e365df7b6b2b06c9276124e965cec08c452`, including Debian runtime libraries. No apt or pip resolution in the new image recipe. |
+| New container CPython 3.13.14 and OS libraries | INDEPENDENTLY_REACQUIRABLE | Official Python amd64 OCI manifest `sha256:de572b33eae61a53675a87bbd02b5e365df7b6b2b06c9276124e965cec08c452` pulled on the clean runner, including Debian runtime libraries. No apt or pip resolution in the new image recipe. |
 | Python packages for this J001-only bootstrap/verifier | REPRODUCIBLE_FROM_PINNED_INPUTS (empty package set) | The selected path uses Python's standard library only. This does not qualify the API provider, a Python-task verifier, Node verifier, controller test suite or Windows replay runtime. |
 | Docker engine, kernel, filesystem semantics, available CPU/RAM/disk | UNRESOLVED as exact historical host identities | A Docker-capable clean Linux runner is required. Actual daemon version, capacity and launched image identity must be recorded. Matching container limits does not make host hardware/kernel byte-identical. |
 | Source, wrapper policy and frozen J001 acceptance | INDEPENDENTLY_REACQUIRABLE | Exact public checkout plus frozen baseline SHA-256 `230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0dbe89afe5388` and test SHA-256 `80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159`. |
 
-The cloud workspace used for initial acquisition has no Docker executable or
+The cloud workspace used for initial acquisition had no Docker executable or
 daemon, zero Linux capabilities, and rejects user-namespace mapping. Host Java
 17 is not used as a verifier fallback. A Docker-capable hosted runner is needed
-for the actual isolated baseline attempt.
+for isolated verification. The subsequent GitHub-hosted Ubuntu 24.04 run
+provided Docker 28.0.4, four CPUs and approximately 16 GB RAM, and reproduced
+the expected baseline. File-level classifications and observed hashes are in
+`portable_verifier/evidence/ARTIFACT_CLASSIFICATION.json`.
 
 ## Licensing and public artifact policy
 
@@ -110,7 +117,8 @@ not satisfy the old Windows runtime identity or claim a pinned hosted OS image.
 
 The trusted priming container has network access only to acquire/generate build
 inputs. It receives unchanged baseline source, no frozen test and no credentials.
-It resolves `createMinecraftArtifacts` and `testClasses`, inventories generated
+It resolves `createMinecraftArtifacts`, `testClasses`, and the unchanged test
+runtime classpath through a preparation-only Gradle init script, inventories generated
 cache metadata and NFRT outputs, then checks that all pinned module/native input
 bytes remain unchanged. This is preparation, not a coding experiment or an
 acceptance result. The no-model targeted verifier subsequently stages the exact
@@ -128,9 +136,10 @@ The exact old Docker image is not reconstructed by either mode.
 `.github/workflows/hive-portable-verifier.yml` is one job with a 60-minute hard
 timeout, no matrix, no secrets and no model/provider entry point. Ordinary
 commits do not execute it: a push to the reconstruction branch needs the
-deliberate `[portable-verifier-once]` commit-message marker. This turn authorizes
-one model-free baseline reconstruction attempt. Later repeats require a new
-deliberate operator action. `workflow_dispatch` additionally exists; GitHub
+deliberate `[portable-verifier-once]` commit-message marker. Four clean preparation
+runs were required: two stopped before acceptance, the third could not load the
+offline JUnit runtime, and the fourth reproduced the baseline. All are preserved.
+Later repeats require a new deliberate operator action. `workflow_dispatch` additionally exists; GitHub
 requires that workflow registration/default-branch conditions be satisfied.
 No merge into main is required for the guarded push path.
 
