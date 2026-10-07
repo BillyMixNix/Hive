@@ -2,24 +2,28 @@
 
 from datetime import date
 import json
+import os
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from scripts import hive_api_connection_smoke as smoke
 
 
 class FakeResponse:
-    status = 200
-
-    def __init__(self, payload=None):
-        self.payload = payload or {
+    def __init__(self, payload=None, *, status=200, raw=None):
+        self.status = status
+        self.payload = payload if payload is not None else {
             "model": smoke.MODEL, "service_tier": "default",
             "status": "completed",
             "usage": {"input_tokens": 22, "output_tokens": 5, "total_tokens": 27},
         }
+        self.raw = raw
 
     def read(self, limit):
         assert limit == 65_537
-        return json.dumps(self.payload).encode()
+        return self.raw if self.raw is not None else json.dumps(self.payload).encode()
 
 
 class FakeConnection:
@@ -94,6 +98,62 @@ class SmokeContractTests(unittest.TestCase):
                 self.assertEqual(caught.exception.classification, reason)
                 self.assertEqual(len(FakeConnection.calls), 1)
                 self.assertEqual(len(FakeConnection.calls[0].requests), 1)
+
+    def test_allowlisted_http_diagnostics_only(self):
+        FakeConnection.response = FakeResponse({"error": {
+            "code": "credit_balance_exhausted", "type": "insufficient_quota",
+            "param": "service_tier", "message": "private sk-test-only"}}, status=429)
+        with self.assertRaises(smoke.SmokeFailure) as caught:
+            smoke.run_smoke("sk-test-only", connection_factory=FakeConnection,
+                            today=date(2026, 10, 7))
+        self.assertEqual(caught.exception.classification, "API_HTTP_ERROR")
+        self.assertEqual(caught.exception.details, {
+            "http_status": 429, "error_code": "credit_balance_exhausted",
+            "error_type": "insufficient_quota", "error_param": "service_tier",
+        })
+        self.assertEqual(len(FakeConnection.calls[0].requests), 1)
+
+    def test_malformed_unknown_and_secret_fields_cannot_leak(self):
+        cases = [
+            FakeResponse(status=400, raw=b"{bad JSON sk-test-only"),
+            FakeResponse({"error": ["sk-test-only"]}, status=401),
+            FakeResponse({"error": {
+                "code": "sk-test-only", "type": "secret-type",
+                "param": "Bearer sk-test-only", "message": "sk-test-only",
+                "extra": "sk-test-only"}}, status=403),
+        ]
+        for response in cases:
+            with self.subTest(status=response.status):
+                FakeConnection.response = response
+                FakeConnection.calls = []
+                with self.assertRaises(smoke.SmokeFailure) as caught:
+                    smoke.run_smoke("sk-test-only", connection_factory=FakeConnection,
+                                    today=date(2026, 10, 7))
+                self.assertEqual(caught.exception.details,
+                                 {"http_status": response.status})
+                self.assertNotIn("sk-test-only", repr(caught.exception.details))
+                self.assertEqual(len(FakeConnection.calls[0].requests), 1)
+
+    def test_artifact_contains_only_safe_diagnostics(self):
+        FakeConnection.response = FakeResponse({"error": {
+            "code": "model_not_found", "type": "invalid_request_error",
+            "param": "model", "message": "secret sk-test-only"}}, status=404)
+        with tempfile.TemporaryDirectory() as directory:
+            original_run = smoke.run_smoke
+
+            def offline_run(key):
+                return original_run(key, connection_factory=FakeConnection,
+                                    today=date(2026, 10, 7))
+
+            with (patch.dict(os.environ, {"OPENAI_API_KEY": "sk-test-only"}),
+                  patch.object(smoke, "run_smoke", side_effect=offline_run),
+                  patch("sys.argv", ["smoke", "--output-root", directory])):
+                self.assertEqual(smoke.main(), 2)
+            artifact = Path(directory, "HIVE_API_CONNECTION_SMOKE.json").read_text()
+            self.assertIn('"http_status": 404', artifact)
+            self.assertIn('"error_code": "model_not_found"', artifact)
+            self.assertNotIn("sk-test-only", artifact)
+            self.assertNotIn("message", artifact)
 
 
 if __name__ == "__main__":
