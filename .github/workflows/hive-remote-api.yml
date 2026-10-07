@@ -1,0 +1,80 @@
+name: Hive remote API infrastructure
+run-name: Hive API ${{ inputs.mode }} at ${{ inputs.commit }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Exact reviewed 40-character commit on the remote API branch
+        type: string
+        required: true
+      mode:
+        description: Infrastructure only; no coding experiment is enabled
+        type: choice
+        default: preflight
+        options: [preflight, prepare, smoke]
+      model:
+        description: Exact API model identifier available to your project (required for smoke)
+        type: string
+        default: ''
+      reasoning_effort:
+        description: Optional supported reasoning effort; blank omits the field
+        type: string
+        default: ''
+      max_output_tokens:
+        description: Smoke output cap including reasoning (16 to 64)
+        type: string
+        default: '32'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-remote-api-infrastructure
+  cancel-in-progress: false
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Define this environment before use; its secret is injected only in smoke.
+    environment: hive-api-infrastructure
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ inputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Inventory or prepare without credentials
+        if: inputs.mode != 'smoke'
+        env:
+          HIVE_COMMIT: ${{ inputs.commit }}
+          HIVE_MODE: ${{ inputs.mode }}
+        run: >-
+          python3 -B -m hive_remote.runner "$HIVE_MODE"
+          --expected-commit "$HIVE_COMMIT"
+          --output-root "$RUNNER_TEMP/hive-remote-evidence"
+      - name: One tiny provider smoke
+        if: inputs.mode == 'smoke'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HIVE_COMMIT: ${{ inputs.commit }}
+          OPENAI_MODEL: ${{ inputs.model }}
+          HIVE_REASONING: ${{ inputs.reasoning_effort }}
+          HIVE_OUTPUT_CAP: ${{ inputs.max_output_tokens }}
+        shell: bash
+        run: |
+          args=()
+          if [ -n "$HIVE_REASONING" ]; then args+=(--reasoning-effort "$HIVE_REASONING"); fi
+          python3 -B -m hive_remote.runner smoke \
+            --expected-commit "$HIVE_COMMIT" \
+            --output-root "$RUNNER_TEMP/hive-remote-evidence" \
+            --max-output-tokens "$HIVE_OUTPUT_CAP" "${args[@]}"
+      - name: Preserve evidence even on blocked qualification
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hive-remote-api-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-remote-evidence/
+          retention-days: 30
+          if-no-files-found: error
