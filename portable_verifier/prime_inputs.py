@@ -6,6 +6,7 @@ from pathlib import Path
 
 from jvm_runner import _bounded_process, _source_digest
 from prime_runner import _validate_profile
+from redact import safe_diagnostics
 
 
 def main():
@@ -32,6 +33,8 @@ def main():
     print(json.dumps({'priming_succeeded': result['returncode'] == 0 and not result['timed_out'] and unchanged,
                       'source_unchanged': unchanged, 'timed_out': result['timed_out'],
                       'returncode': result['returncode'], 'wall_seconds': result['wall_seconds'],
+                      'stdout_tail_redacted': safe_diagnostics(result['stdout']),
+                      'stderr_tail_redacted': safe_diagnostics(result['stderr']),
                       'stdout_sha256': hashlib.sha256(result['stdout'].encode()).hexdigest(),
                       'stderr_sha256': hashlib.sha256(result['stderr'].encode()).hexdigest()}))
 

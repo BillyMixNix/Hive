@@ -8,9 +8,19 @@ from unittest.mock import patch
 
 from portable_verifier import acquire as a
 from portable_verifier.bootstrap import reconstruct_launcher, baseline_outcome
+from portable_verifier.redact import safe_diagnostics
 
 
 class Boundaries(unittest.TestCase):
+    def test_diagnostics_remove_sensitive_metadata_preserve_results(self):
+        raw = '3 cases, 1 failure; Temurin 21.0.12.1 at /home/person/private\nhttps://user:pass@maven.neoforged.net/releases/artifact?signature=private\nAuthorization: Bearer example-token'
+        result = safe_diagnostics(raw)
+        for private in ('/home/person', 'user:pass', 'signature=', 'example-token'):
+            self.assertNotIn(private, result)
+        self.assertIn('3 cases, 1 failure', result)
+        self.assertIn('21.0.12.1', result)
+        self.assertIn('https://maven.neoforged.net/releases/artifact', result)
+
     def test_destination_and_url_authority(self):
         for p in ('../credential', '/private', 'C:/private', 'a\\b', 'a/../b'):
             with self.subTest(path=p), self.assertRaises(ValueError):

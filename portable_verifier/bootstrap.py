@@ -123,7 +123,7 @@ def build_image(downloads, work, evidence):
     (context / 'jdk-extraction').rmdir()
     for name in ('runner.py', 'jvm_runner.py', 'prime_runner.py'):
         shutil.copyfile(ROOT / 'hive_canonical/legacy/verification' / name, context / name)
-    for name in ('Dockerfile', 'prime_inputs.py'):
+    for name in ('Dockerfile', 'prime_inputs.py', 'redact.py'):
         shutil.copyfile(ROOT / 'portable_verifier' / name, context / name)
     command(['docker', 'build', '--network=none', '--platform=linux/amd64', '-t', IMAGE_TAG, str(context)], timeout=600)
     image = command(['docker', 'image', 'inspect', IMAGE_TAG, '--format', '{{.Id}}']).stdout.strip()
