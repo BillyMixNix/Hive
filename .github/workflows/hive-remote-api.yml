@@ -1,0 +1,54 @@
+name: Hive remote API infrastructure
+run-name: Hive API ${{ inputs.mode }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Model-free infrastructure or one-call connection smoke
+        type: choice
+        default: preflight
+        options: [preflight, prepare, smoke]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-remote-api-infrastructure
+  cancel-in-progress: false
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: hive-api-infrastructure
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          # Smoke uses this workflow's exact revision; model-free modes use the reconstruction.
+          ref: ${{ inputs.mode == 'smoke' && github.sha || '205bd9cd5e16fff7a1e0786134fac41c44d0f564' }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Inventory or prepare without credentials
+        if: inputs.mode != 'smoke'
+        env:
+          HIVE_MODE: ${{ inputs.mode }}
+        run: >-
+          python3 -B -m hive_remote.runner "$HIVE_MODE"
+          --expected-commit 205bd9cd5e16fff7a1e0786134fac41c44d0f564
+          --output-root "$RUNNER_TEMP/hive-remote-evidence"
+      - name: One bounded connection request
+        if: inputs.mode == 'smoke'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: >-
+          python3 -B scripts/hive_api_connection_smoke.py
+          --output-root "$RUNNER_TEMP/hive-remote-evidence"
+      - name: Preserve infrastructure evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: hive-remote-api-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-remote-evidence/
+          retention-days: 30
+          if-no-files-found: warn
