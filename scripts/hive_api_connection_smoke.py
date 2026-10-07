@@ -22,12 +22,51 @@ INPUT_RATE = Decimal("0.75")
 OUTPUT_RATE = Decimal("4.50")
 INPUT_UPLIFT = Decimal("1.25") * Decimal("1.10") * Decimal("2")
 OUTPUT_UPLIFT = Decimal("1.10") * Decimal("2")
+ERROR_CODES = frozenset({
+    "invalid_api_key", "insufficient_quota", "credit_balance_exhausted",
+    "organization_spend_limit_exceeded", "project_spend_limit_exceeded",
+    "organization_usage_limit_exceeded", "slow_down", "server_is_overloaded",
+    "model_not_found", "unsupported_parameter", "rate_limit_exceeded",
+})
+ERROR_TYPES = frozenset({
+    "invalid_request_error", "authentication_error", "permission_error",
+    "rate_limit_error", "insufficient_quota", "service_unavailable_error",
+    "server_error", "api_error",
+})
+ERROR_PARAMS = frozenset({
+    "model", "input", "max_output_tokens", "reasoning", "reasoning.effort",
+    "service_tier", "tools", "tool_choice", "store", "stream", "truncation",
+})
 
 
 class SmokeFailure(Exception):
-    def __init__(self, classification: str):
+    def __init__(self, classification: str, details: dict | None = None):
         super().__init__(classification)
         self.classification = classification
+        self.details = details or {}
+
+
+def safe_http_error(status: object, raw: bytes) -> dict:
+    """Keep only fixed, recognized fields; never preserve server-supplied prose."""
+    result = {}
+    if type(status) is int and 400 <= status <= 599:
+        result["http_status"] = status
+    try:
+        payload = json.loads(raw)
+    except (ValueError, UnicodeError):
+        return result
+    if not isinstance(payload, dict) or not isinstance(payload.get("error"), dict):
+        return result
+    error = payload["error"]
+    for source, target, allowed in (
+        ("code", "error_code", ERROR_CODES),
+        ("type", "error_type", ERROR_TYPES),
+        ("param", "error_param", ERROR_PARAMS),
+    ):
+        value = error.get(source)
+        if type(value) is str and value in allowed:
+            result[target] = value
+    return result
 
 
 def planned_cost_usd() -> Decimal:
@@ -74,7 +113,7 @@ def run_smoke(key: str, *, connection_factory=http.client.HTTPSConnection,
         if len(raw) > 65_536:
             raise SmokeFailure("RESPONSE_TOO_LARGE")
         if response.status != 200:
-            raise SmokeFailure("API_HTTP_ERROR")
+            raise SmokeFailure("API_HTTP_ERROR", safe_http_error(response.status, raw))
         payload = json.loads(raw)
         usage = payload.get("usage")
         if (payload.get("model") != MODEL or
@@ -122,7 +161,8 @@ def main() -> int:
         exit_code = 0
     except SmokeFailure as exc:
         result = {"classification": exc.classification, "request_count": "at_most_one",
-                  "qualification": "CONNECTIVITY_ONLY_NOT_HIVE_PROVIDER_OR_VERIFIER"}
+                  "qualification": "CONNECTIVITY_ONLY_NOT_HIVE_PROVIDER_OR_VERIFIER",
+                  **exc.details}
         exit_code = 2
     args.output_root.mkdir(parents=True, exist_ok=True)
     (args.output_root / "HIVE_API_CONNECTION_SMOKE.json").write_text(

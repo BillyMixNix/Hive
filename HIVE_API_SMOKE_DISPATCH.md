@@ -64,3 +64,8 @@ contains only safe classification, model, service tier, usage, and planning
 metadata; it contains no prompt, raw response, headers, or credential. A
 connectivity PASS is infrastructure evidence only. Artifacts expire after
 30 days.
+
+On an HTTP rejection, the artifact includes the numeric status and only
+recognized values of `error.code`, `error.type`, and `error.param`. Unknown or
+malformed values are omitted. The script never saves the server's error
+message, raw body, or unrecognized fields. The diagnostic does not retry.
