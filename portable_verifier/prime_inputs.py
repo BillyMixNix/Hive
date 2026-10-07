@@ -26,7 +26,8 @@ def main():
             'gradle/wrapper/gradle-wrapper.jar', 'org.gradle.wrapper.GradleWrapperMain',
             '--no-daemon', '--console=plain', '--info', '--max-workers=2',
             '--no-build-cache', '-Dorg.gradle.jvmargs=-Xmx768m',
-            'createMinecraftArtifacts', 'testClasses']
+            '--init-script', '/opt/verifier/resolve_inputs.gradle',
+            'createMinecraftArtifacts', 'testClasses', 'hivePortableResolveTestRuntime']
     result = _bounded_process(argv, cwd=project, env=env, timeout=1500,
                               max_log_bytes=12000)
     unchanged = _source_digest(source) == before

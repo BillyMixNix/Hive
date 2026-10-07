@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .acquire import ROOT, CORPUS, GRADLE, JDK, catalog, digest, acquire
+from .redact import safe_diagnostics
 
 ANCHOR = 'f93a6c2f79d25d24bdea1b171cd82a6b1f336667'
 OLD_IMAGE = 'sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26'
@@ -123,7 +124,7 @@ def build_image(downloads, work, evidence):
     (context / 'jdk-extraction').rmdir()
     for name in ('runner.py', 'jvm_runner.py', 'prime_runner.py'):
         shutil.copyfile(ROOT / 'hive_canonical/legacy/verification' / name, context / name)
-    for name in ('Dockerfile', 'prime_inputs.py', 'redact.py'):
+    for name in ('Dockerfile', 'prime_inputs.py', 'redact.py', 'resolve_inputs.gradle'):
         shutil.copyfile(ROOT / 'portable_verifier' / name, context / name)
     command(['docker', 'build', '--network=none', '--platform=linux/amd64', '-t', IMAGE_TAG, str(context)], timeout=600)
     image = command(['docker', 'image', 'inspect', IMAGE_TAG, '--format', '{{.Id}}']).stdout.strip()
@@ -267,6 +268,15 @@ def functional_baseline(downloads, work, c, evidence):
                     frozen_junit_tests=metadata, expected_jvm_profile=profile,
                     expected_external_baseline_sha256=BASELINE_SHA, diagnostics_dir=work / 'private-diagnostics')
     evidence['verifier_result_sha256'] = hashlib.sha256(json.dumps(result, sort_keys=True).encode()).hexdigest()
+    def public_report(value):
+        if isinstance(value, dict):
+            return {key: public_report(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [public_report(item) for item in value]
+        if isinstance(value, str):
+            return safe_diagnostics(value)
+        return value
+    evidence['verifier_report_redacted'] = public_report(result)
     evidence['targeted_elapsed_seconds'] = round(time.monotonic() - started, 3)
     counts, qualified = baseline_outcome(result, task['test_class'])
     evidence['baseline_result'] = counts

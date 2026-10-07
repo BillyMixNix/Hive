@@ -1,0 +1,8 @@
+// Preparation only. No test source or acceptance command is changed.
+gradle.projectsEvaluated {
+    gradle.rootProject.tasks.register('hivePortableResolveTestRuntime') {
+        doLast {
+            gradle.rootProject.configurations.getByName('testRuntimeClasspath').resolve()
+        }
+    }
+}

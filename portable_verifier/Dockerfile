@@ -5,6 +5,7 @@ COPY jdk/ /opt/java/openjdk/
 COPY runner.py jvm_runner.py prime_runner.py /opt/verifier/
 COPY prime_inputs.py /opt/verifier/prime_inputs.py
 COPY redact.py /opt/verifier/redact.py
+COPY resolve_inputs.gradle /opt/verifier/resolve_inputs.gradle
 RUN mkdir -p /work /approved-gradle-cache && chown 65532:65532 /work
 ENV JAVA_HOME=/opt/java/openjdk PYTHONDONTWRITEBYTECODE=1
 USER 65532:65532
