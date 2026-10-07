@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "classification": "PASS_HOST_BOUND_ONLY",
+  "starting_closure_commit": "427ad3cce3916aa6d0c0b450d43ad1833b8688eb",
+  "tested_implementation_commit": "0ff2826a255058b16de2e84f69c40de08a784cc7",
+  "tested_tree": "a68d2f77a677dde30e3ae4da1df42c403f8a8b85",
+  "clean_checkout": "detached sparse worktree; zero Git changes before exact fixture materialization",
+  "source_manifest_sha256": "63400cb674f13b762d2a0e6036ad16431d37e28224f5c94590906037ad177b45",
+  "python_runtime_manifest_sha256": "adf9a8e353f64464d0545d05b52ffe406eea4e44a934a2ebc5a0f91397a41866",
+  "diagnostic_schema_sha256": "00860e8be8392bf70be8b6fbf261905754bc1b1670dc692c30d5d982e70498ca",
+  "historical_corpus_tree": "214a81054c99ec4a12db04f60d17bb25ec9011bb",
+  "frozen_baseline_tree": "517e5cb3a523f944c68833b196bd511cbcd0fc07",
+  "frozen_baseline_source_sha256": "230340980b85d60b7a59d3aa338dffc4447c1bb7d8df90bff4d0be89afe5388",
+  "frozen_j001_test_sha256": "80c1ced02955971cc827aed4e983d9407b919f47cc3af20f457f3a0f0098f159",
+  "versions": {
+    "python": "3.13.14",
+    "pytest": "9.1.1",
+    "docker_client": "29.7.2",
+    "docker_server": "29.7.2",
+    "java_container": "Temurin 21.0.12.1+1",
+    "gradle": "9.2.1"
+  },
+  "checks": [
+    {"name": "syntax_and_import", "result": "PASS", "python_files": 33},
+    {"name": "source_provenance", "command": "python -B recovery/rc1-replay/verify_source.py verify", "result": "PASS", "runtime_files": 42},
+    {"name": "recovery_tests", "command": "python -B -m pytest tests/recovery -q -p no:cacheprovider", "result": "PASS_WITH_SKIP", "passed": 106, "skipped": 2, "failed": 0, "seconds": 18.04},
+    {"name": "archived_workshop", "command": "python -B -m pytest tests -q -p no:cacheprovider, from repaired-workshop after exact isolated fixture materialization", "result": "PASS_WITH_SKIP", "passed": 613, "skipped": 8, "failed": 0, "seconds": 66.79},
+    {"name": "verifier_isolation_and_cancellation_subset", "command": "python -B -m pytest -q tests/test_verifier_observability.py tests/test_hive_isolated_verifier.py tests/test_hive_external_root.py -p no:cacheprovider", "result": "PASS_WITH_SKIP", "passed": 18, "skipped": 2, "failed": 0, "seconds": 23.99, "overlaps_archived_suite": true},
+    {"name": "mock_diagnostic_transport", "result": "QUALIFIED_FOR_BOUNDED_REPLAY", "mock_requests": 3, "model_calls": 0, "raw_audit_has_sentinel": true, "model_requests_have_sentinel": false},
+    {"name": "host_bound_pre_model_contract", "result": "PASS_HOST_BOUND", "selected_cache_files_verified": 4866, "entire_environment_layout_files": 4873, "image_id": "sha256:b71e6beae584a3bba27e6fe782a27ef971b481b1dff7226bc57f28626843ad26", "promotion_authorization": "unavailable"},
+    {"name": "fresh_j001_baseline", "result": "EXPECTED_FROZEN_ACCEPTANCE_FAILURE", "seconds": 130.266, "timed_out": false, "cases": 3, "failures": 1, "errors": 0, "skipped": 0, "evidence_sha256": "5a7e7a3f66eae35fdf79cbf91dc1cc29cd428ea859e9ea7bbb1f4959c435e952"},
+    {"name": "synthetic_build_control_adversary", "result": "FALSE_PASS_DEMONSTRATED; WRITE_SCOPE_REJECTED", "original_junit_exit": 1, "attacked_junit_exit": 0, "original_test_source_unchanged": true, "evidence_sha256": "cca725e5a40d3b261e274bc9f7b6ced5a4eab069272c4698d48448c2ef0263ff"},
+    {"name": "post_verifier_environment_integrity", "result": "PASS", "selected_cache_files_verified": 4866},
+    {"name": "historical_corpus_and_frozen_identity", "result": "PASS"},
+    {"name": "independent_adversarial_retest", "result": "NO_REMAINING_DEMONSTRATED_HIGH_OR_MEDIUM_BYPASS_IN_BOUNDED_ENTRYPOINT"}
+  ],
+  "independently_reacquired": ["Gradle 9.2.1 distribution ZIP, exact SHA-256 72f44c9f8ebcb1af43838f45ee5c4aa9c5444898b3468ab3f4af7b6076c5bc3f"],
+  "host_local_required": ["exact Docker image", "approved Gradle/Minecraft/NFRT cache", "NFRT intermediates", "host Python runtime and packages"],
+  "model_calls": 0,
+  "promotion_attempts": 0,
+  "ready_for_host_bound_hive_recovery_002": true,
+  "ready_for_portable_hive_recovery_002": false
+}
