@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Awaitable, Callable, Mapping
 
 from .legacy.workshop import external_root, hive, hive_jvm, hive_review
+from . import diagnostics
 from .promotion import PromotionUnavailableError, unavailable
 from .provenance import CandidateIntegrityError, assert_scoped_change, source_index
 
@@ -22,6 +23,7 @@ from .provenance import CandidateIntegrityError, assert_scoped_change, source_in
 hive.apply_run = unavailable
 hive._apply_run_locked = unavailable
 hive.rollback_run = unavailable
+diagnostics.install_hooks()
 
 AgentCall = Callable[[str, str], Awaitable[str]]
 
@@ -46,13 +48,13 @@ def _protected_agent_call(agent_call: AgentCall, *, frozen_tests: bool) -> Agent
     async def guarded(role: str, prompt: str) -> str:
         if frozen_tests and (role == "reviewer" or
                              str(prompt).startswith("TARGETED VERIFICATION CORRECTION\n")):
-            # The recovered controller includes candidate-emitted JUnit failure
-            # messages in correction/reviewer evidence. Candidate code can read
-            # mounted frozen test source. Until that transport is qualified,
-            # do not expose those messages to any model at all.
-            raise ProtectedDiagnosticTransportError(
-                "PROTECTED_DIAGNOSTIC_TRANSPORT_UNQUALIFIED: post-verification model evidence may contain frozen test source"
-            )
+            # Only the recovery layer's upstream-built, hash-registered prompt
+            # can cross this boundary. The legacy controller records prompts
+            # before this call, so downstream text filtering would be too late.
+            if not diagnostics.authorized(prompt, diagnostics.ACTIVE.get()):
+                raise ProtectedDiagnosticTransportError(
+                    "PROTECTED_DIAGNOSTIC_TRANSPORT_UNQUALIFIED: post-verification prompt lacks a safe projection"
+                )
         return await agent_call(role, prompt)
     return guarded
 
@@ -221,15 +223,21 @@ async def produce_candidate(spec: CandidateSpec, agent_call: AgentCall) -> Candi
     if frozen:
         metadata["frozen_junit_tests"] = hive_jvm.store_frozen_junit_tests(frozen, runs / run_id)
 
-    run = await hive.run_build(
-        candidate_root, runs, spec.request, spec.local_model,
-        _protected_agent_call(agent_call, frozen_tests=bool(frozen)),
-        metadata={"external_root": metadata, "external_root_mode": "candidate_only",
-                  "rc1_source_anchor": "HIVE-FACTORIAL-003R1"},
-        run_id=run_id, external_root_mode=True,
-        allowed_write_files=list(allowed),
-        require_independent_review=spec.require_independent_review,
-    )
+    safe_context = (diagnostics.SafeRunContext(allowed, sum(item["expected_cases"] for item in frozen))
+                    if frozen else None)
+    token = diagnostics.ACTIVE.set(safe_context)
+    try:
+        run = await hive.run_build(
+            candidate_root, runs, spec.request, spec.local_model,
+            _protected_agent_call(agent_call, frozen_tests=bool(frozen)),
+            metadata={"external_root": metadata, "external_root_mode": "candidate_only",
+                      "rc1_source_anchor": "HIVE-FACTORIAL-003R1"},
+            run_id=run_id, external_root_mode=True,
+            allowed_write_files=list(allowed),
+            require_independent_review=spec.require_independent_review,
+        )
+    finally:
+        diagnostics.ACTIVE.reset(token)
     run_record = runs / run_id / "run.json"
     if not run_record.is_file() or run.get("id") != run_id:
         raise CandidateIntegrityError("run evidence or identity is missing")

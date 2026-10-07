@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RC1 recovery model-visible verification diagnostic",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "phase", "verifier_status", "failure_class", "checks", "host_expected_cases", "compilation_status", "timeout", "correction_allowed", "allowed_write_files"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "phase": {"enum": ["TARGETED", "FULL"]},
+    "verifier_status": {"enum": ["PASSED", "FAILED", "TIMED_OUT", "NOT_RUN"]},
+    "failure_class": {"enum": ["NONE", "FROZEN_ACCEPTANCE_FAILED", "VERIFIER_FAILED", "TIMEOUT", "SOURCE_INTEGRITY_FAILED", "UNKNOWN"]},
+    "checks": {
+      "type": "array", "maxItems": 100,
+      "items": {"type": "object", "additionalProperties": false, "required": ["check_id", "passed"],
+        "properties": {"check_id": {"enum": ["FROZEN_JUNIT_ACCEPTANCE", "ISOLATED_VERIFIER", "EXTERNAL_INTEGRITY", "EXTERNAL_FULL_GATE_PREREQUISITE", "PYTHON_COMPILE", "JAVASCRIPT_PARSE", "UNKNOWN"]}, "passed": {"type": "boolean"}}}
+    },
+    "host_expected_cases": {"type": ["integer", "null"], "minimum": 0, "maximum": 10000},
+    "compilation_status": {"const": "UNKNOWN"},
+    "timeout": {"type": "boolean"},
+    "correction_allowed": {"type": "boolean"},
+    "allowed_write_files": {"type": "array", "maxItems": 100, "items": {"type": "string", "maxLength": 500}}
+  }
+}
