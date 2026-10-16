@@ -1,0 +1,1191 @@
+{
+  "schema": "hive.packet-comparison.v1",
+  "model": "gpt-5.6-luna",
+  "study_sha256": "519c9e38b644b88397d9aaf51f203c841b56d955db8db9e29d1e059c45fdec9c",
+  "sources": {
+    "HiveAgent.py": "532e2fcc4f1092730ae7ee6512ee8d5e1a85ac518297c78f429ca8fb3c212bbb",
+    "HiveBridge.py": "bd131d8ba7d0cfbf04244f5e791ee077adc21c3ba2eb8f23a713bcf943d86e76",
+    "HiveConverse.py": "27d4de79dd20666745236c9688c05488c3b3980eb8f6dd466de560717271cc3c",
+    "HiveLessonMemory.py": "926de5a7f873d49a9a6a2ec0bf7d7a27ec390aa284b4a6817994ba86d635ad45",
+    "HiveMaterializer.py": "a73569ea1ed8c9952ac473c6426ed7081d29a7cce9aa12ce2158e524d72c859e",
+    "HiveMemoryAgent.py": "ec38304fc77d5f4a53ad230f5520cec43df1728ae0c68a90cf6e055cde3435db",
+    "HiveStateManager.py": "eedd6e5bf2823814f17667784f26ada34688e81302442258a2e043877de5880b",
+    "anchor_utils.py": "52c94848b74451e6822385bd2213de2e87c41f28e00e7139aa802156603d1069",
+    "benchmark_harness.py": "6a9c4cab107abfafaf011d693ae2cd73e1f0f25b346dd98c147870727562c21e",
+    "benchmark_pack.py": "bf45d2a956af08f6df317e59d2f3436f0e799c4f83b48ec97076d08960f4b307",
+    "builder.py": "cddf85d8b363e8e461d0574af61012ec5951390005740028ce5a26d472c6cc4c",
+    "code_domain.py": "9d817375431e3d9067cd084a17da4b2e19b0c083cae5a4717e47cbb8ff0261e8",
+    "coder.py": "18b3fcb0e37a38b9c9f0a10df01631c2f805d4f514e87b99d135b304c408cf9c",
+    "coder_block_ops.py": "3dce9e9ab96ee1cd5cd217ea31a20c97ed7aa3c0f666f60f5ed17a6f5f836f7a",
+    "coder_constraints.py": "1f52025c8a89a1af4c8b4e2961ac1894321a04effb87dacaa32b66fd222a37c6",
+    "coder_context.py": "ad84b1cede7ef09418f94ade17bed96dc4c78cb1d43bdf67623ef021ab2be0aa",
+    "coder_failures.py": "0277e31cc99e41ba54abff422ca1bcd6e17fdb71add1b73a1624fd8c2848860e",
+    "coder_prompt.py": "394bc20e9517cea4da7d4b3f6a3c649f0b14a19fd9ce1749e07df01c09a25316",
+    "coder_prompting.py": "96b36fd28911670a33db0a5341750b3c6234ef60bd8e61f91111354fb95131b6",
+    "coder_validation.py": "3a30710d73132eed392703caf9c3ac7ea1b398eb3536047e8e40735e8a147b8a",
+    "conversation_manager.py": "273ac3ad720f883fc7649316d3661d3f461dcf1bfb69282c641de10f7c5e5fc9",
+    "conversation_prompt.py": "bb05a982156e50ba3c589cc0854455fd9bc160118a84efc7cc86a673e390b745",
+    "executor.py": "cefe76bb654ca4da106d352faeaa7fd16fedb42e316410b33a1655be5b1e19c1",
+    "experiments/learning-dev/analysis/audit_contract_rerun.py": "32a170cdc1deb944f63a6e7d4dff5757f6576c23da6b069c2694c5ceef40af8b",
+    "experiments/learning-dev/analysis/cache_contract_audit.py": "72be7efc7cf15a34596ae92393715ce219b70d778251ae30a2f5ebdf9552c719",
+    "experiments/learning-dev/analysis/checkpoint_cases.py": "8bb2f872ef7d1a4f18403251b1d8b421eb75fd863bc5d549654394b158f07f77",
+    "experiments/learning-dev/analysis/checkpoint_followon.py": "6f1f64ced7dea0ca875828b2ca8dcfebb8a45d506d47715e9c307115003d032b",
+    "experiments/learning-dev/analysis/checkpoint_preflight.py": "0bfa42f8fa495b5419cc830d1f69f055731e9faf615dcf254118ecb5bf4f3d9d",
+    "experiments/learning-dev/analysis/cloud_http400.py": "ca05c81a3e67258402409aa05727d17896f64ce632abb6893adf2485646c69a6",
+    "experiments/learning-dev/analysis/contract_checked_hive.py": "1a6e1b35ca09e330a01f6edfa81bd000c112ce3a20a10582f0080990cf5e7f3a",
+    "experiments/learning-dev/analysis/contract_rerun.py": "ab0a271d6d47a6f25d30ab3404b739ce3296b695f7ae14f854b739c47e38ca13",
+    "experiments/learning-dev/analysis/contract_rerun_preflight.py": "bc52548406900f8cefbd90775879a0a61c9882cf10e2c3c0a0c514a57809b0e8",
+    "experiments/learning-dev/analysis/indexed_checkpoint.py": "9af96eb1c87ff7565f61e12b2701100d173ae65dd7841bdc460f32a465f8241e",
+    "experiments/learning-dev/analysis/lesson_bank_study.py": "4266a6f92609c204aed717ec518c39a2f53d5e80bceec11e0bb634429d28499c",
+    "experiments/learning-dev/analysis/lesson_bank_v4.py": "644f17b91344026667ea6478a444bf911b98b3563688955889c53b768d5ff850",
+    "experiments/learning-dev/analysis/lesson_bank_v5.py": "7c9f72a063d657505bd9f3a164ceb6181b609d6e6844c63438cd2503f248959a",
+    "experiments/learning-dev/analysis/lesson_checkpoint.py": "43653ce49a01129b0d9776835ea252206e77aace4b38d00126a4c79adc0250c8",
+    "experiments/learning-dev/analysis/packet_adapter.py": "50c959de5e278d3205697c856178e20a8b38ad0cfd017bff24c7cc45324f384c",
+    "experiments/learning-dev/analysis/packet_audit.py": "497adbcb866d7a552ce99ebb5a7dff5a257c96f30800dee9c83f585d36dc8578",
+    "experiments/learning-dev/analysis/packet_comparison.py": "bb81354ff0622d38c2f0cdee19d93c8858946cd201718386a9ea7dcb517ba161",
+    "experiments/learning-dev/analysis/packet_spending.py": "8848cbc8a39078bf6e1d14b2fe95011d0f9ffcc45e689a3f7ae58b429934a3d3",
+    "experiments/learning-dev/analysis/public_contracts.py": "32be271f7303f668f3f6b2693142e79846738d7ef8fb6565e50816365d393350",
+    "experiments/learning-dev/analysis/report_contract_rerun.py": "eacc92969f19936f07c5497e328d02f544ba26e8187d4d75016b5d761ed628a8",
+    "experiments/learning-dev/analysis/state_packet.py": "5b445c06b96d9794570d6ed7dabef28febbce09e43a095929d5f00fe409cbc55",
+    "experiments/learning-dev/analysis/supplemental_iterator_audit.py": "98f617808acba792784271c76b7fc7910217fd8a9946a66745a7c3dfe59bf839",
+    "experiments/learning-dev/analysis/supplemental_sort_audit.py": "0e143dfd1d6b219997f56772046fe1f1e9d36bdd3c7b522194f50df42d408eba",
+    "experiments/learning-dev/analysis/typed_actions.py": "32af9d54a7e778c3a21315f26cf7c5d5fe39745158da1e34d0d3daba68f7761e",
+    "experiments/learning-dev/analysis/verify_contract_repair.py": "d36a4d7b2136d44d9ae21f38b5fcc6bdfbd4ce3235c77a0722f3667c6cc96812",
+    "experiments/learning-dev/hive_learning/__init__.py": "5e198d9b194d0b1ea13bbe71f0200f6e1b8344e653d550e2eb1917739d47effd",
+    "experiments/learning-dev/hive_learning/__main__.py": "c908165954366a584885e74fabfb494805881cb2980d428cc7ee30d5925350b6",
+    "experiments/learning-dev/hive_learning/adapter.py": "edb1e6ca55d847c98ddb4bca0530ff805c1aa4ab812076b580c6f6739ed55bbc",
+    "experiments/learning-dev/hive_learning/cloud_continue.py": "22429a955a3980b766e8eb3a4b74a04c1d7b3d4c4b33f77e8f37a4fad0f1909f",
+    "experiments/learning-dev/hive_learning/cloud_repeat.py": "67b717bc06786aeda36afb5501a866f3bd6a5f343ac6023a65c3e03009bb7977",
+    "experiments/learning-dev/hive_learning/cloud_study.py": "dc6c6e0dfdcd82458779f9c5b58cb693661906a40c804c0191f8a4242dcb6020",
+    "experiments/learning-dev/hive_learning/cloud_trial.py": "cd5b1c66c8ac870502c292d970411476489beabc5cf83c713391ee248c774265",
+    "experiments/learning-dev/hive_learning/demo.py": "1429856a6c36ecf39553b23b5ae0c6a237336d2ee28d5bf0846f4faa0677280d",
+    "experiments/learning-dev/hive_learning/evaluate.py": "05dd393ec5ca190c403c9a9a190024d4a99fe21076d14f6c7dd2056d1157857f",
+    "experiments/learning-dev/hive_learning/hive_agent.py": "32b545e6bc00fb98020947958bfe5aca90438425cc2508c030b1b36160927b0b",
+    "experiments/learning-dev/hive_learning/ledger.py": "18dfacc44ec3327f7031bbf8e3ce1198cf0185986c83adfe033395038f4964c6",
+    "experiments/learning-dev/hive_learning/lesson_cases.py": "612235b8215c9e24cfaec74470f71d4c49f4bf76fc576bfb047814662601bc01",
+    "experiments/learning-dev/hive_learning/lesson_study.py": "add3daf06f7519b322515f9120519036a367654f68e1bde7e953e5276a4b98cb",
+    "experiments/learning-dev/hive_learning/loop.py": "ca66e308d46bc79b17b6db28c0841f78076c754a462d7ddef4287ca45697c23a",
+    "experiments/learning-dev/hive_learning/openai_adapter.py": "d2c8c739ebc04df7efb02251bc81234d064016e1fd4919326d38de251759a2b5",
+    "experiments/learning-dev/hive_learning/repair_probe.py": "147162f49d72d111d3ebd1ec5da91d1b69390caa9b9ff5b851e90b0a15543340",
+    "experiments/learning-dev/hive_learning/response_trace.py": "725ff7a4863309f2b96d860ba0e7c772b427468e754673f5a69d48d5eeadb680",
+    "experiments/learning-dev/hive_learning/spending.py": "86da2cb74fa0b0a98ecde01974e0a0edca5ee15854d41c336c6e25e0894f104b",
+    "experiments/learning-dev/hive_orchestrator.py": "c879b5f236b321f03660c21c466530156ba6cc53e8bca488342737ab8b7031e8",
+    "experiments/learning-dev/jarvis/__init__.py": "66bf3f56063b3e9933ef05b9ed046969d006056f594c498f59354b18c6050e45",
+    "experiments/learning-dev/jarvis/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "experiments/learning-dev/jarvis/api.py": "b5a91ee7e1681edb2fdc621930aadd728232252d425cf1b1b6f4dc394ac41623",
+    "experiments/learning-dev/jarvis/cli.py": "a312aa7cf6a1e43dc13e79598764df2de84b38a8cb264d9cc5b99c01c9063807",
+    "experiments/learning-dev/jarvis/codex_agent.py": "1eb12c735fe9cafcf8a0b2688f3cef3d3161df9a8e15a59f5bb68efbbff70fe7",
+    "experiments/learning-dev/jarvis/dashboard.py": "c45167c4a0afabbc489a870d1362f183347c377cf554854082960d8340fd80ec",
+    "experiments/learning-dev/jarvis/executor.py": "41717f82110563afd3ab23fd7b46a4060970cb171632a812c0c922d44736b3fa",
+    "experiments/learning-dev/jarvis/store.py": "0d3965c7897da016486b3b0395a1eeb656670d180041f15c3a7ee01cd8c8850d",
+    "experiments/learning-dev/jarvis/supervisor.py": "38465f66402c9e5693b8fda16b17b11af952b08b4f89db753efef69024da6c73",
+    "experiments/learning-dev/local_agent.py": "2b4d160c98d739935d6586bb704502b30ce888b55e7de7828fead97d47da6c79",
+    "experiments/learning-dev/tests/conftest.py": "b20b167262b032a68d33887becac764114d1800734f5f9e78fe0dcf01863619d",
+    "experiments/learning-dev/tests/test_cache_contract_audit.py": "bd278c860cf8abd733bbe089c49d8875b300aad213a9369316e7b1940bdd546c",
+    "experiments/learning-dev/tests/test_contract_checked_hive.py": "600ab10d1c0a7f65fc77b7941091903c5deb79e93a6ceb7bed210278c1aad5e4",
+    "experiments/learning-dev/tests/test_contract_rerun.py": "eb207118c0b799c691996dc11ee331fb34f4b265febff506ab623174cf436f93",
+    "experiments/learning-dev/tests/test_http400_diagnostic.py": "2d58509264d4c3027c803c79c364afc9113cac3861a14609beb8d2207c7c561b",
+    "experiments/learning-dev/tests/test_indexed_checkpoint.py": "1ff971776f807cbb8f87b1976d140741227cb9cc29180c6b4e438c79257cc718",
+    "experiments/learning-dev/tests/test_learning.py": "c24d9e20ccfe13b10bbe748cda8bb018fcc0aa6f72e0f57826c21f3da04b0971",
+    "experiments/learning-dev/tests/test_lesson_bank_study.py": "d837f843ca4e9325d335dadb7907053025ff854aeb2ab0f23825a7000cb0ac63",
+    "experiments/learning-dev/tests/test_lesson_checkpoint.py": "ff49484aeb6420531566380778d878ce7807dc3fb54f52db178dbe07e0cc9f5c",
+    "experiments/learning-dev/tests/test_lesson_study.py": "a23283d45a75356ea780399b60ed85b0347e00c91332b36233202fed2fb3095a",
+    "experiments/learning-dev/tests/test_lesson_v4.py": "8b84c121f0c4a13bdfd72d91c841b1921d1d3028130104bcae33acf68bbe7160",
+    "experiments/learning-dev/tests/test_openai_adapter.py": "64b242da29a3e02cd74fcd89195e460b855b60ff1cc80a0676318600e0337a36",
+    "experiments/learning-dev/tests/test_packet_adapter.py": "08556af254891ce819060d935ca879945a0462199e316123d28dc8b9c82bd8bb",
+    "experiments/learning-dev/tests/test_packet_comparison.py": "7e61d975b34c2759c43b18d01d51c47df11da9332009ad43602cd3c4ff5df2a9",
+    "experiments/learning-dev/tests/test_packet_spending.py": "6137cd8e71be2f4f752acff0e43a589c27a7df164fa4696f6c8ab808653006d5",
+    "experiments/learning-dev/tests/test_portable_iterator_audit.py": "f4b7ff9afd2d9beacf085221e431146822c86ff45383fdd0acc7777a07fec606",
+    "experiments/learning-dev/tests/test_public_contracts.py": "e7066ce9cc93b396a55c94d84de85b03599ee46cfa8192fba2612a42e8da14e4",
+    "experiments/learning-dev/tests/test_repair_probe.py": "c15e30042fbe44bf6e428b81437b3dd65771ed639fd1211c7824545f8fd50e36",
+    "experiments/learning-dev/tests/test_response_trace.py": "25df42131d312a892e75f0223226899b067f30ff3ac0b4fc937d568d0cf21449",
+    "experiments/learning-dev/tests/test_runtime.py": "ffe3864c24d40a76b4b15492b6f9be739dd71c4e7bc23055738165fef7deaa69",
+    "experiments/learning-dev/tests/test_spending.py": "1bcebea09d5b478ffa1bd261341114ae94baec668b0aa43a3b741490104ea124",
+    "experiments/learning-dev/tests/test_state_packet.py": "3caa79b7672f51732e2262c451d49af3852003123a99bd2a832f6398a15f7500",
+    "experiments/learning-dev/tests/test_typed_actions.py": "a0b01f8e4b7f8d0ae822f5ca33b892d32e2e1942e7b3a6abcd856b752520e747",
+    "failure_intelligence.py": "cf6f6d2b006a95474ce19120f98528d9d8969b5a51918799b68eee8517397166",
+    "fix_executor.py": "4e77372193aec982592eb26f706f7c67953edb2ed1fe02004112af5f340a92f4",
+    "fix_planner.py": "a605db88568c19ec1ea07533159895354a55c1d33c8338c04eb99b907aa5b91a",
+    "fix_traceback.py": "fe54b6c7ccd4465bb6d1b72c3b15969d0183001b978451b492268ec2ffdedac3",
+    "fix_traceback_revert.py": "e442bc4528a2969d4e9cb9b6d6dfa01a50e2a6754f7e774985547bc4bdbe7c89",
+    "fix_validation.py": "bb32e4ea24020853751d461da8353a8cd97fe70a7d0039c5887901caa506f886",
+    "hive_cockpit.py": "70b497bcafa8631add20e7f7b4c2e5bdc2e60d03e31c03acc80164757307b693",
+    "hive_gui.py": "0138d88412b89a06e7f85dacb63121e9cd9e19cf098e16dc4b968a9e07c55b8c",
+    "hive_lesson_reuse_patch/benchmark_harness.py": "c3ba4d0e58bc44ea338b5dd9635e0d7b2e149c8919584f101ccd344cd08f11ff",
+    "hive_lesson_reuse_patch/coder.py": "37c9485fe556d87795de981488186efd4aa03ca4ec5f379854b57d3d389d6d1a",
+    "hive_lesson_reuse_patch/test_lesson_reuse_sequence.py": "6ea9932cad7f9dd80c23d126b2540034a43bfc083ab3459ca0d98e6c799dd99c",
+    "hive_lesson_reuse_patch/validation/lesson_study.py": "0f23be5585c03e22a46b065dd4c1bdab0be4a1521f82c9c21c63f899793ecd5e",
+    "hive_lesson_reuse_patch/validation/lesson_study_cases.py": "3b72541899dc1d3e0b7d748bc98fe9c49ae6533eff1d719b583cb7f59e56246d",
+    "hive_llm.py": "45f52be72c443f8d43023f0c6e0a228f8e8c7b9cfc3304fa48f59e3ec896b44c",
+    "interface.py": "3a283c4bf6968df22c8fe24b740b28dcb4d4fbd8b8d02308b0476415fbe0f9e3",
+    "main.py": "a382c8058c73b6f7e8953515a107fd07c8da5f9584cbc8a6760f990ab9010fc2",
+    "math_domain.py": "3e0b8c576739290cb35ee722c142b53ccbbb1563968fa89abb1237bcbccd0971",
+    "planner.py": "1483f83a110056167ec6834314d05ac6b5db160be6c697ed1d1399b08982f192",
+    "planner_prompt.py": "0fdd2ef77abbd2738b5ac25c50bac493e334b717cd5e265624a40f542210f165",
+    "reflector.py": "b207ab76a366f8b479892b15cd018a1f21361ebf1c944aac52fbfff9ded52d41",
+    "reflector_prompt.py": "a1fd3beced0215b93bfabab3b7063fc07fc6e186a1cec6d3b507392220890c43",
+    "regression_gate.py": "f0f52da571a7286996b51b41997369fdb5e03c2971d972e8c34682fdf04f0f4f",
+    "repo_map.py": "5d6bbf9e331eb3975542b3ef8986de9cb02cbd54c5d95c808c4ba7d0b3dab864",
+    "router.py": "a79b7e6573e6e0fe4d702bc982af1b25b85700c1e67129e7053b3a159c0c9bce",
+    "run_memes.py": "e3db83a8b5db16dd82db693cdfeb55ecb908d3f5b1073cc914fc365a8472437c",
+    "scripts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scripts/adversarial_task_generator.py": "578c103ede119a971d67f75ed640aab8d0821c0cf202de1766145b997e4d1733",
+    "scripts/check_llm.py": "463ae41e3280e429ef37edb74fce165b2caab9cae6414efac8c2f259f25ecdaf",
+    "scripts/ci_gate.py": "aedd663d3363dd391b5b79fbf787c9201ed80edcf6e44c0cfc36133126850dd3",
+    "scripts/codex_runner.py": "172441625543b4afa3196037e7d535c6b2517986b8ce358cc78f4b47da279ac4",
+    "scripts/create_tmp_dirs.py": "23e8bf5023f6065e9490e6d5331bbff0807ccbce56b79ba6b9345e6361383bcd",
+    "scripts/entity_loader.py": "c999c5341beca05db4e5256386b927bf4dbb8d7cdb18416d2ddbb0d27cbbfcf3",
+    "scripts/fuzzer_patch_generator.py": "63dec135b2740494ce4f16786cb6f160109a5cd8556c022b1b77fc01ef50ad53",
+    "scripts/generate_repo_map.py": "ecef57b41e2637c717b03bf972da85ad9dd808fb4f85b2a9e3b775ec0042e69f",
+    "scripts/hive_runner.py": "1a3b976cf279d583b697f6e9508ad454920f0eb4396ce7fed4d3a474f663071c",
+    "scripts/intent_detector.py": "21d0e84add48fc6d249554df731f31a9132b03a37ff3d8a3e92e135af139f05d",
+    "scripts/lesson_loader.py": "73f63f5ea03d032faaf85ce4548d299a323b4bfd95e0bde714415d78970f6a61",
+    "scripts/metrics.py": "730acef34e87dc4db1eb79accdfb6c6291d57356561a1d6746c7619d7fd95ec6",
+    "scripts/packet_experiment.py": "bd3dd320f7b31af458e4cde814d8f17e270e750a62cb220d341b91004ace7cac",
+    "scripts/stress_runner.py": "128ce798ef85bbd419d96cfdede839936622b45a2fdc180db52960f7ea35e801",
+    "scripts/task_generator.py": "6482631a71a7a98bcf74b49276b7956b0f44218688c6fce48bba651c221adc33",
+    "scripts/task_ranker.py": "c66fc3984fdf5a6300c2512cae9ae5d0807b2cad9d34deb989ceb66833b3232a",
+    "scripts/task_scanner.py": "103e0467bd113380f0d00b9c6b88b5ce8adf283fbb49611686e27430c8f8ad78",
+    "tests/__init__.py": "735469839c842bc3fbc34792d87ecca2fb190d80bc5c631024bb850a07b5bbfb",
+    "tests/conftest.py": "2565e61061b919afa92d723084664aed36cf7fee97b8ea7d9bd67cd72f67392b",
+    "tests/integration_harness.py": "9e8765bf5db6a9c843fe868e089eb53f5ca087b99c44d020f3db1ecce6c08ba2",
+    "tests/test_action_rpg_prototype_contract.py": "65272a163c3f865027d9c1c58dc7e2f650eb48336bd0af400745ac9b1dcff6b3",
+    "tests/test_adversarial_agent_run.py": "b1789aeb274f37732098ed21ae0bb1a952f40e268aa5a75e90b9bc890dc69128",
+    "tests/test_block_rewrite_minimality.py": "84b30b1c8a1ae8933bbc660702ba3d7b88dab9ea04c700905abd7ec8f4b9baea",
+    "tests/test_coder_retries.py": "b8899a9cb4e9a7acf5b0895a61af3961017f1090eac9958ad1e5aa7808c5c0a0",
+    "tests/test_comment_only_tasks.py": "7b1f5e98cc22178653d5206b73d74da5d0afec441bf9936ca3d2df990c3668ee",
+    "tests/test_context_budgeting.py": "0b29e3e4d3f1067fe21d88f29d0ea54ac5d6cb302d47c80739535aa2a50c755c",
+    "tests/test_core_hive_npc_contract.py": "7a63f5b283667a0a873874f0747f683711fe341237d21a14952d6317b8c672af",
+    "tests/test_core_loop_contract.py": "fb724823a9984d6dd0fbb535e5422403c240ebb4723ff95b218d1d0fdfea9a58",
+    "tests/test_core_memory_contract.py": "582a53f61eb67dc2eb52cb34c37680d6bf929e76f1bdbeea5aa2b516d92e9b02",
+    "tests/test_core_questless_events_contract.py": "243ab252e9dc9d1b0cd840b1c61bfcb45980b4e96061c1351bc6436ba27df8b4",
+    "tests/test_core_simulation_contract.py": "4ac6eb84ee5909c7023291cf12e4dca459d77cdc3fc9ebf00a1ec6f10aa47990",
+    "tests/test_empirical_validation_gate.py": "ec724105dd38ea003c07a3f3cd7cbf34efec333e5e0ce0b20a8546c540b69fe3",
+    "tests/test_executor.py": "c1605b49eac780bb096579698951df6aab908254d61e2f4aecba45b62284e72f",
+    "tests/test_executor_verification_contract.py": "14a33ed5df7e6af331591075ea3068379e502641eef5d3ff8164bce7aa7d1f03",
+    "tests/test_failure_intelligence.py": "567fe27cbd1a9d421d473aaa77b7724319801b0f739c4606ba434586fda62d9c",
+    "tests/test_frontend_boundary_contract.py": "2e42e2abca7fc47cabde28a681bbfc4fe03760da95e565d17a48e35019b3e390",
+    "tests/test_hard_anchor_enforcement.py": "949822e7f14dbdc5591f2c3b7b8358983c14bb0d30227c440c096671d3383116",
+    "tests/test_hive_agent_feedback_real.py": "65a1d02dfbf840b91bf167563325b1c01e98241ef9791b8b89ada148be728507",
+    "tests/test_lesson_reuse_sequence.py": "6ea9932cad7f9dd80c23d126b2540034a43bfc083ab3459ca0d98e6c799dd99c",
+    "tests/test_lesson_routing.py": "0fc66053b28666d92083c0904f42772806e4f0ee35a44a6641bfeca6add2fc4f",
+    "tests/test_live_validation_loop.py": "4c2554e95cdde4549b55029b611109a93d45267316ca370996f3a78347553fa0",
+    "tests/test_math_research_agents.py": "d1d3700c843507b3be26d23ba24423e6b191f6d77e7182e5fa8cc7682bbbd905",
+    "tests/test_phase1_live_benchmark.py": "903bf53e754287c5983a8257caca4226086743d416be5c9ecb9f1d5c41638e42",
+    "tests/test_phase1_stability.py": "f959115d09708e429cae1c89fb53ecbb8ecf476c83e85014af9ce39dad11063b",
+    "tests/test_phase2_context_discipline.py": "d9b48e27d434bed4cdb67bf301e2bb6274994cde186d9dd6f1fe2dab2d7c7044",
+    "tests/test_pilot_intent_loop.py": "134e164fde2ef54efa66c970bf032fe436c4340211b91452642615049027d40c",
+    "tests/test_pilot_review_gate.py": "6b159c56eb84f6a7114c9a6cbb62b91868db11bf9a463c704f5d48268fcf6b28",
+    "tests/test_planner_anchor_canonicalization.py": "17d1f7bab6aeb0c25a0834f3b2b139b79fe279907a86ff5feef058aa1a6c284f",
+    "tests/test_planner_completion_cues.py": "96b82db01b451d360b679ce579bc37339d760cbdcba2c079795aa12f575cbd4c",
+    "tests/test_planner_intent_fuzzy.py": "0c08fd070ec43e2dd38235c55e9dc484ade3239fcde24e95d9882b1d10941aa5",
+    "tests/test_recorded_regressions.py": "02baafd989fe1791189258384647ebc7eb81a0dffd2d682a7310aacfe9c9ffaa",
+    "tests/test_reflector.py": "87a2bf2d3ab53e868857b789d89dcd27003aa86b9a1e9e4ed5402c970db0be94",
+    "tests/test_regression_gate.py": "5b0adeb17a07af28e71abb563169d93d5acc80bdd9b58beb2261fc379a75fa8e",
+    "tests/test_reliability_benchmark_harness.py": "92e9fa482752f346f9cf37f58b95017f12ac116bfc3f07c8cf5b3b6e1ca50330",
+    "tests/test_repo_map.py": "0e0e2fc662efea1c360cb909911910659c94367f68b25db88336466db0a8e923",
+    "tests/test_state_manager_disk_sync.py": "e12b76dd4acd33cfca9a241c2003f3eac1d02163b4e751b756dffeacdf75cf58",
+    "tests/test_tarrow_aftermath.py": "4233c75c292adcbda636bd270e5d05c232ab5b3e21cb1975f198a61c85e0891c",
+    "tests/test_tarrow_scenario_orchestration.py": "f11266cc36a0a88af6b0110eff78d7c57f3e338623cbb66847df52422a534000",
+    "tests/test_tarrow_settlement_contract.py": "6b809c8de370b2c950f7db05840c419285cea495a2d2f1a86b9a7460cd815168",
+    "tests/test_twin_realms.py": "94a5430e48a12851e174777cf0f7e804033db8081faa416ac794632b6a05cdd3",
+    "tests/test_twin_realms_adversarial.py": "9b389072bda86d5515f809fa0a9923cf335d073dac121ea2db17a5147ead3140",
+    "tests/test_twin_realms_agent_loop.py": "10b1cde5960f8636f89c96d4c7d50d34ed8809397c0066aa0567f2a077e7abde",
+    "tests/test_twin_realms_ai_modes.py": "eae64cd77c35170201642c01169c437f3934a2143be9c4f157e91e8985d00dde",
+    "tests/test_twin_realms_complexity.py": "1355ab5e8a34ab1ca5b51a9158ede044c74943def38eebc725a8774ac9247552",
+    "tests/test_twin_realms_hive_adapter.py": "179075784385beecefd3a227e4e5c7a2079e6e990f818151694ae2774f398c7b",
+    "tests/test_twin_realms_invariants.py": "fb4ff14010105dd269b13f68400e04c267bb0c993ef81ddb1333a41f331efc98",
+    "tests/test_twin_realms_live_shapes.py": "3e03d6fe95c3480826a958749452c3e38ec0048b5ce518f9f96e08bf6d8bdd1e",
+    "tests/test_twin_realms_long_run.py": "0e0ee3d5f7a9695c60983ccc2e590750cde45d69fa39c64fa812c4dd9eb88f01",
+    "tests/test_twin_realms_narration_guard.py": "ed51839f3cb3fa124728338b4aa45ff180a2ac4b3db9031cec385e362f05325f",
+    "tests/test_twin_realms_play.py": "8b287b1bd09f32c6a96523ee58dd9a37190394f28fd55d969a4a95a9a284402c",
+    "tests/test_twin_realms_prompt_contracts.py": "16bcd0b2d8fbe66363e67aa84e9857361052bc2e08fdc32d3fb05c49539573f4",
+    "tests/test_twin_realms_region.py": "35a5d73377e509b6872ee963d24be0772ece80d1c138a02bc98286e59ae03d16",
+    "tests/test_twin_realms_replay.py": "9a73c50f61c828d1709a3a383c67a6178f36a765b5e631d2b1340b008d25de2f",
+    "tests/test_validation_ab_run.py": "f6579e7527de91fe39191447f9cece0547f0658c2121cb7f7e024cb42e22645f",
+    "tests/test_work_ontology.py": "81e313d19163d1dbfd9b7e079fdffdf8361dd0d54e9e66e3b063eb88af58aa1c",
+    "tmp_integration/target_module.py": "1d3c9376b5bd0b06b6c2830e84e778b2758695702769324c2dd3ff13d5c6f248",
+    "twin_realms/__init__.py": "e7ab01121d1d4e0be67b1e95ea8ffe98fffcebd0fab4af004546e80e7f2aa1a2",
+    "twin_realms/__main__.py": "c2ee4ddb093c9af060cafaf68219907f8a6b7b301ed3f8bea75db7555adec987",
+    "twin_realms/agent_loop.py": "b0f7dab69f6b45ee05b663377fad21e1060f75afedb330614752f099f093082e",
+    "twin_realms/ai.py": "a9546393c0efdc7e0652ab850fd4e64ae27da7076126271236f944df76d38712",
+    "twin_realms/behavior.py": "2b22c45bb7d6fdb923762c00bff763c41bb75ec0f7fb36a7beb6cf71cf1b3501",
+    "twin_realms/benchmark.py": "8a2310880895c009dc91897b1e81b85c5789fb58cdef693c1b9c391a2eba2d9f",
+    "twin_realms/cli.py": "be460f5b8f3e427d2166a74307180fe651f5f7ac62b101a91e5d3eb638849806",
+    "twin_realms/cognition.py": "bc72ee4a29ff0a5541da26223a3331c95d0aeb9b35ec800cb99a4d3a2e976ab0",
+    "twin_realms/complexity.py": "a619f0961644117724b1c213ec5a96f7704117a6d8aced4bace680e2d03b60e0",
+    "twin_realms/content.py": "d0b3e535624ebeca2d5fce22a17a157335e62bc72d7cc0529798d17810753a58",
+    "twin_realms/drift.py": "03de835a7d29674570fb649aa66dbf7c800d4548783687f37baa978ab63f640b",
+    "twin_realms/engine.py": "7a5704fce634f65cc33656faa1ddf2a20ba2d86a75530b2c418173c687ecba74",
+    "twin_realms/fidelity.py": "8fea7dca69da266c3ddd92b2ce3f2b3b9d9e9f18294c38e9680fd028fbc20bbd",
+    "twin_realms/frontend_boundary.py": "af14af126c37ba206aebebcbe25c5a21b24043c79cc74d8749196deb91301d6a",
+    "twin_realms/frontend_server.py": "146b59536e9a5b3e4f28f72489a066898b188038ce655b1faf2372a32e7abc9e",
+    "twin_realms/hive_adapter.py": "0c9aa84af0ea01a318a99181b200984c0700983d707beacb2a6b939aabab14fd",
+    "twin_realms/intent.py": "5ebf5ccaa73ac3672fe7d1fd7bb14dd81573194e99e694e363eb154273cf18de",
+    "twin_realms/knowledge.py": "36e1e28af6e12560ed5315359f10642902fd2791bc2728202be80ad8c46d899d",
+    "twin_realms/llm_client.py": "8b331bc819e66604b26207c52c24f88d0dbba9282c84bc23870de0ff6e739547",
+    "twin_realms/models.py": "38e2aba0e3164fa0294f7a817508cc1e703e21f18c35485fdeb82e51f462407f",
+    "twin_realms/narrative.py": "373c2bd353939c27288f72397e2cd0762936c79a552fd913c1b838b5b4712295",
+    "twin_realms/play.py": "352be3aa7708108b6fabab2284090931743be35ff7927d9ec58e3c1b1c8b2138",
+    "twin_realms/region.py": "9ac4b7a94992666996da1e0ab7a48f694b1e47889d69efe3b1b223ff98204632",
+    "twin_realms/runtime.py": "abeaf14e6399b1d6c1ecbe8d433c20685fede4554d982dc1d8ebc69f88074e4c",
+    "twin_realms/simulation.py": "cd0a8956aaf1c70c7c185d167d195d598ef5bf928737915cf2d526a2e1eafcd6",
+    "twin_realms/tarrow.py": "5e96f7459f95add9c183d0a31ef1b2f1ea52eda9f06997b1c9076966b6d383b1",
+    "twin_realms/tarrow_scenario.py": "ef718ff92a81467ab5c85192cfa6105f3848eff5078a36add2308e0e050d0dfd",
+    "validation/__init__.py": "720504b7aafc89faf37ebed5434694beac43b76e135824bd48829d910d6a8643",
+    "validation/ab_run.py": "2bce24062ede3703a762ea8a903a6bc7ac2a1c63e5ea1d9ae6211ddc4bf32871",
+    "validation/analyze_trials.py": "9c44cffa24256f733ca6220e43f67faa5c04b2484ce6b4d5eb53dba9b3a8c9d4",
+    "validation/archive.py": "857bd3393ac60b18ac0f4f097949fee1171dcf690160e2e7eb10668382fb4c09",
+    "validation/compare_twin_realms_agent_loops.py": "320b49ff9c289539a9fd524d80ee47c47b2a12699c69e76d2007f3f8a18523d4",
+    "validation/compare_twin_realms_awareness.py": "3961f7f4126d47bfa0e08d5c3044e2fef74642c5bae0a0aec8163e78ca840a76",
+    "validation/compare_twin_realms_hive_contracts.py": "d19101c45bd1e6d432e86a20707470ead9f9565e1e405f59fbab0ab438dbe27b",
+    "validation/compare_twin_realms_tiers.py": "c81d1a0540d3478fcbf298a9624619e80bf0c34889ce31fd91a5ab14cb8c5632",
+    "validation/experiment_cases.py": "bc4d8de8c8ac384cb079b298e37a70e7842276299492c2aa0c7493279cf45900",
+    "validation/gate.py": "97af3f6c7c44fe961596b5e18653bda45e484f3efd63f4b4aa4f18af7f9bdf66",
+    "validation/lesson_study.py": "86aa2a24dbca6046d9e16228446f1cc75e4b8081c67f4184e938d443ccf1fc51",
+    "validation/lesson_study_cases.py": "21664af936a95fab6b4ab2250e9170bbef5ac90e3bee8f830d51798a4ce6a375",
+    "validation/live_loop.py": "0a707d4f4fe622b567305a121ba1d932cb255f8a045951dfcd96660a2cce3a65",
+    "validation/scoring.py": "17250e93838ab54cdabceed1129533740b0003dbe8d613f0f7ab57ada2c52452",
+    "validation/twin_realms_complexity_study.py": "46643e978f168f31b7776c1af177c80f7a8ced39d2d6f3976eee73b3a64c4e30",
+    "validation/twin_realms_hive_learning_probe.py": "56c2506175b30ce1a2a7c91cbc959f307c2e283a90fc57062b226a5e11862031",
+    "validation/twin_realms_live_study.py": "022a3f90017124a0ff70b87c65fbb607a656afa39c6ab0d3e2d2bfdad40a19a2",
+    "validation/twin_realms_region_study.py": "8f3823d9dc9db6666325e77b7a0025b58fe086f59f8af872e1af3335f864a82a",
+    "validation/variant.py": "a4b4342dcd4ce1e317463e7b5c6c0930737d11f2b2fa0c1499c48188dd1921ed",
+    "work_ontology.py": "ca64db8926823ff88dd0167998fcad15d5e773b3305a3ac4685f87ea36e6b68e"
+  },
+  "schedule": [
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "lessons"
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "packet"
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "raw"
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "lessons"
+    }
+  ],
+  "new_budget_nano_usd": 5000000000,
+  "historical_budget_is_separate": true,
+  "calls_per_recipient": 36,
+  "interpretation": "descriptive reused-task state-presentation comparison",
+  "preflight": {
+    "schema": "hive.contract-rerun.preflight.v1",
+    "verified": true,
+    "study_sha256": "519c9e38b644b88397d9aaf51f203c841b56d955db8db9e29d1e059c45fdec9c",
+    "runtime_sha256": "73ceae499cc9a9e9d1bfc991db13743cf7e4469a75501de42a15ca0b47bd3b65",
+    "new_model_requests": 0,
+    "cases": [
+      {
+        "case_id": "checkpoint_permuted_columns",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "9c4aba622d894eeecf76586fd60a2dc665ce7353e1d4dee6168854bbc6ce5602"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "ae4320a871b8db99b1f7eebf44094b7cf3820ce8e097a0914b60d9d1655f19e7",
+          "contracts": [
+            {
+              "arguments": [
+                "keys",
+                "values",
+                "order"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_1322350d02.py",
+              "symbol": "process"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+          "policy_sha256": "fb2acac4787f189f78c5107de6f815a33306c292e2bab36d8ac368f7264bdd79",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "keys",
+                  "values",
+                  "order"
+                ],
+                "source_file": "unit_1322350d02.py",
+                "symbol": "process"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_absolute_priority",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "ad440ed34efcaba0e1467691013ed108c7336cd25801c09a1afd57abc680fd87"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+          "contracts": [
+            {
+              "arguments": [
+                "keys",
+                "values"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_8c6b829a21.py",
+              "symbol": "process"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "b3d8970d9ad6435ba6054ae4e9bf83fe8480f3359c97cc008dc18ffc11922d29",
+          "policy_sha256": "0b03f0149139cdabb90d90b75ad9396d3e26c5b4f87fb019a6c7b6ccf6128d40",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "keys",
+                  "values"
+                ],
+                "source_file": "unit_8c6b829a21.py",
+                "symbol": "process"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_stable_partition",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "2ddd4866f411660ac2de5706b7d74d7948d7bc63c8474cae8d77655afc5f355d"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+          "contracts": [
+            {
+              "arguments": [
+                "keys",
+                "values",
+                "flags"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_2cef8711d3.py",
+              "symbol": "process"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "4c665dbc3cf86e10968920c90415f98173d413851b69a6b66a7350847eb6cc7b",
+          "policy_sha256": "1e9d105e73b5f02f97efe378e2a4321bb49c8be2a2e83359ede55beeb8759113",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "keys",
+                  "values",
+                  "flags"
+                ],
+                "source_file": "unit_2cef8711d3.py",
+                "symbol": "process"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_top_k_pairs",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "45c07938ade6f0acf215e6775c2354428a2fa3fee35c20a4b9201fd2775490c3"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "cdd59e39e3bebd268f27b914dd9a5ae5627af4d0cc5a46af283f73d72a3aadf9",
+          "contracts": [
+            {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "16362375ec13db746d7c259335ace3843d9998a647a01afa718a14d4444d1f8c",
+          "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "keys",
+                  "values",
+                  "limit"
+                ],
+                "source_file": "unit_9e5c6035ea.py",
+                "symbol": "process"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_head_and_tail",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "65d6a54570e745f98b656ff781ef24ed303b2c82f16405bbe3775a715a584e8f"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": null,
+        "reference_contract": null
+      },
+      {
+        "case_id": "checkpoint_ordered_unique",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "356955ea77bbf42b4b21bc7b18989dae08f6766dfaff12b5173f641ccef222e4"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": null,
+        "reference_contract": null
+      },
+      {
+        "case_id": "checkpoint_enumerated_rows",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "c122d5cfd47204678272aa5aeeb946f758323e07816afaaad6cf4222ac400da2"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": null,
+        "reference_contract": null
+      },
+      {
+        "case_id": "checkpoint_validate_then_reverse",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "93bdc01167e85661d5e916408d836d50a8f6b5b4e783531f3a44a8f75b0bec43"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": null,
+        "reference_contract": null
+      },
+      {
+        "case_id": "checkpoint_factor_cache",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "649e39d9f0374076046290959f20b112b523001b4f9167a9af0303f7d97b8db5"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+        },
+        "contract_policy": {
+          "baseline_sha256": "098e14c0d59c97726ac7b8b2b379a635c90d2edfe9f71de6932fdbd39333cbe3",
+          "contracts": [
+            {
+              "arguments": [
+                "name",
+                "factor",
+                "values"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_dac49f99a0.py",
+              "symbol": "Memo.fetch"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+          "policy_sha256": "2c7e184346e03435b07ad3e30266d43f6b8e33ca9b2162fbe343b982229489ba",
+          "observed_calls": 3,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 3,
+              "contract": {
+                "arguments": [
+                  "name",
+                  "factor",
+                  "values"
+                ],
+                "source_file": "unit_dac49f99a0.py",
+                "symbol": "Memo.fetch"
+              },
+              "errors": [],
+              "observed_calls": 3,
+              "violations": []
+            }
+          ],
+          "output_sha256": "a71df3ef716cabe43ead70bd8311cda3aeadcb986bea501da0ea9262f31c3925"
+        }
+      },
+      {
+        "case_id": "checkpoint_operation_cache",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "bdd1900f7ce4bf49bbe8459241b622e00484d5a04b7f4babf564f73ca7aff044"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+        },
+        "contract_policy": {
+          "baseline_sha256": "d995b7ea076b9c13ce9f7768bdaf3c5262fa288caf49d5a163d1933d151e517f",
+          "contracts": [
+            {
+              "arguments": [
+                "name",
+                "mode",
+                "values"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_e1ecffe6a3.py",
+              "symbol": "Memo.fetch"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "9ff007f347b1c84589c919cd3f8aada1629725c42f5bd00fc31039940e681ef1",
+          "policy_sha256": "f0591461e26ec6f7f8baeb39429d0e384ab508d6c2a93a6f51fc29fbb26fa4bd",
+          "observed_calls": 3,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 3,
+              "contract": {
+                "arguments": [
+                  "name",
+                  "mode",
+                  "values"
+                ],
+                "source_file": "unit_e1ecffe6a3.py",
+                "symbol": "Memo.fetch"
+              },
+              "errors": [],
+              "observed_calls": 3,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_ambient_policy",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "560ed8a7d8e5a4829e746cfcd1cc4335ea3450a16dfa563a71a1d1c4cc1ab08a"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+        },
+        "contract_policy": {
+          "baseline_sha256": "f14ba8a952dbf7a0cec01bd0f85a6e5b5899a32e18e4ea0b30d5d8aedfd74fa4",
+          "contracts": [
+            {
+              "arguments": [
+                "name",
+                "values"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_0525d40328.py",
+              "symbol": "Memo.fetch"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+          "policy_sha256": "51e1d4cde3b0229637bdeef4792104553713528bef7190492cb842fa947d69b2",
+          "observed_calls": 3,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 3,
+              "contract": {
+                "arguments": [
+                  "name",
+                  "values"
+                ],
+                "source_file": "unit_0525d40328.py",
+                "symbol": "Memo.fetch"
+              },
+              "errors": [],
+              "observed_calls": 3,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_shared_namespace",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "d4e408ccd0d50709f6b53f62356308e97571d250921464a9068f370696d93615"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+        },
+        "contract_policy": {
+          "baseline_sha256": "0c292dc856005a3342afb840d0ec71accf39a61b28586e112797aff2494041f8",
+          "contracts": [
+            {
+              "arguments": [
+                "name",
+                "revision",
+                "values"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "unit_b38ffe65cc.py",
+              "symbol": "Memo.fetch"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+          "policy_sha256": "a6051a37e2eb030992c0cdba5173c78e49e01ae1b0d061a02b80b99b350c957a",
+          "observed_calls": 3,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 3,
+              "contract": {
+                "arguments": [
+                  "name",
+                  "revision",
+                  "values"
+                ],
+                "source_file": "unit_b38ffe65cc.py",
+                "symbol": "Memo.fetch"
+              },
+              "errors": [],
+              "observed_calls": 3,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_explicit_zero_63",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "680f494e8ea776ed48e33178a1d163f5296c410a6560906f8e61113c811a368b"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "8a15ee5b918a569cd165d2307cb8f61655c73fa1f37e0f0bb493490f32b59e4f",
+          "contracts": [
+            {
+              "arguments": [
+                "defaults",
+                "overrides"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "component_d2117b3b.py",
+              "symbol": "configure_63"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+          "policy_sha256": "70c16ba6737ec7a90e0914ab00354df29a0dedd2881ee48131d0bc959ac5b50a",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "defaults",
+                  "overrides"
+                ],
+                "source_file": "component_d2117b3b.py",
+                "symbol": "configure_63"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_snapshot_alias_64",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "cc698b2c3af809352c216c5cae56e38e0c43bf3db233d872ba54f005a227d65e"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+        },
+        "contract_policy": {
+          "baseline_sha256": "4e0206e72445918dae041e4a5a4efeaba0a6586d1d7ff607d8d1fc68a02f5b9f",
+          "contracts": [
+            {
+              "arguments": [
+                "settings"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "component_9b58812e.py",
+              "symbol": "Journal_64.__init__"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "84947f7aaa4aaa6dec248d9b76e7d1b26479ca3854856cb8312f7199bf51d025",
+          "policy_sha256": "4be2467b6edb533d952acdbbaab825064cf9fcc8c227e8ea89f91704fec068bf",
+          "observed_calls": 1,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 1,
+              "contract": {
+                "arguments": [
+                  "settings"
+                ],
+                "source_file": "component_9b58812e.py",
+                "symbol": "Journal_64.__init__"
+              },
+              "errors": [],
+              "observed_calls": 1,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      },
+      {
+        "case_id": "checkpoint_current_input_65",
+        "initial": {
+          "passed": false,
+          "valid": true,
+          "exit_code": 1,
+          "output_sha256": "57d1c323acffbb782e72e82ebf87565f5492a118c02a29173c771a43b157a181"
+        },
+        "reference": {
+          "passed": true,
+          "valid": true,
+          "exit_code": 0,
+          "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+        },
+        "contract_policy": {
+          "baseline_sha256": "6a7a3383bb2a74afee8b9e0144d3fe40bc8e0558beeb07531e0ea20a689158e9",
+          "contracts": [
+            {
+              "arguments": [
+                "volume",
+                "current_width"
+              ],
+              "kind": "preserve_argument_values",
+              "scope": "After each observed public-test call, including exceptions.",
+              "source_file": "component_7da2276b.py",
+              "symbol": "Converter_65.buckets"
+            }
+          ],
+          "maximum_observed_calls": 1000,
+          "schema": "hive.public-contract-policy.v1",
+          "timeout_seconds": 10
+        },
+        "reference_contract": {
+          "schema": "hive.public-contract-result.v1",
+          "status": "PASSED",
+          "accepted": true,
+          "valid": true,
+          "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+          "policy_sha256": "81c42ce9df51ce1a43494e7d71bb52934786f1a8ad9499e5593e10baa3dc636b",
+          "observed_calls": 3,
+          "public_test_exit_code": 0,
+          "checks": [
+            {
+              "completed_calls": 3,
+              "contract": {
+                "arguments": [
+                  "volume",
+                  "current_width"
+                ],
+                "source_file": "component_7da2276b.py",
+                "symbol": "Converter_65.buckets"
+              },
+              "errors": [],
+              "observed_calls": 3,
+              "violations": []
+            }
+          ],
+          "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+        }
+      }
+    ],
+    "saved_bad_patches_rejected": 3,
+    "reference_regression_accepted": true
+  }
+}

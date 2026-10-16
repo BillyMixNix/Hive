@@ -1,0 +1,2311 @@
+{
+  "scope": "Model claims only; no automatic truth credit",
+  "checkpoints": [
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact permitted command `pytest` once will capture the controller's current test output; no command-specific historical memory was supplied.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command `pytest` and supplies no historical memories."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source will reveal the numbered callable definitions and identify the public runtime operation or its delegating helper; no source lines are currently available.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_ed595d07c8.py and provides no reported operation candidate or callable line."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public callable defined at line 3 will identify process as the runtime operation whose product computation produces the observed counterexample; no historical memory is supplied.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def process(stream):` at line 3 and the observed failure invokes process(iter([2, 3, 4])) returning (3, 1) instead of (3, 24)."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the product computation should identify the first line where the returned product becomes incorrect; for the iterator input, it observes the exhausted stream and yields 1 instead of 24.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows process(iter([2, 3, 4])) returns (3, 1) instead of (3, 24), while count is correct at 3."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is supplied; confirming the locked candidate should identify line 6 as the first wrong computation when the stream has already been consumed, while boundary case: a reusable sequence would not exhibit that consumption effect.",
+      "memory_id": "none",
+      "public_evidence": "The public callable context shows saved = tuple(stream) on line 4 followed by product = math.prod(stream) on line 6, and no upstream cause choices remain."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied, so no memory-based change is predicted; the selected line should assign 1 from the captured exhausted iterator.",
+      "memory_id": "none",
+      "public_evidence": "The controller captured stream as a list_iterator, saved as [2, 3, 4], and frames_after_line shows product as 1."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Using the already captured saved values will make the focused case compute 2*3*4=24 while preserving count 3; for an empty finite iterable, math.prod(saved) remains 1.",
+      "memory_id": "none",
+      "public_evidence": "The runtime frame shows stream is exhausted after saved=tuple(stream), while saved contains [2, 3, 4] and math.prod(stream) produced product 1 instead of 24."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot should provide the complete changed diff and fresh test result needed to identify any concrete review concern; with no historical memory supplied, no memory-based boundary prediction applies.",
+      "memory_id": "none",
+      "public_evidence": "The task packet requires exactly one review_snapshot call before submitting a review, and the supplied historical memory is empty."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Using the saved tuple for math.prod will preserve the input values for both count and product, including the boundary case of a one-pass iterator; the supplied test result should remain passing.",
+      "memory_id": "none",
+      "public_evidence": "The final diff changes only `math.prod(stream)` to `math.prod(saved)`, and the fresh test result reports TEST EXIT CODE: 0 and TEST STATUS: PASSED."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; no historical memory is supplied, so no memory-based effect is expected.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires exactly one run_command call with command='pytest' and provides no historical memory."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the numbered callable definitions and the fetch implementation needed to select exactly one callable; no historical memory is supplied.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading unit_3c975b00a8.py and reports the failing public operation as Memo.fetch."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker will lock the public fetch callable at its exact definition line; the source shows fetch performs the failing cached lookup.",
+      "memory_id": "none",
+      "public_evidence": "The observed failure is m.fetch('row', 1, [4, 8]) returning 5, and the source defines fetch at line 10 with the cache behavior."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the identity computation should identify the first runtime value that is wrong; for the second fetch, a distinct epoch should lead to a distinct key and the result should be 12 rather than the prior cached 5.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('row', 1, [4, 8]) returns 5 after fetch('row', 0, [2, 3]) returned 5, indicating the key value is already incorrect before the membership check and cached return."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is supplied; rejecting the frontier leaves the locked candidate unconfirmed because the unavailable counterexample does not establish that it is the first wrong computation explaining every mismatched field.",
+      "memory_id": "none",
+      "public_evidence": "The public packet states observable_counterexample is unavailable and provides no upstream cause choices."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to select one; if no callable is present, the broker result will expose that boundary.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading unit_3c975b00a8.py and requires the exact definition line before submission."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public fetch callable at its exact async-def/def line will lock the callable responsible for memo lookup and insertion; no boundary-case counterexample is available to justify selecting a helper instead.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source defines Memo.fetch at line 10; it computes the key via identity, inserts a missing entry using sum(values), and returns the stored entry."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "On the second fetch, the selected branch should expose the cache-key collision before the stale stored value is returned; the first fetch remains correct.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('row', 1, [4, 8]) returns the earlier cached value 5 instead of 12, indicating the cache-membership branch is the earliest visible point of the mismatch."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "If the upstream identity computation is the first wrong producer, correcting it should change the derived key and remove the mismatched lookup behavior; if the identity is already correct, the lookup mismatch will remain.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies the identity assignment as the only remaining upstream reaching definition, and assigned feedback says the locked symptom cannot explain every mismatched observable field."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 10,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied; the diagnosis is based on the captured operands and should identify key as \"row\" while noting that epoch and values are omitted from the selected RHS.",
+      "memory_id": "none",
+      "public_evidence": "The controller reports selected expression self.identity(name), frames with name \"row\" and key \"row\", and current-call parameters not loaded: epoch and values."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 11,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "The key will distinguish calls by both the preserved identity hook result and epoch: the second call stores 12 separately from the first 5, while a later call with epoch 0 reuses its original entry.",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows epoch 1 incorrectly returns 5 after epoch 0 stored entries under the key \"row\"; the objective requires caching per (identity(name), epoch)."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 12,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot will provide the controller-computed diff and fresh test result needed to identify any concrete changed-code concerns.",
+      "memory_id": "none",
+      "public_evidence": "No historical memory was supplied; the task packet directs review based only on the forthcoming snapshot."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": 13,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review should accept the change if the fresh test result passes and the added epoch component does not reveal a concrete defect in the changed lines; otherwise a specific changed-token finding would be required.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows TEST STATUS: PASSED and the only changed token is key = (self.identity(name), epoch), with no hardcoded example or weakened behavior visible in the diff."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command `pytest` once will execute the repository test suite and return its observed result; no test-path or flags are added.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command `pytest` and lists no public test output yet."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the public callable and any delegated helper, including exact numbered definition lines; no historical memory concerns callable selection here.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_3c975b00a8.py and the failure identifies the public operation as Memo.fetch."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public fetch callable at its exact definition line will identify the runtime operation whose second call returns the stale first value; no helper or constructor is needed.",
+      "memory_id": "none",
+      "public_evidence": "The visible failure explicitly names Memo.fetch, and the source shows its definition at line 10 with the failing cache behavior delegated through identity and entries."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected line is where the lookup key first becomes incorrect for the second epoch; the second fetch should no longer reuse the first fetch's value, including the boundary case of the same name with a different epoch.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('row', 1, [4, 8]) returns the prior value 5 instead of 12 after fetch('row', 0, [2, 3]), indicating the key remains improperly shared before storage or return."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the frontier should leave the cause unresolved because no upstream choices remain and the available packet does not establish that the locked computation explains every mismatched field.",
+      "memory_id": "none",
+      "public_evidence": "The packet states observable_counterexample is unavailable and cause_source_line_choices is empty, so the locked candidate cannot be verified as the first wrong computation explaining every mismatch."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal numbered callable definitions; if no callable is present, selection cannot be grounded.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_3c975b00a8.py and provides no reported operation candidate or counterexample."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The callable submission will lock the runtime method defined at line 10; the boundary case is that constructor line 2 must not be selected because the task requires a callable operation rather than an initializer.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows Memo.fetch defined at line 10 and no reported operation hint or counterexample identifies another callable."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the conditional should identify the first point where the second fetch takes the wrong cache-hit path; the returned value should remain unchanged at the downstream return.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('row', 1, [4, 8]) returns the prior 5 instead of 12, while the callable window's conditional controls whether the cached entry is reused."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "Using the upstream identity producer should explain the mismatched fields; if the identity is correct, the cache membership check and subsequent entry reuse should remain consistent across equivalent fetch inputs.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies `key = self.identity(name)` as the only remaining upstream reaching definition for the locked candidate at `if key not in self.entries:`."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 10,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The proposed explanation predicts that changing only `epoch` while keeping `name` and identity result `row` leaves the cache lookup key unchanged, including when an existing `row` entry is present.",
+      "memory_id": "none",
+      "public_evidence": "The controller captured `name: \"row\"` and `key: \"row\"` for both epoch 0 and epoch 1, while the RHS load list omits `epoch` and `values`; the epoch-1 frame already contains `entries: {\"row\": 5}."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 11,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Using a composite key will separate cached sums for different epochs while preserving reuse when the same identity and epoch recur; the current red case should return 12 for epoch 1 instead of reusing 5.",
+      "memory_id": "none",
+      "public_evidence": "Runtime frames show the selected expression produces key \"row\" while epoch is omitted, and the focused regression fails with 5 instead of 12 on the second epoch."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 12,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived-session memories do not concern code diffs or test outcomes; reviewing the snapshot should return the controller-computed diff and fresh test result for this task.",
+      "memory_id": "none",
+      "public_evidence": "The task packet only identifies a reviewer task and provides no public diff or test result yet."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": 13,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review submission should record PASS because the snapshot shows a single targeted key change and the fresh test suite passes; no concrete defect is observable in the changed token.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot reports TEST EXIT CODE: 0 and TEST STATUS: PASSED; the only changed token is `key = (self.identity(name), epoch)` replacing `key = self.identity(name)`. "
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Pytest will run the repository's default test suite and return its observed results; if no tests or configuration are present, it will report that boundary condition instead.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes exactly one command, pytest, to capture the controller's failing test output."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to select one callable; if the failing public operation delegates, its helper will also be visible.",
+      "memory_id": "none",
+      "public_evidence": "The task permits reading unit_b6d4e8653e.py, and the failure identifies process(...) as the exercised operation."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public callable defined at line 1 will identify process as the runtime operation responsible for the observed incorrect average; no helper callable is present.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source defines only `def process(stream):` at line 1, and the public failure reports process(iter([2, 4, 9])) returning (3, 0.0) instead of (3, 5)."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected line computes the incorrect average from the already-exhausted stream, so the observed result should remain 0.0 instead of 5 for the supplied input.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows process(iter([2, 4, 9])) returns (3, 0.0) rather than (3, 5), and the callable context shows average is computed with sum(stream) after saved = list(stream)."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "Confirming the candidate identifies line 4 as the first wrong computation; for a consumed iterator, count remains the saved length while sum(stream) sees no remaining items, whereas an already-materialized reusable stream may not show the mismatch.",
+      "memory_id": "none",
+      "public_evidence": "The supplied context shows line 2 consumes stream into saved, while line 4 independently sums stream rather than saved."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied, so no memory-based effect is predicted; the cited line should account for the observed average of 0.0 from the captured operands.",
+      "memory_id": "none",
+      "public_evidence": "Controller evidence shows count=3, saved=[2,4,9], stream is a list_iterator before the line, and average=0.0 afterward; the RHS loads count and stream and current_call_parameters_not_loaded is []."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing the exhausted stream with the captured saved values should make the public case return (3, 5); for empty input, the conditional should still return 0 without division.",
+      "memory_id": "none",
+      "public_evidence": "Runtime evidence shows saved=[2,4,9], count=3, stream is an exhausted list_iterator, and current result is (3,0.0) instead of (3,5)."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot should provide the complete changed diff and fresh test result needed to assess whether any concrete review finding is warranted.",
+      "memory_id": "none",
+      "public_evidence": "The task packet supplies no historical memory and directs review solely from the controller-brokered snapshot."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review submission should record PASS because the only changed token uses the saved list for summation, and the fresh test result is passed; no historical memory was supplied.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows `average = sum(saved) / count if count else 0` replacing `sum(stream)`, and TEST EXIT CODE: 0 with TEST STATUS: PASSED."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact permitted command should execute the repository test suite once and return its observed pass/fail output; no alternate path or flags will be used.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and permits pytest as the only command."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the sole allowed source will reveal the numbered callable definitions and the public operation responsible for the observed incorrect second tuple value.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_b6d4e8653e.py, and the failure reports process(iter([2, 4, 9])) returning (3, 0.0) instead of (3, 5)."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public callable defined at line 1 will lock process as the selected runtime operation; no source change or test execution is expected from this locator action.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def process(stream):` at line 1, and the observed failure explicitly calls process(iter([2, 4, 9])) and reports the incorrect average 0.0."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the average computation should identify the first line where the observed result becomes 0.0 instead of 5; an empty stream remains governed by the existing count-zero branch.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows process(iter([2, 4, 9])) returns (3, 0.0) instead of (3, 5), and the callable computes average with sum(stream) after saving the iterator."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 5,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "For a one-shot iterator with items, the saved list remains populated and count is positive; the downstream average calculation can still observe an exhausted stream, while an empty input keeps count at zero.",
+      "memory_id": "none",
+      "public_evidence": "The supplied context shows saved = list(stream), then count = len(saved), followed by sum(stream) on the original stream."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The submission should be accepted as a single causal explanation grounded in the captured operands; no observable effect from the archived-record memories is predicted.",
+      "memory_id": "none",
+      "public_evidence": "The controller reports selected expression `len(saved)`, `saved` as `[2, 4, 9]` before the line, `count` as `3` after it, and `stream` among the current-call parameters not loaded by the RHS."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "The replacement should keep count equal to len(saved) while rebinding stream to an iterator over saved, so the downstream sum(stream) observes [2, 4, 9]; for empty saved it should still yield count 0 and average 0.",
+      "memory_id": "none",
+      "public_evidence": "The runtime frame shows saved=[2, 4, 9], stream is a single-use list_iterator, and the focused failure is (3, 0.0) instead of (3, 5), while the locked downstream expression still sums stream."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot should provide the complete changed diff and fresh test result needed to identify any concrete review concern; the archived-session memories do not address code-diff review.",
+      "memory_id": "none",
+      "public_evidence": "The task packet directs a read-only review of the controller-brokered final diff and test result, while the supplied memories concern archived records rather than software changes."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The review will accept the changed implementation because the fresh test passed and the diff shows no concrete defect in the added expression.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot reports TEST EXIT CODE: 0 and TEST STATUS: PASSED; the only changed token is the count assignment using iter(saved)."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; no archived-session memory is relevant to reproducing the current test run.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes exactly one command, pytest, and provides no current test output yet."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the callable definition lines needed to select the public runtime operation; if it delegates the failing computation, the relevant helper will also be visible.",
+      "memory_id": "none",
+      "public_evidence": "The public failure identifies process(...) as the exercised operation, but no source definition line is provided."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker should lock the only public callable, process, at its exact definition line; the archived ordering notes do not provide evidence about callable selection or source spans.",
+      "memory_id": "none",
+      "public_evidence": "The source packet shows a single callable, `def process(keys, values):`, at line 1, and the reported operation is unavailable."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the result-construction line should identify the first point where the sorted keys are paired with the wrong value positions; the return line should only pass along that already-wrong result.",
+      "memory_id": "none",
+      "public_evidence": "The observed failure shows process returns [(5, 'a'), (3, 'b'), (2, 'c')] instead of [(5, 'b'), (3, 'c'), (2, 'a')], and the callable context constructs result with zip(sorted(keys, reverse=True), values)."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "Confirming the locked candidate should identify the first wrong computation; with no upstream producer choices, the resulting paired list should reflect the candidate's descending-key zip behavior at the reported symptom.",
+      "memory_id": "none",
+      "public_evidence": "The packet states that no upstream producer choices remain and identifies the locked candidate as the direct computation at line 2: result = list(zip(sorted(keys, reverse=True), values))."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived memories concern dated record ordering, not pairing sorted keys with their corresponding payloads; applying them predicts no relevant change to this diagnosis.",
+      "memory_id": "none",
+      "public_evidence": "The public runtime frame shows keys [2,5,3], values [\"a\",\"b\",\"c\"], and assigned result [[5,\"a\"],[3,\"b\"],[2,\"c\"]], while the requirement requires original associations."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "The replacement will sort key-payload pairs by descending key while preserving payload associations and stable input order for equal keys; with keys [2,5,3] and values ['a','b','c'], it predicts [(5,'b'),(3,'c'),(2,'a')].",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows the current expression produces [(5,'a'),(3,'b'),(2,'c')] instead of [(5,'b'),(3,'c'),(2,'a')], and the runtime frame shows keys and values are supplied in parallel."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived memories concern ordering of archived records, not code-diff review; using none should leave review grounded solely in the returned diff and test result, including any boundary-case defects shown there.",
+      "memory_id": "none",
+      "public_evidence": "The supplied task packet provides no current diff or test result yet, and the historical memories do not mention controller-brokered code review."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "No supplied historical memory concerns this code diff; submitting a concrete finding should cause the review to be recorded as findings rather than PASS.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows the exact replacement of `list(zip(sorted(keys, reverse=True), values))` with `sorted(zip(keys, values), key=lambda pair: pair[0], reverse=True)`, while the fresh test result passed."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command `pytest` will execute the test suite once and return its observed output; no test or file changes are expected.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command `pytest` and provides no historical memory."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to submit exactly one callable; if no callable is present, the broker result will expose that boundary.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits read_source_lines for unit_6ea1cbf91e.py and provides no reported operation candidate or source line."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public process definition at line 1 will select the callable that directly performs the failing zip operation; no boundary case changes callable identity.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def process(keys, values):` on line 1, and the observed failure names process as the public operation."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the assignment line should identify the first point where sorted keys are paired with values in their original order; the return line only propagates that already-wrong result.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows output pairs 5 with 'a', 3 with 'b', and 2 with 'c', which is produced by the zip expression on the assignment line."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The produced result will pair values with keys sorted in descending order; if that ordering is the first mismatch, confirming this line identifies the cause, while inputs whose keys are already descending remain unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The public packet offers no upstream producer choices and identifies line 2 as the direct candidate: result = list(zip(sorted(keys, reverse=True), values))."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied; the submitted explanation should therefore rely only on the captured operands and observable before/after frames, predicting the shown result [[5, \"a\"], [3, \"b\"], [2, \"c\"]].",
+      "memory_id": "none",
+      "public_evidence": "The controller captured keys [2, 5, 3] and values [\"a\", \"b\", \"c\"] before line 2, and result [[5, \"a\"], [3, \"b\"], [2, \"c\"]] after it; the RHS loads keys and values."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Sorting the already-associated (key, value) pairs by key descending should produce [(5, 'b'), (3, 'c'), (2, 'a')] for the observed input; equal-key pairs should retain input order because Python's sorted is stable with a key function.",
+      "memory_id": "none",
+      "public_evidence": "The controller runtime shows keys [2, 5, 3], values ['a', 'b', 'c'], and the failing result pairs 5 with 'a', 3 with 'b', and 2 with 'c'; the focused regression expects associations reordered with their keys."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot will provide the controller-computed diff and fresh test result needed to identify any concrete changed-line concern.",
+      "memory_id": "none",
+      "public_evidence": "No historical memory was supplied; the task packet requires reviewing the snapshot before submitting a verdict."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "With no historical memory supplied, submitting PASS should record that the complete changed diff has no concrete reviewer finding; the broker should accept the review if its snapshot supports that result.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows one changed expression replacing independent key sorting with sorting of zipped pairs, and the fresh test result is PASSED with exit code 0."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command will execute the controller's pytest suite once and return its observed output; no files will be modified.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and grants pytest as the allowed command."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions; if the public operation delegates to a helper, the relevant definitions will be observable for selection.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading unit_9def8078f0.py and reports a failing public process operation, but provides no historical memory."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public callable at its exact definition line will identify process as the runtime operation responsible for the observed pairing behavior; no boundary case is available beyond the shown input.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def process(keys, values, flags):` on line 1, and the failure names process directly."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The submitted location should identify the first line where the produced pairs become misaligned; the returned result should point to the zip operation rather than initialization or downstream return.",
+      "memory_id": "none",
+      "public_evidence": "The observed failure shows [(8, 'x'), (2, 'y')] instead of [(8, 'y'), (2, 'z')], indicating the mismatch appears when selected keys are zipped with unfiltered values."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 5,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "Changing the selected-value producer would change the corresponding keys entering the zip; if the locked zip line is itself the first wrong computation, this upstream change would not explain the mismatch.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies the locked candidate as the zip operation and offers selected = [key for key, keep in zip(keys, flags) if keep] as the only upstream reaching definition."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied, so no remembered principle predicts an additional effect; the observable prediction is that the selected assignment remains [8, 2] when values changes while keys and flags stay fixed.",
+      "memory_id": "none",
+      "public_evidence": "The controller captured keys [4, 8, 2], flags [false, true, true], values [\"x\", \"y\", \"z\"], and listed values among current-call parameters not loaded by the selected RHS; the after-line frames show selected's source computation has retained 8 and 2."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected comprehension will use values instead of keys while retaining the existing flags filter; for the supplied inputs it is predicted to select ['y', 'z'] rather than [8, 2].",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows the current result [(8, 'x'), (2, 'y')] versus expected [(8, 'y'), (2, 'z')], and runtime evidence reports that the selected expression currently loads keys and flags but not values."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 8,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected leaf substitution changes the filter input from flags to values; for the supplied non-empty string payloads, all three values are truthy, so selected is expected to include all keys rather than only keys with true flags, and the focused regression may remain failing.",
+      "memory_id": "none",
+      "public_evidence": "The handoff lists the only available leaf choice as replacing flags with values, while the focused red output expects filtering by flags and shows the current result [(8, 'x'), (2, 'y')] versus [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 9,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the locked line should preserve the conclusion that it is not the first wrong computation; with no upstream choices remaining, no candidate repair is selected.",
+      "memory_id": "none",
+      "public_evidence": "The public regression shows the locked zip expression producing an extra pair, while the supplied context shows selected is the upstream filtered value and no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 10,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions; if it contains multiple callables, I will select one callable definition rather than a statement.",
+      "memory_id": "none",
+      "public_evidence": "The task packet authorizes reading unit_9def8078f0.py and requires locating an exact def or async-def line; no historical memory was supplied."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 11,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker should lock the only callable defined in the allowed source, process, at its def line; no helper or boundary case is present in the file.",
+      "memory_id": "none",
+      "public_evidence": "The source packet shows `def process(keys, values, flags):` on line 1 and contains no other callable definitions."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 12,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting this line predicts the first incorrect intermediate selection is identified, before the downstream return uses the already-wrong value.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows expected values paired with labels, while the returned pairs use the earlier key sequence (8,'x') and (2,'y'), indicating the mismatch originates in the selection expression."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 13,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting this locked candidate should preserve the finding that it cannot explain every mismatched observable field and allow the cause trace to proceed or remain unresolved.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly states that the remaining locked symptom cannot explain every mismatched observable field after its upstream frontier was exhausted."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 14,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions; a boundary case is that an empty or constructor-only file would provide no valid runtime callable.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_9def8078f0.py and requires locating one callable, while no counterexample or candidate operation is supplied."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 15,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the only callable definition will identify process as the selected runtime callable; no helper or alternate callable is present in the allowed source.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source contains exactly one callable, `def process(keys, values, flags):`, at line 1."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 16,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker will record the sole offered source line as the selected location; the visible failure should remain an output mismatch because no alternative line is available in the locked window.",
+      "memory_id": "none",
+      "public_evidence": "The callable window contains only `return result`, and the observed test output mismatches both returned value fields."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 17,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "If this upstream producer is the first wrong computation, correcting the value produced by list(zip(selected, values)) should change the returned pairs; if it is already correct, the returned result should remain unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies `result = list(zip(selected, values))` as the sole untried upstream reaching definition for the locked `return result` candidate."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 18,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied; the observable effect should be the line's direct zip result from the captured operands and its omission of the current-call parameters listed as not loaded.",
+      "memory_id": "none",
+      "public_evidence": "The controller captured `selected=[8, 2]`, `values=[\"x\", \"y\", \"z\"]`, with `keys` and `flags` listed as not loaded; after the line it observed `result=[[8,\"x\"],[2,\"y\"]]`."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 19,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected reference is preserved while the values reference is replaced by flags, so the result should pair selected keys with boolean flag entries; this is observably different from the locked computation but does not match the regression's required payload values.",
+      "memory_id": "none",
+      "public_evidence": "The focused failure shows the required result is [(8, 'y'), (2, 'z')], while the available controller choice a101 produces list(zip(selected, flags)); the locked line currently uses list(zip(selected, values))."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 20,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing the selected reference with the in-scope keys value will make the RHS evaluate as zip(keys, values); for the captured inputs this predicts all three original key/value pairs, so the focused regression may still expose the missing flag filtering boundary.",
+      "memory_id": "none",
+      "public_evidence": "The supplied focused failure shows the current result pairs selected keys with values from position zero, while the only controller-generated alternatives are flags, keys, or replacing values with keys; no historical memory was supplied."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 21,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected leaf substitution changes the RHS from list(zip(selected, values)) to list(zip(selected, keys)); for the captured inputs this is predicted to produce [(8, 4), (2, 8)], so it does not match the accepted regression output [(8, 'y'), (2, 'z')].",
+      "memory_id": "none",
+      "public_evidence": "The public packet shows the accepted regression expects [(8, 'y'), (2, 'z')] while the only controller choices are replacing selected with flags or values with keys; the chosen option preserves selected keys but replaces payload values with keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 22,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory was supplied, so no memory-based mechanism is predicted; the cited line should produce the captured result [[8, 'x'], [2, 'y']] from its captured operands.",
+      "memory_id": "none",
+      "public_evidence": "Controller runtime evidence shows selected=[8, 2], values=['x', 'y', 'z'], and result=[[8, 'x'], [2, 'y']]; the regression report shows the public association mismatch against [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 23,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The only offered leaf substitution changes the selected reference from selected to flags, so the locked expression will become list(zip(flags, values)); this is the controller-authorized prediction, though the supplied focused regression expects key/value pairs and may therefore remain non-green.",
+      "memory_id": "none",
+      "public_evidence": "The packet supplies exactly one leaf choice, replacing selected with flags, while the focused red output shows the expected result [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 24,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the locked return line should reflect that the observable mismatch is already present in the value assigned to result; the returned value will remain wrong unless an upstream producer is changed.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows process returns [(False, 'x'), (True, 'y'), (True, 'z')] instead of [(8, 'y'), (2, 'z')], while the locked candidate is only `return result` and no upstream choices remain."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 25,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is supplied; rejecting the locked return location should preserve the observation that the wrong pairs are produced before the return executes.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows result contains [(False, 'x'), (True, 'y'), (True, 'z')] while the locked line only returns result; the mismatch is established earlier."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 26,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the locked return line should leave upstream value-production causes unresolved because the reported mismatch is already present in the returned result; the return statement itself does not create the differing elements.",
+      "memory_id": "none",
+      "public_evidence": "The supplied failure shows the assertion mismatch in the returned list, while the locked source line is only `return result`; no upstream cause choices remain."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": 27,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the frontier should report that the locked return statement is not the first wrong computation; the mismatched output is already formed upstream, so no candidate can explain every field.",
+      "memory_id": "none",
+      "public_evidence": "The supplied context shows line 4 only returns result, while the failure contains incorrect tuple elements and length; the locked return does not create those values."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact allowed command pytest once will produce the controller's current test output; if no tests or failures are present, the broker result will show that boundary case.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and permits pytest."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions; if the public operation delegates, its helper will also be visible for selection.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_ed595d07c8.py and reports a failing public call to process, but gives no callable candidate or source line."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public process callable at its exact definition line will select the operation whose returned product is observed as 1 instead of 24; no boundary case changes the callable identity.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows `def process(stream):` at line 3, and the failure invokes process(iter([2, 3, 4])) with result (3, 1) instead of (3, 24)."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the product-assignment line should identify where the exhausted iterator produces 1 instead of 24; the count remains correct, including the boundary case of an empty iterator.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows process(iter([2, 3, 4])) returns (3, 1) instead of (3, 24), and the callable context shows math.prod(stream) occurs after tuple(stream) consumes the iterator."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "Confirming the locked computation should attribute the product mismatch to math.prod(stream); for a re-iterable stream product may remain correct, but for an exhausted iterator it can produce the wrong result after tuple(stream).",
+      "memory_id": "none",
+      "public_evidence": "The public callable context shows stream is consumed by saved = tuple(stream) before product = math.prod(stream), and no upstream cause choices remain."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory concerns this iterator-consumption and empty-product mechanism; the selected line should be explained directly from the captured frames, predicting assignment of product=1 after math.prod receives the exhausted iterator.",
+      "memory_id": "none",
+      "public_evidence": "The public packet shows saved=(2,3,4), count=3, stream is a list_iterator before the line, and product=1 afterward; current_call_parameters_not_loaded is an empty list."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "not_applicable",
+      "expected_effect": "Using the already captured tuple should make the product 24 for [2, 3, 4], while preserving the empty-product result of 1 for an empty iterable.",
+      "memory_id": "none",
+      "public_evidence": "The runtime frame shows saved=(2, 3, 4) before the selected RHS and product=1 afterward because stream is exhausted."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived-session memory is unrelated to reviewing the current code diff and test result, so it should not affect the snapshot request; the broker should return the controller-computed diff and fresh test result.",
+      "memory_id": "none",
+      "public_evidence": "The task packet provides only the current review scope and requires inspection of a fresh snapshot; no historical record concerns the changed tokens or tests."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived-record memories do not concern iterator preservation or this code diff; submitting PASS with no findings should record that the changed token is supported by the fresh passing test.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows only `product = math.prod(stream)` changed to `product = math.prod(saved)`, and the test status is PASSED with exit code 0."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The controller will execute exactly the permitted pytest command once and return its failing test output, if any; no files should be modified.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one run_command call with command='pytest' and grants pytest as the allowed command."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "applies",
+      "expected_effect": "Reading the allowed source should reveal the public runtime callable and any helper involved in the failed product computation; if an iterator is consumed twice, the source should show that boundary.",
+      "memory_id": "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+      "public_evidence": "The public failure passes iter([2, 3, 4]) and returns count 3 but product 1 instead of 24, indicating an iterable-consumption issue is plausible and source inspection is required."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Selecting the public process callable will expose the failing computation: after stream is materialized into saved, the later math.prod(stream) consumes the already-exhausted iterator and yields 1; this boundary behavior is visible for single-use iterators such as iter([2,3,4]).",
+      "memory_id": "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+      "public_evidence": "The allowed source defines process(stream) at line 3 and shows saved = tuple(stream) followed by math.prod(stream); the observed failure is process(iter([2,3,4])) == (3,1) instead of (3,24)."
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "The saved tuple already contains 2, 3, and 4, while the later product over the already-consumed iterator yields the empty-product value 1; selecting this line identifies the first incorrect runtime result, with an empty or single-use iterator as the boundary case.",
+      "memory_id": "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+      "public_evidence": "The callable context materializes stream into saved, then computes math.prod(stream), and the public failure reports count 3 but product 1 instead of 24."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Runs exactly the controller-specified pytest command once and returns its observed test output; no path or flags are added.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one run_command call with command='pytest' and forbids additional arguments."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "applies",
+      "expected_effect": "Reading the allowed source will reveal the public runtime callable and any helper it delegates to, including exact definition lines needed for the single locator submission; the boundary case is that a helper is preferred only if the public method merely delegates the failing computation.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The counterexample shows Memo.fetch returns a stale value when locale changes from en to fr, indicating the relevant runtime operation is likely in the allowed source file; no callable candidates are supplied."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Selecting the public fetch callable will target the failing runtime operation; its current implementation reuses an entry keyed only by identity, so calls differing by locale can return the first cached sum.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The observed failure is m.fetch('Ada','fr',[8,9]) returning 7 after fetch('Ada','en',[3,4]), and source line 10 defines fetch while line 12 checks only the identity-derived key."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "Including the locale in the cache identity should make the second call use a distinct entry; the boundary case is repeated calls with the same name and locale, which should still reuse that locale-specific value.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The first call for Ada/en returns 7, while the subsequent Ada/fr call incorrectly returns the cached 7 instead of 17, and the context builds the key only from name."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "applies",
+      "expected_effect": "If locale is a required cache identity dimension, calls with the same name but different locales should produce distinct cached entries, while calls with the same name and locale should reuse the same entry.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The locked computation assigns the cache key from identity(name) while fetch also receives locale; the shown entries lookup uses that key, so locale is not visibly included in the key construction."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "Because the complete cache identity must distinguish locale as well as the authoritative normalized name, identifying the omitted locale dimension predicts reuse of one locale's stored entry for another locale; the boundary case is equivalent names sharing only when their locales also match.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The captured frames show the first call stores entries {\"ada\": 7}, while the second call has locale \"fr\" and the same computed key \"ada\"; runtime evidence lists locale among parameters not loaded by the selected RHS."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "uncertain",
+      "expected_effect": "Running the exact pytest command once should reproduce and record the controller's current test outcome; if the suite is empty or passes, the output will show that boundary case instead of a failure.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and provides no current test output to compare against."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "applies",
+      "expected_effect": "Reading the allowed source will reveal the public callable whose reordering logic produces the observed positional mismatch; if it delegates, the helper definition will also be visible for selection.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The failure shows values sorted descending while labels remain in original order, demonstrating corrupted positional associations."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "The public process callable will be selected because it directly performs the failing sort-and-zip operation; the observed mismatch is consistent with reordering keys independently while leaving values positional. A helper is unnecessary because process contains the failing computation itself.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The source shows process at line 1 and line 2 computes zip(sorted(keys, reverse=True), values), while the failure shows expected positional associations differ from the returned pairs."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "Selecting the result-building line identifies the first point where keys are reordered without their correlated values; the returned pairs should preserve key-value associations, including for descending non-monotonic keys.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The failing assertion shows sorted keys [5, 3, 2] paired with unchanged values ['a', 'b', 'c'], producing (5, 'a') instead of the expected (5, 'b')."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "applies",
+      "expected_effect": "Sorting only keys before zipping changes positional associations while preserving output length; with non-monotonic keys, the resulting pairs will mismatch the original key-value records.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The candidate expression applies sorted(keys, reverse=True) independently and then zips it with values; no upstream cause choices remain."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "When keys are non-monotonic, sorting only the key sequence changes positions while leaving payload positions fixed, producing mismatched key-payload pairs; equal keys would retain input order only within the independently sorted key sequence.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The controller observed keys [2, 5, 3] and values [\"a\", \"b\", \"c\"] before the line, then result [[5, \"a\"], [3, \"b\"], [2, \"c\"]] after it."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 7,
+      "action": "replace_selected_expression",
+      "applicability": "applies",
+      "expected_effect": "Bundling each key with its corresponding value before sorting will produce descending-key pairs while preserving associations; for equal keys, Python's stable sorted with reverse ordering by key preserves their input order.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The focused red output shows keys sorted to [5, 3, 2] while values remain in input order, yielding mismatched pairs; the objective explicitly requires preserving associations and equal-key input order."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "uncertain",
+      "expected_effect": "The snapshot should provide the complete changed-line diff and fresh test result needed to identify any concrete defect, including ordering or iterable-consumption issues if present.",
+      "memory_id": "none",
+      "public_evidence": "The task packet states that review_snapshot returns the controller-computed diff and fresh test result, but no diff is visible yet."
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "applies",
+      "expected_effect": "Bundling keys and values with zip before sorting preserves positional associations while ordering by key; correlated pairs remain intact, including non-monotonic keys.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The changed expression is list(sorted(zip(keys, values), key=lambda pair: pair[0], reverse=True)), and the fresh test result passed with exit code 0."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker will run exactly the requested pytest command once and return the controller's observed test output; no files will be modified.",
+      "memory_id": "none",
+      "public_evidence": "The task instruction explicitly specifies command='pytest' and restricts this reproducer to one allowed failing test command."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "applies",
+      "expected_effect": "Reading the allowed source will reveal the public callable that first transforms the correlated value and label sequences; I expect its exact definition line and any delegated helper needed for selection.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The visible counterexample shows values [4,8,2] and labels ['x','y','z'] becoming [(8,'x'),(2,'y')], preserving lengths but corrupting positional associations after filtering."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Submitting the public process callable should lock the runtime operation that performs the failing positional filtering; the shown non-monotonic association failure is within this callable, while no helper is present.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The only allowed source defines process at line 1, and its separate filtering of keys followed by zip with values matches the observed output [(8, 'x'), (2, 'y')] instead of the expected aligned pairs."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "The selected keys are [8, 2], while the unfiltered values remain ['x', 'y', 'z']; at this zip, positional associations first become incorrect, producing [(8, 'x'), (2, 'y')] instead of [(8, 'y'), (2, 'z')].",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The failing assertion observes [(8, 'x'), (2, 'y')] versus the expected [(8, 'y'), (2, 'z')], and the callable context shows result zips filtered selected keys with the original values."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 5,
+      "action": "submit_cause",
+      "applicability": "applies",
+      "expected_effect": "If flags filter out any non-final key, the selected-key sequence becomes shorter or shifts while values remain in original positional order, so the result pairs keys with the wrong values; when all flags are true, this specific filtering-induced mismatch should not occur.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The supplied process code creates selected by filtering keys with flags, then zips selected with the unfiltered values, showing a producer that can break positional association."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "Because keys and values are positionally correlated, the selected computation should preserve each key with the value at the same input index; with flags [false,true,true], changing the key selection must not shift the associated values.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The captured frame has keys [4,8,2], values [\"x\",\"y\",\"z\"], and flags [false,true,true]; the selected RHS loads keys and flags but lists values as not loaded."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "The filtered sequence will read the payload input at the same flag positions; for the boundary case [false,true,true], the selected payload entries should be the second and third items rather than the first and second.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The focused failure shows keys [4,8,2] and values ['x','y','z'] becoming [(8,'x'),(2,'y')] instead of [(8,'y'),(2,'z')], and runtime evidence confirms values is omitted from the selected expression."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 8,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Replacing the selected reference with values will change the filtering input while preserving the existing zip/comprehension tree; for the supplied case, because all values are truthy, the boundary behavior is that all keys remain selected, so the broker's regression gate will determine whether this controller-bounded substitution is accepted.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The focused red output shows positional associations are corrupted: actual [(8, 'x'), (2, 'y')] versus expected [(8, 'y'), (2, 'z')], while the controller offers only the flags-to-values leaf substitution."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 9,
+      "action": "confirm_candidate",
+      "applicability": "applies",
+      "expected_effect": "Because keys and values are positional fields, correcting the locked zip computation to use the same keep selection should remove the unkept record and preserve kept key/value associations; with all flags true, output should remain unchanged.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The supplied regression expects only the entries whose flags are True, but the observed result includes the unkept (4, 'x') entry, demonstrating that the locked result construction is producing the wrong filtered association."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 10,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "Because filtering changes the key sequence while the value sequence remains unfiltered, the resulting pairs should be positionally misassociated; with flags [false,true,true], the first selected key should not pair with the first value.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The captured frame has selected [8, 2] and values [\"x\", \"y\", \"z\"], and the after-frame records result [[8,\"x\"],[2,\"y\"]], while the public regression requires [(8,\"y\"),(2,\"z\")]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 11,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "The regression requires preserving key/value positional associations while filtering by true flags; however, replacing values with flags would produce boolean payloads rather than the expected strings, so this boundary behavior predicts the focused regression will remain failing.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "Runtime evidence shows selected is [8, 2], values is [\"x\", \"y\", \"z\"], flags is [false, true, true], and the failing expected result is [(8, \"y\"), (2, \"z\")]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 12,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Replacing selected with keys will make the zip pair each original key with its same-position value, preserving key/payload associations; however, unlike the required filtered result, the boundary case with a false flag still predicts an extra unfiltered pair.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The focused red output shows selected=[8,2], values=['x','y','z'], and the required result [(8,'y'),(2,'z')]; the available leaf choices contain no substitution that filters values by flags, while this choice at least preserves original key/value positional association."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 13,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "The existing filtered key sequence should remain the first field, while replacing the payload reference with keys is expected to produce pairs using the in-scope key sequence; the boundary case is that it does not provide the required corresponding payload values for the public example.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "Runtime evidence shows selected=[8,2] and values=[\"x\",\"y\",\"z\"], with the failing result pairing selected keys to unfiltered values as [[8,\"x\"],[2,\"y\"]]; the offered choice substitutes values with keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 14,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "When correlated key and value sequences are filtered, applying the same selection before positional pairing should preserve associations; with flags [false,true,true], the boundary case should pair 8 with 'y' and 2 with 'z', not with earlier values.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The selected RHS loads selected and values; the controller captured selected=[8,2] and values=['x','y','z'] before line 3, and observed result=[[8,'x'],[2,'y']] after it, while the focused regression reports [(8,'y'),(2,'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 15,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Replacing the selected reference with flags will make the line evaluate list(zip(flags, values)); for the supplied boundary case it will produce boolean/value pairs rather than preserving key/value associations, so the focused regression is expected to remain failing.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The runtime frame shows selected=[8, 2], values=['x','y','z'], and the expected result is [(8,'y'),(2,'z')]; the only controller-generated choice substitutes selected with flags and therefore cannot retain selected keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 16,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the callable definitions and any upstream producer responsible for the observed process output; boundary case: if only one callable exists, that callable is the submission candidate.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides one allowed source file and an observed failure naming process, but no source lines or operation candidates yet."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 17,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Selecting process should lock the public operation whose first transformation filters keys while flags remain positional; the broker should accept the callable at its def line, including the boundary case where selected keys are zipped with the unfiltered values.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The only allowed source defines process at line 1, and its reported failing behavior comes from process returning [(False, 'x'), (True, 'y'), (True, 'z')] instead of the expected filtered key/value pairs."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 18,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "Selecting the later line should move the reported fault away from the already-rejected key-selection expression; the accepted location should identify where the returned pairs first show mismatched positional associations, while the boundary case with flags [False, True, True] should still require (8,'y') and (2,'z').",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The public failure shows keys are selected as 8 and 2 but returned values are x and y instead of y and z, and assigned feedback explicitly says the prior expression-edit family for the selected line was mechanically disproven and to move to the next causal hypothesis."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 19,
+      "action": "submit_cause",
+      "applicability": "applies",
+      "expected_effect": "Because filtering keys can change positional membership while values remain unfiltered, constructing the zipped result will pair keys with the wrong values; if all flags are true, no mismatch should occur.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The supplied context shows selected is built by filtering keys with flags, while result zips selected with the original values, making line 3 the first producer of the mismatched associations."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 20,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "Because keys and values are positionally correlated, using separately filtered keys with the unfiltered values should preserve neither association nor the selected original positions; a non-monotonic selection such as [false, true, true] exposes the mismatch while lengths remain plausible.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The runtime frame shows selected [8, 2] from keys [4, 8, 2] and flags [false, true, true], while values remains ['x', 'y', 'z']; after the cited line result is observed as [(8, 'x'), (2, 'y')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 21,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Replacing selected with keys will pair each original key with the value at the same position, preserving key/value positional associations; however, because flags are not applied in this locked expression, the boundary case with a false flag may retain an extra pair.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The captured frame shows selected=[8,2] while values=['x','y','z'], producing [(8,'x'),(2,'y')] instead of [(8,'y'),(2,'z')]; the available keys reference is the only choice that restores original key/value positional alignment."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 22,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "The selected keys remain in input order, while replacing the payload reference with flags will make the result pairs use the flag values as payloads; for the captured input this predicts [(8, False), (2, True)], so it does not preserve the required ['y', 'z'] payload association.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The runtime frame shows selected=[8,2], values=['x','y','z'], flags=[false,true,true], and the focused failure requires [(8,'y'),(2,'z')]. None of the offered one-reference substitutions supplies the filtered values sequence, but this choice at least preserves selected keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 23,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Because keys and values are positionally correlated, a correct repair must preserve their original associations; however, this leaf substitution changes the selected-key reference to flags, so the observable result is expected to use flag booleans as the first tuple field rather than preserve keys, including the boundary case where the first flag is false.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The captured failing frame shows selected=[8,2], values=['x','y','z'], and the required output [(8,'y'),(2,'z')], while the offered choices permit only replacing selected with flags or values with keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 24,
+      "action": "submit_mechanism",
+      "applicability": "applies",
+      "expected_effect": "Because keys and values are positionally correlated records, a computation that filters or reorders one field without applying the same selection to the other produces shifted pairings; the boundary case where all flags are true would not expose the shift.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The captured frame has keys=[4,8,2], flags=[false,true,true], selected=[8,2], values=['x','y','z']; the line loads selected and values and the observed result is [(8,'x'),(2,'y')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 25,
+      "action": "replace_selected_leaf",
+      "applicability": "applies",
+      "expected_effect": "Replacing the unfiltered payload reference with the current keys reference will make the locked expression produce pairs from selected and keys; for the supplied boundary case, this predicts [(8, 4), (2, 8)] rather than the required payload associations, so the offered substitution may remain insufficient.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The runtime frame shows selected=[8, 2] while values=['x','y','z'], and the focused failure shows positional misassociation [(8,'x'),(2,'y')] versus [(8,'y'),(2,'z')]. The only controller-generated choice replaces values with keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 26,
+      "action": "reject_cause_frontier",
+      "applicability": "applies",
+      "expected_effect": "If correlated keys and values are filtered or reordered inconsistently, rejecting this locked return location should preserve the distinction that the first wrong computation is upstream; the boundary case is when the return merely exposes an already-correct result, which cannot repair mismatched value associations.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The locked candidate is `return result`, while the reported regression shows mismatched tuple values and states that no upstream producer choices remain; the prior locked-expression repair remained red."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 27,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the allowed source will reveal the callable definitions and any delegation needed to select one exact definition line; no reordering or iterable behavior can be established before inspection.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides one allowed source file, no reported operation candidates, and an unavailable counterexample."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 28,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Submitting the public process callable should lock the runtime operation that selects and zips correlated fields; because selection reorders or filters keys separately from values, a non-monotonic or filtered case may expose mismatched positional associations.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The allowed source contains one public callable, process, at line 1; its body filters keys with flags and then zips selected keys with the original values."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 29,
+      "action": "submit_location",
+      "applicability": "applies",
+      "expected_effect": "Selecting keys independently with the flags yields [8, 2] while correlated values remain unfiltered or differently aligned; bundling each key-value record before filtering would preserve (8, 'y') and (2, 'z').",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The public failure shows the expected key-value pairs [(8, 'y'), (2, 'z')] but actual pairs [(8, 'x'), (2, 'y')], demonstrating positional association corruption while the selected keys themselves correspond to the true kept keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 30,
+      "action": "reject_cause_frontier",
+      "applicability": "applies",
+      "expected_effect": "If correlated fields are independently filtered or reordered, positional associations can become corrupted; however, rejecting this locked candidate should leave the cause unresolved because this symptom line cannot account for every mismatched observable field.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The task packet explicitly states that no upstream producer choices remain and that the locked symptom cannot explain every mismatched observable field after its upstream frontier was exhausted."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": 31,
+      "action": "reject_cause_frontier",
+      "applicability": "applies",
+      "expected_effect": "Rejecting the locked line should leave the cause unresolved because filtering only keys while retaining unfiltered values breaks positional associations at the subsequent zip; when all flags are true, this mismatch boundary does not occur.",
+      "memory_id": "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+      "public_evidence": "The callable context shows line 2 creates selected from keys and flags, while line 3 pairs selected with the original unfiltered values; no upstream cause choices remain, so the locked line is not the first wrong computation."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; if tests fail, the broker result will include the failing test details, while a passing suite will report no failures.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes pytest and requires exactly one invocation with command='pytest'; the supplied memories concern archived records, not test execution."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the sole allowed source will reveal the callable definitions and the failing public operation's delegation path; a boundary case is that no helper may exist.",
+      "memory_id": "none",
+      "public_evidence": "The packet provides one allowed source file and a public failure showing Memo.fetch returns the first locale's cached value for French."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The callable locator will select the public fetch operation at its exact definition line; the archived memory concerns ordered records and does not predict callable selection here.",
+      "memory_id": "none",
+      "public_evidence": "The current source shows Memo.fetch defined on line 10, and the observed failure explicitly occurs at m.fetch for the locale-dependent counterexample."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the key computation predicts that the French lookup will use the same identity key as the earlier English lookup, before the later cache check or return can expose the wrong value.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('Ada','fr',[8,9]) returns the prior result 7 instead of 17, and the callable computes key from name alone before checking entries."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 5,
+      "action": "confirm_candidate",
+      "applicability": "not_applicable",
+      "expected_effect": "The locked candidate is accepted as the causal producer; with no upstream producer choices remaining, the observable behavior should be attributed to `key = self.identity(name)`, including any boundary case where identity returns the same key for distinct names.",
+      "memory_id": "none",
+      "public_evidence": "The task packet states that no upstream producer choices remain and identifies `key = self.identity(name)` as the candidate direct cause."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory is relevant to this source-level causal diagnosis; the submitted explanation should be judged against the captured operands and resulting key assignment.",
+      "memory_id": "none",
+      "public_evidence": "The runtime evidence shows `name` is `\"Ada\"` in both calls, `key` becomes `\"ada\"` in both frames, and `locale` is listed among current-call parameters not loaded by the selected RHS."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 7,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing the name operand with locale should make the cache key differ for the observed en and fr calls while preserving the identity hook; the boundary case is unchanged locales still share the same normalized key.",
+      "memory_id": "none",
+      "public_evidence": "The runtime frames show self.identity(name) produces \"ada\" for both calls, while the focused regression expects separate results for locale \"en\" and \"fr\"."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 8,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The snapshot should provide the complete changed-line diff and fresh test result needed to identify any concrete review finding; with no relevant historical principle, it should not alter the review.",
+      "memory_id": "none",
+      "public_evidence": "The task packet limits review to the controller-computed diff and fresh test result, while the supplied memories concern archived records and do not address code review."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": 9,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting FINDINGS should flag the changed locale-based key because the diff shows it replaces the name-based key while the fresh tests passing does not establish the intended identity behavior.",
+      "memory_id": "none",
+      "public_evidence": "The final diff changes `key = self.identity(name)` to `key = self.identity(locale)`; the fresh test result has exit code 0 and status PASSED."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run the controller's test suite once and return its actual result and output; no test files or repository state will be changed.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes pytest and requires calling it exactly once with command='pytest'."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the public callable and its exact definition line; if it delegates, it will also reveal the helper to consider.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits unit_57523768a0.py and reports a failing public call to Memo.fetch, but provides no source definition line."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the public fetch callable at its exact definition line will identify the runtime operation that returns the stale cached value for a different locale; no helper is needed because fetch contains the computation directly.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source defines Memo.fetch at line 10, and the observed failure explicitly occurs at m.fetch('Ada', 'fr', [8, 9]) returning the prior value 7."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 4,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the key-construction line should identify the earliest point where the locale-specific lookup is collapsed; the boundary case is a second fetch with the same name but a different locale, which should otherwise use a distinct key.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('Ada','fr',[8,9]) returns the earlier English result 7 instead of 17, and the locked context constructs the key from name alone."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 5,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "No upstream choices remain; rejecting the frontier should avoid confirming the locked candidate when the packet provides no observable counterexample establishing it as the first wrong computation.",
+      "memory_id": "none",
+      "public_evidence": "The packet explicitly states observable_counterexample is unavailable and cause_source_line_choices is empty."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 6,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions needed to select exactly one callable; if no callable is present, the broker result will expose that boundary.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits only unit_57523768a0.py and requires inspecting its numbered def or async-def line."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 7,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker should lock the public Memo.fetch callable at definition line 10; the boundary case is that no reported operation is available to justify selecting another callable.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source visibly defines Memo.fetch at line 10 and no reported operation candidates or observable counterexample were supplied."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 8,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the cache-membership condition should identify the first point where the locale-specific lookup takes the wrong branch; the existing Ada entry causes the French call to skip recomputation, while a new key would still enter the branch.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows fetch('Ada','fr',[8,9]) returns the prior result 7 instead of 17 after the earlier Ada/en call returned 7."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 9,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "Using the upstream identity computation should account for the mismatched lookup behavior; when the identity is already correct, the fetch guard remains unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies `key = self.identity(name)` as the remaining upstream reaching definition, and assigned feedback says the locked symptom cannot explain every mismatched observable field."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 10,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No historical memory applies; submitting this mechanism should identify that the selected computation is insensitive to locale while preserving identity(name) as the key component.",
+      "memory_id": "none",
+      "public_evidence": "The controller shows self.identity(name) loads name, self, and self.identity but not locale; both frames produce key \"ada\", and the second frame already has entries {\"ada\": 7}."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 11,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "Replacing the selected name reference with locale should make the cache key differ between the observed calls with locale \"en\" and \"fr\"; if names are equivalent but locales match, the existing entry should still be reused.",
+      "memory_id": "none",
+      "public_evidence": "The runtime frames show key evaluates to \"ada\" for both calls while locale changes from \"en\" to \"fr\", and the focused regression reports the second call incorrectly returns 7 instead of 17."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 12,
+      "action": "review_snapshot",
+      "applicability": "not_applicable",
+      "expected_effect": "The historical memory is empty, so no prior principle should affect this review; the snapshot should provide the complete diff and fresh test result needed for an evidence-based decision.",
+      "memory_id": "none",
+      "public_evidence": "The supplied task packet contains no historical memory entries and instructs that review_snapshot returns the controller-computed diff and fresh test result."
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": 13,
+      "action": "submit_review",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting FINDINGS will record the concrete diff-grounded concern despite the fresh test result passing; no historical memory is supplied.",
+      "memory_id": "none",
+      "public_evidence": "The snapshot shows the one-line replacement from `self.identity(name)` to `self.identity(locale)`, and reports TEST EXIT CODE: 0 with TEST STATUS: PASSED."
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "uncertain",
+      "expected_effect": "Running the exact allowed pytest command once should capture the controller's current test outcome and output; if tests pass, no failure output will be available, while any failure should include the smallest reported failing comparison.",
+      "memory_id": "none",
+      "public_evidence": "The task contract explicitly requires one invocation with command='pytest' and permits pytest as the only command."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "lesson",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "The allowed pytest command will run once and return the controller's exact test output; no files will be changed. A boundary case is that if pytest is unavailable or tests collect no tests, the broker will report that directly.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly authorizes pytest and requires exactly one invocation with command='pytest'."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "lesson",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "applies",
+      "expected_effect": "Reading the allowed source will reveal the public runtime callable and its exact definition line; if cache-key construction is delegated, the source will show whether fetch or a helper owns the failing computation.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The public counterexample shows Memo.fetch returning the first result for a call differing in the index and values, which is consistent with a cache-key collision, but no source callable has yet been inspected."
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "lesson",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "applies",
+      "expected_effect": "Selecting the public fetch callable should target the failing runtime operation; the boundary case is that different epochs currently reuse the same name-only entry and return the first sum.",
+      "memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f",
+      "public_evidence": "The failure shows Memo.fetch('row', 1, [4, 8]) returns the earlier cached value 5 instead of 12, and source lines 10-14 show fetch builds a name-only key via identity."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 1,
+      "action": "run_command",
+      "applicability": "not_applicable",
+      "expected_effect": "Running the exact permitted command once will capture the controller's pytest result and output; if no tests are collected or failures occur, that boundary result will be recorded unchanged.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly requires one invocation with command='pytest' and allows pytest."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 2,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the sole allowed source file will reveal the numbered callable definitions needed to select exactly one runtime operation; if no callable is present, the broker will report that boundary.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits reading unit_9def8078f0.py and requires the exact definition line, while the reported operation candidates are unavailable."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 3,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The callable defined on line 1 will be submitted; no boundary behavior from the archived record is relevant to locating the failing runtime operation.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows a single public callable, process, defined at line 1, and the failure invokes process directly."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 4,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the current numbered source should reveal the exact public callable definition line; the boundary case is that the file may contain helpers, which can then be inspected before submission.",
+      "memory_id": "none",
+      "public_evidence": "The broker feedback explicitly requires a current-revision numbered read of unit_9def8078f0.py, and the failed public test names process behavior."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 5,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the exact public function definition should identify process as the callable responsible for the observed pairing behavior; no boundary behavior is needed because the source has one top-level callable.",
+      "memory_id": "none",
+      "public_evidence": "The current numbered source shows `def process(keys, values, flags):` at line 1, and the failure names process as the public operation."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 6,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected source line should identify where the already-filtered keys are paired with the unfiltered values; the boundary case is when flags skip the first item, producing shifted labels.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows selected keys 8 and 2 paired with x and y instead of expected y and z, while the preceding selection itself is consistent with flags [False, True, True]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 7,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected list will reflect the keys whose corresponding flags are true; if the candidate's zip behavior is otherwise unchanged, correcting this producer should correct the downstream pairing where the mismatch originates.",
+      "memory_id": "none",
+      "public_evidence": "The public packet identifies selected = [key for key, keep in zip(keys, flags) if keep] as the sole upstream reaching definition for the candidate's selected value."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 8,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker should record this line as causal because changing values while keeping keys and flags fixed leaves selected unchanged, despite the local requirement requiring payload associations to follow the selected positions.",
+      "memory_id": "none",
+      "public_evidence": "The controller frame shows keys [4, 8, 2], flags [false, true, true], values [\"x\", \"y\", \"z\"], and explicitly lists values among current-call parameters not loaded by the selected RHS."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 9,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected expression will use the in-scope values reference instead of keys; the broker will determine whether this controller-bounded substitution turns the focused regression green.",
+      "memory_id": "none",
+      "public_evidence": "The handoff identifies the selected line and provides this exact controller-generated choice; the focused test currently fails with [(8, 'x'), (2, 'y')] versus [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 10,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected leaf substitution will replace the zip predicate source from flags to values; for the supplied call, all nonempty payload strings are truthy, so the selected-key list is expected to include every key, a boundary behavior that may not match the focused regression.",
+      "memory_id": "none",
+      "public_evidence": "The packet shows the only controller-generated choice replaces flags with values, while the focused red output identifies the required true-flag pairs and the prior rejected proposal is a different expression."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 11,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the frontier should preserve the locked candidate as unconfirmed because the observed extra (4, 'x') is not explained by the visible zip operation when flags are [False, True, True].",
+      "memory_id": "none",
+      "public_evidence": "The supplied regression shows process returned [(4, 'x'), (8, 'y'), (2, 'z')] instead of [(8, 'y'), (2, 'z')], while the locked line is result = list(zip(selected, values)) and no upstream choices remain."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 12,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "Reading the only allowed source file will reveal the numbered callable definitions; if it contains multiple callables, the relevant runtime operation can be selected from those definitions.",
+      "memory_id": "none",
+      "public_evidence": "The task packet permits read_source_lines for unit_9def8078f0.py and provides no reported operation, candidates, or counterexample to apply the archived memory."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 13,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker should lock the only callable definition, process, at line 1; no boundary-case selection is available because the source contains only this public operation.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source shows exactly one definition, `def process(keys, values, flags):`, at numbered line 1, and the packet provides no reported operation candidate or counterexample."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 14,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting this line should identify the earliest point where the retained sequence is formed incorrectly; the downstream return should then expose the already-misaligned result, including shifted labels.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows expected retained pairs (8,'y') and (2,'z') but actual labels are shifted to (8,'x') and (2,'y'); the locked callable context offers the selection line before the return."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 15,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the exhausted frontier should leave the locked candidate unconfirmed because it cannot account for every mismatched observable field; if it could, this rejection would be inappropriate.",
+      "memory_id": "none",
+      "public_evidence": "The task packet explicitly states that no upstream producer choices remain and that the locked symptom cannot explain every mismatched observable field after its upstream frontier was exhausted."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 16,
+      "action": "read_source_lines",
+      "applicability": "not_applicable",
+      "expected_effect": "The archived memories concern ordered session records, not locating a callable in the supplied Python source; reading the allowed file should reveal numbered def or async-def lines.",
+      "memory_id": "none",
+      "public_evidence": "The task packet provides one allowed source file and no reported operation or counterexample to guide selection."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 17,
+      "action": "submit_callable",
+      "applicability": "not_applicable",
+      "expected_effect": "Submitting the only top-level callable at its exact def line should lock process as the selected callable; no boundary behavior is supplied that would justify choosing a helper or another definition.",
+      "memory_id": "none",
+      "public_evidence": "The allowed source contains one callable, `def process(keys, values, flags):`, at numbered line 1, and no reported operation candidate or observable counterexample is available."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 18,
+      "action": "submit_location",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker will record the only offered source line as the location for the incorrect returned pairing; for inputs where selected flags are offset from values, the returned labels should remain visibly misaligned until the upstream cause is fixed.",
+      "memory_id": "none",
+      "public_evidence": "The public failure shows expected [(8, 'y'), (2, 'z')] but actual [(8, 'x'), (2, 'y')], while the locked callable exposes only `return result`."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 19,
+      "action": "submit_cause",
+      "applicability": "not_applicable",
+      "expected_effect": "Selecting the upstream producer should move the causal trace from the return statement to the result construction; if that producer is not the first wrong computation, the returned result remains mismatched.",
+      "memory_id": "none",
+      "public_evidence": "The packet identifies `result = list(zip(selected, values))` as the sole upstream reaching definition, while the candidate is only `return result`."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 20,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No supplied historical memory concerns list-selection or positional pairing, so it predicts no relevant effect on this diagnosis.",
+      "memory_id": "none",
+      "public_evidence": "The public runtime frame shows selected=[8, 2], values=[\"x\", \"y\", \"z\"], flags=[false, true, true], and the line produces result=[[8, \"x\"], [2, \"y\"]]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 21,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected leaf substitution will change the second zipped input from values to flags, so the result is expected to retain two selected entries but contain boolean payloads rather than the required string payloads.",
+      "memory_id": "none",
+      "public_evidence": "The focused red output shows the required result uses selected keys (8, 2) paired with payloads ('y', 'z'), while the offered choice a1018963f5e87057 produces list(zip(selected, flags)) and therefore cannot preserve those string payloads."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 22,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The substitution changes the first zip input from the previously filtered selected keys to the full keys list, so the result is expected to contain all key/value pairs in input order; the boundary case with a false flag will expose the extra unfiltered pair.",
+      "memory_id": "none",
+      "public_evidence": "The current runtime frame shows selected=[8,2] and values=['x','y','z'], while the accepted regression requires [(8,'y'),(2,'z')]; among the offered substitutions, replacing selected with keys is the only option that retains key/value pairing rather than pairing keys with flags or with other keys."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 23,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The selected leaf substitution changes the RHS from list(zip(selected, values)) to list(zip(flags, values)); for the supplied boundary case it is expected to produce flag/payload pairs rather than the required selected key/payload pairs.",
+      "memory_id": "none",
+      "public_evidence": "The repair handoff lists 9fd0262c8010e94a as a controller-generated choice replacing selected with flags, while the focused failure shows the required output is [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 24,
+      "action": "submit_mechanism",
+      "applicability": "not_applicable",
+      "expected_effect": "No supplied historical memory concerns this list-zip association mismatch; the cited expression should produce the positionally zipped result shown by the captured frame.",
+      "memory_id": "none",
+      "public_evidence": "The captured before-frame has selected=[8, 2] and values=['x', 'y', 'z']; the after-frame has result=[(8, 'x'), (2, 'y')], while the public assertion requires [(8, 'y'), (2, 'z')]."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 25,
+      "action": "replace_selected_leaf",
+      "applicability": "not_applicable",
+      "expected_effect": "The broker will replace only the selected values reference with keys, yielding list(zip(selected, keys)); this does not match the supplied regression's required payload association for flags [False, True, True].",
+      "memory_id": "none",
+      "public_evidence": "The repair handoff provides exactly one controller-generated choice, replacing values with keys, while the focused failure shows the required result pairs selected keys with 'y' and 'z'."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 26,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the locked return location should leave the causal frontier unresolved, because the observed mismatch is already present in the value produced before return; the empty upstream list provides no remaining producer choice to select.",
+      "memory_id": "none",
+      "public_evidence": "The public packet shows line 4 only returns result, while the failed output indicates result contains [(8, 4), (2, 8)] instead of [(8, 'y'), (2, 'z')], and no upstream producer choices remain."
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": 27,
+      "action": "reject_cause_frontier",
+      "applicability": "not_applicable",
+      "expected_effect": "Rejecting the frontier should avoid attributing the mismatch to the return statement; the observed output will remain incorrectly paired as [(8, 4), (2, 8)] rather than [(8, 'y'), (2, 'z')].",
+      "memory_id": "none",
+      "public_evidence": "The supplied failure shows line 4 returns [(8, 4), (2, 8)], while the mismatch is already embodied in the result produced before the return; no upstream choices remain."
+    }
+  ],
+  "handoffs": [
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "baseline",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "baseline",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "arm": "neutral",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "baseline",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "arm": "neutral",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_descending_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 3
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "lesson",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "call": null,
+      "lines": 5
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    },
+    {
+      "case_id": "checkpoint_masked_pairs",
+      "arm": "neutral",
+      "call": null,
+      "lines": 4
+    }
+  ]
+}

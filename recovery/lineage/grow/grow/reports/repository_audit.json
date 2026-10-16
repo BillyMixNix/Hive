@@ -1,0 +1,37 @@
+{
+  "audit_role": "Repository Auditor",
+  "baseline_ref": "d0ee22781336331c1d387b7fafe37fcf744be60e",
+  "editing_performed_by_role": false,
+  "architecture": {
+    "orchestrator": ["main.py", "router.py", "planner.py", "coder.py", "reflector.py", "executor.py"],
+    "repair_workflow": ["coder.py", "coder_prompting.py", "coder_context.py", "coder_constraints.py", "coder_validation.py", "coder_block_ops.py", "coder_failures.py"],
+    "investigation_failure_workflow": ["failure_intelligence.py", "coder_failures.py", "HiveLessonMemory.py", "HiveStateManager.py"],
+    "regression_workflow": ["regression_gate.py", "validation/regressions/", "tests/test_regression_gate.py", "tests/test_recorded_regressions.py"],
+    "oracle_harness": ["benchmark_harness.py", "benchmark_pack.py", "validation/gate.py", "scripts/ci_gate.py"],
+    "retry_frontier": ["coder.py", "coder_failures.py", "failure_intelligence.py"],
+    "persistent_ledgers": ["HiveLessonMemory.py", "hive_memory.json", "results/", "validation/lesson_studies/"],
+    "isolation": ["ExecutorAgent.test_patch_in_sandbox", "benchmark_harness.py temporary sessions", "validation/variant.py"],
+    "model_invocation": ["hive_llm.py"],
+    "ci": [".github/workflows/ci.yml", ".github/workflows/reliability-ci.yml"]
+  },
+  "baseline_evidence": {
+    "pytest": "335 passed",
+    "ci": "PASS",
+    "reliability_gate": "PASS",
+    "reliability_quick_metrics": {
+      "unsafe": "0/10 succeeded as expected",
+      "safe": "10/10 succeeded",
+      "intent_case": "10/10 succeeded with drift detected in all 10"
+    }
+  },
+  "trader_artifacts": {
+    "named_tree_matches": [],
+    "TradeSimulator_search_matches": [],
+    "conclusion": "No preserved Trader artifact was found by repository tree/name search. GROW-0 does not alter Trader behavior."
+  },
+  "key_risks": [
+    "hive_llm.py can route selected roles to Claude when ANTHROPIC_API_KEY is present, so a lineage must pin an explicit model/digest rather than inherit ambient routing.",
+    "Existing patch sandboxes isolate a target file but do not by themselves create an immutable evaluator/benchmark kernel.",
+    "Existing benchmark harness fingerprints sources/cases but has no descendant lineage or deterministic promotion rule."
+  ]
+}

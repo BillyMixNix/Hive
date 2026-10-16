@@ -1,0 +1,211 @@
+{
+  "status": "COMPLETED",
+  "assessment": {
+    "confirmatory_gain_claim_allowed": false,
+    "completed_recipients": 45,
+    "expected_recipients": 45,
+    "reused_tasks": true,
+    "verdict": "DESCRIPTIVE_ONLY",
+    "transfer_successes": {
+      "baseline": 9,
+      "lesson": 9,
+      "neutral": 8
+    },
+    "retention_successes": {
+      "baseline": 2,
+      "lesson": 2,
+      "neutral": 3
+    },
+    "false_completions": {
+      "baseline": 1,
+      "lesson": 1,
+      "neutral": 2
+    },
+    "comparisons": {
+      "baseline": {
+        "control_penalized_calls": 216,
+        "lesson_penalized_calls": 193,
+        "relative_reduction": 0.10648148148148151,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          17,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        "lesson_lower_effort": 3,
+        "lesson_higher_effort": 0,
+        "ties": 9
+      },
+      "neutral": {
+        "control_penalized_calls": 221,
+        "lesson_penalized_calls": 193,
+        "relative_reduction": 0.12669683257918551,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          -3,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          27
+        ],
+        "lesson_lower_effort": 2,
+        "lesson_higher_effort": 1,
+        "ties": 9
+      }
+    },
+    "interpretation": "Same previously evaluated cases and frozen model-generated lessons; no new-task confirmation, weight training, pooled significance test or automatic retry."
+  },
+  "arms": {
+    "baseline": {
+      "transfer_correct": 9,
+      "transfer_completed": 12,
+      "retention_correct": 2,
+      "retention_completed": 3,
+      "transfer_calls": 176,
+      "transfer_penalized_calls": 216,
+      "retention_calls": 32,
+      "all_calls": 208,
+      "input_tokens": 394303,
+      "output_tokens": 54381,
+      "charge_upper_nano_usd": 295037300,
+      "false_completions": 1
+    },
+    "lesson": {
+      "transfer_correct": 9,
+      "transfer_completed": 12,
+      "retention_correct": 2,
+      "retention_completed": 3,
+      "transfer_calls": 150,
+      "transfer_penalized_calls": 193,
+      "retention_calls": 32,
+      "all_calls": 182,
+      "input_tokens": 422406,
+      "output_tokens": 44044,
+      "charge_upper_nano_usd": 290482200,
+      "false_completions": 1
+    },
+    "neutral": {
+      "transfer_correct": 8,
+      "transfer_completed": 12,
+      "retention_correct": 3,
+      "retention_completed": 3,
+      "transfer_calls": 148,
+      "transfer_penalized_calls": 221,
+      "retention_calls": 27,
+      "all_calls": 175,
+      "input_tokens": 389279,
+      "output_tokens": 41207,
+      "charge_upper_nano_usd": 268812100,
+      "false_completions": 2
+    }
+  },
+  "provider_requests": 565,
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 3469597600,
+    "measured_usage_upper_nano_usd": 854331600,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 4323929200,
+    "requests_reserved": 565,
+    "blocked": false,
+    "counted_recipient_failures": 0
+  },
+  "recorded_input_mutation_observations": [
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "neutral",
+      "recorded_mutation_checks": 1,
+      "distinct_mutating_candidate_hashes": [
+        "46ef427913cb54d8940203cfd0f4ffaf140be022de7ef632cd8087a4a591c0e4"
+      ],
+      "controller_decision": "SATISFIED",
+      "final_passed": true
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "lesson",
+      "recorded_mutation_checks": 2,
+      "distinct_mutating_candidate_hashes": [
+        "0839586e33d07a2ce72837ec47e036afedff9309f07d9447f6ed60f71fea0c76",
+        "c5ba9f81b266ba38e9bf472eefe03acc2f10a11c365d94a3cb25d016ef23bb6c"
+      ],
+      "controller_decision": "SATISFIED",
+      "final_passed": true
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "baseline",
+      "recorded_mutation_checks": 3,
+      "distinct_mutating_candidate_hashes": [
+        "6a8f97f5ba70c6d76f085f5c93996a6dbc15921663042f0d2b32b6b432f4a89b",
+        "87dc461cfd82cc8801c161d41323ca9cb475024d1e1b4160b61b7c2649ba1063",
+        "b8bf48143d4614d591c41882b3d78fd5a607219c0532dc689b4a3466a926d978"
+      ],
+      "controller_decision": "SATISFIED",
+      "final_passed": true
+    }
+  ],
+  "previous_audited_followon": {
+    "baseline": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 154,
+      "penalized_calls_original": 193,
+      "penalized_calls_audited": 220,
+      "input_tokens": 290503,
+      "output_tokens": 35534,
+      "charge_upper_nano_usd": 209212700,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 28
+    },
+    "lesson": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 165,
+      "penalized_calls_original": 203,
+      "penalized_calls_audited": 230,
+      "input_tokens": 388227,
+      "output_tokens": 41902,
+      "charge_upper_nano_usd": 269537100,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 28
+    },
+    "neutral": {
+      "transfer_correct_original": 9,
+      "transfer_correct_audited": 8,
+      "transfer_tasks": 12,
+      "actual_calls": 154,
+      "penalized_calls_original": 197,
+      "penalized_calls_audited": 220,
+      "input_tokens": 344709,
+      "output_tokens": 36407,
+      "charge_upper_nano_usd": 237887100,
+      "retention_correct": 2,
+      "retention_tasks": 3,
+      "retention_calls": 31
+    }
+  },
+  "workflow_url": "https://github.com/BillyMixNix/Hive/actions/runs/34287133344",
+  "launch_commit": "2e5b24939dfe764a3eed39ed2bd694aec8406de5",
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+  "no_weight_training": true,
+  "confirmatory_gain_claim_allowed": false
+}

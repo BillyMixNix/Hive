@@ -1,0 +1,75 @@
+{
+  "scope": "Original scores unchanged. Post-hoc for stopped V5; definition committed before inspecting follow-on outcomes. No positive confirmation may be rescued.",
+  "definition_commit": "e69e7ee67cc19629cebdfbd690b97473464c9d63",
+  "definition_sha256": "72be7efc7cf15a34596ae92393715ce219b70d778251ae30a2f5ebdf9552c719",
+  "rows": [
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "dc2aa7e07f01677efb453945293d4729971c64b12bd1fbae90c29394813a2ab5"
+      }
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "lesson",
+      "original_passed": false,
+      "candidate_sha256": null,
+      "full_contract_passed": false,
+      "reason": "No final candidate after counted output failure; remains unsuccessful"
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "bc42288024407a97fd9e946a6c04fb9d32891142def8989544b59c99c7ce3ac1",
+      "full_contract_passed": false,
+      "audit": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "1c14b1c6144730e178a08c91e7068ced848dfd0152eef135647f6463014797b5"
+      }
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "baseline",
+      "original_passed": true,
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "lesson",
+      "original_passed": false,
+      "candidate_sha256": null,
+      "full_contract_passed": false,
+      "reason": "No final candidate after counted output failure; remains unsuccessful"
+    },
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "arm": "neutral",
+      "original_passed": true,
+      "candidate_sha256": "db219c46a58cdacd658c44bd84e883634bb0ceed4397e9b53c8b7365e39a7a49",
+      "full_contract_passed": true,
+      "audit": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      }
+    }
+  ]
+}

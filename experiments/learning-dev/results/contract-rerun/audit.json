@@ -1,0 +1,1881 @@
+{
+  "verified": true,
+  "scope": "Artifact integrity, assignments, accounting, guidance and independent rescoring; no general learning claim.",
+  "workflow_url": "https://github.com/BillyMixNix/Hive/actions/runs/34287133344",
+  "launch_commit": "2e5b24939dfe764a3eed39ed2bd694aec8406de5",
+  "archive_sha256": "484b67fac50dfc5c090a2d7eddd48dc00c398ade1b39f84808b4441d90123bcc",
+  "artifact_files_verified": 1494,
+  "report_status": "COMPLETED",
+  "provider_requests": 565,
+  "input_tokens": 1205988,
+  "output_tokens": 139632,
+  "candidates_independently_rescored": 45,
+  "checkpoints_verified": 565,
+  "repair_handoffs_verified": 86,
+  "guidance_assignment_verified": true,
+  "withheld_test_names_absent_from_requests": true,
+  "visible_tests_preserved": true,
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+  "prior_upper_nano_usd": 3469597600,
+  "permanent_earlier_unknown_usage_reservation_nano_usd": 532372800,
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 3469597600,
+    "measured_usage_upper_nano_usd": 854331600,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 4323929200,
+    "requests_reserved": 565,
+    "blocked": false,
+    "counted_recipient_failures": 0
+  },
+  "assessment": {
+    "confirmatory_gain_claim_allowed": false,
+    "completed_recipients": 45,
+    "expected_recipients": 45,
+    "reused_tasks": true,
+    "verdict": "DESCRIPTIVE_ONLY",
+    "transfer_successes": {
+      "baseline": 9,
+      "lesson": 9,
+      "neutral": 8
+    },
+    "retention_successes": {
+      "baseline": 2,
+      "lesson": 2,
+      "neutral": 3
+    },
+    "false_completions": {
+      "baseline": 1,
+      "lesson": 1,
+      "neutral": 2
+    },
+    "comparisons": {
+      "baseline": {
+        "control_penalized_calls": 216,
+        "lesson_penalized_calls": 193,
+        "relative_reduction": 0.10648148148148151,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          17,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2
+        ],
+        "lesson_lower_effort": 3,
+        "lesson_higher_effort": 0,
+        "ties": 9
+      },
+      "neutral": {
+        "control_penalized_calls": 221,
+        "lesson_penalized_calls": 193,
+        "relative_reduction": 0.12669683257918551,
+        "paired_differences": [
+          0,
+          0,
+          0,
+          -3,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          27
+        ],
+        "lesson_lower_effort": 2,
+        "lesson_higher_effort": 1,
+        "ties": 9
+      }
+    },
+    "interpretation": "Same previously evaluated cases and frozen model-generated lessons; no new-task confirmation, weight training, pooled significance test or automatic retry."
+  },
+  "recipients": [
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19155,
+      "output_tokens": 1636,
+      "upper_charge_nano_usd": 12522300,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a4afccfff38df12382e91ec43b91d5aa0a10b6e6c63973a47e4121fda5ec6c20",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19667,
+      "output_tokens": 1919,
+      "upper_charge_nano_usd": 13287700,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a4afccfff38df12382e91ec43b91d5aa0a10b6e6c63973a47e4121fda5ec6c20",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 15210,
+      "output_tokens": 1733,
+      "upper_charge_nano_usd": 10724400,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a4afccfff38df12382e91ec43b91d5aa0a10b6e6c63973a47e4121fda5ec6c20",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 11,
+      "input_tokens": 19098,
+      "output_tokens": 2717,
+      "upper_charge_nano_usd": 14439600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+        "policy_sha256": "a6051a37e2eb030992c0cdba5173c78e49e01ae1b0d061a02b80b99b350c957a",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "revision",
+                "values"
+              ],
+              "source_file": "unit_b38ffe65cc.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19557,
+      "output_tokens": 2388,
+      "upper_charge_nano_usd": 14076900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+        "policy_sha256": "a6051a37e2eb030992c0cdba5173c78e49e01ae1b0d061a02b80b99b350c957a",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "revision",
+                "values"
+              ],
+              "source_file": "unit_b38ffe65cc.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "35d86279d96ed65491ba8ff0748e1c8e7891711531404dc5d4b9cd6ae33de3ec"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "arm": "neutral",
+      "passed": false,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19067,
+      "output_tokens": 2690,
+      "upper_charge_nano_usd": 14375500,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "f856b5dce2cc1c32b0fdc8e9d394870021df5d924b7f08b7f08d40ff16058360",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "2b0d7b791e6eb4150b5f1094c38122857c8c8f2d912f26e0ee22ed2fa26b066a"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "f856b5dce2cc1c32b0fdc8e9d394870021df5d924b7f08b7f08d40ff16058360",
+        "policy_sha256": "a6051a37e2eb030992c0cdba5173c78e49e01ae1b0d061a02b80b99b350c957a",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "revision",
+                "values"
+              ],
+              "source_file": "unit_b38ffe65cc.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 20544,
+      "output_tokens": 1990,
+      "upper_charge_nano_usd": 13854000,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+        "policy_sha256": "fb2acac4787f189f78c5107de6f815a33306c292e2bab36d8ac368f7264bdd79",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "order"
+              ],
+              "source_file": "unit_1322350d02.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 16112,
+      "output_tokens": 1881,
+      "upper_charge_nano_usd": 11441800,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+        "policy_sha256": "fb2acac4787f189f78c5107de6f815a33306c292e2bab36d8ac368f7264bdd79",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "order"
+              ],
+              "source_file": "unit_1322350d02.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 20036,
+      "output_tokens": 1878,
+      "upper_charge_nano_usd": 13398400,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+        "policy_sha256": "fb2acac4787f189f78c5107de6f815a33306c292e2bab36d8ac368f7264bdd79",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "order"
+              ],
+              "source_file": "unit_1322350d02.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 14126,
+      "output_tokens": 1732,
+      "upper_charge_nano_usd": 10180600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "2ee225f55af08f008f865f76fd0baa5757fdbd2b41ebb8d642de17264d607087",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18083,
+      "output_tokens": 1747,
+      "upper_charge_nano_usd": 12186100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "2ee225f55af08f008f865f76fd0baa5757fdbd2b41ebb8d642de17264d607087",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18566,
+      "output_tokens": 1883,
+      "upper_charge_nano_usd": 12672400,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "2ee225f55af08f008f865f76fd0baa5757fdbd2b41ebb8d642de17264d607087",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 10,
+      "input_tokens": 22841,
+      "output_tokens": 3441,
+      "upper_charge_nano_usd": 17614300,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "d3b2bb9f73763522bde87457e0eba2fc2bb33d3018602e21228d513447ceb1f9",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "d3b2bb9f73763522bde87457e0eba2fc2bb33d3018602e21228d513447ceb1f9",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 13,
+      "input_tokens": 33131,
+      "output_tokens": 5495,
+      "upper_charge_nano_usd": 26456500,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "4de345024d3e1f3ae0071c897fadd349ae15b20f8dd63dd615771248cadb4afa",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "4de345024d3e1f3ae0071c897fadd349ae15b20f8dd63dd615771248cadb4afa",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 30,
+      "input_tokens": 61525,
+      "output_tokens": 12397,
+      "upper_charge_nano_usd": 53077100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "891433082e58bcac5ddc9de8028233656970785643f22ecd3366fbeade6e3773",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "891433082e58bcac5ddc9de8028233656970785643f22ecd3366fbeade6e3773",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19078,
+      "output_tokens": 1726,
+      "upper_charge_nano_usd": 12645800,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+        "policy_sha256": "51e1d4cde3b0229637bdeef4792104553713528bef7190492cb842fa947d69b2",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "values"
+              ],
+              "source_file": "unit_0525d40328.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19569,
+      "output_tokens": 1903,
+      "upper_charge_nano_usd": 13209900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+        "policy_sha256": "51e1d4cde3b0229637bdeef4792104553713528bef7190492cb842fa947d69b2",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "values"
+              ],
+              "source_file": "unit_0525d40328.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 15109,
+      "output_tokens": 1689,
+      "upper_charge_nano_usd": 10594700,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+        "policy_sha256": "51e1d4cde3b0229637bdeef4792104553713528bef7190492cb842fa947d69b2",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "values"
+              ],
+              "source_file": "unit_0525d40328.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "baseline",
+      "passed": false,
+      "controller_decision": "GENUINELY_BLOCKED",
+      "calls": 10,
+      "input_tokens": 17317,
+      "output_tokens": 4597,
+      "upper_charge_nano_usd": 16933100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "be8bff159a42a3a102bf3130961efe2a2ec73484b9d7710d2be4f2c4d5599528",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "f9e3413bb9bc4d87a8a0083b62d0353e65d5c8136a208fa1da934d3a5970dd55"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "be8bff159a42a3a102bf3130961efe2a2ec73484b9d7710d2be4f2c4d5599528",
+        "policy_sha256": "4be2467b6edb533d952acdbbaab825064cf9fcc8c227e8ea89f91704fec068bf",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "settings"
+              ],
+              "source_file": "component_9b58812e.py",
+              "symbol": "Journal_64.__init__"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18358,
+      "output_tokens": 3522,
+      "upper_charge_nano_usd": 15518600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "7117f68ce597d4af61eb57e0a6a26be335983bb3b9e45a7fe09f448b85307da8",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "7117f68ce597d4af61eb57e0a6a26be335983bb3b9e45a7fe09f448b85307da8",
+        "policy_sha256": "4be2467b6edb533d952acdbbaab825064cf9fcc8c227e8ea89f91704fec068bf",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "settings"
+              ],
+              "source_file": "component_9b58812e.py",
+              "symbol": "Journal_64.__init__"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "arm": "lesson",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 10,
+      "input_tokens": 19754,
+      "output_tokens": 1831,
+      "upper_charge_nano_usd": 13172800,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "4e0206e72445918dae041e4a5a4efeaba0a6586d1d7ff607d8d1fc68a02f5b9f",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "cc698b2c3af809352c216c5cae56e38e0c43bf3db233d872ba54f005a227d65e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "4e0206e72445918dae041e4a5a4efeaba0a6586d1d7ff607d8d1fc68a02f5b9f",
+        "policy_sha256": "4be2467b6edb533d952acdbbaab825064cf9fcc8c227e8ea89f91704fec068bf",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "settings"
+              ],
+              "source_file": "component_9b58812e.py",
+              "symbol": "Journal_64.__init__"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "b471f180e4099964db87ace55f5d8f7c26231d2a1d02de92c544e955349441ab"
+      }
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "baseline",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 27,
+      "input_tokens": 54744,
+      "output_tokens": 6527,
+      "upper_charge_nano_usd": 39120600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "9230d17993f87efe177e609b50d928ec083490a9b4054d2fafdd20ef05bea132"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+        "policy_sha256": "0b03f0149139cdabb90d90b75ad9396d3e26c5b4f87fb019a6c7b6ccf6128d40",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values"
+              ],
+              "source_file": "unit_8c6b829a21.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "324d2cb23e2f58244f1a261d118191af6521aa2659fa3b085a8f97d33075aefb"
+      }
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "neutral",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 24,
+      "input_tokens": 53925,
+      "output_tokens": 5669,
+      "upper_charge_nano_usd": 37166700,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "9230d17993f87efe177e609b50d928ec083490a9b4054d2fafdd20ef05bea132"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+        "policy_sha256": "0b03f0149139cdabb90d90b75ad9396d3e26c5b4f87fb019a6c7b6ccf6128d40",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values"
+              ],
+              "source_file": "unit_8c6b829a21.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "1fc8379e6836fb1df77230293a924f7a2de7f6869feaebb87d43c6fd77d6bc3a"
+      }
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "arm": "lesson",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 27,
+      "input_tokens": 68008,
+      "output_tokens": 7012,
+      "upper_charge_nano_usd": 46625600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "9230d17993f87efe177e609b50d928ec083490a9b4054d2fafdd20ef05bea132"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+        "policy_sha256": "0b03f0149139cdabb90d90b75ad9396d3e26c5b4f87fb019a6c7b6ccf6128d40",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values"
+              ],
+              "source_file": "unit_8c6b829a21.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "324d2cb23e2f58244f1a261d118191af6521aa2659fa3b085a8f97d33075aefb"
+      }
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 14251,
+      "output_tokens": 1767,
+      "upper_charge_nano_usd": 10306100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a42cd7aef621ba3a3245f5f2b56ee739078bf73cdafe32774a0262c8bbfbf64b",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18169,
+      "output_tokens": 1798,
+      "upper_charge_nano_usd": 12320900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a42cd7aef621ba3a3245f5f2b56ee739078bf73cdafe32774a0262c8bbfbf64b",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18665,
+      "output_tokens": 1731,
+      "upper_charge_nano_usd": 12448300,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "a42cd7aef621ba3a3245f5f2b56ee739078bf73cdafe32774a0262c8bbfbf64b",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18907,
+      "output_tokens": 1953,
+      "upper_charge_nano_usd": 12968900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "8ec3ebfe7ba9fb3bacfe96103353777c1e0554271ab1c3aee65d98552f121704",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18412,
+      "output_tokens": 1800,
+      "upper_charge_nano_usd": 12446000,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "8ec3ebfe7ba9fb3bacfe96103353777c1e0554271ab1c3aee65d98552f121704",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 13,
+      "input_tokens": 20575,
+      "output_tokens": 2623,
+      "upper_charge_nano_usd": 15008900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "8ec3ebfe7ba9fb3bacfe96103353777c1e0554271ab1c3aee65d98552f121704",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": null
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18924,
+      "output_tokens": 1587,
+      "upper_charge_nano_usd": 12318600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+        "policy_sha256": "81c42ce9df51ce1a43494e7d71bb52934786f1a8ad9499e5593e10baa3dc636b",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "volume",
+                "current_width"
+              ],
+              "source_file": "component_7da2276b.py",
+              "symbol": "Converter_65.buckets"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 13,
+      "input_tokens": 20361,
+      "output_tokens": 2250,
+      "upper_charge_nano_usd": 14230500,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+        "policy_sha256": "81c42ce9df51ce1a43494e7d71bb52934786f1a8ad9499e5593e10baa3dc636b",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "volume",
+                "current_width"
+              ],
+              "source_file": "component_7da2276b.py",
+              "symbol": "Converter_65.buckets"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 18429,
+      "output_tokens": 1650,
+      "upper_charge_nano_usd": 12184500,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+        "policy_sha256": "81c42ce9df51ce1a43494e7d71bb52934786f1a8ad9499e5593e10baa3dc636b",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "volume",
+                "current_width"
+              ],
+              "source_file": "component_7da2276b.py",
+              "symbol": "Converter_65.buckets"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 15018,
+      "output_tokens": 1824,
+      "upper_charge_nano_usd": 10792200,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+        "policy_sha256": "2c7e184346e03435b07ad3e30266d43f6b8e33ca9b2162fbe343b982229489ba",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "factor",
+                "values"
+              ],
+              "source_file": "unit_dac49f99a0.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19425,
+      "output_tokens": 1866,
+      "upper_charge_nano_usd": 13071300,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+        "policy_sha256": "2c7e184346e03435b07ad3e30266d43f6b8e33ca9b2162fbe343b982229489ba",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "factor",
+                "values"
+              ],
+              "source_file": "unit_dac49f99a0.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a71df3ef716cabe43ead70bd8311cda3aeadcb986bea501da0ea9262f31c3925"
+      }
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 13,
+      "input_tokens": 26778,
+      "output_tokens": 2577,
+      "upper_charge_nano_usd": 18027600,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+        "policy_sha256": "2c7e184346e03435b07ad3e30266d43f6b8e33ca9b2162fbe343b982229489ba",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "factor",
+                "values"
+              ],
+              "source_file": "unit_dac49f99a0.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a71df3ef716cabe43ead70bd8311cda3aeadcb986bea501da0ea9262f31c3925"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "lesson",
+      "passed": false,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19545,
+      "output_tokens": 1992,
+      "upper_charge_nano_usd": 13358100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "e4a2d8ecc548e509ab9ea9cc860eb32217fc272581120723c5be108e88af20c4"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+        "policy_sha256": "f0591461e26ec6f7f8baeb39429d0e384ab508d6c2a93a6f51fc29fbb26fa4bd",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "mode",
+                "values"
+              ],
+              "source_file": "unit_e1ecffe6a3.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a71df3ef716cabe43ead70bd8311cda3aeadcb986bea501da0ea9262f31c3925"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "neutral",
+      "passed": false,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 19235,
+      "output_tokens": 1982,
+      "upper_charge_nano_usd": 13185100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "c11bb4550bb0e15192215dbed1d17e7db82fcae63b08921dad077cc611beb825"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+        "policy_sha256": "f0591461e26ec6f7f8baeb39429d0e384ab508d6c2a93a6f51fc29fbb26fa4bd",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "mode",
+                "values"
+              ],
+              "source_file": "unit_e1ecffe6a3.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "arm": "baseline",
+      "passed": false,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 15269,
+      "output_tokens": 2004,
+      "upper_charge_nano_usd": 11241700,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "1aadeae2aa291647f3a3301644a4c3f1ed374089bb31285afc9517117fea706e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "81fdb6e1139425aaa3d4d1c4fae9da68149fb88adbad45cb4f34659696bbf990",
+        "policy_sha256": "f0591461e26ec6f7f8baeb39429d0e384ab508d6c2a93a6f51fc29fbb26fa4bd",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "mode",
+                "values"
+              ],
+              "source_file": "unit_e1ecffe6a3.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "neutral",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 29,
+      "input_tokens": 76640,
+      "output_tokens": 7414,
+      "upper_charge_nano_usd": 51665200,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "b93583079445ad199dd402e3a331d6eb46b1fd896b5b0388ae196ed74c61a593"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+        "policy_sha256": "1e9d105e73b5f02f97efe378e2a4321bb49c8be2a2e83359ede55beeb8759113",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "flags"
+              ],
+              "source_file": "unit_2cef8711d3.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "dbff6e881745f96429b1c5833a75915f1584389a405acd98ec62a9e8d0e5f1ff"
+      }
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "lesson",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 29,
+      "input_tokens": 78144,
+      "output_tokens": 7820,
+      "upper_charge_nano_usd": 53148000,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "b93583079445ad199dd402e3a331d6eb46b1fd896b5b0388ae196ed74c61a593"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+        "policy_sha256": "1e9d105e73b5f02f97efe378e2a4321bb49c8be2a2e83359ede55beeb8759113",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "flags"
+              ],
+              "source_file": "unit_2cef8711d3.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a0808aa50b8beb363210807fc53fc9decc38fef8015cd400d3986b588253f00d"
+      }
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "arm": "baseline",
+      "passed": false,
+      "controller_decision": "EXECUTABLE_WORK_REMAINS",
+      "calls": 32,
+      "input_tokens": 78455,
+      "output_tokens": 9032,
+      "upper_charge_nano_usd": 55485100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+      "independent_rescore": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "b93583079445ad199dd402e3a331d6eb46b1fd896b5b0388ae196ed74c61a593"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "FAILED",
+        "accepted": false,
+        "valid": true,
+        "candidate_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+        "policy_sha256": "1e9d105e73b5f02f97efe378e2a4321bb49c8be2a2e83359ede55beeb8759113",
+        "observed_calls": 1,
+        "public_test_exit_code": 1,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "flags"
+              ],
+              "source_file": "unit_2cef8711d3.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a0808aa50b8beb363210807fc53fc9decc38fef8015cd400d3986b588253f00d"
+      }
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "baseline",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 17133,
+      "output_tokens": 1608,
+      "upper_charge_nano_usd": 11460900,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+        "policy_sha256": "70c16ba6737ec7a90e0914ab00354df29a0dedd2881ee48131d0bc959ac5b50a",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "defaults",
+                "overrides"
+              ],
+              "source_file": "component_d2117b3b.py",
+              "symbol": "configure_63"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "lesson",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 13,
+      "input_tokens": 30000,
+      "output_tokens": 2674,
+      "upper_charge_nano_usd": 19813200,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+        "policy_sha256": "70c16ba6737ec7a90e0914ab00354df29a0dedd2881ee48131d0bc959ac5b50a",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "defaults",
+                "overrides"
+              ],
+              "source_file": "component_d2117b3b.py",
+              "symbol": "configure_63"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "arm": "neutral",
+      "passed": true,
+      "controller_decision": "SATISFIED",
+      "calls": 9,
+      "input_tokens": 21073,
+      "output_tokens": 1677,
+      "upper_charge_nano_usd": 13555100,
+      "outcome": "controller_result",
+      "failure_codes": [],
+      "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+      "independent_rescore": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "independent_public_check": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+        "policy_sha256": "70c16ba6737ec7a90e0914ab00354df29a0dedd2881ee48131d0bc959ac5b50a",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "defaults",
+                "overrides"
+              ],
+              "source_file": "component_d2117b3b.py",
+              "symbol": "configure_63"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    }
+  ],
+  "limitations": [
+    "Reused synthetic tasks; gate built after earlier observed failures.",
+    "One attempt per case and arm, fixed provider alias rather than a pinned weight snapshot.",
+    "Input preservation checks supported values on observed synchronous public calls only.",
+    "Absence of withheld test names is a scoped exposure check, not proof of all possible information isolation."
+  ]
+}

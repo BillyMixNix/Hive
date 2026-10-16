@@ -1,0 +1,191 @@
+{
+  "scope": "development_real_model",
+  "kind": "visible_failure_repair_probe",
+  "probe_sha256": "c6676e972b10de0ac475d0b8ae435877cf67dfca6f7053b906013e58cbe54a81",
+  "case_id": "visible-inclusive-boundary-v1",
+  "promotion_eligible": false,
+  "lessons_supplied": [],
+  "verdict": "REPAIR_NOT_VERIFIED",
+  "probe_integrity_verified": true,
+  "before": {
+    "passed": false,
+    "valid": true,
+    "exit_code": 1,
+    "output_sha256": "1e9efff396de3d0bf2bd9a653274c48a9f3e17d6594b4b2ff9be58d1b377559c"
+  },
+  "usage": {
+    "calls": 10,
+    "prompt_tokens": 14247,
+    "output_tokens": 954
+  },
+  "controller": {
+    "decision": "GENUINELY_BLOCKED",
+    "objective_id": "objective_341b1edafd70",
+    "task_state": {
+      "original_failure_reproduced": true,
+      "root_cause_identified": true,
+      "callable_location_grounded": true,
+      "callable_location": {
+        "source_file": "capacity.py",
+        "symbol": "admit",
+        "definition_line": 1,
+        "end_line": 2,
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "callable_id": "f67c0afe7f93c3c5"
+      },
+      "rejected_callable_locations": [],
+      "invalid_callable_location_submissions": [],
+      "source_location_grounded": true,
+      "source_location": {
+        "callable_id": "f67c0afe7f93c3c5",
+        "candidate_location_id": "fade0495beec03b0",
+        "source_file": "capacity.py",
+        "symbol": "admit",
+        "line": 2,
+        "source_line": "return quantity < capacity",
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "cause_relation": "direct_candidate_confirmation",
+        "expression_frame": {
+          "mode": "expression",
+          "statement_kind": "return",
+          "assigned_targets": [],
+          "prefix": "return ",
+          "suffix": "",
+          "template": "return <MODEL_EXPRESSION>",
+          "old_expression": "quantity < capacity"
+        },
+        "location_id": "e852bc57ed6af9b3",
+        "leaf_replacement_choices": []
+      },
+      "cause_location_grounded": true,
+      "candidate_source_location": {
+        "callable_id": "f67c0afe7f93c3c5",
+        "source_file": "capacity.py",
+        "symbol": "admit",
+        "line": 2,
+        "source_line": "return quantity < capacity",
+        "source_sha256": "6cf001042ca894bdd574e0727a71c4248fcc0b4247c4a69a656b2f70117a5f02",
+        "location_id": "fade0495beec03b0"
+      },
+      "rejected_cause_locations": [],
+      "operationally_deferred_cause_locations": [],
+      "rejected_source_locations": [],
+      "operationally_deferred_source_locations": [],
+      "invalid_source_location_submissions": [],
+      "location_repair_failures": {},
+      "location_repair_stagnations": {},
+      "diagnosis_grounded": true,
+      "investigator_diagnosis": {
+        "location_id": "e852bc57ed6af9b3",
+        "source_file": "capacity.py",
+        "symbol": "admit",
+        "line": 2,
+        "source_line": "return quantity < capacity",
+        "actual": null,
+        "expected": null,
+        "mechanism": "The selected RHS uses the current-call operands quantity and capacity in the strict comparison quantity < capacity. With the controller-captured values quantity=5 and capacity=5, it evaluates to False, so the return statement produces False (there is no assigned target visible after the line). This rejects the at-capacity case even though the requirement admits quantities up to and including capacity. Both current-call parameters are loaded by the RHS; no current-call parameter is omitted, so the mismatch is caused by the strict comparison's equality behavior rather than insensitivity to an unloaded parameter."
+      },
+      "source_runtime_evidence": {
+        "captured": true,
+        "location_id": "e852bc57ed6af9b3",
+        "source_file": "capacity.py",
+        "line": 2,
+        "test_nodes": [
+          "test_visible.py::test_at_capacity"
+        ],
+        "pytest_exit": 1,
+        "selected_expression": "quantity < capacity",
+        "selected_loads": [
+          "capacity",
+          "quantity"
+        ],
+        "assigned_targets": [],
+        "current_call_parameters_not_loaded": [],
+        "branch_control_parameters": [],
+        "omitted_data_parameters": [],
+        "frames_before_line": [
+          {
+            "capacity": 5,
+            "quantity": 5
+          }
+        ],
+        "frames_after_line": [],
+        "runtime_evidence_id": "334b46c97f9c5d83"
+      },
+      "rejected_investigator_diagnoses": [],
+      "atomic_source_files": [
+        "capacity.py"
+      ],
+      "atomic_test_files": [
+        "test_visible.py"
+      ],
+      "regression_established": true,
+      "regression_created": false,
+      "regression_fails_on_broken_revision": true,
+      "source_repaired": true,
+      "regression_passes_after_repair": true,
+      "original_tests_pass": true,
+      "acceptance_oracle_pass": false,
+      "review_pass": true,
+      "reproduced_failure_nodes": [
+        "test_visible.py::test_at_capacity"
+      ],
+      "regression_nodes": [
+        "test_visible.py::test_at_capacity"
+      ],
+      "regression_origin": "existing",
+      "regression_baseline_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "accepted_regression_snapshot": {
+        "capacity.py": "def admit(quantity, capacity):\n    return quantity < capacity\n",
+        "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+      },
+      "regression_target": {},
+      "repair_oracle_target": {},
+      "last_failed_gate": "",
+      "last_gate_feedback": "",
+      "gate_failures": {},
+      "rejected_repair_actions": [],
+      "rejected_repair_action_locations": {},
+      "invalid_repair_submissions": [],
+      "atomic_cycle": 1,
+      "cycle_history": [],
+      "oracle_feedback": "",
+      "reproduction_origin": "pytest"
+    }
+  },
+  "candidate": {
+    "capacity.py": "def admit(quantity, capacity):\n    return quantity <= capacity\n",
+    "test_visible.py": "from capacity import admit\n\ndef test_below():\n    assert admit(3, 5)\n\ndef test_at_capacity():\n    assert admit(5, 5)\n\ndef test_above():\n    assert not admit(6, 5)\n"
+  },
+  "candidate_sha256": "fb88f5e059e6f93b5977f5c62e60a537161752517060e7a3ebefbbe13ffb29b7",
+  "source_changed": true,
+  "after": {
+    "passed": true,
+    "valid": true,
+    "exit_code": 0,
+    "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+  },
+  "transport_usage": [
+    {
+      "calls": 10,
+      "prompt_tokens": 14247,
+      "output_tokens": 954,
+      "complete": true
+    }
+  ],
+  "episode_id": "2c52abe69ccdb3cad6f4bc600499bdbd39782503ba6cad46fd8f54ca7fd7a2f8",
+  "continued_after": "8f3c368e9a7d80132b202734f9d48e2a096dbf514cbc896365fa3936e66e988f",
+  "spending": {
+    "limit_nano_usd": 5000000000,
+    "prior_upper_nano_usd": 11224800,
+    "measured_usage_upper_nano_usd": 8840700,
+    "unresolved_reservation_nano_usd": 0,
+    "total_upper_nano_usd": 20065500,
+    "requests_reserved": 10,
+    "blocked": false
+  },
+  "interpretation": "One frozen visible-failure development repair probe with no supplied lesson. The initial failure and candidate are independently graded using the same frozen tests. This verifies integration only; no learning gain, lesson promotion or RSI is established. Spending carries every preceding attempt and is a conservative token-charge upper bound."
+}

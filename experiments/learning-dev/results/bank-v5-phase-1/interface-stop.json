@@ -1,0 +1,98 @@
+{
+  "status": "ORIGINAL_V5_CONFIRMATION_INCOMPLETE",
+  "planned_recipients": 63,
+  "completed_recipients": 18,
+  "stop_was_not_predeclared": true,
+  "reason": "Four lesson recipients ended on one-character omissions in long unconstrained memory IDs. The interface required exact copying of a hash although the ID is only advisory metadata.",
+  "old_results_unchanged": true,
+  "gain_confirmed": false,
+  "remaining_tasks_not_attempted_in_original_version": 45,
+  "failures": [
+    {
+      "case_id": "checkpoint_epoch_cache",
+      "calls": 4,
+      "actual_memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75",
+      "offered_memory_ids": [
+        "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+        "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+        "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f"
+      ],
+      "response_output": [
+        {
+          "type": "reasoning"
+        },
+        {
+          "type": "function_call",
+          "status": "completed",
+          "name": "submit_location",
+          "arguments": "{\"callable_id\":\"2391c5be54221cc6\",\"choice_id\":\"b23a44de8c644c83\",\"memory_check\":{\"applicability\":\"applies\",\"expected_effect\":\"Including every required identity dimension in the cache key should make the second fetch use a distinct entry and return 12; calls with the same name and epoch should still reuse their entry.\",\"memory_id\":\"cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75\",\"public_evidence\":\"The public failure shows fetch('row', 1, [4, 8]) returns the prior result 5 after fetch('row', 0, [2, 3]), while the callable constructs the key only from identity(name).\"}}"
+        }
+      ]
+    },
+    {
+      "case_id": "checkpoint_mean_after_snapshot",
+      "calls": 2,
+      "actual_memory_id": "8d744424340beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+      "offered_memory_ids": [
+        "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+        "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+        "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f"
+      ],
+      "response_output": [
+        {
+          "type": "reasoning"
+        },
+        {
+          "type": "function_call",
+          "status": "completed",
+          "name": "read_source_lines",
+          "arguments": "{\"memory_check\":{\"applicability\":\"applies\",\"expected_effect\":\"Reading the allowed source will reveal the public callable and any delegated helper, including exact numbered definition lines; the boundary case is that a public callable may delegate the failing computation.\",\"memory_id\":\"8d744424340beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90\",\"public_evidence\":\"The observed failure passes an iterator to process and returns the correct count but an incorrect aggregate, indicating source inspection is needed to trace iterable consumption.\"},\"path\":\"unit_b6d4e8653e.py\"}"
+        }
+      ]
+    },
+    {
+      "case_id": "checkpoint_normalized_locale",
+      "calls": 7,
+      "actual_memory_id": "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75",
+      "offered_memory_ids": [
+        "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+        "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+        "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f"
+      ],
+      "response_output": [
+        {
+          "type": "reasoning"
+        },
+        {
+          "type": "function_call",
+          "status": "completed",
+          "name": "replace_selected_leaf",
+          "arguments": "{\"choice_id\":\"728cb8088681eb83\",\"memory_check\":{\"applicability\":\"applies\",\"expected_effect\":\"The second call with the same normalized name but a different locale should no longer reuse the first entry; however, because this leaf substitution changes the identity argument itself, equivalent names may no longer share a result as required.\",\"memory_id\":\"cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75\",\"public_evidence\":\"Runtime evidence shows both captured calls produce key \\\"ada\\\" while locales differ (\\\"en\\\" versus \\\"fr\\\"), and the focused test returns 7 instead of the expected 17 on the second call.\"}}"
+        }
+      ]
+    },
+    {
+      "case_id": "checkpoint_product_and_count",
+      "calls": 5,
+      "actual_memory_id": "8d744424340beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+      "offered_memory_ids": [
+        "1fec10aeb2e30472a95af5336d945777824f4d53dd244b4df5309cab992236c2",
+        "8d7444243400beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90",
+        "cfc40e90f00a97446f8800342dee72be59a651281cc88aea00531df237b1d75f"
+      ],
+      "response_output": [
+        {
+          "type": "reasoning"
+        },
+        {
+          "type": "function_call",
+          "status": "completed",
+          "name": "confirm_candidate",
+          "arguments": "{\"candidate_location_id\":\"ec3d01d7d0469971\",\"memory_check\":{\"applicability\":\"applies\",\"expected_effect\":\"Because stream is materialized by tuple(stream) before math.prod(stream), a single-use iterator is exhausted; the boundary case is that a reusable sequence would still produce the product, while an exhausted iterator yields the empty-product identity 1.\",\"memory_id\":\"8d744424340beca9a4a8d78d2b4b05dd07c67d106b5ad8e68535cc16d3abf90\",\"public_evidence\":\"The callable context shows saved = tuple(stream) on line 4 followed by product = math.prod(stream) on line 6, and no upstream producer choices remain.\"}}"
+        }
+      ]
+    }
+  ],
+  "budget_upper_nano_usd": 2639946400,
+  "followon": "The remaining untouched tasks will use short schema-constrained handles and will be reported separately as descriptive engineering evidence. No positive confirmatory claim or alpha reallocation."
+}

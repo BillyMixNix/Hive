@@ -1,0 +1,14 @@
+{
+  "bundle_id": "grow0-provenance-trigger-v1",
+  "case_id": "trigger-current-over-stored-01",
+  "goal": "A repair step must choose the value belonging to the active call rather than stale stored state.",
+  "stored_value": 73,
+  "current_value": 41,
+  "expected_source": "current",
+  "expected_value": 41,
+  "failure_class": "state_provenance_loss",
+  "surface_labels": {
+    "stored": "entry_snapshot",
+    "current": "close_request"
+  }
+}
