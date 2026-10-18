@@ -1,0 +1,1022 @@
+{
+  "schema": "hive.lesson-bank.state.v4",
+  "study_sha256": "9efd504c03045ec8c9c9210400167d9ed667114d0fa3e405369fbc65aa597909",
+  "lessons": [
+    {
+      "rationale": "A failed test exposed that independently reordering one parallel sequence leaves positional associations corrupted, even though lengths and output shape still look valid. The efficient diagnostic is to trace the first transformation that changes ordering, inspect whether correlated fields are transformed as one unit, and use non-monotonic inputs to distinguish ordering errors from length or API errors. Advisory checks and source-location submissions are secondary; the decisive evidence is the smallest failing comparison and the expression that produced it.",
+      "summary": "When data fields are positionally correlated, preserve their associations by bundling records before applying any reordering or filtering operation.",
+      "when": "Apply this whenever multiple sequences represent fields of the same records and one operation can change their order, membership, or grouping."
+    },
+    {
+      "rationale": "When debugging iterable-processing code, trace the input's state across each consuming operation rather than relying on intermediate tool success or implementation-specific introspection. Identify the first operation that advances a possibly single-use iterable, then inspect later uses and the final source file before rerunning tests. The repair principle is to materialize the iterable once into a stable collection and use that snapshot for validation and output; avoid private or implementation-dependent mechanisms such as reduce payloads.",
+      "summary": "Consume a potentially single-use iterable exactly once, retain the materialized snapshot, and derive every later result from that snapshot. Diagnose failures by tracking iterator state and verifying the actual file and tests after edits.",
+      "when": "Use this whenever code performs multiple passes over an input that may be a generator or iterator, especially when a debugging shortcut or reported patch appears to preserve items without confirming the iterable's state."
+    },
+    {
+      "rationale": "A cache collision should be diagnosed by observing the complete key at both insertion and lookup, including values returned by any identity or normalization hook. Source-level reasoning that treats a helper result as the whole key can misidentify the cause when additional dimensions are present, while bypassing the helper may also break intended extension behavior. Compare calls that differ in exactly one required identity dimension and inspect the resulting key components before choosing a repair.",
+      "summary": "Trace and verify every cache-key component at runtime before repairing a collision, while preserving the contract of any key-generation hook.",
+      "when": "When memoized results are reused unexpectedly, compare the full stored and requested keys for calls differing by one input dimension, then adjust the key construction without discarding documented normalization or override behavior."
+    }
+  ],
+  "lesson_history": [
+    {
+      "family": "paired_sort",
+      "lesson": {
+        "rationale": "A failed test exposed that independently reordering one parallel sequence leaves positional associations corrupted, even though lengths and output shape still look valid. The efficient diagnostic is to trace the first transformation that changes ordering, inspect whether correlated fields are transformed as one unit, and use non-monotonic inputs to distinguish ordering errors from length or API errors. Advisory checks and source-location submissions are secondary; the decisive evidence is the smallest failing comparison and the expression that produced it.",
+        "summary": "When data fields are positionally correlated, preserve their associations by bundling records before applying any reordering or filtering operation.",
+        "when": "Apply this whenever multiple sequences represent fields of the same records and one operation can change their order, membership, or grouping."
+      },
+      "source_sha256": "3fc6b2f25d1d45749a099cfe5ffc23fa11ae6c096b41bef75dace74518befbf7",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1856,
+        "output_tokens": 212
+      }
+    },
+    {
+      "family": "single_pass",
+      "lesson": {
+        "rationale": "When debugging iterable-processing code, trace the input's state across each consuming operation rather than relying on intermediate tool success or implementation-specific introspection. Identify the first operation that advances a possibly single-use iterable, then inspect later uses and the final source file before rerunning tests. The repair principle is to materialize the iterable once into a stable collection and use that snapshot for validation and output; avoid private or implementation-dependent mechanisms such as reduce payloads.",
+        "summary": "Consume a potentially single-use iterable exactly once, retain the materialized snapshot, and derive every later result from that snapshot. Diagnose failures by tracking iterator state and verifying the actual file and tests after edits.",
+        "when": "Use this whenever code performs multiple passes over an input that may be a generator or iterator, especially when a debugging shortcut or reported patch appears to preserve items without confirming the iterable's state."
+      },
+      "source_sha256": "539939ffab52b27914c45ae8ed74a1008bcde0496c05e09dbd2ddbe0c37e6c5b",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3071,
+        "output_tokens": 227
+      }
+    },
+    {
+      "family": "versioned_cache",
+      "lesson": {
+        "rationale": "A cache collision should be diagnosed by observing the complete key at both insertion and lookup, including values returned by any identity or normalization hook. Source-level reasoning that treats a helper result as the whole key can misidentify the cause when additional dimensions are present, while bypassing the helper may also break intended extension behavior. Compare calls that differ in exactly one required identity dimension and inspect the resulting key components before choosing a repair.",
+        "summary": "Trace and verify every cache-key component at runtime before repairing a collision, while preserving the contract of any key-generation hook.",
+        "when": "When memoized results are reused unexpectedly, compare the full stored and requested keys for calls differing by one input dimension, then adjust the key construction without discarding documented normalization or override behavior."
+      },
+      "source_sha256": "b3e05cba5d46a03e8143649d0fa1fe016a5e16c644440a28d01cd402f856071e",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2216,
+        "output_tokens": 331
+      }
+    }
+  ],
+  "phases": [
+    {
+      "phase": 0,
+      "status": "completed"
+    },
+    {
+      "phase": 1,
+      "status": "completed",
+      "schedule": [
+        {
+          "case_id": "bank4_single_pass_43",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_paired_sort_43",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_versioned_cache_43",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_42",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_paired_sort_43",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_42",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_single_pass_43",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_paired_sort_42",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_43",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_single_pass_42",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_paired_sort_43",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_versioned_cache_43",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_single_pass_42",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_42",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_single_pass_43",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_paired_sort_42",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_single_pass_42",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_paired_sort_42",
+          "arm": "neutral"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "status": "completed",
+      "schedule": [
+        {
+          "case_id": "bank4_paired_sort_44",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_44",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_single_pass_44",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_paired_sort_44",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_paired_sort_45",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_paired_sort_44",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_single_pass_45",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_paired_sort_45",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_paired_sort_45",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_versioned_cache_45",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_single_pass_45",
+          "arm": "baseline"
+        },
+        {
+          "case_id": "bank4_versioned_cache_45",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_versioned_cache_45",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_versioned_cache_44",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_single_pass_44",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_versioned_cache_44",
+          "arm": "lesson"
+        },
+        {
+          "case_id": "bank4_single_pass_45",
+          "arm": "neutral"
+        },
+        {
+          "case_id": "bank4_single_pass_44",
+          "arm": "baseline"
+        }
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "case_id": "bank4_single_pass_43",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 32,
+        "prompt_tokens": 65334,
+        "output_tokens": 10085
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "4a2cd75b2bdabae0bad617a0553a1548c26e673cd6463d799caa1a5698497a97",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_43",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 16,
+        "prompt_tokens": 37694,
+        "output_tokens": 8058
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "candidate_sha256": "cc511e15bb1ab6587185d11fd1a87949524c0a672d65bef0c0816dbcd4cef8cf",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_43",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 21917,
+        "output_tokens": 1440
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "a8d29384202b955c8781f80b55645a5ddaff74ced4af23499b2f4c7c7847054b",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_42",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 21608,
+        "output_tokens": 1242
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "2f6e41bfc0b7230bf00bbcd4016e3826da8bcfc8869f70d376c20023eb7d3de5",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_43",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 20369,
+        "output_tokens": 1959
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "candidate_sha256": "b2629da2afcfe926cb911ad60e8b9d9406a98eaf657f16bb832413e68673da7d",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_42",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 13251,
+        "output_tokens": 1296
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "ef4ca59bfeeec7694c453d6297d8f5b8bbb4e7890df796c3725f9c701ec60943",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_43",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 30,
+        "prompt_tokens": 59533,
+        "output_tokens": 8760
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "48af7ba77956da4d0ce0cd5073543a503f7e87e481632659692781b53d5b9b07",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_42",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 19592,
+        "output_tokens": 875
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "candidate_sha256": "0a814ab4880ab9459d7263ae22341a225c8e768809ccb6194cefcf823587cc7c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_43",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 17,
+        "prompt_tokens": 27345,
+        "output_tokens": 1906
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "d75a235b179ee6f0a59adc66aede96745080c209b9a06af83e3e0b618113c2aa",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_42",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15206,
+        "output_tokens": 854
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "c29ce1c3c0f447ec73eb5a32909fbda36cd341837b1d51f6fe7c0535f10f87d1",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_43",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": false,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 11,
+        "prompt_tokens": 18559,
+        "output_tokens": 7682
+      },
+      "score": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "efc628e689ea001c148286e3d68144b0b6ce10f8986fb2ccefce3159f5e42caa"
+      },
+      "candidate_sha256": "20649749a5e72a49a94f5084e218ab63a12ad2d3226bcab77902d0adff247231",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_43",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11140,
+        "output_tokens": 1036
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "a8d29384202b955c8781f80b55645a5ddaff74ced4af23499b2f4c7c7847054b",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_42",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15680,
+        "output_tokens": 793
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "c29ce1c3c0f447ec73eb5a32909fbda36cd341837b1d51f6fe7c0535f10f87d1",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_42",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15724,
+        "output_tokens": 821
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "d3f141555edfd1d82f9ff0c64aac6ab81a883185663f94c78ec1a26d5e9c23c7",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_43",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 31,
+        "prompt_tokens": 49046,
+        "output_tokens": 7863
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "b35927f666c963cdea97cfc6b42bf2efb53dd790130499f620f29c07ffca722d",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_42",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 14952,
+        "output_tokens": 1101
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "candidate_sha256": "0a814ab4880ab9459d7263ae22341a225c8e768809ccb6194cefcf823587cc7c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_42",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11412,
+        "output_tokens": 723
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "c29ce1c3c0f447ec73eb5a32909fbda36cd341837b1d51f6fe7c0535f10f87d1",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_42",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 18857,
+        "output_tokens": 964
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "candidate_sha256": "0a814ab4880ab9459d7263ae22341a225c8e768809ccb6194cefcf823587cc7c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_44",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 21011,
+        "output_tokens": 1998
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "candidate_sha256": "c31defe2f483508330a066d2e08327f7d2755a0ffb02f709541b19922cb0ab55",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_44",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11470,
+        "output_tokens": 1050
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "9dba0b61a61be074c573e8f86af1d3f075e096049cf62ba3fe4b3fc6f6b4ae96",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_44",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15692,
+        "output_tokens": 760
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "f5d292a46634ad2490be89ecd7c9b52cf4552193ab36b1d5a2e20572691f7a4b",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_44",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 13463,
+        "output_tokens": 2014
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "candidate_sha256": "d9cab797d89ebf49f0e0e7158f195c9ea1faf4d913f355483e301d8542be804a",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_45",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 14,
+        "prompt_tokens": 25736,
+        "output_tokens": 1440
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "41bdc78b455f4b95ae4dbc4e7d0c79c4f64bf9a94b2260e8d5ecb6777859501c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_44",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 11,
+        "prompt_tokens": 24189,
+        "output_tokens": 2581
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "candidate_sha256": "45610cfcfc2ebfebc0ea1ad8508a7e16699b420c29197eabfb14eb48971245c4",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_45",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15776,
+        "output_tokens": 690
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "b7057dc50ea3707bbf6c495c8ccfe2d9ce49e84194b5d6ad4d863930f1573e66",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_45",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 10,
+        "prompt_tokens": 19705,
+        "output_tokens": 938
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "41bdc78b455f4b95ae4dbc4e7d0c79c4f64bf9a94b2260e8d5ecb6777859501c",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_paired_sort_45",
+      "family": "paired_sort",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 11,
+        "prompt_tokens": 17722,
+        "output_tokens": 1203
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "candidate_sha256": "61ee43279b85c9e980bed5312b86a10a52aee1aeb1c61e24f8e1ec7dff4976d3",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_45",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 16078,
+        "output_tokens": 1347
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "580cd93ef04efc9acfbe0ebb50154644549321ab7f727e6c0fc1ef9618bbdbad",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_45",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11510,
+        "output_tokens": 772
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "b7057dc50ea3707bbf6c495c8ccfe2d9ce49e84194b5d6ad4d863930f1573e66",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_45",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15706,
+        "output_tokens": 780
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "6c879270e7a58b2063bf41f4538013196cbbf18638063ca9e6f7143e7ea8c4b3",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_45",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 13,
+        "prompt_tokens": 21545,
+        "output_tokens": 1558
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "6c879270e7a58b2063bf41f4538013196cbbf18638063ca9e6f7143e7ea8c4b3",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_44",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15217,
+        "output_tokens": 991
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "9dba0b61a61be074c573e8f86af1d3f075e096049cf62ba3fe4b3fc6f6b4ae96",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_44",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15153,
+        "output_tokens": 765
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "f5d292a46634ad2490be89ecd7c9b52cf4552193ab36b1d5a2e20572691f7a4b",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_versioned_cache_44",
+      "family": "versioned_cache",
+      "split": "confirmation",
+      "arm": "lesson",
+      "guidance_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15748,
+        "output_tokens": 794
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "cdf8d13a3f141b449c7d92c9b86d6fd681de17445a1d661236b92f93860eafac"
+      },
+      "candidate_sha256": "9dba0b61a61be074c573e8f86af1d3f075e096049cf62ba3fe4b3fc6f6b4ae96",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_45",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "neutral",
+      "guidance_sha256": "bd39b57c897e2816151aac362aa5205e598e2f24a202169c279eb8c6ed8cdc44",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 15254,
+        "output_tokens": 767
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "b7057dc50ea3707bbf6c495c8ccfe2d9ce49e84194b5d6ad4d863930f1573e66",
+      "controller_decision": "SATISFIED"
+    },
+    {
+      "case_id": "bank4_single_pass_44",
+      "family": "single_pass",
+      "split": "confirmation",
+      "arm": "baseline",
+      "guidance_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "passed": true,
+      "integrity_valid": true,
+      "usage": {
+        "calls": 9,
+        "prompt_tokens": 11368,
+        "output_tokens": 818
+      },
+      "score": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "fcd476841e8af121ff907e81a92a59579b64c007b70cb79f9d096806f703fc7e"
+      },
+      "candidate_sha256": "f5d292a46634ad2490be89ecd7c9b52cf4552193ab36b1d5a2e20572691f7a4b",
+      "controller_decision": "SATISFIED"
+    }
+  ],
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4"
+}

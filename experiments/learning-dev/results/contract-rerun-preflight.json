@@ -1,0 +1,749 @@
+{
+  "schema": "hive.contract-rerun.preflight.v1",
+  "verified": true,
+  "study_sha256": "519c9e38b644b88397d9aaf51f203c841b56d955db8db9e29d1e059c45fdec9c",
+  "runtime_sha256": "73ceae499cc9a9e9d1bfc991db13743cf7e4469a75501de42a15ca0b47bd3b65",
+  "new_model_requests": 0,
+  "cases": [
+    {
+      "case_id": "checkpoint_permuted_columns",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "34c3b58857ff93227d013f398599f6ae4092999b74fbf2f349b5fad8c5101ae4"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": {
+        "baseline_sha256": "ae4320a871b8db99b1f7eebf44094b7cf3820ce8e097a0914b60d9d1655f19e7",
+        "contracts": [
+          {
+            "arguments": [
+              "keys",
+              "values",
+              "order"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_1322350d02.py",
+            "symbol": "process"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "10d79a2e00d473d2c1747c9b0e4b4a5530f2af05a2ee4e9146c1725706dd57a0",
+        "policy_sha256": "fb2acac4787f189f78c5107de6f815a33306c292e2bab36d8ac368f7264bdd79",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "order"
+              ],
+              "source_file": "unit_1322350d02.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_absolute_priority",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "9230d17993f87efe177e609b50d928ec083490a9b4054d2fafdd20ef05bea132"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "contract_policy": {
+        "baseline_sha256": "50c118e404366ee73a6879dad39f09dbc01ba6b66439557b69f09fe56998302f",
+        "contracts": [
+          {
+            "arguments": [
+              "keys",
+              "values"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_8c6b829a21.py",
+            "symbol": "process"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "b3d8970d9ad6435ba6054ae4e9bf83fe8480f3359c97cc008dc18ffc11922d29",
+        "policy_sha256": "0b03f0149139cdabb90d90b75ad9396d3e26c5b4f87fb019a6c7b6ccf6128d40",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values"
+              ],
+              "source_file": "unit_8c6b829a21.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_stable_partition",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "b93583079445ad199dd402e3a331d6eb46b1fd896b5b0388ae196ed74c61a593"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": {
+        "baseline_sha256": "cfc31e0ec12c9908639eb64fb8518891598eb8dd7ef40574fd956657664f8418",
+        "contracts": [
+          {
+            "arguments": [
+              "keys",
+              "values",
+              "flags"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_2cef8711d3.py",
+            "symbol": "process"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "4c665dbc3cf86e10968920c90415f98173d413851b69a6b66a7350847eb6cc7b",
+        "policy_sha256": "1e9d105e73b5f02f97efe378e2a4321bb49c8be2a2e83359ede55beeb8759113",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "flags"
+              ],
+              "source_file": "unit_2cef8711d3.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_top_k_pairs",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "45c07938ade6f0acf215e6775c2354428a2fa3fee35c20a4b9201fd2775490c3"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "contract_policy": {
+        "baseline_sha256": "cdd59e39e3bebd268f27b914dd9a5ae5627af4d0cc5a46af283f73d72a3aadf9",
+        "contracts": [
+          {
+            "arguments": [
+              "keys",
+              "values",
+              "limit"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_9e5c6035ea.py",
+            "symbol": "process"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "16362375ec13db746d7c259335ace3843d9998a647a01afa718a14d4444d1f8c",
+        "policy_sha256": "83b0abcb732e9a08c243c853e0b67523419520c47a450b5312c86908c4173c25",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "keys",
+                "values",
+                "limit"
+              ],
+              "source_file": "unit_9e5c6035ea.py",
+              "symbol": "process"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_head_and_tail",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "65d6a54570e745f98b656ff781ef24ed303b2c82f16405bbe3775a715a584e8f"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": null,
+      "reference_contract": null
+    },
+    {
+      "case_id": "checkpoint_ordered_unique",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "649a7ea2a3058bd7a53202f8611118a9bd8400fbbda7c3b65e1881aa5a076b52"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": null,
+      "reference_contract": null
+    },
+    {
+      "case_id": "checkpoint_enumerated_rows",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "a9e40b9a99852ce5efbca4d3aba48fe6b66d0628c1a4b9d4114459ad70536984"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": null,
+      "reference_contract": null
+    },
+    {
+      "case_id": "checkpoint_validate_then_reverse",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "93bdc01167e85661d5e916408d836d50a8f6b5b4e783531f3a44a8f75b0bec43"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "e0a6ea218ea5d725ce7272da8d68d45a029e489423e03af6960c7bff0f7fe414"
+      },
+      "contract_policy": null,
+      "reference_contract": null
+    },
+    {
+      "case_id": "checkpoint_factor_cache",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "15c0b1f986d769d6ba80a82a23a89cd7d137a7907373168a077f3366267cf378"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "contract_policy": {
+        "baseline_sha256": "098e14c0d59c97726ac7b8b2b379a635c90d2edfe9f71de6932fdbd39333cbe3",
+        "contracts": [
+          {
+            "arguments": [
+              "name",
+              "factor",
+              "values"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_dac49f99a0.py",
+            "symbol": "Memo.fetch"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "bd9f715ca479f2c7187bb77c75606d60120a72b0ed4285da6695e00627ffc61d",
+        "policy_sha256": "2c7e184346e03435b07ad3e30266d43f6b8e33ca9b2162fbe343b982229489ba",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "factor",
+                "values"
+              ],
+              "source_file": "unit_dac49f99a0.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_operation_cache",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "1316e4d5167957ed7a397d1c42512f0f68a9b64c536c15e5163febcadf569d4c"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "contract_policy": {
+        "baseline_sha256": "d995b7ea076b9c13ce9f7768bdaf3c5262fa288caf49d5a163d1933d151e517f",
+        "contracts": [
+          {
+            "arguments": [
+              "name",
+              "mode",
+              "values"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_e1ecffe6a3.py",
+            "symbol": "Memo.fetch"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "9ff007f347b1c84589c919cd3f8aada1629725c42f5bd00fc31039940e681ef1",
+        "policy_sha256": "f0591461e26ec6f7f8baeb39429d0e384ab508d6c2a93a6f51fc29fbb26fa4bd",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "mode",
+                "values"
+              ],
+              "source_file": "unit_e1ecffe6a3.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_ambient_policy",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "0dc4254ae236185e59b0e3e6aefe106c229502ccd640131137eb017d45021d37"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "4250d1f2029068ddc50a143f438d48c0e151e05c734fe713ffea94436ecf9381"
+      },
+      "contract_policy": {
+        "baseline_sha256": "f14ba8a952dbf7a0cec01bd0f85a6e5b5899a32e18e4ea0b30d5d8aedfd74fa4",
+        "contracts": [
+          {
+            "arguments": [
+              "name",
+              "values"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_0525d40328.py",
+            "symbol": "Memo.fetch"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "98211a3d6da7c3defde4b8de5e09f2d746a598649d6797d2317577fd9c831ff4",
+        "policy_sha256": "51e1d4cde3b0229637bdeef4792104553713528bef7190492cb842fa947d69b2",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "values"
+              ],
+              "source_file": "unit_0525d40328.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_shared_namespace",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "0962117d03871656ed8f2739a78c2ca2667cd9ce98bb59a49371110ae4c6bab2"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "99cef98de12a8b8a90abbcb2033d076bfc563ea7951d4da90263da27288d16f6"
+      },
+      "contract_policy": {
+        "baseline_sha256": "0c292dc856005a3342afb840d0ec71accf39a61b28586e112797aff2494041f8",
+        "contracts": [
+          {
+            "arguments": [
+              "name",
+              "revision",
+              "values"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "unit_b38ffe65cc.py",
+            "symbol": "Memo.fetch"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "3b1bf55be99a0b917723ddb26b89244a93b9f57f1416a26cc046613aa12d398b",
+        "policy_sha256": "a6051a37e2eb030992c0cdba5173c78e49e01ae1b0d061a02b80b99b350c957a",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "name",
+                "revision",
+                "values"
+              ],
+              "source_file": "unit_b38ffe65cc.py",
+              "symbol": "Memo.fetch"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_explicit_zero_63",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "5c43b9b6d22314bd9174ae92600451eb275f424c83f55369232622795066d908"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "contract_policy": {
+        "baseline_sha256": "8a15ee5b918a569cd165d2307cb8f61655c73fa1f37e0f0bb493490f32b59e4f",
+        "contracts": [
+          {
+            "arguments": [
+              "defaults",
+              "overrides"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "component_d2117b3b.py",
+            "symbol": "configure_63"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "aedbe8a5410bc5a92bd3d505958466fcabf2deb2dd201c416119d0cd3e306e09",
+        "policy_sha256": "70c16ba6737ec7a90e0914ab00354df29a0dedd2881ee48131d0bc959ac5b50a",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "defaults",
+                "overrides"
+              ],
+              "source_file": "component_d2117b3b.py",
+              "symbol": "configure_63"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_snapshot_alias_64",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "cc698b2c3af809352c216c5cae56e38e0c43bf3db233d872ba54f005a227d65e"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+      },
+      "contract_policy": {
+        "baseline_sha256": "4e0206e72445918dae041e4a5a4efeaba0a6586d1d7ff607d8d1fc68a02f5b9f",
+        "contracts": [
+          {
+            "arguments": [
+              "settings"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "component_9b58812e.py",
+            "symbol": "Journal_64.__init__"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "84947f7aaa4aaa6dec248d9b76e7d1b26479ca3854856cb8312f7199bf51d025",
+        "policy_sha256": "4be2467b6edb533d952acdbbaab825064cf9fcc8c227e8ea89f91704fec068bf",
+        "observed_calls": 1,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 1,
+            "contract": {
+              "arguments": [
+                "settings"
+              ],
+              "source_file": "component_9b58812e.py",
+              "symbol": "Journal_64.__init__"
+            },
+            "errors": [],
+            "observed_calls": 1,
+            "violations": []
+          }
+        ],
+        "output_sha256": "4bcefcc9f6c645923b9993ccf73ad92e6b400ca25458ea14e095857fc2131342"
+      }
+    },
+    {
+      "case_id": "checkpoint_current_input_65",
+      "initial": {
+        "passed": false,
+        "valid": true,
+        "exit_code": 1,
+        "output_sha256": "4d3851a5c679d64e7503b65050b6ca556e52750e96c7ba23348be525593992b9"
+      },
+      "reference": {
+        "passed": true,
+        "valid": true,
+        "exit_code": 0,
+        "output_sha256": "c2cba0e5b1275bde99432021fd22a26635493fa35d0886fcd5cd38708b0f7cca"
+      },
+      "contract_policy": {
+        "baseline_sha256": "6a7a3383bb2a74afee8b9e0144d3fe40bc8e0558beeb07531e0ea20a689158e9",
+        "contracts": [
+          {
+            "arguments": [
+              "volume",
+              "current_width"
+            ],
+            "kind": "preserve_argument_values",
+            "scope": "After each observed public-test call, including exceptions.",
+            "source_file": "component_7da2276b.py",
+            "symbol": "Converter_65.buckets"
+          }
+        ],
+        "maximum_observed_calls": 1000,
+        "schema": "hive.public-contract-policy.v1",
+        "timeout_seconds": 10
+      },
+      "reference_contract": {
+        "schema": "hive.public-contract-result.v1",
+        "status": "PASSED",
+        "accepted": true,
+        "valid": true,
+        "candidate_sha256": "54abb2a98e0d40a6684b6f0a4e4a668c3342d63c0b850f198b1dd72fe4d33fcb",
+        "policy_sha256": "81c42ce9df51ce1a43494e7d71bb52934786f1a8ad9499e5593e10baa3dc636b",
+        "observed_calls": 3,
+        "public_test_exit_code": 0,
+        "checks": [
+          {
+            "completed_calls": 3,
+            "contract": {
+              "arguments": [
+                "volume",
+                "current_width"
+              ],
+              "source_file": "component_7da2276b.py",
+              "symbol": "Converter_65.buckets"
+            },
+            "errors": [],
+            "observed_calls": 3,
+            "violations": []
+          }
+        ],
+        "output_sha256": "a71df3ef716cabe43ead70bd8311cda3aeadcb986bea501da0ea9262f31c3925"
+      }
+    }
+  ],
+  "saved_bad_patches_rejected": 3,
+  "reference_regression_accepted": true
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "hive.lesson-bank.state.v4",
+  "study_sha256": "9efd504c03045ec8c9c9210400167d9ed667114d0fa3e405369fbc65aa597909",
+  "lessons": [
+    {
+      "rationale": "A failed test exposed that independently reordering one parallel sequence leaves positional associations corrupted, even though lengths and output shape still look valid. The efficient diagnostic is to trace the first transformation that changes ordering, inspect whether correlated fields are transformed as one unit, and use non-monotonic inputs to distinguish ordering errors from length or API errors. Advisory checks and source-location submissions are secondary; the decisive evidence is the smallest failing comparison and the expression that produced it.",
+      "summary": "When data fields are positionally correlated, preserve their associations by bundling records before applying any reordering or filtering operation.",
+      "when": "Apply this whenever multiple sequences represent fields of the same records and one operation can change their order, membership, or grouping."
+    },
+    {
+      "rationale": "When debugging iterable-processing code, trace the input's state across each consuming operation rather than relying on intermediate tool success or implementation-specific introspection. Identify the first operation that advances a possibly single-use iterable, then inspect later uses and the final source file before rerunning tests. The repair principle is to materialize the iterable once into a stable collection and use that snapshot for validation and output; avoid private or implementation-dependent mechanisms such as reduce payloads.",
+      "summary": "Consume a potentially single-use iterable exactly once, retain the materialized snapshot, and derive every later result from that snapshot. Diagnose failures by tracking iterator state and verifying the actual file and tests after edits.",
+      "when": "Use this whenever code performs multiple passes over an input that may be a generator or iterator, especially when a debugging shortcut or reported patch appears to preserve items without confirming the iterable's state."
+    },
+    {
+      "rationale": "A cache collision should be diagnosed by observing the complete key at both insertion and lookup, including values returned by any identity or normalization hook. Source-level reasoning that treats a helper result as the whole key can misidentify the cause when additional dimensions are present, while bypassing the helper may also break intended extension behavior. Compare calls that differ in exactly one required identity dimension and inspect the resulting key components before choosing a repair.",
+      "summary": "Trace and verify every cache-key component at runtime before repairing a collision, while preserving the contract of any key-generation hook.",
+      "when": "When memoized results are reused unexpectedly, compare the full stored and requested keys for calls differing by one input dimension, then adjust the key construction without discarding documented normalization or override behavior."
+    }
+  ],
+  "lesson_history": [
+    {
+      "family": "paired_sort",
+      "lesson": {
+        "rationale": "A failed test exposed that independently reordering one parallel sequence leaves positional associations corrupted, even though lengths and output shape still look valid. The efficient diagnostic is to trace the first transformation that changes ordering, inspect whether correlated fields are transformed as one unit, and use non-monotonic inputs to distinguish ordering errors from length or API errors. Advisory checks and source-location submissions are secondary; the decisive evidence is the smallest failing comparison and the expression that produced it.",
+        "summary": "When data fields are positionally correlated, preserve their associations by bundling records before applying any reordering or filtering operation.",
+        "when": "Apply this whenever multiple sequences represent fields of the same records and one operation can change their order, membership, or grouping."
+      },
+      "source_sha256": "3fc6b2f25d1d45749a099cfe5ffc23fa11ae6c096b41bef75dace74518befbf7",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 1856,
+        "output_tokens": 212
+      }
+    },
+    {
+      "family": "single_pass",
+      "lesson": {
+        "rationale": "When debugging iterable-processing code, trace the input's state across each consuming operation rather than relying on intermediate tool success or implementation-specific introspection. Identify the first operation that advances a possibly single-use iterable, then inspect later uses and the final source file before rerunning tests. The repair principle is to materialize the iterable once into a stable collection and use that snapshot for validation and output; avoid private or implementation-dependent mechanisms such as reduce payloads.",
+        "summary": "Consume a potentially single-use iterable exactly once, retain the materialized snapshot, and derive every later result from that snapshot. Diagnose failures by tracking iterator state and verifying the actual file and tests after edits.",
+        "when": "Use this whenever code performs multiple passes over an input that may be a generator or iterator, especially when a debugging shortcut or reported patch appears to preserve items without confirming the iterable's state."
+      },
+      "source_sha256": "539939ffab52b27914c45ae8ed74a1008bcde0496c05e09dbd2ddbe0c37e6c5b",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 3071,
+        "output_tokens": 227
+      }
+    },
+    {
+      "family": "versioned_cache",
+      "lesson": {
+        "rationale": "A cache collision should be diagnosed by observing the complete key at both insertion and lookup, including values returned by any identity or normalization hook. Source-level reasoning that treats a helper result as the whole key can misidentify the cause when additional dimensions are present, while bypassing the helper may also break intended extension behavior. Compare calls that differ in exactly one required identity dimension and inspect the resulting key components before choosing a repair.",
+        "summary": "Trace and verify every cache-key component at runtime before repairing a collision, while preserving the contract of any key-generation hook.",
+        "when": "When memoized results are reused unexpectedly, compare the full stored and requested keys for calls differing by one input dimension, then adjust the key construction without discarding documented normalization or override behavior."
+      },
+      "source_sha256": "b3e05cba5d46a03e8143649d0fa1fe016a5e16c644440a28d01cd402f856071e",
+      "usage": {
+        "calls": 1,
+        "prompt_tokens": 2216,
+        "output_tokens": 331
+      }
+    }
+  ],
+  "phases": [
+    {
+      "phase": 0,
+      "status": "completed"
+    }
+  ],
+  "trials": [],
+  "bank_sha256": "53e959ee24c1c0fca0be1f899ce711f2636f01c3925ed5e9df3cd4d5cb6936a4"
+}
