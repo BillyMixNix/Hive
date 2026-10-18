@@ -1,0 +1,89 @@
+{
+  "benchmark": "compressor-scale-ab-001",
+  "model": "qwen2.5-coder:3b",
+  "tokenizer": "Qwen/Qwen2.5-Coder-3B-Instruct",
+  "model_context_limit_tokens": 32768,
+  "method": "fail-closed capacity comparison; oversized Raw prompts are not silently truncated",
+  "history_design": "real failed CI evidence + actual repository text as historical tool-output filler; answer-leaking files excluded; newest human wording preserved verbatim",
+  "failed_log_source": "github_actions_job_log",
+  "eligible_repo_files": 218,
+  "targets": [50000, 100000, 500000],
+  "runs": [
+    {
+      "target_raw_tokens": 50000,
+      "measured_full_raw_prompt_tokens": 55941,
+      "measured_full_hive_prompt_tokens": 1397,
+      "full_context_tokens_saved": 54544,
+      "full_context_token_reduction_percent": 97.5,
+      "model_context_limit_tokens": 32768,
+      "raw_full_history_fits_model": false,
+      "hive_full_history_fits_model": true,
+      "capacity_extension_observed": true,
+      "raw": {
+        "status": "OVER_CONTEXT_NOT_RUN",
+        "passed": null,
+        "reason": "complete Raw prompt exceeds configured model context; silent truncation rejected"
+      },
+      "hive": {
+        "status": "RAN",
+        "text": "{\"replacement_command\":\"python -m pip install pytest requests\"}",
+        "parsed_command": "python -m pip install pytest requests",
+        "passed": true,
+        "parse_error": null,
+        "prompt_eval_count": 1443,
+        "eval_count": 13
+      }
+    },
+    {
+      "target_raw_tokens": 100000,
+      "measured_full_raw_prompt_tokens": 115039,
+      "measured_full_hive_prompt_tokens": 1397,
+      "full_context_tokens_saved": 113642,
+      "full_context_token_reduction_percent": 98.79,
+      "model_context_limit_tokens": 32768,
+      "raw_full_history_fits_model": false,
+      "hive_full_history_fits_model": true,
+      "capacity_extension_observed": true,
+      "raw": {
+        "status": "OVER_CONTEXT_NOT_RUN",
+        "passed": null,
+        "reason": "complete Raw prompt exceeds configured model context; silent truncation rejected"
+      },
+      "hive": {
+        "status": "RAN",
+        "text": "{\"replacement_command\":\"python -m pip install pytest requests\"}",
+        "parsed_command": "python -m pip install pytest requests",
+        "passed": true,
+        "parse_error": null,
+        "prompt_eval_count": 1443,
+        "eval_count": 13
+      }
+    },
+    {
+      "target_raw_tokens": 500000,
+      "measured_full_raw_prompt_tokens": 570074,
+      "measured_full_hive_prompt_tokens": 1397,
+      "full_context_tokens_saved": 568677,
+      "full_context_token_reduction_percent": 99.75,
+      "model_context_limit_tokens": 32768,
+      "raw_full_history_fits_model": false,
+      "hive_full_history_fits_model": true,
+      "capacity_extension_observed": true,
+      "raw": {
+        "status": "OVER_CONTEXT_NOT_RUN",
+        "passed": null,
+        "reason": "complete Raw prompt exceeds configured model context; silent truncation rejected"
+      },
+      "hive": {
+        "status": "RAN",
+        "text": "{\"replacement_command\":\"python -m pip install pytest requests\"}",
+        "parsed_command": "python -m pip install pytest requests",
+        "passed": true,
+        "parse_error": null,
+        "prompt_eval_count": 1443,
+        "eval_count": 13
+      }
+    }
+  ],
+  "claim_scope": "scale/capacity stress test for one coding repair task; not a general workload claim"
+}

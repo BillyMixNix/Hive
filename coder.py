@@ -940,6 +940,16 @@ class CoderAgent:
     def _allows_file_level_work(self, task, plan=None):
         if self._is_symbol_locked_task(task, plan):
             return False
+
+        metadata = (task or {}).get("metadata") or {}
+        anchor = dict(metadata.get("anchor") or {})
+        if (
+            anchor.get("target_file")
+            and not anchor.get("target_symbol")
+            and anchor.get("anchor_level") == "file"
+        ):
+            return True
+
         return self._get_work_mode(task, plan) in FILE_LEVEL_WORK_MODES
 
     def _blocked_anchor_patch(self, task, plan, target_file, reason, error_text):
