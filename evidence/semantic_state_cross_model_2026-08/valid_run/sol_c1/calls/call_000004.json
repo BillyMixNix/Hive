@@ -1,0 +1,140 @@
+{
+  "admission_error": null,
+  "batch_id": 4,
+  "call_id": "call_000004",
+  "case_ids": [
+    "DT-TA-SH",
+    "DT-EC-DL",
+    "DT-IK-SL"
+  ],
+  "condition": "SOL_C1",
+  "finished_at_utc": "2026-08-29T00:08:17.931553Z",
+  "payload_sha256": "ebc75b8b1aaa49f76a132d17f4b07bd44d159ceb617057c1214d9fe7f7d0d6bb",
+  "request": {
+    "openai_text_format": {
+      "name": "hive_labels_3",
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "answers": {
+            "items": {
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "INSUFFICIENT"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          }
+        },
+        "required": [
+          "answers"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "json_schema"
+    },
+    "openai_text_format_sha256": "b501d8bd658ad9f604caa0097de524ff04b5237371c934d4d14f279aa8c0fe1b",
+    "prompt": "HIVE SYSTEM COMPARISON v1 — FROZEN SOLVER\n\nSolve each independent synthetic world using only its supplied representation.\nEffective time determines chronology; record time is only arrival order.\nOnly canonical, completed actual/observation/message events with satisfied\npreconditions can change current truth or knowledge. Plans, rumors, claims,\nattempts, future events, and unsatisfied effects must not be promoted.\n\nA full verbose packet uses named event fields. A compact packet contains\nrecord_columns plus positional records: read every position only by its named\ncolumn. Possible compact columns are ref, effective_t, record_t, kind,\nauthority, status, requires, and effects. Missing columns were not supplied;\ndo not reconstruct them as facts. Compact codes, when present: kind A=actual,\nP=plan, R=rumor, C=claim, O=observation, M=message; authority K=canonical,\nN=noncanonical; status C=completed, P=planned, A=attempted, R=reported.\nrequires=[key,operator,value] and effects=[operator,key,value]. The relative\narray order is preserved but does not replace effective chronology.\n\nReturn one answer value per supplied case, in the same order. The constrained\nresponse contains one field named answers, whose array contains only A, B, C,\nD, or INSUFFICIENT. Use INSUFFICIENT only when the supplied representation\ncannot support one option. Return no case IDs, answer text, reasoning, or prose.\n\nINPUT:\n{\n  \"cases\": [\n    {\n      \"candidate_current_claims\": [\n        {\n          \"claim_id\": \"c_16901e39c\",\n          \"statement\": \"Daro\"\n        },\n        {\n          \"claim_id\": \"c_005be6b9e\",\n          \"statement\": \"Hale\"\n        },\n        {\n          \"claim_id\": \"c_b94a56a17\",\n          \"statement\": \"Bex\"\n        },\n        {\n          \"claim_id\": \"c_b36b2d0a7\",\n          \"statement\": \"Fenn\"\n        }\n      ],\n      \"case_id\": \"DT-TA-SH\",\n      \"options\": {\n        \"A\": \"Daro\",\n        \"B\": \"Hale\",\n        \"C\": \"Bex\",\n        \"D\": \"Fenn\"\n      },\n      \"query_effective_time\": 6,\n      \"question\": \"Who canonically owns SealFF29 at effective time T6?\",\n      \"representation\": {\n        \"format\": \"compact_named_columns_frontier_v1\",\n        \"record_columns\": [\n          \"ref\",\n          \"effective_t\",\n          \"kind\",\n          \"authority\",\n          \"status\",\n          \"requires\",\n          \"effects\"\n        ],\n        \"records\": [\n          [\n            \"e_19f4b54e5\",\n            0,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"owner:SealFF29\",\n                \"Daro\"\n              ]\n            ]\n          ],\n          [\n            \"e_0a31eea6b\",\n            1,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"permit:SealFF29:1\",\n                true\n              ]\n            ]\n          ],\n          [\n            \"e_2fa1adde5\",\n            2,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"permit:SealFF29:2\",\n                true\n              ]\n            ]\n          ],\n          [\n            \"e_9aa715640\",\n            3,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"permit:SealFF29:3\",\n                true\n              ]\n            ]\n          ],\n          [\n            \"e_277d90f03\",\n            6,\n            \"A\",\n            \"K\",\n            \"C\",\n            [\n              [\n                \"owner:SealFF29\",\n                \"eq\",\n                \"Daro\"\n              ],\n              [\n                \"permit:SealFF29:1\",\n                \"eq\",\n                true\n              ],\n              [\n                \"permit:SealFF29:2\",\n                \"eq\",\n                true\n              ],\n              [\n                \"permit:SealFF29:3\",\n                \"eq\",\n                true\n              ]\n            ],\n            [\n              [\n                \"set\",\n                \"owner:SealFF29\",\n                \"Hale\"\n              ]\n            ]\n          ],\n          [\n            \"e_f71554111\",\n            9,\n            \"A\",\n            \"K\",\n            \"C\",\n            [\n              [\n                \"owner:SealFF29\",\n                \"eq\",\n                \"Hale\"\n              ]\n            ],\n            [\n              [\n                \"set\",\n                \"owner:SealFF29\",\n                \"Fenn\"\n              ]\n            ]\n          ],\n          [\n            \"e_68891fd8f\",\n            1,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"owner:SealFF29\",\n                \"Bex\"\n              ]\n            ]\n          ],\n          [\n            \"e_1d7be7edb\",\n            3,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:8\",\n                8\n              ]\n            ]\n          ],\n          [\n            \"e_2f7b56de2\",\n            19,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:9\",\n                9\n              ]\n            ]\n          ],\n          [\n            \"e_0dc4b9371\",\n            26,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:10\",\n                10\n              ]\n            ]\n          ],\n          [\n            \"e_2bc5e86d1\",\n            19,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:11\",\n                11\n              ]\n            ]\n          ],\n          [\n            \"e_fe47a86fc\",\n            21,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:12\",\n                12\n              ]\n            ]\n          ],\n          [\n            \"e_9ebe6b6ae\",\n            17,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:13\",\n                13\n              ]\n            ]\n          ],\n          [\n            \"e_88fc50b8d\",\n            22,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:14\",\n                14\n              ]\n            ]\n          ],\n          [\n            \"e_0f212b174\",\n            9,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:15\",\n                15\n              ]\n            ]\n          ],\n          [\n            \"e_6b075fc7b\",\n            13,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:16\",\n                16\n              ]\n            ]\n          ],\n          [\n            \"e_6cf1518e6\",\n            6,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:17\",\n                17\n              ]\n            ]\n          ],\n          [\n            \"e_a4298e60d\",\n            22,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:18\",\n                18\n              ]\n            ]\n          ],\n          [\n            \"e_830430c5c\",\n            2,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:19\",\n                19\n              ]\n            ]\n          ],\n          [\n            \"e_8ff39317f\",\n            24,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-TA-SH:20\",\n                20\n              ]\n            ]\n          ]\n        ]\n      }\n    },\n    {\n      \"candidate_current_claims\": [\n        {\n          \"claim_id\": \"c_b77ccb202\",\n          \"statement\": \"balance=7|obligation=4|xp=1|key=False\"\n        },\n        {\n          \"claim_id\": \"c_cc6e79339\",\n          \"statement\": \"balance=17|obligation=0|xp=1|key=False\"\n        },\n        {\n          \"claim_id\": \"c_260f901c1\",\n          \"statement\": \"balance=0|obligation=1|xp=1|key=True\"\n        },\n        {\n          \"claim_id\": \"c_27689cb1c\",\n          \"statement\": \"balance=7|obligation=1|xp=1|key=False\"\n        }\n      ],\n      \"case_id\": \"DT-EC-DL\",\n      \"options\": {\n        \"A\": \"balance=7|obligation=4|xp=1|key=False\",\n        \"B\": \"balance=17|obligation=0|xp=1|key=False\",\n        \"C\": \"balance=0|obligation=1|xp=1|key=True\",\n        \"D\": \"balance=7|obligation=1|xp=1|key=False\"\n      },\n      \"query_effective_time\": 2,\n      \"question\": \"What is Eli's canonical balance, remaining O6177, XP, and key ownership at T2?\",\n      \"representation\": {\n        \"format\": \"compact_named_columns_frontier_v1\",\n        \"record_columns\": [\n          \"ref\",\n          \"effective_t\",\n          \"kind\",\n          \"authority\",\n          \"status\",\n          \"requires\",\n          \"effects\"\n        ],\n        \"records\": [\n          [\n            \"e_a2d5b2955\",\n            0,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"balance:Eli\",\n                5\n              ],\n              [\n                \"set\",\n                \"obligation:O6177\",\n                4\n              ],\n              [\n                \"set\",\n                \"xp:Eli\",\n                0\n              ],\n              [\n                \"set\",\n                \"asset:Eli:key\",\n                false\n              ]\n            ]\n          ],\n          [\n            \"e_c8fb56f25\",\n            1,\n            \"A\",\n            \"K\",\n            \"C\",\n            [\n              [\n                \"balance:Eli\",\n                \"eq\",\n                5\n              ]\n            ],\n            [\n              [\n                \"set\",\n                \"balance:Eli\",\n                10\n              ],\n              [\n                \"set\",\n                \"xp:Eli\",\n                1\n              ]\n            ]\n          ],\n          [\n            \"e_2440df38b\",\n            2,\n            \"A\",\n            \"K\",\n            \"C\",\n            [\n              [\n                \"balance:Eli\",\n                \"eq\",\n                10\n              ],\n              [\n                \"obligation:O6177\",\n                \"eq\",\n                4\n              ]\n            ],\n            [\n              [\n                \"set\",\n                \"balance:Eli\",\n                7\n              ],\n              [\n                \"set\",\n                \"obligation:O6177\",\n                1\n              ]\n            ]\n          ],\n          [\n            \"e_1a25ddb0d\",\n            2,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"inc\",\n                \"balance:Eli\",\n                10\n              ]\n            ]\n          ],\n          [\n            \"e_3de8aec61\",\n            2,\n            \"C\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"obligation:O6177\",\n                0\n              ]\n            ]\n          ],\n          [\n            \"e_dca7fc904\",\n            27,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-EC-DL:6\",\n                6\n              ]\n            ]\n          ],\n          [\n            \"e_5ee5dafa3\",\n            3,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-EC-DL:7\",\n                7\n              ]\n            ]\n          ],\n          [\n            \"e_c08de0f51\",\n            28,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-EC-DL:8\",\n                8\n              ]\n            ]\n          ]\n        ]\n      }\n    },\n    {\n      \"candidate_current_claims\": [\n        {\n          \"claim_id\": \"c_ce4b79022\",\n          \"statement\": \"truth=Hale@Vault|known=Hale@UNKNOWN\"\n        },\n        {\n          \"claim_id\": \"c_a5f025997\",\n          \"statement\": \"truth=Bex@Vault|known=Bex@Vault\"\n        },\n        {\n          \"claim_id\": \"c_a889c3f70\",\n          \"statement\": \"truth=Hale@Vault|known=UNKNOWN@UNKNOWN\"\n        },\n        {\n          \"claim_id\": \"c_f007ed119\",\n          \"statement\": \"truth=Hale@Vault|known=Hale@Vault\"\n        }\n      ],\n      \"case_id\": \"DT-IK-SL\",\n      \"options\": {\n        \"A\": \"truth=Hale@Vault|known=Hale@UNKNOWN\",\n        \"B\": \"truth=Bex@Vault|known=Bex@Vault\",\n        \"C\": \"truth=Hale@Vault|known=UNKNOWN@UNKNOWN\",\n        \"D\": \"truth=Hale@Vault|known=Hale@Vault\"\n      },\n      \"query_effective_time\": 1,\n      \"question\": \"At T1, what is the actual owner/location of KeyC08C, and what owner/location does Eli know?\",\n      \"representation\": {\n        \"format\": \"compact_named_columns_frontier_v1\",\n        \"record_columns\": [\n          \"ref\",\n          \"effective_t\",\n          \"kind\",\n          \"authority\",\n          \"status\",\n          \"requires\",\n          \"effects\"\n        ],\n        \"records\": [\n          [\n            \"e_7cac6a6ae\",\n            0,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"owner:KeyC08C\",\n                \"Hale\"\n              ],\n              [\n                \"set\",\n                \"location:KeyC08C\",\n                \"Vault\"\n              ]\n            ]\n          ],\n          [\n            \"e_ec2dcbd2d\",\n            1,\n            \"O\",\n            \"K\",\n            \"C\",\n            [\n              [\n                \"owner:KeyC08C\",\n                \"eq\",\n                \"Hale\"\n              ]\n            ],\n            [\n              [\n                \"set\",\n                \"knows:Eli:owner:KeyC08C\",\n                \"Hale\"\n              ],\n              [\n                \"set\",\n                \"knows:Eli:location:KeyC08C\",\n                \"Vault\"\n              ]\n            ]\n          ],\n          [\n            \"e_9fe0579b9\",\n            1,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"owner:KeyC08C\",\n                \"Bex\"\n              ]\n            ]\n          ],\n          [\n            \"e_5baf02114\",\n            2,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"knows:Eli:owner:KeyC08C\",\n                \"Bex\"\n              ]\n            ]\n          ],\n          [\n            \"e_8a8254545\",\n            7,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:5\",\n                5\n              ]\n            ]\n          ],\n          [\n            \"e_be47ba006\",\n            22,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:6\",\n                6\n              ]\n            ]\n          ],\n          [\n            \"e_ba498170e\",\n            6,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:7\",\n                7\n              ]\n            ]\n          ],\n          [\n            \"e_9c880b6c5\",\n            15,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:8\",\n                8\n              ]\n            ]\n          ],\n          [\n            \"e_af134c674\",\n            8,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:9\",\n                9\n              ]\n            ]\n          ],\n          [\n            \"e_860c3719a\",\n            16,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:10\",\n                10\n              ]\n            ]\n          ],\n          [\n            \"e_4fa24d572\",\n            1,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:11\",\n                11\n              ]\n            ]\n          ],\n          [\n            \"e_ed623c3ac\",\n            14,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:12\",\n                12\n              ]\n            ]\n          ],\n          [\n            \"e_12833adb8\",\n            13,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:13\",\n                13\n              ]\n            ]\n          ],\n          [\n            \"e_a23e973ec\",\n            18,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:14\",\n                14\n              ]\n            ]\n          ],\n          [\n            \"e_10195029e\",\n            24,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:15\",\n                15\n              ]\n            ]\n          ],\n          [\n            \"e_3b25caffc\",\n            15,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:16\",\n                16\n              ]\n            ]\n          ],\n          [\n            \"e_3f9396dc8\",\n            21,\n            \"R\",\n            \"N\",\n            \"R\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:17\",\n                17\n              ]\n            ]\n          ],\n          [\n            \"e_17791dc24\",\n            4,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:18\",\n                18\n              ]\n            ]\n          ],\n          [\n            \"e_b3e38febf\",\n            10,\n            \"A\",\n            \"K\",\n            \"C\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:19\",\n                19\n              ]\n            ]\n          ],\n          [\n            \"e_568969d73\",\n            18,\n            \"P\",\n            \"N\",\n            \"P\",\n            [],\n            [\n              [\n                \"set\",\n                \"decoy:DT-IK-SL:20\",\n                20\n              ]\n            ]\n          ]\n        ]\n      }\n    }\n  ],\n  \"representation_family\": \"compact_named_column_records\"\n}\n",
+    "prompt_sha256": "a68ea223e2a1e256162922d8f926f7e401348be14865590dcd715799606e760e",
+    "solver_config": {
+      "api": "responses",
+      "max_attempts": 1,
+      "max_output_tokens": 16384,
+      "model": "gpt-5.6-sol",
+      "prompt_cache_mode": "explicit",
+      "provider": "openai",
+      "provider_fallback": false,
+      "reasoning_context": "current_turn",
+      "reasoning_effort": "medium",
+      "sdk_max_retries": 0,
+      "service_tier": "default",
+      "store": false,
+      "timeout_seconds": 900,
+      "tool_permissions": [],
+      "truncation": "disabled"
+    },
+    "solver_config_sha256": "04b279997f7f4789a57c4c399622eccefe8f4dbfdf368bec404f1c7bba8f2422"
+  },
+  "response": {
+    "raw_text": "{\"answers\":[\"B\",\"D\",\"D\"]}",
+    "sha256": "7ed37e6c53dcf2a7029892fb52ffb4a2cffb758df68b286242f6d45871d53c15"
+  },
+  "schema_version": 1,
+  "sequence": 4,
+  "stage": "replication_001",
+  "started_at_utc": "2026-08-29T00:08:16.194888Z",
+  "status": "completed",
+  "transport_error": null,
+  "transport_metadata": {
+    "adapter_status": "completed",
+    "api": "responses",
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 0,
+    "configuration_hash": "04b279997f7f4789a57c4c399622eccefe8f4dbfdf368bec404f1c7bba8f2422",
+    "incomplete_details": null,
+    "input_tokens": 4575,
+    "latency_seconds": 1.731769500001974,
+    "max_attempts": 1,
+    "max_output_tokens": 16384,
+    "model": "gpt-5.6-sol",
+    "openai_text_format": {
+      "name": "hive_labels_3",
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "answers": {
+            "items": {
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "INSUFFICIENT"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array"
+          }
+        },
+        "required": [
+          "answers"
+        ],
+        "type": "object"
+      },
+      "strict": true,
+      "type": "json_schema"
+    },
+    "openai_text_format_sha256": "b501d8bd658ad9f604caa0097de524ff04b5237371c934d4d14f279aa8c0fe1b",
+    "output_tokens": 21,
+    "physical_attempts": 1,
+    "prompt_cache_mode": "explicit",
+    "provider": "openai",
+    "provider_fallback": false,
+    "reasoning_context": "current_turn",
+    "reasoning_effort": "medium",
+    "reasoning_tokens": 0,
+    "requested_model": "gpt-5.6-sol",
+    "response_error": null,
+    "response_id": "resp_0cb2b921784e8eb5016a9222f0799487d0939bf5565beec744",
+    "response_status": "completed",
+    "returned_model": "gpt-5.6-sol",
+    "returned_service_tier": "default",
+    "sdk_max_retries": 0,
+    "sdk_version": "3.3.1",
+    "service_tier": "default",
+    "store": false,
+    "timeout_seconds": 900,
+    "tool_permissions": [],
+    "total_tokens": 4596,
+    "truncation": "disabled"
+  }
+}

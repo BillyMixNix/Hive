@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "pack_id": "hive-decompression-smoke-001",
+  "description": "Twenty preregistered synthetic temporal/causal cases: five domains by four load contrasts.",
+  "cases": [
+    {"case_id": "DT-TA-DL", "family": "temporal_authority", "load": "distractor_low",  "event_count": 8,  "support_depth": 3, "seed": 1101, "correct_slot": "C"},
+    {"case_id": "DT-TA-DH", "family": "temporal_authority", "load": "distractor_high", "event_count": 32, "support_depth": 3, "seed": 1102, "correct_slot": "A"},
+    {"case_id": "DT-TA-SL", "family": "temporal_authority", "load": "support_low",    "event_count": 20, "support_depth": 2, "seed": 1103, "correct_slot": "D"},
+    {"case_id": "DT-TA-SH", "family": "temporal_authority", "load": "support_high",   "event_count": 20, "support_depth": 5, "seed": 1104, "correct_slot": "B"},
+
+    {"case_id": "DT-CO-DL", "family": "containment",        "load": "distractor_low",  "event_count": 8,  "support_depth": 3, "seed": 2201, "correct_slot": "B"},
+    {"case_id": "DT-CO-DH", "family": "containment",        "load": "distractor_high", "event_count": 32, "support_depth": 3, "seed": 2202, "correct_slot": "D"},
+    {"case_id": "DT-CO-SL", "family": "containment",        "load": "support_low",    "event_count": 20, "support_depth": 2, "seed": 2203, "correct_slot": "A"},
+    {"case_id": "DT-CO-SH", "family": "containment",        "load": "support_high",   "event_count": 20, "support_depth": 5, "seed": 2204, "correct_slot": "C"},
+
+    {"case_id": "DT-TR-DL", "family": "transformation",     "load": "distractor_low",  "event_count": 8,  "support_depth": 3, "seed": 3301, "correct_slot": "A"},
+    {"case_id": "DT-TR-DH", "family": "transformation",     "load": "distractor_high", "event_count": 32, "support_depth": 3, "seed": 3302, "correct_slot": "C"},
+    {"case_id": "DT-TR-SL", "family": "transformation",     "load": "support_low",    "event_count": 20, "support_depth": 2, "seed": 3303, "correct_slot": "B"},
+    {"case_id": "DT-TR-SH", "family": "transformation",     "load": "support_high",   "event_count": 20, "support_depth": 5, "seed": 3304, "correct_slot": "D"},
+
+    {"case_id": "DT-EC-DL", "family": "economics_obligations", "load": "distractor_low",  "event_count": 8,  "support_depth": 3, "seed": 4401, "correct_slot": "D"},
+    {"case_id": "DT-EC-DH", "family": "economics_obligations", "load": "distractor_high", "event_count": 32, "support_depth": 3, "seed": 4402, "correct_slot": "B"},
+    {"case_id": "DT-EC-SL", "family": "economics_obligations", "load": "support_low",    "event_count": 20, "support_depth": 2, "seed": 4403, "correct_slot": "C"},
+    {"case_id": "DT-EC-SH", "family": "economics_obligations", "load": "support_high",   "event_count": 20, "support_depth": 5, "seed": 4404, "correct_slot": "A"},
+
+    {"case_id": "DT-IK-DL", "family": "intent_knowledge",   "load": "distractor_low",  "event_count": 8,  "support_depth": 3, "seed": 5501, "correct_slot": "B"},
+    {"case_id": "DT-IK-DH", "family": "intent_knowledge",   "load": "distractor_high", "event_count": 32, "support_depth": 3, "seed": 5502, "correct_slot": "A"},
+    {"case_id": "DT-IK-SL", "family": "intent_knowledge",   "load": "support_low",    "event_count": 20, "support_depth": 2, "seed": 5503, "correct_slot": "D"},
+    {"case_id": "DT-IK-SH", "family": "intent_knowledge",   "load": "support_high",   "event_count": 20, "support_depth": 5, "seed": 5504, "correct_slot": "C"}
+  ],
+  "batches": [
+    {"batch_id": 1, "case_ids": ["DT-TA-DL", "DT-CO-DH", "DT-TR-SL", "DT-EC-SH"], "condition_order": ["raw", "retrieval", "compressed"]},
+    {"batch_id": 2, "case_ids": ["DT-TA-DH", "DT-CO-SL", "DT-TR-SH", "DT-IK-DL"], "condition_order": ["raw", "compressed", "retrieval"]},
+    {"batch_id": 3, "case_ids": ["DT-TA-SL", "DT-TR-DL", "DT-IK-DH"], "condition_order": ["retrieval", "raw", "compressed"]},
+    {"batch_id": 4, "case_ids": ["DT-TA-SH", "DT-EC-DL", "DT-IK-SL"], "condition_order": ["retrieval", "compressed", "raw"]},
+    {"batch_id": 5, "case_ids": ["DT-CO-DL", "DT-TR-DH", "DT-EC-SL"], "condition_order": ["compressed", "raw", "retrieval"]},
+    {"batch_id": 6, "case_ids": ["DT-CO-SH", "DT-EC-DH", "DT-IK-SH"], "condition_order": ["compressed", "retrieval", "raw"]}
+  ],
+  "ablation": {
+    "essential_case_ids": ["DT-TA-SH", "DT-CO-SH", "DT-TR-SH", "DT-EC-SH", "DT-IK-SH"],
+    "control_case_ids": ["DT-TA-SH", "DT-CO-SH", "DT-TR-SH", "DT-EC-SH", "DT-IK-SH"],
+    "counterbalanced_calls": [
+      [
+        {"case_id": "DT-CO-SH", "role": "control"},
+        {"case_id": "DT-IK-SH", "role": "essential"},
+        {"case_id": "DT-TA-SH", "role": "essential"},
+        {"case_id": "DT-TR-SH", "role": "control"},
+        {"case_id": "DT-EC-SH", "role": "essential"}
+      ],
+      [
+        {"case_id": "DT-IK-SH", "role": "control"},
+        {"case_id": "DT-CO-SH", "role": "essential"},
+        {"case_id": "DT-TA-SH", "role": "control"},
+        {"case_id": "DT-TR-SH", "role": "essential"},
+        {"case_id": "DT-EC-SH", "role": "control"}
+      ]
+    ]
+  }
+}
