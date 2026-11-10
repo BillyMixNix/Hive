@@ -1,0 +1,1 @@
+GROW-0 runtime state is created under grow/state/ and is intentionally not committed as experiment evidence before a run. Lineage and rejection ledgers are append-only hash-chained JSONL; generation/run artifacts are controller-owned and are never copied into candidate workspaces.

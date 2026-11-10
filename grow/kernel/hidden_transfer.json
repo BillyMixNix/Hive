@@ -1,0 +1,14 @@
+{
+  "bundle_id": "grow0-provenance-transfer-v1",
+  "case_id": "transfer-live-over-cache-01",
+  "goal": "A repair step must choose the value belonging to the active operation rather than stale stored state.",
+  "stored_value": -18,
+  "current_value": 206,
+  "expected_source": "current",
+  "expected_value": 206,
+  "failure_class": "state_provenance_loss",
+  "surface_labels": {
+    "stored": "cached_reference",
+    "current": "runtime_observation"
+  }
+}
