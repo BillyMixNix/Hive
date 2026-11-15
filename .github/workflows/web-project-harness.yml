@@ -1,0 +1,61 @@
+name: Web Project Harness
+
+on:
+  pull_request:
+    paths:
+      - 'hive/project_harness/**'
+      - '.github/workflows/web-project-harness.yml'
+  workflow_dispatch:
+
+jobs:
+  harness-self-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Playwright
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Create deterministic harness fixture
+        run: |
+          mkdir -p .hive/harness-fixture
+          cat > .hive/harness-fixture/index.html <<'EOF'
+          <!doctype html><html><body>
+          <h1>Hive Harness Fixture</h1>
+          <button id="advance" onclick="document.querySelector('#state').textContent='observed'">Advance</button>
+          <div id="state">ready</div>
+          </body></html>
+          EOF
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('.hive/harness-fixture/index.html').resolve()
+          manifest={
+            'candidate':'harness-self-test',
+            'entrypoint':str(p),
+            'viewport':{'width':412,'height':915},
+            'steps':[
+              {'action':'assert_no_page_errors','name':'fixture boots cleanly'},
+              {'action':'assert_text','text':'Hive Harness Fixture','exact':True,'name':'fixture visible'},
+              {'action':'screenshot','name':'boot'},
+              {'action':'click_text','text':'Advance','exact':True},
+              {'action':'assert_text','text':'observed','exact':True,'name':'interaction changes state'},
+              {'action':'screenshot','name':'after-interaction'}
+            ]
+          }
+          Path('.hive/harness-fixture/manifest.json').write_text(json.dumps(manifest,indent=2))
+          PY
+      - name: Run harness self-test
+        run: python hive/project_harness/web_harness.py .hive/harness-fixture/manifest.json --out .hive/observations/self-test
+      - name: Upload observation bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-harness-observation
+          path: .hive/observations/self-test
+          if-no-files-found: error
