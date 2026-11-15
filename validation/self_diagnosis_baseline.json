@@ -1,0 +1,30 @@
+{
+  "run_id": "baseline-regression-path-aliasing",
+  "goal": "Preserve historical failures as precise executable regression evidence.",
+  "observed": "Regression target selection treats any two files with the same basename as equivalent.",
+  "expected": "When a regression records a repository-relative path, it should run only for that logical path; basename matching should be reserved for callers that provide only a basename.",
+  "divergence": "The current _case_matches_target predicate returns true for exact normalized path equality OR basename equality, so pkg_a/router.py can select a case recorded for pkg_b/router.py.",
+  "contributing_component": "regression_gate._case_matches_target",
+  "scope": "systemic",
+  "cause": "The regression gate lacks a distinction between path-qualified and basename-only target requests.",
+  "proposed_change": "Change matching so path-qualified requested targets require exact normalized path equality while basename-only requests retain basename compatibility.",
+  "expected_improvement": "Path-specific regression memory stops leaking across unrelated same-named modules without breaking existing basename-only gate callers.",
+  "risks": [
+    "A caller may currently pass a path-qualified target while relying on accidental basename fallback.",
+    "Candidate-file invocation must preserve the logical repository path instead of replacing it with a temporary workspace path."
+  ],
+  "falsification_test": "Create two recorded cases targeting pkg_a/router.py and pkg_b/router.py. Request pkg_a/router.py and assert only the first loads; request router.py and assert both load for backward-compatible basename-only behavior.",
+  "evidence": [
+    {
+      "source": "source-inspection",
+      "observation": "_case_matches_target currently returns case_target == requested or Path(case_target).name == Path(requested).name.",
+      "artifact": "regression_gate.py"
+    },
+    {
+      "source": "repository-contract",
+      "observation": "RegressionCase.target_file is normalized and persisted as a logical target, so directory identity is available to the gate.",
+      "artifact": "regression_gate.py"
+    }
+  ],
+  "confidence": 0.99
+}
