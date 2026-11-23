@@ -15,7 +15,7 @@ import urllib.request
 from research.recursive_improvement.container_runner import ContainerRunner, Limits
 from research.recursive_improvement.experiment1.run import (
     baseline_agents, digest, evaluate_cases, generation_context, recorded_regressions,
-    security_checks, snapshot, stage_patch, strict_json, summarize_generation_cost, write,
+    snapshot, stage_patch, strict_json, summarize_generation_cost, write,
 )
 from research.recursive_improvement.gate import Trial, evaluate_candidate
 from research.recursive_improvement.integration import CandidatePolicy, propose_candidate
@@ -27,6 +27,44 @@ from research.recursive_improvement.experiment2.structured import (
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
+
+
+def memory_limit_confirmed(run, memory_mb):
+    if run.status == 'oom' and run.oom_killed:
+        return True
+    if run.status != 'completed' or run.exit_code != 0:
+        return False
+    try:
+        data = strict_json(run.stdout)
+        return (data.get('child_signal') == 9 and type(data.get('oom_kill_count')) is int
+                and data['oom_kill_count'] > 0 and data.get('memory_max') == memory_mb * 1024**2
+                and data.get('evidence_source') == 'cgroup_v2_memory_events')
+    except (ValueError, TypeError, AttributeError):
+        return False
+
+
+def security_checks(runner, baseline, output):
+    probe = runner.run(baseline, 'probe')
+    write(output / 'security-effective-policy.json', asdict(probe))
+    if probe.status != 'completed':
+        raise RuntimeError('Effective sandbox probe failed')
+    data = strict_json(probe.stdout)
+    quota, period = data['cpu_max'].split()
+    ok = (data['uid'] == 65534 and all(data['denied'].values())
+          and 'CapEff:\t0000000000000000' in data['status'] and 'NoNewPrivs:\t1' in data['status']
+          and 'Seccomp:\t2' in data['status'] and int(data['memory_max']) == runner.limits.memory_mb * 1024**2
+          and int(data['pids_max']) == runner.limits.pids and quota != 'max'
+          and int(quota) / int(period) == runner.limits.cpus and not data['credentials'] and not data['docker_socket'])
+    if not ok:
+        raise RuntimeError('Effective sandbox policy mismatch')
+    short = ContainerRunner(runner.image, runner.harness, replace(runner.limits, wall_seconds=3, output_bytes=16384))
+    runs = {'hang': short.run(baseline, 'hang'), 'flood': short.run(baseline, 'flood'), 'oom': runner.run(baseline, 'oom')}
+    for name, run in runs.items():
+        write(output / f'security-{name}.json', asdict(run))
+    if runs['hang'].status != 'timeout' or runs['flood'].status != 'output_limit' or not memory_limit_confirmed(runs['oom'], runner.limits.memory_mb):
+        raise RuntimeError('Sandbox limit enforcement could not be independently confirmed')
+    return {'passed': True, 'effective_policy': data, **{n: asdict(r) for n, r in runs.items()},
+            'memory_probe': 'Trusted parent observes child SIGKILL plus positive kernel cgroup oom_kill count and exact memory.max. Exit 137 alone is insufficient.'}
 
 
 class ExperimentRunner(ContainerRunner):

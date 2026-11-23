@@ -13,6 +13,13 @@ from new calls. This repair was selected after inspecting plans, before any
 candidate or held-out result; it is not an independent replication or an unchanged
 protocol rerun. Original artifacts, including the failure, must remain available.
 
+A continuation preflight (45281574396) stopped before new inference when a memory
+stress process exited 137 but Docker reported `OOMKilled: false`. Its cause was
+not assumed. The trusted memory probe now keeps a small parent alive and requires
+a child SIGKILL, a positive kernel cgroup `oom_kill` counter, and the exact memory
+limit. Exit 137 alone still fails. CPU, memory, PID, filesystem and time limits are
+unchanged; this is an evidence-collection repair before candidate execution.
+
 This is a new frozen feasibility cohort on the original baseline
 `87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb`. Experiment 1 evidence is unchanged.
 The selected target remains `PlannerAgent._extract_json_object` in `planner.py`.

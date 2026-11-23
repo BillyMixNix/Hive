@@ -7,7 +7,8 @@ from unittest.mock import patch
 from research.recursive_improvement.experiment2.structured import (
     compact_prompt, hive_plan, method_to_contract, validate_plan,
 )
-from research.recursive_improvement.experiment2.run import cost_report, StructuredTransport
+from research.recursive_improvement.experiment2.run import cost_report, StructuredTransport, memory_limit_confirmed
+from research.recursive_improvement.container_runner import Run
 from research.recursive_improvement.experiment2.regression_adapter import fixture_path_class
 from validation.variant import apply_unified_diff
 
@@ -92,6 +93,15 @@ class Experiment2Tests(unittest.TestCase):
             self.assertTrue(calls[0]['replayed'])
             self.assertEqual(calls[0]['prompt_eval_count'], 601)
             self.assertEqual(json.loads(result)['tasks'][0]['target_file'], 'planner.py')
+
+    def test_memory_probe_requires_kernel_evidence_not_just_sigkill(self):
+        data = {'child_signal': 9, 'oom_kill_count': 1, 'memory_max': 256 * 1024**2,
+                'evidence_source': 'cgroup_v2_memory_events'}
+        good = Run('completed', 0, json.dumps(data), 10, False, None)
+        self.assertTrue(memory_limit_confirmed(good, 256))
+        for change in ({'oom_kill_count':0}, {'child_signal':15}, {'memory_max':512*1024**2}):
+            self.assertFalse(memory_limit_confirmed(Run('completed',0,json.dumps({**data,**change}),10,False,None),256))
+        self.assertFalse(memory_limit_confirmed(Run('error',137,'',10,False,None),256))
 
 
 if __name__ == "__main__":

@@ -28,9 +28,18 @@ def main():
         while True:
             print("x" * 8192, flush=True)
     if mode == "oom":
-        blocks = []
-        while True:
-            blocks.append(bytearray(8 * 1024**2))
+        child = os.fork()
+        if child == 0:
+            blocks = []
+            while True:
+                blocks.append(bytearray(8 * 1024**2))
+        _, status = os.waitpid(child, 0)
+        events = dict(line.split() for line in Path('/sys/fs/cgroup/memory.events').read_text().splitlines())
+        emit({'child_signal': os.WTERMSIG(status) if os.WIFSIGNALED(status) else None,
+              'oom_kill_count': int(events.get('oom_kill', 0)),
+              'memory_max': int(Path('/sys/fs/cgroup/memory.max').read_text()),
+              'evidence_source': 'cgroup_v2_memory_events'})
+        return
     if mode == "probe":
         denied = {}
         for name, path in {"source": "/subject/planner.py", "harness": "/harness/worker.py",
