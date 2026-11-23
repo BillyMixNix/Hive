@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from research.recursive_improvement.container_runner import ContainerRunner, Limits, SandboxUnavailable
-from research.recursive_improvement.experiment1.run import generation_context, restrict_method, score, stage_patch
+from research.recursive_improvement.experiment1.run import generation_context, restrict_method, score, stage_patch, summarize_generation_cost
 from research.recursive_improvement.gate import Trial, evaluate_candidate
 
 
@@ -137,6 +137,20 @@ class BoundaryTests(unittest.TestCase):
         for value in (float("nan"), float("inf"), True):
             with self.assertRaises(ValueError):
                 evaluate_candidate([], [], min_accuracy_gain=value)
+
+    def test_interrupted_model_usage_is_unknown_rather_than_zero(self):
+        known = {"status": "completed", "prompt_eval_count": 10, "eval_count": 5, "wall_ms": 100}
+        partial = {"status": "RemoteDisconnected", "wall_ms": 50}
+        cost = summarize_generation_cost([known, partial])
+        self.assertIsNone(cost["prompt_tokens"])
+        self.assertIsNone(cost["output_tokens"])
+        self.assertFalse(cost["token_usage_complete"])
+        self.assertEqual(cost["known_prompt_tokens"], 10)
+        self.assertEqual(cost["known_output_tokens"], 5)
+        self.assertEqual(cost["wall_ms"], 150)
+        cost = summarize_generation_cost([known])
+        self.assertTrue(cost["token_usage_complete"])
+        self.assertEqual((cost["prompt_tokens"], cost["output_tokens"]), (10, 5))
 
 
 if __name__ == "__main__":

@@ -49,12 +49,32 @@ No threshold was relaxed after observing results.
 | Candidate correctness, latency, regressions | Not evaluated: no valid candidate | Not evaluated: no valid candidate |
 | Promotion | Disabled | Disabled |
 
-Across both generation attempts: **4 calls, 11,647 prompt tokens, 2,797 output
+Across the two completed planned generation attempts: **4 calls, 11,647 prompt tokens, 2,797 output
 tokens, 277.853 seconds of model-call wall time, and $0 paid API charges**.
 The model ran locally on the GitHub VM. Dollar compute cost and independently
 measured CPU/energy cost are unknown. Downloads, infrastructure attempts and CI
 are not included in that inference-time total. Zero API fees do not establish zero
 cost or satisfaction of a complete lifecycle cost budget.
+
+After those measurements were committed, GitHub's PR-wide path filter launched
+an unintended duplicate, run
+[45265703389](https://github.com/BillyMixNix/Hive/actions/runs/45265703389).
+It was cancelled, with successful container cleanup. One Planner request was
+interrupted after 31.645 s with `RemoteDisconnected`; it returned no token usage,
+no response and no candidate. Thus overall execution includes **5 request
+attempts, 4 completed responses, at least 11,647 prompt and 2,797 output tokens**;
+additional consumed tokens in the interrupted request are unknown. Measured
+transport wall time including that request is 309.497 s. The raw cancelled-run
+JSON's zero token fields were absence-of-usage placeholders, not measurements;
+the controller now emits null for incomplete totals and separate known counts.
+Its focused missing-usage regression test passes. Partial raw evidence is in
+`cancelled-45265703389/`; no efficacy conclusion is drawn from it.
+
+The workflow now requires the explicit PR label `run-experiment-1` and cancels
+superseded runs. The guard's first workflow run
+[45266026550](https://github.com/BillyMixNix/Hive/actions/runs/45266026550) was
+observed skipped with no model calls. Future documentation updates cannot spend
+generation budget unless the label is deliberately enabled.
 
 Each accuracy fraction has only 32 distinct held-out cases. Repetitions do not
 turn these into 96 independent cases. Host latency includes fresh container
@@ -122,6 +142,11 @@ verification on `e8593fd` recorded 358 passed, 1 skipped (Torch unavailable), an
 7 passing subtests. That older local log is explicitly labeled by commit.
 `py_compile` and `git diff --check` also passed. Only the research branch was
 updated. `main` remained at `b2d3df6fdbc2b3d395d74a0c25d3c777382cd170`.
+
+The later workflow opt-in guard and unknown-usage aggregation fix follow the
+measured implementation; they do not change study tasks, thresholds or raw data.
+The updated focused suite records 34 passing tests. Their final commit's normal
+CI status is separate from the completed 366-test implementation run.
 
 ## Reproducibility and limits
 

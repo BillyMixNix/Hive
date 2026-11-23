@@ -1,5 +1,12 @@
 # Experiment 1
 
+The completed study and raw evidence are in `docs/research/experiment1/REPORT.md`.
+Further Actions runs require the explicit PR label `run-experiment-1`. The label
+guard prevents ordinary evidence commits from repeating generation; newer runs
+cancel superseded ones. Interrupted model calls report incomplete usage as null,
+with separately identified known token counts. The completed study's raw records
+are preserved unchanged.
+
 This study asks whether the existing Hive Planner and Coder can propose a useful
 change to `PlannerAgent._extract_json_object`. It does not test open-ended RSI.
 The baseline is commit `87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb`.

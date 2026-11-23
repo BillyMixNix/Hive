@@ -28,18 +28,39 @@
       "phase": "generation after canonical symbol context repair",
       "result": "Coder reason loop reached 2048-token output limit; missing PATCH section; blocked",
       "model_calls": 2
+    },
+    {
+      "run_id": 45265703389,
+      "commit": "c470e99eff6cce88a9ff7562eaa13ac77b9d9c7d",
+      "phase": "unintended automatic rerun after evidence commit",
+      "result": "cancelled; cleanup succeeded; one interrupted Planner request; no response or candidate",
+      "model_calls": 1,
+      "completed_responses": 0,
+      "token_usage": "unknown"
+    },
+    {
+      "run_id": 45266026550,
+      "commit": "c1fa654d929dd789ddb6e8a82906423d96016b09",
+      "phase": "explicit opt-in workflow guard",
+      "result": "skipped without run-experiment-1 label",
+      "model_calls": 0
     }
   ],
   "rules": "Preserve failures. No changes to protocol, public cases, held-out cases, thresholds, baseline, model, or seed across these attempts. Controller repairs are separate commits; two model calls maximum per run.",
   "artifact_sha256": {
     "45262925695": "d99345bc8a70406663d49aa97b7e40f2b865790ec834b9d7451efd332103b166",
-    "45263989826": "8aee76cfabdc1da7ee500368b2689fd5d9c4e10bf343312b31a88f5b1578c254"
+    "45263989826": "8aee76cfabdc1da7ee500368b2689fd5d9c4e10bf343312b31a88f5b1578c254",
+    "45265703389": "35acc5da0d0792c28dbe1223503ca17336a8eb31cb0bf27a86cb36d53b52587d"
   },
   "cumulative_generation": {
-    "calls": 4,
-    "prompt_tokens": 11647,
-    "output_tokens": 2797,
-    "wall_seconds": 277.852870165,
+    "request_attempts": 5,
+    "completed_responses": 4,
+    "prompt_tokens": null,
+    "output_tokens": null,
+    "known_prompt_tokens": 11647,
+    "known_output_tokens": 2797,
+    "token_usage_complete": false,
+    "transport_wall_seconds": 309.497402167,
     "api_charge_usd": 0,
     "compute_cost_usd": null
   },
@@ -49,5 +70,9 @@
     "result": "366 passed, 7 subtests passed",
     "seconds": 238.35,
     "artifact_sha256": "78e46fbdb2d295d548409038fc434e6caef266c88944afff99699ef1be68f53e"
+  },
+  "poststudy_verification": {
+    "focused_tests_passed": 34,
+    "qualification": "Includes unknown-usage aggregation regression; normal final-commit CI tracked separately."
   }
 }

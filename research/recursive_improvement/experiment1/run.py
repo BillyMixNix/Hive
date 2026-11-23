@@ -316,6 +316,24 @@ def generation_context(baseline, task):
     return state
 
 
+def summarize_generation_cost(calls):
+    """A disconnected request can consume tokens without returning usage."""
+    complete = all(c.get("status") == "completed" and
+                   all(type(c.get(k)) is int and c[k] >= 0
+                       for k in ("prompt_eval_count", "eval_count")) for c in calls)
+    incoming = sum(c["prompt_eval_count"] for c in calls
+                   if type(c.get("prompt_eval_count")) is int and c["prompt_eval_count"] >= 0)
+    outgoing = sum(c["eval_count"] for c in calls
+                   if type(c.get("eval_count")) is int and c["eval_count"] >= 0)
+    return {"api_charge_usd": 0, "compute_cost_usd": None, "calls": len(calls),
+            "prompt_tokens": incoming if complete else None,
+            "output_tokens": outgoing if complete else None,
+            "known_prompt_tokens": incoming, "known_output_tokens": outgoing,
+            "token_usage_complete": complete,
+            "wall_ms": sum(c["wall_ms"] for c in calls),
+            "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost."}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--image", required=True)
@@ -376,11 +394,7 @@ def main():
         write(args.output / "result.json", report)
         generated = generate(protocol, baseline, runner, public, args.output)
         report["generation_status"] = generated["status"]
-        report["generation_cost"] = {"api_charge_usd": 0, "compute_cost_usd": None,
-              "prompt_tokens": sum(c.get("prompt_eval_count") or 0 for c in generated["model_calls"]),
-              "output_tokens": sum(c.get("eval_count") or 0 for c in generated["model_calls"]),
-              "wall_ms": sum(c["wall_ms"] for c in generated["model_calls"]),
-              "calls": len(generated["model_calls"]), "qualification": "Local compute; zero API fees is not zero lifecycle cost."}
+        report["generation_cost"] = summarize_generation_cost(generated["model_calls"])
         patch_data = generated.get("patch_data") or {}
         # Blocked candidates may be evaluated diagnostically, but cannot be accepted.
         if patch_data.get("status") == "blocked" and patch_data.get("failed_patch_text"):
