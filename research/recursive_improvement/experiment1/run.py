@@ -275,9 +275,12 @@ def generate(protocol, baseline, runner, public, output):
                 return {"applied": False, "syntax_valid": False, "semantic_valid": False,
                         "errors": [type(exc).__name__], "notes": "Candidate policy or container validation failed."}
     with baseline_agents(baseline) as (planner_module, coder_module):
+        state = generation_context(baseline, task)
+        captures["task_anchor"] = task["metadata"]["anchor"]
+        write(output / "generation-task.json", task)
         planner_module.ask_hive = coder_module.ask_hive = transport
-        planner = planner_module.PlannerAgent()
-        coder = coder_module.CoderAgent(executor=SmokeExecutor())
+        planner = planner_module.PlannerAgent(state_manager=state)
+        coder = coder_module.CoderAgent(state_manager=state, executor=SmokeExecutor())
         class CapturePlanner:
             def plan_task(self, value):
                 captures["plan"] = planner.plan_task(value)
@@ -298,6 +301,19 @@ def generate(protocol, baseline, runner, public, output):
     captures["model_calls"] = transport.calls
     write(output / "generation.json", captures)
     return captures
+
+
+def generation_context(baseline, task):
+    """Give the original agents their required baseline symbol/span authority."""
+    from HiveStateManager import HiveStateManager
+    from anchor_utils import canonicalize_task_anchor
+    state = HiveStateManager(repo_root=baseline, snapshot_path=baseline / "experiment-state.json")
+    state.rebuild_repo_map()
+    canonicalize_task_anchor(task, state_manager=state, default_anchor_source="frozen_baseline")
+    anchor = task["metadata"]["anchor"]
+    if any(anchor.get(name) is None for name in ("target_symbol_id", "lineno", "end_lineno")):
+        raise ValueError("Baseline symbol proof unavailable; refusing to spend generation calls")
+    return state
 
 
 def main():

@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 from research.recursive_improvement.container_runner import ContainerRunner, Limits, SandboxUnavailable
-from research.recursive_improvement.experiment1.run import restrict_method, score, stage_patch
+from research.recursive_improvement.experiment1.run import generation_context, restrict_method, score, stage_patch
 from research.recursive_improvement.gate import Trial, evaluate_candidate
 
 
@@ -110,6 +110,22 @@ class BoundaryTests(unittest.TestCase):
             with self.assertRaises(PermissionError):
                 stage_patch(root, root / "variant", {"target_file": "tests/eval.py", "patch": "unused"})
             self.assertFalse((root / "variant").exists())
+
+    def test_generation_has_real_symbol_and_span_before_any_model_call(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "planner.py").write_text("class PlannerAgent:\n    def _extract_json_object(self, raw_response):\n        return raw_response\n")
+            task = {"id": "test", "note": "Fix _extract_json_object in planner.py",
+                    "target_file": "planner.py", "target_symbol": "_extract_json_object"}
+            state = generation_context(root, task)
+            anchor = task["metadata"]["anchor"]
+            span = state.get_symbol_span("planner.py", "_extract_json_object")
+            self.assertEqual(anchor["target_symbol_id"], span["symbol_id"])
+            self.assertEqual((anchor["lineno"], anchor["end_lineno"]), (2, 3))
+            self.assertEqual(task["target_symbol_id"], span["symbol_id"])
+            task["target_symbol"] = "missing"
+            with self.assertRaises(ValueError):
+                generation_context(root, task)
 
     def test_nonfinite_or_forged_trial_data_is_rejected(self):
         for value in (float("nan"), float("inf"), -1, True, "0"):

@@ -24,6 +24,14 @@ public smoke executor. A fallback plan is recorded as a fallback, and a blocked
 patch is never relabeled a successful proposal. Valid failed patches may be
 evaluated diagnostically. No fabricated candidate is substituted for a failure.
 
+The first completed run (45262925695) was blocked by missing baseline symbol proof
+in the experiment adapter. Its raw evidence is preserved under `docs/research/`.
+The adapter now supplies the original shared `HiveStateManager` and canonical
+repository-map anchor to both agents, and checks the span before any model call.
+A subsequent run retains the same protocol, model, seed, tasks and two-call budget
+per run. All attempts and cumulative generation usage must be reported; this is
+not a fresh independent held-out replication.
+
 The external controller compares actual return strings or exceptions to expected
 answers. The candidate cannot award scores, omit cases, or supply expected values.
 Each repetition uses the same inputs for both versions. Three fixed shuffle seeds
