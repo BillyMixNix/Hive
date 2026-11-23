@@ -2,6 +2,7 @@ name: Recursive improvement Experiment 1
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     branches: [main]
     paths:
       - 'research/recursive_improvement/**'
@@ -12,11 +13,14 @@ permissions:
 
 concurrency:
   group: hive-experiment1-${{ github.event.pull_request.number }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   experiment:
-    if: github.head_ref == 'research/recursive-improvement' && github.event.pull_request.head.repo.full_name == 'BillyMixNix/Hive'
+    if: >-
+      github.head_ref == 'research/recursive-improvement' &&
+      github.event.pull_request.head.repo.full_name == 'BillyMixNix/Hive' &&
+      contains(github.event.pull_request.labels.*.name, 'run-experiment-1')
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
