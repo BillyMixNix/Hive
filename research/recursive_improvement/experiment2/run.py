@@ -65,6 +65,20 @@ class StructuredTransport:
         self.all_calls.append(record)
         (self.output / f"{role}-original-prompt.txt").write_text(original_prompt)
         (self.output / f"{role}-actual-prompt.txt").write_text(prompt)
+        replay = self.protocol.get("planner_replay")
+        if role == "planner" and replay:
+            data = strict_json((HERE / "planner_replay" / f"{self.seed}.json").read_text())
+            record.update(data["call"])
+            record.update({"replayed": True, "original_run_id": replay["run_id"], "status": "replayed"})
+            raw = data["response"]
+            (self.output / "planner-response.txt").write_text(raw)
+            self.plan = validate_plan(raw)
+            result = hive_plan(self.plan)
+            (self.output / "planner-hive-contract.txt").write_text(result)
+            write(self.output / "model-calls.json", self.calls)
+            return result
+        if sum(not c.get("replayed", False) for c in self.all_calls) > config.get("max_new_calls", config["max_calls"]):
+            raise RuntimeError("New inference request budget exhausted")
         schema = PLAN_SCHEMA if role == "planner" else CODE_SCHEMA
         body = {"model": self.protocol["model"], "prompt": prompt, "stream": False, "format": schema,
                 "options": {**{k: config[k] for k in ("temperature", "num_ctx", "num_thread")},
@@ -264,6 +278,9 @@ def main():
             entry = generate(protocol, seed, baseline, runner, public, args.output / f"seed-{seed}", calls)
             report["generation"].append(entry)
             report["generation_cost"] = cost_report(calls)
+            report["request_accounting"] = {"historical_planner_requests": sum(bool(c.get("replayed")) for c in calls),
+                "new_requests_this_run": sum(not c.get("replayed", False) for c in calls),
+                "qualification": "Historical request usage is counted once in total Experiment 2 cost; replay makes no new HTTP request."}
             write(args.output / "result.json", report)
         for entry in report["generation"]:
             patch_data = entry.get("evaluation_patch")

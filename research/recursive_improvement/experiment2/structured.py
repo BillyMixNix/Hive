@@ -42,7 +42,7 @@ def validate_plan(raw):
     if not isinstance(approach, str) or not 10 <= len(approach) <= 500:
         raise ValueError("Plan description envelope failed")
     lower = approach.lower()
-    if "json" not in lower or not any(x in lower for x in ("extract", "decod", "pars")):
+    if "json" not in lower or not any(x in lower for x in ("extract", "decod", "pars", "scan", "brace")):
         raise ValueError("Plan not grounded in JSON extraction")
     if any(name != FILE for name in re.findall(r"\b[\w]+\.py\b", approach)):
         raise ValueError("Plan references unauthorized file")

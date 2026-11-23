@@ -25,6 +25,9 @@ class Experiment2Tests(unittest.TestCase):
                 validate_plan(json.dumps({**PLAN, **change}))
         self.assertEqual(validate_plan(json.dumps(PLAN)), PLAN)
         self.assertEqual(json.loads(hive_plan(PLAN))["tasks"][0]["target_symbol"], "_extract_json_object")
+        for approach in ("Scan through the string, balance braces and return the first valid JSON object.",
+                         "Find opening and closing braces surrounding a valid JSON object."):
+            self.assertEqual(validate_plan(json.dumps({**PLAN, "approach": approach}))["approach"], approach)
 
     def test_structured_method_becomes_a_strict_single_method_diff(self):
         source = 'def _extract_json_object(self, raw_response):\n    return "{}"\n'
@@ -75,6 +78,20 @@ class Experiment2Tests(unittest.TestCase):
         self.assertIn("public-marker", prompt)
         self.assertNotIn("heldout", prompt)
         self.assertLess(len(prompt), 4000)
+
+    def test_recorded_plans_replay_without_network_and_retain_original_usage(self):
+        protocol = json.loads(Path('research/recursive_improvement/experiment2/protocol.json').read_text())
+        if not protocol.get('planner_replay'):
+            self.skipTest('Replay inputs have not been frozen')
+        with tempfile.TemporaryDirectory() as tmp:
+            calls = []
+            transport = StructuredTransport(protocol, 1729, ORIGINAL, [], Path(tmp), calls)
+            with patch('urllib.request.urlopen') as network:
+                result = transport('original prompt', role='planner')
+                network.assert_not_called()
+            self.assertTrue(calls[0]['replayed'])
+            self.assertEqual(calls[0]['prompt_eval_count'], 601)
+            self.assertEqual(json.loads(result)['tasks'][0]['target_file'], 'planner.py')
 
 
 if __name__ == "__main__":

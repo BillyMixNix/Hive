@@ -1,5 +1,18 @@
 # Experiment 2: structured generation
 
+Protocol revision 2b preserves the failed first generation run (45280078249):
+all three 7B Planner responses were on-topic but the external vocabulary gate
+incorrectly rejected their scan/brace wording. That is a harness failure, not a
+model result. The gate now recognizes that wording while still requiring the
+exact objective/file/symbol and rejecting unrelated files or feature work.
+The three original response bytes and original usage are frozen for replay.
+The continuation makes only the three unused Coder requests, so total real
+inference remains bounded at six requests across the original and continuation.
+Historical usage is included once, with replay explicitly identified separately
+from new calls. This repair was selected after inspecting plans, before any
+candidate or held-out result; it is not an independent replication or an unchanged
+protocol rerun. Original artifacts, including the failure, must remain available.
+
 This is a new frozen feasibility cohort on the original baseline
 `87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb`. Experiment 1 evidence is unchanged.
 The selected target remains `PlannerAgent._extract_json_object` in `planner.py`.

@@ -28,6 +28,7 @@
     "coder_output_tokens": 1536,
     "coder_timeout_seconds": 480,
     "max_calls": 6,
+    "max_new_calls": 3,
     "max_prompt_characters": 10000,
     "num_ctx": 8192,
     "num_thread": 4,
@@ -42,6 +43,13 @@
   },
   "model": "qwen2.5-coder:7b",
   "model_digest_prefix": "dae161e27b0e",
+  "planner_replay": {
+    "artifact_sha256": "af71dafb06d9aea24c957272a5310003e26301c46cb1ac2e3c3fcb28de91494e",
+    "historical_calls": 3,
+    "reason": "The frozen original gate rejected valid scan/brace wording. Preserve that failed cohort and resume only its unused Coder budget.",
+    "run_id": 45280078249
+  },
+  "protocol_revision": "2b: correct false-negative plan vocabulary gate; replay existing model plans; no prior candidate/held-out feedback",
   "regression_limits": {
     "file_bytes": 33554432,
     "memory_mb": 512,
