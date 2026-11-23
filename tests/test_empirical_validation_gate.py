@@ -188,6 +188,36 @@ def test_protected_grader_patch_is_rejected_before_application(tmp_path):
     assert (repo / "benchmark_harness.py").read_text(encoding="utf-8") == "# protected\n"
 
 
+def test_protected_directory_patch_is_rejected_before_application(tmp_path):
+    repo = make_repo(tmp_path)
+    protected = repo / "tests" / "hidden_evaluator.py"
+    protected.parent.mkdir()
+    protected.write_text("EXPECTED = 1\n", encoding="utf-8")
+    archive = tmp_path / "archive.jsonl"
+    patch = (
+        "TARGET_FILE: tests/hidden_evaluator.py\n"
+        "PATCH:\n"
+        "--- tests/hidden_evaluator.py\n"
+        "+++ tests/hidden_evaluator.py\n"
+        "@@ -1,1 +1,1 @@\n"
+        "-EXPECTED = 1\n"
+        "+EXPECTED = 0\n"
+    )
+
+    record = evaluate(
+        patch,
+        "Weaken a hidden evaluator.",
+        repo_root=repo,
+        scorer=behavioral_score,
+        archive_path=archive,
+        n=2,
+    )
+
+    assert record["decision"] == "reject"
+    assert record["reason"] == "grader_tamper_rejected: protected path tests/hidden_evaluator.py"
+    assert protected.read_text(encoding="utf-8") == "EXPECTED = 1\n"
+
+
 def test_syntax_failure_is_rejected_before_scoring(tmp_path):
     repo = make_repo(tmp_path)
     archive = tmp_path / "archive.jsonl"

@@ -32,12 +32,13 @@ VerifyFunction = Callable[[Path, str], tuple[bool, str] | bool]
 
 DEFAULT_PROTECTED_PATHS = frozenset(
     {
+        "tests/",
+        "validation/",
+        "research/recursive_improvement/",
+        ".github/workflows/",
         "benchmark_harness.py",
         "benchmark_pack.py",
-        "validation/gate.py",
-        "validation/scoring.py",
-        "validation/variant.py",
-        "validation/archive.py",
+        "regression_gate.py",
     }
 )
 _SCORE_SENTINEL = "__HIVE_GATE_SCORE__"
@@ -83,7 +84,13 @@ def default_score_repo(repo_root: Path, *, timeout: int = 300) -> float:
 
 def _is_protected(target_file: str, protected_paths: set[str] | frozenset[str]) -> bool:
     normalized = target_file.replace("\\", "/").lstrip("./")
-    return normalized in protected_paths or normalized.startswith(".github/workflows/")
+    for protected in protected_paths:
+        protected = protected.replace("\\", "/").lstrip("./")
+        if protected.endswith("/") and normalized.startswith(protected):
+            return True
+        if normalized == protected:
+            return True
+    return False
 
 
 def _archive_default(repo_root: Path) -> Path:
