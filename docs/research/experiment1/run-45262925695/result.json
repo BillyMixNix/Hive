@@ -1,0 +1,1308 @@
+{
+  "baseline": [
+    {
+      "heldout": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"heldout-30\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.003747}, {\"id\": \"heldout-20\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.001473}, {\"id\": \"heldout-21\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000991}, {\"id\": \"heldout-14\", \"text\": \"{oops:5}.\\n{\\\"literal\\\": \\\"{not an object}\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000995}, {\"id\": \"heldout-05\", \"text\": \"{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\", \"latency_ms_untrusted\": 0.000577}, {\"id\": \"heldout-13\", \"text\": \"{oops:4}.\\n{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000636}, {\"id\": \"heldout-24\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000642}, {\"id\": \"heldout-08\", \"text\": \"{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\", \"latency_ms_untrusted\": 0.002465}, {\"id\": \"heldout-23\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.001303}, {\"id\": \"heldout-01\", \"text\": \"{}\", \"latency_ms_untrusted\": 0.000776}, {\"id\": \"heldout-11\", \"text\": \"{oops:2}.\\n{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.001692}, {\"id\": \"heldout-12\", \"text\": \"{oops:3}.\\n{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000831}, {\"id\": \"heldout-09\", \"text\": \"{oops:0}.\\n{}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.00074}, {\"id\": \"heldout-02\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\", \"latency_ms_untrusted\": 0.000488}, {\"id\": \"heldout-03\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\", \"latency_ms_untrusted\": 0.000668}, {\"id\": \"heldout-10\", \"text\": \"{oops:1}.\\n{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.0004}, {\"id\": \"heldout-26\", \"text\": \"{\\\"x\\\":}\", \"latency_ms_untrusted\": 0.000585}, {\"id\": \"heldout-04\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\", \"latency_ms_untrusted\": 0.000538}, {\"id\": \"heldout-22\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000996}, {\"id\": \"heldout-16\", \"text\": \"{oops:7}.\\n{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000553}, {\"id\": \"heldout-32\", \"text\": \"{\\\"x\\\":NaN}\", \"latency_ms_untrusted\": 0.000493}, {\"id\": \"heldout-06\", \"text\": \"{\\\"literal\\\": \\\"{not an object}\\\"}\", \"latency_ms_untrusted\": 0.000516}, {\"id\": \"heldout-07\", \"text\": \"{\\\"numbers\\\": [-3, 0, 1.25]}\", \"latency_ms_untrusted\": 0.000522}, {\"id\": \"heldout-19\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.00084}, {\"id\": \"heldout-17\", \"text\": \"{}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.00041}, {\"id\": \"heldout-27\", \"text\": \"{\\\"x\\\":1,}\", \"latency_ms_untrusted\": 0.00041}, {\"id\": \"heldout-15\", \"text\": \"{oops:6}.\\n{\\\"numbers\\\": [-3, 0, 1.25]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000342}, {\"id\": \"heldout-25\", \"text\": \"{not valid}\", \"latency_ms_untrusted\": 0.00029}, {\"id\": \"heldout-31\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000608}, {\"id\": \"heldout-18\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000466}, {\"id\": \"heldout-28\", \"text\": \"{\\\"x\\\":\\\"unterminated}\", \"latency_ms_untrusted\": 0.000482}, {\"id\": \"heldout-29\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000529}], \"cpu_seconds_untrusted\": 0.151736}\n",
+          "wall_ms": 372.71798599999784
+        },
+        "scores": [
+          {
+            "case_id": "heldout-01",
+            "correct": true,
+            "response": {
+              "id": "heldout-01",
+              "latency_ms_untrusted": 0.000776,
+              "text": "{}"
+            }
+          },
+          {
+            "case_id": "heldout-02",
+            "correct": true,
+            "response": {
+              "id": "heldout-02",
+              "latency_ms_untrusted": 0.000488,
+              "text": "{\"goal\": \"g\", \"tasks\": []}"
+            }
+          },
+          {
+            "case_id": "heldout-03",
+            "correct": true,
+            "response": {
+              "id": "heldout-03",
+              "latency_ms_untrusted": 0.000668,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}"
+            }
+          },
+          {
+            "case_id": "heldout-04",
+            "correct": true,
+            "response": {
+              "id": "heldout-04",
+              "latency_ms_untrusted": 0.000538,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}"
+            }
+          },
+          {
+            "case_id": "heldout-05",
+            "correct": true,
+            "response": {
+              "id": "heldout-05",
+              "latency_ms_untrusted": 0.000577,
+              "text": "{\"quote\": \"a \\\" and \\\\ end\"}"
+            }
+          },
+          {
+            "case_id": "heldout-06",
+            "correct": true,
+            "response": {
+              "id": "heldout-06",
+              "latency_ms_untrusted": 0.000516,
+              "text": "{\"literal\": \"{not an object}\"}"
+            }
+          },
+          {
+            "case_id": "heldout-07",
+            "correct": true,
+            "response": {
+              "id": "heldout-07",
+              "latency_ms_untrusted": 0.000522,
+              "text": "{\"numbers\": [-3, 0, 1.25]}"
+            }
+          },
+          {
+            "case_id": "heldout-08",
+            "correct": true,
+            "response": {
+              "id": "heldout-08",
+              "latency_ms_untrusted": 0.002465,
+              "text": "{\"empty\": {\"a\": {}, \"b\": []}}"
+            }
+          },
+          {
+            "case_id": "heldout-09",
+            "correct": false,
+            "response": {
+              "id": "heldout-09",
+              "latency_ms_untrusted": 0.00074,
+              "text": "{oops:0}.\n{}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-10",
+            "correct": false,
+            "response": {
+              "id": "heldout-10",
+              "latency_ms_untrusted": 0.0004,
+              "text": "{oops:1}.\n{\"goal\": \"g\", \"tasks\": []}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-11",
+            "correct": false,
+            "response": {
+              "id": "heldout-11",
+              "latency_ms_untrusted": 0.001692,
+              "text": "{oops:2}.\n{\"unicode\": \"\u96ea\u2603\u00e9\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-12",
+            "correct": false,
+            "response": {
+              "id": "heldout-12",
+              "latency_ms_untrusted": 0.000831,
+              "text": "{oops:3}.\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-13",
+            "correct": false,
+            "response": {
+              "id": "heldout-13",
+              "latency_ms_untrusted": 0.000636,
+              "text": "{oops:4}.\n{\"quote\": \"a \\\" and \\\\ end\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-14",
+            "correct": false,
+            "response": {
+              "id": "heldout-14",
+              "latency_ms_untrusted": 0.000995,
+              "text": "{oops:5}.\n{\"literal\": \"{not an object}\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-15",
+            "correct": false,
+            "response": {
+              "id": "heldout-15",
+              "latency_ms_untrusted": 0.000342,
+              "text": "{oops:6}.\n{\"numbers\": [-3, 0, 1.25]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-16",
+            "correct": false,
+            "response": {
+              "id": "heldout-16",
+              "latency_ms_untrusted": 0.000553,
+              "text": "{oops:7}.\n{\"empty\": {\"a\": {}, \"b\": []}}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-17",
+            "correct": false,
+            "response": {
+              "id": "heldout-17",
+              "latency_ms_untrusted": 0.00041,
+              "text": "{}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-18",
+            "correct": false,
+            "response": {
+              "id": "heldout-18",
+              "latency_ms_untrusted": 0.000466,
+              "text": "{\"goal\": \"g\", \"tasks\": []}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-19",
+            "correct": false,
+            "response": {
+              "id": "heldout-19",
+              "latency_ms_untrusted": 0.00084,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-20",
+            "correct": false,
+            "response": {
+              "id": "heldout-20",
+              "latency_ms_untrusted": 0.001473,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-21",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-21",
+              "latency_ms_untrusted": 0.000991
+            }
+          },
+          {
+            "case_id": "heldout-22",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-22",
+              "latency_ms_untrusted": 0.000996
+            }
+          },
+          {
+            "case_id": "heldout-23",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-23",
+              "latency_ms_untrusted": 0.001303
+            }
+          },
+          {
+            "case_id": "heldout-24",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-24",
+              "latency_ms_untrusted": 0.000642
+            }
+          },
+          {
+            "case_id": "heldout-25",
+            "correct": false,
+            "response": {
+              "id": "heldout-25",
+              "latency_ms_untrusted": 0.00029,
+              "text": "{not valid}"
+            }
+          },
+          {
+            "case_id": "heldout-26",
+            "correct": false,
+            "response": {
+              "id": "heldout-26",
+              "latency_ms_untrusted": 0.000585,
+              "text": "{\"x\":}"
+            }
+          },
+          {
+            "case_id": "heldout-27",
+            "correct": false,
+            "response": {
+              "id": "heldout-27",
+              "latency_ms_untrusted": 0.00041,
+              "text": "{\"x\":1,}"
+            }
+          },
+          {
+            "case_id": "heldout-28",
+            "correct": false,
+            "response": {
+              "id": "heldout-28",
+              "latency_ms_untrusted": 0.000482,
+              "text": "{\"x\":\"unterminated}"
+            }
+          },
+          {
+            "case_id": "heldout-29",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-29",
+              "latency_ms_untrusted": 0.000529
+            }
+          },
+          {
+            "case_id": "heldout-30",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-30",
+              "latency_ms_untrusted": 0.003747
+            }
+          },
+          {
+            "case_id": "heldout-31",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-31",
+              "latency_ms_untrusted": 0.000608
+            }
+          },
+          {
+            "case_id": "heldout-32",
+            "correct": false,
+            "response": {
+              "id": "heldout-32",
+              "latency_ms_untrusted": 0.000493,
+              "text": "{\"x\":NaN}"
+            }
+          }
+        ],
+        "valid": true
+      },
+      "public": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"public-fenced\", \"text\": \"{\\\"tasks\\\":[1,2]}\", \"latency_ms_untrusted\": 0.002641}, {\"id\": \"public-plain\", \"text\": \"{\\\"goal\\\":\\\"repair\\\"}\", \"latency_ms_untrusted\": 0.001146}, {\"id\": \"public-trailing-object\", \"text\": \"{\\\"first\\\":true} then {\\\"second\\\":false}\", \"latency_ms_untrusted\": 0.000813}, {\"id\": \"public-nested\", \"text\": \"{\\\"outer\\\":{\\\"x\\\":2}} trailing }\", \"latency_ms_untrusted\": 0.000816}, {\"id\": \"public-invalid-prefix\", \"text\": \"{not JSON}. Answer: {\\\"ok\\\":true}\", \"latency_ms_untrusted\": 0.000924}, {\"id\": \"public-quoted-brace\", \"text\": \"{\\\"text\\\":\\\"a } and { b\\\"}\", \"latency_ms_untrusted\": 0.000687}, {\"id\": \"public-empty\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.002673}, {\"id\": \"public-unclosed\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.002808}], \"cpu_seconds_untrusted\": 0.15761}\n",
+          "wall_ms": 364.901543000002
+        },
+        "scores": [
+          {
+            "case_id": "public-plain",
+            "correct": true,
+            "response": {
+              "id": "public-plain",
+              "latency_ms_untrusted": 0.001146,
+              "text": "{\"goal\":\"repair\"}"
+            }
+          },
+          {
+            "case_id": "public-fenced",
+            "correct": true,
+            "response": {
+              "id": "public-fenced",
+              "latency_ms_untrusted": 0.002641,
+              "text": "{\"tasks\":[1,2]}"
+            }
+          },
+          {
+            "case_id": "public-trailing-object",
+            "correct": false,
+            "response": {
+              "id": "public-trailing-object",
+              "latency_ms_untrusted": 0.000813,
+              "text": "{\"first\":true} then {\"second\":false}"
+            }
+          },
+          {
+            "case_id": "public-invalid-prefix",
+            "correct": false,
+            "response": {
+              "id": "public-invalid-prefix",
+              "latency_ms_untrusted": 0.000924,
+              "text": "{not JSON}. Answer: {\"ok\":true}"
+            }
+          },
+          {
+            "case_id": "public-quoted-brace",
+            "correct": true,
+            "response": {
+              "id": "public-quoted-brace",
+              "latency_ms_untrusted": 0.000687,
+              "text": "{\"text\":\"a } and { b\"}"
+            }
+          },
+          {
+            "case_id": "public-nested",
+            "correct": false,
+            "response": {
+              "id": "public-nested",
+              "latency_ms_untrusted": 0.000816,
+              "text": "{\"outer\":{\"x\":2}} trailing }"
+            }
+          },
+          {
+            "case_id": "public-empty",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-empty",
+              "latency_ms_untrusted": 0.002673
+            }
+          },
+          {
+            "case_id": "public-unclosed",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-unclosed",
+              "latency_ms_untrusted": 0.002808
+            }
+          }
+        ],
+        "valid": true
+      },
+      "seed": 11
+    },
+    {
+      "heldout": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"heldout-23\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.003864}, {\"id\": \"heldout-21\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.001209}, {\"id\": \"heldout-26\", \"text\": \"{\\\"x\\\":}\", \"latency_ms_untrusted\": 0.001315}, {\"id\": \"heldout-32\", \"text\": \"{\\\"x\\\":NaN}\", \"latency_ms_untrusted\": 0.000822}, {\"id\": \"heldout-11\", \"text\": \"{oops:2}.\\n{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.002476}, {\"id\": \"heldout-16\", \"text\": \"{oops:7}.\\n{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000835}, {\"id\": \"heldout-18\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000491}, {\"id\": \"heldout-22\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.003027}, {\"id\": \"heldout-19\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.00161}, {\"id\": \"heldout-07\", \"text\": \"{\\\"numbers\\\": [-3, 0, 1.25]}\", \"latency_ms_untrusted\": 0.000875}, {\"id\": \"heldout-09\", \"text\": \"{oops:0}.\\n{}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000727}, {\"id\": \"heldout-27\", \"text\": \"{\\\"x\\\":1,}\", \"latency_ms_untrusted\": 0.000677}, {\"id\": \"heldout-06\", \"text\": \"{\\\"literal\\\": \\\"{not an object}\\\"}\", \"latency_ms_untrusted\": 0.00058}, {\"id\": \"heldout-25\", \"text\": \"{not valid}\", \"latency_ms_untrusted\": 0.000568}, {\"id\": \"heldout-29\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000826}, {\"id\": \"heldout-24\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.00074}, {\"id\": \"heldout-08\", \"text\": \"{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\", \"latency_ms_untrusted\": 0.000495}, {\"id\": \"heldout-15\", \"text\": \"{oops:6}.\\n{\\\"numbers\\\": [-3, 0, 1.25]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000607}, {\"id\": \"heldout-04\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\", \"latency_ms_untrusted\": 0.000642}, {\"id\": \"heldout-02\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\", \"latency_ms_untrusted\": 0.000369}, {\"id\": \"heldout-01\", \"text\": \"{}\", \"latency_ms_untrusted\": 0.000562}, {\"id\": \"heldout-14\", \"text\": \"{oops:5}.\\n{\\\"literal\\\": \\\"{not an object}\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000504}, {\"id\": \"heldout-13\", \"text\": \"{oops:4}.\\n{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000682}, {\"id\": \"heldout-31\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000551}, {\"id\": \"heldout-17\", \"text\": \"{}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000602}, {\"id\": \"heldout-03\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\", \"latency_ms_untrusted\": 0.000742}, {\"id\": \"heldout-10\", \"text\": \"{oops:1}.\\n{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.00037}, {\"id\": \"heldout-30\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000546}, {\"id\": \"heldout-28\", \"text\": \"{\\\"x\\\":\\\"unterminated}\", \"latency_ms_untrusted\": 0.000513}, {\"id\": \"heldout-20\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000636}, {\"id\": \"heldout-12\", \"text\": \"{oops:3}.\\n{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000741}, {\"id\": \"heldout-05\", \"text\": \"{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\", \"latency_ms_untrusted\": 0.00053}], \"cpu_seconds_untrusted\": 0.15586999999999998}\n",
+          "wall_ms": 348.88538499998845
+        },
+        "scores": [
+          {
+            "case_id": "heldout-01",
+            "correct": true,
+            "response": {
+              "id": "heldout-01",
+              "latency_ms_untrusted": 0.000562,
+              "text": "{}"
+            }
+          },
+          {
+            "case_id": "heldout-02",
+            "correct": true,
+            "response": {
+              "id": "heldout-02",
+              "latency_ms_untrusted": 0.000369,
+              "text": "{\"goal\": \"g\", \"tasks\": []}"
+            }
+          },
+          {
+            "case_id": "heldout-03",
+            "correct": true,
+            "response": {
+              "id": "heldout-03",
+              "latency_ms_untrusted": 0.000742,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}"
+            }
+          },
+          {
+            "case_id": "heldout-04",
+            "correct": true,
+            "response": {
+              "id": "heldout-04",
+              "latency_ms_untrusted": 0.000642,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}"
+            }
+          },
+          {
+            "case_id": "heldout-05",
+            "correct": true,
+            "response": {
+              "id": "heldout-05",
+              "latency_ms_untrusted": 0.00053,
+              "text": "{\"quote\": \"a \\\" and \\\\ end\"}"
+            }
+          },
+          {
+            "case_id": "heldout-06",
+            "correct": true,
+            "response": {
+              "id": "heldout-06",
+              "latency_ms_untrusted": 0.00058,
+              "text": "{\"literal\": \"{not an object}\"}"
+            }
+          },
+          {
+            "case_id": "heldout-07",
+            "correct": true,
+            "response": {
+              "id": "heldout-07",
+              "latency_ms_untrusted": 0.000875,
+              "text": "{\"numbers\": [-3, 0, 1.25]}"
+            }
+          },
+          {
+            "case_id": "heldout-08",
+            "correct": true,
+            "response": {
+              "id": "heldout-08",
+              "latency_ms_untrusted": 0.000495,
+              "text": "{\"empty\": {\"a\": {}, \"b\": []}}"
+            }
+          },
+          {
+            "case_id": "heldout-09",
+            "correct": false,
+            "response": {
+              "id": "heldout-09",
+              "latency_ms_untrusted": 0.000727,
+              "text": "{oops:0}.\n{}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-10",
+            "correct": false,
+            "response": {
+              "id": "heldout-10",
+              "latency_ms_untrusted": 0.00037,
+              "text": "{oops:1}.\n{\"goal\": \"g\", \"tasks\": []}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-11",
+            "correct": false,
+            "response": {
+              "id": "heldout-11",
+              "latency_ms_untrusted": 0.002476,
+              "text": "{oops:2}.\n{\"unicode\": \"\u96ea\u2603\u00e9\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-12",
+            "correct": false,
+            "response": {
+              "id": "heldout-12",
+              "latency_ms_untrusted": 0.000741,
+              "text": "{oops:3}.\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-13",
+            "correct": false,
+            "response": {
+              "id": "heldout-13",
+              "latency_ms_untrusted": 0.000682,
+              "text": "{oops:4}.\n{\"quote\": \"a \\\" and \\\\ end\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-14",
+            "correct": false,
+            "response": {
+              "id": "heldout-14",
+              "latency_ms_untrusted": 0.000504,
+              "text": "{oops:5}.\n{\"literal\": \"{not an object}\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-15",
+            "correct": false,
+            "response": {
+              "id": "heldout-15",
+              "latency_ms_untrusted": 0.000607,
+              "text": "{oops:6}.\n{\"numbers\": [-3, 0, 1.25]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-16",
+            "correct": false,
+            "response": {
+              "id": "heldout-16",
+              "latency_ms_untrusted": 0.000835,
+              "text": "{oops:7}.\n{\"empty\": {\"a\": {}, \"b\": []}}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-17",
+            "correct": false,
+            "response": {
+              "id": "heldout-17",
+              "latency_ms_untrusted": 0.000602,
+              "text": "{}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-18",
+            "correct": false,
+            "response": {
+              "id": "heldout-18",
+              "latency_ms_untrusted": 0.000491,
+              "text": "{\"goal\": \"g\", \"tasks\": []}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-19",
+            "correct": false,
+            "response": {
+              "id": "heldout-19",
+              "latency_ms_untrusted": 0.00161,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-20",
+            "correct": false,
+            "response": {
+              "id": "heldout-20",
+              "latency_ms_untrusted": 0.000636,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-21",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-21",
+              "latency_ms_untrusted": 0.001209
+            }
+          },
+          {
+            "case_id": "heldout-22",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-22",
+              "latency_ms_untrusted": 0.003027
+            }
+          },
+          {
+            "case_id": "heldout-23",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-23",
+              "latency_ms_untrusted": 0.003864
+            }
+          },
+          {
+            "case_id": "heldout-24",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-24",
+              "latency_ms_untrusted": 0.00074
+            }
+          },
+          {
+            "case_id": "heldout-25",
+            "correct": false,
+            "response": {
+              "id": "heldout-25",
+              "latency_ms_untrusted": 0.000568,
+              "text": "{not valid}"
+            }
+          },
+          {
+            "case_id": "heldout-26",
+            "correct": false,
+            "response": {
+              "id": "heldout-26",
+              "latency_ms_untrusted": 0.001315,
+              "text": "{\"x\":}"
+            }
+          },
+          {
+            "case_id": "heldout-27",
+            "correct": false,
+            "response": {
+              "id": "heldout-27",
+              "latency_ms_untrusted": 0.000677,
+              "text": "{\"x\":1,}"
+            }
+          },
+          {
+            "case_id": "heldout-28",
+            "correct": false,
+            "response": {
+              "id": "heldout-28",
+              "latency_ms_untrusted": 0.000513,
+              "text": "{\"x\":\"unterminated}"
+            }
+          },
+          {
+            "case_id": "heldout-29",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-29",
+              "latency_ms_untrusted": 0.000826
+            }
+          },
+          {
+            "case_id": "heldout-30",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-30",
+              "latency_ms_untrusted": 0.000546
+            }
+          },
+          {
+            "case_id": "heldout-31",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-31",
+              "latency_ms_untrusted": 0.000551
+            }
+          },
+          {
+            "case_id": "heldout-32",
+            "correct": false,
+            "response": {
+              "id": "heldout-32",
+              "latency_ms_untrusted": 0.000822,
+              "text": "{\"x\":NaN}"
+            }
+          }
+        ],
+        "valid": true
+      },
+      "public": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"public-invalid-prefix\", \"text\": \"{not JSON}. Answer: {\\\"ok\\\":true}\", \"latency_ms_untrusted\": 0.002813}, {\"id\": \"public-unclosed\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.002271}, {\"id\": \"public-plain\", \"text\": \"{\\\"goal\\\":\\\"repair\\\"}\", \"latency_ms_untrusted\": 0.00128}, {\"id\": \"public-empty\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.00104}, {\"id\": \"public-nested\", \"text\": \"{\\\"outer\\\":{\\\"x\\\":2}} trailing }\", \"latency_ms_untrusted\": 0.000996}, {\"id\": \"public-quoted-brace\", \"text\": \"{\\\"text\\\":\\\"a } and { b\\\"}\", \"latency_ms_untrusted\": 0.000589}, {\"id\": \"public-trailing-object\", \"text\": \"{\\\"first\\\":true} then {\\\"second\\\":false}\", \"latency_ms_untrusted\": 0.000666}, {\"id\": \"public-fenced\", \"text\": \"{\\\"tasks\\\":[1,2]}\", \"latency_ms_untrusted\": 0.002582}], \"cpu_seconds_untrusted\": 0.153829}\n",
+          "wall_ms": 362.2223910000031
+        },
+        "scores": [
+          {
+            "case_id": "public-plain",
+            "correct": true,
+            "response": {
+              "id": "public-plain",
+              "latency_ms_untrusted": 0.00128,
+              "text": "{\"goal\":\"repair\"}"
+            }
+          },
+          {
+            "case_id": "public-fenced",
+            "correct": true,
+            "response": {
+              "id": "public-fenced",
+              "latency_ms_untrusted": 0.002582,
+              "text": "{\"tasks\":[1,2]}"
+            }
+          },
+          {
+            "case_id": "public-trailing-object",
+            "correct": false,
+            "response": {
+              "id": "public-trailing-object",
+              "latency_ms_untrusted": 0.000666,
+              "text": "{\"first\":true} then {\"second\":false}"
+            }
+          },
+          {
+            "case_id": "public-invalid-prefix",
+            "correct": false,
+            "response": {
+              "id": "public-invalid-prefix",
+              "latency_ms_untrusted": 0.002813,
+              "text": "{not JSON}. Answer: {\"ok\":true}"
+            }
+          },
+          {
+            "case_id": "public-quoted-brace",
+            "correct": true,
+            "response": {
+              "id": "public-quoted-brace",
+              "latency_ms_untrusted": 0.000589,
+              "text": "{\"text\":\"a } and { b\"}"
+            }
+          },
+          {
+            "case_id": "public-nested",
+            "correct": false,
+            "response": {
+              "id": "public-nested",
+              "latency_ms_untrusted": 0.000996,
+              "text": "{\"outer\":{\"x\":2}} trailing }"
+            }
+          },
+          {
+            "case_id": "public-empty",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-empty",
+              "latency_ms_untrusted": 0.00104
+            }
+          },
+          {
+            "case_id": "public-unclosed",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-unclosed",
+              "latency_ms_untrusted": 0.002271
+            }
+          }
+        ],
+        "valid": true
+      },
+      "seed": 29
+    },
+    {
+      "heldout": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"heldout-24\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.004057}, {\"id\": \"heldout-10\", \"text\": \"{oops:1}.\\n{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.00154}, {\"id\": \"heldout-26\", \"text\": \"{\\\"x\\\":}\", \"latency_ms_untrusted\": 0.001197}, {\"id\": \"heldout-31\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.001077}, {\"id\": \"heldout-28\", \"text\": \"{\\\"x\\\":\\\"unterminated}\", \"latency_ms_untrusted\": 0.000795}, {\"id\": \"heldout-27\", \"text\": \"{\\\"x\\\":1,}\", \"latency_ms_untrusted\": 0.000431}, {\"id\": \"heldout-21\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000731}, {\"id\": \"heldout-07\", \"text\": \"{\\\"numbers\\\": [-3, 0, 1.25]}\", \"latency_ms_untrusted\": 0.002629}, {\"id\": \"heldout-06\", \"text\": \"{\\\"literal\\\": \\\"{not an object}\\\"}\", \"latency_ms_untrusted\": 0.000902}, {\"id\": \"heldout-16\", \"text\": \"{oops:7}.\\n{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000942}, {\"id\": \"heldout-25\", \"text\": \"{not valid}\", \"latency_ms_untrusted\": 0.000723}, {\"id\": \"heldout-12\", \"text\": \"{oops:3}.\\n{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.001111}, {\"id\": \"heldout-08\", \"text\": \"{\\\"empty\\\": {\\\"a\\\": {}, \\\"b\\\": []}}\", \"latency_ms_untrusted\": 0.000694}, {\"id\": \"heldout-22\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.001299}, {\"id\": \"heldout-05\", \"text\": \"{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\", \"latency_ms_untrusted\": 0.000505}, {\"id\": \"heldout-29\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000663}, {\"id\": \"heldout-04\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\", \"latency_ms_untrusted\": 0.000601}, {\"id\": \"heldout-01\", \"text\": \"{}\", \"latency_ms_untrusted\": 0.000486}, {\"id\": \"heldout-30\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.00061}, {\"id\": \"heldout-02\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\", \"latency_ms_untrusted\": 0.000367}, {\"id\": \"heldout-20\", \"text\": \"{\\\"nested\\\": [null, false, {\\\"v\\\": [1, 2, 3]}]}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000493}, {\"id\": \"heldout-32\", \"text\": \"{\\\"x\\\":NaN}\", \"latency_ms_untrusted\": 0.000368}, {\"id\": \"heldout-13\", \"text\": \"{oops:4}.\\n{\\\"quote\\\": \\\"a \\\\\\\" and \\\\\\\\ end\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000454}, {\"id\": \"heldout-17\", \"text\": \"{}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000345}, {\"id\": \"heldout-09\", \"text\": \"{oops:0}.\\n{}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000556}, {\"id\": \"heldout-11\", \"text\": \"{oops:2}.\\n{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.001707}, {\"id\": \"heldout-19\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000633}, {\"id\": \"heldout-15\", \"text\": \"{oops:6}.\\n{\\\"numbers\\\": [-3, 0, 1.25]}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000394}, {\"id\": \"heldout-18\", \"text\": \"{\\\"goal\\\": \\\"g\\\", \\\"tasks\\\": []}\\n```\\n{\\\"ignored\\\":{\\\"nested\\\":1}}\", \"latency_ms_untrusted\": 0.000346}, {\"id\": \"heldout-14\", \"text\": \"{oops:5}.\\n{\\\"literal\\\": \\\"{not an object}\\\"}\\n{\\\"trailer\\\":true} trailing }\", \"latency_ms_untrusted\": 0.000454}, {\"id\": \"heldout-03\", \"text\": \"{\\\"unicode\\\": \\\"\\u96ea\\u2603\\u00e9\\\"}\", \"latency_ms_untrusted\": 0.000583}, {\"id\": \"heldout-23\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.000781}], \"cpu_seconds_untrusted\": 0.153313}\n",
+          "wall_ms": 332.23055600001317
+        },
+        "scores": [
+          {
+            "case_id": "heldout-01",
+            "correct": true,
+            "response": {
+              "id": "heldout-01",
+              "latency_ms_untrusted": 0.000486,
+              "text": "{}"
+            }
+          },
+          {
+            "case_id": "heldout-02",
+            "correct": true,
+            "response": {
+              "id": "heldout-02",
+              "latency_ms_untrusted": 0.000367,
+              "text": "{\"goal\": \"g\", \"tasks\": []}"
+            }
+          },
+          {
+            "case_id": "heldout-03",
+            "correct": true,
+            "response": {
+              "id": "heldout-03",
+              "latency_ms_untrusted": 0.000583,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}"
+            }
+          },
+          {
+            "case_id": "heldout-04",
+            "correct": true,
+            "response": {
+              "id": "heldout-04",
+              "latency_ms_untrusted": 0.000601,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}"
+            }
+          },
+          {
+            "case_id": "heldout-05",
+            "correct": true,
+            "response": {
+              "id": "heldout-05",
+              "latency_ms_untrusted": 0.000505,
+              "text": "{\"quote\": \"a \\\" and \\\\ end\"}"
+            }
+          },
+          {
+            "case_id": "heldout-06",
+            "correct": true,
+            "response": {
+              "id": "heldout-06",
+              "latency_ms_untrusted": 0.000902,
+              "text": "{\"literal\": \"{not an object}\"}"
+            }
+          },
+          {
+            "case_id": "heldout-07",
+            "correct": true,
+            "response": {
+              "id": "heldout-07",
+              "latency_ms_untrusted": 0.002629,
+              "text": "{\"numbers\": [-3, 0, 1.25]}"
+            }
+          },
+          {
+            "case_id": "heldout-08",
+            "correct": true,
+            "response": {
+              "id": "heldout-08",
+              "latency_ms_untrusted": 0.000694,
+              "text": "{\"empty\": {\"a\": {}, \"b\": []}}"
+            }
+          },
+          {
+            "case_id": "heldout-09",
+            "correct": false,
+            "response": {
+              "id": "heldout-09",
+              "latency_ms_untrusted": 0.000556,
+              "text": "{oops:0}.\n{}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-10",
+            "correct": false,
+            "response": {
+              "id": "heldout-10",
+              "latency_ms_untrusted": 0.00154,
+              "text": "{oops:1}.\n{\"goal\": \"g\", \"tasks\": []}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-11",
+            "correct": false,
+            "response": {
+              "id": "heldout-11",
+              "latency_ms_untrusted": 0.001707,
+              "text": "{oops:2}.\n{\"unicode\": \"\u96ea\u2603\u00e9\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-12",
+            "correct": false,
+            "response": {
+              "id": "heldout-12",
+              "latency_ms_untrusted": 0.001111,
+              "text": "{oops:3}.\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-13",
+            "correct": false,
+            "response": {
+              "id": "heldout-13",
+              "latency_ms_untrusted": 0.000454,
+              "text": "{oops:4}.\n{\"quote\": \"a \\\" and \\\\ end\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-14",
+            "correct": false,
+            "response": {
+              "id": "heldout-14",
+              "latency_ms_untrusted": 0.000454,
+              "text": "{oops:5}.\n{\"literal\": \"{not an object}\"}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-15",
+            "correct": false,
+            "response": {
+              "id": "heldout-15",
+              "latency_ms_untrusted": 0.000394,
+              "text": "{oops:6}.\n{\"numbers\": [-3, 0, 1.25]}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-16",
+            "correct": false,
+            "response": {
+              "id": "heldout-16",
+              "latency_ms_untrusted": 0.000942,
+              "text": "{oops:7}.\n{\"empty\": {\"a\": {}, \"b\": []}}\n{\"trailer\":true} trailing }"
+            }
+          },
+          {
+            "case_id": "heldout-17",
+            "correct": false,
+            "response": {
+              "id": "heldout-17",
+              "latency_ms_untrusted": 0.000345,
+              "text": "{}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-18",
+            "correct": false,
+            "response": {
+              "id": "heldout-18",
+              "latency_ms_untrusted": 0.000346,
+              "text": "{\"goal\": \"g\", \"tasks\": []}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-19",
+            "correct": false,
+            "response": {
+              "id": "heldout-19",
+              "latency_ms_untrusted": 0.000633,
+              "text": "{\"unicode\": \"\u96ea\u2603\u00e9\"}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-20",
+            "correct": false,
+            "response": {
+              "id": "heldout-20",
+              "latency_ms_untrusted": 0.000493,
+              "text": "{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n```\n{\"ignored\":{\"nested\":1}}"
+            }
+          },
+          {
+            "case_id": "heldout-21",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-21",
+              "latency_ms_untrusted": 0.000731
+            }
+          },
+          {
+            "case_id": "heldout-22",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-22",
+              "latency_ms_untrusted": 0.001299
+            }
+          },
+          {
+            "case_id": "heldout-23",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-23",
+              "latency_ms_untrusted": 0.000781
+            }
+          },
+          {
+            "case_id": "heldout-24",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-24",
+              "latency_ms_untrusted": 0.004057
+            }
+          },
+          {
+            "case_id": "heldout-25",
+            "correct": false,
+            "response": {
+              "id": "heldout-25",
+              "latency_ms_untrusted": 0.000723,
+              "text": "{not valid}"
+            }
+          },
+          {
+            "case_id": "heldout-26",
+            "correct": false,
+            "response": {
+              "id": "heldout-26",
+              "latency_ms_untrusted": 0.001197,
+              "text": "{\"x\":}"
+            }
+          },
+          {
+            "case_id": "heldout-27",
+            "correct": false,
+            "response": {
+              "id": "heldout-27",
+              "latency_ms_untrusted": 0.000431,
+              "text": "{\"x\":1,}"
+            }
+          },
+          {
+            "case_id": "heldout-28",
+            "correct": false,
+            "response": {
+              "id": "heldout-28",
+              "latency_ms_untrusted": 0.000795,
+              "text": "{\"x\":\"unterminated}"
+            }
+          },
+          {
+            "case_id": "heldout-29",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-29",
+              "latency_ms_untrusted": 0.000663
+            }
+          },
+          {
+            "case_id": "heldout-30",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-30",
+              "latency_ms_untrusted": 0.00061
+            }
+          },
+          {
+            "case_id": "heldout-31",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "heldout-31",
+              "latency_ms_untrusted": 0.001077
+            }
+          },
+          {
+            "case_id": "heldout-32",
+            "correct": false,
+            "response": {
+              "id": "heldout-32",
+              "latency_ms_untrusted": 0.000368,
+              "text": "{\"x\":NaN}"
+            }
+          }
+        ],
+        "valid": true
+      },
+      "public": {
+        "run": {
+          "cpu_seconds": null,
+          "exit_code": 0,
+          "oom_killed": false,
+          "status": "completed",
+          "stdout": "{\"responses\": [{\"id\": \"public-empty\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.003471}, {\"id\": \"public-fenced\", \"text\": \"{\\\"tasks\\\":[1,2]}\", \"latency_ms_untrusted\": 0.001506}, {\"id\": \"public-trailing-object\", \"text\": \"{\\\"first\\\":true} then {\\\"second\\\":false}\", \"latency_ms_untrusted\": 0.001052}, {\"id\": \"public-unclosed\", \"error\": \"ValueError\", \"latency_ms_untrusted\": 0.001123}, {\"id\": \"public-quoted-brace\", \"text\": \"{\\\"text\\\":\\\"a } and { b\\\"}\", \"latency_ms_untrusted\": 0.000795}, {\"id\": \"public-invalid-prefix\", \"text\": \"{not JSON}. Answer: {\\\"ok\\\":true}\", \"latency_ms_untrusted\": 0.000927}, {\"id\": \"public-plain\", \"text\": \"{\\\"goal\\\":\\\"repair\\\"}\", \"latency_ms_untrusted\": 0.00069}, {\"id\": \"public-nested\", \"text\": \"{\\\"outer\\\":{\\\"x\\\":2}} trailing }\", \"latency_ms_untrusted\": 0.002421}], \"cpu_seconds_untrusted\": 0.1523}\n",
+          "wall_ms": 355.6237549999821
+        },
+        "scores": [
+          {
+            "case_id": "public-plain",
+            "correct": true,
+            "response": {
+              "id": "public-plain",
+              "latency_ms_untrusted": 0.00069,
+              "text": "{\"goal\":\"repair\"}"
+            }
+          },
+          {
+            "case_id": "public-fenced",
+            "correct": true,
+            "response": {
+              "id": "public-fenced",
+              "latency_ms_untrusted": 0.001506,
+              "text": "{\"tasks\":[1,2]}"
+            }
+          },
+          {
+            "case_id": "public-trailing-object",
+            "correct": false,
+            "response": {
+              "id": "public-trailing-object",
+              "latency_ms_untrusted": 0.001052,
+              "text": "{\"first\":true} then {\"second\":false}"
+            }
+          },
+          {
+            "case_id": "public-invalid-prefix",
+            "correct": false,
+            "response": {
+              "id": "public-invalid-prefix",
+              "latency_ms_untrusted": 0.000927,
+              "text": "{not JSON}. Answer: {\"ok\":true}"
+            }
+          },
+          {
+            "case_id": "public-quoted-brace",
+            "correct": true,
+            "response": {
+              "id": "public-quoted-brace",
+              "latency_ms_untrusted": 0.000795,
+              "text": "{\"text\":\"a } and { b\"}"
+            }
+          },
+          {
+            "case_id": "public-nested",
+            "correct": false,
+            "response": {
+              "id": "public-nested",
+              "latency_ms_untrusted": 0.002421,
+              "text": "{\"outer\":{\"x\":2}} trailing }"
+            }
+          },
+          {
+            "case_id": "public-empty",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-empty",
+              "latency_ms_untrusted": 0.003471
+            }
+          },
+          {
+            "case_id": "public-unclosed",
+            "correct": true,
+            "response": {
+              "error": "ValueError",
+              "id": "public-unclosed",
+              "latency_ms_untrusted": 0.001123
+            }
+          }
+        ],
+        "valid": true
+      },
+      "seed": 47
+    }
+  ],
+  "baseline_and_evaluation_unchanged": true,
+  "baseline_commit": "87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb",
+  "baseline_regressions": {
+    "case_count": 4,
+    "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+    "passed": true,
+    "run": {
+      "cpu_seconds": null,
+      "exit_code": 0,
+      "oom_killed": false,
+      "status": "completed",
+      "stdout": "[{\"id\": \"interface-build-response-default-context\", \"value\": {\"intent\": \"help\", \"context\": {}, \"raw_text\": \"help\"}}, {\"id\": \"interface-build-response-detaches-context\", \"value\": {\"intent\": \"apply_patch\", \"context\": {\"patch_id\": 7}, \"raw_text\": \"apply patch 7\"}}, {\"id\": \"router-normalize-command-none\", \"value\": \"\"}, {\"id\": \"router-normalize-command-trim-lower\", \"value\": \"help\"}]\n",
+      "wall_ms": 408.6200610000219
+    }
+  },
+  "baseline_source_sha256": "1483f83a110056167ec6834314d05ac6b5db160be6c697ed1d1399b08982f192",
+  "candidate_failure": "ValueError: Coder returned a blocked candidate",
+  "claim_limit": "One selected method and hand-authored cases; deterministic repetitions are repeatability, not independent samples or replication. No automatic promotion. No recursive self-improvement claim.",
+  "controller_commit": "e8593fd6a90c885f4110b5263027d3c4d8b0e0ee",
+  "environment": {
+    "architecture": "x86_64",
+    "docker_version": "28.0.4",
+    "image_id": "sha256:6c3bae50de79b6e52f4a060627fd9aa7c7412ce609a7166b6133d1b0fe734cd9",
+    "kernel": "7.0.0-1017-azure",
+    "limits": {
+      "cpus": 1,
+      "memory_mb": 256,
+      "output_bytes": 262144,
+      "pids": 32,
+      "tmpfs_mb": 16,
+      "wall_seconds": 20
+    },
+    "security_options": [
+      "name=apparmor",
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ]
+  },
+  "experiment": "Hive Experiment 1: planner JSON extraction",
+  "frozen_files": {
+    "Dockerfile": "c6e70a8098e57b0990de26c7933e5c1f184fff7339079f30087ed30740a736e3",
+    "heldout_cases.json": "db4b5ad3839428588ad92d49b7fffbc0c546a6f59aa241e4a446cd0379c238c3",
+    "protocol.json": "d9a6dcc6bac16ceb98b05f60950d6004f6559af576df5891b78056f61fce6181",
+    "public_cases.json": "c3d08919b475b01d658d8a5a3dd7b79e9ce520c40f5af424a7672c947227c938",
+    "run.py": "8f3583d97f9a791b94b733a5fd6a52b9dd5cfc46ed878c24b61d34c9d99d2cc9",
+    "worker.py": "fdf3d01f3b13beb5c89df5e347f4ec653c4118549ea4c89fdc8f9f632cb12b98"
+  },
+  "generation_cost": {
+    "api_charge_usd": 0,
+    "calls": 2,
+    "compute_cost_usd": null,
+    "output_tokens": 429,
+    "prompt_tokens": 5812,
+    "qualification": "Local compute; zero API fees is not zero lifecycle cost.",
+    "wall_ms": 94591.877974
+  },
+  "generation_status": "blocked",
+  "model_identity": {
+    "capabilities": [
+      "completion",
+      "tools",
+      "insert"
+    ],
+    "details": {
+      "context_length": 32768,
+      "embedding_length": 1536,
+      "families": [
+        "qwen2"
+      ],
+      "family": "qwen2",
+      "format": "gguf",
+      "parameter_size": "1.5B",
+      "parent_model": "",
+      "quantization_level": "Q4_K_M",
+      "runner": "ggml"
+    },
+    "digest": "d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668",
+    "model": "qwen2.5-coder:1.5b",
+    "modified_at": "2026-11-23T20:48:43.297246038Z",
+    "name": "qwen2.5-coder:1.5b",
+    "size": 986062089
+  },
+  "promotion_allowed": false,
+  "protocol_sha256": "d9a6dcc6bac16ceb98b05f60950d6004f6559af576df5891b78056f61fce6181",
+  "python": "3.11.18",
+  "recursive_self_improvement_proven": false,
+  "security_checks": {
+    "effective_policy": {
+      "cpu_max": "100000 100000",
+      "credentials": false,
+      "denied": {
+        "harness": true,
+        "network": true,
+        "rootfs": true,
+        "source": true
+      },
+      "docker_socket": false,
+      "memory_max": "268435456",
+      "pids_max": "32",
+      "status": "Name:\tpython\nUmask:\t0022\nState:\tR (running)\nTgid:\t1\nNgid:\t0\nPid:\t1\nPPid:\t0\nTracerPid:\t0\nUid:\t65534\t65534\t65534\t65534\nGid:\t65534\t65534\t65534\t65534\nFDSize:\t64\nGroups:\t65534 \nNStgid:\t1\nNSpid:\t1\nNSpgid:\t1\nNSsid:\t1\nKthread:\t0\nVmPeak:\t   16972 kB\nVmSize:\t   16972 kB\nVmLck:\t       0 kB\nVmPin:\t       0 kB\nVmHWM:\t   12324 kB\nVmRSS:\t   12324 kB\nRssAnon:\t    6356 kB\nRssFile:\t    5968 kB\nRssShmem:\t       0 kB\nVmData:\t    8028 kB\nVmStk:\t     132 kB\nVmExe:\t       4 kB\nVmLib:\t    4056 kB\nVmPTE:\t      76 kB\nVmSwap:\t       0 kB\nHugetlbPages:\t       0 kB\nCoreDumping:\t0\nTHP_enabled:\t1\nuntag_mask:\t0xffffffffffffffff\nThreads:\t1\nSigQ:\t0/58109\nSigPnd:\t0000000000000000\nShdPnd:\t0000000000000000\nSigBlk:\t0000000000000000\nSigIgn:\t0000000001001000\nSigCgt:\t0000000000000002\nCapInh:\t0000000000000000\nCapPrm:\t0000000000000000\nCapEff:\t0000000000000000\nCapBnd:\t0000000000000000\nCapAmb:\t0000000000000000\nNoNewPrivs:\t1\nSeccomp:\t2\nSeccomp_filters:\t1\nSpeculation_Store_Bypass:\tvulnerable\nSpeculationIndirectBranch:\talways enabled\nCpus_allowed:\tf\nCpus_allowed_list:\t0-3\nMems_allowed:\t00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001\nMems_allowed_list:\t0\nvoluntary_ctxt_switches:\t17\nnonvoluntary_ctxt_switches:\t11\nx86_Thread_features:\t\nx86_Thread_features_locked:\t\n",
+      "uid": 65534
+    },
+    "flood": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "output_limit",
+      "stdout": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "wall_ms": 255.07479800000965
+    },
+    "hang": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "timeout",
+      "stdout": "",
+      "wall_ms": 3072.514404000003
+    },
+    "oom": {
+      "cpu_seconds": null,
+      "exit_code": 137,
+      "oom_killed": true,
+      "status": "oom",
+      "stdout": "",
+      "wall_ms": 370.70575899998914
+    },
+    "passed": true,
+    "probe": {
+      "cpu_seconds": null,
+      "exit_code": 0,
+      "oom_killed": false,
+      "status": "completed",
+      "stdout": "{\"uid\": 65534, \"denied\": {\"source\": true, \"harness\": true, \"rootfs\": true, \"network\": true}, \"status\": \"Name:\\tpython\\nUmask:\\t0022\\nState:\\tR (running)\\nTgid:\\t1\\nNgid:\\t0\\nPid:\\t1\\nPPid:\\t0\\nTracerPid:\\t0\\nUid:\\t65534\\t65534\\t65534\\t65534\\nGid:\\t65534\\t65534\\t65534\\t65534\\nFDSize:\\t64\\nGroups:\\t65534 \\nNStgid:\\t1\\nNSpid:\\t1\\nNSpgid:\\t1\\nNSsid:\\t1\\nKthread:\\t0\\nVmPeak:\\t   16972 kB\\nVmSize:\\t   16972 kB\\nVmLck:\\t       0 kB\\nVmPin:\\t       0 kB\\nVmHWM:\\t   12324 kB\\nVmRSS:\\t   12324 kB\\nRssAnon:\\t    6356 kB\\nRssFile:\\t    5968 kB\\nRssShmem:\\t       0 kB\\nVmData:\\t    8028 kB\\nVmStk:\\t     132 kB\\nVmExe:\\t       4 kB\\nVmLib:\\t    4056 kB\\nVmPTE:\\t      76 kB\\nVmSwap:\\t       0 kB\\nHugetlbPages:\\t       0 kB\\nCoreDumping:\\t0\\nTHP_enabled:\\t1\\nuntag_mask:\\t0xffffffffffffffff\\nThreads:\\t1\\nSigQ:\\t0/58109\\nSigPnd:\\t0000000000000000\\nShdPnd:\\t0000000000000000\\nSigBlk:\\t0000000000000000\\nSigIgn:\\t0000000001001000\\nSigCgt:\\t0000000000000002\\nCapInh:\\t0000000000000000\\nCapPrm:\\t0000000000000000\\nCapEff:\\t0000000000000000\\nCapBnd:\\t0000000000000000\\nCapAmb:\\t0000000000000000\\nNoNewPrivs:\\t1\\nSeccomp:\\t2\\nSeccomp_filters:\\t1\\nSpeculation_Store_Bypass:\\tvulnerable\\nSpeculationIndirectBranch:\\talways enabled\\nCpus_allowed:\\tf\\nCpus_allowed_list:\\t0-3\\nMems_allowed:\\t00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001\\nMems_allowed_list:\\t0\\nvoluntary_ctxt_switches:\\t17\\nnonvoluntary_ctxt_switches:\\t11\\nx86_Thread_features:\\t\\nx86_Thread_features_locked:\\t\\n\", \"memory_max\": \"268435456\", \"pids_max\": \"32\", \"cpu_max\": \"100000 100000\", \"docker_socket\": false, \"credentials\": false}\n",
+      "wall_ms": 1003.1578359999997
+    }
+  },
+  "status": "generation_or_policy_blocked"
+}

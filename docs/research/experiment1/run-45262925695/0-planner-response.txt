@@ -1,0 +1,34 @@
+```json
+{
+  "goal": "Extract the first JSON object from the given string.",
+  "work_mode": "repair",
+  "domain": "code",
+  "artifact": "JSON object",
+  "operation": "patch operation in domain terms",
+  "validation": "AST parse or focused smoke check",
+  "task_type": "bugfix",
+  "tasks": [
+    {
+      "title": "Extract the first JSON object from the given string.",
+      "description": "Extract the first JSON object from the given string.",
+      "work_mode": "repair",
+      "domain": "code",
+      "artifact": "JSON object",
+      "operation": "patch operation in domain terms",
+      "validation": "AST parse or focused smoke check",
+      "target_file": "planner.py",
+      "target_symbol": null,
+      "creates_symbols": [],
+      "wires_into_symbols": [],
+      "insertion_region": null,
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": ["The extracted JSON object is {json_object}."]
+    }
+  ],
+  "dependencies": ["planner.py"],
+  "risks": [],
+  "next_action": "Extract the first JSON object from the given string.",
+  "status": "planned"
+}
+```

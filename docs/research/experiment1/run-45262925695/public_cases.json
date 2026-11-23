@@ -1,0 +1,10 @@
+[
+ {"id":"public-plain","input":"{\"goal\":\"repair\"}","expected":{"goal":"repair"}},
+ {"id":"public-fenced","input":"```json\n{\"tasks\":[1,2]}\n```","expected":{"tasks":[1,2]}},
+ {"id":"public-trailing-object","input":"{\"first\":true} then {\"second\":false}","expected":{"first":true}},
+ {"id":"public-invalid-prefix","input":"Example {not JSON}. Answer: {\"ok\":true}","expected":{"ok":true}},
+ {"id":"public-quoted-brace","input":"{\"text\":\"a } and { b\"}","expected":{"text":"a } and { b"}},
+ {"id":"public-nested","input":"Answer: {\"outer\":{\"x\":2}} trailing }","expected":{"outer":{"x":2}}},
+ {"id":"public-empty","input":"","error":"ValueError"},
+ {"id":"public-unclosed","input":"{\"x\": 1","error":"ValueError"}
+]

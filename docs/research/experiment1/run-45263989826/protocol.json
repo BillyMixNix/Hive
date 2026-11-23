@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "experiment": "Hive Experiment 1: planner JSON extraction",
+  "baseline_commit": "87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb",
+  "editable_file": "planner.py",
+  "editable_method": "PlannerAgent._extract_json_object",
+  "contract": "Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity).",
+  "model": "qwen2.5-coder:1.5b",
+  "generation": {"seed": 1729, "temperature": 0, "num_predict": 2048, "num_ctx": 16384, "num_thread": 4, "max_calls": 2, "timeout_seconds_per_call": 240, "max_prompt_characters": 48000},
+  "evaluation": {"repetitions": 3, "shuffle_seeds": [11, 29, 47], "minimum_distinct_heldout_cases": 20, "minimum_accuracy_gain": 0.05, "maximum_generation_cost_increase": 0.10, "maximum_median_latency_ratio": 1.25, "latency_floor_ms": 1, "no_baseline_correct_case_regression": true, "require_all_public_cases": true, "require_all_recorded_regressions": true, "require_candidate_repository_tests": true},
+  "sandbox": {"memory_mb": 256, "cpus": 1, "pids": 32, "wall_seconds": 20, "output_bytes": 262144, "network": "none", "uid": 65534, "rootfs": "read-only", "tmpfs_mb": 16, "capabilities": "none", "no_new_privileges": true},
+  "cost_accounting": "No paid API. Record local model prompt/output tokens and wall time, evaluation wall time, and container CPU time. Dollar compute cost is unknown; zero API charges do not imply free compute. Gate cost uses evaluation API charges (zero for both); lifecycle generation is separate and must not be amortized away.",
+  "claim_limit": "One selected method and hand-authored cases; deterministic repetitions are repeatability, not independent samples or replication. No automatic promotion. No recursive self-improvement claim."
+}

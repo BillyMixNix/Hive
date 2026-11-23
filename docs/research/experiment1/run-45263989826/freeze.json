@@ -1,0 +1,106 @@
+{
+  "checksums": {
+    "Dockerfile": "c6e70a8098e57b0990de26c7933e5c1f184fff7339079f30087ed30740a736e3",
+    "heldout_cases.json": "db4b5ad3839428588ad92d49b7fffbc0c546a6f59aa241e4a446cd0379c238c3",
+    "protocol.json": "d9a6dcc6bac16ceb98b05f60950d6004f6559af576df5891b78056f61fce6181",
+    "public_cases.json": "c3d08919b475b01d658d8a5a3dd7b79e9ce520c40f5af424a7672c947227c938",
+    "run.py": "4092fa0e2cec15fa76ecc2767a2700f5ef7e48a3dbc2e821194de3252fb1b35c",
+    "worker.py": "fdf3d01f3b13beb5c89df5e347f4ec653c4118549ea4c89fdc8f9f632cb12b98"
+  },
+  "environment": {
+    "architecture": "x86_64",
+    "docker_version": "28.0.4",
+    "image_id": "sha256:acf1b6d4eb29b4bcbacacbd2322226b2d9fa192381110676e2f2b3f6d5f1015a",
+    "kernel": "7.0.0-1014-aws",
+    "limits": {
+      "cpus": 1,
+      "memory_mb": 256,
+      "output_bytes": 262144,
+      "pids": 32,
+      "tmpfs_mb": 16,
+      "wall_seconds": 20
+    },
+    "security_options": [
+      "name=apparmor",
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ]
+  },
+  "model_identity": {
+    "capabilities": [
+      "completion",
+      "tools",
+      "insert"
+    ],
+    "details": {
+      "context_length": 32768,
+      "embedding_length": 1536,
+      "families": [
+        "qwen2"
+      ],
+      "family": "qwen2",
+      "format": "gguf",
+      "parameter_size": "1.5B",
+      "parent_model": "",
+      "quantization_level": "Q4_K_M",
+      "runner": "ggml"
+    },
+    "digest": "d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668",
+    "model": "qwen2.5-coder:1.5b",
+    "modified_at": "2026-11-23T20:54:53.514346943Z",
+    "name": "qwen2.5-coder:1.5b",
+    "size": 986062089
+  },
+  "protocol": {
+    "baseline_commit": "87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb",
+    "claim_limit": "One selected method and hand-authored cases; deterministic repetitions are repeatability, not independent samples or replication. No automatic promotion. No recursive self-improvement claim.",
+    "contract": "Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity).",
+    "cost_accounting": "No paid API. Record local model prompt/output tokens and wall time, evaluation wall time, and container CPU time. Dollar compute cost is unknown; zero API charges do not imply free compute. Gate cost uses evaluation API charges (zero for both); lifecycle generation is separate and must not be amortized away.",
+    "editable_file": "planner.py",
+    "editable_method": "PlannerAgent._extract_json_object",
+    "evaluation": {
+      "latency_floor_ms": 1,
+      "maximum_generation_cost_increase": 0.1,
+      "maximum_median_latency_ratio": 1.25,
+      "minimum_accuracy_gain": 0.05,
+      "minimum_distinct_heldout_cases": 20,
+      "no_baseline_correct_case_regression": true,
+      "repetitions": 3,
+      "require_all_public_cases": true,
+      "require_all_recorded_regressions": true,
+      "require_candidate_repository_tests": true,
+      "shuffle_seeds": [
+        11,
+        29,
+        47
+      ]
+    },
+    "experiment": "Hive Experiment 1: planner JSON extraction",
+    "generation": {
+      "max_calls": 2,
+      "max_prompt_characters": 48000,
+      "num_ctx": 16384,
+      "num_predict": 2048,
+      "num_thread": 4,
+      "seed": 1729,
+      "temperature": 0,
+      "timeout_seconds_per_call": 240
+    },
+    "model": "qwen2.5-coder:1.5b",
+    "sandbox": {
+      "capabilities": "none",
+      "cpus": 1,
+      "memory_mb": 256,
+      "network": "none",
+      "no_new_privileges": true,
+      "output_bytes": 262144,
+      "pids": 32,
+      "rootfs": "read-only",
+      "tmpfs_mb": 16,
+      "uid": 65534,
+      "wall_seconds": 20
+    },
+    "schema_version": 1
+  },
+  "timestamp_unix": 1795467301.4968624
+}
