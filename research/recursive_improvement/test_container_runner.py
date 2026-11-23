@@ -1,8 +1,9 @@
 import json
+import io
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from research.recursive_improvement.container_runner import ContainerRunner, Limits, SandboxUnavailable
 from research.recursive_improvement.experiment1.run import restrict_method, score, stage_patch
@@ -45,6 +46,36 @@ class BoundaryTests(unittest.TestCase):
         with patch("research.recursive_improvement.container_runner._docker", side_effect=SandboxUnavailable("absent")):
             with self.assertRaises(SandboxUnavailable):
                 runner.preflight()
+
+    def test_output_flood_disconnects_attachment_before_container_removal(self):
+        events = []
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            process = MagicMock()
+            process.stdin = io.BytesIO()
+            process.stdout = io.BufferedReader(io.BytesIO(b"x" * 100))
+            process.poll.return_value = None
+            process.kill.side_effect = lambda: events.append("disconnect")
+            selector = MagicMock()
+            selector.__enter__.return_value = selector
+            selector.get_map.return_value = {1: True}
+            key = MagicMock()
+            key.fileobj = process.stdout
+            selector.select.return_value = [(key, 1)]
+            def docker(*args, **kwargs):
+                if args[0] == "inspect":
+                    return json.dumps([{"HostConfig": {"ReadonlyRootfs": True, "Privileged": False,
+                        "NetworkMode": "none", "Memory": 256 * 1024**2, "MemorySwap": 256 * 1024**2,
+                        "PidsLimit": 32, "NanoCpus": 10**9}, "Config": {"User": "65534:65534"}, "Mounts": []}])
+                if args[0] == "rm":
+                    events.append("remove")
+                return "container"
+            with patch("research.recursive_improvement.container_runner._docker", side_effect=docker), \
+                 patch("research.recursive_improvement.container_runner.subprocess.Popen", return_value=process), \
+                 patch("research.recursive_improvement.container_runner.selectors.DefaultSelector", return_value=selector):
+                run = ContainerRunner(IMAGE, root, Limits(output_bytes=10)).run(root, "flood")
+            self.assertEqual(run.status, "output_limit")
+            self.assertEqual(events, ["disconnect", "remove"])
 
     def test_subject_cannot_supply_scores_or_omit_cases(self):
         cases = [{"id": "a", "input": "{}", "expected": {}}]

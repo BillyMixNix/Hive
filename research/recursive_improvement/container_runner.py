@@ -168,14 +168,17 @@ class ContainerRunner:
         except subprocess.TimeoutExpired:
             status = "timeout"
         finally:
-            # Removing the whole container kills descendants, including detached ones.
+            # Disconnect attachment before removal. A flooding subject can otherwise
+            # fill the pipe and block daemon teardown behind output backpressure.
             try:
-                _docker("rm", "--force", name, timeout=10)
-            finally:
                 if process is not None:
                     if process.poll() is None:
                         process.kill()
                     process.wait(timeout=10)
                     process.stdout.close()
+            finally:
+                # Whole-container removal kills detached descendants as well.
+                # A cleanup error propagates, preventing further evaluation.
+                _docker("rm", "--force", name, timeout=10)
         return Run(status, code, output.decode("utf-8", errors="replace"),
                    (time.monotonic() - started) * 1000, oom, cpu)

@@ -197,11 +197,12 @@ class ModelAdapter:
             write(self.output / "model-calls.json", self.calls)
 
 
-def security_checks(runner, baseline):
+def security_checks(runner, baseline, output):
     probe = runner.run(baseline, "probe")
     if probe.status != "completed":
         raise RuntimeError("Sandbox probe failed: " + probe.stdout)
     info = strict_json(probe.stdout)
+    write(output / "security-effective-policy.json", {"run": asdict(probe), "policy": info})
     expected_cpu = runner.limits.cpus
     quota, period = info["cpu_max"].split()
     ok = (info["uid"] == 65534 and all(info["denied"].values())
@@ -216,8 +217,11 @@ def security_checks(runner, baseline):
         raise RuntimeError("Sandbox effective-policy probe failed")
     short = ContainerRunner(runner.image, runner.harness, replace(runner.limits, wall_seconds=3, output_bytes=16384))
     hang = short.run(baseline, "hang")
+    write(output / "security-hang.json", asdict(hang))
     flood = short.run(baseline, "flood")
+    write(output / "security-flood.json", asdict(flood))
     oom = runner.run(baseline, "oom")
+    write(output / "security-oom.json", asdict(oom))
     if hang.status != "timeout" or flood.status != "output_limit" or oom.status != "oom":
         raise RuntimeError("Sandbox limit enforcement failed")
     return {"effective_policy": info, "probe": asdict(probe), "hang": asdict(hang),
@@ -330,7 +334,7 @@ def main():
         shutil.copy2(HERE / "worker.py", harness / "worker.py")
         runner.harness = harness
         report["environment"] = runner.preflight()
-        report["security_checks"] = security_checks(runner, baseline)
+        report["security_checks"] = security_checks(runner, baseline, args.output)
         # Model identity and all evaluation hashes are persisted before inference.
         try:
             with urllib.request.urlopen("http://127.0.0.1:11434/api/tags", timeout=5) as response:
@@ -426,4 +430,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        # Preserve a machine-readable infrastructure failure even before inference.
+        if "--output" in sys.argv:
+            output = Path(sys.argv[sys.argv.index("--output") + 1])
+            output.mkdir(parents=True, exist_ok=True)
+            path = output / "result.json"
+            report = json.loads(path.read_text()) if path.exists() else {}
+            report.update({"status": "infrastructure_failed", "error": type(exc).__name__ + ": " + str(exc),
+                           "promotion_allowed": False, "recursive_self_improvement_proven": False})
+            write(path, report)
+        raise
