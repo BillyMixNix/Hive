@@ -35,6 +35,7 @@ jobs:
       - name: Build credential-free subject image
         run: |
           mkdir -p "$RUNNER_TEMP/hive-experiment1"
+          docker pull python:3.11-slim-bookworm
           docker build --pull -t hive-experiment1:local research/recursive_improvement/experiment1
           docker image inspect hive-experiment1:local > "$RUNNER_TEMP/hive-experiment1/image.json"
           docker image inspect python:3.11-slim-bookworm > "$RUNNER_TEMP/hive-experiment1/base-image.json"
