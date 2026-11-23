@@ -1,0 +1,67 @@
+name: Recursive improvement Experiment 1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/recursive_improvement/**'
+      - '.github/workflows/recursive-improvement-experiment1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-experiment1-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  experiment:
+    if: github.head_ref == 'research/recursive-improvement' && github.event.pull_request.head.repo.full_name == 'BillyMixNix/Hive'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install controller dependencies
+        run: pip install requests==2.32.3 pytest==8.3.5 z3-solver==4.15.4.0
+      - name: Test host controller and candidate policy
+        run: python -m pytest -q research/recursive_improvement tests/test_empirical_validation_gate.py
+      - name: Build credential-free subject image
+        run: |
+          mkdir -p "$RUNNER_TEMP/hive-experiment1"
+          docker build --pull -t hive-experiment1:local research/recursive_improvement/experiment1
+          docker image inspect hive-experiment1:local > "$RUNNER_TEMP/hive-experiment1/image.json"
+          docker image inspect python:3.11-slim-bookworm > "$RUNNER_TEMP/hive-experiment1/base-image.json"
+      - name: Start bounded local model service
+        run: |
+          docker pull ollama/ollama:0.40.17
+          docker image inspect ollama/ollama:0.40.17 > "$RUNNER_TEMP/hive-experiment1/ollama-image.json"
+          docker run -d --name hive-experiment1-model --memory=4g --memory-swap=4g --cpus=4 --pids-limit=128 --cap-drop=ALL --security-opt=no-new-privileges:true -p 127.0.0.1:11434:11434 -e OLLAMA_NUM_PARALLEL=1 -e OLLAMA_MAX_LOADED_MODELS=1 ollama/ollama:0.40.17
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null; then break; fi
+            sleep 1
+          done
+          docker exec hive-experiment1-model ollama pull qwen2.5-coder:1.5b
+      - name: Freeze, baseline, propose, and independently evaluate
+        run: |
+          HIVE_SUBJECT_IMAGE=$(docker image inspect hive-experiment1:local --format '{{.Id}}')
+          python -B -m research.recursive_improvement.experiment1.run --image "$HIVE_SUBJECT_IMAGE" --output "$RUNNER_TEMP/hive-experiment1"
+      - name: Remove model container and any remaining subject containers
+        if: always()
+        run: |
+          docker rm -f hive-experiment1-model || true
+          docker ps -aq --filter name=hive-ri- | xargs -r docker rm -f
+      - name: Preserve exact inputs, model output, trials, and failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: hive-experiment1-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-experiment1/
+          retention-days: 30
+          if-no-files-found: error

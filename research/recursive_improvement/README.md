@@ -2,6 +2,10 @@
 
 **Status:** experimental gate, not an autonomous RSI system.
 
+Experiment 1 now has a [container runner and frozen protocol](experiment1/README.md).
+Use that controller for generated candidates. The older callback-based integration
+below is retained for trusted unit fixtures and is not a hostile-code runner.
+
 The first module is a fail-closed, deterministic comparison gate for independently generated baseline and candidate evaluation reports. The incremental integration in `integration.py` now connects Hive's existing planner/coder contracts to its isolated variant and recorded-regression APIs. It does **not** promote patches, grant broad filesystem authority, or claim that an LLM has learned.
 
 ## Research protocol
