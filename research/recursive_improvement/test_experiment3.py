@@ -104,3 +104,21 @@ def test_clean_frozen_planning_response_is_valid_for_trusted_baseline(monkeypatc
             "metadata": {"target_file": "planner.py", "target_symbol": "_extract_json_object"}}
     plan = planner.PlannerAgent().plan_task(task)
     assert score_plans([case], [{"id": case["id"], "plan": plan}])[0]["correct"]
+
+
+def test_planner_scratch_view_keeps_source_read_only_and_lesson_data_separate(tmp_path, monkeypatch):
+    from research.recursive_improvement.experiment3.replay_worker import scratch_view
+    from HiveLessonMemory import LessonMemory
+    source = tmp_path / "source"; source.mkdir()
+    (source / "planner.py").write_text("trusted fixture")
+    source.chmod(0o555)
+    try:
+        work = scratch_view(source)
+        monkeypatch.chdir(work)
+        LessonMemory()
+        assert (work / "planner.py").read_text() == "trusted fixture"
+        assert (work / "hive_lessons.jsonl").is_file()
+        assert not (source / "hive_lessons.jsonl").exists()
+        assert (source / "planner.py").read_text() == "trusted fixture"
+    finally:
+        source.chmod(0o755)

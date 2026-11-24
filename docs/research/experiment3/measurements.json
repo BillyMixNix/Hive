@@ -1,0 +1,613 @@
+{
+  "baseline_and_evaluation_unchanged": true,
+  "baseline_commit": "bbc0b2dcc216b51d4c13232754926f23ea45fd31",
+  "baseline_repository_tests": {
+    "failed": 0,
+    "passed": 379,
+    "skipped": 1
+  },
+  "baseline_test_wall_ms": 170234.31127299997,
+  "candidates": [
+    {
+      "attempt": 0,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 4242,
+      "source_sha256": "ef9ffd9ca580d25561efc775cb1387321e65100d37bb201777dbc47168eba50c"
+    },
+    {
+      "attempt": 1,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 4242,
+      "source_sha256": "ef9ffd9ca580d25561efc775cb1387321e65100d37bb201777dbc47168eba50c"
+    },
+    {
+      "attempt": 0,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 5656,
+      "source_sha256": "1dd202f1d052ed0d86190ce6f9ce54b86fdee166f3c7991ebeceaf80ce599c88"
+    },
+    {
+      "attempt": 1,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 5656,
+      "source_sha256": "1dd202f1d052ed0d86190ce6f9ce54b86fdee166f3c7991ebeceaf80ce599c88"
+    },
+    {
+      "attempt": 0,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 7878,
+      "source_sha256": "1dd202f1d052ed0d86190ce6f9ce54b86fdee166f3c7991ebeceaf80ce599c88"
+    },
+    {
+      "attempt": 1,
+      "bounded_gain": false,
+      "hive_selected": false,
+      "seed": 7878,
+      "source_sha256": "6b52cc0fc97bae94e6bd0ab4daaf9c20e5710ca7cde5b23659d8886618e2bef2"
+    }
+  ],
+  "controller_commit": "b2b8d01c4aeb622d2c6ed3a7d8758cbe97f76474",
+  "environment": {
+    "architecture": "x86_64",
+    "docker_version": "28.0.4",
+    "image_id": "sha256:76580bb61a9a44611a73cc32caf624cdfe4a5e13b8b928fb31b2090feed2e560",
+    "kernel": "7.0.0-1014-aws",
+    "limits": {
+      "cpus": 1,
+      "memory_mb": 256,
+      "output_bytes": 262144,
+      "pids": 32,
+      "tmpfs_mb": 16,
+      "wall_seconds": 20
+    },
+    "security_options": [
+      "name=apparmor",
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ]
+  },
+  "evaluations": {
+    "1dd202f1d052ed0d86190ce6f9ce54b86fdee166f3c7991ebeceaf80ce599c88": {
+      "bounded_gates_passed": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_planner_response_replays": false,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "no_planner_replay_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "host_batch_latency_ms": {
+        "baseline_median": 244.2492410000341,
+        "candidate_median": 241.64098100004594,
+        "ratio": 0.9893213178910645
+      },
+      "original_plan_replay_interpretation": "Uninterpretable as functional accuracy: every call raised OSError before helper execution. Preserve original raw 0/8 results; evaluate exact patches in a separate zero-inference diagnostic after scratch-CWD repair.",
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 168520.765697,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 379,
+        "skipped": 1
+      },
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 242.79302200000075
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 280.3402339999366
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 240.05832300008478
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 238.93032399996628
+            }
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 248.66056300004402
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 237.4265229999537
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 241.64098100004594
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 250.99705499997071
+            }
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 244.2492410000341
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 241.24078800002735
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 245.7288040000094
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 238.834585999939
+            }
+          },
+          "seed": 47
+        }
+      ]
+    },
+    "6b52cc0fc97bae94e6bd0ab4daaf9c20e5710ca7cde5b23659d8886618e2bef2": {
+      "bounded_gates_passed": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_planner_response_replays": false,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "no_planner_replay_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "host_batch_latency_ms": {
+        "baseline_median": 250.6140019997929,
+        "candidate_median": 252.10287999993852,
+        "ratio": 1.005940921050959
+      },
+      "original_plan_replay_interpretation": "Uninterpretable as functional accuracy: every call raised OSError before helper execution. Preserve original raw 0/8 results; evaluate exact patches in a separate zero-inference diagnostic after scratch-CWD repair.",
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 170267.9589080001,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 379,
+        "skipped": 1
+      },
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 251.766883000073
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 284.676035000075
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 64,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 252.10287999993852
+            },
+            "public": {
+              "correct": 9,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 247.9320990000815
+            }
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 250.6140019997929
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 249.1146590000426
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 64,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 252.95535800000835
+            },
+            "public": {
+              "correct": 9,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 251.17165799997565
+            }
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 242.73020299983727
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 248.97790800014263
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 64,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 247.8058310000506
+            },
+            "public": {
+              "correct": 9,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 249.04926600015642
+            }
+          },
+          "seed": 47
+        }
+      ]
+    },
+    "ef9ffd9ca580d25561efc775cb1387321e65100d37bb201777dbc47168eba50c": {
+      "bounded_gates_passed": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_planner_response_replays": false,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "no_planner_replay_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "host_batch_latency_ms": {
+        "baseline_median": 242.79891699995915,
+        "candidate_median": 237.582130000078,
+        "ratio": 0.9785139609997435
+      },
+      "original_plan_replay_interpretation": "Uninterpretable as functional accuracy: every call raised OSError before helper execution. Preserve original raw 0/8 results; evaluate exact patches in a separate zero-inference diagnostic after scratch-CWD repair.",
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 167753.05366600002,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 379,
+        "skipped": 1
+      },
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 242.79891699995915
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 247.97277099992243
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 237.582130000078
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 239.53114200003256
+            }
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 237.15633500000877
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 269.7257879999597
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 237.7955000000611
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 233.03923100002066
+            }
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 32,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 243.74351899996327
+            },
+            "public": {
+              "correct": 6,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 245.1079300000174
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 48,
+              "total": 96,
+              "valid": true,
+              "wall_ms": 233.72874300002877
+            },
+            "public": {
+              "correct": 8,
+              "total": 14,
+              "valid": true,
+              "wall_ms": 242.0691169999145
+            }
+          },
+          "seed": 47
+        }
+      ]
+    }
+  },
+  "generation": [
+    {
+      "cost": {
+        "api_charge_usd": 0,
+        "calls": 3,
+        "compute_cost_usd": null,
+        "known_output_tokens": 386,
+        "known_prompt_tokens": 3149,
+        "output_tokens": 386,
+        "prompt_tokens": 3149,
+        "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+        "token_usage_complete": true,
+        "wall_ms": 127794.60320600003
+      },
+      "failure_code": "sandbox_semantic_failed",
+      "public_smokes": [
+        {
+          "attempt": 0,
+          "correct": 8,
+          "total": 14
+        },
+        {
+          "attempt": 1,
+          "correct": 8,
+          "total": 14
+        }
+      ],
+      "seed": 4242,
+      "status": "blocked"
+    },
+    {
+      "cost": {
+        "api_charge_usd": 0,
+        "calls": 3,
+        "compute_cost_usd": null,
+        "known_output_tokens": 378,
+        "known_prompt_tokens": 3131,
+        "output_tokens": 378,
+        "prompt_tokens": 3131,
+        "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+        "token_usage_complete": true,
+        "wall_ms": 92002.5094689999
+      },
+      "failure_code": "sandbox_semantic_failed",
+      "public_smokes": [
+        {
+          "attempt": 0,
+          "correct": 8,
+          "total": 14
+        },
+        {
+          "attempt": 1,
+          "correct": 8,
+          "total": 14
+        }
+      ],
+      "seed": 5656,
+      "status": "blocked"
+    },
+    {
+      "cost": {
+        "api_charge_usd": 0,
+        "calls": 3,
+        "compute_cost_usd": null,
+        "known_output_tokens": 404,
+        "known_prompt_tokens": 3129,
+        "output_tokens": 404,
+        "prompt_tokens": 3129,
+        "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+        "token_usage_complete": true,
+        "wall_ms": 98123.01786699993
+      },
+      "failure_code": "sandbox_semantic_failed",
+      "public_smokes": [
+        {
+          "attempt": 0,
+          "correct": 8,
+          "total": 14
+        },
+        {
+          "attempt": 1,
+          "correct": 9,
+          "total": 14
+        }
+      ],
+      "seed": 7878,
+      "status": "blocked"
+    }
+  ],
+  "generation_cost": {
+    "api_charge_usd": 0,
+    "calls": 9,
+    "compute_cost_usd": null,
+    "known_output_tokens": 1168,
+    "known_prompt_tokens": 9409,
+    "output_tokens": 1168,
+    "prompt_tokens": 9409,
+    "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+    "token_usage_complete": true,
+    "wall_ms": 317920.1305419998
+  },
+  "model_identity": {
+    "capabilities": [
+      "completion",
+      "tools",
+      "insert"
+    ],
+    "details": {
+      "context_length": 32768,
+      "embedding_length": 3584,
+      "families": [
+        "qwen2"
+      ],
+      "family": "qwen2",
+      "format": "gguf",
+      "parameter_size": "7.6B",
+      "parent_model": "",
+      "quantization_level": "Q4_K_M",
+      "runner": "ggml"
+    },
+    "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "model": "qwen2.5-coder:7b",
+    "modified_at": "2026-11-24T05:35:58.902952294Z",
+    "name": "qwen2.5-coder:7b",
+    "size": 4683087561
+  },
+  "promotion_allowed": false,
+  "protocol_sha256": "38e631ea4b79a5e8697e50c01b07fb911f20a8513b8e68c428f55f8e609dbca6",
+  "recursive_self_improvement_proven": false,
+  "security": {
+    "flood": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "output_limit",
+      "wall_ms": 147.57102500001906
+    },
+    "hang": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "timeout",
+      "wall_ms": 3040.7918260000033
+    },
+    "oom": {
+      "cpu_seconds": null,
+      "exit_code": 0,
+      "oom_killed": true,
+      "status": "completed",
+      "wall_ms": 243.0607699999996
+    },
+    "oom_evidence": {
+      "child_signal": 9,
+      "evidence_source": "cgroup_v2_memory_events",
+      "memory_max": 268435456,
+      "oom_kill_count": 1
+    }
+  },
+  "status": "no_accepted_candidate"
+}

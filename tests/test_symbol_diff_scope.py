@@ -40,13 +40,15 @@ class PlannerAgent:
 '''
 
 
-def validate(source, changed, name="target", context=3):
+def validate(source, changed, name="target", context=3, tag=None):
     node = next(n for n in ast.walk(ast.parse(source))
                 if isinstance(n, ast.FunctionDef) and n.name == name)
     span = {k: getattr(node, k) for k in ("lineno", "end_lineno", "col_offset", "end_col_offset")}
     symbol_id = f"sample.py::{name}"
     anchor = {**span, "target_symbol": name, "target_symbol_id": symbol_id, "target_file": "sample.py"}
     task = {"target_file": "sample.py", "target_symbol": name, "metadata": {"anchor": anchor}}
+    if tag:
+        task["tag"] = tag
     block = {**span, "name": name, "symbol_id": symbol_id}
     patch = "".join(difflib.unified_diff(source.splitlines(True), changed.splitlines(True),
                                       fromfile="sample.py", tofile="sample.py", n=context))
@@ -79,6 +81,15 @@ def test_real_out_of_scope_edits_are_blocked_even_without_def_context(changed):
 def test_changed_def_names_excludes_context_but_keeps_real_added_definitions():
     patch = " def target(self):\n-    return 1\n+    return 2\n def neighbor(self):\n+def added():\n+    pass\n"
     assert extract_changed_def_names(patch) == {"added"}
+
+
+def test_existing_complexity_helper_exception_is_preserved_without_weakening_bugfix_scope():
+    changed = SOURCE.replace("return value", "return self.helper(value)") + "\n    def helper(self, value):\n        return str(value)\n"
+    with pytest.raises(ValueError, match="symbol_anchor_drift"):
+        validate(SOURCE, changed)
+    assert validate(SOURCE, changed, tag="complexity")
+    with pytest.raises(ValueError, match="symbol_anchor_drift"):
+        validate(SOURCE, changed + "\n    def extra(self):\n        return 0\n", tag="complexity")
 
 
 def test_archived_experiment2_patches_no_longer_trigger_neighbor_drift():

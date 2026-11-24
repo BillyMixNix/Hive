@@ -579,11 +579,9 @@ def validate_symbol_locked_patch(patch_data, task, selected_block=None, *, origi
         validate_symbol_patch_scope(original_source, patch_text, selected_block)
 
     if changed_defs:
-        if target_symbol not in changed_defs:
-            raise ValueError(
-                f"symbol_anchor_drift: patch does not modify requested symbol {target_symbol}."
-            )
-
+        # A body edit need not add/remove its def line. Absence from this set
+        # does not establish absence of a target edit. Modern diffs already have
+        # the source-tree scope check above; retain the existing helper policy.
         unrelated_defs = sorted(name for name in changed_defs if name != target_symbol)
         if unrelated_defs:
             if task_tag == "complexity" and len(unrelated_defs) == 1:
