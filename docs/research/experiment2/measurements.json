@@ -1,0 +1,484 @@
+{
+  "baseline_and_evaluation_unchanged": true,
+  "baseline_commit": "87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb",
+  "candidates": [
+    {
+      "bounded_gain": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "generation_seed": 1729,
+      "hive_error": "symbol_anchor_drift: patch modifies unrelated symbols ['_validate_task_list']; only _extract_json_object may change.",
+      "hive_failure_code": "symbol_anchor_drift",
+      "hive_status": "blocked",
+      "host_batch_latency_ms": {
+        "baseline_median": 247.2087790000046,
+        "candidate_median": 244.76658899999393,
+        "ratio": 0.990120941457299
+      },
+      "measured_diagnostically": true,
+      "method_only_ast_verified": true,
+      "public_failure_ids": [
+        "pub2-b"
+      ],
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 172137.997961,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 348,
+        "skipped": 1
+      },
+      "source_sha256": "44b67a8f0923546240a718205ccb68691aae0c9e2a6b921cbd9bd81e60804b35",
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 252.49490800001695
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 337.74223500000744
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 45,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 244.76658899999393
+            },
+            "public": {
+              "correct": 7,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 243.96946000001662
+            }
+          },
+          "shuffle_seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 246.86180200001218
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 243.48933799996075
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 45,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 244.14084200003572
+            },
+            "public": {
+              "correct": 7,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 247.26085499997907
+            }
+          },
+          "shuffle_seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 247.2087790000046
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 263.8011390000088
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 45,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 253.51378799996382
+            },
+            "public": {
+              "correct": 7,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 245.326394000017
+            }
+          },
+          "shuffle_seed": 47
+        }
+      ]
+    },
+    {
+      "bounded_gain": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "generation_seed": 2718,
+      "hive_error": "symbol_anchor_drift: patch modifies unrelated symbols ['_validate_task_list']; only _extract_json_object may change.",
+      "hive_failure_code": "symbol_anchor_drift",
+      "hive_status": "blocked",
+      "host_batch_latency_ms": {
+        "baseline_median": 259.2477550000467,
+        "candidate_median": 258.3583290000888,
+        "ratio": 0.9965692046206621
+      },
+      "measured_diagnostically": true,
+      "method_only_ast_verified": true,
+      "public_failure_ids": [
+        "pub2-b",
+        "pub2-c"
+      ],
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 169116.66034099995,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 348,
+        "skipped": 1
+      },
+      "source_sha256": "a4dada12425e1dc394b55972c2ee1ac632436c92836f6f74e08fc352a9b3b8c7",
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 259.2477550000467
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 272.8941819999591
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 33,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 258.27748699998665
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 274.38654000002316
+            }
+          },
+          "shuffle_seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 260.4893100000254
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 283.8906430000634
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 33,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 258.54530300000533
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 255.6440930000008
+            }
+          },
+          "shuffle_seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 253.0620939999153
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 264.91905900002166
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 33,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 258.3583290000888
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 259.3097949999219
+            }
+          },
+          "shuffle_seed": 47
+        }
+      ]
+    },
+    {
+      "bounded_gain": false,
+      "criteria": {
+        "all_accuracy_api_cost_gates": true,
+        "all_public_correct": false,
+        "host_latency": true,
+        "no_baseline_correct_regression": true,
+        "recorded_regressions": true,
+        "repository_suite": true,
+        "valid_runs": true
+      },
+      "generation_seed": 31415,
+      "hive_error": "symbol_anchor_drift: patch modifies unrelated symbols ['_validate_task_list']; only _extract_json_object may change.",
+      "hive_failure_code": "symbol_anchor_drift",
+      "hive_status": "blocked",
+      "host_batch_latency_ms": {
+        "baseline_median": 253.11533599995073,
+        "candidate_median": 255.47473799997533,
+        "ratio": 1.0093214502025474
+      },
+      "measured_diagnostically": true,
+      "method_only_ast_verified": true,
+      "public_failure_ids": [
+        "pub2-b",
+        "pub2-c"
+      ],
+      "recorded_regressions": {
+        "case_count": 4,
+        "limitation": "Return-value checks only; recorded alias/post-mutation checks run in pytest.",
+        "passed": true
+      },
+      "repository_test_wall_ms": 167545.42136699992,
+      "repository_tests": {
+        "failed": 0,
+        "passed": 348,
+        "skipped": 1
+      },
+      "source_sha256": "8a6b8048f65fa3102055ba750efc7020d2db0570247f293de203255cd316aff5",
+      "trials": [
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 257.8371240000479
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 256.78192499992747
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 32,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 258.1670409999788
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 253.96671399994375
+            }
+          },
+          "shuffle_seed": 11
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 244.92111099993963
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 246.9893239999692
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 32,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 240.2209029999085
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 246.3918690000355
+            }
+          },
+          "shuffle_seed": 29
+        },
+        {
+          "baseline": {
+            "heldout": {
+              "correct": 20,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 253.11533599995073
+            },
+            "public": {
+              "correct": 4,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 238.80317700002252
+            }
+          },
+          "candidate": {
+            "heldout": {
+              "correct": 32,
+              "total": 64,
+              "valid": true,
+              "wall_ms": 255.47473799997533
+            },
+            "public": {
+              "correct": 6,
+              "total": 8,
+              "valid": true,
+              "wall_ms": 248.4021779999921
+            }
+          },
+          "shuffle_seed": 47
+        }
+      ]
+    }
+  ],
+  "controller_commit": "87cdd7d3f96d5c1da8a43a1d67b8af5998eed888",
+  "generation_cost": {
+    "api_charge_usd": 0,
+    "calls": 6,
+    "compute_cost_usd": null,
+    "known_output_tokens": 812,
+    "known_prompt_tokens": 3730,
+    "output_tokens": 812,
+    "prompt_tokens": 3730,
+    "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+    "token_usage_complete": true,
+    "wall_ms": 200041.0035179999
+  },
+  "model_identity": {
+    "capabilities": [
+      "completion",
+      "tools",
+      "insert"
+    ],
+    "details": {
+      "context_length": 32768,
+      "embedding_length": 3584,
+      "families": [
+        "qwen2"
+      ],
+      "family": "qwen2",
+      "format": "gguf",
+      "parameter_size": "7.6B",
+      "parent_model": "",
+      "quantization_level": "Q4_K_M",
+      "runner": "ggml"
+    },
+    "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "model": "qwen2.5-coder:7b",
+    "modified_at": "2026-11-23T22:45:45.310406061Z",
+    "name": "qwen2.5-coder:7b",
+    "size": 4683087561
+  },
+  "promotion_allowed": false,
+  "protocol_sha256": "7a77ce34d7bfb5094076456f028bad951b1ec5af4d36259ccd6c2413d3ecbdd8",
+  "recursive_self_improvement_proven": false,
+  "request_accounting": {
+    "historical_planner_requests": 3,
+    "new_requests_this_run": 3,
+    "qualification": "Historical request usage is counted once in total Experiment 2 cost; replay makes no new HTTP request."
+  },
+  "security": {
+    "flood": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "output_limit",
+      "wall_ms": 154.36733000001368
+    },
+    "hang": {
+      "cpu_seconds": null,
+      "exit_code": null,
+      "oom_killed": false,
+      "status": "timeout",
+      "wall_ms": 3047.313607999996
+    },
+    "oom": {
+      "cpu_seconds": null,
+      "exit_code": 0,
+      "oom_killed": true,
+      "status": "completed",
+      "wall_ms": 262.98798099998066
+    },
+    "oom_kernel_evidence": {
+      "child_signal": 9,
+      "evidence_source": "cgroup_v2_memory_events",
+      "memory_max": 268435456,
+      "oom_kill_count": 1
+    },
+    "passed": true
+  },
+  "status": "no_accepted_candidate"
+}
