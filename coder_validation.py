@@ -1,3 +1,4 @@
+import ast
 import re
 
 KNOWN_FILES = {
@@ -347,10 +348,10 @@ def extract_changed_def_names(patch_text):
     for line in patch_text.splitlines():
         if not line or line.startswith(("+++", "---", "@@")):
             continue
-        if not line.startswith(("+", "-", " ")):
+        if not line.startswith(("+", "-")):
             continue
 
-        content = line[1:] if line[0] in "+- " else line
+        content = line[1:]
         stripped = content.strip()
         if not stripped.startswith("def "):
             continue
@@ -367,6 +368,57 @@ def extract_changed_def_names(patch_text):
             changed_defs.add(name)
 
     return changed_defs
+
+
+def validate_symbol_patch_scope(original_source, patch_text, selected_block):
+    """Compare parsed source, without executing it, outside the selected symbol.
+
+    Diff context and hunk coordinates are not evidence of a semantic edit. Apply
+    the diff against trusted source and compare both trees with the selected
+    definition replaced by a placeholder. This also catches edits to a neighbor's
+    body when its definition line is absent from the diff.
+    """
+    from validation.variant import apply_unified_diff
+
+    def locate(node, path=()):
+        if (isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and node.name == selected_block["name"]
+                and node.lineno == selected_block["lineno"]):
+            return path
+        for field, value in ast.iter_fields(node):
+            children = enumerate(value) if isinstance(value, list) else [(None, value)]
+            for index, child in children:
+                if isinstance(child, ast.AST):
+                    found = locate(child, path + ((field, index),))
+                    if found is not None:
+                        return found
+        return None
+
+    try:
+        before = ast.parse(original_source)
+        after = ast.parse(apply_unified_diff(original_source, patch_text))
+        path = locate(before)
+        if not path:
+            raise ValueError("selected definition was not found in trusted source")
+        for tree in (before, after):
+            parent = tree
+            for field, index in path[:-1]:
+                value = getattr(parent, field)
+                parent = value if index is None else value[index]
+            field, index = path[-1]
+            value = getattr(parent, field)
+            target = value if index is None else value[index]
+            if not isinstance(target, (ast.FunctionDef, ast.AsyncFunctionDef)) or target.name != selected_block["name"]:
+                raise ValueError("selected definition was moved, removed or renamed")
+            if index is None:
+                setattr(parent, field, ast.Pass())
+            else:
+                value[index] = ast.Pass()
+        if ast.dump(before) != ast.dump(after):
+            raise ValueError("patch changes Python structure outside the selected definition")
+    except (ValueError, SyntaxError, IndexError, AttributeError, TypeError) as exc:
+        raise ValueError(f"symbol_anchor_drift: {exc}") from exc
+    return True
 
 
 def _get_anchor_span(anchor):
@@ -430,7 +482,7 @@ def _validate_selected_block_against_anchor(selected_block, anchor, target_symbo
     return True
 
 
-def validate_symbol_locked_patch(patch_data, task, selected_block=None):
+def validate_symbol_locked_patch(patch_data, task, selected_block=None, *, original_source=None):
     task_metadata = task.get("metadata") or {}
     target_symbol = task.get("target_symbol") or task_metadata.get("target_symbol")
     if not target_symbol:
@@ -520,6 +572,12 @@ def validate_symbol_locked_patch(patch_data, task, selected_block=None):
             f"symbol_anchor_drift: exact context end_col_offset expected {anchor_span.get('end_col_offset')}, got {context_span.get('end_col_offset')}."
         )
 
+    task_tag = (task.get("tag") or task_metadata.get("tag") or "").lower()
+    # Legacy shorthand @@ patches still use the existing contract checks. For
+    # real unified diffs, Coder supplies trusted full source for a stronger check.
+    if original_source is not None and re.search(r"^@@ -\d", patch_text, re.MULTILINE) and task_tag != "complexity":
+        validate_symbol_patch_scope(original_source, patch_text, selected_block)
+
     if changed_defs:
         if target_symbol not in changed_defs:
             raise ValueError(
@@ -528,7 +586,6 @@ def validate_symbol_locked_patch(patch_data, task, selected_block=None):
 
         unrelated_defs = sorted(name for name in changed_defs if name != target_symbol)
         if unrelated_defs:
-            task_tag = (task.get("tag") or task_metadata.get("tag") or "").lower()
             if task_tag == "complexity" and len(unrelated_defs) == 1:
                 pass  # one new adjacent helper is expected for complexity-reduction tasks
             else:

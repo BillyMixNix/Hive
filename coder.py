@@ -1186,7 +1186,8 @@ class CoderAgent:
 
             validate_patch_data(candidate_patch_data, task=task)
             validate_patch_against_anchor(candidate_patch_data, anchor)
-            validate_symbol_locked_patch(candidate_patch_data, task, selected_block=selected_block)
+            validate_symbol_locked_patch(candidate_patch_data, task, selected_block=selected_block,
+                                         original_source=full_file_text)
             validate_patch_matches_task_intent(candidate_patch_data, task)
             self._validate_patch_against_contract(
                 candidate_patch_data,
@@ -1229,6 +1230,7 @@ class CoderAgent:
             candidate_patch_data,
             task,
             selected_block=context.get("selected_block"),
+            original_source=full_file_text,
         )
         validate_patch_matches_task_intent(candidate_patch_data, task)
         self._validate_patch_against_contract(
