@@ -1,0 +1,74 @@
+{
+  "artifacts": {
+    "ci-87cdd7d.txt": "0cad68a6c11298e5efcb406ad78dd924d84139bf15c1866e1d22168971f8a6fe",
+    "cohort-45282442247.zip": "cedb1d287b242f33590e1ab329e261f85c1efae18fa2cfc162150de808a9e113",
+    "goal-gate-failure-45280078249.zip": "af71dafb06d9aea24c957272a5310003e26301c46cb1ac2e3c3fcb28de91494e",
+    "preflight-45278800840.zip": "58828c1c9db9628444b6f9840fac85a87e06f49040c0fc72505d8e7e1697a101",
+    "security-preflight-45281574396.zip": "b6af8ebeca63f6a6db9e7a98651689c13c8582bc2e62b51538b613fe5b96b4d2"
+  },
+  "attempts": [
+    {
+      "baseline_failed": 8,
+      "baseline_passed": 340,
+      "commit": "1e12af5c363f3cdd47b459f12d78c7de822f3f7c",
+      "inference_requests": 0,
+      "outcome": "baseline dependency preflight failed: missing SymPy",
+      "run_id": 45278800840
+    },
+    {
+      "baseline_failed": 0,
+      "baseline_passed": 348,
+      "baseline_skipped": 1,
+      "commit": "cee87229ca9bac4385ee80ef961120b55c18a73c",
+      "inference_requests": 3,
+      "outcome": "all three on-topic Planner responses falsely rejected by external vocabulary gate; no Coder calls",
+      "output_tokens": 283,
+      "prompt_tokens": 1803,
+      "request_wall_ms": 70621.548794,
+      "run_id": 45280078249
+    },
+    {
+      "commit": "13d5e95937b191842e338a138a5cfd1f05b577ca",
+      "new_inference_requests": 0,
+      "outcome": "Security preflight did not confirm OOM: stress exited 137 with Docker OOMKilled false; aborted before new inference",
+      "run_id": 45281574396
+    },
+    {
+      "baseline_failed": 0,
+      "baseline_passed": 348,
+      "baseline_skipped": 1,
+      "commit": "87cdd7d3f96d5c1da8a43a1d67b8af5998eed888",
+      "new_inference_requests": 3,
+      "outcome": "All three Hive Coder proposals blocked by false-positive symbol_anchor_drift. All three transport patches measured diagnostically; held-out gains observed, public correctness gate failed. No promotion.",
+      "replayed_historical_planner_responses": 3,
+      "run_id": 45282442247
+    }
+  ],
+  "baseline_commit": "87e64edc9b0d4fef6d6838f2fc6dc4ccca624bfb",
+  "continuation": {
+    "accepted_hive_proposals": 0,
+    "commit": "87cdd7d3f96d5c1da8a43a1d67b8af5998eed888",
+    "historical_planner_requests": 3,
+    "max_new_coder_requests": 3,
+    "new_coder_requests": 3,
+    "protocol_revision": "2b",
+    "run_id": 45282442247,
+    "status": "no_accepted_candidate",
+    "token_usage_complete": true,
+    "total_experiment_request_cap": 6,
+    "unique_diagnostic_patches": 3,
+    "workflow_conclusion": "success"
+  },
+  "generation_cost": {
+    "api_charge_usd": 0,
+    "calls": 6,
+    "compute_cost_usd": null,
+    "known_output_tokens": 812,
+    "known_prompt_tokens": 3730,
+    "output_tokens": 812,
+    "prompt_tokens": 3730,
+    "qualification": "Local compute; missing usage is unknown, and zero API fees is not zero lifecycle cost.",
+    "token_usage_complete": true,
+    "wall_ms": 200041.0035179999
+  }
+}

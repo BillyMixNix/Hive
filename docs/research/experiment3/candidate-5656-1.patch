@@ -1,0 +1,26 @@
+--- planner.py
++++ planner.py
+@@ -525,12 +525,19 @@
+ 
+     def _extract_json_object(self, raw_response):
+         start = raw_response.find("{")
+-        end = raw_response.rfind("}")
+-
+-        if start == -1 or end == -1 or end < start:
++        if start == -1:
+             raise ValueError("No JSON object found in model response.")
+ 
+-        return raw_response[start:end + 1]
++        balance = 0
++        for i in range(start, len(raw_response)):
++            if raw_response[i] == "{":
++                balance += 1
++            elif raw_response[i] == "}":
++                balance -= 1
++                if balance == 0:
++                    return raw_response[start:i+1]
++
++        raise ValueError("No JSON object found in model response.")
+ 
+     def _validate_task_list(self, tasks):
+         if not isinstance(tasks, list) or not tasks:

@@ -1,0 +1,243 @@
+[
+  {
+    "id": "heldout-01",
+    "input": "Plan:\n{}\nDone.",
+    "expected": {}
+  },
+  {
+    "id": "heldout-02",
+    "input": "Plan:\n{\"goal\": \"g\", \"tasks\": []}\nDone.",
+    "expected": {
+      "goal": "g",
+      "tasks": []
+    }
+  },
+  {
+    "id": "heldout-03",
+    "input": "Plan:\n{\"unicode\": \"雪☃é\"}\nDone.",
+    "expected": {
+      "unicode": "雪☃é"
+    }
+  },
+  {
+    "id": "heldout-04",
+    "input": "Plan:\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\nDone.",
+    "expected": {
+      "nested": [
+        null,
+        false,
+        {
+          "v": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "heldout-05",
+    "input": "Plan:\n{\"quote\": \"a \\\" and \\\\ end\"}\nDone.",
+    "expected": {
+      "quote": "a \" and \\ end"
+    }
+  },
+  {
+    "id": "heldout-06",
+    "input": "Plan:\n{\"literal\": \"{not an object}\"}\nDone.",
+    "expected": {
+      "literal": "{not an object}"
+    }
+  },
+  {
+    "id": "heldout-07",
+    "input": "Plan:\n{\"numbers\": [-3, 0, 1.25]}\nDone.",
+    "expected": {
+      "numbers": [
+        -3,
+        0,
+        1.25
+      ]
+    }
+  },
+  {
+    "id": "heldout-08",
+    "input": "Plan:\n{\"empty\": {\"a\": {}, \"b\": []}}\nDone.",
+    "expected": {
+      "empty": {
+        "a": {},
+        "b": []
+      }
+    }
+  },
+  {
+    "id": "heldout-09",
+    "input": "Malformed {oops:0}.\n{}\n{\"trailer\":true} trailing }",
+    "expected": {}
+  },
+  {
+    "id": "heldout-10",
+    "input": "Malformed {oops:1}.\n{\"goal\": \"g\", \"tasks\": []}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "goal": "g",
+      "tasks": []
+    }
+  },
+  {
+    "id": "heldout-11",
+    "input": "Malformed {oops:2}.\n{\"unicode\": \"雪☃é\"}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "unicode": "雪☃é"
+    }
+  },
+  {
+    "id": "heldout-12",
+    "input": "Malformed {oops:3}.\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "nested": [
+        null,
+        false,
+        {
+          "v": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "heldout-13",
+    "input": "Malformed {oops:4}.\n{\"quote\": \"a \\\" and \\\\ end\"}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "quote": "a \" and \\ end"
+    }
+  },
+  {
+    "id": "heldout-14",
+    "input": "Malformed {oops:5}.\n{\"literal\": \"{not an object}\"}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "literal": "{not an object}"
+    }
+  },
+  {
+    "id": "heldout-15",
+    "input": "Malformed {oops:6}.\n{\"numbers\": [-3, 0, 1.25]}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "numbers": [
+        -3,
+        0,
+        1.25
+      ]
+    }
+  },
+  {
+    "id": "heldout-16",
+    "input": "Malformed {oops:7}.\n{\"empty\": {\"a\": {}, \"b\": []}}\n{\"trailer\":true} trailing }",
+    "expected": {
+      "empty": {
+        "a": {},
+        "b": []
+      }
+    }
+  },
+  {
+    "id": "heldout-17",
+    "input": "```json\n{}\n```\n{\"ignored\":{\"nested\":1}}",
+    "expected": {}
+  },
+  {
+    "id": "heldout-18",
+    "input": "```json\n{\"goal\": \"g\", \"tasks\": []}\n```\n{\"ignored\":{\"nested\":1}}",
+    "expected": {
+      "goal": "g",
+      "tasks": []
+    }
+  },
+  {
+    "id": "heldout-19",
+    "input": "```json\n{\"unicode\": \"雪☃é\"}\n```\n{\"ignored\":{\"nested\":1}}",
+    "expected": {
+      "unicode": "雪☃é"
+    }
+  },
+  {
+    "id": "heldout-20",
+    "input": "```json\n{\"nested\": [null, false, {\"v\": [1, 2, 3]}]}\n```\n{\"ignored\":{\"nested\":1}}",
+    "expected": {
+      "nested": [
+        null,
+        false,
+        {
+          "v": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "heldout-21",
+    "input": "",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-22",
+    "input": "just prose",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-23",
+    "input": "{",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-24",
+    "input": "}",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-25",
+    "input": "{not valid}",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-26",
+    "input": "{\"x\":}",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-27",
+    "input": "{\"x\":1,}",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-28",
+    "input": "{\"x\":\"unterminated}",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-29",
+    "input": "[]",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-30",
+    "input": "null",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-31",
+    "input": "42",
+    "error": "ValueError"
+  },
+  {
+    "id": "heldout-32",
+    "input": "{\"x\":NaN}",
+    "error": "ValueError"
+  }
+]

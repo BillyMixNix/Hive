@@ -1,0 +1,189 @@
+{
+  "baseline_commit": "bbc0b2dcc216b51d4c13232754926f23ea45fd31",
+  "controller_commit": "edfac8c9d79a3537e53e454e7aeed79114481f5e",
+  "diagnostic_only": true,
+  "environment": {
+    "architecture": "x86_64",
+    "docker_version": "28.0.4",
+    "image_id": "sha256:43c500803db969d5d1e5a45aa89f2f4212329e633ab35ca3de5a497433fcd191",
+    "kernel": "7.0.0-1014-aws",
+    "limits": {
+      "cpus": 1,
+      "memory_mb": 256,
+      "output_bytes": 262144,
+      "pids": 32,
+      "tmpfs_mb": 16,
+      "wall_seconds": 20
+    },
+    "security_options": [
+      "name=apparmor",
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ]
+  },
+  "evaluations": {
+    "1dd202f1d052ed0d86190ce6f9ce54b86fdee166f3c7991ebeceaf80ce599c88": {
+      "trials": [
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 261.3753380000077
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 228.9046490000004
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 231.8211830000081
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 232.77823499999784
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 226.91391899999758
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 228.08648899999184
+          },
+          "seed": 47
+        }
+      ]
+    },
+    "6b52cc0fc97bae94e6bd0ab4daaf9c20e5710ca7cde5b23659d8886618e2bef2": {
+      "trials": [
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 278.307249000008
+          },
+          "candidate": {
+            "correct": 6,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 231.36289800000043
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 232.11034499999528
+          },
+          "candidate": {
+            "correct": 6,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 232.13541700000917
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 231.4902769999918
+          },
+          "candidate": {
+            "correct": 6,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 236.0785289999967
+          },
+          "seed": 47
+        }
+      ]
+    },
+    "ef9ffd9ca580d25561efc775cb1387321e65100d37bb201777dbc47168eba50c": {
+      "trials": [
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 238.9557179999997
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 235.52817399999526
+          },
+          "seed": 11
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 229.31525300001
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 226.51263899999208
+          },
+          "seed": 29
+        },
+        {
+          "baseline": {
+            "correct": 3,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 222.2961549999951
+          },
+          "candidate": {
+            "correct": 5,
+            "total": 8,
+            "valid": true,
+            "wall_ms": 230.9415140000084
+          },
+          "seed": 47
+        }
+      ]
+    }
+  },
+  "frozen_unchanged": true,
+  "inference_requests": 0,
+  "original_cwd_probe": {
+    "cpu_seconds": null,
+    "exit_code": 0,
+    "oom_killed": false,
+    "status": "completed",
+    "stdout": "{\"initialized\": false, \"error\": \"OSError\", \"errno\": 30, \"filename\": \"hive_lessons.jsonl\", \"message\": \"[Errno 30] Read-only file system: 'hive_lessons.jsonl'\"}\n",
+    "wall_ms": 223.61198599999454
+  },
+  "original_experiment_status": "no_accepted_candidate",
+  "original_run_id": 45334226981,
+  "plan_cases_sha256": "2171919048571257bff4081ab5f470396553dea659fc19c15a6cfe05335cf474",
+  "promotion_allowed": false,
+  "source_artifact_sha256": "61fef5f6cc04d75e6769e7cac3402a927d3aca8e8883056aa125d99990246a16",
+  "status": "diagnostic_complete"
+}

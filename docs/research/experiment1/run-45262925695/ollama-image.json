@@ -1,0 +1,75 @@
+[
+    {
+        "Id": "sha256:beb6fbbe080c297ba015c52adfd383c7c761b510ddada261b0f9eb18a957d9a8",
+        "RepoTags": [
+            "ollama/ollama:0.40.17"
+        ],
+        "RepoDigests": [
+            "ollama/ollama@sha256:ccc42bcd3d5fcf7ab0d532b300382154e1a4da56fc666bdb313b78ebdd912754"
+        ],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-11-21T03:25:05.505901448Z",
+        "DockerVersion": "",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "11434/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64",
+                "NVIDIA_DRIVER_CAPABILITIES=compute,utility",
+                "NVIDIA_VISIBLE_DEVICES=all",
+                "OLLAMA_HOST=0.0.0.0:11434"
+            ],
+            "Cmd": [
+                "serve"
+            ],
+            "ArgsEscaped": true,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/bin/ollama"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "org.opencontainers.image.version": "24.04"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 5097119481,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/1ee2518ad3a69578e72fc21f92bd4a3cb59ebf8f21dc12b338b8d25bbbdd92ed/diff:/var/lib/docker/overlay2/df05000fa4d859fb52ed33a6e8c3923dfc0b12990c2e1dbbacc64c14af8c5fa9/diff:/var/lib/docker/overlay2/e4d7e88d3ca737445a2b8641e16b258b4cb6f4440f86b2492dbee68f8b34276e/diff",
+                "MergedDir": "/var/lib/docker/overlay2/e972d70ee4a6132de2ecc09b5e3a06cd6554c501466b231e0c69be8064165b8e/merged",
+                "UpperDir": "/var/lib/docker/overlay2/e972d70ee4a6132de2ecc09b5e3a06cd6554c501466b231e0c69be8064165b8e/diff",
+                "WorkDir": "/var/lib/docker/overlay2/e972d70ee4a6132de2ecc09b5e3a06cd6554c501466b231e0c69be8064165b8e/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:369ede38a92da8cd72a76f15f37e496def401830f3c8b7d39c0c7695682a51ce",
+                "sha256:22eceadf002f7fb0a6f05b57cf6ec09bb00aef93f97cfb7049edede17e99e4f5",
+                "sha256:1b95267917dd90428b960f484fbd870d877edb0a64c3760335f439c2e7f814c8",
+                "sha256:448d7cb362f444af1ea0ac26163bc837e1a80d105e95268e3a5c49dcd89b027b"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "0001-01-01T00:00:00Z"
+        }
+    }
+]

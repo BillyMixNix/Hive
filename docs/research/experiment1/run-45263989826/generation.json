@@ -1,0 +1,149 @@
+{
+  "error": "ValueError: Coder returned a blocked candidate",
+  "model_calls": [
+    {
+      "done": true,
+      "done_reason": "stop",
+      "eval_count": 320,
+      "eval_duration": 24011409000,
+      "load_duration": 1284842554,
+      "model": "qwen2.5-coder:1.5b",
+      "prompt_characters": 18404,
+      "prompt_eval_count": 4161,
+      "prompt_eval_duration": 24643810000,
+      "role": "planner",
+      "status": "completed",
+      "total_duration": 49967788857,
+      "wall_ms": 49981.95987600002
+    },
+    {
+      "done": true,
+      "done_reason": "length",
+      "eval_count": 2048,
+      "eval_duration": 125514044000,
+      "load_duration": 811529,
+      "model": "qwen2.5-coder:1.5b",
+      "prompt_characters": 6684,
+      "prompt_eval_count": 1674,
+      "prompt_eval_duration": 7693744000,
+      "role": "coder",
+      "status": "completed",
+      "total_duration": 133269922181,
+      "wall_ms": 133279.032315
+    }
+  ],
+  "patch_data": {
+    "change_type": "diff_patch",
+    "failure_code": "missing_patch_section",
+    "llm_error": "No PATCH: section found in model response.",
+    "patch": "--- planner.py\n+++ planner.py\n",
+    "reason": "Hard anchor enforcement blocked patch for _extract_json_object",
+    "risk_level": "high",
+    "source": "fallback",
+    "status": "blocked",
+    "target_file": "planner.py",
+    "task_id": "experiment1-json-extraction"
+  },
+  "plan": {
+    "artifact": "main.py",
+    "dependencies": [
+      "planner.py"
+    ],
+    "domain": "code",
+    "goal": "Improve the logic in the `main.py` file to handle a new feature.",
+    "metadata": {
+      "anchor": {
+        "anchor_level": "symbol",
+        "anchor_source": "frozen_baseline",
+        "col_offset": 4,
+        "end_col_offset": 42,
+        "end_lineno": 533,
+        "lineno": 526,
+        "scope": "single_file",
+        "target_file": "planner.py",
+        "target_symbol": "_extract_json_object",
+        "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+      },
+      "planner_source": "llm"
+    },
+    "next_action": "Add the `handle_new_feature` function to `main.py`.",
+    "operation": "modify_logic",
+    "risks": [
+      "The new feature may not be fully implemented or tested."
+    ],
+    "source": "llm",
+    "status": "planned",
+    "task_id": "experiment1-json-extraction",
+    "task_kind": "modify",
+    "task_type": "bugfix",
+    "tasks": [
+      {
+        "artifact": "main.py",
+        "change_intent": "modify_existing_logic",
+        "col_offset": 4,
+        "completion_cues": [
+          "The new function `handle_new_feature` should be added to the `main.py` file."
+        ],
+        "creates_symbols": [
+          "handle_new_feature"
+        ],
+        "depends_on": [],
+        "description": "Add a new function `handle_new_feature` to the `main.py` file that processes the new data. (target method: _extract_json_object)",
+        "domain": "code",
+        "end_col_offset": 42,
+        "end_lineno": 533,
+        "expected_operation": "modify_logic",
+        "insertion_region": "",
+        "lineno": 526,
+        "metadata": {
+          "anchor": {
+            "anchor_level": "symbol",
+            "anchor_source": "planner_normalized",
+            "col_offset": 4,
+            "end_col_offset": 42,
+            "end_lineno": 533,
+            "lineno": 526,
+            "scope": "single_file",
+            "target_file": "planner.py",
+            "target_symbol": "_extract_json_object",
+            "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+          },
+          "col_offset": 4,
+          "end_col_offset": 42,
+          "end_lineno": 533,
+          "lineno": 526,
+          "target_file": "planner.py",
+          "target_symbol": "_extract_json_object",
+          "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+        },
+        "operation": "add_method_or_function",
+        "status": "planned",
+        "target_file": "planner.py",
+        "target_symbol": "_extract_json_object",
+        "target_symbol_id": "planner.py::PlannerAgent._extract_json_object",
+        "task_id": "task-experiment1-json-extraction-1",
+        "task_kind": "modify",
+        "task_type": "bugfix",
+        "title": "Add a new function to handle the new feature.",
+        "validation": "AST parse or focused smoke check",
+        "wires_into_symbols": [],
+        "work_mode": "modify"
+      }
+    ],
+    "validation": "AST parse or focused smoke check",
+    "work_mode": "modify"
+  },
+  "status": "blocked",
+  "task_anchor": {
+    "anchor_level": "symbol",
+    "anchor_source": "frozen_baseline",
+    "col_offset": 4,
+    "end_col_offset": 42,
+    "end_lineno": 533,
+    "lineno": 526,
+    "scope": "single_file",
+    "target_file": "planner.py",
+    "target_symbol": "_extract_json_object",
+    "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+  }
+}

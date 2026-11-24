@@ -1,0 +1,18 @@
+TARGET_FILE: planner.py
+CHANGE_TYPE: diff_patch
+RISK_LEVEL: low
+STATUS: proposed
+REASON: short reason
+PATCH:
+--- planner.py
++++ planner.py
+@@ -123,7 +123,7 @@ def _extract_json_object(self, raw_response):
+         start = raw_response.find("{")
+         end = raw_response.rfind("}")
+
+-        if start == -1 or end == -1 or end < start:
++        if start == -1 or end == -1 or end < start or start == -1 or end == -1 or end < start:
+             raise ValueError("No JSON object found in model response.")
+
+         return raw_response[start:end + 1]
+```

@@ -1,0 +1,34 @@
+........................................................................ [ 20%]
+................................................................. [ 38%]
+........................................................................ [ 58%]
+........................................................................ [ 78%]
+........................................................................ [ 98%]
+.....                                                                    [100%]
+=============================== warnings summary ===============================
+../../../../opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/anyio/pytest_plugin.py:14
+  /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/anyio/pytest_plugin.py:14: PytestRemovedIn10Warning: _pytest.python.CallSpec2 has been renamed to CallSpec.
+  The CallSpec2 alias will be removed in pytest 10.
+  Update imports to use CallSpec instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#callspec2-renamed
+    from _pytest.python import CallSpec2
+
+hive_lesson_reuse_patch/test_lesson_reuse_sequence.py: 48 warnings
+tests/test_hard_anchor_enforcement.py: 8 warnings
+tests/test_lesson_reuse_sequence.py: 48 warnings
+tests/test_phase1_live_benchmark.py: 28 warnings
+tests/test_phase1_stability.py: 2 warnings
+tests/test_phase2_context_discipline.py: 4 warnings
+tests/test_reliability_benchmark_harness.py: 31 warnings
+tests/test_state_manager_disk_sync.py: 4 warnings
+tests/test_validation_ab_run.py: 48 warnings
+  /workspace/scratch/93b9d299d494/Hive/HiveStateManager.py:78: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow().isoformat()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================= slowest 5 durations ==============================
+51.80s call     tests/test_twin_realms_long_run.py::test_seeded_ten_thousand_turn_disk_chaos_resists_adversarial_prompts
+16.42s call     tests/test_validation_ab_run.py::test_real_hive_harness_detects_seeded_lesson_reuse
+15.71s call     tests/test_reliability_benchmark_harness.py::ReliabilityBenchmarkHarnessTests::test_harness_reports_case_metrics_and_top_failure_classes
+9.17s call     hive_lesson_reuse_patch/test_lesson_reuse_sequence.py::LessonReuseSequenceTests::test_lessons_reduce_retries_vs_off
+8.85s call     tests/test_lesson_reuse_sequence.py::LessonReuseSequenceTests::test_lessons_reduce_retries_vs_off
+358 passed, 1 skipped, 222 warnings, 7 subtests passed in 154.73s (0:02:34)

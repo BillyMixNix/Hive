@@ -1,0 +1,34 @@
+```json
+{
+  "goal": "Improve the logic in the `main.py` file to handle a new feature.",
+  "work_mode": "modify",
+  "domain": "code",
+  "artifact": "main.py",
+  "operation": "modify_logic",
+  "validation": "AST parse or focused smoke check",
+  "task_type": "bugfix",
+  "tasks": [
+    {
+      "title": "Add a new function to handle the new feature.",
+      "description": "Add a new function `handle_new_feature` to the `main.py` file that processes the new data.",
+      "work_mode": "modify",
+      "domain": "code",
+      "artifact": "main.py",
+      "operation": "add_method_or_function",
+      "validation": "AST parse or focused smoke check",
+      "target_file": "main.py",
+      "target_symbol": null,
+      "creates_symbols": ["handle_new_feature"],
+      "wires_into_symbols": [],
+      "insertion_region": null,
+      "change_intent": "modify_existing_logic",
+      "expected_operation": "modify_logic",
+      "completion_cues": ["The new function `handle_new_feature` should be added to the `main.py` file."]
+    }
+  ],
+  "dependencies": ["main.py"],
+  "risks": ["The new feature may not be fully implemented or tested."],
+  "next_action": "Add the `handle_new_feature` function to `main.py`.",
+  "status": "planned"
+}
+```

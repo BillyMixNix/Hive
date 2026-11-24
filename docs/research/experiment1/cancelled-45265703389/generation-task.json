@@ -1,0 +1,35 @@
+{
+  "change_intent": "modify_existing_logic",
+  "col_offset": 4,
+  "end_col_offset": 42,
+  "end_lineno": 533,
+  "expected_operation": "modify_logic",
+  "id": "experiment1-json-extraction",
+  "lineno": 526,
+  "metadata": {
+    "anchor": {
+      "anchor_level": "symbol",
+      "anchor_source": "frozen_baseline",
+      "col_offset": 4,
+      "end_col_offset": 42,
+      "end_lineno": 533,
+      "lineno": 526,
+      "scope": "single_file",
+      "target_file": "planner.py",
+      "target_symbol": "_extract_json_object",
+      "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+    },
+    "col_offset": 4,
+    "end_col_offset": 42,
+    "end_lineno": 533,
+    "lineno": 526,
+    "target_file": "planner.py",
+    "target_symbol": "_extract_json_object",
+    "target_symbol_id": "planner.py::PlannerAgent._extract_json_object"
+  },
+  "note": "Improve PlannerAgent._extract_json_object in planner.py. Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity). Modify only this existing method body; preserve its signature. Do not change tests, evaluator, imports, other methods, permissions or sandbox. Public examples: [{\"id\": \"public-plain\", \"input\": \"{\\\"goal\\\":\\\"repair\\\"}\", \"expected\": {\"goal\": \"repair\"}}, {\"id\": \"public-fenced\", \"input\": \"```json\\n{\\\"tasks\\\":[1,2]}\\n```\", \"expected\": {\"tasks\": [1, 2]}}, {\"id\": \"public-trailing-object\", \"input\": \"{\\\"first\\\":true} then {\\\"second\\\":false}\", \"expected\": {\"first\": true}}, {\"id\": \"public-invalid-prefix\", \"input\": \"Example {not JSON}. Answer: {\\\"ok\\\":true}\", \"expected\": {\"ok\": true}}, {\"id\": \"public-quoted-brace\", \"input\": \"{\\\"text\\\":\\\"a } and { b\\\"}\", \"expected\": {\"text\": \"a } and { b\"}}, {\"id\": \"public-nested\", \"input\": \"Answer: {\\\"outer\\\":{\\\"x\\\":2}} trailing }\", \"expected\": {\"outer\": {\"x\": 2}}}, {\"id\": \"public-empty\", \"input\": \"\", \"error\": \"ValueError\"}, {\"id\": \"public-unclosed\", \"input\": \"{\\\"x\\\": 1\", \"error\": \"ValueError\"}]",
+  "target_file": "planner.py",
+  "target_symbol": "_extract_json_object",
+  "target_symbol_id": "planner.py::PlannerAgent._extract_json_object",
+  "task_type": "bugfix"
+}

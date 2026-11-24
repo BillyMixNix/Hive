@@ -1,0 +1,61 @@
+[
+  {
+    "id": "pub2-a",
+    "input": "Trace. {\"task\":\"parse\",\"flags\":[true,false]} End.",
+    "expected": {
+      "task": "parse",
+      "flags": [
+        true,
+        false
+      ]
+    }
+  },
+  {
+    "id": "pub2-b",
+    "input": "prefix {broken} {\"n\":19} {\"n\":22}",
+    "expected": {
+      "n": 19
+    }
+  },
+  {
+    "id": "pub2-c",
+    "input": "{\"text\":\"brace } quote \\\" and {\"} tail }",
+    "expected": {
+      "text": "brace } quote \" and {"
+    }
+  },
+  {
+    "id": "pub2-d",
+    "input": "```json\n{\"deep\":{\"list\":[1,null]}}\n``` trailing }",
+    "expected": {
+      "deep": {
+        "list": [
+          1,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "id": "pub2-e",
+    "input": "[{\"array\":true}]",
+    "expected": {
+      "array": true
+    }
+  },
+  {
+    "id": "pub2-f",
+    "input": "empty response",
+    "error": "ValueError"
+  },
+  {
+    "id": "pub2-g",
+    "input": "{\"partial\":",
+    "error": "ValueError"
+  },
+  {
+    "id": "pub2-h",
+    "input": "{} extra {}",
+    "expected": {}
+  }
+]

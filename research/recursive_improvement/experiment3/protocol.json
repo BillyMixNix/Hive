@@ -1,0 +1,76 @@
+{
+  "baseline_commit": "bbc0b2dcc216b51d4c13232754926f23ea45fd31",
+  "claim_limit": "Human-authored validator repair is part of the pinned baseline, not a Hive improvement. Public feedback is externally supplied. A single helper gain and replayed Planner responses do not prove improved model reasoning, autonomous objective discovery, a second self-improvement cycle, or generality.",
+  "contract": "Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity).",
+  "cost_accounting": "No paid API. Record local model prompt/output tokens and wall time, evaluation wall time, and container CPU time. Dollar compute cost is unknown; zero API charges do not imply free compute. Gate cost uses evaluation API charges (zero for both); lifecycle generation is separate and must not be amortized away.",
+  "editable_file": "planner.py",
+  "editable_method": "PlannerAgent._extract_json_object",
+  "evaluation": {
+    "latency_floor_ms": 1,
+    "maximum_generation_cost_increase": 0.1,
+    "maximum_median_latency_ratio": 1.25,
+    "minimum_accuracy_gain": 0.05,
+    "minimum_distinct_heldout_cases": 96,
+    "minimum_repository_passes": 300,
+    "no_baseline_correct_case_regression": true,
+    "no_planner_response_replay_regression": true,
+    "repetitions": 3,
+    "require_all_planner_response_replays": true,
+    "require_all_public_cases": true,
+    "require_all_recorded_regressions": true,
+    "require_candidate_repository_tests": true,
+    "shuffle_seeds": [
+      11,
+      29,
+      47
+    ]
+  },
+  "experiment": "Hive Experiment 3: one bounded public-feedback repair",
+  "generation": {
+    "coder_output_tokens": 1536,
+    "coder_timeout_seconds": 480,
+    "max_calls": 9,
+    "max_new_calls": 9,
+    "max_prompt_characters": 20000,
+    "max_revisions": 1,
+    "num_ctx": 8192,
+    "num_thread": 4,
+    "planner_output_tokens": 512,
+    "planner_timeout_seconds": 240,
+    "repair_seed_offset": 100000,
+    "seeds": [
+      4242,
+      5656,
+      7878
+    ],
+    "temperature": 0.2
+  },
+  "generation_budget": "At most 9 fresh request attempts total: one Planner and up to two Coder calls per seed. Original Hive may stop before using its repair budget. No replayed inference, retries outside Hive, paid APIs, or manual algorithm substitution.",
+  "model": "qwen2.5-coder:7b",
+  "model_digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "plan_replay_contract": "Eight frozen held-out response-replay inputs exercise original Planner.plan_task with no model call. Require source llm, expected goal, one correctly anchored repair task, all eight correct and no baseline-correct loss in every repetition. Expected goals are host-only.",
+  "protocol_revision": "3a: new frozen cohort after externally verified validator repair",
+  "regression_limits": {
+    "file_bytes": 33554432,
+    "memory_mb": 512,
+    "tmpfs_mb": 128,
+    "wall_seconds": 420
+  },
+  "regression_suite": "Entire pinned baseline repository, identical lightweight image for both versions. Torch is absent in the image and its optional module skip must match baseline. Test assertions and source are immutable; only test Path aliases route legacy _tmp_* scratch files into tmpfs. Pytest is diagnostic, external scoring is authoritative.",
+  "sandbox": {
+    "capabilities": "none",
+    "cpus": 1,
+    "memory_mb": 256,
+    "network": "none",
+    "no_new_privileges": true,
+    "output_bytes": 262144,
+    "pids": 32,
+    "rootfs": "read-only",
+    "tmpfs_mb": 16,
+    "uid": 65534,
+    "wall_seconds": 20
+  },
+  "schema_version": 3,
+  "security_probe_revision": "Trusted parent observes child SIGKILL plus positive cgroup_v2 oom_kill and exact memory.max; Docker exit 137 alone does not pass. Limits unchanged.",
+  "selection": "Three new fixed seeds. Original Planner once and original Coder with at most one revision. Public-only feedback. Complete all generation before any held-out extraction or planning feedback. Evaluate all admissible initial and repair patches, cache identical source hashes, and count bounded gain only for the patch selected by Hive before held-out evaluation. No promotion."
+}

@@ -1,0 +1,72 @@
+name: Recursive improvement Experiment 3 replay diagnostic
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-experiment3-replay-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  request:
+    if: github.head_ref == 'research/recursive-improvement' && github.event.pull_request.head.repo.full_name == 'BillyMixNix/Hive'
+    runs-on: ubuntu-24.04
+    outputs:
+      run: ${{ steps.request.outputs.run }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: request
+        shell: bash
+        run: |
+          if [ "$(git log -1 --pretty=%s)" = "experiment3: replay frozen candidates" ]; then
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+          fi
+  experiment:
+    needs: request
+    if: needs.request.outputs.run == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Controller checks
+        run: |
+          pip install requests==2.32.3 pytest==8.3.5 z3-solver==4.15.4.0
+          python -m pytest -q research/recursive_improvement tests/test_empirical_validation_gate.py tests/test_symbol_diff_scope.py tests/test_hard_anchor_enforcement.py
+      - name: Build immutable subject image
+        run: |
+          mkdir -p "$RUNNER_TEMP/hive-experiment3-replay"
+          docker build -t hive-experiment3:local research/recursive_improvement/experiment3
+          docker image inspect hive-experiment3:local > "$RUNNER_TEMP/hive-experiment3-replay/image.json"
+      - name: Replay exact candidates without inference
+        run: |
+          HIVE_SUBJECT_IMAGE=$(docker image inspect hive-experiment3:local --format '{{.Id}}')
+          timeout --signal=TERM --kill-after=10s 600s python -B -m research.recursive_improvement.experiment3.replay_followup --image "$HIVE_SUBJECT_IMAGE" --output "$RUNNER_TEMP/hive-experiment3-replay"
+      - name: Remove subject containers
+        if: always()
+        run: |
+          docker ps -aq --filter name=hive-ri- | xargs -r docker rm -f
+      - name: Preserve cohort, telemetry, and failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: hive-experiment3-replay-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-experiment3-replay/
+          retention-days: 30
+          if-no-files-found: error

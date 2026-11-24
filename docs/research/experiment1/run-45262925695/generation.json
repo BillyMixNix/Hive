@@ -1,0 +1,113 @@
+{
+  "error": "ValueError: Coder returned a blocked candidate",
+  "model_calls": [
+    {
+      "done": true,
+      "done_reason": "stop",
+      "eval_count": 278,
+      "eval_duration": 20809408000,
+      "load_duration": 1799667329,
+      "model": "qwen2.5-coder:1.5b",
+      "prompt_characters": 18404,
+      "prompt_eval_count": 4161,
+      "prompt_eval_duration": 47861680000,
+      "role": "planner",
+      "status": "completed",
+      "total_duration": 70505341660,
+      "wall_ms": 70526.33570899999
+    },
+    {
+      "done": true,
+      "done_reason": "stop",
+      "eval_count": 151,
+      "eval_duration": 8341279000,
+      "load_duration": 1825710,
+      "model": "qwen2.5-coder:1.5b",
+      "prompt_characters": 6614,
+      "prompt_eval_count": 1651,
+      "prompt_eval_duration": 15633067000,
+      "role": "coder",
+      "status": "completed",
+      "total_duration": 24056456141,
+      "wall_ms": 24065.542265000004
+    }
+  ],
+  "patch_data": {
+    "change_type": "diff_patch",
+    "failure_code": "symbol_anchor_drift",
+    "llm_error": "symbol_anchor_drift: anchored task is missing required anchor proof fields ['target_symbol_id', 'lineno', 'end_lineno'] for _extract_json_object.",
+    "patch": "--- planner.py\n+++ planner.py\n",
+    "reason": "Hard anchor enforcement blocked patch for _extract_json_object",
+    "risk_level": "high",
+    "source": "fallback",
+    "status": "blocked",
+    "target_file": "planner.py",
+    "task_id": "experiment1-json-extraction"
+  },
+  "plan": {
+    "artifact": "JSON object",
+    "dependencies": [
+      "planner.py"
+    ],
+    "domain": "code",
+    "goal": "Extract the first JSON object from the given string.",
+    "metadata": {
+      "anchor": {
+        "anchor_level": "symbol",
+        "anchor_source": "task_note",
+        "scope": "single_file",
+        "target_file": "planner.py",
+        "target_symbol": "_extract_json_object"
+      },
+      "planner_source": "llm"
+    },
+    "next_action": "Extract the first JSON object from the given string.",
+    "operation": "patch operation in domain terms",
+    "risks": [],
+    "source": "llm",
+    "status": "planned",
+    "task_id": "experiment1-json-extraction",
+    "task_kind": "repair",
+    "task_type": "bugfix",
+    "tasks": [
+      {
+        "artifact": "JSON object",
+        "change_intent": "modify_existing_logic",
+        "completion_cues": [
+          "The extracted JSON object is {json_object}."
+        ],
+        "creates_symbols": [],
+        "depends_on": [],
+        "description": "Extract the first JSON object from the given string. (target method: _extract_json_object)",
+        "domain": "code",
+        "expected_operation": "modify_logic",
+        "insertion_region": "",
+        "metadata": {
+          "anchor": {
+            "anchor_level": "symbol",
+            "anchor_source": "planner_normalized",
+            "scope": "single_file",
+            "target_file": "planner.py",
+            "target_symbol": "_extract_json_object"
+          },
+          "target_file": "planner.py",
+          "target_symbol": "_extract_json_object"
+        },
+        "operation": "patch operation in domain terms",
+        "status": "planned",
+        "target_file": "planner.py",
+        "target_symbol": "_extract_json_object",
+        "task_id": "task-experiment1-json-extraction-1",
+        "task_kind": "repair",
+        "task_type": "bugfix",
+        "title": "Extract the first JSON object from the given string.",
+        "validation": "AST parse or focused smoke check",
+        "wires_into_symbols": [],
+        "work_mode": "repair"
+      }
+    ],
+    "validation": "AST parse or focused smoke check",
+    "work_mode": "repair"
+  },
+  "status": "blocked"
+}

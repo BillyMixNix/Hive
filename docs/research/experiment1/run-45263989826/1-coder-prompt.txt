@@ -1,0 +1,88 @@
+
+You are Hive's coding agent.
+
+Generate one minimal unified diff for one existing Python file.
+
+Return output in EXACTLY this format:
+TARGET_FILE: file.py
+CHANGE_TYPE: diff_patch
+RISK_LEVEL: low
+STATUS: proposed
+REASON: short reason
+PATCH:
+--- file.py
++++ file.py
+ ...diff content...
+
+Hard rules:
+- Rewrite only the existing function _extract_json_object in planner.py.
+- Do not modify any other symbol.
+- Do not add new functions.
+- Do not rename _extract_json_object.
+- Return only one unified diff for planner.py.
+- Use real anchor lines from the file excerpt below.
+- No markdown.
+- No commentary.
+
+Task:
+- ID: experiment1-json-extraction
+- Note: Improve PlannerAgent._extract_json_object in planner.py. Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity). Modify only this existing method body; preserve its signature. Do not change tests, evaluator, imports, other methods, permissions or sandbox. Public examples: [{"id": "public-plain", "input": "{\"goal\":\"repair\"}", "expected": {"goal": "repair"}}, {"id": "public-fenced", "input": "```json\n{\"tasks\":[1,2]}\n```", "expected": {"tasks": [1, 2]}}, {"id": "public-trailing-object", "input": "{\"first\":true} then {\"second\":false}", "expected": {"first": true}}, {"id": "public-invalid-prefix", "input": "Example {not JSON}. Answer: {\"ok\":true}", "expected": {"ok": true}}, {"id": "public-quoted-brace", "input": "{\"text\":\"a } and { b\"}", "expected": {"text": "a } and { b"}}, {"id": "public-nested", "input": "Answer: {\"outer\":{\"x\":2}} trailing }", "expected": {"outer": {"x": 2}}}, {"id": "public-empty", "input": "", "error": "ValueError"}, {"id": "public-unclosed", "input": "{\"x\": 1", "error": "ValueError"}]
+
+Pilot context:
+# Hive Builder Packet
+- Current intent: Improve PlannerAgent._extract_json_object in planner.py. Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity). Modify only this existing method body; preserve its signature. Do not change tests, evaluator, imports, other methods, permissions or sandbox. Public examples: [{"id": "public-plain", "input": "{\"goal\":\"repair\"}", "expected": {"goal": "repair"}}, {"id": "public-fenced", "input": "```json\n{\"tasks\":[1,2]}\n```", "expected": {"tasks": [1, 2]}}, {"id": "public-trailing-object", "input": "{\"first\":true} then {\"second\":false}", "expected": {"first": true}}, {"id": "public-invalid-prefix", "input": "Example {not JSON}. Answer: {\"ok\":true}", "expected": {"ok": true}}, {"id": "public-quoted-brace", "input": "{\"text\":\"a } and { b\"}", "expected": {"text": "a } and { b"}}, {"id": "public-nested", "input": "Answer: {\"outer\":{\"x\":2}} trailing }", "expected": {"outer": {"x": 2}}}, {"id": "public-empty", "input": "", "error": "ValueError"}, {"id": "public-unclosed", "input": "{\"x\": 1", "error": "ValueError"}]
+- Intent summary: Improve PlannerAgent._extract_json_object in planner.py. Return a string containing the first independently decodable JSON object starting at an opening brace in the response, ignoring malformed brace prefixes and trailing prose or objects. Preserve nested values and strings. Raise ValueError when no such object exists. Objects embedded in arrays count as brace-starting objects. Inputs are strings; strict JSON only (no NaN or Infinity). Modify only this existing method body; preserve its signature. Do not change tests, evaluator, imports, other methods, permissions or sandbox. Public examples: [{"id": "public-plain", "input": "{\"goal\":\"repair\"}", "expected": {"goal": "repair"}}, {"id": "public-fenced", "input": "```json\n{\"tasks\":[1,2]}\n```", "expected": {"tasks": [1, 2]}}, {"id": "public-trailing-object", "input": "{\"first\":true} then {\"second\":false}", "expected": {"first": true}}, {"id": "public-invalid-prefix", "input": "Example {not JSON}. Answer: {\"ok\":true}", "expected": {"ok": true}}, {"id": "public-quoted-brace", "input": "{\"text\":\"a } and { b\"}", "expected": {"text": "a } and { b"}}, {"id": "public-nested", "input": "Answer: {\"outer\":{\"x\":2}} trailing }", "expected": {"outer": {"x": 2}}}, {"id": "public-empty", "input": "", "error": "ValueError"}, {"id": "public-unclosed", "input": "{\"x\": 1", "error": "ValueError"}]
+- Constraints: none recorded
+
+Pilot guardrails:
+No relevant pilot guardrails.
+
+Retry guidance:
+RETRY CONSTRAINTS:
+- Failure category: unknown_failure
+- Primary instruction: Keep the patch minimal, anchored, structurally valid, and avoid repeating the previous failure.
+- Constraint: Prefer a smaller localized diff.
+- Constraint: Do not repeat the same failed patch shape unchanged.
+
+No relevant recent failure lessons.
+
+Preflight intent:
+STRICT REQUIREMENTS:
+- Work mode: repair
+- You MUST stay within file: planner.py
+- You MUST only modify: _extract_json_object
+- You MUST stay within lines: 526-533
+- You MUST match symbol_id: planner.py::PlannerAgent._extract_json_object
+- You MUST NOT modify any other functions, methods, classes, or file regions
+- You MUST satisfy expected_operation: modify_logic
+- You MUST include completion cues: none explicitly provided
+- If you cannot satisfy every strict requirement exactly, return STATUS: blocked
+
+Target file:
+planner.py
+
+Exact symbol context:
+        return PLANNER_PROMPT_TEMPLATE.format(
+            task_id=task["id"],
+            task_note=task["note"],
+            hint=hint,
+            pilot_brief=format_pilot_brief(task),
+            pilot_guardrails=pilot_guardrails,
+        )
+
+    def _extract_json_object(self, raw_response):
+        start = raw_response.find("{")
+        end = raw_response.rfind("}")
+
+        if start == -1 or end == -1 or end < start:
+            raise ValueError("No JSON object found in model response.")
+
+        return raw_response[start:end + 1]
+
+    def _validate_task_list(self, tasks):
+        if not isinstance(tasks, list) or not tasks:
+            raise ValueError("tasks must be a non-empty list.")
+
+        for item in tasks:
+            if not isinstance(item, dict):
+                raise ValueError("Each task in tasks must be a dictionary.")
