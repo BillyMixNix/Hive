@@ -1,17 +1,24 @@
 {
   "artifacts": {
+    "archived-workflows/recursive-improvement-experiment2.yml": "24e66df652ef9578e7345e0ee50345f22e0a698de8435df1b5a63ef1e5cc9965",
+    "archived-workflows/recursive-improvement-experiment3-replay.yml": "f4ac0b650fcb6a420eda8a7f0e30934257e15bf003addab9843f19c20fb40dd8",
+    "archived-workflows/recursive-improvement-experiment3.yml": "b5e9a2be7fb5fd7ae5effdbf3eec0ad4d4aa2b00ad195144b23d8a0a956cea27",
     "candidates.json": "a22766a831691362ee63069d0b38b4a805394ffa88168a095b29b9b47b715ffb",
     "ci-b2b8d01.txt": "c5c79bc75b2d2177a4bcfaeffa565dd98bcc4f24d417fe52c9c4e6fb0b449b3d",
     "ci-bbc0b2d.txt": "81c626f5f8891cc6d325691897aed97d1fdd7f338e627ce016be4a237b67e752",
+    "ci-edfac8c.txt": "4410c2ca149fcba569b0f5987dfad360baec66fd0d6b59c4b54bf7db7d99f449",
     "cohort-45334226981.zip": "61fef5f6cc04d75e6769e7cac3402a927d3aca8e8883056aa125d99990246a16",
-    "measurements.json": "e2176a597f12c55630516b18ad9248a54fdc9d5d14cd5576a618b1d4e1b1de94"
+    "integrity.json": "937cae3da27b399878d775314d9643542ba250b75332cda10667d579f8f5bc8a",
+    "measurements.json": "e2176a597f12c55630516b18ad9248a54fdc9d5d14cd5576a618b1d4e1b1de94",
+    "replay-45337482248.zip": "d6830cbc3f84dbd353fa573af101b35d24d7357f2e1ae86f0b4487f1dd8e740d",
+    "replay-measurements.json": "44ed186b71fdb2f861cbed51e48540ec015161940746270ac17b82f535e4cb56"
   },
   "attempts": [
     {
       "commit": "b2b8d01c4aeb622d2c6ed3a7d8758cbe97f76474",
       "distinct_sources": 3,
       "hive_selected": 0,
-      "original_planning_measurement": "Harness OSError during Planner initialization; not functional accuracy. Separate diagnostic pending.",
+      "original_planning_measurement": "Invalid functional measurement: OSError before helper execution; preserved unchanged.",
       "real_requests": 9,
       "request_cap": 9,
       "run_id": 45334226981,
@@ -21,12 +28,42 @@
     }
   ],
   "baseline_commit": "bbc0b2dcc216b51d4c13232754926f23ea45fd31",
+  "compatibility_followup": {
+    "commit": "edfac8c9d79a3537e53e454e7aeed79114481f5e",
+    "focused_passed": 38,
+    "github_passed": 394,
+    "github_passing_subtests": 7,
+    "github_run_id": 45337482154,
+    "human_authored": true,
+    "included_in_original_baseline": false,
+    "local_passed": 387,
+    "local_skipped": 1,
+    "reliability_gate": "success"
+  },
   "controller_commit": "b2b8d01c4aeb622d2c6ed3a7d8758cbe97f76474",
   "controller_verification": {
     "passed": 392,
     "passing_subtests": 7,
     "reliability_gate": "success",
     "run_id": 45334226798
+  },
+  "diagnostic_followup": {
+    "baseline_planner_replays_each_repeat": "3/8",
+    "cases_grader_and_candidate_hashes_unchanged": true,
+    "commit": "edfac8c9d79a3537e53e454e7aeed79114481f5e",
+    "inference_requests": 0,
+    "initial_sources_each_repeat": "5/8",
+    "repair_source_each_repeat": "6/8",
+    "run_id": 45337482248,
+    "scratch_probe_confirmed": {
+      "errno": 30,
+      "error": "OSError",
+      "filename": "hive_lessons.jsonl",
+      "initialized": false,
+      "message": "[Errno 30] Read-only file system: 'hive_lessons.jsonl'"
+    },
+    "selection": "diagnostic only; original verdict unchanged",
+    "status": "diagnostic_complete"
   },
   "generation_cost": {
     "api_charge_usd": 0,
