@@ -1,0 +1,97 @@
+[
+  {
+    "id": "exp3-pub-001",
+    "input": "Status: {\"action\":\"repair\",\"ready\":true} done.",
+    "expected": {
+      "action": "repair",
+      "ready": true
+    }
+  },
+  {
+    "id": "exp3-pub-002",
+    "input": "{invalid-prefix} then {\"item\":37} then {\"item\":41}",
+    "expected": {
+      "item": 37
+    }
+  },
+  {
+    "id": "exp3-pub-003",
+    "input": "{\"text\": \"quoted } and { and \\\\\\\" inside\"}",
+    "expected": {
+      "text": "quoted } and { and \\\" inside"
+    }
+  },
+  {
+    "id": "exp3-pub-004",
+    "input": "{\"first\":{\"second\":[1,null,false]}} trailing }",
+    "expected": {
+      "first": {
+        "second": [
+          1,
+          null,
+          false
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-pub-005",
+    "input": "```json\n{\"wrapped\":\"yes\"}\n``` extra {\"ignore\":1}",
+    "expected": {
+      "wrapped": "yes"
+    }
+  },
+  {
+    "id": "exp3-pub-006",
+    "input": "[{\"inside_array\":3}]",
+    "expected": {
+      "inside_array": 3
+    }
+  },
+  {
+    "id": "exp3-pub-007",
+    "input": "{} after {} after",
+    "expected": {}
+  },
+  {
+    "id": "exp3-pub-008",
+    "input": "unclosed { preceding {\"recovered\":true}",
+    "expected": {
+      "recovered": true
+    }
+  },
+  {
+    "id": "exp3-pub-009",
+    "input": "{\"bad\":NaN} then {\"finite\":12}",
+    "expected": {
+      "finite": 12
+    }
+  },
+  {
+    "id": "exp3-pub-010",
+    "input": "{\"bad\":Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-pub-011",
+    "input": "{\"bad\":-Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-pub-012",
+    "input": "nothing structured here",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-pub-013",
+    "input": "{\"unfinished\":",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-pub-014",
+    "input": "} before {\"unicode\":\"雪🌲\"} after",
+    "expected": {
+      "unicode": "雪🌲"
+    }
+  }
+]

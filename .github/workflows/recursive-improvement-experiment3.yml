@@ -1,0 +1,84 @@
+name: Recursive improvement Experiment 3
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hive-experiment3-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  request:
+    if: github.head_ref == 'research/recursive-improvement' && github.event.pull_request.head.repo.full_name == 'BillyMixNix/Hive'
+    runs-on: ubuntu-24.04
+    outputs:
+      run: ${{ steps.request.outputs.run }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - id: request
+        shell: bash
+        run: |
+          if [ "$(git log -1 --pretty=%s)" = "experiment3: run frozen cohort" ]; then
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+          fi
+  experiment:
+    needs: request
+    if: needs.request.outputs.run == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Controller checks
+        run: |
+          pip install requests==2.32.3 pytest==8.3.5 z3-solver==4.15.4.0
+          python -m pytest -q research/recursive_improvement tests/test_empirical_validation_gate.py tests/test_symbol_diff_scope.py tests/test_hard_anchor_enforcement.py
+      - name: Build immutable subject image
+        run: |
+          mkdir -p "$RUNNER_TEMP/hive-experiment3"
+          docker build -t hive-experiment3:local research/recursive_improvement/experiment3
+          docker image inspect hive-experiment3:local > "$RUNNER_TEMP/hive-experiment3/image.json"
+      - name: Start local 7B model with a fixed VM budget
+        run: |
+          HIVE_OLLAMA_IMAGE=ollama/ollama@sha256:ccc42bcd3d5fcf7ab0d532b300382154e1a4da56fc666bdb313b78ebdd912754
+          docker pull "$HIVE_OLLAMA_IMAGE"
+          docker image inspect "$HIVE_OLLAMA_IMAGE" > "$RUNNER_TEMP/hive-experiment3/ollama-image.json"
+          docker run -d --name hive-experiment3-model --memory=10g --memory-swap=10g --cpus=4 --pids-limit=128 --cap-drop=ALL --security-opt=no-new-privileges:true -p 127.0.0.1:11434:11434 -e OLLAMA_NUM_PARALLEL=1 -e OLLAMA_MAX_LOADED_MODELS=1 "$HIVE_OLLAMA_IMAGE"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:11434/api/tags > /dev/null; then break; fi
+            sleep 1
+          done
+          docker exec hive-experiment3-model ollama pull qwen2.5-coder:7b
+      - name: Freeze and run the complete cohort
+        run: |
+          HIVE_SUBJECT_IMAGE=$(docker image inspect hive-experiment3:local --format '{{.Id}}')
+          timeout --signal=TERM --kill-after=10s 3300s python -B -m research.recursive_improvement.experiment3.run --image "$HIVE_SUBJECT_IMAGE" --output "$RUNNER_TEMP/hive-experiment3"
+      - name: Remove model and subject containers
+        if: always()
+        run: |
+          docker rm -f hive-experiment3-model || true
+          docker ps -aq --filter name=hive-ri- | xargs -r docker rm -f
+      - name: Preserve cohort, telemetry, and failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: hive-experiment3-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/hive-experiment3/
+          retention-days: 30
+          if-no-files-found: error

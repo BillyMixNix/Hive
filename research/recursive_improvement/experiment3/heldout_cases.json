@@ -1,0 +1,1026 @@
+[
+  {
+    "id": "exp3-held-001",
+    "input": "Case #0: {\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"} commentary",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-002",
+    "input": "{\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"} {\"later\":1901}",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-003",
+    "input": "{unquoted-0:oops} {\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"}",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-004",
+    "input": "broken-0 { open {\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"}",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-005",
+    "input": "quoted {\"record\": 1207, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 0\"} } end",
+    "expected": {
+      "record": 1207,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 0"
+    }
+  },
+  {
+    "id": "exp3-held-006",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1703}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1703
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-007",
+    "input": "[null, \"prefix\", {\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"}, true]",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-008",
+    "input": "{\"bad\":NaN} retry {\"record\": 907, \"flags\": [true, null, false], \"label\": \"new-0\"}",
+    "expected": {
+      "record": 907,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-0"
+    }
+  },
+  {
+    "id": "exp3-held-009",
+    "input": "{\"nonfinite0\":NaN}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-010",
+    "input": "{\"truncated0\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-011",
+    "input": "plain response 3301; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-012",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{0\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2801} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{0",
+      "b": "\\\"{}\\",
+      "n": 2801
+    }
+  },
+  {
+    "id": "exp3-held-013",
+    "input": "Case #1: {\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"} commentary",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-014",
+    "input": "{\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"} {\"later\":1902}",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-015",
+    "input": "{unquoted-1:oops} {\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"}",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-016",
+    "input": "broken-1 { open {\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"}",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-017",
+    "input": "quoted {\"record\": 1208, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 1\"} } end",
+    "expected": {
+      "record": 1208,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 1"
+    }
+  },
+  {
+    "id": "exp3-held-018",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1704}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1704
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-019",
+    "input": "[null, \"prefix\", {\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"}, true]",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-020",
+    "input": "{\"bad\":Infinity} retry {\"record\": 908, \"flags\": [true, null, false], \"label\": \"new-1\"}",
+    "expected": {
+      "record": 908,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-1"
+    }
+  },
+  {
+    "id": "exp3-held-021",
+    "input": "{\"nonfinite1\":Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-022",
+    "input": "{\"truncated1\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-023",
+    "input": "plain response 3302; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-024",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{1\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2802} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{1",
+      "b": "\\\"{}\\",
+      "n": 2802
+    }
+  },
+  {
+    "id": "exp3-held-025",
+    "input": "Case #2: {\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"} commentary",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-026",
+    "input": "{\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"} {\"later\":1903}",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-027",
+    "input": "{unquoted-2:oops} {\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"}",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-028",
+    "input": "broken-2 { open {\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"}",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-029",
+    "input": "quoted {\"record\": 1209, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 2\"} } end",
+    "expected": {
+      "record": 1209,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 2"
+    }
+  },
+  {
+    "id": "exp3-held-030",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1705}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1705
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-031",
+    "input": "[null, \"prefix\", {\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"}, true]",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-032",
+    "input": "{\"bad\":-Infinity} retry {\"record\": 909, \"flags\": [true, null, false], \"label\": \"new-2\"}",
+    "expected": {
+      "record": 909,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-2"
+    }
+  },
+  {
+    "id": "exp3-held-033",
+    "input": "{\"nonfinite2\":-Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-034",
+    "input": "{\"truncated2\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-035",
+    "input": "plain response 3303; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-036",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{2\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2803} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{2",
+      "b": "\\\"{}\\",
+      "n": 2803
+    }
+  },
+  {
+    "id": "exp3-held-037",
+    "input": "Case #3: {\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"} commentary",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-038",
+    "input": "{\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"} {\"later\":1904}",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-039",
+    "input": "{unquoted-3:oops} {\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"}",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-040",
+    "input": "broken-3 { open {\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"}",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-041",
+    "input": "quoted {\"record\": 1210, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 3\"} } end",
+    "expected": {
+      "record": 1210,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 3"
+    }
+  },
+  {
+    "id": "exp3-held-042",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1706}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1706
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-043",
+    "input": "[null, \"prefix\", {\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"}, true]",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-044",
+    "input": "{\"bad\":NaN} retry {\"record\": 910, \"flags\": [true, null, false], \"label\": \"new-3\"}",
+    "expected": {
+      "record": 910,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-3"
+    }
+  },
+  {
+    "id": "exp3-held-045",
+    "input": "{\"nonfinite3\":NaN}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-046",
+    "input": "{\"truncated3\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-047",
+    "input": "plain response 3304; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-048",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{3\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2804} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{3",
+      "b": "\\\"{}\\",
+      "n": 2804
+    }
+  },
+  {
+    "id": "exp3-held-049",
+    "input": "Case #4: {\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"} commentary",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-050",
+    "input": "{\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"} {\"later\":1905}",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-051",
+    "input": "{unquoted-4:oops} {\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"}",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-052",
+    "input": "broken-4 { open {\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"}",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-053",
+    "input": "quoted {\"record\": 1211, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 4\"} } end",
+    "expected": {
+      "record": 1211,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 4"
+    }
+  },
+  {
+    "id": "exp3-held-054",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1707}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1707
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-055",
+    "input": "[null, \"prefix\", {\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"}, true]",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-056",
+    "input": "{\"bad\":Infinity} retry {\"record\": 911, \"flags\": [true, null, false], \"label\": \"new-4\"}",
+    "expected": {
+      "record": 911,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-4"
+    }
+  },
+  {
+    "id": "exp3-held-057",
+    "input": "{\"nonfinite4\":Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-058",
+    "input": "{\"truncated4\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-059",
+    "input": "plain response 3305; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-060",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{4\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2805} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{4",
+      "b": "\\\"{}\\",
+      "n": 2805
+    }
+  },
+  {
+    "id": "exp3-held-061",
+    "input": "Case #5: {\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"} commentary",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-062",
+    "input": "{\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"} {\"later\":1906}",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-063",
+    "input": "{unquoted-5:oops} {\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"}",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-064",
+    "input": "broken-5 { open {\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"}",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-065",
+    "input": "quoted {\"record\": 1212, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 5\"} } end",
+    "expected": {
+      "record": 1212,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 5"
+    }
+  },
+  {
+    "id": "exp3-held-066",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1708}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1708
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-067",
+    "input": "[null, \"prefix\", {\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"}, true]",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-068",
+    "input": "{\"bad\":-Infinity} retry {\"record\": 912, \"flags\": [true, null, false], \"label\": \"new-5\"}",
+    "expected": {
+      "record": 912,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-5"
+    }
+  },
+  {
+    "id": "exp3-held-069",
+    "input": "{\"nonfinite5\":-Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-070",
+    "input": "{\"truncated5\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-071",
+    "input": "plain response 3306; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-072",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{5\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2806} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{5",
+      "b": "\\\"{}\\",
+      "n": 2806
+    }
+  },
+  {
+    "id": "exp3-held-073",
+    "input": "Case #6: {\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"} commentary",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-074",
+    "input": "{\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"} {\"later\":1907}",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-075",
+    "input": "{unquoted-6:oops} {\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"}",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-076",
+    "input": "broken-6 { open {\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"}",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-077",
+    "input": "quoted {\"record\": 1213, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 6\"} } end",
+    "expected": {
+      "record": 1213,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 6"
+    }
+  },
+  {
+    "id": "exp3-held-078",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1709}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1709
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-079",
+    "input": "[null, \"prefix\", {\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"}, true]",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-080",
+    "input": "{\"bad\":NaN} retry {\"record\": 913, \"flags\": [true, null, false], \"label\": \"new-6\"}",
+    "expected": {
+      "record": 913,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-6"
+    }
+  },
+  {
+    "id": "exp3-held-081",
+    "input": "{\"nonfinite6\":NaN}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-082",
+    "input": "{\"truncated6\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-083",
+    "input": "plain response 3307; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-084",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{6\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2807} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{6",
+      "b": "\\\"{}\\",
+      "n": 2807
+    }
+  },
+  {
+    "id": "exp3-held-085",
+    "input": "Case #7: {\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"} commentary",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-086",
+    "input": "{\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"} {\"later\":1908}",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-087",
+    "input": "{unquoted-7:oops} {\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"}",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-088",
+    "input": "broken-7 { open {\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"}",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-089",
+    "input": "quoted {\"record\": 1214, \"text\": \"escaped \\\\\\\" brace } slash \\\\ newline\\n opening { token 7\"} } end",
+    "expected": {
+      "record": 1214,
+      "text": "escaped \\\" brace } slash \\ newline\n opening { token 7"
+    }
+  },
+  {
+    "id": "exp3-held-090",
+    "input": "```json\n{\"tree\": {\"branch\": [{\"leaf\": 1710}, [null, false, \"é雪\"]]}}\n``` tail }",
+    "expected": {
+      "tree": {
+        "branch": [
+          {
+            "leaf": 1710
+          },
+          [
+            null,
+            false,
+            "é雪"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "id": "exp3-held-091",
+    "input": "[null, \"prefix\", {\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"}, true]",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-092",
+    "input": "{\"bad\":Infinity} retry {\"record\": 914, \"flags\": [true, null, false], \"label\": \"new-7\"}",
+    "expected": {
+      "record": 914,
+      "flags": [
+        true,
+        null,
+        false
+      ],
+      "label": "new-7"
+    }
+  },
+  {
+    "id": "exp3-held-093",
+    "input": "{\"nonfinite7\":Infinity}",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-094",
+    "input": "{\"truncated7\":[false,",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-095",
+    "input": "plain response 3308; no braces at all",
+    "error": "ValueError"
+  },
+  {
+    "id": "exp3-held-096",
+    "input": "{\"a\": \"}{\\\"x\\\":1}{7\", \"b\": \"\\\\\\\"{}\\\\\", \"n\": 2808} after {\"unused\":9}",
+    "expected": {
+      "a": "}{\"x\":1}{7",
+      "b": "\\\"{}\\",
+      "n": 2808
+    }
+  }
+]
